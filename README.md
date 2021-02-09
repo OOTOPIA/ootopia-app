@@ -1,29 +1,16 @@
-# README #
+# ootopia_app
 
-This README would normally document whatever steps are necessary to get your application up and running.
+A new Flutter project.
 
-### What is this repository for? ###
+## Getting Started
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+This project is a starting point for a Flutter application.
 
-### How do I get set up? ###
+A few resources to get you started if this is your first Flutter project:
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
