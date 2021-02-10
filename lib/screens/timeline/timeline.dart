@@ -50,13 +50,7 @@ class PhotoTimeline extends StatelessWidget {
             'Andrew Montes Teste Teste',
             textAlign: TextAlign.start,
           ),
-
-          // Image.asset(
-          //   'assets/images/teste01.jpeg',
-          //   width: double.infinity,
-          //   height: 400,
-          //   fit: BoxFit.cover,
-          // ),
+          PlayerVideo(),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
             child: Row(
@@ -111,11 +105,20 @@ class _PlayerVideoState extends State<PlayerVideo> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.network(
-        'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')
+        'https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
+  }
+
+  void myFunc() {
+    print("Chamado");
+    setState(() {
+      _controller.value.isPlaying ? _controller.pause() : _controller.play();
+    });
+
+    print(_controller);
   }
 
   @override
@@ -137,15 +140,14 @@ class _PlayerVideoState extends State<PlayerVideo> {
         IconButton(
           icon: Icon(
               _controller.value.isPlaying ? Icons.pause : Icons.play_arrow),
-          onPressed: () {
-            setState(() {
-              _controller.value.isPlaying
-                  ? _controller.pause()
-                  : _controller.play();
-            });
-          },
+          onPressed: myFunc,
         )
       ],
     );
+  }
+
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }
