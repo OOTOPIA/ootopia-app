@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../timeline/timeline.dart';
+import '../camera_screen/camera_screen.dart';
 
 class NavigatorBar extends StatefulWidget {
   const NavigatorBar({
@@ -10,6 +12,22 @@ class NavigatorBar extends StatefulWidget {
 }
 
 class _NavigatorBarState extends State<NavigatorBar> {
+  // int _selectedIndex = 0;
+
+  // _returnPageSelect() {
+  //   if (this._selectedIndex == 0) {
+  //     return TimelinePage();
+  //   } else if (this._selectedIndex == 0) {
+  //     return CameraCapturePage();
+  //   }
+  // }
+
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -61,6 +79,9 @@ class _NavigatorBarState extends State<NavigatorBar> {
         //   title: Text('Home'),
         // ),
       ],
+      // currentIndex: _selectedIndex,
+      // selectedItemColor: Colors.amber[800],
+      // onTap: _onItemTapped,
     );
   }
 }
