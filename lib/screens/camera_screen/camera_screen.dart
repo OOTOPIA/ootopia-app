@@ -918,7 +918,7 @@ class _CameraAppState extends State<CameraApp> {
       WidgetsFlutterBinding.ensureInitialized();
       this.cameras = await availableCameras();
 
-      controller = CameraController(cameras[0], ResolutionPreset.high);
+      controller = CameraController(cameras[0], ResolutionPreset.ultraHigh);
       controller.initialize().then((_) {
         if (!mounted) {
           return;

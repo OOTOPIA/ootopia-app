@@ -33,6 +33,18 @@ class _NavigatorBarState extends State<NavigatorBar> {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       fixedColor: Colors.black54,
+      onTap: (value) {
+        switch (value) {
+          case 1:
+            {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CameraScreen()),
+              );
+            }
+        }
+        print('Value: $value');
+      },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: ImageIcon(

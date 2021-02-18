@@ -11,8 +11,8 @@ class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: TimelinePage(),
-      home: CameraScreen(),
+      home: TimelinePage(),
+      //home: CameraScreen(),
     );
   }
 }
