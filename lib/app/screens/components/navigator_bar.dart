@@ -43,7 +43,6 @@ class _NavigatorBarState extends State<NavigatorBar> {
               );
             }
         }
-        print('Value: $value');
       },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(

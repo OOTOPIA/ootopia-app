@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:ootopia_app/screens/components/navigator_bar.dart';
+import 'package:ootopia_app/app/screens/components/navigator_bar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:google_fonts/google_fonts.dart';
 

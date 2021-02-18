@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './screens/timeline/timeline.dart';
-import './screens/camera_screen/camera_screen.dart';
-
-import 'package:camera/camera.dart';
+import './app/screens/timeline/timeline.dart';
 
 main() => runApp(ExpensesApp());
 
