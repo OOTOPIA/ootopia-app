@@ -918,7 +918,7 @@ class _CameraAppState extends State<CameraApp> {
       WidgetsFlutterBinding.ensureInitialized();
       this.cameras = await availableCameras();
 
-      controller = CameraController(cameras[0], ResolutionPreset.medium);
+      controller = CameraController(cameras[0], ResolutionPreset.high);
       controller.initialize().then((_) {
         if (!mounted) {
           return;
@@ -946,11 +946,21 @@ class _CameraAppState extends State<CameraApp> {
     if (!controller.value.isInitialized) {
       return Container();
     } else {
+      final size = MediaQuery.of(context).size;
+      final deviceRatio = size.width / size.height;
+
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
           Container(
-            child: CameraPreview(controller),
+            child: AspectRatio(
+              aspectRatio: deviceRatio,
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.diagonal3Values(1.0, 1.0, 1),
+                child: CameraPreview(controller),
+              ),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
