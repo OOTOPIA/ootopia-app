@@ -586,7 +586,7 @@
 //     controller.setExposurePoint(offset);
 //     controller.setFocusPoint(offset);
 //   }
-
+//aqui
 //   void onNewCameraSelected(CameraDescription cameraDescription) async {
 //     if (controller != null) {
 //       await controller.dispose();
@@ -897,6 +897,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+
+import 'package:flutter_uploader/flutter_uploader.dart';
 
 class CameraApp extends StatefulWidget {
   @override
@@ -906,6 +909,14 @@ class CameraApp extends StatefulWidget {
 class _CameraAppState extends State<CameraApp> {
   CameraController controller;
   List<CameraDescription> cameras;
+  int indexCamera = 1;
+  bool isRecord = false;
+  XFile imageFile;
+  XFile videoFile;
+
+  final uploader = FlutterUploader();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -918,13 +929,7 @@ class _CameraAppState extends State<CameraApp> {
       WidgetsFlutterBinding.ensureInitialized();
       this.cameras = await availableCameras();
 
-      controller = CameraController(cameras[0], ResolutionPreset.ultraHigh);
-      controller.initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
-      });
+      setCamera();
     } on CameraException catch (e) {
       logError(e.code, e.description);
     }
@@ -938,8 +943,136 @@ class _CameraAppState extends State<CameraApp> {
     super.dispose();
   }
 
+  void setCamera() async {
+    if (controller != null) {
+      await controller.dispose();
+    }
+
+    indexCamera = indexCamera == 0 ? 1 : 0;
+    controller = CameraController(
+      cameras[indexCamera],
+      ResolutionPreset.ultraHigh,
+      imageFormatGroup: ImageFormatGroup.jpeg,
+    );
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  Future<void> startVideoRecording() async {
+    print('Olá');
+
+    if (!controller.value.isInitialized || controller.value.isRecordingVideo) {
+      return null;
+    }
+
+    try {
+      await controller.startVideoRecording();
+    } on CameraException catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  void uploadFileBackground(XFile file) async {
+    // uploader
+
+    await uploader.enqueue(
+        url: "your upload link", //required: url to upload to
+        files: [
+          FileItem(
+            filename: file.name,
+            savedDir: file.path,
+            fieldname: "file",
+          )
+        ], // required: list of files that you want to upload
+        method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
+        headers: {"apikey": "api_123456", "userkey": "userkey_123456"},
+        data: {"name": "john"}, // any data you want to send in upload request
+        showNotification:
+            false, // send local notification (android only) for upload status
+        tag: "upload 1"); // unique tag for upload task
+  }
+
+  void onStopButtonPressed() {
+    stopVideoRecording().then((file) {
+      print('file ${file.name}');
+      print('file ${file.path}');
+
+      if (mounted) setState(() {});
+      if (file != null) {
+        GallerySaver.saveVideo(file.path).then((path) {
+          // setState(() {
+          //   secondButtonText = 'video saved!';
+          // });
+          print('Foi aqui ---------');
+          print('Foi path --------- $path');
+        });
+        // showInSnackBar('Video recorded to ${file.path}');
+        videoFile = file;
+        // uploadFileBackground(file);
+      }
+    });
+  }
+
+  Future<XFile> stopVideoRecording() async {
+    if (!controller.value.isRecordingVideo) {
+      return null;
+    }
+
+    try {
+      return controller.stopVideoRecording();
+    } on CameraException catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  void showInSnackBar(String message) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
+  }
+
   void logError(String code, String message) =>
       print('Error: $code\nError Message: $message');
+
+  void onSetFlashModeButtonPressed(FlashMode mode) {
+    // print("Fui chamado1");
+
+    setFlashMode(mode).then((_) {
+      if (mounted) setState(() {});
+      showInSnackBar('Flash mode set to ${mode.toString().split('.').last}');
+    });
+  }
+
+  Future<void> setFlashMode(FlashMode mode) async {
+    try {
+      await controller.setFlashMode(mode);
+    } on CameraException catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Widget renderButtonsFlashCamera() {
+    if (true) {
+      return IconButton(
+        icon: Icon(Icons.flash_off),
+        iconSize: 30,
+        color: Colors.white,
+        onPressed: () {},
+      );
+    } else {
+      return IconButton(
+        icon: Icon(Icons.flash_on),
+        iconSize: 30,
+        color: Colors.white,
+        onPressed: () {},
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -952,12 +1085,13 @@ class _CameraAppState extends State<CameraApp> {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
+          renderButtonsFlashCamera(),
           Container(
             child: AspectRatio(
               aspectRatio: deviceRatio,
               child: Transform(
                 alignment: Alignment.center,
-                transform: Matrix4.diagonal3Values(1.0, 1.0, 1),
+                transform: Matrix4.diagonal3Values(1.0, 1.0, 0.5),
                 child: CameraPreview(controller),
               ),
             ),
@@ -966,34 +1100,24 @@ class _CameraAppState extends State<CameraApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.flash_auto),
+                  icon: Icon(Icons.fiber_manual_record),
+                  iconSize: 68,
+                  color: controller.value.isRecordingVideo
+                      ? Colors.red
+                      : Colors.white,
+                  onPressed: () {
+                    if (!controller.value.isRecordingVideo) {
+                      startVideoRecording();
+                    } else {
+                      onStopButtonPressed();
+                    }
+                  }),
+              IconButton(
+                icon: Icon(
+                    indexCamera == 0 ? Icons.camera_front : Icons.camera_rear),
                 iconSize: 30,
                 color: Colors.white,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.flash_on),
-                iconSize: 30,
-                color: Colors.white,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.fiber_manual_record),
-                iconSize: 68,
-                color: Colors.red,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.camera_rear),
-                iconSize: 30,
-                color: Colors.white,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(Icons.camera_front),
-                iconSize: 30,
-                color: Colors.white,
-                onPressed: () {},
+                onPressed: () => setCamera(),
               ),
             ],
           )

@@ -31,7 +31,9 @@ dependencies:
   video_player: ^1.0.1
   google_fonts: ^1.1.2
   flutter_svg: ^0.17.4
-  camera: ^0.7.0+2  
+  camera: ^0.7.0+2
+  gallery_saver: ^2.0.3
+  flutter_uploader: ^1.2.1
 
 dev_dependencies:
   flutter_test:
