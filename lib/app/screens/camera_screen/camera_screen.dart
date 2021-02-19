@@ -1039,36 +1039,51 @@ class _CameraAppState extends State<CameraApp> {
       print('Error: $code\nError Message: $message');
 
   void onSetFlashModeButtonPressed(FlashMode mode) {
-    // print("Fui chamado1");
+    print('mode $mode');
 
     setFlashMode(mode).then((_) {
       if (mounted) setState(() {});
-      showInSnackBar('Flash mode set to ${mode.toString().split('.').last}');
+      // showInSnackBar('Flash mode set to ${mode.toString().split('.').last}');
     });
   }
 
   Future<void> setFlashMode(FlashMode mode) async {
+    print('Hello $mode');
+
     try {
+      print('deu certo');
       await controller.setFlashMode(mode);
     } on CameraException catch (e) {
-      print(e);
+      print('Erro da camera $e');
       rethrow;
     }
   }
 
   Widget renderButtonsFlashCamera() {
-    if (true) {
+    if (false && indexCamera == 0) {
+      print('Foi aqui1');
       return IconButton(
         icon: Icon(Icons.flash_off),
         iconSize: 30,
         color: Colors.white,
-        onPressed: () {},
+        onPressed: () => onSetFlashModeButtonPressed(FlashMode.off),
       );
-    } else {
+    } else if (true && indexCamera == 0) {
+      print('Foi aqui2');
+
       return IconButton(
         icon: Icon(Icons.flash_on),
         iconSize: 30,
         color: Colors.white,
+        onPressed: () => onSetFlashModeButtonPressed(FlashMode.always),
+      );
+    } else {
+      print('Foi aqui3');
+
+      return IconButton(
+        icon: Icon(Icons.no_flash),
+        iconSize: 30,
+        color: Colors.white38,
         onPressed: () {},
       );
     }
@@ -1085,13 +1100,12 @@ class _CameraAppState extends State<CameraApp> {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
-          renderButtonsFlashCamera(),
           Container(
             child: AspectRatio(
               aspectRatio: deviceRatio,
               child: Transform(
                 alignment: Alignment.center,
-                transform: Matrix4.diagonal3Values(1.0, 1.0, 0.5),
+                transform: Matrix4.diagonal3Values(1.0, 1.0, 1.0),
                 child: CameraPreview(controller),
               ),
             ),
@@ -1099,6 +1113,7 @@ class _CameraAppState extends State<CameraApp> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              controller != null ? renderButtonsFlashCamera() : null,
               IconButton(
                   icon: Icon(Icons.fiber_manual_record),
                   iconSize: 68,
