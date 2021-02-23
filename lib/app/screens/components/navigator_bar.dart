@@ -12,22 +12,6 @@ class NavigatorBar extends StatefulWidget {
 }
 
 class _NavigatorBarState extends State<NavigatorBar> {
-  // int _selectedIndex = 0;
-
-  // _returnPageSelect() {
-  //   if (this._selectedIndex == 0) {
-  //     return TimelinePage();
-  //   } else if (this._selectedIndex == 0) {
-  //     return CameraCapturePage();
-  //   }
-  // }
-
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(

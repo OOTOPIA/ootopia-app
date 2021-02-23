@@ -4,8 +4,6 @@ import 'package:ootopia_app/app/screens/components/navigator_bar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// import 'package:video_player/video_player.dart';
-
 class TimelinePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -116,14 +114,6 @@ class PhotoTimeline extends StatelessWidget {
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
-          // Row(
-          //   children: [
-          //     Text('Likes 241'),
-          //     Row(
-          //       children: [Text(' 13,55')],
-          //     )
-          //   ],
-          // )
         ],
       ),
     );
@@ -136,19 +126,15 @@ class PlayerVideo extends StatefulWidget {
   PlayerVideo({this.url});
 
   @override
-  _PlayerVideoState createState() => _PlayerVideoState(url: this.url);
+  _PlayerVideoState createState() => _PlayerVideoState();
 }
 
 class _PlayerVideoState extends State<PlayerVideo> {
-  String url;
-
-  _PlayerVideoState({this.url});
-
   VideoPlayerController _controller;
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(this.url)
+    _controller = VideoPlayerController.network(widget.url)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
