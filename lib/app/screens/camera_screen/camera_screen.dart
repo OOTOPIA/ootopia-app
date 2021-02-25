@@ -74,12 +74,8 @@ class _CameraAppState extends State<CameraApp> {
       return null;
     }
 
-    try {
-      await controller.startVideoRecording();
-    } on CameraException catch (e) {
-      print(e);
-      return;
-    }
+    await controller.startVideoRecording();
+    setState(() {});
   }
 
   void uploadFileBackground(XFile file) async {
@@ -87,7 +83,8 @@ class _CameraAppState extends State<CameraApp> {
     try {
       await uploader.enqueue(
           url:
-              "https://709c2b433902.ngrok.io/posts", //required: url to upload to
+              "https://api-ootopia.devmagic.com.br/posts", //required: url to upload to
+          //
           files: [
             FileItem(
               filename: basename(file.path),
@@ -110,25 +107,16 @@ class _CameraAppState extends State<CameraApp> {
 
   void onStopButtonPressed(BuildContext context) {
     stopVideoRecording().then((file) {
-      print('file ${file.name}');
-      print('file ${file.path}');
-
       if (mounted) setState(() {});
       if (file != null) {
-        GallerySaver.saveVideo(file.path).then((path) {
-          // setState(() {
-          //   secondButtonText = 'video saved!';
-          // });
-          print('Foi aqui ---------');
-          print('Foi path --------- $path');
-        });
+        GallerySaver.saveVideo(file.path);
         // showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
         uploadFileBackground(file);
       }
     });
 
-    // Navigator.pop(context);
+    Navigator.pop(context, true);
   }
 
   Future<XFile> stopVideoRecording() async {
@@ -156,7 +144,6 @@ class _CameraAppState extends State<CameraApp> {
 
     setFlashMode(mode).then((_) {
       if (mounted) setState(() {});
-      // showInSnackBar('Flash mode set to ${mode.toString().split('.').last}');
     });
   }
 
@@ -173,33 +160,41 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   Widget renderButtonsFlashCamera() {
-    if (false && indexCamera == 0) {
-      print('Foi aqui1');
-      return IconButton(
-        icon: Icon(Icons.flash_off),
-        iconSize: 30,
-        color: Colors.white,
-        onPressed: () => onSetFlashModeButtonPressed(FlashMode.off),
-      );
-    } else if (true && indexCamera == 0) {
-      print('Foi aqui2');
+    // if (false && indexCamera == 0) {
+    //   print('Foi aqui1');
 
-      return IconButton(
-        icon: Icon(Icons.flash_on),
-        iconSize: 30,
-        color: Colors.white,
-        onPressed: () => onSetFlashModeButtonPressed(FlashMode.always),
-      );
-    } else {
-      print('Foi aqui3');
+    //   return IconButton(
+    //     icon: Icon(Icons.flash_off),
+    //     iconSize: 30,
+    //     color: Colors.white,
+    //     onPressed: () => onSetFlashModeButtonPressed(FlashMode.off),
+    //   );
+    // } else if (true && indexCamera == 0) {
+    //   print('Foi aqui2');
 
-      return IconButton(
-        icon: Icon(Icons.no_flash),
-        iconSize: 30,
-        color: Colors.white38,
-        onPressed: () {},
-      );
-    }
+    //   return IconButton(
+    //     icon: Icon(Icons.flash_on),
+    //     iconSize: 30,
+    //     color: Colors.white,
+    //     onPressed: () => onSetFlashModeButtonPressed(FlashMode.always),
+    //   );
+    // } else {
+    //   print('Foi aqui3');
+
+    //   return IconButton(
+    //     icon: Icon(Icons.no_flash),
+    //     iconSize: 30,
+    //     color: Colors.white38,
+    //     onPressed: () {},
+    //   );
+    // }
+
+    return IconButton(
+      icon: Icon(Icons.no_flash),
+      iconSize: 30,
+      color: Colors.white38,
+      onPressed: () {},
+    );
   }
 
   @override
