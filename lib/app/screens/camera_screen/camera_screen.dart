@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:path/path.dart';
 
 import 'package:flutter_uploader/flutter_uploader.dart';
 
@@ -18,7 +19,7 @@ class _CameraAppState extends State<CameraApp> {
   XFile imageFile;
   XFile videoFile;
 
-  final uploader = FlutterUploader();
+  final FlutterUploader uploader = FlutterUploader();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -83,25 +84,31 @@ class _CameraAppState extends State<CameraApp> {
 
   void uploadFileBackground(XFile file) async {
     // uploader
-
-    await uploader.enqueue(
-        url: "your upload link", //required: url to upload to
-        files: [
-          FileItem(
-            filename: file.name,
-            savedDir: file.path,
-            fieldname: "file",
-          )
-        ], // required: list of files that you want to upload
-        method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
-        headers: {"apikey": "api_123456", "userkey": "userkey_123456"},
-        data: {"name": "john"}, // any data you want to send in upload request
-        showNotification:
-            false, // send local notification (android only) for upload status
-        tag: "upload 1"); // unique tag for upload task
+    try {
+      await uploader.enqueue(
+          url:
+              "https://709c2b433902.ngrok.io/posts", //required: url to upload to
+          files: [
+            FileItem(
+              filename: basename(file.path),
+              savedDir: dirname(file.path),
+              fieldname: "file",
+            )
+          ], // required: list of files that you want to upload
+          method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
+          headers: {"apikey": "api_123456", "userkey": "userkey_123456"},
+          data: {
+            "metadata": '{"type": "video", "description": "Upload"}'
+          }, // any data you want to send in upload request
+          showNotification:
+              false, // send local notification (android only) for upload status
+          tag: "upload 1");
+    } catch (e) {
+      print('Error upload: $e');
+    } // unique tag for upload task
   }
 
-  void onStopButtonPressed() {
+  void onStopButtonPressed(BuildContext context) {
     stopVideoRecording().then((file) {
       print('file ${file.name}');
       print('file ${file.path}');
@@ -117,9 +124,11 @@ class _CameraAppState extends State<CameraApp> {
         });
         // showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
-        // uploadFileBackground(file);
+        uploadFileBackground(file);
       }
     });
+
+    // Navigator.pop(context);
   }
 
   Future<XFile> stopVideoRecording() async {
@@ -228,7 +237,7 @@ class _CameraAppState extends State<CameraApp> {
                     if (!controller.value.isRecordingVideo) {
                       startVideoRecording();
                     } else {
-                      onStopButtonPressed();
+                      onStopButtonPressed(context);
                     }
                   }),
               IconButton(
