@@ -12,19 +12,37 @@ class NavigatorBar extends StatefulWidget {
 }
 
 class _NavigatorBarState extends State<NavigatorBar> {
+  renderSnackBar(BuildContext context) {
+    return Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "O vídeo esta sendo carregado",
+          style: TextStyle(color: Colors.black),
+        ),
+        duration: Duration(seconds: 6),
+        backgroundColor: Colors.yellow,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       fixedColor: Colors.black54,
-      onTap: (value) {
+      onTap: (value) async {
         switch (value) {
           case 1:
             {
-              Navigator.push(
+              final resultCamera = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CameraScreen()),
               );
+              print("result $resultCamera");
+
+              if (resultCamera) {
+                renderSnackBar(context);
+              }
             }
         }
       },
