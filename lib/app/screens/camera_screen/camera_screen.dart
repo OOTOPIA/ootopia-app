@@ -38,8 +38,6 @@ class _CameraAppState extends State<CameraApp> {
     } on CameraException catch (e) {
       logError(e.code, e.description);
     }
-
-    print('CAMERA ${this.cameras}');
   }
 
   @override
@@ -68,8 +66,6 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   Future<void> startVideoRecording() async {
-    print('Olá');
-
     if (!controller.value.isInitialized || controller.value.isRecordingVideo) {
       return null;
     }
@@ -140,8 +136,6 @@ class _CameraAppState extends State<CameraApp> {
       print('Error: $code\nError Message: $message');
 
   void onSetFlashModeButtonPressed(FlashMode mode) {
-    print('mode $mode');
-
     setFlashMode(mode).then((_) {
       if (mounted) setState(() {});
     });
@@ -151,7 +145,6 @@ class _CameraAppState extends State<CameraApp> {
     print('Hello $mode');
 
     try {
-      print('deu certo');
       await controller.setFlashMode(mode);
     } on CameraException catch (e) {
       print('Erro da camera $e');

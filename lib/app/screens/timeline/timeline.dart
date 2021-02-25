@@ -142,7 +142,6 @@ class _PlayerVideoState extends State<PlayerVideo> {
   }
 
   void myFunc() {
-    print("Chamado");
     setState(() {
       _controller.value.isPlaying ? _controller.pause() : _controller.play();
     });
