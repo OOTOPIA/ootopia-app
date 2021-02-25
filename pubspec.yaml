@@ -33,6 +33,9 @@ dependencies:
   camera: ^0.7.0+2
   gallery_saver: ^2.0.3
   flutter_uploader: ^1.2.1
+  http: ^0.12.2
+  rxdart : ^0.22.0 
+  intl : ^0.15.8
 
 dev_dependencies:
   flutter_test:
