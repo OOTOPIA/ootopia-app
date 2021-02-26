@@ -49,7 +49,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
         BottomNavigationBarItem(
           icon: ImageIcon(
             AssetImage('assets/icons/home.png'),
-            color: Colors.black12,
+            color: Colors.black,
           ),
           // ignore: deprecated_member_use
           title: Text('Home'),
@@ -71,7 +71,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
         BottomNavigationBarItem(
           icon: ImageIcon(
             AssetImage('assets/icons/add.png'),
-            color: Colors.black12,
+            color: Colors.black,
           ),
           // ignore: deprecated_member_use
           title: Text('Add'),
