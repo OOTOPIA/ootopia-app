@@ -1,0 +1,326 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/data/models/timeline_post_model.dart';
+import 'package:ootopia_app/screens/components/navigator_bar.dart';
+import 'package:video_player/video_player.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class TimelinePage extends StatefulWidget {
+  @override
+  _TimelinePageState createState() => _TimelinePageState();
+}
+
+class _TimelinePageState extends State<TimelinePage> {
+  TimelinePostBloc timelineBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
+    timelineBloc.add(LoadingSucessTimelinePostEvent());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Ootopia',
+          // 'App Teste',
+          style: GoogleFonts.jomhuria(
+              fontStyle: FontStyle.normal, color: Colors.blue, fontSize: 42),
+        ),
+        backgroundColor: Colors.white,
+      ),
+      body: Center(
+          child: BlocListener<TimelinePostBloc, TimelinePostState>(
+        listener: (context, state) {
+          if (state is ErrorState) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        },
+        child: _blocBuilder(),
+      )),
+      bottomNavigationBar: NavigatorBar(),
+    );
+  }
+
+  _blocBuilder() {
+    return BlocBuilder<TimelinePostBloc, TimelinePostState>(
+      builder: (context, state) {
+        if (state is InitialState) {
+          return Center(
+            child: Text("Initial"),
+          );
+        } else if (state is LoadingState) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is LoadedSucessState) {
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: RefreshIndicator(
+                    onRefresh: () async {
+                      state.posts = [];
+                      _getData();
+                    },
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.posts.length,
+                      itemBuilder: (context, index) {
+                        return PhotoTimeline(post: state.posts[index]);
+                      },
+                    )),
+              ),
+            ],
+          );
+        } else if (state is ErrorState) {
+          return Center(child: Text("Error"));
+        }
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'nothing data :(',
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _getData() async {
+    setState(() {
+      timelineBloc.add(LoadingSucessTimelinePostEvent());
+    });
+  }
+}
+
+// class TimelinePosts extends StatefulWidget {
+//   @override
+//   _TimelinePostsState createState() => _TimelinePostsState();
+// }
+
+// class _TimelinePostsState extends State<TimelinePosts> {
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return new FutureBuilder<List<TimelinePost>>(
+//       future: TimelinePostRepositoryImpl().getPosts(),
+//       builder: (context, snapshot) {
+//         if (!snapshot.hasData) return Container();
+//         List<TimelinePost> posts = snapshot.data;
+//         return new ListView(
+//           children: posts
+//               .map((post) => PhotoTimeline(
+//                     urlVideo: post.videoUrl,
+//                     urlImageProfile: post.photoUrl,
+//                     nameUser: post.fullname,
+//                   ))
+//               .toList(),
+//         );
+//       },
+//     );
+//   }
+// }
+
+class PhotoTimeline extends StatelessWidget {
+  TimelinePost post;
+
+  PhotoTimeline({this.post});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage("${this.post.photoUrl}"),
+                      minRadius: 16,
+                    ),
+                  ),
+                  Text(
+                    this.post.fullname,
+                    textAlign: TextAlign.start,
+                  ),
+                ],
+              ),
+              IconButton(
+                icon: ImageIcon(
+                  AssetImage('assets/icons/options_group.png'),
+                  color: Colors.black12,
+                ),
+                onPressed: null,
+              ),
+            ],
+          ),
+          PlayerVideo(url: this.post.videoUrl),
+          Row(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: ImageIcon(
+                      AssetImage('assets/icons/heart.png'),
+                      color: Colors.black12,
+                    ),
+                    onPressed: null,
+                  ),
+                  IconButton(
+                    icon: ImageIcon(
+                      AssetImage('assets/icons/comment.png'),
+                      color: Colors.black12,
+                    ),
+                    onPressed: null,
+                  ),
+                ],
+              ),
+              IconButton(
+                icon: ImageIcon(
+                  AssetImage('assets/icons/bookmark.png'),
+                  color: Colors.black12,
+                ),
+                onPressed: null,
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Row(
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(bottom: 3, left: 12),
+                  child: new RichText(
+                    text: new TextSpan(
+                      style: new TextStyle(fontSize: 14, color: Colors.black),
+                      children: <TextSpan>[
+                        new TextSpan(
+                            text: 'Likes ',
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                        new TextSpan(text: this.post.likesCount.toString()),
+                      ],
+                    ),
+                  ))
+            ],
+          ),
+          Row(
+            children: [
+              Padding(
+                  padding:
+                      EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
+                  child: Text(this.post.description))
+            ],
+          ),
+          Row(
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(bottom: 12, left: 12),
+                  child: Text(
+                    "0 comments",
+                    style: TextStyle(color: Colors.black.withOpacity(0.4)),
+                  ))
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlayerVideo extends StatefulWidget {
+  String url;
+
+  PlayerVideo({this.url});
+
+  @override
+  _PlayerVideoState createState() => _PlayerVideoState();
+}
+
+class _PlayerVideoState extends State<PlayerVideo> {
+  VideoPlayerController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.network(widget.url)
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
+  }
+
+  void myFunc() {
+    setState(() {
+      _controller.value.isPlaying ? _controller.pause() : _controller.play();
+    });
+
+    print(_controller);
+  }
+
+  iconPlayAndPause() {
+    if (_controller.value.isPlaying) {
+      return Visibility(
+        child: Icon(Icons.pause),
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        visible: false,
+      );
+    } else {
+      return Icon(Icons.play_arrow);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        Container(
+          width: double.infinity,
+          child: _controller.value.initialized
+              ? AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                )
+              : Container(
+                  alignment: AlignmentDirectional.center,
+                  height: 200,
+                  width: double.infinity,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+        ),
+        IconButton(
+          icon: iconPlayAndPause(),
+          color: Colors.white,
+          onPressed: myFunc,
+        )
+      ],
+    );
+  }
+
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+}

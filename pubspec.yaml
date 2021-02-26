@@ -33,6 +33,12 @@ dependencies:
   camera: ^0.7.0+2
   gallery_saver: ^2.0.3
   flutter_uploader: ^1.2.1
+  http: ^0.12.2
+  rxdart : ^0.22.0 
+  intl : ^0.15.8
+  flutter_dotenv : ^3.1.0
+  flutter_bloc : ^6.1.2
+  equatable : ^1.2.6
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +64,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

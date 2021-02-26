@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path/path.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 import 'package:flutter_uploader/flutter_uploader.dart';
 
@@ -54,7 +55,7 @@ class _CameraAppState extends State<CameraApp> {
     indexCamera = indexCamera == 0 ? 1 : 0;
     controller = CameraController(
       cameras[indexCamera],
-      ResolutionPreset.ultraHigh,
+      ResolutionPreset.high,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
     controller.initialize().then((_) {
@@ -78,8 +79,7 @@ class _CameraAppState extends State<CameraApp> {
     // uploader
     try {
       await uploader.enqueue(
-          url:
-              "https://api-ootopia.devmagic.com.br/posts", //required: url to upload to
+          url: DotEnv.env['API_URL'] + "posts", //required: url to upload to
           //
           files: [
             FileItem(
@@ -89,7 +89,7 @@ class _CameraAppState extends State<CameraApp> {
             )
           ], // required: list of files that you want to upload
           method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
-          headers: {"apikey": "api_123456", "userkey": "userkey_123456"},
+          //headers: {"apikey": "api_123456", "userkey": "userkey_123456"},
           data: {
             "metadata": '{"type": "video", "description": "Upload"}'
           }, // any data you want to send in upload request
@@ -224,7 +224,9 @@ class _CameraAppState extends State<CameraApp> {
                   onPressed: () {
                     if (!controller.value.isRecordingVideo) {
                       startVideoRecording();
+                      print("START RECORD");
                     } else {
+                      print("ON STOP HERE");
                       onStopButtonPressed(context);
                     }
                   }),
