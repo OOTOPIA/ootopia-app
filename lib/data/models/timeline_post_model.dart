@@ -12,6 +12,7 @@ class TimelinePost extends Equatable {
   String fullname;
   int likesCount;
   int commentsCount;
+  bool liked = false;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -27,6 +28,7 @@ class TimelinePost extends Equatable {
       this.fullname,
       this.likesCount,
       this.commentsCount,
+      this.liked,
       this.createdAt,
       this.updatedAt});
 
@@ -42,6 +44,7 @@ class TimelinePost extends Equatable {
         photoUrl: parsedJson['photoUrl'],
         fullname: parsedJson['fullname'],
         likesCount: parsedJson['likesCount'],
+        liked: (parsedJson['liked'] == null ? false : parsedJson['liked']),
         commentsCount: parsedJson['commentsCount'],
         createdAt: parsedJson['createdAt'],
         updatedAt: parsedJson['updatedAt']);
@@ -60,6 +63,7 @@ class TimelinePost extends Equatable {
         fullname,
         likesCount,
         commentsCount,
+        liked,
         createdAt,
         updatedAt,
       ];

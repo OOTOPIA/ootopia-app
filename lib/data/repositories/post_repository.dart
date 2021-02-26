@@ -1,3 +1,4 @@
+import 'package:ootopia_app/data/models/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
@@ -5,6 +6,7 @@ import 'dart:convert';
 
 abstract class PostRepository {
   Future<List<TimelinePost>> getPosts();
+  Future<LikePostResult> likePost(String id);
   //Future<TimelinePost> getPost(int id);
   //Future<TimelinePost> updatePost(post);
   //Future<TimelinePost> deletePost(int id);
@@ -29,6 +31,28 @@ class PostRepositoryImpl implements PostRepository {
     } catch (error) {
       throw Exception('Failed to load posts' + error);
     }
+  }
+
+  @override
+  Future<LikePostResult> likePost(String id) async {
+    try {
+      if (id != null) {
+        final response = await http.post(
+          DotEnv.env['API_URL'] + "posts/$id/like",
+          headers: API_HEADERS,
+        );
+
+        if (response.statusCode == 200) {
+          print("RESPONSE BODY ${response.body}");
+          return LikePostResult.fromJson(json.decode(response.body));
+        } else {
+          throw Exception('Failed to like a post');
+        }
+      }
+    } catch (error) {
+      throw Exception('Failed to like a post ' + error);
+    }
+    return null;
   }
 
   // @override

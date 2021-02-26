@@ -74,7 +74,9 @@ class _TimelinePageState extends State<TimelinePage> {
                       shrinkWrap: true,
                       itemCount: state.posts.length,
                       itemBuilder: (context, index) {
-                        return PhotoTimeline(post: state.posts[index]);
+                        return PhotoTimeline(
+                            post: state.posts[index],
+                            timelineBloc: this.timelineBloc);
                       },
                     )),
               ),
@@ -104,42 +106,26 @@ class _TimelinePageState extends State<TimelinePage> {
   }
 }
 
-// class TimelinePosts extends StatefulWidget {
-//   @override
-//   _TimelinePostsState createState() => _TimelinePostsState();
-// }
+class PhotoTimeline extends StatefulWidget {
+  final TimelinePost post;
+  final TimelinePostBloc timelineBloc;
+  PhotoTimeline({this.post, this.timelineBloc});
 
-// class _TimelinePostsState extends State<TimelinePosts> {
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
+  @override
+  _PhotoTimelineState createState() => _PhotoTimelineState(post: this.post, timelineBloc: this.timelineBloc);
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return new FutureBuilder<List<TimelinePost>>(
-//       future: TimelinePostRepositoryImpl().getPosts(),
-//       builder: (context, snapshot) {
-//         if (!snapshot.hasData) return Container();
-//         List<TimelinePost> posts = snapshot.data;
-//         return new ListView(
-//           children: posts
-//               .map((post) => PhotoTimeline(
-//                     urlVideo: post.videoUrl,
-//                     urlImageProfile: post.photoUrl,
-//                     nameUser: post.fullname,
-//                   ))
-//               .toList(),
-//         );
-//       },
-//     );
-//   }
-// }
-
-class PhotoTimeline extends StatelessWidget {
+class _PhotoTimelineState extends State<PhotoTimeline> {
   TimelinePost post;
+  final TimelinePostBloc timelineBloc;
+  _PhotoTimelineState({this.post, this.timelineBloc});
 
-  PhotoTimeline({this.post});
+  bool dragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,12 +166,16 @@ class PhotoTimeline extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    icon: ImageIcon(
-                      AssetImage('assets/icons/heart.png'),
-                      color: Colors.black12,
-                    ),
-                    onPressed: null,
-                  ),
+                      icon: !this.post.liked
+                          ? ImageIcon(
+                              AssetImage('assets/icons/heart.png'),
+                              color: Colors.black12,
+                            )
+                          : ImageIcon(
+                              AssetImage('assets/icons/heart_filled.png'),
+                              color: Color(0xff0253e7),
+                            ),
+                      onPressed: () => {this._likePost()}),
                   IconButton(
                     icon: ImageIcon(
                       AssetImage('assets/icons/comment.png'),
@@ -244,7 +234,41 @@ class PhotoTimeline extends StatelessWidget {
       ),
     );
   }
+
+  void _likePost() {
+    setState(() {
+      this.timelineBloc.add(LikePostEvent(this.post.id));
+      this.post.liked = !this.post.liked;
+    });
+  }
 }
+
+/*
+Draggable(
+  data: "teste",
+  onDragStarted: () {
+    setState(() {
+      //dragging = true;
+    });
+  },
+  axis: Axis.horizontal,
+  child: Visibility(
+    visible: !dragging,
+    child: IconButton(
+      icon: ImageIcon(
+        AssetImage('assets/icons/heart.png'),
+        color: Colors.black12,
+      ),
+      onPressed: () {},
+    ),
+  ),
+  feedback: Container(
+      margin: const EdgeInsets.only(top: 12),
+      child: ImageIcon(
+        AssetImage('assets/icons/heart_filled.png'),
+        color: Color(0xff0253e7),
+      )))
+*/
 
 class PlayerVideo extends StatefulWidget {
   String url;
