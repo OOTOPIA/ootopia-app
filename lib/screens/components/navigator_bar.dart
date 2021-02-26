@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../timeline/timeline.dart';
 import '../camera_screen/camera_screen.dart';
 
 class NavigatorBar extends StatefulWidget {

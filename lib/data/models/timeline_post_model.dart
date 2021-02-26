@@ -1,4 +1,6 @@
-class TimelinePost {
+import 'package:equatable/equatable.dart';
+
+class TimelinePost extends Equatable {
   String id;
   String userId;
   String description;
@@ -29,7 +31,7 @@ class TimelinePost {
       this.updatedAt});
 
   factory TimelinePost.fromJson(Map<String, dynamic> parsedJson) {
-    return new TimelinePost(
+    return TimelinePost(
         id: parsedJson['id'],
         userId: parsedJson['userId'],
         description: parsedJson['description'],
@@ -39,9 +41,26 @@ class TimelinePost {
         thumbnailUrl: parsedJson['thumbnailUrl'],
         photoUrl: parsedJson['photoUrl'],
         fullname: parsedJson['fullname'],
-        likesCount: parsedJson['likesCount'].toInt(),
-        commentsCount: parsedJson['commentsCount'].toInt(),
+        likesCount: parsedJson['likesCount'],
+        commentsCount: parsedJson['commentsCount'],
         createdAt: parsedJson['createdAt'],
         updatedAt: parsedJson['updatedAt']);
   }
+
+  @override
+  List<Object> get props => [
+        id,
+        userId,
+        description,
+        type,
+        imageUrl,
+        videoUrl,
+        thumbnailUrl,
+        photoUrl,
+        fullname,
+        likesCount,
+        commentsCount,
+        createdAt,
+        updatedAt,
+      ];
 }
