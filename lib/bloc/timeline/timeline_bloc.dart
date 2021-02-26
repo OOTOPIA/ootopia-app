@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:ootopia_app/data/models/timeline_post_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
@@ -30,10 +31,11 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
     // Branching the executed logic by checking the event type
     LoadingState();
     if (event is LoadingSucessTimelinePostEvent) {
+      yield LoadingState();
       yield* _mapAlbumsLoadedToState();
-    } // else if (event is CreateTimelinePostEvent) {
-    //   yield* _mapAlbumAddedToState(event);
-    // } else if (event is UpdateTimelinePostEvent) {
+    } else if (event is LikePostEvent) {
+      yield* _mapPostLikedToState(event);
+    } // else if (event is UpdateTimelinePostEvent) {
     //   yield* _mapAlbumUpdatedToState(event);
     // } else if (event is DeleteTimelinePostEvent) {
     //   yield* _mapAlbumDeletedToState(event);
@@ -46,6 +48,28 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
       yield LoadedSucessState(posts);
     } catch (_) {
       yield ErrorState("error loading Albums");
+    }
+  }
+
+  Stream<TimelinePostState> _mapPostLikedToState(LikePostEvent event) async* {
+    try {
+      if (state is LoadedSucessState) {
+        var result = (await this.repository.likePost(event.postId));
+        if (result != null) {
+          final List<TimelinePost> posts =
+              (state as LoadedSucessState).posts.map((post) {
+            if (post.id == event.postId) {
+              post.liked = result.liked;
+              post.likesCount = result.count;
+            }
+            return post;
+          }).toList();
+          yield LoadingState();
+          yield LoadedSucessState(posts);
+        }
+      }
+    } catch (_) {
+      yield ErrorState("error on like a post");
     }
   }
 

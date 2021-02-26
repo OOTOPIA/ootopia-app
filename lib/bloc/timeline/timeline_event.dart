@@ -26,6 +26,14 @@ class GetTimelinePostEvent extends TimelinePostEvent {
   List<Object> get props => [];
 }
 
+class LikePostEvent extends TimelinePostEvent {
+  final String postId;
+  const LikePostEvent(this.postId);
+
+  @override
+  List<Object> get props => [postId];
+}
+
 class CreateTimelinePostEvent extends TimelinePostEvent {
   final TimelinePost post;
   const CreateTimelinePostEvent(this.post);
