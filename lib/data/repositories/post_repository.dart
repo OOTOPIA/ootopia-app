@@ -1,5 +1,5 @@
-import 'package:ootopia_app/data/models/like_post_result_model.dart';
-import 'package:ootopia_app/data/models/timeline_post_model.dart';
+import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'dart:convert';
@@ -22,6 +22,7 @@ class PostRepositoryImpl implements PostRepository {
     try {
       final response = await http.get(DotEnv.env['API_URL'] + "posts");
       if (response.statusCode == 200) {
+        print("POSTS RESPONSE ${response.body}");
         return (json.decode(response.body) as List)
             .map((i) => TimelinePost.fromJson(i))
             .toList();

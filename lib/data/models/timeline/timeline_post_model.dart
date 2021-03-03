@@ -9,28 +9,29 @@ class TimelinePost extends Equatable {
   String videoUrl;
   String thumbnailUrl;
   String photoUrl;
-  String fullname;
+  String username;
   int likesCount;
   int commentsCount;
   bool liked = false;
   DateTime createdAt;
   DateTime updatedAt;
 
-  TimelinePost(
-      {this.id,
-      this.userId,
-      this.description,
-      this.type,
-      this.imageUrl,
-      this.videoUrl,
-      this.thumbnailUrl,
-      this.photoUrl,
-      this.fullname,
-      this.likesCount,
-      this.commentsCount,
-      this.liked,
-      this.createdAt,
-      this.updatedAt});
+  TimelinePost({
+    this.id,
+    this.userId,
+    this.description,
+    this.type,
+    this.imageUrl,
+    this.videoUrl,
+    this.thumbnailUrl,
+    this.photoUrl,
+    this.username,
+    this.likesCount,
+    this.commentsCount,
+    this.liked,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory TimelinePost.fromJson(Map<String, dynamic> parsedJson) {
     return TimelinePost(
@@ -42,7 +43,7 @@ class TimelinePost extends Equatable {
         videoUrl: parsedJson['videoUrl'],
         thumbnailUrl: parsedJson['thumbnailUrl'],
         photoUrl: parsedJson['photoUrl'],
-        fullname: parsedJson['fullname'],
+        username: parsedJson['username'],
         likesCount: parsedJson['likesCount'],
         liked: (parsedJson['liked'] == null ? false : parsedJson['liked']),
         commentsCount: parsedJson['commentsCount'],
@@ -60,7 +61,7 @@ class TimelinePost extends Equatable {
         videoUrl,
         thumbnailUrl,
         photoUrl,
-        fullname,
+        username,
         likesCount,
         commentsCount,
         liked,
