@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline_post_model.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
+import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -112,7 +113,8 @@ class PhotoTimeline extends StatefulWidget {
   PhotoTimeline({this.post, this.timelineBloc});
 
   @override
-  _PhotoTimelineState createState() => _PhotoTimelineState(post: this.post, timelineBloc: this.timelineBloc);
+  _PhotoTimelineState createState() =>
+      _PhotoTimelineState(post: this.post, timelineBloc: this.timelineBloc);
 }
 
 class _PhotoTimelineState extends State<PhotoTimeline> {
@@ -146,7 +148,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                     ),
                   ),
                   Text(
-                    this.post.fullname,
+                    this.post.username,
                     textAlign: TextAlign.start,
                   ),
                 ],
@@ -181,7 +183,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                       AssetImage('assets/icons/comment.png'),
                       color: Colors.black12,
                     ),
-                    onPressed: null,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CommentScreen()),
+                      );
+                    },
                   ),
                 ],
               ),
