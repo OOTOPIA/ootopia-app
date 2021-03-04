@@ -1,11 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'dart:convert';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 
 abstract class CommentRepository {
   Future<List<Comment>> getComments(String postId);
-  //Future<LikePostResult> likePost(String id);
+  Future<Comment> createComment(CommentCreate comment);
   //Future<TimelinePost> getPost(int id);
   //Future<TimelinePost> updatePost(post);
   //Future<TimelinePost> deletePost(int id);
@@ -34,6 +35,29 @@ class CommentRepositoryImpl implements CommentRepository {
       }
     } catch (error) {
       throw Exception('Failed to load posts' + error);
+    }
+  }
+
+  @override
+  Future<Comment> createComment(CommentCreate comment) async {
+    print("Hello My Frind");
+
+    try {
+      final response = await http.post(
+        DotEnv.env['API_URL'] + 'posts/${comment.postId}/comments',
+        headers: API_HEADERS,
+        body: jsonEncode(<String, String>{
+          'text': comment.text,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        return Comment.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to create post');
+      }
+    } catch (error) {
+      throw Exception('Failed to create post ' + error);
     }
   }
 }

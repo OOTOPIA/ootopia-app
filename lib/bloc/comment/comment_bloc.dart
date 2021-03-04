@@ -1,36 +1,75 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 
-class CommentBloc {
+part 'comment_event.dart';
+part 'comment_state.dart';
+
+class CommentBloc extends Bloc<CommentEvent, CommentState> {
   CommentRepositoryImpl repository = CommentRepositoryImpl();
 
-  final StreamController<CommentCreate> _createCommentController =
-      StreamController<CommentCreate>();
-  Sink<CommentCreate> get createComment => _createCommentController.sink;
+  CommentBloc(this.repository) : super(CommentInitialState());
 
-  final StreamController<String> _getCommentsController =
-      StreamController<String>();
-  Sink<String> get getComments => _getCommentsController.sink;
-  Stream<List<Comment>> get onGetComments =>
-      _getCommentsController.stream.asyncMap((postId) => _getComments(postId));
+  @override
+  CommentState get initialState => CommentInitialState();
 
-  Future<List<Comment>> _getComments(String postId) async {
+  @override
+  Stream<CommentState> mapEventToState(
+    CommentEvent event,
+  ) async* {
+    LoadingState();
+    if (event is GetCommentEvent) {
+      yield LoadingState();
+      yield* _mapGetComments(event.postId);
+    } else if (event is CreateCommentEvent) {
+      yield* _mapCreateCommentToState(event);
+    }
+    // else if (event is Comment) {
+    //   yield* _mapUserLoginToState(event);
+    // }
+    // Stream<TimelinePostState> _mapAlbumsLoadedToState() async* {
+    //   try {
+    //     var posts = (await this.repository.getPosts());
+    //     yield LoadedSucessState(posts);
+    //   } catch (_) {
+    //     yield ErrorState("error loading Albums");
+    //   }
+    // }
+  }
+
+  Stream<CommentState> _mapGetComments(postId) async* {
     try {
-      print("CALL GET COMMENTS");
-      List<Comment> comments = (await this.repository.getComments(postId));
-      print("GET COMMENTS RESPONSE");
-      print("FIRST COMMENT " +
-          comments[0].username +
-          "; TEXT: " +
-          comments[0].text);
-      return comments;
-    } catch (error) {
-      print("DEU ERRO ${error.toString()}");
+      var comments = (await this.repository.getComments(postId));
+      yield CommentSuccessState(comments);
+    } catch (_) {
+      yield CommentErrorState("error loading comments");
+    }
+  }
 
-      throw Exception('Failed to load posts' + error);
+  Stream<CommentState> _mapCreateCommentToState(
+      CreateCommentEvent event) async* {
+    try {
+      if (state is CommentSuccessState) {
+        print("MANDAR O COMENTARIO ${event.comment.text}");
+        var result = (await this.repository.createComment(event.comment));
+        if (result != null) {
+          Comment comment = result;
+
+          List<Comment> comments = (state as CommentSuccessState).comments
+            ..add(comment);
+
+          yield EmptyState();
+          yield CommentSuccessState(comments.reversed.toList());
+        }
+      }
+    } catch (_) {
+      yield ErrorCreateCommentState("Error on create a comment");
     }
   }
 }
