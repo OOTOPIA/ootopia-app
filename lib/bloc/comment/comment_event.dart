@@ -18,13 +18,12 @@ class GetCommentEvent extends CommentEvent {
 }
 
 class CreateCommentEvent extends CommentEvent {
-  final String postId;
-  final String text;
+  final CommentCreate comment;
 
-  CreateCommentEvent({this.postId, this.text});
+  CreateCommentEvent({this.comment});
 
   @override
-  List<Object> get props => [this.postId, this.text];
+  List<Object> get props => [this.comment];
 }
 
 class LoadingSucessCommentsEvent extends CommentEvent {

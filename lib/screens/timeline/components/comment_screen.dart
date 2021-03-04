@@ -16,6 +16,7 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   final TextEditingController _inputController = TextEditingController();
+  ScrollController _scrollController = new ScrollController();
 
   CommentBloc commentBloc;
 
@@ -25,10 +26,13 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   void _addComment() {
-    print("Hello");
-
-    CommentCreate commentCreate =
-        CommentCreate(postId: widget.postId, text: _inputController.toString());
+    print("Add Comment");
+    commentBloc.add(
+      CreateCommentEvent(
+        comment:
+            CommentCreate(postId: widget.postId, text: _inputController.text),
+      ),
+    );
 
     // bloc.createComment.add(commentCreate);
 
@@ -44,19 +48,25 @@ class _CommentScreenState extends State<CommentScreen> {
         title: Text('Comentarios'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          BlocListener<CommentBloc, CommentState>(
-            listener: (context, state) {},
-            child: _blocBuilder(),
+          Expanded(
+            child: Center(
+              child: BlocListener<CommentBloc, CommentState>(
+                listener: (context, state) {},
+                child: _blocBuilder(),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              style: TextStyle(color: Colors.black),
               controller: _inputController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Comentário',
+                hintStyle: TextStyle(color: Colors.black),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () => _addComment(),
@@ -80,29 +90,43 @@ class _CommentScreenState extends State<CommentScreen> {
           child: Text('Nenhum comentário'),
         );
       } else if (state is CommentSuccessState) {
-        return Column(
-          children: <Widget>[
-            Expanded(
-              child: RefreshIndicator(
-                  onRefresh: () async {
-                    // state.comments = [];
-                    // _getData();
+        print("SUCCESS STATE");
+        return Center(
+          child: Column(
+            children: <Widget>[
+              RefreshIndicator(
+                onRefresh: () async {
+                  // state.comments = [];
+                  // _getData();
+                },
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  itemCount: state.comments.length,
+                  itemBuilder: (context, index) {
+                    return CommentItem(
+                      photoUrl: state.comments[index].photoUrl,
+                      text: state.comments[index].text,
+                      username: state.comments[index].username,
+                    );
                   },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.comments.length,
-                    itemBuilder: (context, index) {
-                      return CommentItem(
-                        photoUrl: state.comments[index].photoUrl,
-                        text: state.comments[index].text,
-                        username: state.comments[index].username,
-                      );
-                    },
-                  )),
-            ),
-          ],
+                ),
+              ),
+            ],
+          ),
         );
       }
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'nothing data :(',
+            ),
+          ],
+        ),
+      );
     });
   }
 }
@@ -127,17 +151,27 @@ class CommentItem extends StatelessWidget {
               minRadius: 16,
             ),
           ),
-          Text(
-            this.username + ': ',
-            textAlign: TextAlign.start,
-            style: new TextStyle(
-              fontWeight: FontWeight.bold,
+          Flexible(
+            child: RichText(
+              text: TextSpan(
+                text: this.username + ': ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  fontSize: 16,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: this.text,
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          Text(
-            this.text,
-            textAlign: TextAlign.start,
-          ),
+          )
         ],
       ),
     );

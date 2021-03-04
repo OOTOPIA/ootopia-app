@@ -8,7 +8,7 @@ import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import './screens/timeline/timeline.dart';
+import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
 import 'data/repositories/comment_repository.dart';
 

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 
@@ -26,6 +27,8 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     if (event is GetCommentEvent) {
       yield LoadingState();
       yield* _mapGetComments(event.postId);
+    } else if (event is CreateCommentEvent) {
+      yield* _mapCreateCommentToState(event);
     }
     // else if (event is Comment) {
     //   yield* _mapUserLoginToState(event);
@@ -46,6 +49,34 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       yield CommentSuccessState(comments);
     } catch (_) {
       yield CommentErrorState("error loading comments");
+    }
+  }
+
+  Stream<CommentState> _mapCreateCommentToState(
+      CreateCommentEvent event) async* {
+    try {
+      if (state is CommentSuccessState) {
+        print("MANDAR O COMENTARIO ${event.comment.text}");
+        var result = (await this.repository.createComment(event.comment));
+        if (result != null) {
+          Comment comment = result;
+
+          List<Comment> comments = [];
+
+          comments.add(comment);
+
+          (state as CommentSuccessState).comments.forEach((c) {
+            comments.add(c);
+          });
+
+          print("LIST SIZE: ${comments.length}");
+
+          yield EmptyState();
+          yield CommentSuccessState(comments);
+        }
+      }
+    } catch (_) {
+      yield ErrorCreateCommentState("Error on create a comment");
     }
   }
 }
