@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
+import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:video_player/video_player.dart';
@@ -28,27 +29,23 @@ class _TimelinePageState extends State<TimelinePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          'Ootopia',
-          // 'App Teste',
-          style: GoogleFonts.jomhuria(
-              fontStyle: FontStyle.normal, color: Colors.blue, fontSize: 42),
-        ),
+        title: Image.asset('assets/images/logo.png', height: 42),
         backgroundColor: Colors.white,
       ),
       body: Center(
-          child: BlocListener<TimelinePostBloc, TimelinePostState>(
-        listener: (context, state) {
-          if (state is ErrorState) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
-          }
-        },
-        child: _blocBuilder(),
-      )),
+        child: BlocListener<TimelinePostBloc, TimelinePostState>(
+          listener: (context, state) {
+            if (state is ErrorState) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            }
+          },
+          child: _blocBuilder(),
+        ),
+      ),
       bottomNavigationBar: NavigatorBar(),
     );
   }
@@ -175,7 +172,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                             )
                           : ImageIcon(
                               AssetImage('assets/icons/heart_filled.png'),
-                              color: Color(0xff0253e7),
+                              color: Theme.of(context).accentColor,
                             ),
                       onPressed: () => {this._likePost()}),
                   IconButton(
@@ -244,10 +241,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
   }
 
   void _likePost() {
-    setState(() {
+    //TODO: Fazer o push somente quando não estiver logado
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+    /*setState(() {
       this.timelineBloc.add(LikePostEvent(this.post.id));
       this.post.liked = !this.post.liked;
-    });
+    });*/
   }
 }
 
