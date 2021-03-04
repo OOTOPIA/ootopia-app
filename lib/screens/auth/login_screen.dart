@@ -1,0 +1,320 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  AuthBloc authBloc;
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    authBloc = BlocProvider.of<AuthBloc>(context);
+  }
+
+  void _submit() {
+    setState(() {
+      isLoading = true;
+      authBloc.add(EmptyEvent());
+      authBloc.add(LoginEvent(_emailController.text, _passwordController.text));
+    });
+  }
+
+  void _isLoading(bool loading) {
+    setState(() {
+      isLoading = loading;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is ErrorState) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        } else if (state is LoadedSucessState) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Successfully Logged In"),
+            ),
+          );
+        }
+      },
+      child: _blocBuilder(),
+    ));
+  }
+
+  _blocBuilder() {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is LoadedSucessState) {
+          isLoading = false;
+        }
+        return ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/login_bg.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding:
+                    EdgeInsets.all(GlobalConstants.of(context).spacingMedium),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/white_logo.png',
+                                  height:
+                                      GlobalConstants.of(context).logoHeight,
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: GlobalConstants.of(context)
+                                      .spacingNormal),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: GlobalConstants.of(context).spacingMedium,
+                              ),
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    controller: _emailController,
+                                    autofocus: true,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      hintText: 'E-mail',
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      filled: true,
+                                      fillColor: Colors.white12,
+                                      contentPadding: EdgeInsets.only(
+                                        left: GlobalConstants.of(context)
+                                            .spacingNormal,
+                                        bottom: GlobalConstants.of(context)
+                                            .spacingSmall,
+                                        top: GlobalConstants.of(context)
+                                            .spacingSmall,
+                                        right: GlobalConstants.of(context)
+                                            .spacingNormal,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Please enter your e-mail';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context)
+                                        .spacingNormal,
+                                  ),
+                                  TextFormField(
+                                    controller: _passwordController,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      hintText: 'Password',
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      filled: true,
+                                      fillColor: Colors.white12,
+                                      contentPadding: EdgeInsets.only(
+                                        left: GlobalConstants.of(context)
+                                            .spacingNormal,
+                                        bottom: GlobalConstants.of(context)
+                                            .spacingSmall,
+                                        top: GlobalConstants.of(context)
+                                            .spacingSmall,
+                                        right: GlobalConstants.of(context)
+                                            .spacingNormal,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.white, width: 1.5),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Please enter your password';
+                                      }
+                                      return null;
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: GlobalConstants.of(context).spacingLarge,
+                                bottom:
+                                    GlobalConstants.of(context).spacingLarge,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'I forgot my password',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FlatButton(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                GlobalConstants.of(context).spacingNormal,
+                              ),
+                              child: Text(
+                                "Create account",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            onPressed: () {},
+                            splashColor: Colors.black54,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          SizedBox(
+                            height: GlobalConstants.of(context).spacingNormal,
+                          ),
+                          FlatButton(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                GlobalConstants.of(context).spacingNormal,
+                              ),
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                _submit();
+                              }
+                            },
+                            color: Colors.white,
+                            splashColor: Colors.black54,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
