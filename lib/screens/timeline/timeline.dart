@@ -184,7 +184,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CommentScreen()),
+                            builder: (context) => CommentScreen(
+                                  postId: this.post.id,
+                                )),
                       );
                     },
                   ),

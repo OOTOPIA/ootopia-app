@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 
 class CommentScreen extends StatefulWidget {
   final List<Comment> _comments = List();
+  final String postId;
+
+  CommentScreen({this.postId});
 
   @override
   _CommentScreenState createState() => _CommentScreenState();
@@ -13,18 +17,24 @@ class CommentScreen extends StatefulWidget {
 class _CommentScreenState extends State<CommentScreen> {
   final TextEditingController _inputController = TextEditingController();
 
-  CommentBloc bloc = CommentBloc();
+  CommentBloc commentBloc;
 
   void initState() {
-    bloc.getComments.add("c78df9ee-2636-4b98-9c6a-ab07ab5f10b1");
+    commentBloc = BlocProvider.of<CommentBloc>(context);
+    commentBloc.add(GetCommentEvent(postId: widget.postId));
   }
 
-  void _addComment(Comment comment) {
-    if (comment != null) {
-      setState(() {
-        widget._comments.add(comment);
-      });
-    }
+  void _addComment() {
+    print("Hello");
+
+    CommentCreate commentCreate =
+        CommentCreate(postId: widget.postId, text: _inputController.toString());
+
+    // bloc.createComment.add(commentCreate);
+
+    // setState(() {
+    //   widget._comments.add(commentCreate);
+    // });
   }
 
   @override
@@ -36,38 +46,20 @@ class _CommentScreenState extends State<CommentScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Center(
-              child: StreamBuilder<List<Comment>>(
-            stream: bloc.onGetComments,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot?.data?.length ?? 0,
-                itemBuilder: (context, index) {
-                  Comment comment = snapshot.data[index];
-                  return CommentItem(
-                    avatarUrl: comment.photoUrl,
-                    nickName: comment.username,
-                    comment: comment.text,
-                  );
-                },
-              );
-            },
-          )),
+          BlocListener<CommentBloc, CommentState>(
+            listener: (context, state) {},
+            child: _blocBuilder(),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              obscureText: true,
               controller: _inputController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Comentário',
                 suffixIcon: IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: () {},
+                  onPressed: () => _addComment(),
                 ),
               ),
             ),
@@ -76,14 +68,51 @@ class _CommentScreenState extends State<CommentScreen> {
       ),
     );
   }
+
+  _blocBuilder() {
+    return BlocBuilder<CommentBloc, CommentState>(builder: (context, state) {
+      if (state is LoadingState) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (state is CommentErrorState) {
+        return Center(
+          child: Text('Nenhum comentário'),
+        );
+      } else if (state is CommentSuccessState) {
+        return Column(
+          children: <Widget>[
+            Expanded(
+              child: RefreshIndicator(
+                  onRefresh: () async {
+                    // state.comments = [];
+                    // _getData();
+                  },
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.comments.length,
+                    itemBuilder: (context, index) {
+                      return CommentItem(
+                        photoUrl: state.comments[index].photoUrl,
+                        text: state.comments[index].text,
+                        username: state.comments[index].username,
+                      );
+                    },
+                  )),
+            ),
+          ],
+        );
+      }
+    });
+  }
 }
 
 class CommentItem extends StatelessWidget {
-  String avatarUrl;
-  String nickName;
-  String comment;
+  String photoUrl = '';
+  String username = '';
+  String text = '';
 
-  CommentItem({this.avatarUrl, this.nickName, this.comment});
+  CommentItem({this.photoUrl, this.username, this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -91,22 +120,22 @@ class CommentItem extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: CircleAvatar(
-          //     backgroundImage: NetworkImage("${this.post.photoUrl}"),
-          //     minRadius: 16,
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage("${this.photoUrl}"),
+              minRadius: 16,
+            ),
+          ),
           Text(
-            this.nickName + ': ',
+            this.username + ': ',
             textAlign: TextAlign.start,
             style: new TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
-            this.comment,
+            this.text,
             textAlign: TextAlign.start,
           ),
         ],
