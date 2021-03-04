@@ -51,8 +51,6 @@ class CommentRepositoryImpl implements CommentRepository {
         }),
       );
 
-      print('Essa aqui $response');
-
       if (response.statusCode == 201) {
         return Comment.fromJson(json.decode(response.body));
       } else {

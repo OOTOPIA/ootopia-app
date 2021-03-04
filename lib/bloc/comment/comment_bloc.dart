@@ -61,18 +61,11 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
         if (result != null) {
           Comment comment = result;
 
-          List<Comment> comments = [];
-
-          comments.add(comment);
-
-          (state as CommentSuccessState).comments.forEach((c) {
-            comments.add(c);
-          });
-
-          print("LIST SIZE: ${comments.length}");
+          List<Comment> comments = (state as CommentSuccessState).comments
+            ..add(comment);
 
           yield EmptyState();
-          yield CommentSuccessState(comments);
+          yield CommentSuccessState(comments.reversed.toList());
         }
       }
     } catch (_) {
