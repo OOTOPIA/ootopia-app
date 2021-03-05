@@ -25,8 +25,6 @@ class CommentRepositoryImpl implements CommentRepository {
       if (response.statusCode == 200) {
         print("RESPONSE BODY: ${response.body}");
         List l = (json.decode(response.body) as List);
-        print("LIST SIZE ${l.length}");
-        print("test1 " + l[0]['username']);
         return (json.decode(response.body) as List)
             .map((i) => Comment.fromJson(i))
             .toList();

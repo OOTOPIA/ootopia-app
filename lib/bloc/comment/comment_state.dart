@@ -41,11 +41,12 @@ class SuccessCreateCommentState extends CommentState {
 
 class CommentSuccessState extends CommentState {
   List<Comment> comments;
+  bool newCommentIsAdded;
 
-  CommentSuccessState(this.comments);
+  CommentSuccessState(this.comments, [this.newCommentIsAdded = false]);
 
   @override
-  List<Object> get props => [comments];
+  List<Object> get props => [comments, newCommentIsAdded];
 }
 
 class CommentErrorState extends CommentState {

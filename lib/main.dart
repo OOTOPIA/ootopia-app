@@ -61,7 +61,7 @@ class ExpensesApp extends StatelessWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 1.5),
+              borderSide: BorderSide(color: Colors.black54, width: 1.5),
               borderRadius: BorderRadius.circular(100),
             ),
             hintStyle: TextStyle(color: Colors.white),
@@ -74,11 +74,12 @@ class ExpensesApp extends StatelessWidget {
               right: GlobalConstants.of(context).spacingNormal,
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 1.5),
+              borderSide:
+                  BorderSide(color: Theme.of(context).accentColor, width: 1.5),
               borderRadius: BorderRadius.circular(100),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 1.5),
+              borderSide: BorderSide(color: Colors.black54, width: 1.5),
               borderRadius: BorderRadius.circular(100),
             ),
           ),

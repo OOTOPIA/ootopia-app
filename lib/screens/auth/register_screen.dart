@@ -154,9 +154,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       controller: _nameController,
                                       keyboardType: TextInputType.name,
                                       autofocus: true,
-                                      decoration: InputDecoration(
-                                        hintText: 'Name and surname',
-                                      ),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme('Name and surname'),
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter your e-mail';
@@ -171,9 +170,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     TextFormField(
                                       controller: _emailController,
                                       keyboardType: TextInputType.emailAddress,
-                                      decoration: InputDecoration(
-                                        hintText: "E-mail",
-                                      ),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme('E-mail'),
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter your e-mail';
@@ -188,8 +186,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     TextFormField(
                                       controller: _passwordController,
                                       obscureText: true,
-                                      decoration:
-                                          InputDecoration(hintText: "Password"),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme('Password'),
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter your password';
