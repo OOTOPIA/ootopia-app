@@ -15,7 +15,7 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
-  final TextEditingController _inputController = TextEditingController();
+  TextEditingController _inputController = TextEditingController();
   ScrollController _scrollController = new ScrollController();
 
   CommentBloc commentBloc;
@@ -39,27 +39,32 @@ class _CommentScreenState extends State<CommentScreen> {
       ),
     );
 
-    _inputController.text = "";
+    _inputController.clear();
+    _removeFocusInput();
+  }
+
+  void _removeFocusInput() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      FocusManager.instance.primaryFocus.unfocus();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Comentarios'),
-      ),
-      body: BlocListener<CommentBloc, CommentState>(
-        listener: (context, state) {
-          print("State changes");
-          if (state is CommentSuccessState) {
-            print("SOME O CARREGANDO");
-            newCommentLoading = false;
-          }
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
+    return GestureDetector(
+      onTap: () => _removeFocusInput(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Comentarios'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: _blocBuilder()),
+            BlocListener<CommentBloc, CommentState>(
+              listener: (context, state) {},
+              child: _blocBuilder(),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
@@ -69,15 +74,13 @@ class _CommentScreenState extends State<CommentScreen> {
                   border: OutlineInputBorder(),
                   labelText: 'Comentário',
                   hintStyle: TextStyle(color: Colors.black),
-                  suffix: newCommentLoading
-                      ? CircularProgressIndicator()
-                      : IconButton(
-                          icon: Icon(Icons.send),
-                          onPressed: () => _addComment(),
-                        ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () => _addComment(),
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -96,52 +99,30 @@ class _CommentScreenState extends State<CommentScreen> {
             child: Text('Nenhum comentário'),
           );
         } else if (state is CommentSuccessState) {
-          print("SUCCESS STATE");
-          return Center(
-            child: Column(
-              children: <Widget>[
-                RefreshIndicator(
-                  onRefresh: () async {
-                    // state.comments = [];
-                    // _getData();
-                  },
-                  child: ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    controller: _scrollController,
-                    shrinkWrap: true,
-                    itemCount: state.comments.length,
-                    itemBuilder: (context, index) {
-                      return CommentItem(
-                        photoUrl: state.comments[index].photoUrl,
-                        text: state.comments[index].text,
-                        username: state.comments[index].username,
-                      );
-                    },
-                  ),
-                ),
-              ],
+          return Expanded(
+            flex: 1,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: state.comments.length,
+              itemBuilder: (context, index) {
+                return CommentItem(
+                  photoUrl: state.comments[index].photoUrl,
+                  text: state.comments[index].text,
+                  username: state.comments[index].username,
+                );
+              },
             ),
           );
         }
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'nothing data :(',
-              ),
-            ],
-          ),
-        );
       },
     );
   }
 }
 
 class CommentItem extends StatelessWidget {
-  String photoUrl = '';
-  String username = '';
-  String text = '';
+  String photoUrl;
+  String username;
+  String text;
 
   CommentItem({this.photoUrl, this.username, this.text});
 
@@ -152,7 +133,7 @@ class CommentItem extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: CircleAvatar(
               backgroundImage: NetworkImage("${this.photoUrl}"),
               minRadius: 16,
@@ -163,10 +144,9 @@ class CommentItem extends StatelessWidget {
               text: TextSpan(
                 text: (this.username != null ? this.username : "") + ': ',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                  fontSize: 16,
-                ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                    fontSize: 16),
                 children: <TextSpan>[
                   TextSpan(
                     text: this.text,
