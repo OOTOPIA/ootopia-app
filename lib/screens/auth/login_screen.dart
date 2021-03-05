@@ -128,10 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                                 children: [
                                   TextFormField(
                                     controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
                                     autofocus: true,
-                                    decoration: InputDecoration(
-                                      hintText: 'E-mail',
-                                    ),
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme("E-mail"),
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'Please enter your e-mail';
@@ -146,9 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                                   TextFormField(
                                     controller: _passwordController,
                                     obscureText: true,
-                                    decoration: InputDecoration(
-                                      hintText: 'Password',
-                                    ),
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme("Password"),
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'Please enter your password';

@@ -56,16 +56,15 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       CreateCommentEvent event) async* {
     try {
       if (state is CommentSuccessState) {
-        print("MANDAR O COMENTARIO ${event.comment.text}");
         var result = (await this.repository.createComment(event.comment));
         if (result != null) {
           Comment comment = result;
 
-          List<Comment> comments = (state as CommentSuccessState).comments
-            ..add(comment);
+          List<Comment> comments = (state as CommentSuccessState).comments;
+          comments.insert(0, comment);
 
           yield EmptyState();
-          yield CommentSuccessState(comments.reversed.toList());
+          yield CommentSuccessState(comments.toList(), true);
         }
       }
     } catch (_) {
