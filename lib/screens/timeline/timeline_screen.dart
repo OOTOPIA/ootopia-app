@@ -168,7 +168,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                       icon: !this.post.liked
                           ? ImageIcon(
                               AssetImage('assets/icons/heart.png'),
-                              color: Colors.black12,
+                              color: Colors.black87,
                             )
                           : ImageIcon(
                               AssetImage('assets/icons/heart_filled.png'),
@@ -178,15 +178,16 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                   IconButton(
                     icon: ImageIcon(
                       AssetImage('assets/icons/comment.png'),
-                      color: Colors.black12,
+                      color: Colors.black87,
                     ),
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CommentScreen(
-                                  postId: this.post.id,
-                                )),
+                          builder: (context) => CommentScreen(
+                            postId: this.post.id,
+                          ),
+                        ),
                       );
                     },
                   ),
