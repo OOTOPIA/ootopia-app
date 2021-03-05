@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:video_player/video_player.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,14 +15,20 @@ class TimelinePage extends StatefulWidget {
   _TimelinePageState createState() => _TimelinePageState();
 }
 
-class _TimelinePageState extends State<TimelinePage> {
+class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   TimelinePostBloc timelineBloc;
+  bool loggedIn = false;
 
   @override
   void initState() {
     super.initState();
+    _checkUserIsLoggedIn();
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     timelineBloc.add(LoadingSucessTimelinePostEvent());
+  }
+
+  void _checkUserIsLoggedIn() async {
+    loggedIn = await getUserIsLoggedIn();
   }
 
   @override
@@ -73,8 +80,10 @@ class _TimelinePageState extends State<TimelinePage> {
                       itemCount: state.posts.length,
                       itemBuilder: (context, index) {
                         return PhotoTimeline(
-                            post: state.posts[index],
-                            timelineBloc: this.timelineBloc);
+                          post: state.posts[index],
+                          timelineBloc: this.timelineBloc,
+                          loggedIn: this.loggedIn,
+                        );
                       },
                     )),
               ),
@@ -107,17 +116,22 @@ class _TimelinePageState extends State<TimelinePage> {
 class PhotoTimeline extends StatefulWidget {
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
-  PhotoTimeline({this.post, this.timelineBloc});
+  bool loggedIn = false;
+  PhotoTimeline({this.post, this.timelineBloc, this.loggedIn});
 
   @override
-  _PhotoTimelineState createState() =>
-      _PhotoTimelineState(post: this.post, timelineBloc: this.timelineBloc);
+  _PhotoTimelineState createState() => _PhotoTimelineState(
+        post: this.post,
+        timelineBloc: this.timelineBloc,
+        loggedIn: this.loggedIn,
+      );
 }
 
 class _PhotoTimelineState extends State<PhotoTimeline> {
   TimelinePost post;
   final TimelinePostBloc timelineBloc;
-  _PhotoTimelineState({this.post, this.timelineBloc});
+  bool loggedIn = false;
+  _PhotoTimelineState({this.post, this.timelineBloc, this.loggedIn});
 
   bool dragging = false;
 
@@ -245,14 +259,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
 
   void _likePost() {
     //TODO: Fazer o push somente quando não estiver logado
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-    /*setState(() {
-      this.timelineBloc.add(LikePostEvent(this.post.id));
-      this.post.liked = !this.post.liked;
-    });*/
+    if (!loggedIn) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } else {
+      setState(() {
+        this.timelineBloc.add(LikePostEvent(this.post.id));
+        this.post.liked = !this.post.liked;
+      });
+    }
   }
 }
 

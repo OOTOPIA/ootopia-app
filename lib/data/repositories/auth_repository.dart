@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'dart:convert';
 
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class AuthRepository {
   Future<User> login(String email, String password);
@@ -13,7 +14,7 @@ const Map<String, String> API_HEADERS = {
   'Content-Type': 'application/json; charset=UTF-8'
 };
 
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   @override
   Future<User> login(String email, String password) async {
     try {
@@ -27,7 +28,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
         if (response.statusCode == 200) {
           print("RESPONSE BODY ${response.body}");
-          return User.fromJson(json.decode(response.body));
+          User user = User.fromJson(json.decode(response.body));
+
+          await setAuthToken(user.token);
+
+          return user;
         } else {
           throw Exception('Failed to login');
         }
