@@ -28,7 +28,12 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   void _addComment() {
-    print("Add Comment");
+    print("Value Input ${_inputController.text}");
+
+    if (_inputController.text.length <= 0) {
+      return;
+    }
+
     setState(() {
       newCommentLoading = true;
       commentBloc.add(
@@ -89,8 +94,20 @@ class _CommentScreenState extends State<CommentScreen> {
                       decoration: InputDecoration(
                         labelText: 'Escreva seu comentário',
                         hintStyle: TextStyle(color: Colors.black),
-                        suffix: newCommentLoading
-                            ? CircularProgressIndicator()
+                        suffixIcon: newCommentLoading
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 14.0),
+                                    child: SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                ],
+                              )
                             : IconButton(
                                 icon: Icon(Icons.send),
                                 onPressed: () => _addComment(),
@@ -111,13 +128,19 @@ class _CommentScreenState extends State<CommentScreen> {
     return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
         if (state is LoadingState) {
-          return Center(
-            child: CircularProgressIndicator(),
+          return Expanded(
+            flex: 1,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         } else if (state is CommentSuccessState) {
           if (state.comments == null || state.comments.length <= 0) {
-            return Center(
-              child: Text('Nenhum comentário'),
+            return Expanded(
+              flex: 1,
+              child: Center(
+                child: Text('Nenhum comentário'),
+              ),
             );
           }
           return Expanded(
