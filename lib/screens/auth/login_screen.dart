@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/register_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -32,33 +34,35 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void _isLoading(bool loading) {
-    setState(() {
-      isLoading = loading;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is ErrorState) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
-        } else if (state is LoadedSucessState) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Successfully Logged In"),
-            ),
-          );
-        }
-      },
-      child: _blocBuilder(),
-    ));
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is ErrorState) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          } else if (state is LoadedSucessState) {
+            print("LOGGED!!!!!");
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Color(0xff66bb6a),
+                content: Text("Successfully Logged In"),
+              ),
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => TimelinePage(),
+                ),
+                (Route<dynamic> route) => false);
+          }
+        },
+        child: _blocBuilder(),
+      ),
+    );
   }
 
   _blocBuilder() {
@@ -126,38 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _emailController,
                                     autofocus: true,
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
                                       hintText: 'E-mail',
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      filled: true,
-                                      fillColor: Colors.white12,
-                                      contentPadding: EdgeInsets.only(
-                                        left: GlobalConstants.of(context)
-                                            .spacingNormal,
-                                        bottom: GlobalConstants.of(context)
-                                            .spacingSmall,
-                                        top: GlobalConstants.of(context)
-                                            .spacingSmall,
-                                        right: GlobalConstants.of(context)
-                                            .spacingNormal,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
                                     ),
                                     validator: (value) {
                                       if (value.isEmpty) {
@@ -174,38 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _passwordController,
                                     obscureText: true,
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
                                       hintText: 'Password',
-                                      hintStyle: TextStyle(color: Colors.white),
-                                      filled: true,
-                                      fillColor: Colors.white12,
-                                      contentPadding: EdgeInsets.only(
-                                        left: GlobalConstants.of(context)
-                                            .spacingNormal,
-                                        bottom: GlobalConstants.of(context)
-                                            .spacingSmall,
-                                        top: GlobalConstants.of(context)
-                                            .spacingSmall,
-                                        right: GlobalConstants.of(context)
-                                            .spacingNormal,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.white, width: 1.5),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
                                     ),
                                     validator: (value) {
                                       if (value.isEmpty) {
@@ -261,7 +203,14 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisterPage(),
+                                ),
+                              );
+                            },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
