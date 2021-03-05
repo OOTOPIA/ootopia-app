@@ -59,6 +59,29 @@ class ExpensesApp extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 1.5),
+              borderRadius: BorderRadius.circular(100),
+            ),
+            hintStyle: TextStyle(color: Colors.white),
+            filled: true,
+            fillColor: Colors.white12,
+            contentPadding: EdgeInsets.only(
+              left: GlobalConstants.of(context).spacingNormal,
+              bottom: GlobalConstants.of(context).spacingSmall,
+              top: GlobalConstants.of(context).spacingSmall,
+              right: GlobalConstants.of(context).spacingNormal,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 1.5),
+              borderRadius: BorderRadius.circular(100),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 1.5),
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
         ),
         home: TimelinePage(),
       ),

@@ -27,6 +27,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield LoadingState();
     } else if (event is LoginEvent) {
       yield* _mapUserLoginToState(event);
+    } else if (event is RegisterEvent) {
+      yield* _mapUserRegisterToState(event);
     } // else if (event is UpdateTimelinePostEvent) {
     //   yield* _mapAlbumUpdatedToState(event);
     // } else if (event is DeleteTimelinePostEvent) {
@@ -36,7 +38,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapUserLoginToState(LoginEvent event) async* {
     try {
-      print("VAI LOGAR? ${event.email}");
       var result = (await this.repository.login(event.email, event.password));
       if (result != null) {
         User user = result;
@@ -44,8 +45,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield LoadedSucessState(user);
       }
     } catch (_) {
-      yield ErrorState("error on like a post");
+      yield ErrorState("Error on login");
     }
+  }
+
+  Stream<AuthState> _mapUserRegisterToState(RegisterEvent event) async* {
+    try {
+      print("NOVA CONTA ${event.email}");
+      var result = (await this
+          .repository
+          .register(event.name, event.email, event.password));
+      if (result != null) {
+        User user = result;
+        print("USER REGISTERED " + user.fullname);
+        yield EmptyState();
+        yield LoadedSucessState(user);
+      }
+    } catch (e) {
+      print('error caught: $e');
+      yield ErrorState("Error on register");
+    }
+    /*} catch (_) {
+      yield ErrorState("Error on register");
+    }*/
   }
 
   /*final StreamController<Map<String, String>> _loginController =
