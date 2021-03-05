@@ -71,13 +71,18 @@ class _CommentScreenState extends State<CommentScreen> {
                 style: TextStyle(color: Colors.black),
                 controller: _inputController,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Comentário',
-                  hintStyle: TextStyle(color: Colors.black),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () => _addComment(),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black54, width: 1.5),
+                    borderRadius: BorderRadius.circular(100),
                   ),
+                  labelText: 'Escreva seu comentário',
+                  hintStyle: TextStyle(color: Colors.black),
+                  suffix: newCommentLoading
+                      ? CircularProgressIndicator()
+                      : IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () => _addComment(),
+                        ),
                 ),
               ),
             ),
