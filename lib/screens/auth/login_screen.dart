@@ -71,6 +71,9 @@ class _LoginPageState extends State<LoginPage> {
         if (state is LoadedSucessState) {
           isLoading = false;
         }
+        if (state is ErrorState) {
+          isLoading = false;
+        }
         return ModalProgressHUD(
           inAsyncCall: isLoading,
           child: Container(

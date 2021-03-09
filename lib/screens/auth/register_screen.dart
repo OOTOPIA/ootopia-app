@@ -7,6 +7,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:email_validator/email_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -23,6 +24,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _repeatPasswordController =
+      TextEditingController();
 
   void _toggleTerms() {
     setState(() {
@@ -61,17 +64,11 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             );
           } else if (state is LoadedSucessState) {
-            print("REGISTERED!!!!!");
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Successfully Registered In"),
-              ),
-            );
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => TimelinePage(),
-                ),
-                (Route<dynamic> route) => false);
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+              builder: (context) {
+                return TimelinePage();
+              },
+            ), (Route<dynamic> route) => false);
           }
         },
         child: Scaffold(
@@ -158,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           .loginInputTheme('Name and surname'),
                                       validator: (value) {
                                         if (value.isEmpty) {
-                                          return 'Please enter your e-mail';
+                                          return 'Please enter your name and surname';
                                         }
                                         return null;
                                       },
@@ -175,6 +172,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter your e-mail';
+                                        } else if (!EmailValidator.validate(
+                                            value)) {
+                                          return 'Please enter a valid e-mail';
                                         }
                                         return null;
                                       },
@@ -191,6 +191,25 @@ class _RegisterPageState extends State<RegisterPage> {
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter your password';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: GlobalConstants.of(context)
+                                          .spacingNormal,
+                                    ),
+                                    TextFormField(
+                                      controller: _repeatPasswordController,
+                                      obscureText: true,
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme('Repeat password'),
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Please repeat your password';
+                                        }
+                                        if (value != _passwordController.text) {
+                                          return 'Password does not match';
                                         }
                                         return null;
                                       },

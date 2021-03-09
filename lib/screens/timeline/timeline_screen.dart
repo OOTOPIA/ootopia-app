@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
@@ -18,6 +19,7 @@ class TimelinePage extends StatefulWidget {
 class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   TimelinePostBloc timelineBloc;
   bool loggedIn = false;
+  User user;
 
   @override
   void initState() {
@@ -29,6 +31,10 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
+    if (loggedIn) {
+      user = await getCurrentUser();
+      print("LOGGED USER: " + user.fullname);
+    }
   }
 
   @override
@@ -237,19 +243,21 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
           Row(
             children: [
               Padding(
-                  padding:
-                      EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
-                  child: Text(this.post.description))
+                padding:
+                    EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
+                child: Text(this.post.description),
+              )
             ],
           ),
           Row(
             children: [
               Padding(
-                  padding: EdgeInsets.only(bottom: 12, left: 12),
-                  child: Text(
-                    "0 comments",
-                    style: TextStyle(color: Colors.black.withOpacity(0.4)),
-                  ))
+                padding: EdgeInsets.only(bottom: 12, left: 12),
+                child: Text(
+                  "0 comments",
+                  style: TextStyle(color: Colors.black.withOpacity(0.4)),
+                ),
+              )
             ],
           ),
         ],
@@ -258,7 +266,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
   }
 
   void _likePost() {
-    //TODO: Fazer o push somente quando não estiver logado
     if (!loggedIn) {
       Navigator.push(
         context,
@@ -268,6 +275,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
       setState(() {
         this.timelineBloc.add(LikePostEvent(this.post.id));
         this.post.liked = !this.post.liked;
+        if (this.post.liked) {
+          this.post.likesCount = this.post.likesCount + 1;
+        } else if (this.post.likesCount > 0) {
+          this.post.likesCount = this.post.likesCount - 1;
+        }
       });
     }
   }
