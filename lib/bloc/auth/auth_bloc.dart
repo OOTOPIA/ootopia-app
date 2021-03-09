@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
+import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -44,8 +46,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield EmptyState();
         yield LoadedSucessState(user);
       }
-    } catch (_) {
-      yield ErrorState("Error on login");
+    } on FetchDataException catch (e) {
+      String errorMessage = e.toString();
+
+      if (errorMessage == "INVALID_PASSWORD") {
+        yield ErrorState("Invalid email and/or password");
+      } else {
+        yield ErrorState("Error on login");
+      }
     }
   }
 
@@ -56,36 +64,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           .repository
           .register(event.name, event.email, event.password));
       if (result != null) {
-        User user = result;
-        print("USER REGISTERED " + user.fullname);
         yield EmptyState();
-        yield LoadedSucessState(user);
+        yield LoadedSucessState(result);
       }
-    } catch (e) {
-      print('error caught: $e');
-      yield ErrorState("Error on register");
+    } on FetchDataException catch (e) {
+      String errorMessage = e.toString();
+
+      if (errorMessage == "EMAIL_ALREADY_EXISTS") {
+        yield ErrorState(
+            "There is already a registered user with that email address");
+      } else {
+        yield ErrorState("Error on register");
+      }
     }
-    /*} catch (_) {
-      yield ErrorState("Error on register");
-    }*/
   }
-
-  /*final StreamController<Map<String, String>> _loginController =
-      StreamController<Map<String, String>>();
-  Sink<Map<String, String>> get login => _loginController.sink;
-  Stream<User> get onLogin =>
-      _loginController.stream.asyncMap((data) => _login(data));
-
-  Future<User> _login(Map<String, String> data) async {
-    try {
-      print("CALL LOGIN");
-      User user =
-          (await this.repository.login(data['email'], data['password']));
-      print("LOGGED USER " + user.fullname + "; " + user.email);
-      return user;
-    } catch (error) {
-      print("DEU ERRO ${error.toString()}");
-      throw Exception('Failed to login ' + error);
-    }
-  }*/
 }

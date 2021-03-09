@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'dart:convert';
 
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
+
 abstract class PostRepository {
   Future<List<TimelinePost>> getPosts();
   Future<LikePostResult> likePost(String id);
@@ -17,10 +19,26 @@ const Map<String, String> API_HEADERS = {
   'Content-Type': 'application/json; charset=UTF-8'
 };
 
-class PostRepositoryImpl implements PostRepository {
+class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
+  Future<Map<String, String>> getHeaders() async {
+    bool loggedIn = await getUserIsLoggedIn();
+    if (!loggedIn) {
+      return API_HEADERS;
+    }
+    String token = await getAuthToken();
+
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ' + token
+    };
+  }
+
   Future<List<TimelinePost>> getPosts() async {
     try {
-      final response = await http.get(DotEnv.env['API_URL'] + "posts");
+      final response = await http.get(
+        DotEnv.env['API_URL'] + "posts",
+        headers: await this.getHeaders(),
+      );
       if (response.statusCode == 200) {
         print("POSTS RESPONSE ${response.body}");
         return (json.decode(response.body) as List)
@@ -40,7 +58,7 @@ class PostRepositoryImpl implements PostRepository {
       if (id != null) {
         final response = await http.post(
           DotEnv.env['API_URL'] + "posts/$id/like",
-          headers: API_HEADERS,
+          headers: await this.getHeaders(),
         );
 
         if (response.statusCode == 200) {
