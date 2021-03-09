@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class CommentScreen extends StatefulWidget {
   final List<Comment> _comments = List();
@@ -14,17 +16,26 @@ class CommentScreen extends StatefulWidget {
   _CommentScreenState createState() => _CommentScreenState();
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   TextEditingController _inputController = TextEditingController();
   ScrollController _scrollController = new ScrollController();
+  User user;
 
   CommentBloc commentBloc;
 
   bool newCommentLoading = false;
 
   void initState() {
+    _checkUserIsLoggedIn();
     commentBloc = BlocProvider.of<CommentBloc>(context);
     commentBloc.add(GetCommentEvent(postId: widget.postId));
+  }
+
+  void _checkUserIsLoggedIn() async {
+    if (await getUserIsLoggedIn()) {
+      user = await getCurrentUser();
+      print("LOGGED USER: " + user.fullname);
+    }
   }
 
   void _addComment() {
@@ -155,6 +166,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 itemCount: state.comments.length,
                 itemBuilder: (context, index) {
                   return CommentItem(
+                    currentUser: this.user,
                     photoUrl: state.comments[index].photoUrl,
                     text: state.comments[index].text,
                     username: state.comments[index].username,
@@ -170,11 +182,12 @@ class _CommentScreenState extends State<CommentScreen> {
 }
 
 class CommentItem extends StatelessWidget {
+  User currentUser;
   String photoUrl;
   String username;
   String text;
 
-  CommentItem({this.photoUrl, this.username, this.text});
+  CommentItem({this.currentUser, this.photoUrl, this.username, this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -185,14 +198,21 @@ class CommentItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: CircleAvatar(
-              backgroundImage: NetworkImage("${this.photoUrl}"),
+              backgroundImage: NetworkImage(this.photoUrl == null
+                  ? this.currentUser.photoUrl
+                  : this.photoUrl),
               minRadius: 16,
             ),
           ),
           Flexible(
             child: RichText(
               text: TextSpan(
-                text: (this.username != null ? this.username : "") + ': ',
+                text: (this.username != null
+                        ? this.username
+                        : (this.currentUser.fullname != null
+                            ? this.currentUser.fullname
+                            : "")) +
+                    ': ',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,

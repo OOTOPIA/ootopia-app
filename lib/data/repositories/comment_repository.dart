@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'dart:convert';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class CommentRepository {
   Future<List<Comment>> getComments(String postId);
@@ -17,11 +18,26 @@ const Map<String, String> API_HEADERS = {
   'Content-Type': 'application/json; charset=UTF-8'
 };
 
-class CommentRepositoryImpl implements CommentRepository {
+class CommentRepositoryImpl with SecureStoreMixin implements CommentRepository {
+  Future<Map<String, String>> getHeaders() async {
+    bool loggedIn = await getUserIsLoggedIn();
+    if (!loggedIn) {
+      return API_HEADERS;
+    }
+    String token = await getAuthToken();
+
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ' + token
+    };
+  }
+
   Future<List<Comment>> getComments(postId) async {
     try {
-      final response = await http
-          .get(DotEnv.env['API_URL'] + "posts/" + postId + "/comments");
+      final response = await http.get(
+        DotEnv.env['API_URL'] + "posts/" + postId + "/comments",
+        headers: await this.getHeaders(),
+      );
       if (response.statusCode == 200) {
         print("RESPONSE BODY: ${response.body}");
         List l = (json.decode(response.body) as List);
@@ -38,12 +54,10 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Comment> createComment(CommentCreate comment) async {
-    print("Hello My Frind");
-
     try {
       final response = await http.post(
         DotEnv.env['API_URL'] + 'posts/${comment.postId}/comments',
-        headers: API_HEADERS,
+        headers: await this.getHeaders(),
         body: jsonEncode(<String, String>{
           'text': comment.text,
         }),
