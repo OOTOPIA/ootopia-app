@@ -4,6 +4,7 @@ import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   CommentBloc commentBloc;
 
   bool newCommentLoading = false;
+  bool loggedIn = false;
 
   void initState() {
     _checkUserIsLoggedIn();
@@ -32,28 +34,35 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   void _checkUserIsLoggedIn() async {
-    if (await getUserIsLoggedIn()) {
+    loggedIn = await getUserIsLoggedIn();
+    if (loggedIn) {
       user = await getCurrentUser();
       print("LOGGED USER: " + user.fullname);
     }
   }
 
   void _addComment() {
-    print("Value Input ${_inputController.text}");
-
     if (_inputController.text.length <= 0) {
       return;
     }
 
-    setState(() {
-      newCommentLoading = true;
-      commentBloc.add(
-        CreateCommentEvent(
-          comment:
-              CommentCreate(postId: widget.postId, text: _inputController.text),
-        ),
+    if (!loggedIn) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
-    });
+      return;
+    } else {
+      setState(() {
+        newCommentLoading = true;
+        commentBloc.add(
+          CreateCommentEvent(
+            comment: CommentCreate(
+                postId: widget.postId, text: _inputController.text),
+          ),
+        );
+      });
+    }
 
     _inputController.clear();
     _removeFocusInput();
