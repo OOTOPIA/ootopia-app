@@ -199,7 +199,9 @@ class CommentItem extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: CircleAvatar(
               backgroundImage: NetworkImage(this.photoUrl == null
-                  ? this.currentUser.photoUrl
+                  ? (this.currentUser.photoUrl != null
+                      ? this.currentUser.photoUrl
+                      : "")
                   : this.photoUrl),
               minRadius: 16,
             ),
