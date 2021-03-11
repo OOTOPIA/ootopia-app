@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:email_validator/email_validator.dart';
@@ -106,159 +107,259 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/white_logo.png',
-                                    height:
-                                        GlobalConstants.of(context).logoHeight,
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top:
-                                      GlobalConstants.of(context).spacingNormal,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Create your account and join the \nmovement to heal planet Earth!',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top:
-                                      GlobalConstants.of(context).spacingMedium,
-                                  bottom:
-                                      GlobalConstants.of(context).spacingMedium,
-                                ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/white_logo.png',
+                              height: GlobalConstants.of(context).logoHeight,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: GlobalConstants.of(context).spacingNormal,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Visibility(
+                                visible: !termsOpened,
                                 child: Column(
-                                  children: [
-                                    TextFormField(
-                                      controller: _nameController,
-                                      keyboardType: TextInputType.name,
-                                      autofocus: true,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme('Name and surname'),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter your name and surname';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .spacingNormal,
-                                    ),
-                                    TextFormField(
-                                      controller: _emailController,
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme('E-mail'),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter your e-mail';
-                                        } else if (!EmailValidator.validate(
-                                            value)) {
-                                          return 'Please enter a valid e-mail';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .spacingNormal,
-                                    ),
-                                    TextFormField(
-                                      controller: _passwordController,
-                                      obscureText: true,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme('Password'),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter your password';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .spacingNormal,
-                                    ),
-                                    TextFormField(
-                                      controller: _repeatPasswordController,
-                                      obscureText: true,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme('Repeat password'),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please repeat your password';
-                                        }
-                                        if (value != _passwordController.text) {
-                                          return 'Password does not match';
-                                        }
-                                        return null;
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      GlobalConstants.of(context).spacingMedium,
-                                ),
-                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Flexible(
-                                      child: Text(
-                                        'We value and respect your data! That\'s why it will never be trade with third parties. We stand for total transparency and ethics!',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Create your account and join the \nmovement to heal planet Earth!',
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1,
                                         ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: GlobalConstants.of(context)
+                                            .spacingMedium,
+                                        bottom: GlobalConstants.of(context)
+                                            .spacingMedium,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          TextFormField(
+                                            controller: _nameController,
+                                            keyboardType: TextInputType.name,
+                                            autofocus: true,
+                                            decoration:
+                                                GlobalConstants.of(context)
+                                                    .loginInputTheme(
+                                                        'Name and surname'),
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'Please enter your name and surname';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          SizedBox(
+                                            height: GlobalConstants.of(context)
+                                                .spacingNormal,
+                                          ),
+                                          TextFormField(
+                                            controller: _emailController,
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            decoration:
+                                                GlobalConstants.of(context)
+                                                    .loginInputTheme('E-mail'),
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'Please enter your e-mail';
+                                              } else if (!EmailValidator
+                                                  .validate(value)) {
+                                                return 'Please enter a valid e-mail';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          SizedBox(
+                                            height: GlobalConstants.of(context)
+                                                .spacingNormal,
+                                          ),
+                                          TextFormField(
+                                            controller: _passwordController,
+                                            obscureText: true,
+                                            decoration: GlobalConstants.of(
+                                                    context)
+                                                .loginInputTheme('Password'),
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'Please enter your password';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          SizedBox(
+                                            height: GlobalConstants.of(context)
+                                                .spacingNormal,
+                                          ),
+                                          TextFormField(
+                                            controller:
+                                                _repeatPasswordController,
+                                            obscureText: true,
+                                            decoration:
+                                                GlobalConstants.of(context)
+                                                    .loginInputTheme(
+                                                        'Repeat password'),
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'Please repeat your password';
+                                              }
+                                              if (value !=
+                                                  _passwordController.text) {
+                                                return 'Password does not match';
+                                              }
+                                              return null;
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: GlobalConstants.of(context)
+                                            .spacingMedium,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              'We value and respect your data! That\'s why it will never be trade with third parties. We stand for total transparency and ethics!',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      GlobalConstants.of(context).spacingMedium,
+                            ),
+                          ],
+                        ),
+                        Stack(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Visibility(
+                                visible: termsOpened,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: GlobalConstants.of(context)
+                                          .spacingMedium),
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height -
+                                        300,
+                                    child: SafeArea(
+                                      child: Scrollbar(
+                                        child: SingleChildScrollView(
+                                          child: Flexible(
+                                            child: Text(
+                                              "01. This is a term\n\nLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.\n\n02. This is a term\n\nLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.\n\n03. This is a term\n\nLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.\n\n04. This is a term\n\nLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          value: _termsCheckbox,
-                                          onChanged: (value) {
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Visibility(
+                                visible: termsOpened,
+                                child: IconButton(
+                                  icon: Image.asset('assets/icons/close.png'),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    _toggleTerms();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    GlobalConstants.of(context).spacingMedium,
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
                                             setState(() {
                                               _termsCheckbox = !_termsCheckbox;
-                                              showCheckBoxError =
-                                                  !_termsCheckbox;
                                             });
-                                          },
+                                          });
+                                        },
+                                        child: Container(
+                                            child: _termsCheckbox
+                                                ? CustomPaint(
+                                                    painter: CirclePainter(),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: Icon(
+                                                        Icons.check,
+                                                        size: 14.0,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ))
+                                                : CustomPaint(
+                                                    painter: CirclePainter(),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: Icon(
+                                                        null,
+                                                        size: 14.0,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ))),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          left: GlobalConstants.of(context)
+                                              .spacingSmall,
                                         ),
-                                        new RichText(
+                                        child: RichText(
                                           text: new TextSpan(
                                               text: 'I accept the ',
                                               style: TextStyle(
@@ -282,63 +383,71 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 )
                                               ]),
                                         ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        showCheckBoxError
-                                            ? Flexible(
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: GlobalConstants.of(
-                                                              context)
-                                                          .spacingSmall),
-                                                  child: Text(
-                                                    "You need to accept the Terms of Use to continue",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Colors.redAccent),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      showCheckBoxError
+                                          ? Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: GlobalConstants.of(
+                                                    context,
+                                                  ).spacingNormal,
+                                                ),
+                                                child: Text(
+                                                  "You need to accept the Terms of Use to continue",
+                                                  style: TextStyle(
+                                                    color: Colors.redAccent,
                                                   ),
                                                 ),
-                                              )
-                                            : Container()
-                                      ],
-                                    )
-                                  ],
-                                ),
+                                              ),
+                                            )
+                                          : Container()
+                                    ],
+                                  )
+                                ],
                               ),
-                              FlatButton(
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                    GlobalConstants.of(context).spacingNormal,
-                                  ),
-                                  child: Text(
-                                    "Create account",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                FlatButton(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                      GlobalConstants.of(context).spacingNormal,
+                                    ),
+                                    child: Text(
+                                      "Create account",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                onPressed: () {
-                                  if (_formKey.currentState.validate()) {
-                                    _submit();
-                                  }
-                                },
-                                color: Colors.white,
-                                splashColor: Colors.black54,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Colors.white,
-                                    width: 2,
-                                    style: BorderStyle.solid,
+                                  onPressed: () {
+                                    if (_formKey.currentState.validate()) {
+                                      _submit();
+                                    }
+                                  },
+                                  color: Colors.white,
+                                  splashColor: Colors.black54,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2,
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
                                 ),
-                              )
-                            ],
-                          ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),
