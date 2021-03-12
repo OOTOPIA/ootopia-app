@@ -8,6 +8,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class CommentRepository {
   Future<List<Comment>> getComments(String postId);
   Future<Comment> createComment(CommentCreate comment);
+  Future<String> deleteComments(String postId, List<String> commentsIds);
   //Future<TimelinePost> getPost(int id);
   //Future<TimelinePost> updatePost(post);
   //Future<TimelinePost> deletePost(int id);
@@ -65,6 +66,28 @@ class CommentRepositoryImpl with SecureStoreMixin implements CommentRepository {
 
       if (response.statusCode == 201) {
         return Comment.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to create post');
+      }
+    } catch (error) {
+      throw Exception('Failed to create post ' + error);
+    }
+  }
+
+  @override
+  Future<String> deleteComments(String postId, List<String> commentsIds) async {
+    try {
+      final request = http.Request("DELETE",
+          Uri.parse(DotEnv.env['API_URL'] + 'posts/$postId/comments'));
+      request.headers.addAll(await this.getHeaders());
+      request.body = jsonEncode(<String, dynamic>{
+        'commentsIds': commentsIds,
+      });
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        return "ALL_DELETED";
       } else {
         throw Exception('Failed to create post');
       }

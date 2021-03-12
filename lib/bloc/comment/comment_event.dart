@@ -31,3 +31,30 @@ class LoadingSucessCommentsEvent extends CommentEvent {
   // TODO: implement props
   List<Object> get props => [];
 }
+
+class OnToggleSelectCommentEvent extends CommentEvent {
+  final Comment comment;
+
+  OnToggleSelectCommentEvent({this.comment});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [this.comment];
+}
+
+class UnselectAllCommentsEvent extends CommentEvent {
+  UnselectAllCommentsEvent();
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class DeleteSelectedCommentsEvent extends CommentEvent {
+  final String postId;
+  final List<String> commentsIds;
+
+  DeleteSelectedCommentsEvent(this.postId, this.commentsIds);
+  @override
+  // TODO: implement props
+  List<Object> get props => [this.commentsIds];
+}
