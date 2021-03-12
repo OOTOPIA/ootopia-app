@@ -29,6 +29,13 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       yield* _mapGetComments(event.postId);
     } else if (event is CreateCommentEvent) {
       yield* _mapCreateCommentToState(event);
+    } else if (event is OnToggleSelectCommentEvent) {
+      yield* _mapOnToggleSelectCommentToState(event);
+    } else if (event is UnselectAllCommentsEvent) {
+      yield* _mapUnselectAllCommentsToState(event);
+    } else if (event is DeleteSelectedCommentsEvent) {
+      yield LoadingState();
+      yield* _mapDeleteSelectedCommentsToState(event);
     }
     // else if (event is Comment) {
     //   yield* _mapUserLoginToState(event);
@@ -58,13 +65,65 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       if (state is CommentSuccessState) {
         var result = (await this.repository.createComment(event.comment));
         if (result != null) {
-          Comment comment = result;
-
           List<Comment> comments = (state as CommentSuccessState).comments;
-          comments.insert(0, comment);
+          comments.insert(0, result);
 
           yield EmptyState();
           yield CommentSuccessState(comments.toList(), true);
+        }
+      }
+    } catch (_) {
+      yield ErrorCreateCommentState("Error on create a comment");
+    }
+  }
+
+  Stream<CommentState> _mapOnToggleSelectCommentToState(
+      OnToggleSelectCommentEvent event) async* {
+    try {
+      if (state is CommentSuccessState) {
+        List<Comment> comments = (state as CommentSuccessState).comments;
+
+        comments.forEach((c) {
+          if (c.id == event.comment.id) {
+            c.selected = event.comment.selected;
+          }
+        });
+
+        yield EmptyState();
+        yield CommentSuccessState(comments.toList(), false);
+      }
+    } catch (_) {
+      yield ErrorCreateCommentState("Error on create a comment");
+    }
+  }
+
+  Stream<CommentState> _mapUnselectAllCommentsToState(
+      UnselectAllCommentsEvent event) async* {
+    try {
+      if (state is CommentSuccessState) {
+        List<Comment> comments = (state as CommentSuccessState).comments;
+
+        comments.forEach((c) {
+          c.selected = false;
+        });
+
+        yield EmptyState();
+        yield CommentSuccessState(comments.toList(), false);
+      }
+    } catch (_) {
+      yield ErrorCreateCommentState("Error on create a comment");
+    }
+  }
+
+  Stream<CommentState> _mapDeleteSelectedCommentsToState(
+      DeleteSelectedCommentsEvent event) async* {
+    try {
+      if (state is LoadingState) {
+        var result = (await this
+            .repository
+            .deleteComments(event.postId, event.commentsIds));
+        if (result == "ALL_DELETED") {
+          yield* this._mapGetComments(event.postId);
         }
       }
     } catch (_) {

@@ -8,6 +8,7 @@ class Comment extends Equatable {
   String photoUrl;
   String username;
   bool deleted = false;
+  bool selected = false;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -45,6 +46,7 @@ class Comment extends Equatable {
         photoUrl,
         username,
         deleted,
+        selected,
         createdAt,
         updatedAt,
       ];
