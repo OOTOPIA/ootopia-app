@@ -9,12 +9,15 @@ abstract class CommentEvent extends Equatable {
 
 class GetCommentEvent extends CommentEvent {
   final String postId;
+  final int page;
+  final List<Comment> allComments;
+  final bool loadingMore;
 
   @required
-  GetCommentEvent({this.postId});
+  GetCommentEvent({this.postId, this.page, this.allComments, this.loadingMore});
 
   @override
-  List<Object> get props => [this.postId];
+  List<Object> get props => [this.postId, this.page];
 }
 
 class CreateCommentEvent extends CommentEvent {

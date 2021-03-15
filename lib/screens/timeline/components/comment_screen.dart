@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -26,17 +27,30 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool newCommentLoading = false;
   bool loggedIn = false;
   bool selectMode = false;
+  bool allCommentsLoaded = false;
+  bool loadingMoreComments = false;
+  int currentPage = 1;
 
   List<String> selectedCommentsIds = [];
 
   void initState() {
     _checkUserIsLoggedIn();
     commentBloc = BlocProvider.of<CommentBloc>(context);
-    commentBloc.add(GetCommentEvent(postId: widget.post.id));
+    _getComments([]);
   }
 
   bool _enabledToDeleteOtherComments() {
     return this.user != null && this.user.id == widget.post.userId;
+  }
+
+  Future<void> _getComments(List<Comment> allComments,
+      [bool loadingMore = false]) async {
+    commentBloc.add(GetCommentEvent(
+      postId: widget.post.id,
+      page: currentPage,
+      allComments: allComments,
+      loadingMore: loadingMore,
+    ));
   }
 
   @override
@@ -70,6 +84,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                   if (state.newCommentIsAdded) {
                     newCommentLoading = false;
                   }
+                  allCommentsLoaded = state.allCommentsLoaded;
+                  loadingMoreComments = false;
                 }
               },
               child: BlocBuilder<CommentBloc, CommentState>(
@@ -139,13 +155,47 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                   state.comments = [];
                   selectedCommentsIds = [];
                   selectMode = false;
+                  currentPage = 1;
+                  loadingMoreComments = false;
                 });
-                _getData();
+                _getComments(state.comments);
               },
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: state.comments.length,
+                itemCount: state.comments.length + 1,
                 itemBuilder: (context, index) {
+                  if (index > 0 && index == state.comments.length) {
+                    if (allCommentsLoaded) {
+                      return Container();
+                    }
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                            GlobalConstants.of(context).spacingSmall),
+                        child: IconButton(
+                          icon: loadingMoreComments
+                              ? SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ImageIcon(
+                                  AssetImage('assets/icons/add.png'),
+                                  color: Colors.black,
+                                ),
+                          onPressed: () {
+                            setState(() {
+                              currentPage = currentPage + 1;
+                              loadingMoreComments = true;
+                            });
+                            _getComments(state.comments, true);
+                          },
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  }
+
                   Comment comment = state.comments[index];
                   return GestureDetector(
                     onLongPress: () {
@@ -250,10 +300,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       selectMode = selectedCommentsIds.length > 0;
       commentBloc.add(OnToggleSelectCommentEvent(comment: comment));
     });
-  }
-
-  Future<void> _getData() async {
-    commentBloc.add(GetCommentEvent(postId: widget.post.id));
   }
 
   void _onLeadingClick(BuildContext context) {

@@ -42,8 +42,10 @@ class SuccessCreateCommentState extends CommentState {
 class CommentSuccessState extends CommentState {
   List<Comment> comments;
   bool newCommentIsAdded;
+  bool allCommentsLoaded;
 
-  CommentSuccessState(this.comments, [this.newCommentIsAdded = false]);
+  CommentSuccessState(this.comments,
+      [this.newCommentIsAdded = false, this.allCommentsLoaded = false]);
 
   @override
   List<Object> get props => [comments, newCommentIsAdded];
