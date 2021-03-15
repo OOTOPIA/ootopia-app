@@ -25,8 +25,10 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
   ) async* {
     LoadingState();
     if (event is GetCommentEvent) {
-      yield LoadingState();
-      yield* _mapGetComments(event.postId);
+      if (!event.loadingMore) {
+        yield LoadingState();
+      }
+      yield* _mapGetComments(event.postId, event.page, event.allComments);
     } else if (event is CreateCommentEvent) {
       yield* _mapCreateCommentToState(event);
     } else if (event is OnToggleSelectCommentEvent) {
@@ -50,10 +52,22 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     // }
   }
 
-  Stream<CommentState> _mapGetComments(postId) async* {
+  Stream<CommentState> _mapGetComments(
+      String postId, int page, List<Comment> allComments) async* {
     try {
-      var comments = (await this.repository.getComments(postId));
-      yield CommentSuccessState(comments);
+      var allCommentsLoaded = false;
+      var comments = (await this.repository.getComments(postId, page));
+
+      allCommentsLoaded = comments.length <= 0;
+
+      if (allComments == null) {
+        allComments = [];
+      }
+
+      allComments.addAll(comments);
+
+      yield EmptyState();
+      yield CommentSuccessState(allComments, false, allCommentsLoaded);
     } catch (_) {
       yield CommentErrorState("error loading comments");
     }
@@ -123,8 +137,11 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
             .repository
             .deleteComments(event.postId, event.commentsIds));
         if (result == "ALL_DELETED") {
-          yield* this._mapGetComments(event.postId);
+          yield* this._mapGetComments(event.postId, 1, []);
         }
+
+        //TODO: Não recarregar a lista, apenas remover da lista atual os comentários removidos
+        //fruits.where((f) => f.startsWith('a')).toList();
       }
     } catch (_) {
       yield ErrorCreateCommentState("Error on create a comment");

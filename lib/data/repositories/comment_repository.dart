@@ -6,7 +6,7 @@ import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class CommentRepository {
-  Future<List<Comment>> getComments(String postId);
+  Future<List<Comment>> getComments(String postId, int page);
   Future<Comment> createComment(CommentCreate comment);
   Future<String> deleteComments(String postId, List<String> commentsIds);
   //Future<TimelinePost> getPost(int id);
@@ -33,10 +33,16 @@ class CommentRepositoryImpl with SecureStoreMixin implements CommentRepository {
     };
   }
 
-  Future<List<Comment>> getComments(postId) async {
+  Future<List<Comment>> getComments(postId, page) async {
     try {
+      Map<String, String> queryParams = {
+        'page': page.toString(),
+      };
+
+      String queryString = Uri(queryParameters: queryParams).query;
+
       final response = await http.get(
-        DotEnv.env['API_URL'] + "posts/" + postId + "/comments",
+        DotEnv.env['API_URL'] + "posts/" + postId + "/comments?" + queryString,
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {

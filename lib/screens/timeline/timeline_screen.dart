@@ -253,11 +253,16 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
             children: [
               Padding(
                 padding: EdgeInsets.only(bottom: 12, left: 12),
-                child: Text(
-                  "0 comments",
-                  style: TextStyle(color: Colors.black.withOpacity(0.4)),
+                child: GestureDetector(
+                  onTap: () => CommentScreen(
+                    post: this.post,
+                  ),
+                  child: Text(
+                    this.post.commentsCount.toString() + " comments",
+                    style: TextStyle(color: Colors.black.withOpacity(0.4)),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ],
