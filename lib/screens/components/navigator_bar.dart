@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import '../camera_screen/camera_screen.dart';
 
 class NavigatorBar extends StatefulWidget {
@@ -11,7 +14,31 @@ class NavigatorBar extends StatefulWidget {
   _NavigatorBarState createState() => _NavigatorBarState();
 }
 
-class _NavigatorBarState extends State<NavigatorBar> {
+class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
+  bool loggedIn = false;
+  User user;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserIsLoggedIn();
+  }
+
+  void _checkUserIsLoggedIn() async {
+    loggedIn = await getUserIsLoggedIn();
+    if (loggedIn) {
+      user = await getCurrentUser();
+      print("LOGGED USER: " + user.fullname);
+    }
+
+    // if (!loggedIn) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => LoginPage()),
+    //   );
+    // }
+  }
+
   renderSnackBar(BuildContext context) {
     return Scaffold.of(context).showSnackBar(
       SnackBar(
@@ -45,6 +72,15 @@ class _NavigatorBarState extends State<NavigatorBar> {
             break;
 
           case 2:
+            if (!loggedIn) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+
+              return;
+            }
+
             await Navigator.push(
               context,
               MaterialPageRoute(

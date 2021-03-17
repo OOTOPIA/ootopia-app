@@ -33,14 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       user = await getCurrentUser();
       print("LOGGED USER ANDREW: " + user.fullname);
     }
-
-    if (!loggedIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-      return;
-    }
   }
 
   @override
