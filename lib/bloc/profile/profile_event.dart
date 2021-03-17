@@ -8,15 +8,19 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class GetPostsProfileEvent extends ProfileEvent {
+  final int page;
+  final String userId;
+
+  const GetPostsProfileEvent(this.page, this.userId);
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [this.page, this.userId];
 }
 
 class GetProfileUserEvent extends ProfileEvent {
   final String id;
 
-  const GetProfileUserEvent({this.id});
+  const GetProfileUserEvent(this.id);
   @override
   // TODO: implement props
   List<Object> get props => [this.id];

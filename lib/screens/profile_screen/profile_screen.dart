@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/profile/profile_bloc.dart';
+import 'package:ootopia_app/data/models/profile/profile_model.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/profile_repository.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -10,36 +13,61 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'components/timeline_profile.dart';
 
 class ProfileScreen extends StatefulWidget {
+  final String id;
+
+  ProfileScreen([this.id]);
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
-  ProfileBloc timelineBloc;
+  ProfileBloc profileBloc;
+  ProfileRepositoryImpl profileRepositoryImpl = ProfileRepositoryImpl();
+
   bool loggedIn = false;
   User user;
+  Profile userProfile;
+  bool loadingPosts = true;
+  bool loadPostsError = false;
+  List<TimelinePost> posts = [];
 
   @override
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
-    timelineBloc = BlocProvider.of<ProfileBloc>(context);
-    timelineBloc.add(GetPostsProfileEvent());
+    profileBloc = BlocProvider.of<ProfileBloc>(context);
   }
 
   void _checkUserIsLoggedIn() async {
+    String userId = "";
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      print("LOGGED USER ANDREW: " + user.fullname);
+      userId = user.id;
+    } else {
+      userId = widget.id;
     }
+    getUserProfile(userId);
+    profileBloc.add(GetPostsProfileEvent(1, userId));
+  }
+
+  Future getUserProfile(String id) async {
+    this.profileRepositoryImpl.getProfile(id).then((user) {
+      if (user == null) {
+        return;
+      }
+      setState(() {
+        userProfile = user;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: user != null ? Text(user.fullname) : Text(''),
+        title: userProfile != null ? Text(userProfile.fullname) : Text(''),
         actions: [
           IconButton(
             icon: const Icon(Icons.menu_outlined),
@@ -51,33 +79,38 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       ),
       body: Column(
         children: [
-          Row(
+          Column(
             children: [
-              Avatar(),
-              DataProfile(),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: RichText(
-              text: TextSpan(
-                text: ('Bio: '),
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    fontSize: 16),
-                children: <TextSpan>[
-                  TextSpan(
-                    text:
-                        'Bio: Nature gives a person a new perspective of how he should look at life and himself as a part of the environment.',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  )
+              Row(
+                children: [
+                  Avatar((userProfile == null ? "" : userProfile.photoUrl)),
+                  DataProfile(),
                 ],
               ),
-            ),
+              Container(
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: RichText(
+                  text: (userProfile != null && userProfile.bio != null
+                      ? TextSpan(
+                          text: ('Bio: '),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                              fontSize: 16),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: userProfile.bio,
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          ],
+                        )
+                      : TextSpan(text: "")),
+                ),
+              ),
+            ],
           ),
           CaptionOfItems(
             backgroundCaption: Color(0xffE6ECDA),
@@ -85,32 +118,40 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
             colorIcon: Colors.black,
             pathIcon: 'assets/icons/add.png',
           ),
-          _blocBuilder()
+          BlocListener<ProfileBloc, ProfileState>(
+            listener: (context, state) {
+              if (state is LoadingState) {
+                loadingPosts = true;
+              } else if (state is LoadedPostsProfileSucessState) {
+                loadingPosts = false;
+                posts = state.posts;
+              } else if (state is LoadPostsProfileErrorState) {
+                loadPostsError = true;
+              }
+            },
+            child: _postsBlocBuilder(),
+          ),
         ],
       ),
       bottomNavigationBar: NavigatorBar(),
     );
   }
 
-  _blocBuilder() {
+  _postsBlocBuilder() {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        if (state is InitialState) {
-          return Center(
-            child: Text("Initial"),
-          );
-        } else if (state is LoadingState) {
+        if (loadingPosts) {
           return Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is LoadedSucessState) {
-          return GridPosts(
-            context: context,
-            state: state,
-          );
-        } else if (state is ErrorState) {
+        }
+        if (loadPostsError) {
           return Center(child: Text("Error"));
         }
+        return GridPosts(
+          context: context,
+          posts: posts,
+        );
       },
     );
   }
@@ -174,16 +215,14 @@ class CaptionOfItems extends StatelessWidget {
 class Avatar extends StatelessWidget {
   String photoUrl;
 
-  Avatar({this.photoUrl}) {
-    print("My photo >>>>>>>>$photoUrl");
-  }
+  Avatar(this.photoUrl);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: (MediaQuery.of(context).size.width * .40) - 16,
       height: (MediaQuery.of(context).size.width * .40) - 16,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(4),
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
@@ -278,10 +317,10 @@ class IconDataProfile extends StatelessWidget {
 
 class GridPosts extends StatelessWidget {
   final context;
-  final state;
+  final List<TimelinePost> posts;
 
-  GridPosts({this.context, this.state}) {
-    print('---------> context <---------- ${state.posts[0].username}');
+  GridPosts({this.context, this.posts}) {
+    print('---------> context <---------- ${posts[0].username}');
   }
 
   _goToTimelinePost(posts, postSelected) async {
@@ -304,9 +343,9 @@ class GridPosts extends StatelessWidget {
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         crossAxisCount: 4,
-        children: List.generate(state.posts.length, (index) {
+        children: List.generate(posts.length, (index) {
           return GestureDetector(
-            onTap: () => _goToTimelinePost(state.posts, index),
+            onTap: () => _goToTimelinePost(posts, index),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.blue,
@@ -316,7 +355,7 @@ class GridPosts extends StatelessWidget {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    state.posts[index].thumbnailUrl,
+                    posts[index].thumbnailUrl,
                   ),
                 ),
               ),

@@ -28,24 +28,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     LoadingState();
     if (event is GetPostsProfileEvent) {
       yield LoadingState();
-      yield* _mapAlbumsLoadedToState();
+      yield* _mapGetPostsProfileToState(event);
     } else if (event is GetProfileUserEvent) {
       yield* _mapGetProfileUserToState(event.id);
     }
   }
 
-  Stream<ProfileState> _mapAlbumsLoadedToState() async* {
+  Stream<ProfileState> _mapGetPostsProfileToState(
+      GetPostsProfileEvent event) async* {
     try {
-      var posts = (await this.postRepository.getPosts());
-      yield LoadedSucessState(posts);
+      var posts =
+          (await this.postRepository.getPosts(event.page, event.userId));
+      yield LoadedPostsProfileSucessState(posts);
     } catch (_) {
-      yield ErrorState("error loading Albums");
+      yield LoadPostsProfileErrorState("error loading posts");
     }
   }
 
   Stream<ProfileState> _mapGetProfileUserToState(id) async* {
     try {
+      print("BEFORE LOAD PROFILE");
       var profile = (await this.profileRepository.getProfile(id));
+      print("AFTER LOAD PROFILE");
       yield GetProfileLoadedSucessState(profile: profile);
     } catch (_) {
       yield GetProfileErrorState(message: "Erro loading profile");

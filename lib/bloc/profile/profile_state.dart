@@ -16,16 +16,16 @@ class LoadingState extends ProfileState {
   List<Object> get props => [];
 }
 
-class LoadedSucessState extends ProfileState {
+class LoadedPostsProfileSucessState extends ProfileState {
   List<TimelinePost> posts;
-  LoadedSucessState(this.posts);
+  LoadedPostsProfileSucessState(this.posts);
   @override
   List<Object> get props => [posts];
 }
 
-class ErrorState extends ProfileState {
+class LoadPostsProfileErrorState extends ProfileState {
   final String message;
-  const ErrorState(this.message);
+  const LoadPostsProfileErrorState(this.message);
   @override
   List<Object> get props => [message];
 }
@@ -37,7 +37,7 @@ class GetProfileInitialState extends ProfileState {
 }
 
 class GetProfileLoadedSucessState extends ProfileState {
-  ProfileModel profile;
+  Profile profile;
   GetProfileLoadedSucessState({this.profile});
   @override
   List<Object> get props => [this.profile];

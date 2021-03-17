@@ -6,7 +6,7 @@ import 'package:ootopia_app/data/models/profile/profile_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class ProfileRepository {
-  Future<ProfileModel> getProfile(String id);
+  Future<Profile> getProfile(String id);
   //Future<TimelinePost> getPost(int id);
   //Future<TimelinePost> updatePost(post);
   //Future<TimelinePost> deletePost(int id);
@@ -31,17 +31,16 @@ class ProfileRepositoryImpl with SecureStoreMixin implements ProfileRepository {
     };
   }
 
-  Future<ProfileModel> getProfile(id) async {
+  Future<Profile> getProfile(id) async {
     try {
       final response = await http.get(
         DotEnv.env['API_URL'] + "users/$id/profile",
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
-        print("POSTS RESPONSE ${response.body}");
-        ProfileModel profile =
-            ProfileModel.fromJson(json.decode(response.body));
-        return profile;
+        print("PROFILE LOADED ${response.body}");
+        Profile profile = Profile.fromJson(json.decode(response.body));
+        return Future.value(profile);
       } else {
         throw Exception('Failed to load profile');
       }

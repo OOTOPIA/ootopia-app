@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-class ProfileModel extends Equatable {
+class Profile extends Equatable {
   String id;
   String fullname;
   String birthdate;
   String bio;
   String photoUrl;
 
-  ProfileModel({
+  Profile({
     this.id,
     this.fullname,
     this.birthdate,
@@ -15,8 +15,8 @@ class ProfileModel extends Equatable {
     this.photoUrl,
   });
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) {
-    return ProfileModel(
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile(
       id: json['id'],
       fullname: json['fullname'],
       birthdate: json['birthdate'],
