@@ -61,8 +61,13 @@ class ExpensesApp extends StatelessWidget {
           accentColor: Color(0xff0253e7),
           textTheme: TextTheme(
             headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+            headline2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-            bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+            bodyText2: TextStyle(
+              fontSize: 14.0,
+              fontFamily: 'Hind',
+              color: Colors.black,
+            ),
             subtitle1: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
