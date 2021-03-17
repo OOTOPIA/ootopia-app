@@ -12,3 +12,12 @@ class GetPostsProfileEvent extends ProfileEvent {
   // TODO: implement props
   List<Object> get props => [];
 }
+
+class GetProfileUserEvent extends ProfileEvent {
+  final String id;
+
+  const GetProfileUserEvent({this.id});
+  @override
+  // TODO: implement props
+  List<Object> get props => [this.id];
+}

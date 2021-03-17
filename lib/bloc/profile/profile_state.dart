@@ -29,3 +29,23 @@ class ErrorState extends ProfileState {
   @override
   List<Object> get props => [message];
 }
+
+class GetProfileInitialState extends ProfileState {
+  const GetProfileInitialState();
+  @override
+  List<Object> get props => [];
+}
+
+class GetProfileLoadedSucessState extends ProfileState {
+  ProfileModel profile;
+  GetProfileLoadedSucessState({this.profile});
+  @override
+  List<Object> get props => [this.profile];
+}
+
+class GetProfileErrorState extends ProfileState {
+  final String message;
+  const GetProfileErrorState({this.message});
+  @override
+  List<Object> get props => [this.message];
+}
