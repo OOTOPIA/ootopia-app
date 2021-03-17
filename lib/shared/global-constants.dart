@@ -34,6 +34,24 @@ class GlobalConstants extends InheritedWidget {
     );
   }
 
+  InputDecoration registerBirthdateInputTheme(String hintText) {
+    return InputDecoration(
+      hintText: hintText,
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black54, width: 1.5),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white, width: 1.5),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white, width: 1.5),
+        borderRadius: BorderRadius.circular(100),
+      ),
+    );
+  }
+
   @override
   bool updateShouldNotify(GlobalConstants oldWidget) => false;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import '../camera_screen/camera_screen.dart';
 
 class NavigatorBar extends StatefulWidget {
@@ -43,6 +44,15 @@ class _NavigatorBarState extends State<NavigatorBar> {
                 renderSnackBar(context);
               }
             }
+            break;
+          case 2:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RegisterPhase2Page(),
+              ),
+            );
+            break;
         }
       },
       items: const <BottomNavigationBarItem>[
@@ -76,13 +86,13 @@ class _NavigatorBarState extends State<NavigatorBar> {
           // ignore: deprecated_member_use
           title: Text('Add'),
         ),
-        // BottomNavigationBarItem(
-        //   icon: ImageIcon(
-        //     AssetImage('assets/icons/profile.png'),
-        //   ),
-        //   // ignore: deprecated_member_use
-        //   title: Text('Profile'),
-        // ),
+        BottomNavigationBarItem(
+          icon: ImageIcon(
+            AssetImage('assets/icons/profile.png'),
+          ),
+          // ignore: deprecated_member_use
+          title: Text('Profile'),
+        ),
         // BottomNavigationBarItem(
         //   icon: ImageIcon(
         //     AssetImage('assets/icons/ootopia.png'),
