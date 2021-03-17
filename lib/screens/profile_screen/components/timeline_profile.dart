@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
@@ -18,7 +20,7 @@ class TimelineScreenProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hello'),
+        title: Text('Publicações'),
       ),
       body: ListPostProfileComponent(
         posts: this.posts,
@@ -56,8 +58,11 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     _checkUserIsLoggedIn();
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     timelineBloc.add(LoadingSucessTimelinePostEvent());
-    print(">>>>>>>>>numero index${widget.postSelected}<<<<<<<<<<");
     // jumpTo(widget.postSelected);
+    Timer(
+      Duration(milliseconds: 300),
+      () => itemScrollController.jumpTo(index: widget.postSelected),
+    );
   }
 
   void jumpTo(int index) => itemScrollController.jumpTo(
