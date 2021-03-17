@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import '../camera_screen/camera_screen.dart';
 
 class NavigatorBar extends StatefulWidget {
@@ -32,17 +33,26 @@ class _NavigatorBarState extends State<NavigatorBar> {
       onTap: (value) async {
         switch (value) {
           case 1:
-            {
-              final resultCamera = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CameraScreen()),
-              );
-              print("result $resultCamera");
+            final resultCamera = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CameraScreen()),
+            );
+            print("result $resultCamera");
 
-              if (resultCamera) {
-                renderSnackBar(context);
-              }
+            if (resultCamera) {
+              renderSnackBar(context);
             }
+            break;
+
+          case 2:
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfileScreen(),
+              ),
+            );
+
+            break;
         }
       },
       items: const <BottomNavigationBarItem>[
@@ -76,13 +86,14 @@ class _NavigatorBarState extends State<NavigatorBar> {
           // ignore: deprecated_member_use
           title: Text('Add'),
         ),
-        // BottomNavigationBarItem(
-        //   icon: ImageIcon(
-        //     AssetImage('assets/icons/profile.png'),
-        //   ),
-        //   // ignore: deprecated_member_use
-        //   title: Text('Profile'),
-        // ),
+        BottomNavigationBarItem(
+          icon: ImageIcon(
+            AssetImage('assets/icons/profile.png'),
+            color: Colors.black,
+          ),
+          // ignore: deprecated_member_use
+          title: Text('Profile'),
+        ),
         // BottomNavigationBarItem(
         //   icon: ImageIcon(
         //     AssetImage('assets/icons/ootopia.png'),

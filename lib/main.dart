@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
+import 'package:ootopia_app/bloc/profile/profile_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
@@ -35,15 +36,24 @@ class ExpensesApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (BuildContext context) =>
-              TimelinePostBloc(PostRepositoryImpl()),
+          create: (BuildContext context) => TimelinePostBloc(
+            PostRepositoryImpl(),
+          ),
         ),
         BlocProvider(
-          create: (BuildContext context) => AuthBloc(AuthRepositoryImpl()),
+          create: (BuildContext context) => AuthBloc(
+            AuthRepositoryImpl(),
+          ),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              CommentBloc(CommentRepositoryImpl()),
+          create: (BuildContext context) => CommentBloc(
+            CommentRepositoryImpl(),
+          ),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ProfileBloc(
+            PostRepositoryImpl(),
+          ),
         ),
       ],
       child: MaterialApp(
