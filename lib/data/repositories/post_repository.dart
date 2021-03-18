@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class PostRepository {
-  Future<List<TimelinePost>> getPosts();
+  Future<List<TimelinePost>> getPosts([int page, String userId]);
   Future<LikePostResult> likePost(String id);
   //Future<TimelinePost> getPost(int id);
   //Future<TimelinePost> updatePost(post);
@@ -33,10 +33,20 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     };
   }
 
-  Future<List<TimelinePost>> getPosts() async {
+  Future<List<TimelinePost>> getPosts([int page, String userId]) async {
     try {
+      Map<String, String> queryParams = {
+        'page': page == null ? "1" : page.toString(),
+      };
+
+      if (userId != null) {
+        queryParams['userId'] = userId;
+      }
+
+      String queryString = Uri(queryParameters: queryParams).query;
+
       final response = await http.get(
-        DotEnv.env['API_URL'] + "posts",
+        DotEnv.env['API_URL'] + "posts?" + queryString,
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
