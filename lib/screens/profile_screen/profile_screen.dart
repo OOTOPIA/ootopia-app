@@ -5,9 +5,7 @@ import 'package:ootopia_app/data/models/profile/profile_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/profile_repository.dart';
-import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'components/timeline_profile.dart';
@@ -15,7 +13,7 @@ import 'components/timeline_profile.dart';
 class ProfileScreen extends StatefulWidget {
   final String id;
 
-  ProfileScreen([this.id]);
+  ProfileScreen({this.id});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -42,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   void _checkUserIsLoggedIn() async {
     String userId = "";
     loggedIn = await getUserIsLoggedIn();
-    if (loggedIn) {
+    if (widget.id == null) {
       user = await getCurrentUser();
       userId = user.id;
     } else {
@@ -69,12 +67,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       appBar: AppBar(
         title: userProfile != null ? Text(userProfile.fullname) : Text(''),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.menu_outlined),
-            iconSize: 36,
-            tooltip: 'Show Snackbar',
-            onPressed: () => {},
-          )
+          widget.id == null
+              ? IconButton(
+                  icon: const Icon(Icons.menu_outlined),
+                  iconSize: 36,
+                  tooltip: 'Show Snackbar',
+                  onPressed: () => {},
+                )
+              : SizedBox.shrink()
         ],
       ),
       body: Column(
@@ -83,33 +83,37 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
             children: [
               Row(
                 children: [
-                  Avatar((userProfile == null ? "" : userProfile.photoUrl)),
+                  Avatar(
+                    photoUrl: userProfile == null ? null : userProfile.photoUrl,
+                  ),
                   DataProfile(),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: RichText(
-                  text: (userProfile != null && userProfile.bio != null
-                      ? TextSpan(
-                          text: ('Bio: '),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              fontSize: 16),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: userProfile.bio,
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            )
-                          ],
-                        )
-                      : TextSpan(text: "")),
-                ),
-              ),
+              (userProfile != null && userProfile.bio != null)
+                  ? Container(
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: RichText(
+                        text: (userProfile != null && userProfile.bio != null
+                            ? TextSpan(
+                                text: ('Bio: '),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    fontSize: 16),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: userProfile.bio,
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : TextSpan(text: "")),
+                      ),
+                    )
+                  : SizedBox.shrink(),
             ],
           ),
           CaptionOfItems(
@@ -141,8 +145,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (loadingPosts) {
-          return Center(
-            child: CircularProgressIndicator(),
+          return Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
         if (loadPostsError) {
@@ -177,6 +183,7 @@ class CaptionOfItems extends StatelessWidget {
       children: [
         Container(
             height: 36,
+            margin: EdgeInsets.only(bottom: 8, top: 8),
             width: MediaQuery.of(context).size.width - 16,
             decoration: BoxDecoration(
               color: this.backgroundCaption,
@@ -215,7 +222,7 @@ class CaptionOfItems extends StatelessWidget {
 class Avatar extends StatelessWidget {
   String photoUrl;
 
-  Avatar(this.photoUrl);
+  Avatar({this.photoUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -232,9 +239,11 @@ class Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(150),
       ),
       child: CircleAvatar(
-        backgroundImage: NetworkImage(
-          "${this.photoUrl}",
-        ),
+        backgroundImage: this.photoUrl != null
+            ? NetworkImage(
+                "${this.photoUrl}",
+              )
+            : AssetImage('assets/icons_profile/profile.png'),
         minRadius: 60,
       ),
     );
@@ -257,14 +266,17 @@ class DataProfile extends StatelessWidget {
               IconDataProfile(
                 pathIcon: 'assets/icons_profile/primary_icon.png',
                 valueData: '100',
+                colorIcon: Color(0xff01E8F8),
               ),
               IconDataProfile(
                 pathIcon: 'assets/icons_profile/primary_icon.png',
                 valueData: '100',
+                colorIcon: Color(0xff01A9E4),
               ),
               IconDataProfile(
                 pathIcon: 'assets/icons_profile/primary_icon.png',
                 valueData: '100',
+                colorIcon: Color(0xff0073EA),
               ),
             ],
           ),
@@ -298,8 +310,9 @@ class DataProfile extends StatelessWidget {
 class IconDataProfile extends StatelessWidget {
   String pathIcon;
   String valueData;
+  Color colorIcon;
 
-  IconDataProfile({this.pathIcon, this.valueData});
+  IconDataProfile({this.pathIcon, this.valueData, this.colorIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +320,7 @@ class IconDataProfile extends StatelessWidget {
       children: [
         ImageIcon(
           AssetImage(this.pathIcon),
-          color: Colors.black,
+          color: colorIcon,
         ),
         Text(' ' + this.valueData ?? '--')
       ],
@@ -319,9 +332,7 @@ class GridPosts extends StatelessWidget {
   final context;
   final List<TimelinePost> posts;
 
-  GridPosts({this.context, this.posts}) {
-    print('---------> context <---------- ${posts[0].username}');
-  }
+  GridPosts({this.context, this.posts});
 
   _goToTimelinePost(posts, postSelected) async {
     await Navigator.push(
@@ -338,31 +349,33 @@ class GridPosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GridView.count(
-        padding: const EdgeInsets.all(16),
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        crossAxisCount: 4,
-        children: List.generate(posts.length, (index) {
-          return GestureDetector(
-            onTap: () => _goToTimelinePost(posts, index),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(14),
-                ),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    posts[index].thumbnailUrl,
+      child: this.posts.length > 0
+          ? GridView.count(
+              padding: const EdgeInsets.all(16),
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              crossAxisCount: 4,
+              children: List.generate(posts.length, (index) {
+                return GestureDetector(
+                  onTap: () => _goToTimelinePost(posts, index),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(14),
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          posts[index].thumbnailUrl,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
+                );
+              }),
+            )
+          : Center(child: Text("Esse usuário ainda não tem postagem")),
     );
   }
 }

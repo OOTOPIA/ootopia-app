@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/player_video_component.dart';
 
@@ -32,6 +33,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
     super.initState();
   }
 
+  void _goToProfile() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileScreen(
+          id: post.userId,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,20 +53,23 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage("${this.post.photoUrl}"),
-                      minRadius: 16,
+              GestureDetector(
+                onTap: () => _goToProfile(),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage("${this.post.photoUrl}"),
+                        minRadius: 16,
+                      ),
                     ),
-                  ),
-                  Text(
-                    this.post.username,
-                    textAlign: TextAlign.start,
-                  ),
-                ],
+                    Text(
+                      this.post.username,
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
               ),
               IconButton(
                 icon: ImageIcon(
