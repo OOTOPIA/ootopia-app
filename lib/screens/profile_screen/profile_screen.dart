@@ -117,8 +117,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
               ),
               (userProfile != null && userProfile.bio != null)
                   ? Container(
+                      width: double.infinity,
                       padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: RichText(
+                        textAlign: TextAlign.left,
                         text: (userProfile != null && userProfile.bio != null
                             ? TextSpan(
                                 text: ('Bio: '),

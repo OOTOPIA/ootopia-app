@@ -39,7 +39,6 @@ class User extends Equatable {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    print("LAAAT ${json['addressLatitude']}");
     return User(
       id: json['id'],
       fullname: json['fullname'],

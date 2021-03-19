@@ -31,7 +31,6 @@ class _RegisterPhase2DailyLearningGoalPageState
 
   @override
   Widget build(BuildContext context) {
-    final node = FocusScope.of(context);
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -98,18 +97,23 @@ class _RegisterPhase2DailyLearningGoalPageState
                         SizedBox(
                           height: GlobalConstants.of(context).spacingSmall,
                         ),
-                        Slider(
-                          value: _learningGoalRating,
-                          min: 10,
-                          max: 60,
-                          divisions: 5,
-                          onChanged: (newRating) {
-                            setState(() {
-                              _learningGoalRating = newRating;
-                            });
-                          },
-                          label:
-                              "${_learningGoalRating.toStringAsFixed(0)} min.",
+                        SliderTheme(
+                          data: SliderThemeData(
+                            thumbColor: Colors.white,
+                          ),
+                          child: Slider(
+                            value: _learningGoalRating,
+                            min: 10,
+                            max: 60,
+                            divisions: 5,
+                            onChanged: (newRating) {
+                              setState(() {
+                                _learningGoalRating = newRating;
+                              });
+                            },
+                            label:
+                                "${_learningGoalRating.toStringAsFixed(0)} min.",
+                          ),
                         ),
                         SizedBox(
                           height: GlobalConstants.of(context).spacingLarge,

@@ -26,8 +26,9 @@ class GetProfileUserEvent extends UserEvent {
 
 class UpdateUserEvent extends UserEvent {
   final User user;
+  final List<String> tagsIds;
 
-  const UpdateUserEvent(this.user);
+  const UpdateUserEvent(this.user, this.tagsIds);
   @override
   List<Object> get props => [this.user];
 }

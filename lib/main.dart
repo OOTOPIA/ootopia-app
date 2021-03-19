@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
+import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
+import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -54,6 +56,10 @@ class ExpensesApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) =>
               UserBloc(UserRepositoryImpl(), PostRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (BuildContext context) =>
+              InterestsTagsBloc(InterestsTagsRepositoryImpl()),
         ),
       ],
       child: MaterialApp(

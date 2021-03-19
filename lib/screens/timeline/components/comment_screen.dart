@@ -165,7 +165,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 itemCount: state.comments.length + 1,
                 itemBuilder: (context, index) {
                   if (index > 0 && index == state.comments.length) {
-                    if (allCommentsLoaded) {
+                    if (allCommentsLoaded || state.comments.length < 10) {
                       return Container();
                     }
                     return Center(
@@ -459,14 +459,14 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final String title;
   final Icon icon;
-  final bool hasselectedCommentsIds;
+  final bool hasSelectedCommentsIds;
   final Function onLeadingClick;
   final Function onDeleteClick;
 
   CustomAppBar(
     this.title,
     this.icon,
-    this.hasselectedCommentsIds,
+    this.hasSelectedCommentsIds,
     this.onLeadingClick,
     this.onDeleteClick, {
     Key key,
@@ -478,8 +478,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(
-            color: hasselectedCommentsIds ? Colors.white : Colors.black),
+        style: TextStyle(color: Colors.black),
       ),
       elevation: 0,
       flexibleSpace: Container(
@@ -495,19 +494,19 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         ),
       ),
       // backgroundColor:
-      //     hasselectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
+      //     hasSelectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
       leading: IconButton(
         icon: this.icon,
         onPressed: () => this.onLeadingClick(context),
-        color: hasselectedCommentsIds ? Colors.white : Colors.black,
+        color: Colors.black,
       ),
       actions: [
         Visibility(
-          visible: hasselectedCommentsIds,
+          visible: hasSelectedCommentsIds,
           child: IconButton(
             icon: Icon(Icons.delete),
             onPressed: () => this.onDeleteClick(),
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ],

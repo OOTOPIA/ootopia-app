@@ -10,7 +10,8 @@ import 'package:path/path.dart';
 
 abstract class UserRepository {
   Future<Profile> getProfile(String id);
-  Future<String> updateUser(User user, FlutterUploader uploader);
+  Future<User> updateUser(User user, List<String> tagsIds,
+      [FlutterUploader uploader]);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -50,8 +51,10 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   @override
-  Future<String> updateUser(User user, FlutterUploader uploader) async {
+  Future<User> updateUser(User user, List<String> tagsIds,
+      [FlutterUploader uploader]) async {
     try {
+      print("chegou até aqui");
       Map<String, String> data = {
         "birthdate": user.birthdate,
         "dailyLearningGoalInMinutes":
@@ -61,26 +64,44 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "addressCity": user.addressCity,
         "addressLatitude": user.addressLatitude.toString(),
         "addressLongitude": user.addressLongitude.toString(),
+        "tagsIds": tagsIds.join(",")
       };
 
-      return await uploader.enqueue(
-        url: DotEnv.env['API_URL'] + "users/${user.id}",
-        files: [
-          FileItem(
-            filename: basename(user.photoFilePath),
-            savedDir: dirname(user.photoFilePath),
-            fieldname: "file",
-          )
-        ], // required: list of files that you want to upload
-        method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
-        headers: await this.getHeaders(),
-        data: data, // any data you want to send in upload request
-        showNotification:
-            false, // send local notification (android only) for upload status
-        tag: "Uploading user photo",
-      );
+      print("agora tá aqui ${data.toString()}");
+
+      if (uploader != null) {
+        await uploader.enqueue(
+          url: DotEnv.env['API_URL'] + "users/${user.id}",
+          files: [
+            FileItem(
+              filename: basename(user.photoFilePath),
+              savedDir: dirname(user.photoFilePath),
+              fieldname: "file",
+            )
+          ], // required: list of files that you want to upload
+          method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
+          headers: await this.getHeaders(),
+          data: data, // any data you want to send in upload request
+          showNotification:
+              false, // send local notification (android only) for upload status
+          tag: "Uploading user photo",
+        );
+        return user;
+      } else {
+        final response = await http.put(
+          DotEnv.env['API_URL'] + "users/${user.id}",
+          headers: await this.getHeaders(),
+          body: jsonEncode(data),
+        );
+
+        if (response.statusCode == 200) {
+          return User.fromJson(json.decode(response.body));
+        } else {
+          throw Exception('Failed to update user');
+        }
+      }
     } catch (error) {
-      throw Exception('Failed to create post ' + error);
+      throw Exception('Failed to update user ' + error.toString());
     }
   }
 }

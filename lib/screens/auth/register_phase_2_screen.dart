@@ -43,7 +43,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
   // }
 
   Future getLoggedUser() async {
-    setState(() async {
+    setState(() {
       getCurrentUser().then((value) {
         user = value;
       });

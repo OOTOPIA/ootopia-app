@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -62,7 +63,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       var resultSubscription;
       try {
-        User user = await updateUser(event.user, resultSubscription);
+        User user =
+            await updateUser(event.user, event.tagsIds, resultSubscription);
         resultSubscription?.cancel();
         yield UpdateUserSuccessState(user);
       } catch (err) {
@@ -76,20 +78,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  FutureOr<dynamic> updateUser(user, subscription) async {
+  FutureOr<dynamic> updateUser(User user, tagsIds, subscription) async {
     FlutterUploader uploader = FlutterUploader();
     var completer = new Completer();
-    await this.userRepository.updateUser(user, uploader);
-    subscription = uploader.progress.listen((result) {
-      print("Result ${result.toString()}");
-      if (result.progress == 100) {
+
+    if (user.photoFilePath == null || user.photoFilePath.isEmpty) {
+      return await this.userRepository.updateUser(user, tagsIds);
+    } else {
+      await this.userRepository.updateUser(user, tagsIds, uploader);
+      subscription = uploader.progress.listen((result) {
+        if (result.progress == 100) {
+          completer.complete(user);
+        }
+      }, onDone: () {
         completer.complete(user);
-      }
-    }, onDone: () {
-      completer.complete(user);
-    }, onError: (error) {
-      completer.completeError(error);
-    });
-    return completer.future;
+      }, onError: (error) {
+        completer.completeError(error);
+      });
+      return completer.future;
+    }
   }
 }
