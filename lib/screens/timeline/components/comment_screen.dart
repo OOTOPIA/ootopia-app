@@ -481,8 +481,21 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         style: TextStyle(
             color: hasselectedCommentsIds ? Colors.white : Colors.black),
       ),
-      backgroundColor:
-          hasselectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
+      elevation: 0,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xffC0D9E8),
+              Color(0xffffffff),
+            ],
+          ),
+        ),
+      ),
+      // backgroundColor:
+      //     hasselectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
       leading: IconButton(
         icon: this.icon,
         onPressed: () => this.onLeadingClick(context),

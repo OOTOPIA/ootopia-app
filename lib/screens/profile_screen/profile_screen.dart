@@ -65,12 +65,38 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: userProfile != null ? Text(userProfile.fullname) : Text(''),
+        title: userProfile != null
+            ? Text(
+                userProfile.fullname,
+                style: TextStyle(color: Colors.black),
+              )
+            : Text(''),
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xffC0D9E8),
+                Color(0xffffffff),
+              ],
+            ),
+          ),
+        ),
         actions: [
           widget.id == null
               ? IconButton(
                   icon: const Icon(Icons.menu_outlined),
                   iconSize: 36,
+                  color: Colors.black,
                   tooltip: 'Show Snackbar',
                   onPressed: () => {},
                 )
