@@ -3,6 +3,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import '../camera_screen/camera_screen.dart';
 
@@ -60,14 +61,30 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
       fixedColor: Colors.black54,
       onTap: (value) async {
         switch (value) {
+          case 0:
+            await Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => TimelinePage()),
+            );
+
+            break;
+
           case 1:
+            if (!loggedIn) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+
+              return;
+            }
+
             final resultCamera = await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => CameraScreen()),
             );
-            print("result $resultCamera");
 
-            if (resultCamera) {
+            if (resultCamera != null) {
               renderSnackBar(context);
             }
             break;

@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class TimelinePage extends StatefulWidget {
   @override
@@ -33,27 +34,122 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
     }
   }
 
+  void _backButton(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Image.asset('assets/images/logo.png', height: 42),
-        backgroundColor: Colors.white,
-      ),
-      body: Center(
-        child: BlocListener<TimelinePostBloc, TimelinePostState>(
-          listener: (context, state) {
-            if (state is ErrorState) {
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            }
-          },
-          child: _blocBuilder(),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xffC0D9E8),
+                Color(0xffffffff),
+              ],
+            ),
+          ),
         ),
+        // backgroundColor: Colors.white,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ImageIcon(
+                  AssetImage('assets/icons/profile.png'),
+                  color: Colors.black,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * .20,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: .4,
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width * .15,
+                    lineHeight: 16.0,
+                    percent: 0.5,
+                    backgroundColor: Colors.transparent,
+                    progressColor: Color(0xff1BE7FA),
+                  ),
+                ),
+                ImageIcon(
+                  AssetImage('assets/icons/location.png'),
+                  color: Colors.black,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * .20,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: .4,
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width * .15,
+                    lineHeight: 16.0,
+                    percent: 0.5,
+                    backgroundColor: Colors.transparent,
+                    progressColor: Color(0xff0AA7EA),
+                  ),
+                ),
+                ImageIcon(
+                  AssetImage('assets/icons/earth.png'),
+                  color: Colors.black,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * .20,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: .4,
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width * .15,
+                    lineHeight: 16.0,
+                    percent: 0.1,
+                    backgroundColor: Colors.transparent,
+                    progressColor: Color(0xff026FF2),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: BlocListener<TimelinePostBloc, TimelinePostState>(
+                listener: (context, state) {
+                  if (state is ErrorState) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message),
+                      ),
+                    );
+                  }
+                },
+                child: _blocBuilder(),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: NavigatorBar(),
     );
