@@ -19,6 +19,17 @@ class _RegisterPhase2DailyLearningGoalPageState
   double _learningGoalRating = 10;
 
   @override
+  void initState() {
+    super.initState();
+    setState(() {
+      if (widget.user.dailyLearningGoalInMinutes != null &&
+          widget.user.dailyLearningGoalInMinutes >= 10) {
+        _learningGoalRating = widget.user.dailyLearningGoalInMinutes.toDouble();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     return Scaffold(
@@ -118,11 +129,13 @@ class _RegisterPhase2DailyLearningGoalPageState
                             ),
                           ),
                           onPressed: () {
+                            widget.user.dailyLearningGoalInMinutes =
+                                _learningGoalRating.round();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    RegisterPhase2GeolocationPage(),
+                                    RegisterPhase2GeolocationPage(widget.user),
                               ),
                             );
                           },

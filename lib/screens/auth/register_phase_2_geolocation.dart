@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class RegisterPhase2GeolocationPage extends StatefulWidget {
+  final User user;
+
+  RegisterPhase2GeolocationPage(this.user);
+
   @override
   _RegisterPhase2GeolocationPageState createState() =>
       _RegisterPhase2GeolocationPageState();
@@ -21,6 +26,10 @@ class _RegisterPhase2GeolocationPageState
   @override
   void initState() {
     super.initState();
+    _getLocation();
+  }
+
+  void _getLocation() {
     _determinePosition().then((Position position) async {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -30,6 +39,12 @@ class _RegisterPhase2GeolocationPageState
           print("Placemark: ${placemark.toJson()}");
           _inputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
+
+          widget.user.addressCity = placemark.subAdministrativeArea;
+          widget.user.addressState = placemark.administrativeArea;
+          widget.user.addressCountryCode = placemark.isoCountryCode;
+          widget.user.addressLatitude = position.latitude;
+          widget.user.addressLongitude = position.longitude;
         } else {
           geolocationMessage = "Failed to get current location";
           geolocationErrorMessage =
@@ -186,7 +201,7 @@ class _RegisterPhase2GeolocationPageState
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    RegisterPhase2TopInterestsPage(),
+                                    RegisterPhase2TopInterestsPage(widget.user),
                               ),
                             );
                           },

@@ -1,20 +1,34 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootopia_app/data/utils/string-utils.dart';
+import 'package:ootopia_app/bloc/user/user_bloc.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
+  final User user;
+
+  RegisterPhase2TopInterestsPage(this.user);
+
   @override
   _RegisterPhase2TopInterestsPageState createState() =>
       _RegisterPhase2TopInterestsPageState();
 }
 
 class _RegisterPhase2TopInterestsPageState
-    extends State<RegisterPhase2TopInterestsPage> {
+    extends State<RegisterPhase2TopInterestsPage> with SecureStoreMixin {
+  UserBloc userBloc;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _inputController = TextEditingController();
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
   final GlobalKey<TagsState> _tagStateKey2 = GlobalKey<TagsState>();
+  bool _isLoading = false;
 
   List<Item> _topTags = [
     Item(title: 'Agroecologia', active: false, customData: 11),
@@ -47,9 +61,14 @@ class _RegisterPhase2TopInterestsPageState
 
   List<Item> _secondaryTagsCopy = [];
 
+  void _submit() {
+    userBloc.add(UpdateUserEvent(widget.user));
+  }
+
   @override
   void initState() {
     super.initState();
+    userBloc = BlocProvider.of<UserBloc>(context);
     setState(() {
       _topTags.sort((a, b) => a.customData - b.customData);
     });
@@ -66,6 +85,37 @@ class _RegisterPhase2TopInterestsPageState
             fit: BoxFit.cover,
           ),
         ),
+        child: BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
+            if (state is UpdateUserErrorState) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is LoadingState) {
+              _isLoading = true;
+            } else if (state is UpdateUserSuccessState) {
+              _isLoading = false;
+              widget.user.registerPhase = 2;
+              setCurrentUser(jsonEncode(widget.user.toJson()));
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                builder: (context) {
+                  return TimelinePage();
+                },
+              ), (Route<dynamic> route) => false);
+            }
+          },
+          child: _blocBuilder(),
+        ),
+      ),
+    );
+  }
+
+  _blocBuilder() {
+    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+      return ModalProgressHUD(
+        inAsyncCall: _isLoading,
         child: Center(
           child: Row(
             children: [
@@ -146,6 +196,11 @@ class _RegisterPhase2TopInterestsPageState
                             ),
                           ),
                           onPressed: () {
+                            print("pressed!!");
+                            setState(() {
+                              //_isLoading = true;
+                              _submit();
+                            });
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
@@ -173,8 +228,8 @@ class _RegisterPhase2TopInterestsPageState
             ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _addTag(String text, [bool active = false]) {

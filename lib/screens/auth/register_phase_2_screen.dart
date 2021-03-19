@@ -23,6 +23,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
   File _image;
   final picker = ImagePicker();
   User user;
+  String birthdateValidationErrorMessage = "";
 
   // DateTime selectedDate = DateTime.now();
 
@@ -43,7 +44,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
 
   Future getLoggedUser() async {
     setState(() async {
-      user = await getCurrentUser();
+      getCurrentUser().then((value) {
+        user = value;
+      });
     });
   }
 
@@ -276,6 +279,22 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                             ),
                           ],
                         ),
+                        Visibility(
+                          visible: birthdateValidationErrorMessage.isNotEmpty,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: GlobalConstants.of(context).spacingNormal,
+                              bottom: GlobalConstants.of(context).spacingSmall,
+                            ),
+                            child: Text(
+                              birthdateValidationErrorMessage,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: GlobalConstants.of(context).spacingLarge,
                         ),
@@ -295,19 +314,24 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                           ),
                           onPressed: () {
                             if (_birthdateIsValid()) {
-                              print("birthdate is valid");
+                              setState(() {
+                                birthdateValidationErrorMessage = "";
+                              });
                               user.birthdate =
                                   "${_yearController.text}-${_monthController.text}-${_dayController.text}";
-                              print("Result: ${user.birthdate}");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RegisterPhase2DailyLearningGoalPage(user),
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                birthdateValidationErrorMessage =
+                                    "Please enter a valid birthdate in format DD/MM/YYYY";
+                              });
                             }
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RegisterPhase2DailyLearningGoalPage(user),
-                              ),
-                            );
                           },
                           color: Colors.white,
                           splashColor: Colors.black54,

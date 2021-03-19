@@ -30,15 +30,8 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      print("LOGGED USER: " + user.fullname);
+      print("LOGGED USER: ${user.toJson()}");
     }
-
-    // if (!loggedIn) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => LoginPage()),
-    //   );
-    // }
   }
 
   renderSnackBar(BuildContext context) {
@@ -95,17 +88,17 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
               );
-
               return;
+            } else if (loggedIn) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => user.registerPhase == 1
+                      ? RegisterPhase2Page()
+                      : ProfileScreen(),
+                ),
+              );
             }
-            break;
-          case 2:
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RegisterPhase2Page(),
-              ),
-            );
             break;
         }
       },

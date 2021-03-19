@@ -47,7 +47,7 @@ dependencies:
   geocoding: ^1.0.5
   flutter_tags: ^0.4.9+1
   image_picker: ^0.6.7+22
-  percent_indicator: "^2.1.7+2"
+  percent_indicator: ^2.1.7+2
 
 dev_dependencies:
   flutter_test:

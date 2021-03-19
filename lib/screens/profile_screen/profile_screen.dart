@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ootopia_app/bloc/profile/profile_bloc.dart';
-import 'package:ootopia_app/data/models/profile/profile_model.dart';
+import 'package:ootopia_app/bloc/user/user_bloc.dart';
+import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/repositories/profile_repository.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -20,8 +20,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
-  ProfileBloc profileBloc;
-  ProfileRepositoryImpl profileRepositoryImpl = ProfileRepositoryImpl();
+  UserBloc profileBloc;
+  UserRepositoryImpl profileRepositoryImpl = UserRepositoryImpl();
 
   bool loggedIn = false;
   User user;
@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
-    profileBloc = BlocProvider.of<ProfileBloc>(context);
+    profileBloc = BlocProvider.of<UserBloc>(context);
   }
 
   void _checkUserIsLoggedIn() async {
@@ -148,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
             colorIcon: Colors.black,
             pathIcon: 'assets/icons/add.png',
           ),
-          BlocListener<ProfileBloc, ProfileState>(
+          BlocListener<UserBloc, UserState>(
             listener: (context, state) {
               if (state is LoadingState) {
                 loadingPosts = true;
@@ -168,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   }
 
   _postsBlocBuilder() {
-    return BlocBuilder<ProfileBloc, ProfileState>(
+    return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (loadingPosts) {
           return Expanded(
