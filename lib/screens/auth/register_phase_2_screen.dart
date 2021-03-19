@@ -1,37 +1,78 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class RegisterPhase2Page extends StatefulWidget {
   @override
   _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
 }
 
-class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
+class _RegisterPhase2PageState extends State<RegisterPhase2Page>
+    with SecureStoreMixin {
   final TextEditingController _dayController = TextEditingController();
   final TextEditingController _monthController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  File _image;
+  final picker = ImagePicker();
+  User user;
 
-  DateTime selectedDate = DateTime.now();
+  // DateTime selectedDate = DateTime.now();
 
-  _selectDate(BuildContext context, [bool showYearFirst = false]) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      initialDatePickerMode:
-          showYearFirst ? DatePickerMode.year : DatePickerMode.day,
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
+  // _selectDate(BuildContext context, [bool showYearFirst = false]) async {
+  //   final DateTime picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(),
+  //     initialDatePickerMode:
+  //         showYearFirst ? DatePickerMode.year : DatePickerMode.day,
+  //   );
+  //   if (picked != null && picked != selectedDate)
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  // }
+
+  Future getLoggedUser() async {
+    setState(() async {
+      user = await getCurrentUser();
+    });
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        user.photoFilePath = pickedFile.path;
+      }
+    });
+  }
+
+  bool _birthdateIsValid() {
+    try {
+      int day = int.parse(_dayController.text);
+      int month = int.parse(_monthController.text);
+      int year = int.parse(_yearController.text);
+      return day <= 31 && month <= 12 && year >= 1900;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLoggedUser();
   }
 
   @override
@@ -83,13 +124,33 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 SizedBox(
                                   width: 140,
                                   height: 140,
-                                  child: CustomPaint(
-                                    painter: CirclePainter(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Image.asset(
-                                        'assets/icons/profile_large.png',
-                                        width: 36,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      getImage();
+                                    },
+                                    child: CustomPaint(
+                                      painter: CirclePainter(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: _image == null
+                                            ? Image.asset(
+                                                'assets/icons/profile_large.png',
+                                                width: 36,
+                                              )
+                                            : CircleAvatar(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          300),
+                                                  child: Image.file(
+                                                    _image,
+                                                    fit: BoxFit.cover,
+                                                    width: 140,
+                                                    height: 140,
+                                                  ),
+                                                ),
+                                                radius: 300,
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -110,7 +171,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                               'assets/icons/add_without_border.svg'),
                                           color: Colors.white,
                                           onPressed: () {
-                                            print("clicou");
+                                            getImage();
                                           },
                                         ),
                                       ),
@@ -157,7 +218,13 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   keyboardType: TextInputType.number,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .registerBirthdateInputTheme('day'),
+                                      .loginInputTheme('day'),
+                                  onChanged: (String text) {
+                                    if (text.length == 2 &&
+                                        int.parse(text) <= 31) {
+                                      node.nextFocus();
+                                    }
+                                  },
                                   onEditingComplete: () => node.nextFocus(),
                                 ),
                               ),
@@ -174,7 +241,13 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   keyboardType: TextInputType.number,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .registerBirthdateInputTheme('month'),
+                                      .loginInputTheme('month'),
+                                  onChanged: (String text) {
+                                    if (text.length == 2 &&
+                                        int.parse(text) <= 12) {
+                                      node.nextFocus();
+                                    }
+                                  },
                                   onEditingComplete: () => node.nextFocus(),
                                 ),
                               ),
@@ -190,8 +263,14 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   controller: _yearController,
                                   keyboardType: TextInputType.number,
                                   autofocus: false,
+                                  onChanged: (String text) {
+                                    if (text.length == 4 &&
+                                        int.parse(text) >= 1900) {
+                                      node.nextFocus();
+                                    }
+                                  },
                                   decoration: GlobalConstants.of(context)
-                                      .registerBirthdateInputTheme('year'),
+                                      .loginInputTheme('year'),
                                 ),
                               ),
                             ),
@@ -215,11 +294,18 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                             ),
                           ),
                           onPressed: () {
+                            if (_birthdateIsValid()) {
+                              print("birthdate is valid");
+                              user.birthdate =
+                                  "${_yearController.text}-${_monthController.text}-${_dayController.text}";
+                              print("Result: ${user.birthdate}");
+                            }
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    RegisterPhase2DailyLearningGoalPage(),
+                                    RegisterPhase2DailyLearningGoalPage(user),
                               ),
                             );
                           },

@@ -43,6 +43,10 @@ dependencies:
   flutter_secure_storage : ^4.0.0
   email_validator: ^1.0.6
   scrollable_positioned_list: ^0.1.10
+  geolocator: ^6.2.1
+  geocoding: ^1.0.5
+  flutter_tags: ^0.4.9+1
+  image_picker: ^0.6.7+22
 
 dev_dependencies:
   flutter_test:

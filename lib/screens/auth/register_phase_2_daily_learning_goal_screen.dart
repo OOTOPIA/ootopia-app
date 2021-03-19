@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:ootopia_app/data/utils/circle-painter.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 
 class RegisterPhase2DailyLearningGoalPage extends StatefulWidget {
+  final User user;
+
+  RegisterPhase2DailyLearningGoalPage(this.user);
+
   @override
   _RegisterPhase2DailyLearningGoalPageState createState() =>
       _RegisterPhase2DailyLearningGoalPageState();
@@ -87,9 +89,9 @@ class _RegisterPhase2DailyLearningGoalPageState
                         ),
                         Slider(
                           value: _learningGoalRating,
-                          min: 5,
+                          min: 10,
                           max: 60,
-                          divisions: 11,
+                          divisions: 5,
                           onChanged: (newRating) {
                             setState(() {
                               _learningGoalRating = newRating;
@@ -115,7 +117,15 @@ class _RegisterPhase2DailyLearningGoalPageState
                               ),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RegisterPhase2GeolocationPage(),
+                              ),
+                            );
+                          },
                           color: Colors.white,
                           splashColor: Colors.black54,
                           shape: RoundedRectangleBorder(
