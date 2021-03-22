@@ -372,6 +372,7 @@ class CommentItem extends StatelessWidget {
   Comment comment;
   bool enabledToDeleteOtherComments;
   bool selectMode;
+  User user;
 
   CommentItem(
       {this.currentUser,
@@ -383,6 +384,16 @@ class CommentItem extends StatelessWidget {
     return enabledToDeleteOtherComments ||
         (this.currentUser != null && this.currentUser.id == comment.userId);
   }
+
+  /*void _goToProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            user.registerPhase == 1 ? RegisterPhase2Page() : ProfileScreen(),
+      ),
+    );
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -405,17 +416,21 @@ class CommentItem extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(this.comment.photoUrl == null
-                        ? (this.currentUser != null &&
-                                this.currentUser.id == this.comment.userId &&
-                                this.currentUser.photoUrl != null
-                            ? this.currentUser.photoUrl
-                            : "")
-                        : this.comment.photoUrl),
-                    minRadius: 16,
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(this.comment.photoUrl ==
+                              null
+                          ? (this.currentUser != null &&
+                                  this.currentUser.id == this.comment.userId &&
+                                  this.currentUser.photoUrl != null
+                              ? this.currentUser.photoUrl
+                              : "")
+                          : this.comment.photoUrl),
+                      minRadius: 16,
+                    ),
                   ),
                 ),
                 Flexible(
