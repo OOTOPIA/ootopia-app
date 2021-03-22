@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
+import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'components/timeline_profile.dart';
@@ -173,14 +174,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (loadingPosts) {
-          return Expanded(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return SkeletonProfileScreen();
         }
         if (loadPostsError) {
-          return Center(child: Text("Error"));
+          return Center(
+            child: Text("Error"),
+          );
         }
         return GridPosts(
           context: context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:ootopia_app/screens/timeline/components/skeleton_post_timeline_component.dart';
 
 class PlayerVideo extends StatefulWidget {
   String url;
@@ -61,7 +62,7 @@ class _PlayerVideoState extends State<PlayerVideo> {
                   height: 200,
                   width: double.infinity,
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: SkeletonPlayerVideo(),
                   ),
                 ),
         ),
