@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   video_player: ^1.0.1
   google_fonts: ^1.1.2
-  flutter_svg: ^0.17.4
+  flutter_svg: ^0.19.3
   camera: ^0.7.0+2
   gallery_saver: ^2.0.3
   flutter_uploader: ^1.2.1
@@ -45,6 +45,10 @@ dependencies:
   scrollable_positioned_list: ^0.1.10
   percent_indicator: "2.1.9+1"
   shimmer: ^1.1.2
+  geolocator: ^6.2.1
+  geocoding: ^1.0.5
+  flutter_tags: ^0.4.9+1
+  image_picker: ^0.6.7+22
 
 dev_dependencies:
   flutter_test:

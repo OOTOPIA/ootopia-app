@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:path/path.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
@@ -12,7 +13,7 @@ class CameraApp extends StatefulWidget {
   _CameraAppState createState() => _CameraAppState();
 }
 
-class _CameraAppState extends State<CameraApp> {
+class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
   CameraController controller;
   List<CameraDescription> cameras;
   int indexCamera = 1;
@@ -75,6 +76,19 @@ class _CameraAppState extends State<CameraApp> {
     setState(() {});
   }
 
+  Future<Map<String, String>> getHeaders() async {
+    bool loggedIn = await getUserIsLoggedIn();
+    if (!loggedIn) {
+      return null;
+    }
+    String token = await getAuthToken();
+
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ' + token
+    };
+  }
+
   void uploadFileBackground(XFile file) async {
     // uploader
     try {
@@ -89,7 +103,7 @@ class _CameraAppState extends State<CameraApp> {
             )
           ], // required: list of files that you want to upload
           method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
-          //headers: {"apikey": "api_123456", "userkey": "userkey_123456"},
+          headers: await getHeaders(),
           data: {
             "metadata": '{"type": "video", "description": "Upload"}'
           }, // any data you want to send in upload request

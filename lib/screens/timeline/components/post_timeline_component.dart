@@ -152,12 +152,19 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
           ),
           Row(
             children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 12, left: 12),
-                child: GestureDetector(
-                  onTap: () => CommentScreen(
-                    post: this.post,
-                  ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CommentScreen(
+                        post: this.post,
+                      ),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 12, left: 12),
                   child: Text(
                     this.post.commentsCount.toString() + " comments",
                     style: TextStyle(color: Colors.black.withOpacity(0.4)),
