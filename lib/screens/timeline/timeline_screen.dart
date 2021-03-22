@@ -203,6 +203,7 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                         post: state.posts[index],
                         timelineBloc: this.timelineBloc,
                         loggedIn: this.loggedIn,
+                        user: user,
                       );
                     },
                   ),

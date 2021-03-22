@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
@@ -9,8 +10,10 @@ import 'package:ootopia_app/screens/timeline/components/player_video_component.d
 class PhotoTimeline extends StatefulWidget {
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
+  User user;
   bool loggedIn = false;
-  PhotoTimeline({this.post, this.timelineBloc, this.loggedIn});
+
+  PhotoTimeline({this.post, this.timelineBloc, this.loggedIn, this.user});
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
@@ -64,9 +67,22 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                         minRadius: 16,
                       ),
                     ),
-                    Text(
-                      this.post.username,
-                      textAlign: TextAlign.start,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          this.post.username,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Santos - SP',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -127,18 +143,31 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
           Row(
             children: [
               Padding(
-                  padding: EdgeInsets.only(bottom: 3, left: 12),
-                  child: new RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(fontSize: 14, color: Colors.black),
-                      children: <TextSpan>[
-                        new TextSpan(
-                            text: 'Likes ',
-                            style: new TextStyle(fontWeight: FontWeight.bold)),
-                        new TextSpan(text: this.post.likesCount.toString()),
-                      ],
+                padding: EdgeInsets.only(bottom: 3, left: 12),
+                child: new RichText(
+                  text: new TextSpan(
+                    style: new TextStyle(fontSize: 14, color: Colors.black),
+                    children: <TextSpan>[
+                      new TextSpan(
+                          text: 'Likes ',
+                          style: new TextStyle(fontWeight: FontWeight.bold)),
+                      new TextSpan(text: this.post.likesCount.toString()),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 3, left: 12),
+                child: Row(
+                  children: [
+                    ImageIcon(
+                      AssetImage('assets/icons_profile/ootopia.png'),
+                      color: Colors.black,
                     ),
-                  ))
+                    Text('13.55')
+                  ],
+                ),
+              )
             ],
           ),
           Row(
@@ -150,28 +179,69 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
               )
             ],
           ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CommentScreen(
-                        post: this.post,
-                      ),
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 12, left: 12),
-                  child: Text(
-                    this.post.commentsCount.toString() + " comments",
-                    style: TextStyle(color: Colors.black.withOpacity(0.4)),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CommentScreen(
+                    post: this.post,
                   ),
                 ),
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 12, left: 12),
+                        child: Text(
+                          this.post.commentsCount.toString() + " comments",
+                          style:
+                              TextStyle(color: Colors.black.withOpacity(0.4)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 8),
+                        child: widget.user.photoUrl != null
+                            ? CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      "${this.widget.user.photoUrl}"),
+                                  radius: 14,
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                      "assets/icons_profile/profile.png"),
+                                  radius: 14,
+                                ),
+                              ),
+                      ),
+                      Opacity(
+                        opacity: .4,
+                        child: Text(
+                          'Add a comment',
+                          style: TextStyle(),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
