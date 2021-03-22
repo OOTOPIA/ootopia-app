@@ -35,20 +35,21 @@ class TimelinePost extends Equatable {
 
   factory TimelinePost.fromJson(Map<String, dynamic> parsedJson) {
     return TimelinePost(
-        id: parsedJson['id'],
-        userId: parsedJson['userId'],
-        description: parsedJson['description'],
-        type: parsedJson['type'],
-        imageUrl: parsedJson['imageUrl'],
-        videoUrl: parsedJson['videoUrl'],
-        thumbnailUrl: parsedJson['thumbnailUrl'],
-        photoUrl: parsedJson['photoUrl'],
-        username: parsedJson['username'],
-        likesCount: parsedJson['likesCount'],
-        liked: (parsedJson['liked'] == null ? false : parsedJson['liked']),
-        commentsCount: parsedJson['commentsCount'],
-        createdAt: parsedJson['createdAt'],
-        updatedAt: parsedJson['updatedAt']);
+      id: parsedJson['id'],
+      userId: parsedJson['userId'],
+      description: parsedJson['description'],
+      type: parsedJson['type'],
+      imageUrl: parsedJson['imageUrl'],
+      videoUrl: parsedJson['videoUrl'],
+      thumbnailUrl: parsedJson['thumbnailUrl'],
+      photoUrl: parsedJson['photoUrl'],
+      username: parsedJson['username'],
+      likesCount: parsedJson['likesCount'],
+      liked: (parsedJson['liked'] == null ? false : parsedJson['liked']),
+      commentsCount: parsedJson['commentsCount'],
+      createdAt: parsedJson['createdAt'],
+      updatedAt: parsedJson['updatedAt'],
+    );
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -128,10 +129,22 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     );
   }
 
+  void _tryAgain() {
+    this._getComments([]);
+  }
+
   _blocBuilder() {
     return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
-        if (state is LoadingState) {
+        if (state is CommentErrorState) {
+          return Expanded(
+            child: Container(
+              child: TryAgain(
+                this._tryAgain,
+              ),
+            ),
+          );
+        } else if (state is LoadingState) {
           return Expanded(
             flex: 1,
             child: Center(
@@ -165,7 +178,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 itemCount: state.comments.length + 1,
                 itemBuilder: (context, index) {
                   if (index > 0 && index == state.comments.length) {
-                    if (allCommentsLoaded) {
+                    if (allCommentsLoaded || state.comments.length < 10) {
                       return Container();
                     }
                     return Center(
@@ -372,6 +385,7 @@ class CommentItem extends StatelessWidget {
   Comment comment;
   bool enabledToDeleteOtherComments;
   bool selectMode;
+  User user;
 
   CommentItem(
       {this.currentUser,
@@ -383,6 +397,16 @@ class CommentItem extends StatelessWidget {
     return enabledToDeleteOtherComments ||
         (this.currentUser != null && this.currentUser.id == comment.userId);
   }
+
+  /*void _goToProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            user.registerPhase == 1 ? RegisterPhase2Page() : ProfileScreen(),
+      ),
+    );
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -405,17 +429,21 @@ class CommentItem extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(this.comment.photoUrl == null
-                        ? (this.currentUser != null &&
-                                this.currentUser.id == this.comment.userId &&
-                                this.currentUser.photoUrl != null
-                            ? this.currentUser.photoUrl
-                            : "")
-                        : this.comment.photoUrl),
-                    minRadius: 16,
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(this.comment.photoUrl ==
+                              null
+                          ? (this.currentUser != null &&
+                                  this.currentUser.id == this.comment.userId &&
+                                  this.currentUser.photoUrl != null
+                              ? this.currentUser.photoUrl
+                              : "")
+                          : this.comment.photoUrl),
+                      minRadius: 16,
+                    ),
                   ),
                 ),
                 Flexible(
@@ -459,14 +487,14 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final String title;
   final Icon icon;
-  final bool hasselectedCommentsIds;
+  final bool hasSelectedCommentsIds;
   final Function onLeadingClick;
   final Function onDeleteClick;
 
   CustomAppBar(
     this.title,
     this.icon,
-    this.hasselectedCommentsIds,
+    this.hasSelectedCommentsIds,
     this.onLeadingClick,
     this.onDeleteClick, {
     Key key,
@@ -478,8 +506,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(
-            color: hasselectedCommentsIds ? Colors.white : Colors.black),
+        style: TextStyle(color: Colors.black),
       ),
       elevation: 0,
       flexibleSpace: Container(
@@ -495,19 +522,19 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         ),
       ),
       // backgroundColor:
-      //     hasselectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
+      //     hasSelectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
       leading: IconButton(
         icon: this.icon,
         onPressed: () => this.onLeadingClick(context),
-        color: hasselectedCommentsIds ? Colors.white : Colors.black,
+        color: Colors.black,
       ),
       actions: [
         Visibility(
-          visible: hasselectedCommentsIds,
+          visible: hasSelectedCommentsIds,
           child: IconButton(
             icon: Icon(Icons.delete),
             onPressed: () => this.onDeleteClick(),
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ],

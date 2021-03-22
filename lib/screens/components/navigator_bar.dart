@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -29,15 +30,8 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      print("LOGGED USER: " + user.fullname);
+      print("LOGGED USER: ${user.toJson()}");
     }
-
-    // if (!loggedIn) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => LoginPage()),
-    //   );
-    // }
   }
 
   renderSnackBar(BuildContext context) {
@@ -94,17 +88,17 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
               );
-
               return;
+            } else if (loggedIn) {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => user.registerPhase == 1
+                      ? RegisterPhase2Page()
+                      : ProfileScreen(),
+                ),
+              );
             }
-
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfileScreen(),
-              ),
-            );
-
             break;
         }
       },

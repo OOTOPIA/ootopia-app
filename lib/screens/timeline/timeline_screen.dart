@@ -3,7 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -36,6 +39,16 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
 
   void _backButton(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  void _goToProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            user.registerPhase == 1 ? RegisterPhase2Page() : ProfileScreen(),
+      ),
+    );
   }
 
   @override
@@ -71,63 +84,72 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                   AssetImage('assets/icons/profile.png'),
                   color: Colors.black,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * .20,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: .4,
-                      color: Colors.black,
+                GestureDetector(
+                  onTap: () => _goToProfile(),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .20,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: .4,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(100),
                     ),
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: LinearPercentIndicator(
-                    width: MediaQuery.of(context).size.width * .15,
-                    lineHeight: 16.0,
-                    percent: 0.5,
-                    backgroundColor: Colors.transparent,
-                    progressColor: Color(0xff1BE7FA),
+                    child: LinearPercentIndicator(
+                      width: MediaQuery.of(context).size.width * .15,
+                      lineHeight: 16.0,
+                      percent: 0.5,
+                      backgroundColor: Colors.transparent,
+                      progressColor: Color(0xff1BE7FA),
+                    ),
                   ),
                 ),
                 ImageIcon(
                   AssetImage('assets/icons/location.png'),
                   color: Colors.black,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * .20,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: .4,
-                      color: Colors.black,
+                GestureDetector(
+                  onTap: () => _goToProfile(),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .20,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: .4,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(100),
                     ),
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: LinearPercentIndicator(
-                    width: MediaQuery.of(context).size.width * .15,
-                    lineHeight: 16.0,
-                    percent: 0.5,
-                    backgroundColor: Colors.transparent,
-                    progressColor: Color(0xff0AA7EA),
+                    child: LinearPercentIndicator(
+                      width: MediaQuery.of(context).size.width * .15,
+                      lineHeight: 16.0,
+                      percent: 0.5,
+                      backgroundColor: Colors.transparent,
+                      progressColor: Color(0xff0AA7EA),
+                    ),
                   ),
                 ),
                 ImageIcon(
                   AssetImage('assets/icons/earth.png'),
                   color: Colors.black,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * .20,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: .4,
-                      color: Colors.black,
+                GestureDetector(
+                  onTap: () => _goToProfile(),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .20,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: .4,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(50),
                     ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: LinearPercentIndicator(
-                    width: MediaQuery.of(context).size.width * .15,
-                    lineHeight: 16.0,
-                    percent: 0.1,
-                    backgroundColor: Colors.transparent,
-                    progressColor: Color(0xff026FF2),
+                    child: LinearPercentIndicator(
+                      width: MediaQuery.of(context).size.width * .15,
+                      lineHeight: 16.0,
+                      percent: 0.1,
+                      backgroundColor: Colors.transparent,
+                      progressColor: Color(0xff026FF2),
+                    ),
                   ),
                 ),
               ],
@@ -189,7 +211,9 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
             ],
           );
         } else if (state is ErrorState) {
-          return Center(child: Text("Error"));
+          return TryAgain(
+            _getData,
+          );
         }
         return Center(
           child: Column(
