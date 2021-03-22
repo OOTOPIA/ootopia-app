@@ -45,7 +45,7 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
       var posts = (await this.repository.getPosts());
       yield LoadedSucessState(posts);
     } catch (_) {
-      yield ErrorState("error loading Albums");
+      yield ErrorState("Error loading posts");
     }
   }
 

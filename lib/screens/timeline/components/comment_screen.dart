@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -128,10 +129,22 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     );
   }
 
+  void _tryAgain() {
+    this._getComments([]);
+  }
+
   _blocBuilder() {
     return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
-        if (state is LoadingState) {
+        if (state is CommentErrorState) {
+          return Expanded(
+            child: Container(
+              child: TryAgain(
+                this._tryAgain,
+              ),
+            ),
+          );
+        } else if (state is LoadingState) {
           return Expanded(
             flex: 1,
             child: Center(

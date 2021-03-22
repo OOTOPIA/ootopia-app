@@ -5,6 +5,7 @@ import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -210,7 +211,9 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
             ],
           );
         } else if (state is ErrorState) {
-          return Center(child: Text("Error"));
+          return TryAgain(
+            _getData,
+          );
         }
         return Center(
           child: Column(

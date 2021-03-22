@@ -6,6 +6,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_tags/flutter_tags.dart';
@@ -105,8 +106,8 @@ class _RegisterPhase2TopInterestsPageState
               _isLoading = true;
             } else if (state is UpdateUserSuccessState) {
               _isLoading = false;
-              //widget.user.registerPhase = 2;
-              //setCurrentUser(jsonEncode(widget.user.toJson()));
+              widget.user.registerPhase = 2;
+              setCurrentUser(jsonEncode(widget.user.toJson()));
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                 builder: (context) {
                   return TimelinePage();
@@ -120,71 +121,22 @@ class _RegisterPhase2TopInterestsPageState
     );
   }
 
+  void _tryAgain() {
+    setState(() {
+      errorOnGetTags = false;
+      _isLoading = true;
+      getTags();
+    });
+  }
+
   _blocBuilder() {
     return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
       if (errorOnGetTags) {
-        return Center(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 60,
-                  child: ButtonTheme(
-                    height: 60,
-                    child: FlatButton(
-                      child: Padding(
-                        padding: EdgeInsets.all(
-                          GlobalConstants.of(context).spacingNormal,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Icon(
-                                Icons.replay,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                "Try again",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          errorOnGetTags = false;
-                          _isLoading = true;
-                          getTags();
-                        });
-                      },
-                      color: Colors.white,
-                      splashColor: Colors.black54,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        return TryAgain(
+          this._tryAgain,
+          buttonBackgroundColor: Colors.white,
+          messageTextColor: Colors.white,
+          buttonTextColor: Colors.black,
         );
       }
       return ModalProgressHUD(

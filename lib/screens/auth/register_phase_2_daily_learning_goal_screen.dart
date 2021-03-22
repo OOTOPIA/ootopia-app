@@ -100,6 +100,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                         SliderTheme(
                           data: SliderThemeData(
                             thumbColor: Colors.white,
+                            activeTrackColor: Colors.white,
                           ),
                           child: Slider(
                             value: _learningGoalRating,
