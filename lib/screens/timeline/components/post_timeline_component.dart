@@ -62,10 +62,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage("${this.post.photoUrl}"),
-                        minRadius: 16,
-                      ),
+                      child: this.post.photoUrl != null
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage("${this.post.photoUrl}"),
+                              radius: 16,
+                            )
+                          : CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  "assets/icons_profile/profile.png"),
+                              radius: 16,
+                            ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +102,39 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                 onPressed: null,
               ),
             ],
+          ),
+          Container(
+            width: double.infinity,
+            height: 34,
+            margin: EdgeInsets.only(left: 8, right: 8),
+            padding: EdgeInsets.only(left: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              color: Color(0xff1A4188),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  '#',
+                  style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+                HashtagName(
+                  hashtagName: 'flowers',
+                ),
+                HashtagName(
+                  hashtagName: 'urbangardening',
+                ),
+                HashtagName(
+                  hashtagName: 'saveinsects',
+                ),
+              ],
+            ),
           ),
           PlayerVideo(url: this.post.videoUrl),
           Row(
@@ -267,5 +307,30 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
         },
       );
     }
+  }
+}
+
+class HashtagName extends StatelessWidget {
+  String hashtagName;
+
+  HashtagName({this.hashtagName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 8, right: 4),
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: Colors.white,
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Text(
+        this.hashtagName,
+        style: TextStyle(fontSize: 12, color: Colors.white),
+      ),
+    );
   }
 }
