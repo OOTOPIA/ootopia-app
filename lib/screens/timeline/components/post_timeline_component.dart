@@ -5,15 +5,24 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
-import 'package:ootopia_app/screens/timeline/components/player_video_component.dart';
+
+import 'feed_player/multi_manager/flick_multi_manager.dart';
+import 'feed_player/multi_manager/flick_multi_player.dart';
 
 class PhotoTimeline extends StatefulWidget {
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
   User user;
   bool loggedIn = false;
+  final FlickMultiManager flickMultiManager;
 
-  PhotoTimeline({this.post, this.timelineBloc, this.loggedIn, this.user});
+  PhotoTimeline({
+    this.post,
+    this.timelineBloc,
+    this.loggedIn,
+    this.user,
+    this.flickMultiManager,
+  });
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
@@ -62,10 +71,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: this.post.photoUrl != null
+                      child: this.post?.photoUrl != null
                           ? CircleAvatar(
                               backgroundImage:
-                                  NetworkImage("${this.post.photoUrl}"),
+                                  NetworkImage("${this.post?.photoUrl}"),
                               radius: 16,
                             )
                           : CircleAvatar(
@@ -136,7 +145,36 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
               ],
             ),
           ),
-          PlayerVideo(url: this.post.videoUrl),
+          Stack(
+            children: [
+              Container(
+                height: 30,
+                margin: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Color(0xff1A4188),
+                ),
+                child: null,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    child: AspectRatio(
+                      aspectRatio: 3 / 4,
+                      child: FlickMultiPlayer(
+                        url: this.post.videoUrl,
+                        flickMultiManager: widget.flickMultiManager,
+                        image: this.post.thumbnailUrl,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           Row(
             children: [
               Row(
@@ -250,13 +288,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 16, right: 8),
-                        child: widget.user.photoUrl != null
+                        child: widget.user?.photoUrl != null
                             ? CircleAvatar(
                                 radius: 16,
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      "${this.widget.user.photoUrl}"),
+                                  backgroundImage:
+                                      NetworkImage("${widget.user?.photoUrl}"),
                                   radius: 14,
                                 ),
                               )
