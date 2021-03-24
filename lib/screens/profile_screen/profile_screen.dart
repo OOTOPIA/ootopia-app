@@ -12,9 +12,10 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'components/timeline_profile.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String id;
+  Map<String, dynamic> args = {"id": null};
+  //final String id;
 
-  ProfileScreen({this.id});
+  ProfileScreen([args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -41,11 +42,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   void _checkUserIsLoggedIn() async {
     String userId = "";
     loggedIn = await getUserIsLoggedIn();
-    if (widget.id == null) {
+    if (widget.args["id"] == null) {
       user = await getCurrentUser();
       userId = user.id;
     } else {
-      userId = widget.id;
+      userId = widget.args["id"];
     }
     getUserProfile(userId);
     profileBloc.add(GetPostsProfileEvent(1, userId));
@@ -93,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
           ),
         ),
         actions: [
-          widget.id == null
+          widget.args["id"] == null
               ? IconButton(
                   icon: const Icon(Icons.menu_outlined),
                   iconSize: 36,
@@ -365,10 +366,10 @@ class GridPosts extends StatelessWidget {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TimelineScreenProfileScreen(
+        builder: (context) => TimelineScreenProfileScreen({
           posts: posts,
           postSelected: postSelected,
-        ),
+        }),
       ),
     );
   }

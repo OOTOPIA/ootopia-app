@@ -49,6 +49,7 @@ dependencies:
   geocoding: ^1.0.5
   flutter_tags: ^0.4.9+1
   image_picker: ^0.6.7+22
+  flutter_hooks: ^0.16.0
 
 dev_dependencies:
   flutter_test:

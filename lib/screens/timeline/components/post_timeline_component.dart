@@ -37,9 +37,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(
-          id: post.userId,
-        ),
+        builder: (context) => ProfileScreen({
+          "id": post.userId,
+        }),
       ),
     );
   }

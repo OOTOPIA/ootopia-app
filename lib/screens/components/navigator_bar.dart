@@ -6,6 +6,8 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import '../camera_screen/camera_screen.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/shared/navigator-state.dart';
 
 class NavigatorBar extends StatefulWidget {
   const NavigatorBar({
@@ -90,14 +92,20 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               );
               return;
             } else if (loggedIn) {
-              await Navigator.push(
+              if (user.registerPhase == 2) {
+                print("THIS KEY ${Navigator.of(context).toString()}");
+                Navigator.of(context)
+                    .pushNamedIfNotCurrent(PageRoute.Page.profileScreen.route);
+                //.pushNamed(PageRoute.Page.profileScreen.route);
+              } else {}
+              /*await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => user.registerPhase == 1
                       ? RegisterPhase2Page()
                       : ProfileScreen(),
                 ),
-              );
+              );*/
             }
             break;
         }
