@@ -30,6 +30,10 @@ class _RegisterPhase2GeolocationPageState
   }
 
   void _getLocation() {
+    setState(() {
+      geolocationErrorMessage = "";
+      geolocationMessage = "Please, wait...";
+    });
     _determinePosition().then((Position position) async {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -171,7 +175,8 @@ class _RegisterPhase2GeolocationPageState
                               bottom: GlobalConstants.of(context).spacingSmall,
                             ),
                             child: Text(
-                              geolocationErrorMessage,
+                              geolocationErrorMessage +
+                                  "\nTry to retrieve your current location clicking by \"Get location again\"",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.redAccent,
@@ -180,7 +185,45 @@ class _RegisterPhase2GeolocationPageState
                           ),
                         ),
                         SizedBox(
-                          height: GlobalConstants.of(context).spacingLarge,
+                          height: geolocationErrorMessage.isNotEmpty
+                              ? GlobalConstants.of(context).spacingNormal
+                              : GlobalConstants.of(context).spacingLarge,
+                        ),
+                        Visibility(
+                          visible: geolocationErrorMessage.isNotEmpty,
+                          child: FlatButton(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                GlobalConstants.of(context).spacingNormal,
+                              ),
+                              child: Text(
+                                "Get current location",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              _getLocation();
+                            },
+                            splashColor: Colors.black54,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: geolocationErrorMessage.isNotEmpty,
+                          child: SizedBox(
+                            height: GlobalConstants.of(context).spacingNormal,
+                          ),
                         ),
                         FlatButton(
                           child: Padding(
