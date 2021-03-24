@@ -63,10 +63,17 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
 
   bool _birthdateIsValid() {
     try {
+      DateTime now = DateTime.now();
       int day = int.parse(_dayController.text);
       int month = int.parse(_monthController.text);
       int year = int.parse(_yearController.text);
-      return day <= 31 && month <= 12 && year >= 1900;
+      return _dayController.text.length == 2 &&
+          _monthController.text.length == 2 &&
+          _yearController.text.length == 4 &&
+          day <= 31 &&
+          month <= 12 &&
+          year >= 1900 &&
+          year < now.year;
     } catch (error) {
       return false;
     }
@@ -219,6 +226,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   textAlign: TextAlign.center,
                                   controller: _dayController,
                                   keyboardType: TextInputType.number,
+                                  maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
                                       .loginInputTheme('day'),
@@ -242,6 +250,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   textAlign: TextAlign.center,
                                   controller: _monthController,
                                   keyboardType: TextInputType.number,
+                                  maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
                                       .loginInputTheme('month'),
@@ -265,6 +274,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   textAlign: TextAlign.center,
                                   controller: _yearController,
                                   keyboardType: TextInputType.number,
+                                  maxLength: 4,
                                   autofocus: false,
                                   onChanged: (String text) {
                                     if (text.length == 4 &&
@@ -328,8 +338,18 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               );
                             } else {
                               setState(() {
-                                birthdateValidationErrorMessage =
-                                    "Please enter a valid birthdate in format DD/MM/YYYY";
+                                String day = _dayController.text;
+                                String month = _monthController.text;
+                                String year = _yearController.text;
+                                if (day.length < 2 ||
+                                    month.length < 2 ||
+                                    year.length < 4) {
+                                  birthdateValidationErrorMessage =
+                                      "Please enter a valid birthdate in format DD/MM/YYYY";
+                                } else {
+                                  birthdateValidationErrorMessage =
+                                      "Please enter a valid birthdate";
+                                }
                               });
                             }
                           },
