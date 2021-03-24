@@ -6,6 +6,7 @@ import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
+import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -28,6 +29,7 @@ class TimelineScreenProfileScreen extends StatelessWidget {
         posts: this.posts,
         postSelected: this.postSelected,
       ),
+      bottomNavigationBar: NavigatorBar(),
     );
   }
 }

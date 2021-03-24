@@ -106,7 +106,8 @@ class _RegisterPhase2TopInterestsPageState
               _isLoading = true;
             } else if (state is UpdateUserSuccessState) {
               _isLoading = false;
-              widget.user.registerPhase = 2;
+              widget.user.registerPhase = state.user.registerPhase;
+              widget.user.photoUrl = state.user.photoUrl;
               setCurrentUser(jsonEncode(widget.user.toJson()));
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                 builder: (context) {
