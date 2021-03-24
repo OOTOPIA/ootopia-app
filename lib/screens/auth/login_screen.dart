@@ -197,22 +197,20 @@ class _LoginPageState extends State<LoginPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Create account",
+                                "Login",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegisterPage(),
-                                ),
-                              );
+                              if (_formKey.currentState.validate()) {
+                                _submit();
+                              }
                             },
+                            color: Colors.white,
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -232,20 +230,22 @@ class _LoginPageState extends State<LoginPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Login",
+                                "Create account",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                _submit();
-                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisterPage(),
+                                ),
+                              );
                             },
-                            color: Colors.white,
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
