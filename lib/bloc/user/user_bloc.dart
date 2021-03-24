@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -86,9 +87,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       return await this.userRepository.updateUser(user, tagsIds);
     } else {
       await this.userRepository.updateUser(user, tagsIds, uploader);
-      subscription = uploader.progress.listen((result) {
-        if (result.progress == 100) {
-          completer.complete(user);
+      subscription = uploader.result.listen((result) {
+        if (result.status == UploadTaskStatus.complete) {
+          completer.complete(User.fromJson(json.decode(result.response)));
+        } else if (result.status == UploadTaskStatus.failed) {
+          completer.completeError(Exception("Error on upload"));
         }
       }, onDone: () {
         completer.complete(user);
