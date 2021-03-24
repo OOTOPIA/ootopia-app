@@ -10,6 +10,9 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 
 class TimelinePage extends StatefulWidget {
   @override
@@ -21,12 +24,15 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   bool loggedIn = false;
   User user;
 
+  FlickMultiManager flickMultiManager;
+
   @override
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     timelineBloc.add(LoadingSucessTimelinePostEvent());
+    flickMultiManager = FlickMultiManager();
   }
 
   void _checkUserIsLoggedIn() async {
@@ -190,21 +196,31 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
           return Column(
             children: <Widget>[
               Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    state.posts = [];
-                    _getData();
+                child: VisibilityDetector(
+                  key: ObjectKey(flickMultiManager),
+                  onVisibilityChanged: (visibility) {
+                    if (visibility.visibleFraction == 0 && this.mounted) {
+                      flickMultiManager.pause();
+                    }
                   },
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.posts.length,
-                    itemBuilder: (context, index) {
-                      return PhotoTimeline(
-                        post: state.posts[index],
-                        timelineBloc: this.timelineBloc,
-                        loggedIn: this.loggedIn,
-                      );
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      state.posts = [];
+                      _getData();
                     },
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.posts.length,
+                      itemBuilder: (context, index) {
+                        return PhotoTimeline(
+                          post: state.posts[index],
+                          timelineBloc: this.timelineBloc,
+                          loggedIn: this.loggedIn,
+                          user: user,
+                          flickMultiManager: flickMultiManager,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

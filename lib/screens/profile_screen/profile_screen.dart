@@ -292,17 +292,17 @@ class DataProfile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconDataProfile(
-                pathIcon: 'assets/icons_profile/primary_icon.png',
+                pathIcon: 'assets/icons_profile/badge_hero_user.png',
                 valueData: '100',
                 colorIcon: Color(0xff01E8F8),
               ),
               IconDataProfile(
-                pathIcon: 'assets/icons_profile/primary_icon.png',
+                pathIcon: 'assets/icons_profile/badge_hero_city.png',
                 valueData: '100',
                 colorIcon: Color(0xff01A9E4),
               ),
               IconDataProfile(
-                pathIcon: 'assets/icons_profile/primary_icon.png',
+                pathIcon: 'assets/icons_profile/badge_hero_earth.png',
                 valueData: '100',
                 colorIcon: Color(0xff0073EA),
               ),
