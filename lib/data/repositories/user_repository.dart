@@ -54,7 +54,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future<User> updateUser(User user, List<String> tagsIds,
       [FlutterUploader uploader]) async {
     try {
-      print("chegou até aqui");
       Map<String, String> data = {
         "birthdate": user.birthdate,
         "dailyLearningGoalInMinutes":
@@ -66,8 +65,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "addressLongitude": user.addressLongitude.toString(),
         "tagsIds": tagsIds.join(",")
       };
-
-      print("agora tá aqui ${data.toString()}");
 
       if (uploader != null) {
         await uploader.enqueue(
