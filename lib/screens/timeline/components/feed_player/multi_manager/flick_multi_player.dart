@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/portrait_controls.dart';
 
 import './flick_multi_manager.dart';
@@ -26,14 +27,19 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
 
   @override
   void initState() {
+    initVideo();
+
+    super.initState();
+  }
+
+  void initVideo() async {
+    videoPlayerController = VideoPlayerController.network(widget.url);
+
     flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.network(widget.url)
-        ..setLooping(true),
+      videoPlayerController: videoPlayerController..setLooping(true),
       autoPlay: false,
     );
     widget.flickMultiManager.init(flickManager);
-
-    super.initState();
   }
 
   @override
@@ -44,6 +50,10 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
 
   @override
   Widget build(BuildContext context) {
+
+    print(
+        'values aqui 2 ${flickManager.flickVideoManager.videoPlayerValue.size.width} > ${flickManager.flickVideoManager.videoPlayerValue.size.height}');
+
     return VisibilityDetector(
       key: ObjectKey(flickManager),
       onVisibilityChanged: (visiblityInfo) {
@@ -51,9 +61,20 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
           widget.flickMultiManager.play(flickManager);
         }
       },
-      child: Expanded(
-        child: Container(
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * .6),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
           child: FlickVideoPlayer(
+            preferredDeviceOrientationFullscreen: [
+              flickManager.flickVideoManager.videoPlayerValue.size
+                          .width >
+                      flickManager.flickVideoManager.videoPlayerValue
+                          .size.height
+                  ? DeviceOrientation.landscapeLeft
+                  : DeviceOrientation.portraitUp
+            ],
             flickManager: flickManager,
             flickVideoWithControls: FlickVideoWithControls(
               playerLoadingFallback: Positioned.fill(
@@ -73,7 +94,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
                         height: 20,
                         child: CircularProgressIndicator(
                           backgroundColor: Colors.white,
-                          strokeWidth: 4,
+                          strokeWidth: 2,
                         ),
                       ),
                     ),
@@ -86,6 +107,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
               ),
             ),
             flickVideoWithControlsFullscreen: FlickVideoWithControls(
+              videoFit: BoxFit.contain,
               playerLoadingFallback: Center(
                   child: Image.network(
                 widget.image,
