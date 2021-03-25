@@ -14,6 +14,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
 class TimelinePage extends StatefulWidget {
   @override
   _TimelinePageState createState() => _TimelinePageState();
@@ -48,13 +50,9 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   }
 
   void _goToProfile() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            user.registerPhase == 1 ? RegisterPhase2Page() : ProfileScreen(),
-      ),
-    );
+    Navigator.of(context).pushNamed(user.registerPhase == 1
+        ? PageRoute.Page.registerPhase2Screen.route
+        : PageRoute.Page.profileScreen.route);
   }
 
   @override

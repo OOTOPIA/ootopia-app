@@ -10,6 +10,8 @@ import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:email_validator/email_validator.dart';
 
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -65,11 +67,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             );
           } else if (state is LoadedSucessState) {
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              builder: (context) {
-                return TimelinePage();
-              },
-            ), (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                PageRoute.Page.timelineScreen.route, ModalRoute.withName('/'));
           }
         },
         child: Scaffold(

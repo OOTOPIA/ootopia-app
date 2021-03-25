@@ -7,17 +7,17 @@ import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootopia_app/data/utils/string-utils.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
-  final User user;
+  Map<String, dynamic> args;
 
-  RegisterPhase2TopInterestsPage(this.user);
+  RegisterPhase2TopInterestsPage(this.args);
 
   @override
   _RegisterPhase2TopInterestsPageState createState() =>
@@ -30,7 +30,6 @@ class _RegisterPhase2TopInterestsPageState
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _inputController = TextEditingController();
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
-  final GlobalKey<TagsState> _tagStateKey2 = GlobalKey<TagsState>();
   InterestsTagsRepositoryImpl repository = InterestsTagsRepositoryImpl();
 
   bool _isLoading = true;
@@ -44,7 +43,7 @@ class _RegisterPhase2TopInterestsPageState
   List<Item> _secondaryTagsCopy = [];
 
   void _submit() {
-    userBloc.add(UpdateUserEvent(widget.user, _selectedTagsIds));
+    userBloc.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
   }
 
   Future<void> getTags() async {
@@ -63,7 +62,6 @@ class _RegisterPhase2TopInterestsPageState
                 .add(Item(title: tag.name, active: false, customData: tag));
           }
         });
-        print("Total tags count: ${tags.length}");
       });
     }).onError((error, stackTrace) {
       setState(() {
@@ -106,14 +104,12 @@ class _RegisterPhase2TopInterestsPageState
               _isLoading = true;
             } else if (state is UpdateUserSuccessState) {
               _isLoading = false;
-              widget.user.registerPhase = state.user.registerPhase;
-              widget.user.photoUrl = state.user.photoUrl;
-              setCurrentUser(jsonEncode(widget.user.toJson()));
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                builder: (context) {
-                  return TimelinePage();
-                },
-              ), (Route<dynamic> route) => false);
+              widget.args['user'].registerPhase = state.user.registerPhase;
+              widget.args['user'].photoUrl = state.user.photoUrl;
+              setCurrentUser(jsonEncode(widget.args['user'].toJson()));
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  PageRoute.Page.timelineScreen.route,
+                  ModalRoute.withName('/'));
             }
           },
           child: _blocBuilder(),

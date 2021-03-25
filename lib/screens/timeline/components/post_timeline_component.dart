@@ -9,6 +9,8 @@ import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
 
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
 class PhotoTimeline extends StatefulWidget {
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
@@ -46,13 +48,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
   }
 
   void _goToProfile() async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProfileScreen(
-          id: post.userId,
-        ),
-      ),
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.profileScreen.route,
+      arguments: {
+        "id": post.userId,
+      },
     );
   }
 
@@ -179,13 +179,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                     color: Colors.black87,
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CommentScreen(
-                          post: this.post,
-                        ),
-                      ),
+                    Navigator.of(context).pushNamed(
+                      PageRoute.Page.commentScreen.route,
+                      arguments: {
+                        "post": this.post,
+                      },
                     );
                   },
                 ),
@@ -241,13 +239,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CommentScreen(
-                  post: this.post,
-                ),
-              ),
+            Navigator.of(context).pushNamed(
+              PageRoute.Page.commentScreen.route,
+              arguments: {
+                "post": this.post,
+              },
             );
           },
           child: Container(
@@ -308,9 +304,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
 
   void _likePost() {
     if (!loggedIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.loginScreen.route,
       );
     } else {
       setState(
