@@ -12,6 +12,7 @@ enum Page {
   registerPhase2DailyLearningGoalScreen,
   registerPhase2GeolocationScreen,
   registerPhase2TopInterestsScreen,
+  playerVideoFullScreen,
 }
 
 extension PageRoute on Page {

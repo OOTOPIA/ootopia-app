@@ -21,6 +21,7 @@ import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
@@ -141,6 +142,8 @@ class MainPage extends HookWidget {
         RegisterPhase2GeolocationPage(args),
     PageRoute.Page.registerPhase2TopInterestsScreen: (args) =>
         RegisterPhase2TopInterestsPage(args),
+    PageRoute.Page.playerVideoFullScreen: (args) =>
+        PLayerVideoFullscreen(args: args),
   };
 
   @override

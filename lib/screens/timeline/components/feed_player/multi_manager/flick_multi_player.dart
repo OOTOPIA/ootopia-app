@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+
 class FlickMultiPlayer extends StatefulWidget {
   const FlickMultiPlayer(
       {Key key, this.url, this.image, this.flickMultiManager})
@@ -27,32 +29,41 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
 
   @override
   void initState() {
-    initVideo();
-
-    super.initState();
-  }
-
-  void initVideo() async {
     videoPlayerController = VideoPlayerController.network(widget.url);
 
     flickManager = FlickManager(
       videoPlayerController: videoPlayerController..setLooping(true),
       autoPlay: false,
     );
+
     widget.flickMultiManager.init(flickManager);
+    isMute();
+    super.initState();
+  }
+
+  isMute() {
+    //  pop
+  }
+
+  Future<bool> myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    print("BACK BUTTON! ${flickManager.flickControlManager.isFullscreen}"); // Do some stuff.
+    if (flickManager.flickControlManager.isFullscreen) {
+      flickManager.flickControlManager.exitFullscreen();
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
   void dispose() {
-    widget.flickMultiManager.remove(flickManager);
     super.dispose();
+    widget.flickMultiManager.remove(flickManager);
+    flickManager.dispose();
+    videoPlayerController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    print(
-        'values aqui 2 ${flickManager.flickVideoManager.videoPlayerValue.size.width} > ${flickManager.flickVideoManager.videoPlayerValue.size.height}');
 
     return VisibilityDetector(
       key: ObjectKey(flickManager),
@@ -104,6 +115,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
               controls: FeedPlayerPortraitControls(
                 flickMultiManager: widget.flickMultiManager,
                 flickManager: flickManager,
+                url: widget.url
               ),
             ),
             flickVideoWithControlsFullscreen: FlickVideoWithControls(
