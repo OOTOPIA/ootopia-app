@@ -40,7 +40,6 @@ class FeedPlayerPortraitControls extends StatelessWidget {
           Expanded(
             child: FlickToggleSoundAction(
               toggleMute: () {
-
                 flickMultiManager.pause();
                 displayManager.handleShowPlayerControls();
               },
@@ -88,7 +87,7 @@ class FeedPlayerPortraitControls extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pushNamed(
                               PageRoute.Page.playerVideoFullScreen.route,
-                          arguments: {"url": url});
+                              arguments: {"url": url});
                         },
                       ),
                     ),

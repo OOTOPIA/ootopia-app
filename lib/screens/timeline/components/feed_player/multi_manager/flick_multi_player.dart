@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-
 class FlickMultiPlayer extends StatefulWidget {
   const FlickMultiPlayer(
       {Key key, this.url, this.image, this.flickMultiManager})
@@ -37,21 +35,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
     );
 
     widget.flickMultiManager.init(flickManager);
-    isMute();
     super.initState();
-  }
-
-  isMute() {
-    //  pop
-  }
-
-  Future<bool> myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    print("BACK BUTTON! ${flickManager.flickControlManager.isFullscreen}"); // Do some stuff.
-    if (flickManager.flickControlManager.isFullscreen) {
-      flickManager.flickControlManager.exitFullscreen();
-    } else {
-      Navigator.pop(context);
-    }
   }
 
   @override
@@ -64,7 +48,6 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
 
   @override
   Widget build(BuildContext context) {
-
     return VisibilityDetector(
       key: ObjectKey(flickManager),
       onVisibilityChanged: (visiblityInfo) {
@@ -79,10 +62,9 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
           borderRadius: BorderRadius.all(Radius.circular(20)),
           child: FlickVideoPlayer(
             preferredDeviceOrientationFullscreen: [
-              flickManager.flickVideoManager.videoPlayerValue.size
-                          .width >
-                      flickManager.flickVideoManager.videoPlayerValue
-                          .size.height
+              flickManager.flickVideoManager.videoPlayerValue.size.width >
+                      flickManager
+                          .flickVideoManager.videoPlayerValue.size.height
                   ? DeviceOrientation.landscapeLeft
                   : DeviceOrientation.portraitUp
             ],
@@ -113,10 +95,9 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
                 ),
               ),
               controls: FeedPlayerPortraitControls(
-                flickMultiManager: widget.flickMultiManager,
-                flickManager: flickManager,
-                url: widget.url
-              ),
+                  flickMultiManager: widget.flickMultiManager,
+                  flickManager: flickManager,
+                  url: widget.url),
             ),
             flickVideoWithControlsFullscreen: FlickVideoWithControls(
               videoFit: BoxFit.contain,
