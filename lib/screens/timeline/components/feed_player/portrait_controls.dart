@@ -36,34 +36,43 @@ class FeedPlayerPortraitControls extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: FlickToggleSoundAction(
-              toggleMute: () {
-                flickMultiManager.toggleMute();
-                displayManager.handleShowPlayerControls();
-              },
-              child: FlickSeekVideoAction(
-                child: Center(child: FlickVideoBuffer()),
-              ),
-            ),
+            child: Container(),
           ),
           FlickAutoHideChild(
-            autoHide: true,
-            showIfVideoNotInitialized: false,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: FlickSoundToggle(
-                    toggleMute: () => flickMultiManager.toggleMute(),
-                    color: Colors.white,
-                  ),
+                Row(
+                  children: [
+                    FlickPlayToggle(size: 30),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    FlickSoundToggle(size: 30),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    DefaultTextStyle(
+                      style: TextStyle(color: Colors.white54),
+                      child: Row(
+                        children: <Widget>[
+                          FlickCurrentPosition(
+                            fontSize: 16,
+                          ),
+                          Text('/'),
+                          FlickTotalDuration(
+                            fontSize: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    FlickFullScreenToggle(
+                      size: 30,
+                    ),
+                  ],
                 ),
-                // FlickFullScreenToggle(),
               ],
             ),
           ),
