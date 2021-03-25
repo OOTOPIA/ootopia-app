@@ -11,10 +11,23 @@ import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/screens/auth/login_screen.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
+import 'package:ootopia_app/screens/auth/register_screen.dart';
+import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
 import 'data/repositories/comment_repository.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/foundation.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 Future main() async {
   await DotEnv.load(fileName: ".env");
@@ -105,7 +118,57 @@ class ExpensesApp extends StatelessWidget {
             ),
           ),
         ),
-        home: TimelinePage(),
+        home: MainPage(),
+      ),
+    );
+  }
+}
+
+class MainPage extends HookWidget {
+  final Map<PageRoute.Page, Widget Function(dynamic)> _fragments = {
+    PageRoute.Page.timelineScreen: (args) => TimelinePage(),
+    PageRoute.Page.timelineProfileScreen: (args) =>
+        TimelineScreenProfileScreen(args),
+    PageRoute.Page.commentScreen: (args) => CommentScreen(args),
+    PageRoute.Page.profileScreen: (args) => ProfileScreen(args),
+    PageRoute.Page.registerScreen: (args) => RegisterPage(),
+    PageRoute.Page.loginScreen: (args) => LoginPage(),
+    PageRoute.Page.cameraScreen: (args) => CameraScreen(),
+    PageRoute.Page.registerPhase2Screen: (args) => RegisterPhase2Page(),
+    PageRoute.Page.registerPhase2DailyLearningGoalScreen: (args) =>
+        RegisterPhase2DailyLearningGoalPage(args),
+    PageRoute.Page.registerPhase2GeolocationScreen: (args) =>
+        RegisterPhase2GeolocationPage(args),
+    PageRoute.Page.registerPhase2TopInterestsScreen: (args) =>
+        RegisterPhase2TopInterestsPage(args),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final navigatorKey = GlobalObjectKey<NavigatorState>(context);
+    return WillPopScope(
+      onWillPop: () async {
+        if (navigatorKey.currentState.canPop()) {
+          navigatorKey.currentState.pop();
+          return false;
+        }
+
+        return true;
+      },
+      child: Navigator(
+        key: navigatorKey,
+        initialRoute: PageRoute.Page.timelineScreen.route,
+        onGenerateRoute: (settings) {
+          final pageName = settings.name;
+
+          final page = _fragments.keys
+              .firstWhere((element) => describeEnum(element) == pageName);
+
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (context) => _fragments[page](settings.arguments as Map),
+          );
+        },
       ),
     );
   }

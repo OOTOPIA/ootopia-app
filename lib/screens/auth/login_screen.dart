@@ -6,6 +6,7 @@ import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -47,17 +48,14 @@ class _LoginPageState extends State<LoginPage> {
             );
           } else if (state is LoadedSucessState) {
             print("LOGGED!!!!!");
-            Scaffold.of(context).showSnackBar(
+            /*Scaffold.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Color(0xff66bb6a),
                 content: Text("Successfully Logged In"),
               ),
-            );
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => TimelinePage(),
-                ),
-                (Route<dynamic> route) => false);
+            );*/
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                PageRoute.Page.timelineScreen.route, ModalRoute.withName('/'));
           }
         },
         child: _blocBuilder(),
@@ -239,12 +237,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegisterPage(),
-                                ),
-                              );
+                              Navigator.of(context).pushNamed(
+                                  PageRoute.Page.registerScreen.route);
                             },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(

@@ -126,7 +126,7 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
       }
     });
 
-    Navigator.pop(context, true);
+    Navigator.of(context).pop(true);
   }
 
   Future<XFile> stopVideoRecording() async {

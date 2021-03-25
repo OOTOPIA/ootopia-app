@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegisterPhase2DailyLearningGoalPage extends StatefulWidget {
-  final User user;
-
-  RegisterPhase2DailyLearningGoalPage(this.user);
+  Map<String, dynamic> args;
+  RegisterPhase2DailyLearningGoalPage(this.args);
 
   @override
   _RegisterPhase2DailyLearningGoalPageState createState() =>
@@ -22,9 +22,10 @@ class _RegisterPhase2DailyLearningGoalPageState
   void initState() {
     super.initState();
     setState(() {
-      if (widget.user.dailyLearningGoalInMinutes != null &&
-          widget.user.dailyLearningGoalInMinutes >= 10) {
-        _learningGoalRating = widget.user.dailyLearningGoalInMinutes.toDouble();
+      if (widget.args['user'].dailyLearningGoalInMinutes != null &&
+          widget.args['user'].dailyLearningGoalInMinutes >= 10) {
+        _learningGoalRating =
+            widget.args['user'].dailyLearningGoalInMinutes.toDouble();
       }
     });
   }
@@ -134,14 +135,12 @@ class _RegisterPhase2DailyLearningGoalPageState
                             ),
                           ),
                           onPressed: () {
-                            widget.user.dailyLearningGoalInMinutes =
+                            widget.args['user'].dailyLearningGoalInMinutes =
                                 _learningGoalRating.round();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RegisterPhase2GeolocationPage(widget.user),
-                              ),
+                            Navigator.of(context).pushNamed(
+                              PageRoute
+                                  .Page.registerPhase2GeolocationScreen.route,
+                              arguments: widget.args,
                             );
                           },
                           color: Colors.white,
