@@ -69,9 +69,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
       int day = int.parse(_dayController.text);
       int month = int.parse(_monthController.text);
       int year = int.parse(_yearController.text);
-      return _dayController.text.length == 2 &&
-          _monthController.text.length == 2 &&
-          _yearController.text.length == 4 &&
+      return _yearController.text.length == 4 &&
           day <= 31 &&
           month <= 12 &&
           year >= 1900 &&
@@ -340,12 +338,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               );
                             } else {
                               setState(() {
-                                String day = _dayController.text;
-                                String month = _monthController.text;
                                 String year = _yearController.text;
-                                if (day.length < 2 ||
-                                    month.length < 2 ||
-                                    year.length < 4) {
+                                if (year.length < 4) {
                                   birthdateValidationErrorMessage =
                                       "Please enter a valid birthdate in format DD/MM/YYYY";
                                 } else {
