@@ -11,11 +11,12 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'components/timeline_profile.dart';
 
-class ProfileScreen extends StatefulWidget {
-  Map<String, dynamic> args = {"id": null};
-  //final String id;
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-  ProfileScreen([args]);
+class ProfileScreen extends StatefulWidget {
+  Map<String, dynamic> args;
+
+  ProfileScreen([this.args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -42,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   void _checkUserIsLoggedIn() async {
     String userId = "";
     loggedIn = await getUserIsLoggedIn();
-    if (widget.args["id"] == null) {
+    if (widget.args == null || widget.args["id"] == null) {
       user = await getCurrentUser();
       userId = user.id;
     } else {
@@ -94,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
           ),
         ),
         actions: [
-          widget.args["id"] == null
+          widget.args == null || widget.args["id"] == null
               ? IconButton(
                   icon: const Icon(Icons.menu_outlined),
                   iconSize: 36,
@@ -363,14 +364,12 @@ class GridPosts extends StatelessWidget {
   GridPosts({this.context, this.posts});
 
   _goToTimelinePost(posts, postSelected) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TimelineScreenProfileScreen({
-          posts: posts,
-          postSelected: postSelected,
-        }),
-      ),
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.timelineProfileScreen.route,
+      arguments: {
+        "posts": posts,
+        "postSelected": postSelected,
+      },
     );
   }
 

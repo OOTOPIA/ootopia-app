@@ -5,10 +5,12 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
-class RegisterPhase2GeolocationPage extends StatefulWidget {
-  final User user;
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-  RegisterPhase2GeolocationPage(this.user);
+class RegisterPhase2GeolocationPage extends StatefulWidget {
+  Map<String, dynamic> args;
+
+  RegisterPhase2GeolocationPage(this.args);
 
   @override
   _RegisterPhase2GeolocationPageState createState() =>
@@ -44,11 +46,11 @@ class _RegisterPhase2GeolocationPageState
           _inputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
-          widget.user.addressCity = placemark.subAdministrativeArea;
-          widget.user.addressState = placemark.administrativeArea;
-          widget.user.addressCountryCode = placemark.isoCountryCode;
-          widget.user.addressLatitude = position.latitude;
-          widget.user.addressLongitude = position.longitude;
+          widget.args['user'].addressCity = placemark.subAdministrativeArea;
+          widget.args['user'].addressState = placemark.administrativeArea;
+          widget.args['user'].addressCountryCode = placemark.isoCountryCode;
+          widget.args['user'].addressLatitude = position.latitude;
+          widget.args['user'].addressLongitude = position.longitude;
         } else {
           geolocationMessage = "Failed to get current location";
           geolocationErrorMessage =
@@ -240,12 +242,10 @@ class _RegisterPhase2GeolocationPageState
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RegisterPhase2TopInterestsPage(widget.user),
-                              ),
+                            Navigator.of(context).pushNamed(
+                              PageRoute
+                                  .Page.registerPhase2TopInterestsScreen.route,
+                              arguments: widget.args,
                             );
                           },
                           color: Colors.white,

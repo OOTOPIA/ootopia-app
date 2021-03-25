@@ -13,12 +13,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../../shared/secure-store-mixin.dart';
 
 class TimelineScreenProfileScreen extends StatelessWidget {
-  Map<String, dynamic> args = {"post": null, "postSelected": null};
+  final Map<String, dynamic> args;
   //List<TimelinePost> posts;
   User user;
   //int postSelected;
 
-  TimelineScreenProfileScreen(args);
+  TimelineScreenProfileScreen(this.args);
 
   @override
   Widget build(BuildContext context) {

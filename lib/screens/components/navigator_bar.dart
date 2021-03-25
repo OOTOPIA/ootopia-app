@@ -57,27 +57,19 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
       onTap: (value) async {
         switch (value) {
           case 0:
-            await Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => TimelinePage()),
-            );
-
+            Navigator.of(context)
+                .pushNamedIfNotCurrent(PageRoute.Page.timelineScreen.route);
             break;
 
           case 1:
             if (!loggedIn) {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-
+              await Navigator.of(context)
+                  .pushNamed(PageRoute.Page.loginScreen.route);
               return;
             }
 
-            final resultCamera = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CameraScreen()),
-            );
+            final resultCamera = await Navigator.of(context)
+                .pushNamed(PageRoute.Page.cameraScreen.route);
 
             if (resultCamera != null) {
               renderSnackBar(context);
@@ -86,26 +78,17 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
 
           case 2:
             if (!loggedIn) {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
+              await Navigator.of(context)
+                  .pushNamed(PageRoute.Page.loginScreen.route);
               return;
             } else if (loggedIn) {
               if (user.registerPhase == 2) {
-                print("THIS KEY ${Navigator.of(context).toString()}");
                 Navigator.of(context)
                     .pushNamedIfNotCurrent(PageRoute.Page.profileScreen.route);
-                //.pushNamed(PageRoute.Page.profileScreen.route);
-              } else {}
-              /*await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => user.registerPhase == 1
-                      ? RegisterPhase2Page()
-                      : ProfileScreen(),
-                ),
-              );*/
+              } else {
+                Navigator.of(context)
+                    .pushNamed(PageRoute.Page.registerPhase2Screen.route);
+              }
             }
             break;
         }

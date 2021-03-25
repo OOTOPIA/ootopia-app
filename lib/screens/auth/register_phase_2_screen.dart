@@ -9,6 +9,8 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
 class RegisterPhase2Page extends StatefulWidget {
   @override
   _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
@@ -329,12 +331,12 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               });
                               user.birthdate =
                                   "${_yearController.text}-${_monthController.text}-${_dayController.text}";
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      RegisterPhase2DailyLearningGoalPage(user),
-                                ),
+                              Navigator.of(context).pushNamed(
+                                PageRoute
+                                    .Page
+                                    .registerPhase2DailyLearningGoalScreen
+                                    .route,
+                                arguments: {"user": user},
                               );
                             } else {
                               setState(() {

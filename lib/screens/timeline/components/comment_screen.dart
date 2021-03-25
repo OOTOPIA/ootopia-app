@@ -10,10 +10,11 @@ import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
-class CommentScreen extends StatefulWidget {
-  final TimelinePost post;
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-  CommentScreen({this.post});
+class CommentScreen extends StatefulWidget {
+  final Map<String, dynamic> args;
+  CommentScreen(this.args);
 
   @override
   _CommentScreenState createState() => _CommentScreenState();
@@ -35,19 +36,20 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   List<String> selectedCommentsIds = [];
 
   void initState() {
+    print("Test!!!! ${widget.args.toString()}");
     _checkUserIsLoggedIn();
     commentBloc = BlocProvider.of<CommentBloc>(context);
     _getComments([]);
   }
 
   bool _enabledToDeleteOtherComments() {
-    return this.user != null && this.user.id == widget.post.userId;
+    return this.user != null && this.user.id == widget.args['post'].userId;
   }
 
   Future<void> _getComments(List<Comment> allComments,
       [bool loadingMore = false]) async {
     commentBloc.add(GetCommentEvent(
-      postId: widget.post.id,
+      postId: widget.args['post'].id,
       page: currentPage,
       allComments: allComments,
       loadingMore: loadingMore,
@@ -273,10 +275,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     }
 
     if (!loggedIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
+      Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
       return;
     } else {
       setState(() {
@@ -284,7 +283,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         commentBloc.add(
           CreateCommentEvent(
             comment: CommentCreate(
-                postId: widget.post.id, text: _inputController.text),
+                postId: widget.args['post'].id, text: _inputController.text),
           ),
         );
       });
@@ -365,7 +364,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               child: Text('OK'),
               onPressed: () {
                 commentBloc.add(DeleteSelectedCommentsEvent(
-                    widget.post.id, selectedCommentsIds));
+                    widget.args['post'].id, selectedCommentsIds));
                 setState(() {
                   selectMode = false;
                   selectedCommentsIds = [];

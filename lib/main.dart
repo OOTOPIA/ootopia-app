@@ -11,8 +11,16 @@ import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/screens/auth/login_screen.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
+import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
+import 'package:ootopia_app/screens/auth/register_screen.dart';
+import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
@@ -121,7 +129,18 @@ class MainPage extends HookWidget {
     PageRoute.Page.timelineScreen: (args) => TimelinePage(),
     PageRoute.Page.timelineProfileScreen: (args) =>
         TimelineScreenProfileScreen(args),
+    PageRoute.Page.commentScreen: (args) => CommentScreen(args),
     PageRoute.Page.profileScreen: (args) => ProfileScreen(args),
+    PageRoute.Page.registerScreen: (args) => RegisterPage(),
+    PageRoute.Page.loginScreen: (args) => LoginPage(),
+    PageRoute.Page.cameraScreen: (args) => CameraScreen(),
+    PageRoute.Page.registerPhase2Screen: (args) => RegisterPhase2Page(),
+    PageRoute.Page.registerPhase2DailyLearningGoalScreen: (args) =>
+        RegisterPhase2DailyLearningGoalPage(args),
+    PageRoute.Page.registerPhase2GeolocationScreen: (args) =>
+        RegisterPhase2GeolocationPage(args),
+    PageRoute.Page.registerPhase2TopInterestsScreen: (args) =>
+        RegisterPhase2TopInterestsPage(args),
   };
 
   @override
