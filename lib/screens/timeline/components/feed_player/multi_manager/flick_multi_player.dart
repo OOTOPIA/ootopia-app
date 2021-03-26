@@ -27,33 +27,27 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
 
   @override
   void initState() {
-    initVideo();
-
-    super.initState();
-  }
-
-  void initVideo() async {
     videoPlayerController = VideoPlayerController.network(widget.url);
 
     flickManager = FlickManager(
       videoPlayerController: videoPlayerController..setLooping(true),
       autoPlay: false,
     );
+
     widget.flickMultiManager.init(flickManager);
+    super.initState();
   }
 
   @override
   void dispose() {
-    widget.flickMultiManager.remove(flickManager);
     super.dispose();
+    widget.flickMultiManager.remove(flickManager);
+    flickManager.dispose();
+    videoPlayerController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    print(
-        'values aqui 2 ${flickManager.flickVideoManager.videoPlayerValue.size.width} > ${flickManager.flickVideoManager.videoPlayerValue.size.height}');
-
     return VisibilityDetector(
       key: ObjectKey(flickManager),
       onVisibilityChanged: (visiblityInfo) {
@@ -68,10 +62,9 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
           borderRadius: BorderRadius.all(Radius.circular(20)),
           child: FlickVideoPlayer(
             preferredDeviceOrientationFullscreen: [
-              flickManager.flickVideoManager.videoPlayerValue.size
-                          .width >
-                      flickManager.flickVideoManager.videoPlayerValue
-                          .size.height
+              flickManager.flickVideoManager.videoPlayerValue.size.width >
+                      flickManager
+                          .flickVideoManager.videoPlayerValue.size.height
                   ? DeviceOrientation.landscapeLeft
                   : DeviceOrientation.portraitUp
             ],
@@ -102,9 +95,9 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
                 ),
               ),
               controls: FeedPlayerPortraitControls(
-                flickMultiManager: widget.flickMultiManager,
-                flickManager: flickManager,
-              ),
+                  flickMultiManager: widget.flickMultiManager,
+                  flickManager: flickManager,
+                  url: widget.url),
             ),
             flickVideoWithControlsFullscreen: FlickVideoWithControls(
               videoFit: BoxFit.contain,
