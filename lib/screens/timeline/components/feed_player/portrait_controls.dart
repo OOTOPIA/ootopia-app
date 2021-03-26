@@ -40,7 +40,7 @@ class FeedPlayerPortraitControls extends StatelessWidget {
           Expanded(
             child: FlickToggleSoundAction(
               toggleMute: () {
-                flickMultiManager.pause();
+                flickMultiManager.toggleMute();
                 displayManager.handleShowPlayerControls();
               },
               child: FlickSeekVideoAction(
@@ -49,50 +49,32 @@ class FeedPlayerPortraitControls extends StatelessWidget {
             ),
           ),
           FlickAutoHideChild(
-            child: Column(
+            autoHide: true,
+            showIfVideoNotInitialized: false,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Row(
-                  children: [
-                    FlickPlayToggle(size: 30),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    FlickSoundToggle(size: 30),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    DefaultTextStyle(
-                      style: TextStyle(color: Colors.white54),
-                      child: Row(
-                        children: <Widget>[
-                          FlickCurrentPosition(
-                            fontSize: 16,
-                          ),
-                          Text('/'),
-                          FlickTotalDuration(
-                            fontSize: 16,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    FlickAutoHideChild(
-                      autoHide: false,
-                      showIfVideoNotInitialized: false,
-                      child: IconButton(
-                        icon: const Icon(Icons.fullscreen),
-                        tooltip: 'Increase volume by 10',
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              PageRoute.Page.playerVideoFullScreen.route,
-                              arguments: {"url": url});
-                        },
-                      ),
-                    ),
-                  ],
+                Container(
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.black38,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: FlickSoundToggle(
+                    toggleMute: () => flickMultiManager.toggleMute(),
+                    color: Colors.white,
+                  ),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.fullscreen),
+                  tooltip: 'Increase volume by 10',
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                        PageRoute.Page.playerVideoFullScreen.route,
+                        arguments: {"url": url});
+                  },
+                ),
+                // FlickFullScreenToggle(),
               ],
             ),
           ),
