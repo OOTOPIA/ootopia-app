@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/portrait_controls.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
 
@@ -19,11 +20,15 @@ class _PLayerVideoFullscreenState extends State<PLayerVideoFullscreen> {
   VideoPlayerController videoPlayer;
   bool isPortrait = true;
 
+  FlickMultiManager flickMultiManager;
+
   @override
   void initState() {
     super.initState();
 
+    flickMultiManager = FlickMultiManager();
     videoPlayer = VideoPlayerController.network(widget.args["url"]);
+
     videoPlayer
       ..addListener(() {
         isPortrait =
@@ -58,8 +63,11 @@ class _PLayerVideoFullscreenState extends State<PLayerVideoFullscreen> {
         child: FlickVideoPlayer(
           preferredDeviceOrientationFullscreen: [],
           flickManager: flickManager,
-          flickVideoWithControls:
-              FlickVideoWithControls(controls: PlayerControls()),
+          flickVideoWithControls: FlickVideoWithControls(
+              controls: PlayerControls(
+            flickMultiManager: flickMultiManager,
+            flickManager: flickManager,
+          )),
         ),
       ),
     );
@@ -77,11 +85,14 @@ class PlayerControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlickDisplayManager displayManager =
+        Provider.of<FlickDisplayManager>(context);
     return Container(
       color: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           FlickAutoHideChild(
             showIfVideoNotInitialized: false,
@@ -98,57 +109,37 @@ class PlayerControls extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: FlickToggleSoundAction(
-              toggleMute: () {},
-              child: FlickSeekVideoAction(
-                child: Center(child: FlickVideoBuffer()),
-              ),
-            ),
+            child: Container(),
           ),
-          FlickAutoHideChild(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: [
-                    FlickPlayToggle(size: 30),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    FlickSoundToggle(size: 30),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    DefaultTextStyle(
-                      style: TextStyle(color: Colors.white54),
-                      child: Row(
-                        children: <Widget>[
-                          FlickCurrentPosition(
-                            fontSize: 16,
-                          ),
-                          Text('/'),
-                          FlickTotalDuration(
-                            fontSize: 16,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    FlickAutoHideChild(
-                      autoHide: false,
-                      showIfVideoNotInitialized: false,
-                      child: IconButton(
-                        icon: const Icon(Icons.fullscreen),
-                        tooltip: 'Increase volume by 10',
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FlickAutoHideChild(
+              autoHide: false,
+              showIfVideoNotInitialized: false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  // Container(
+                  //   padding: EdgeInsets.all(2),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.black38,
+                  //     borderRadius: BorderRadius.circular(20),
+                  //   ),
+                  //   child: FlickSoundToggle(
+                  //     toggleMute: () => flickMultiManager.toggleMute(),
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
+                  IconButton(
+                    icon: const Icon(Icons.fullscreen),
+                    tooltip: 'Increase volume by 10',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  // FlickFullScreenToggle(),
+                ],
+              ),
             ),
           ),
         ],
