@@ -209,6 +209,7 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                       itemCount: state.posts.length,
                       itemBuilder: (context, index) {
                         return PhotoTimeline(
+                          index: index,
                           post: state.posts[index],
                           timelineBloc: this.timelineBloc,
                           loggedIn: this.loggedIn,

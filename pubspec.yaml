@@ -59,6 +59,7 @@ dev_dependencies:
   provider: ^5.0.0
   flick_video_player: ^0.2.0
   visibility_detector: ^0.1.5
+  youtube_player_flutter: ^7.0.0+7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

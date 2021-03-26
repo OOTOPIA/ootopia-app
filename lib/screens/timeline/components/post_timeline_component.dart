@@ -11,7 +11,10 @@ import 'feed_player/multi_manager/flick_multi_player.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 class PhotoTimeline extends StatefulWidget {
+  final int index;
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
   User user;
@@ -19,6 +22,7 @@ class PhotoTimeline extends StatefulWidget {
   final FlickMultiManager flickMultiManager;
 
   PhotoTimeline({
+    this.index,
     this.post,
     this.timelineBloc,
     this.loggedIn,
@@ -42,9 +46,40 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
 
   bool dragging = false;
 
+  YoutubePlayerController _controller;
+  PlayerState _playerState;
+  YoutubeMetaData _videoMetaData;
+  bool _isPlayerReady = false;
+
   @override
   void initState() {
+    _controller = YoutubePlayerController(
+      initialVideoId: 'MxcJtLbIhvs',
+      flags: YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    )..addListener(listener);
+    //_videoMetaData = const YoutubeMetaData();
+    //_playerState = PlayerState.unknown;
     super.initState();
+  }
+
+  void listener() {
+    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
+      setState(() {
+        _playerState = _controller.value.playerState;
+        _videoMetaData = _controller.metadata;
+        print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
+        print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _goToProfile() async {
@@ -152,11 +187,21 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20)),
           ),
-          child: FlickMultiPlayer(
-            url: this.post.videoUrl,
-            flickMultiManager: widget.flickMultiManager,
-            image: this.post.thumbnailUrl,
-          ),
+          child: widget.index == 0
+              ? YoutubePlayer(
+                  controller: _controller,
+                  showVideoProgressIndicator: true,
+                  onReady: () {
+                    print("ready!!");
+                    _isPlayerReady = true;
+                    //_controller.addListener(listener);
+                  },
+                )
+              : FlickMultiPlayer(
+                  url: this.post.videoUrl,
+                  flickMultiManager: widget.flickMultiManager,
+                  image: this.post.thumbnailUrl,
+                ),
         ),
         Row(
           children: [
