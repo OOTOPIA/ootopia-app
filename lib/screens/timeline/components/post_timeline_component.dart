@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/auth/login_screen.dart';
-import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
-import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
@@ -45,6 +42,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   void _goToProfile() async {

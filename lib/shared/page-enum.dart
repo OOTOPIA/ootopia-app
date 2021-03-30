@@ -13,6 +13,7 @@ enum Page {
   registerPhase2GeolocationScreen,
   registerPhase2TopInterestsScreen,
   playerVideoFullScreen,
+  menuProfile,
 }
 
 extension PageRoute on Page {

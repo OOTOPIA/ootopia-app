@@ -9,7 +9,7 @@ import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
-import 'components/timeline_profile.dart';
+import 'components/menu_profile.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -77,10 +77,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
         ),
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         elevation: 0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -94,17 +90,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
             ),
           ),
         ),
-        actions: [
-          widget.args == null || widget.args["id"] == null
-              ? IconButton(
-                  icon: const Icon(Icons.menu_outlined),
-                  iconSize: 36,
-                  color: Colors.black,
-                  tooltip: 'Show Snackbar',
-                  onPressed: () => {},
-                )
-              : SizedBox.shrink()
-        ],
       ),
       body: Column(
         children: [
@@ -170,6 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       ),
       bottomNavigationBar:
         NavigatorBar(currentPage: PageRoute.Page.profileScreen.route),
+      endDrawer: widget.args == null || widget.args["id"] == null ? MenuProfile(profileName: this.user?.fullname,) : null
     );
   }
 
