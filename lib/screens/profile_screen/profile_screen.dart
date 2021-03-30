@@ -168,7 +168,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
           ),
         ],
       ),
-      bottomNavigationBar: NavigatorBar(),
+      bottomNavigationBar:
+        NavigatorBar(currentPage: PageRoute.Page.profileScreen.route),
     );
   }
 
