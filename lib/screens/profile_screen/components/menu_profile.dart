@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
+
 class MenuProfile extends StatelessWidget with SecureStoreMixin {
   final String profileName;
+  String appVersion;
 
-  MenuProfile({this.profileName});
+  MenuProfile({this.profileName, this.appVersion});
 
   clearAuth(context) async {
     await cleanAuthToken();
@@ -61,7 +63,7 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
                 Container(
                   padding: EdgeInsets.all(32),
                   child: Text(
-                    'OOTOPIA App Version 01.01.1 Feito com amor neste planeta maravilhoso. Logado como $profileName',
+                    'OOTOPIA App Version $appVersion Feito com amor neste planeta maravilhoso. Logado como $profileName',
                     textAlign: TextAlign.center,
                   ),
                 ),
