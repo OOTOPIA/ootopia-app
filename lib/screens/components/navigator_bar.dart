@@ -109,6 +109,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
         items: [
           BottomNavigationBarItem(
             icon: Container(
+              padding: widget.currentPage == PageRoute.Page.timelineScreen.route ? EdgeInsets.all(4) : EdgeInsets.all(0),
               decoration: BoxDecoration(
                 color: widget.currentPage == PageRoute.Page.timelineScreen.route
                     ? Color(0xff062580).withOpacity(.25)
@@ -120,7 +121,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
               child: ImageIcon(
                 AssetImage('assets/icons/home.png'),
-                size: 32,
+                size: widget.currentPage == PageRoute.Page.timelineScreen.route ? 34 : 32,
               ),
             ),
             title: Text('Home', style: TextStyle(fontSize: 8),),
@@ -141,6 +142,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
           // ),
           BottomNavigationBarItem(
             icon: Container(
+              padding: widget.currentPage == PageRoute.Page.cameraScreen.route ? EdgeInsets.all(4) : EdgeInsets.all(0),
               decoration: BoxDecoration(
                 color: widget.currentPage == PageRoute.Page.cameraScreen.route
                     ? Color(0xff598006).withOpacity(.25)
@@ -152,13 +154,14 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
               child: ImageIcon(
                 AssetImage('assets/icons/add.png'),
-                size: 32,
+                size: widget.currentPage == PageRoute.Page.cameraScreen.route ? 34 : 32,
               ),
             ),
             title: Text('Add', style: TextStyle(fontSize: 8),),
           ),
           BottomNavigationBarItem(
             icon: Container(
+              padding: widget.currentPage == PageRoute.Page.profileScreen.route ? EdgeInsets.all(4) : EdgeInsets.all(0),
               decoration: BoxDecoration(
                 color: widget.currentPage == PageRoute.Page.profileScreen.route
                     ? Color(0xff8F0707).withOpacity(.25)
@@ -170,7 +173,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
               child: ImageIcon(
                 AssetImage('assets/icons/profile.png'),
-                size: 32,
+                size: widget.currentPage == PageRoute.Page.profileScreen.route ? 34 : 32,
               ),
             ),
             title: Text('Profile', style: TextStyle(fontSize: 8),),
