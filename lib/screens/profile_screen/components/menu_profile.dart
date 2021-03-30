@@ -62,10 +62,22 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
               children: [
                 Container(
                   padding: EdgeInsets.all(32),
-                  child: Text(
-                    'OOTOPIA App Version $appVersion Feito com amor neste planeta maravilhoso. Logado como $profileName',
-                    textAlign: TextAlign.center,
-                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'OOTOPIA App Version $appVersion.',
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Feito com amor neste planeta maravilhoso.',
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Logado como $profileName',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  )
                 ),
               ],
             ),
