@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
@@ -23,6 +24,11 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   TimelinePostBloc timelineBloc;
   bool loggedIn = false;
   User user;
+  int currentPage = 1;
+  final int _itemsPerPageCount = 10;
+  int _nextPageThreshold = 5;
+  bool _hasMoreItems = true;
+  List<TimelinePost> _allPosts = [];
 
   FlickMultiManager flickMultiManager;
 
@@ -31,7 +37,8 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
     super.initState();
     _checkUserIsLoggedIn();
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
-    timelineBloc.add(LoadingSucessTimelinePostEvent());
+    timelineBloc.add(GetTimelinePostsEvent(
+        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
     flickMultiManager = FlickMultiManager();
   }
 
@@ -167,6 +174,11 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                         content: Text(state.message),
                       ),
                     );
+                  } else if (state is LoadedSucessState) {
+                    _hasMoreItems = state.posts.length == _itemsPerPageCount;
+                    _allPosts.addAll(state.posts);
+                    print(
+                        "PAGINATION ${state.posts.length} ${_allPosts.length}");
                   }
                 },
                 child: _blocBuilder(),
@@ -203,15 +215,30 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                   },
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      state.posts = [];
+                      setState(() {
+                        _allPosts = [];
+                        currentPage = 1;
+                      });
                       _getData();
                     },
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: state.posts.length,
+                      itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
                       itemBuilder: (context, index) {
+                        if (index == _allPosts.length - _nextPageThreshold &&
+                            _hasMoreItems) {
+                          currentPage++;
+                          _getData();
+                        }
+                        if (index == _allPosts.length) {
+                          return Center(
+                              child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: CircularProgressIndicator(),
+                          ));
+                        }
                         return PhotoTimeline(
-                          post: state.posts[index],
+                          post: _allPosts[index],
                           timelineBloc: this.timelineBloc,
                           loggedIn: this.loggedIn,
                           user: user,
@@ -245,7 +272,8 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
 
   Future<void> _getData() async {
     setState(() {
-      timelineBloc.add(LoadingSucessTimelinePostEvent());
+      timelineBloc.add(GetTimelinePostsEvent(
+          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
     });
   }
 }
