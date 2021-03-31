@@ -147,15 +147,18 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                       itemPositionsListener: this.itemPositionsListener,
                       itemBuilder: (context, index) {
                         if (index == _allPosts.length - _nextPageThreshold &&
-                            _hasMoreItems) {
-                          currentPage++;
-                          _getData();
-                        }
+                            _hasMoreItems) {}
                         if (index == _allPosts.length) {
+                          if (_hasMoreItems) {
+                            currentPage++;
+                            _getData();
+                          }
                           return Center(
                             child: Padding(
                               padding: const EdgeInsets.all(8),
-                              child: CircularProgressIndicator(),
+                              child: _hasMoreItems
+                                  ? CircularProgressIndicator()
+                                  : Container(),
                             ),
                           );
                         }
