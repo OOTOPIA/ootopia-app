@@ -187,7 +187,9 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
           ),
         ],
       ),
-      bottomNavigationBar: NavigatorBar(),
+      bottomNavigationBar: NavigatorBar(
+        currentPage: PageRoute.Page.timelineScreen.route,
+      ),
     );
   }
 

@@ -9,8 +9,10 @@ import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'components/menu_profile.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:package_info/package_info.dart';
 
 class ProfileScreen extends StatefulWidget {
   Map<String, dynamic> args;
@@ -36,12 +38,21 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   bool _hasMorePosts = true;
   int currentPage = 1;
   String userId = "";
+  String appVersion;
 
   @override
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
     profileBloc = BlocProvider.of<UserBloc>(context);
+    getAppInfo();
+  }
+
+  Future<void> getAppInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      this.appVersion = info.version;
+    });
   }
 
   void _checkUserIsLoggedIn() async {
@@ -77,110 +88,102 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: userProfile != null
-            ? Text(
-                userProfile.fullname,
-                style: TextStyle(color: Colors.black),
-              )
-            : Text(''),
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+        appBar: AppBar(
+          title: userProfile != null
+              ? Text(
+                  userProfile.fullname,
+                  style: TextStyle(color: Colors.black),
+                )
+              : Text(''),
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          elevation: 0,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xffC0D9E8),
+                  Color(0xffffffff),
+                ],
+              ),
+            ),
+          ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xffC0D9E8),
-                Color(0xffffffff),
+        body: SingleChildScrollView(
+          child: Container(
+            // this will set the outer container size to the height of your screen
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Avatar(
+                      photoUrl:
+                          userProfile == null ? null : userProfile.photoUrl,
+                    ),
+                    DataProfile(),
+                  ],
+                ),
+                (userProfile != null && userProfile.bio != null)
+                    ? Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: RichText(
+                          textAlign: TextAlign.left,
+                          text: (userProfile != null && userProfile.bio != null
+                              ? TextSpan(
+                                  text: ('Bio: '),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                      fontSize: 16),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: userProfile.bio,
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : TextSpan(text: "")),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                CaptionOfItems(
+                  backgroundCaption: Color(0xffE6ECDA),
+                  backgroundIcon: Color(0xff598006),
+                  colorIcon: Colors.black,
+                  pathIcon: 'assets/icons/add.png',
+                ),
+                BlocListener<UserBloc, UserState>(
+                  listener: (context, state) {
+                    if (state is LoadedPostsProfileSucessState) {
+                      loadingPosts = false;
+                      _hasMorePosts = state.posts.length == _postsPerPageCount;
+                      posts.addAll(state.posts);
+                    } else if (state is LoadPostsProfileErrorState) {
+                      loadPostsError = true;
+                    }
+                  },
+                  child: _postsBlocBuilder(),
+                ),
               ],
             ),
           ),
         ),
-        actions: [
-          widget.args == null || widget.args["id"] == null
-              ? IconButton(
-                  icon: const Icon(Icons.menu_outlined),
-                  iconSize: 36,
-                  color: Colors.black,
-                  tooltip: 'Show Snackbar',
-                  onPressed: () => {},
-                )
-              : SizedBox.shrink()
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          // this will set the outer container size to the height of your screen
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Avatar(
-                    photoUrl: userProfile == null ? null : userProfile.photoUrl,
-                  ),
-                  DataProfile(),
-                ],
-              ),
-              (userProfile != null && userProfile.bio != null)
-                  ? Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      child: RichText(
-                        textAlign: TextAlign.left,
-                        text: (userProfile != null && userProfile.bio != null
-                            ? TextSpan(
-                                text: ('Bio: '),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                    fontSize: 16),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: userProfile.bio,
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  )
-                                ],
-                              )
-                            : TextSpan(text: "")),
-                      ),
-                    )
-                  : SizedBox.shrink(),
-              CaptionOfItems(
-                backgroundCaption: Color(0xffE6ECDA),
-                backgroundIcon: Color(0xff598006),
-                colorIcon: Colors.black,
-                pathIcon: 'assets/icons/add.png',
-              ),
-              BlocListener<UserBloc, UserState>(
-                listener: (context, state) {
-                  if (state is LoadedPostsProfileSucessState) {
-                    loadingPosts = false;
-                    _hasMorePosts = state.posts.length == _postsPerPageCount;
-                    posts.addAll(state.posts);
-                  } else if (state is LoadPostsProfileErrorState) {
-                    loadPostsError = true;
-                  }
-                },
-                child: _postsBlocBuilder(),
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: NavigatorBar(),
-    );
+        bottomNavigationBar:
+            NavigatorBar(currentPage: PageRoute.Page.profileScreen.route),
+        endDrawer: widget.args == null || widget.args["id"] == null
+            ? MenuProfile(
+                profileName: this.user?.fullname,
+                appVersion: this.appVersion,
+              )
+            : null);
   }
 
   _postsBlocBuilder() {
