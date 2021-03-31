@@ -28,7 +28,19 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   final int _itemsPerPageCount = 10;
   int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
-  List<TimelinePost> _allPosts = [];
+  List<TimelinePost> _allPosts = [
+    TimelinePost(
+      id: "69360449-1434-4683-a6a4-f9321baca5ed",
+      userId: "00851c9d-fb60-40b5-8ab2-91bb59bd8163",
+      username: "Claudio Oliveira",
+      photoUrl:
+          "https://ootopia-staging.s3.amazonaws.com/users/00851c9d-fb60-40b5-8ab2-91bb59bd8163/photo-1617115171207.jpg",
+      liked: false,
+      likesCount: 0,
+      commentsCount: 0,
+      description: "Little example of Youtube player usage",
+    )
+  ];
 
   FlickMultiManager flickMultiManager;
 
@@ -223,7 +235,11 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                     },
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
+                      itemCount: _allPosts.length +
+                          1 +
+                          (_hasMoreItems
+                              ? 1
+                              : 0), //Adicionei +1 manualmente devido à POC do youtube
                       itemBuilder: (context, index) {
                         if (index == _allPosts.length - _nextPageThreshold &&
                             _hasMoreItems) {
@@ -238,6 +254,7 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                           ));
                         }
                         return PhotoTimeline(
+                          index: index,
                           post: _allPosts[index],
                           timelineBloc: this.timelineBloc,
                           loggedIn: this.loggedIn,
