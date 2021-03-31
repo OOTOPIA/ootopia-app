@@ -177,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
           ),
         ),
         bottomNavigationBar:
-            NavigatorBar(currentPage: PageRoute.Page.profileScreen.route),
+            NavigatorBar(currentPage: widget.args == null || widget.args["id"] == null ? PageRoute.Page.myProfileScreen.route : PageRoute.Page.profileScreen.route),
         endDrawer: widget.args == null || widget.args["id"] == null
             ? MenuProfile(
                 profileName: this.user?.fullname,
