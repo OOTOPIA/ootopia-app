@@ -22,6 +22,7 @@ import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.d
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
+import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'screens/profile_screen/components/menu_profile.dart';
 import 'screens/timeline/timeline_screen.dart';
@@ -146,6 +147,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
     PageRoute.Page.menuProfile: (args) => MenuProfile(),
+    PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
   };
 
   @override
