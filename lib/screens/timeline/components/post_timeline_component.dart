@@ -54,7 +54,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
       initialVideoId: 'MxcJtLbIhvs',
       flags: YoutubePlayerFlags(
         autoPlay: true,
-        mute: false,
+        mute: true,
       ),
     )..addListener(listener);
     //_videoMetaData = const YoutubeMetaData();
