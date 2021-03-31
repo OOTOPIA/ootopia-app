@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
-import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -94,34 +92,39 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               child: BlocBuilder<CommentBloc, CommentState>(
                 builder: (context, state) {
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      style: TextStyle(color: Colors.black),
-                      controller: _inputController,
-                      decoration: InputDecoration(
-                        labelText: 'Escreva seu comentário',
-                        hintStyle: TextStyle(color: Colors.black),
-                        suffixIcon: newCommentLoading
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 14.0),
-                                    child: SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(),
+                      padding: const EdgeInsets.all(8.0),
+                      child: FocusScope(
+                        child: Focus(
+                          onFocusChange: (_) => isLogged(),
+                          child: TextField(
+                            style: TextStyle(color: Colors.black),
+                            controller: _inputController,
+                            decoration: InputDecoration(
+                              labelText: 'Escreva seu comentário',
+                              hintStyle: TextStyle(color: Colors.black),
+                              suffixIcon: newCommentLoading
+                                  ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 14.0),
+                                          child: SizedBox(
+                                            width: 16,
+                                            height: 16,
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : IconButton(
+                                      icon: Icon(Icons.send),
+                                      onPressed: () => _addComment(),
                                     ),
-                                  )
-                                ],
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.send),
-                                onPressed: () => _addComment(),
-                              ),
-                      ),
-                    ),
-                  );
+                            ),
+                          ),
+                        ),
+                      ));
                 },
               ),
             ),
@@ -274,23 +277,25 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       return;
     }
 
-    if (!loggedIn) {
-      Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
-      return;
-    } else {
-      setState(() {
-        newCommentLoading = true;
-        commentBloc.add(
-          CreateCommentEvent(
-            comment: CommentCreate(
-                postId: widget.args['post'].id, text: _inputController.text),
-          ),
-        );
-      });
-    }
+    setState(() {
+      newCommentLoading = true;
+      commentBloc.add(
+        CreateCommentEvent(
+          comment: CommentCreate(
+              postId: widget.args['post'].id, text: _inputController.text),
+        ),
+      );
+    });
 
     _inputController.clear();
     _removeFocusInput();
+  }
+
+  isLogged() {
+    if (!loggedIn) {
+      Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+      return;
+    }
   }
 
   void _removeFocusInput() {

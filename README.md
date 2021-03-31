@@ -1,6 +1,7 @@
-# my_app
+# OOTOPIA
 
-A new Flutter project.
+OOTOPIA is a project created with flutter.
+The app that unites us all to regenerate the Earth.
 
 ## Getting Started
 

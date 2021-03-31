@@ -33,4 +33,9 @@ class SecureStoreMixin {
   Future<dynamic> getSecureStore(String key) async {
     return await secureStore.read(key: key);
   }
+
+  Future<dynamic> cleanAuthToken() async {
+    await secureStore.delete(key: "user");
+    await secureStore.delete(key: "auth_token");
+  }
 }

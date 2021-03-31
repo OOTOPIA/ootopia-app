@@ -13,10 +13,13 @@ class LoadingTimelinePostEvent extends TimelinePostEvent {
   List<Object> get props => [];
 }
 
-class LoadingSucessTimelinePostEvent extends TimelinePostEvent {
+class GetTimelinePostsEvent extends TimelinePostEvent {
+  final int limit;
+  final int offset;
+  String userId;
+  GetTimelinePostsEvent(this.limit, this.offset, [this.userId]);
   @override
-  // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [this.limit, this.offset, this.userId];
 }
 
 class GetTimelinePostEvent extends TimelinePostEvent {

@@ -28,21 +28,22 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
     // Emitting a state from the asynchronous generator
     // Branching the executed logic by checking the event type
     LoadingState();
-    if (event is LoadingSucessTimelinePostEvent) {
-      yield LoadingState();
-      yield* _mapAlbumsLoadedToState();
+    if (event is GetTimelinePostsEvent) {
+      if (event.offset <= 0) {
+        yield LoadingState();
+      }
+      yield* _mapGetTimelinePostsToState(event);
     } else if (event is LikePostEvent) {
       yield* _mapPostLikedToState(event);
-    } // else if (event is UpdateTimelinePostEvent) {
-    //   yield* _mapAlbumUpdatedToState(event);
-    // } else if (event is DeleteTimelinePostEvent) {
-    //   yield* _mapAlbumDeletedToState(event);
-    // }
+    }
   }
 
-  Stream<TimelinePostState> _mapAlbumsLoadedToState() async* {
+  Stream<TimelinePostState> _mapGetTimelinePostsToState(
+      GetTimelinePostsEvent event) async* {
     try {
-      var posts = (await this.repository.getPosts());
+      var posts = (await this
+          .repository
+          .getPosts(event.limit, event.offset, event.userId));
       yield LoadedSucessState(posts);
     } catch (_) {
       yield ErrorState("Error loading posts");
@@ -70,53 +71,4 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
       yield ErrorState("error on like a post");
     }
   }
-
-  // Stream<TimelinePostState> _mapAlbumAddedToState(CreateTimelinePostEvent event) async* {
-  //   try {
-  //     if (state is LoadedSucessState) {
-  //       var newAlbum = (await this.repository.createAlbum(event.album));
-  //       List<Album> updatedAlbums;
-  //       if (newAlbum != null) {
-  //         updatedAlbums = List.from((state as LoadedSucessState).album)
-  //           ..add(newAlbum);
-
-  //         yield LoadedSucessState(updatedAlbums.reversed.toList());
-  //       }
-  //     }
-  //   } catch (_) {
-  //     yield ErrorState("error Add Album");
-  //   }
-  // }
-
-  // Stream<TimelinePostState> _mapAlbumUpdatedToState(UpdateTimelinePostEvent event) async* {
-  //   try {
-  //     if (state is LoadedSucessState) {
-  //       var updatedAlbum = (await this.repository.updateAlbum(event.album));
-  //       if (updatedAlbum != null) {
-  //         final List<Album> updatedAlbums =
-  //             (state as LoadedSucessState).album.map((album) {
-  //           return album.id == updatedAlbum.id ? updatedAlbum : album;
-  //         }).toList();
-
-  //         yield LoadedSucessState(updatedAlbums);
-  //       }
-  //     }
-  //   } catch (_) {
-  //     yield ErrorState("error update album");
-  //   }
-  // }
-
-  // Stream<TimelinePostState> _mapAlbumDeletedToState(DeleteTimelinePostEvent event) async* {
-  //   try {
-  //     if (state is LoadedSucessState) {
-  //       final deletelbum = (state as LoadedSucessState)
-  //           .album
-  //           .where((album) => album.id != event.album.id)
-  //           .toList();
-  //       yield LoadedSucessState(deletelbum);
-  //     }
-  //   } catch (_) {
-  //     yield ErrorState("error delete album");
-  //   }
-  // }
 }
