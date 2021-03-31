@@ -596,7 +596,7 @@ packages:
     source: hosted
     version: "0.1.5"
   wakelock:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: wakelock
       url: "https://pub.dartlang.org"

@@ -7,9 +7,8 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-
-import 'components/timeline_profile.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -31,7 +30,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   Profile userProfile;
   bool loadingPosts = true;
   bool loadPostsError = false;
+  bool loadingMorePosts = false;
   List<TimelinePost> posts = [];
+  int _postsPerPageCount = 12;
+  bool _hasMorePosts = true;
+  int currentPage = 1;
+  String userId = "";
 
   @override
   void initState() {
@@ -41,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   }
 
   void _checkUserIsLoggedIn() async {
-    String userId = "";
     loggedIn = await getUserIsLoggedIn();
     if (widget.args == null || widget.args["id"] == null) {
       user = await getCurrentUser();
@@ -50,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       userId = widget.args["id"];
     }
     getUserProfile(userId);
-    profileBloc.add(GetPostsProfileEvent(1, userId));
+    profileBloc.add(GetPostsProfileEvent(_postsPerPageCount, 0, userId));
   }
 
   Future getUserProfile(String id) async {
@@ -61,6 +64,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       setState(() {
         userProfile = user;
       });
+    });
+  }
+
+  Future<void> _getData() async {
+    setState(() {
+      profileBloc.add(GetPostsProfileEvent(
+          _postsPerPageCount, (currentPage - 1) * _postsPerPageCount, userId));
     });
   }
 
@@ -106,9 +116,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
               : SizedBox.shrink()
         ],
       ),
-      body: Column(
-        children: [
-          Column(
+      body: SingleChildScrollView(
+        child: Container(
+          // this will set the outer container size to the height of your screen
+          height: MediaQuery.of(context).size.height,
+          child: Column(
             children: [
               Row(
                 children: [
@@ -145,50 +157,94 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
                       ),
                     )
                   : SizedBox.shrink(),
+              CaptionOfItems(
+                backgroundCaption: Color(0xffE6ECDA),
+                backgroundIcon: Color(0xff598006),
+                colorIcon: Colors.black,
+                pathIcon: 'assets/icons/add.png',
+              ),
+              BlocListener<UserBloc, UserState>(
+                listener: (context, state) {
+                  if (state is LoadedPostsProfileSucessState) {
+                    loadingPosts = false;
+                    _hasMorePosts = state.posts.length == _postsPerPageCount;
+                    posts.addAll(state.posts);
+                  } else if (state is LoadPostsProfileErrorState) {
+                    loadPostsError = true;
+                  }
+                },
+                child: _postsBlocBuilder(),
+              ),
             ],
           ),
-          CaptionOfItems(
-            backgroundCaption: Color(0xffE6ECDA),
-            backgroundIcon: Color(0xff598006),
-            colorIcon: Colors.black,
-            pathIcon: 'assets/icons/add.png',
-          ),
-          BlocListener<UserBloc, UserState>(
-            listener: (context, state) {
-              if (state is LoadingState) {
-                loadingPosts = true;
-              } else if (state is LoadedPostsProfileSucessState) {
-                loadingPosts = false;
-                posts = state.posts;
-              } else if (state is LoadPostsProfileErrorState) {
-                loadPostsError = true;
-              }
-            },
-            child: _postsBlocBuilder(),
-          ),
-        ],
+        ),
       ),
       bottomNavigationBar: NavigatorBar(),
     );
   }
 
   _postsBlocBuilder() {
-    return BlocBuilder<UserBloc, UserState>(
-      builder: (context, state) {
-        if (loadingPosts) {
-          return SkeletonProfileScreen();
-        }
-        if (loadPostsError) {
-          return Center(
-            child: Text("Error"),
-          );
-        }
-        return GridPosts(
-          context: context,
-          posts: posts,
+    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+      if (loadingPosts) {
+        return SkeletonProfileScreen();
+      }
+      if (loadPostsError) {
+        return Center(
+          child: Text("Error"),
         );
-      },
-    );
+      }
+      return Column(
+        children: [
+          GridPosts(
+            context: context,
+            posts: posts,
+          ),
+          Visibility(
+            visible: posts.length >= _postsPerPageCount && _hasMorePosts,
+            child: loadingMorePosts
+                ? Center(child: CircularProgressIndicator())
+                : ButtonTheme(
+                    height: 48,
+                    child: FlatButton(
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          GlobalConstants.of(context).spacingSmall,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Icon(Icons.expand_more_rounded,
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          currentPage++;
+                          loadingMorePosts = true;
+                        });
+                        _getData();
+                        //widget.onClickButton();
+                      },
+                      color: Colors.white,
+                      splashColor: Colors.black54,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.white,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                  ),
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -375,34 +431,36 @@ class GridPosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: this.posts.length > 0
-          ? GridView.count(
-              padding: const EdgeInsets.all(16),
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              crossAxisCount: 4,
-              children: List.generate(posts.length, (index) {
-                return GestureDetector(
-                  onTap: () => _goToTimelinePost(posts, index),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(14),
-                      ),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          posts[index].thumbnailUrl,
-                        ),
+    return this.posts.length > 0
+        ? GridView.count(
+            padding: const EdgeInsets.all(16),
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            crossAxisCount: 4,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            children: List.generate(posts.length, (index) {
+              return GestureDetector(
+                onTap: () => _goToTimelinePost(posts, index),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(14),
+                    ),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        posts[index].thumbnailUrl,
                       ),
                     ),
                   ),
-                );
-              }),
-            )
-          : Center(child: Text("Esse usuário ainda não tem postagem")),
-    );
+                ),
+              );
+            }),
+          )
+        : Expanded(
+            child: Center(child: Text("Esse usuário ainda não tem postagem")),
+          );
   }
 }

@@ -43,8 +43,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapGetPostsProfileToState(
       GetPostsProfileEvent event) async* {
     try {
-      var posts =
-          (await this.postRepository.getPosts(event.page, event.userId));
+      var posts = (await this
+          .postRepository
+          .getPosts(event.limit, event.offset, event.userId));
       yield LoadedPostsProfileSucessState(posts);
     } catch (_) {
       yield LoadPostsProfileErrorState("error loading posts");
