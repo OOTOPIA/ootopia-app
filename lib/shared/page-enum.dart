@@ -5,6 +5,7 @@ enum Page {
   timelineProfileScreen,
   commentScreen,
   profileScreen,
+  myProfileScreen,
   registerScreen,
   loginScreen,
   cameraScreen,

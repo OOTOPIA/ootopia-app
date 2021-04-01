@@ -7,7 +7,6 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CommentScreen extends StatefulWidget {

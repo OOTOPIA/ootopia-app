@@ -140,6 +140,7 @@ class MainPage extends HookWidget {
         TimelineScreenProfileScreen(args),
     PageRoute.Page.commentScreen: (args) => CommentScreen(args),
     PageRoute.Page.profileScreen: (args) => ProfileScreen(args),
+    PageRoute.Page.myProfileScreen: (args) => ProfileScreen(args),
     PageRoute.Page.registerScreen: (args) => RegisterPage(),
     PageRoute.Page.loginScreen: (args) => LoginPage(),
     PageRoute.Page.cameraScreen: (args) => CameraScreen(),

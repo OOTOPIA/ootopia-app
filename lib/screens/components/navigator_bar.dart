@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/navigator-state.dart';
@@ -97,7 +96,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               } else if (loggedIn) {
                 if (user.registerPhase == 2) {
                   Navigator.of(context).pushNamedIfNotCurrent(
-                      PageRoute.Page.profileScreen.route);
+                      PageRoute.Page.myProfileScreen.route);
                 } else {
                   Navigator.of(context)
                       .pushNamed(PageRoute.Page.registerPhase2Screen.route);
@@ -175,13 +174,15 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
           ),
           BottomNavigationBarItem(
             icon: Container(
-              padding: widget.currentPage == PageRoute.Page.profileScreen.route
-                  ? EdgeInsets.all(4)
-                  : EdgeInsets.all(0),
+              padding:
+                  widget.currentPage == PageRoute.Page.myProfileScreen.route
+                      ? EdgeInsets.all(4)
+                      : EdgeInsets.all(0),
               decoration: BoxDecoration(
-                color: widget.currentPage == PageRoute.Page.profileScreen.route
-                    ? Color(0xff8F0707).withOpacity(.25)
-                    : Colors.transparent,
+                color:
+                    widget.currentPage == PageRoute.Page.myProfileScreen.route
+                        ? Color(0xff8F0707).withOpacity(.25)
+                        : Colors.transparent,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(150),
                   topRight: Radius.circular(150),
@@ -189,7 +190,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
               child: ImageIcon(
                 AssetImage('assets/icons/profile.png'),
-                size: widget.currentPage == PageRoute.Page.profileScreen.route
+                size: widget.currentPage == PageRoute.Page.myProfileScreen.route
                     ? 34
                     : 32,
               ),
