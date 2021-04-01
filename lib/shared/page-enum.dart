@@ -15,6 +15,7 @@ enum Page {
   registerPhase2TopInterestsScreen,
   playerVideoFullScreen,
   menuProfile,
+  postPreviewScreen
 }
 
 extension PageRoute on Page {

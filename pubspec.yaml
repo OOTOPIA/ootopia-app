@@ -35,7 +35,7 @@ dependencies:
   gallery_saver: ^2.0.3
   flutter_uploader: ^1.2.1
   http: ^0.12.2
-  rxdart: ^0.22.0
+  rxdart: ^0.25.0
   intl: ^0.15.8
   flutter_dotenv: ^3.1.0
   flutter_bloc: ^7.0.0
@@ -57,6 +57,7 @@ dependencies:
   visibility_detector: ^0.1.5
   youtube_player_flutter: ^7.0.0+7
   package_info: ^2.0.0
+  multi_select_flutter: ^3.1.8
   url_launcher: ^5.7.10
 
 dev_dependencies:

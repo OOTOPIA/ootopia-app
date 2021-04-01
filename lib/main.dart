@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
+import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
@@ -22,6 +23,7 @@ import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.d
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
+import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'screens/profile_screen/components/menu_profile.dart';
 import 'screens/timeline/timeline_screen.dart';
@@ -76,6 +78,11 @@ class ExpensesApp extends StatelessWidget {
           create: (BuildContext context) =>
               InterestsTagsBloc(InterestsTagsRepositoryImpl()),
         ),
+        BlocProvider(
+          create: (BuildContext context) => PostBloc(
+            PostRepositoryImpl(),
+          ),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -128,7 +135,7 @@ class ExpensesApp extends StatelessWidget {
 
 class MainPage extends HookWidget {
   final Map<PageRoute.Page, Widget Function(dynamic)> _fragments = {
-    PageRoute.Page.timelineScreen: (args) => TimelinePage(),
+    PageRoute.Page.timelineScreen: (args) => TimelinePage(args),
     PageRoute.Page.timelineProfileScreen: (args) =>
         TimelineScreenProfileScreen(args),
     PageRoute.Page.commentScreen: (args) => CommentScreen(args),
@@ -147,20 +154,14 @@ class MainPage extends HookWidget {
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
     PageRoute.Page.menuProfile: (args) => MenuProfile(),
+    PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
   };
 
   @override
   Widget build(BuildContext context) {
     final navigatorKey = GlobalObjectKey<NavigatorState>(context);
     return WillPopScope(
-      onWillPop: () async {
-        if (navigatorKey.currentState.canPop()) {
-          navigatorKey.currentState.pop();
-          return false;
-        }
-
-        return true;
-      },
+      onWillPop: () async => !await navigatorKey.currentState.maybePop(),
       child: Navigator(
         key: navigatorKey,
         initialRoute: PageRoute.Page.timelineScreen.route,

@@ -5,6 +5,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:path/path.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 import 'package:flutter_uploader/flutter_uploader.dart';
 
@@ -116,17 +117,19 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
   }
 
   void onStopButtonPressed(BuildContext context) {
-    stopVideoRecording().then((file) {
+    stopVideoRecording().then((file) async {
       if (mounted) setState(() {});
       if (file != null) {
-        GallerySaver.saveVideo(file.path);
-        // showInSnackBar('Video recorded to ${file.path}');
+        await GallerySaver.saveVideo(file.path);
         videoFile = file;
-        uploadFileBackground(file);
+        Navigator.of(context).pushNamed(
+          PageRoute.Page.postPreviewScreen.route,
+          arguments: {
+            "filePath": file.path,
+          },
+        );
       }
     });
-
-    Navigator.of(context).pop(true);
   }
 
   Future<XFile> stopVideoRecording() async {
@@ -251,6 +254,12 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
                 color: Colors.white,
                 onPressed: () => setCamera(),
               ),
+              /*IconButton(
+                icon: Icon(Icons.insert_photo),
+                iconSize: 30,
+                color: Colors.white,
+                onPressed: () => setCamera(),
+              ),*/
             ],
           )
         ],

@@ -1,14 +1,19 @@
+import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:ootopia_app/data/models/post/post_create_model.dart';
+import 'package:ootopia_app/data/models/post/post_created_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'dart:convert';
+import 'package:path/path.dart';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class PostRepository {
   Future<List<TimelinePost>> getPosts([int limit, int offset, String userId]);
   Future<LikePostResult> likePost(String id);
+  Future<void> createPost(PostCreate post, FlutterUploader uploader);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -72,7 +77,6 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         );
 
         if (response.statusCode == 200) {
-          print("RESPONSE BODY ${response.body}");
           return LikePostResult.fromJson(json.decode(response.body));
         } else {
           throw Exception('Failed to like a post');
@@ -84,106 +88,30 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     return null;
   }
 
-  // @override
-  // Future<Post> getPost(int id) async {
-  //   try {
-  //     if (id != null) {
-  //       final response = await http.get('$API_URL_BASE/posts/$id');
-  //       if (response.statusCode == 200) {
-  //         return Post.fromJson(json.decode(response.body));
-  //       } else {
-  //         throw Exception('Failed to load post');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     throw Exception('Failed to load post ' + error);
-  //   }
-  //   return null;
-  // }
-
-  // @override
-  // Future<Post> createPost(post) async {
-  //   try {
-  //     if (post != null) {
-  //       final response = await http.post(
-  //         '$API_URL_BASE/posts',
-  //         headers: API_HEADERS,
-  //         body: jsonEncode(<String, String>{
-  //           'title': post.title,
-  //         }),
-  //       );
-
-  //       if (response.statusCode == 201) {
-  //         return Post.fromJson(json.decode(response.body));
-  //       } else {
-  //         throw Exception('Failed to create post');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     throw Exception('Failed to create post ' + error);
-  //   }
-  //   return null;
-  // }
-
-  // @override
-  // Future<Post> deletePost(int id) async {
-  //   try {
-  //     if (id != null) {
-  //       final response = await http.delete(
-  //         '$API_URL_BASE/posts/$id',
-  //         headers: API_HEADERS,
-  //       );
-  //       if (response.statusCode == 200) {
-  //         return Post.fromJson(json.decode(response.body));
-  //       } else {
-  //         throw Exception('Failed to load post');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     throw Exception('Failed delete post ' + error);
-  //   }
-  //   return null;
-  // }
-
-  // @override
-  // Future<Post> updatePost(post) async {
-  //   try {
-  //     if (post != null) {
-  //       final response = await http.put(
-  //         '$API_URL_BASE/posts/${post.id}',
-  //         headers: API_HEADERS,
-  //         body: jsonEncode(<String, String>{
-  //           'title': post.title,
-  //         }),
-  //       );
-  //       if (response.statusCode == 200) {
-  //         return Post.fromJson(json.decode(response.body));
-  //       } else {
-  //         throw Exception('Failed to load post');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     throw Exception('Failed update post ' + error);
-  //   }
-  //   return null;
-  // }
-}
-
-/*abstract class TimelinePostRepository {
-  Future<List<TimelinePost>> getPosts();
-}
-
-class TimelinePostRepositoryImpl implements TimelinePostRepository {
-  TimelinePostRepositoryImpl();
-
   @override
-  Future<List<TimelinePost>> getPosts() async {
-    var response = await http.get(DotEnv.env['API_URL'] + "posts");
-    if (response.statusCode == 200) {
-      List responseJson = json.decode(response.body);
-      return responseJson.map((m) => new TimelinePost.fromJson(m)).toList();
-    } else {
-      throw Exception();
+  Future<PostCreate> createPost(
+      PostCreate post, FlutterUploader uploader) async {
+    try {
+      await uploader.enqueue(
+        url: DotEnv.env['API_URL'] + "posts",
+        files: [
+          FileItem(
+            filename: basename(post.filePath),
+            savedDir: dirname(post.filePath),
+            fieldname: "file",
+          )
+        ],
+        method: UploadMethod.POST,
+        headers: await getHeaders(),
+        data: {
+          "metadata": jsonEncode(post),
+        },
+        showNotification: false,
+        tag: "upload 1",
+      );
+      return post;
+    } catch (e) {
+      print('Error upload: $e');
     }
   }
-}*/
+}
