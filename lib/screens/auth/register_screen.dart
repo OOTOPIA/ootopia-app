@@ -1,16 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:email_validator/email_validator.dart';
-
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -330,7 +327,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   recognizer:
                                                       new TapGestureRecognizer()
                                                         ..onTap = () {
-                                                          //TODO: Open terms of use
+                                                          launch('https://www.ootopia.org/terms-of-use');
                                                         },
                                                 )
                                               ]),
