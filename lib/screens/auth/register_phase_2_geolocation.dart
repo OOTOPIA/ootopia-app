@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
+import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -36,7 +37,7 @@ class _RegisterPhase2GeolocationPageState
       geolocationErrorMessage = "";
       geolocationMessage = "Please, wait...";
     });
-    _determinePosition().then((Position position) async {
+    Geolocation.determinePosition().then((Position position) async {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       setState(() {
@@ -63,43 +64,6 @@ class _RegisterPhase2GeolocationPageState
         geolocationErrorMessage = error.toString();
       });
     });
-  }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        // Permissions are denied forever, handle appropriately.
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions. Go to Settings to enable it.');
-      }
-
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied.');
-      }
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -166,7 +130,8 @@ class _RegisterPhase2GeolocationPageState
                             autofocus: false,
                             decoration: GlobalConstants.of(context)
                                 .loginInputTheme(geolocationMessage),
-                            onEditingComplete: () => _determinePosition(),
+                            onEditingComplete: () =>
+                                Geolocation.determinePosition(),
                           ),
                         ),
                         Visibility(

@@ -3,13 +3,19 @@ import 'package:ootopia_app/shared/global-constants.dart';
 
 class TryAgain extends StatefulWidget {
   final Function onClickButton;
+  final String buttonText;
   final Color buttonTextColor;
   final Color messageTextColor;
   final Color buttonBackgroundColor;
-  TryAgain(this.onClickButton,
-      {this.buttonTextColor,
-      this.messageTextColor,
-      this.buttonBackgroundColor});
+  final bool showOnlyButton;
+  TryAgain(
+    this.onClickButton, {
+    this.buttonText,
+    this.buttonTextColor,
+    this.messageTextColor,
+    this.buttonBackgroundColor,
+    this.showOnlyButton = false,
+  });
 
   @override
   _TryAgainState createState() => _TryAgainState();
@@ -28,38 +34,47 @@ class _TryAgainState extends State<TryAgain> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Flexible(
-                    child: Text(
-                      "Oops!",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: widget.buttonBackgroundColor != null
-                            ? widget.buttonBackgroundColor
-                            : Theme.of(context).accentColor,
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: GlobalConstants.of(context).spacingNormal,
-                      ),
+                  Visibility(
+                    visible: !widget.showOnlyButton,
+                    child: Flexible(
                       child: Text(
-                        "There was a problem,\nplease try again.",
+                        "Oops!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 14,
-                          color: widget.messageTextColor != null
-                              ? widget.messageTextColor
-                              : Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: widget.buttonBackgroundColor != null
+                              ? widget.buttonBackgroundColor
+                              : Theme.of(context).accentColor,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: GlobalConstants.of(context).spacingLarge,
+                  Visibility(
+                    visible: !widget.showOnlyButton,
+                    child: Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: GlobalConstants.of(context).spacingNormal,
+                        ),
+                        child: Text(
+                          "There was a problem,\nplease try again.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: widget.messageTextColor != null
+                                ? widget.messageTextColor
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !widget.showOnlyButton,
+                    child: SizedBox(
+                      height: GlobalConstants.of(context).spacingLarge,
+                    ),
                   ),
                   ButtonTheme(
                     height: 48,
@@ -83,7 +98,10 @@ class _TryAgainState extends State<TryAgain> {
                             Container(
                               margin: const EdgeInsets.only(left: 10.0),
                               child: Text(
-                                "Try again",
+                                widget.buttonText != null &&
+                                        widget.buttonText.isNotEmpty
+                                    ? widget.buttonText
+                                    : "Try again",
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -16,11 +19,15 @@ import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class TimelinePage extends StatefulWidget {
+  Map<String, dynamic> args;
+
+  TimelinePage([this.args]);
   @override
   _TimelinePageState createState() => _TimelinePageState();
 }
 
-class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
+class _TimelinePageState extends State<TimelinePage>
+    with SecureStoreMixin, SingleTickerProviderStateMixin {
   TimelinePostBloc timelineBloc;
   bool loggedIn = false;
   User user;
@@ -29,6 +36,7 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
   int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
   List<TimelinePost> _allPosts = [];
+  bool showUploadedVideoMessage = false;
 
   FlickMultiManager flickMultiManager;
 
@@ -40,6 +48,20 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
     timelineBloc.add(GetTimelinePostsEvent(
         _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
     flickMultiManager = FlickMultiManager();
+
+    if (widget.args != null && widget.args["createdPost"] == true) {
+      setState(() {
+        showUploadedVideoMessage = true;
+      });
+      Timer(
+        Duration(milliseconds: 5000),
+        () {
+          setState(() {
+            showUploadedVideoMessage = false;
+          });
+        },
+      );
+    }
   }
 
   void _checkUserIsLoggedIn() async {
@@ -84,8 +106,7 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
       body: Column(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+            padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -164,6 +185,40 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
               ],
             ),
           ),
+          Visibility(
+            visible: showUploadedVideoMessage,
+            child: Padding(
+              padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xff73d778),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(
+                    GlobalConstants.of(context).spacingNormal,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.done, color: Colors.white),
+                      Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: GlobalConstants.of(context).spacingSmall,
+                          ),
+                          child: Text(
+                            "Your video is being processed. Wait until processing is complete.",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Center(
               child: BlocListener<TimelinePostBloc, TimelinePostState>(
@@ -177,8 +232,6 @@ class _TimelinePageState extends State<TimelinePage> with SecureStoreMixin {
                   } else if (state is LoadedSucessState) {
                     _hasMoreItems = state.posts.length == _itemsPerPageCount;
                     _allPosts.addAll(state.posts);
-                    print(
-                        "PAGINATION ${state.posts.length} ${_allPosts.length}");
                   }
                 },
                 child: _blocBuilder(),

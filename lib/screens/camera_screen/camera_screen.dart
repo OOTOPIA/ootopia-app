@@ -121,17 +121,15 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
       if (mounted) setState(() {});
       if (file != null) {
         await GallerySaver.saveVideo(file.path);
-        // showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
         Navigator.of(context).pushNamed(
           PageRoute.Page.postPreviewScreen.route,
-          arguments: {"filePath": file.path},
+          arguments: {
+            "filePath": file.path,
+          },
         );
-        //uploadFileBackground(file);
       }
     });
-
-    //Navigator.of(context).pop(true);
   }
 
   Future<XFile> stopVideoRecording() async {
@@ -256,12 +254,12 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
                 color: Colors.white,
                 onPressed: () => setCamera(),
               ),
-              IconButton(
+              /*IconButton(
                 icon: Icon(Icons.insert_photo),
                 iconSize: 30,
                 color: Colors.white,
                 onPressed: () => setCamera(),
-              ),
+              ),*/
             ],
           )
         ],

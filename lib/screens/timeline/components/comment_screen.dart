@@ -34,7 +34,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   List<String> selectedCommentsIds = [];
 
   void initState() {
-    print("Test!!!! ${widget.args.toString()}");
     _checkUserIsLoggedIn();
     commentBloc = BlocProvider.of<CommentBloc>(context);
     _getComments([]);
