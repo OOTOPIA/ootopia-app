@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
@@ -67,8 +68,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
       setState(() {
         _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
-        print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
-        print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
+        //print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
+        //print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
       });
     }
   }
@@ -123,10 +124,20 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        'Santos - SP',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(fontSize: 12),
+                      Visibility(
+                        visible: (this.post.city != null &&
+                                this.post.city.isNotEmpty) ||
+                            (this.post.state != null &&
+                                this.post.state.isNotEmpty),
+                        child: Text(
+                          '${this.post?.city}' +
+                              (this.post.state != null &&
+                                      this.post.state.isNotEmpty
+                                  ? ', ${this.post?.state}'
+                                  : ''),
+                          textAlign: TextAlign.start,
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                     ],
                   ),
@@ -163,14 +174,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
-              HashtagName(
-                hashtagName: 'flowers',
-              ),
-              HashtagName(
-                hashtagName: 'urbangardening',
-              ),
-              HashtagName(
-                hashtagName: 'saveinsects',
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: this.post?.tags?.length,
+                  itemBuilder: (ctx, index) {
+                    return HashtagName(
+                      hashtagName: this.post?.tags[index],
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -271,13 +285,18 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
             )
           ],
         ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
-              child: Text(this.post.description),
-            )
-          ],
+        Visibility(
+          visible:
+              this.post.description != null && this.post.description.isNotEmpty,
+          child: Row(
+            children: [
+              Padding(
+                padding:
+                    EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
+                child: Text(this.post.description),
+              )
+            ],
+          ),
         ),
         GestureDetector(
           onTap: () {
@@ -373,7 +392,7 @@ class HashtagName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 8, right: 4),
+      margin: EdgeInsets.all(3),
       padding: EdgeInsets.all(4),
       decoration: BoxDecoration(
         border: Border.all(
@@ -382,9 +401,11 @@ class HashtagName extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Text(
-        this.hashtagName,
-        style: TextStyle(fontSize: 12, color: Colors.white),
+      child: Center(
+        child: Text(
+          this.hashtagName,
+          style: TextStyle(fontSize: 12, color: Colors.white),
+        ),
       ),
     );
   }
