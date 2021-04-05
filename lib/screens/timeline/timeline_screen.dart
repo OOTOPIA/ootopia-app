@@ -46,6 +46,7 @@ class _TimelinePageState extends State<TimelinePage>
       liked: false,
       likesCount: 0,
       commentsCount: 0,
+      tags: [],
       description: "Little example of Youtube player usage",
     )
   ];

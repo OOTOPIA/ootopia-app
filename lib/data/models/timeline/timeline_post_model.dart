@@ -13,6 +13,10 @@ class TimelinePost extends Equatable {
   int likesCount;
   int commentsCount;
   bool liked = false;
+  List<String> tags;
+  String city;
+  String state;
+  String country;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -29,6 +33,10 @@ class TimelinePost extends Equatable {
     this.likesCount,
     this.commentsCount,
     this.liked,
+    this.tags,
+    this.city,
+    this.state,
+    this.country,
     this.createdAt,
     this.updatedAt,
   });
@@ -47,6 +55,10 @@ class TimelinePost extends Equatable {
       likesCount: parsedJson['likesCount'],
       liked: (parsedJson['liked'] == null ? false : parsedJson['liked']),
       commentsCount: parsedJson['commentsCount'],
+      tags: List.from(parsedJson['tags']),
+      city: parsedJson['city'],
+      state: parsedJson['state'],
+      country: parsedJson['country'],
       createdAt: parsedJson['createdAt'],
       updatedAt: parsedJson['updatedAt'],
     );
@@ -66,6 +78,10 @@ class TimelinePost extends Equatable {
         likesCount,
         commentsCount,
         liked,
+        tags,
+        city,
+        state,
+        country,
         createdAt,
         updatedAt,
       ];
