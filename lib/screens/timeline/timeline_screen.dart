@@ -282,7 +282,21 @@ class _TimelinePageState extends State<TimelinePage>
                   child: RefreshIndicator(
                     onRefresh: () async {
                       setState(() {
-                        _allPosts = [];
+                        _allPosts = [
+                          TimelinePost(
+                            id: "69360449-1434-4683-a6a4-f9321baca5ed",
+                            userId: "00851c9d-fb60-40b5-8ab2-91bb59bd8163",
+                            username: "Claudio Oliveira",
+                            photoUrl:
+                                "https://ootopia-staging.s3.amazonaws.com/users/00851c9d-fb60-40b5-8ab2-91bb59bd8163/photo-1617115171207.jpg",
+                            liked: false,
+                            likesCount: 0,
+                            commentsCount: 0,
+                            tags: [],
+                            description:
+                                "Little example of Youtube player usage",
+                          ),
+                        ];
                         currentPage = 1;
                       });
                       _getData();
@@ -291,6 +305,7 @@ class _TimelinePageState extends State<TimelinePage>
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
                       shrinkWrap: true,
+                      cacheExtent: 1000,
                       itemCount: _allPosts.length +
                           1 +
                           (_hasMoreItems
@@ -306,7 +321,9 @@ class _TimelinePageState extends State<TimelinePage>
                           return Center(
                               child: Padding(
                             padding: const EdgeInsets.all(8),
-                            child: CircularProgressIndicator(),
+                            child: _hasMoreItems
+                                ? CircularProgressIndicator()
+                                : Container(),
                           ));
                         }
                         return PhotoTimeline(
@@ -344,9 +361,7 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   Future<void> _getData() async {
-    setState(() {
-      timelineBloc.add(GetTimelinePostsEvent(
-          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
-    });
+    timelineBloc.add(GetTimelinePostsEvent(
+        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
   }
 }
