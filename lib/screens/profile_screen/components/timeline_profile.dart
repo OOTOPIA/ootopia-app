@@ -195,9 +195,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   }
 
   Future<void> _getData() async {
-    setState(() {
-      timelineBloc.add(GetTimelinePostsEvent(
-          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount, user.id));
-    });
+    timelineBloc.add(GetTimelinePostsEvent(
+        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount, user.id));
   }
 }
