@@ -68,13 +68,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
       setState(() {
         _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
-<<<<<<< Updated upstream
         //print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
         //print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
-=======
-        // print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
-        // print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
->>>>>>> Stashed changes
       });
     }
   }
