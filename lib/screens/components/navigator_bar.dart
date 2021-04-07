@@ -69,8 +69,10 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
         onTap: (value) async {
           switch (value) {
             case 0:
-              Navigator.of(context)
-                  .pushNamedIfNotCurrent(PageRoute.Page.timelineScreen.route);
+              Navigator.popUntil(
+                context,
+                ModalRoute.withName(PageRoute.Page.timelineScreen.route),
+              );
               break;
 
             case 1:

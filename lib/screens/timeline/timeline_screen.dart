@@ -301,7 +301,9 @@ class _TimelinePageState extends State<TimelinePage>
                       });
                       _getData();
                     },
-                    child: ListView.builder(
+                    child: ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
                       shrinkWrap: true,
                       cacheExtent: 1000,
                       itemCount: _allPosts.length +

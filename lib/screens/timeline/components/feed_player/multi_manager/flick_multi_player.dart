@@ -28,6 +28,10 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
   @override
   void initState() {
     super.initState();
+    startPlayerController();
+  }
+
+  void startPlayerController() {
     videoPlayerController = VideoPlayerController.network(widget.url);
 
     flickManager = FlickManager(
@@ -40,7 +44,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
 
   @override
   void dispose() {
-    //widget.flickMultiManager.remove(flickManager);
+    widget.flickMultiManager.remove(flickManager);
     flickManager.dispose();
     videoPlayerController.dispose();
     super.dispose();
