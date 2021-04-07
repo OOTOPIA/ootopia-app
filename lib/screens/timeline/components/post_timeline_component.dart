@@ -51,6 +51,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
 
   @override
   void initState() {
+    super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: 'MxcJtLbIhvs',
       flags: YoutubePlayerFlags(
@@ -60,7 +61,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
     )..addListener(listener);
     //_videoMetaData = const YoutubeMetaData();
     //_playerState = PlayerState.unknown;
-    super.initState();
   }
 
   void listener() {
@@ -290,10 +290,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
               this.post.description != null && this.post.description.isNotEmpty,
           child: Row(
             children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
-                child: Text(this.post.description),
+              Flexible(
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
+                  child: Text(this.post.description),
+                ),
               )
             ],
           ),

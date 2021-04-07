@@ -146,8 +146,8 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                       itemScrollController: this.itemScrollController,
                       itemPositionsListener: this.itemPositionsListener,
                       itemBuilder: (context, index) {
-                        if (index == _allPosts.length - _nextPageThreshold &&
-                            _hasMoreItems) {}
+                        /*if (index == _allPosts.length - _nextPageThreshold &&
+                            _hasMoreItems) {}*/
                         if (index == _allPosts.length) {
                           if (_hasMoreItems) {
                             currentPage++;
