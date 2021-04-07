@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:path/path.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:flutter_uploader/flutter_uploader.dart';
 
@@ -21,6 +23,7 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
   bool isRecord = false;
   XFile imageFile;
   XFile videoFile;
+  bool permissionsIsNeeded = true;
 
   final FlutterUploader uploader = FlutterUploader();
 
@@ -29,7 +32,41 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
   @override
   void initState() {
     super.initState();
-    checkCameraAvailability();
+    requestPermissions();
+  }
+
+  Future<void> requestPermissions() async {
+    var storageStatus = await Permission.storage.status;
+    var cameraStatus = await Permission.camera.status;
+    var microphoneStatus = await Permission.microphone.status;
+    if (storageStatus.isUndetermined ||
+        cameraStatus.isUndetermined ||
+        microphoneStatus.isUndetermined ||
+        storageStatus.isDenied ||
+        cameraStatus.isDenied ||
+        microphoneStatus.isDenied) {
+      // You can request multiple permissions at once.
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+        Permission.camera,
+        Permission.microphone
+      ].request();
+      if (statuses[Permission.storage] == PermissionStatus.granted &&
+          statuses[Permission.camera] == PermissionStatus.granted &&
+          statuses[Permission.microphone] == PermissionStatus.granted) {
+        checkCameraAvailability();
+        setState(() {
+          permissionsIsNeeded = false;
+        });
+      }
+      print(statuses[
+          Permission.storage]); // it should print PermissionStatus.granted
+    } else {
+      setState(() {
+        permissionsIsNeeded = false;
+      });
+      checkCameraAvailability();
+    }
   }
 
   Future<void> checkCameraAvailability() async {
@@ -120,14 +157,15 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
     stopVideoRecording().then((file) async {
       if (mounted) setState(() {});
       if (file != null) {
-        await GallerySaver.saveVideo(file.path);
-        videoFile = file;
-        Navigator.of(context).pushNamed(
-          PageRoute.Page.postPreviewScreen.route,
-          arguments: {
-            "filePath": file.path,
-          },
-        );
+        GallerySaver.saveVideo(file.path).then((res) {
+          videoFile = file;
+          Navigator.of(context).pushNamed(
+            PageRoute.Page.postPreviewScreen.route,
+            arguments: {
+              "filePath": file.path,
+            },
+          );
+        });
       }
     });
   }
@@ -209,8 +247,35 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
+    if (controller == null || !controller.value.isInitialized) {
+      return Container(
+        child: Center(
+          child: SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    } else if (permissionsIsNeeded) {
+      return Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Container(
+                  width: 300,
+                  child: TryAgain(
+                    requestPermissions,
+                    messageText:
+                        "You need to enable some \npermissions to allow full \nuse of the camera.",
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     } else {
       final size = MediaQuery.of(context).size;
       final deviceRatio = size.width / size.height;

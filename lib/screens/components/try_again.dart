@@ -4,6 +4,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 class TryAgain extends StatefulWidget {
   final Function onClickButton;
   final String buttonText;
+  final String messageText;
   final Color buttonTextColor;
   final Color messageTextColor;
   final Color buttonBackgroundColor;
@@ -12,6 +13,7 @@ class TryAgain extends StatefulWidget {
     this.onClickButton, {
     this.buttonText,
     this.buttonTextColor,
+    this.messageText,
     this.messageTextColor,
     this.buttonBackgroundColor,
     this.showOnlyButton = false,
@@ -58,7 +60,10 @@ class _TryAgainState extends State<TryAgain> {
                           top: GlobalConstants.of(context).spacingNormal,
                         ),
                         child: Text(
-                          "There was a problem,\nplease try again.",
+                          widget.messageText != null &&
+                                  widget.messageText.isNotEmpty
+                              ? widget.messageText
+                              : "There was a problem,\nplease try again.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14,
