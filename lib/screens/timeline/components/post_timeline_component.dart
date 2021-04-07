@@ -68,8 +68,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
       setState(() {
         _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
+<<<<<<< Updated upstream
         //print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
         //print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
+=======
+        // print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
+        // print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
+>>>>>>> Stashed changes
       });
     }
   }
@@ -170,9 +175,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
               Text(
                 '#',
                 style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                  fontSize: 22,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Expanded(
                 child: ListView.builder(
@@ -186,6 +192,23 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                   },
                 ),
               ),
+              // Container(
+              //   height: 10,
+              //   child: ListView(
+              //     scrollDirection: Axis.horizontal,
+              //     children: <HashtagName>[
+              //       HashtagName(
+              //         hashtagName: 'flowers',
+              //       ),
+              //       HashtagName(
+              //         hashtagName: 'urbangardening',
+              //       ),
+              //       HashtagName(
+              //         hashtagName: 'saveinsects',
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),

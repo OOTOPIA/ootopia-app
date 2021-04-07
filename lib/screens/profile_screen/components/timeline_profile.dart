@@ -16,7 +16,6 @@ import '../../../shared/secure-store-mixin.dart';
 class TimelineScreenProfileScreen extends StatelessWidget {
   final Map<String, dynamic> args;
   //List<TimelinePost> posts;
-  User user;
   //int postSelected;
 
   TimelineScreenProfileScreen(this.args);
@@ -41,7 +40,7 @@ class ListPostProfileComponent extends StatefulWidget {
   bool loggedIn = false;
   int postSelected;
 
-  ListPostProfileComponent({this.posts, this.loggedIn, this.postSelected});
+  ListPostProfileComponent({this.posts, this.postSelected});
 
   @override
   _ListPostProfileComponentState createState() =>
@@ -69,6 +68,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
 
   @override
   void initState() {
+    super.initState();
     _checkUserIsLoggedIn();
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     flickMultiManager = FlickMultiManager();

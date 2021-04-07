@@ -82,8 +82,8 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
+    controller?.dispose();
   }
 
   void setCamera() async {
@@ -94,7 +94,7 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
     indexCamera = indexCamera == 0 ? 1 : 0;
     controller = CameraController(
       cameras[indexCamera],
-      ResolutionPreset.high,
+      ResolutionPreset.medium,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
     controller.initialize().then((_) {
