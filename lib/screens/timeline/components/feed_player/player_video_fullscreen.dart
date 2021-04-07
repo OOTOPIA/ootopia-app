@@ -50,10 +50,11 @@ class _PLayerVideoFullscreenState extends State<PLayerVideoFullscreen> {
 
   @override
   void dispose() {
+    super.dispose();
     flickManager.dispose();
+    // videoPlayer.dispose();
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    super.dispose();
   }
 
   @override
