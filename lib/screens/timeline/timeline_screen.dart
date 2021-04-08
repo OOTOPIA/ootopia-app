@@ -12,6 +12,7 @@ import 'package:ootopia_app/screens/timeline/components/post_timeline_component.
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'components/feed_player/multi_manager/flick_multi_manager.dart';
@@ -28,6 +29,8 @@ class TimelinePage extends StatefulWidget {
 
 class _TimelinePageState extends State<TimelinePage>
     with SecureStoreMixin, SingleTickerProviderStateMixin {
+  StreamSubscription _intentDataStreamSubscription;
+  List<SharedMediaFile> _sharedFiles;
   TimelinePostBloc timelineBloc;
   bool loggedIn = false;
   User user;
@@ -36,6 +39,7 @@ class _TimelinePageState extends State<TimelinePage>
   int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
   bool showUploadedVideoMessage = false;
+
   List<TimelinePost> _allPosts = [
     TimelinePost(
       id: "69360449-1434-4683-a6a4-f9321baca5ed",
@@ -56,6 +60,22 @@ class _TimelinePageState extends State<TimelinePage>
   @override
   void initState() {
     super.initState();
+
+    _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
+        .listen((List<SharedMediaFile> value) {
+      setState(() {
+        onReceiveVideoFromAnotherApp(value);
+      });
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
+    });
+
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+      setState(() {
+        onReceiveVideoFromAnotherApp(value);
+      });
+    });
+
     _checkUserIsLoggedIn();
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     timelineBloc.add(GetTimelinePostsEvent(
@@ -77,6 +97,22 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
+  void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) {
+    if (value != null && value.length > 0) {
+      _sharedFiles = value;
+      var videoFile = _sharedFiles[0];
+
+      if (videoFile.path.isNotEmpty) {
+        Navigator.of(context).pushNamed(
+          PageRoute.Page.postPreviewScreen.route,
+          arguments: {
+            "filePath": videoFile.path,
+          },
+        );
+      }
+    }
+  }
+
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
@@ -93,6 +129,12 @@ class _TimelinePageState extends State<TimelinePage>
     Navigator.of(context).pushNamed(user.registerPhase == 1
         ? PageRoute.Page.registerPhase2Screen.route
         : PageRoute.Page.profileScreen.route);
+  }
+
+  @override
+  void dispose() {
+    _intentDataStreamSubscription.cancel();
+    super.dispose();
   }
 
   @override
