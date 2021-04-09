@@ -184,10 +184,12 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     flickManager = FlickManager(
       videoPlayerController: videoPlayer,
-      autoPlay: true,
+      autoPlay: false,
     );
 
     flickMultiManager.init(flickManager);
+
+    flickManager.flickControlManager.mute();
 
     _getTags();
     _getLocation();
