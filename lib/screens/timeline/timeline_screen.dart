@@ -77,6 +77,9 @@ class _TimelinePageState extends State<TimelinePage>
     });
 
     _checkUserIsLoggedIn();
+
+    setTimelineVideosMuted();
+
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     timelineBloc.add(GetTimelinePostsEvent(
         _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));

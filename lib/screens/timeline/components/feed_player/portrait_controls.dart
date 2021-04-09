@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import './multi_manager/flick_multi_manager.dart';
 
-class FeedPlayerPortraitControls extends StatelessWidget {
-  const FeedPlayerPortraitControls(
+class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
+  FeedPlayerPortraitControls(
       {Key key, this.flickMultiManager, this.flickManager, this.url})
       : super(key: key);
 
@@ -41,6 +42,11 @@ class FeedPlayerPortraitControls extends StatelessWidget {
             child: FlickToggleSoundAction(
               toggleMute: () {
                 flickMultiManager.toggleMute();
+                if (flickManager.flickControlManager.isMute) {
+                  setTimelineVideosMuted();
+                } else {
+                  setTimelineVideosUnmuted();
+                }
                 displayManager.handleShowPlayerControls();
               },
               child: FlickSeekVideoAction(
@@ -61,7 +67,14 @@ class FeedPlayerPortraitControls extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: FlickSoundToggle(
-                    toggleMute: () => flickMultiManager.toggleMute(),
+                    toggleMute: () {
+                      flickMultiManager.toggleMute();
+                      if (flickManager.flickControlManager.isMute) {
+                        setTimelineVideosMuted();
+                      } else {
+                        setTimelineVideosUnmuted();
+                      }
+                    },
                     color: Colors.white,
                   ),
                 ),
