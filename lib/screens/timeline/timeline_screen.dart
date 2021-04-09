@@ -95,6 +95,28 @@ class _TimelinePageState extends State<TimelinePage>
         },
       );
     }
+    Timer(Duration(milliseconds: 1000), () {
+      if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
+        if (widget.args['returnToPageWithArgs']['pageRoute'] ==
+                PageRoute.Page.myProfileScreen.route &&
+            user.registerPhase == 1) {
+          Navigator.of(context).pushNamed(
+            PageRoute.Page.registerPhase2Screen.route,
+            arguments: {
+              "returnToPageWithArgs": {
+                "pageRoute": PageRoute.Page.myProfileScreen.route,
+                "arguments": null
+              }
+            },
+          );
+        } else {
+          Navigator.of(context).pushNamed(
+            widget.args['returnToPageWithArgs']['pageRoute'],
+            arguments: widget.args['returnToPageWithArgs']['arguments'],
+          );
+        }
+      }
+    });
   }
 
   void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) {

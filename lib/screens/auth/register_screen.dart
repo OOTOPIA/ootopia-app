@@ -10,6 +10,9 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:url_launcher/url_launcher.dart';
 
 class RegisterPage extends StatefulWidget {
+  Map<String, dynamic> args;
+
+  RegisterPage([this.args]);
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -64,8 +67,20 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             );
           } else if (state is LoadedSucessState) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route, ModalRoute.withName('/'));
+            if (widget.args != null &&
+                widget.args['returnToPageWithArgs'] != null) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                PageRoute.Page.timelineScreen.route,
+                ModalRoute.withName('/'),
+                arguments: {
+                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                },
+              );
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  PageRoute.Page.timelineScreen.route,
+                  ModalRoute.withName('/'));
+            }
           }
         },
         child: Scaffold(
@@ -327,7 +342,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   recognizer:
                                                       new TapGestureRecognizer()
                                                         ..onTap = () {
-                                                          launch('https://www.ootopia.org/terms-of-use');
+                                                          launch(
+                                                              'https://www.ootopia.org/terms-of-use');
                                                         },
                                                 )
                                               ]),
