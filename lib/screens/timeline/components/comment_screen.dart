@@ -291,7 +291,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   isLogged() {
     if (!loggedIn) {
-      Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.loginScreen.route,
+        arguments: {
+          "returnToPageWithArgs": {
+            "pageRoute": PageRoute.Page.commentScreen.route,
+            "arguments": {
+              "post": widget.args['post'],
+            }
+          }
+        },
+      );
       return;
     }
   }

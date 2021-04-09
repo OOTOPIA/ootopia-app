@@ -18,6 +18,7 @@ class GlobalConstants extends InheritedWidget {
 
   InputDecoration loginInputTheme(String hintText) {
     return InputDecoration(
+      counterText: "",
       hintText: hintText,
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black54, width: 1.5),

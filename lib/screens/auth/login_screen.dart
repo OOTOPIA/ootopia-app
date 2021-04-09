@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/auth/register_screen.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class LoginPage extends StatefulWidget {
+  Map<String, dynamic> args;
+
+  LoginPage([this.args]);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -54,8 +55,20 @@ class _LoginPageState extends State<LoginPage> {
                 content: Text("Successfully Logged In"),
               ),
             );*/
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route, ModalRoute.withName('/'));
+            if (widget.args != null &&
+                widget.args['returnToPageWithArgs'] != null) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                PageRoute.Page.timelineScreen.route,
+                ModalRoute.withName('/'),
+                arguments: {
+                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                },
+              );
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  PageRoute.Page.timelineScreen.route,
+                  ModalRoute.withName('/'));
+            }
           }
         },
         child: _blocBuilder(),
@@ -237,8 +250,19 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                  PageRoute.Page.registerScreen.route);
+                              if (widget.args != null &&
+                                  widget.args['returnToPageWithArgs'] != null) {
+                                Navigator.of(context).pushNamed(
+                                  PageRoute.Page.registerScreen.route,
+                                  arguments: {
+                                    "returnToPageWithArgs":
+                                        widget.args['returnToPageWithArgs']
+                                  },
+                                );
+                              } else {
+                                Navigator.of(context).pushNamed(
+                                    PageRoute.Page.registerScreen.route);
+                              }
                             },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(

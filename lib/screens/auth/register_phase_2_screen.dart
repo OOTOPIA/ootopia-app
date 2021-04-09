@@ -12,6 +12,9 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegisterPhase2Page extends StatefulWidget {
+  Map<String, dynamic> args;
+
+  RegisterPhase2Page([this.args]);
   @override
   _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
 }
@@ -334,7 +337,11 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                     .Page
                                     .registerPhase2DailyLearningGoalScreen
                                     .route,
-                                arguments: {"user": user},
+                                arguments: {
+                                  "user": user,
+                                  "returnToPageWithArgs":
+                                      widget.args["returnToPageWithArgs"],
+                                },
                               );
                             } else {
                               setState(() {
