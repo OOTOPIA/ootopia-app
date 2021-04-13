@@ -35,6 +35,9 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
       yield* _mapGetTimelinePostsToState(event);
     } else if (event is LikePostEvent) {
       yield* _mapPostLikedToState(event);
+    } else if (event is OnDeletePostFromTimelineEvent) {
+      yield OnDeletedPostState(event.postId);
+      yield LoadedSucessState([]);
     }
   }
 

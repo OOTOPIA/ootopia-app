@@ -131,293 +131,309 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () => _goToProfile(),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: this.post?.photoUrl != null
-                        ? CircleAvatar(
-                            backgroundImage:
-                                NetworkImage("${this.post?.photoUrl}"),
-                            radius: 16,
-                          )
-                        : CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/icons_profile/profile.png"),
-                            radius: 16,
-                          ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        this.post.username,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Visibility(
-                        visible: (this.post.city != null &&
-                                this.post.city.isNotEmpty) ||
-                            (this.post.state != null &&
-                                this.post.state.isNotEmpty),
-                        child: Text(
-                          '${this.post?.city}' +
-                              (this.post.state != null &&
-                                      this.post.state.isNotEmpty
-                                  ? ', ${this.post?.state}'
-                                  : ''),
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            PopupMenuPost(
-              isAnabled: true,
-              callbackReturnPopupMenu: _popupMenuReturn,
-            )
-          ],
-        ),
-        Container(
-          width: double.infinity,
-          height: 34,
-          margin: EdgeInsets.only(left: 8, right: 8),
-          padding: EdgeInsets.only(left: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            color: Color(0xff1A4188),
-          ),
-          child: Row(
+    return BlocListener<PostBloc, PostState>(
+      listener: (context, state) {
+        if (state is SuccessDeletePostState) {
+          print("chama o evento na timeline");
+          this.timelineBloc.add(OnDeletePostFromTimelineEvent(state.postId));
+        }
+      },
+      child: _blocBuilder(),
+    );
+  }
+
+  _blocBuilder() {
+    return BlocBuilder<TimelinePostBloc, TimelinePostState>(
+        builder: (context, state) {
+      return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '#',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: this.post?.tags?.length,
-                  itemBuilder: (ctx, index) {
-                    return HashtagName(
-                      hashtagName: this.post?.tags[index],
-                    );
-                  },
-                ),
-              ),
-              // Container(
-              //   height: 10,
-              //   child: ListView(
-              //     scrollDirection: Axis.horizontal,
-              //     children: <HashtagName>[
-              //       HashtagName(
-              //         hashtagName: 'flowers',
-              //       ),
-              //       HashtagName(
-              //         hashtagName: 'urbangardening',
-              //       ),
-              //       HashtagName(
-              //         hashtagName: 'saveinsects',
-              //       ),
-              //     ],
-              //   ),
-              // )
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Color(0xff1A4188),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
-          ),
-          child: widget.index == 0
-              ? YoutubePlayer(
-                  controller: _controller,
-                  showVideoProgressIndicator: true,
-                  onReady: () {
-                    print("ready!!");
-                    _isPlayerReady = true;
-                    //_controller.addListener(listener);
-                  },
-                )
-              : FlickMultiPlayer(
-                  url: this.post.videoUrl,
-                  flickMultiManager: widget.flickMultiManager,
-                  image: this.post.thumbnailUrl,
-                ),
-        ),
-        Row(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                    icon: !this.post.liked
-                        ? ImageIcon(
-                            AssetImage('assets/icons/heart.png'),
-                            color: Colors.black87,
-                          )
-                        : ImageIcon(
-                            AssetImage('assets/icons/heart_filled.png'),
-                            color: Theme.of(context).accentColor,
+              GestureDetector(
+                onTap: () => _goToProfile(),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: this.post?.photoUrl != null
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage("${this.post?.photoUrl}"),
+                              radius: 16,
+                            )
+                          : CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  "assets/icons_profile/profile.png"),
+                              radius: 16,
+                            ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          this.post.username,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                    onPressed: () => {this._likePost()}),
-                IconButton(
-                  icon: ImageIcon(
-                    AssetImage('assets/icons/comment.png'),
-                    color: Colors.black87,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      PageRoute.Page.commentScreen.route,
-                      arguments: {
-                        "post": this.post,
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/bookmark.png'),
-                color: Colors.black12,
-              ),
-              onPressed: null,
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: 3, left: 12),
-              child: new RichText(
-                text: new TextSpan(
-                  style: new TextStyle(fontSize: 14, color: Colors.black),
-                  children: <TextSpan>[
-                    new TextSpan(
-                        text: 'Likes ',
-                        style: new TextStyle(fontWeight: FontWeight.bold)),
-                    new TextSpan(text: this.post.likesCount.toString()),
+                        ),
+                        Visibility(
+                          visible: (this.post.city != null &&
+                                  this.post.city.isNotEmpty) ||
+                              (this.post.state != null &&
+                                  this.post.state.isNotEmpty),
+                          child: Text(
+                            '${this.post?.city}' +
+                                (this.post.state != null &&
+                                        this.post.state.isNotEmpty
+                                    ? ', ${this.post?.state}'
+                                    : ''),
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
+              PopupMenuPost(
+                isAnabled: true,
+                callbackReturnPopupMenu: _popupMenuReturn,
+              )
+            ],
+          ),
+          Container(
+            width: double.infinity,
+            height: 34,
+            margin: EdgeInsets.only(left: 8, right: 8),
+            padding: EdgeInsets.only(left: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              color: Color(0xff1A4188),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 3, left: 12),
-              child: Row(
-                children: [
-                  ImageIcon(
-                    AssetImage('assets/icons_profile/ootopia.png'),
-                    color: Colors.black,
+            child: Row(
+              children: [
+                Text(
+                  '#',
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text('13.55')
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: this.post?.tags?.length,
+                    itemBuilder: (ctx, index) {
+                      return HashtagName(
+                        hashtagName: this.post?.tags[index],
+                      );
+                    },
+                  ),
+                ),
+                // Container(
+                //   height: 10,
+                //   child: ListView(
+                //     scrollDirection: Axis.horizontal,
+                //     children: <HashtagName>[
+                //       HashtagName(
+                //         hashtagName: 'flowers',
+                //       ),
+                //       HashtagName(
+                //         hashtagName: 'urbangardening',
+                //       ),
+                //       HashtagName(
+                //         hashtagName: 'saveinsects',
+                //       ),
+                //     ],
+                //   ),
+                // )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Color(0xff1A4188),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
+            ),
+            child: widget.index == 0
+                ? YoutubePlayer(
+                    controller: _controller,
+                    showVideoProgressIndicator: true,
+                    onReady: () {
+                      print("ready!!");
+                      _isPlayerReady = true;
+                      //_controller.addListener(listener);
+                    },
+                  )
+                : FlickMultiPlayer(
+                    url: this.post.videoUrl,
+                    flickMultiManager: widget.flickMultiManager,
+                    image: this.post.thumbnailUrl,
+                  ),
+          ),
+          Row(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                      icon: !this.post.liked
+                          ? ImageIcon(
+                              AssetImage('assets/icons/heart.png'),
+                              color: Colors.black87,
+                            )
+                          : ImageIcon(
+                              AssetImage('assets/icons/heart_filled.png'),
+                              color: Theme.of(context).accentColor,
+                            ),
+                      onPressed: () => {this._likePost()}),
+                  IconButton(
+                    icon: ImageIcon(
+                      AssetImage('assets/icons/comment.png'),
+                      color: Colors.black87,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.commentScreen.route,
+                        arguments: {
+                          "post": this.post,
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
-            )
-          ],
-        ),
-        Visibility(
-          visible:
-              this.post.description != null && this.post.description.isNotEmpty,
-          child: Row(
+              IconButton(
+                icon: ImageIcon(
+                  AssetImage('assets/icons/bookmark.png'),
+                  color: Colors.black12,
+                ),
+                onPressed: null,
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Row(
             children: [
-              Flexible(
-                child: Padding(
-                  padding:
-                      EdgeInsets.only(top: 3, left: 12, bottom: 12, right: 12),
-                  child: Text(this.post.description),
+              Padding(
+                padding: EdgeInsets.only(bottom: 3, left: 12),
+                child: new RichText(
+                  text: new TextSpan(
+                    style: new TextStyle(fontSize: 14, color: Colors.black),
+                    children: <TextSpan>[
+                      new TextSpan(
+                          text: 'Likes ',
+                          style: new TextStyle(fontWeight: FontWeight.bold)),
+                      new TextSpan(text: this.post.likesCount.toString()),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 3, left: 12),
+                child: Row(
+                  children: [
+                    ImageIcon(
+                      AssetImage('assets/icons_profile/ootopia.png'),
+                      color: Colors.black,
+                    ),
+                    Text('13.55')
+                  ],
                 ),
               )
             ],
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.commentScreen.route,
-              arguments: {
-                "post": this.post,
-              },
-            );
-          },
-          child: Container(
-            margin: EdgeInsets.only(bottom: 8),
-            child: Column(
+          Visibility(
+            visible: this.post.description != null &&
+                this.post.description.isNotEmpty,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 12, left: 12),
-                      child: Text(
-                        this.post.commentsCount.toString() + " comments",
-                        style: TextStyle(color: Colors.black.withOpacity(0.4)),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 8),
-                      child: widget.user?.photoUrl != null
-                          ? CircleAvatar(
-                              radius: 16,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage("${widget.user?.photoUrl}"),
-                                radius: 14,
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: 16,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    "assets/icons_profile/profile.png"),
-                                radius: 14,
-                              ),
-                            ),
-                    ),
-                    Opacity(
-                      opacity: .4,
-                      child: Text(
-                        'Add a comment',
-                        style: TextStyle(),
-                      ),
-                    )
-                  ],
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: 3, left: 12, bottom: 12, right: 12),
+                    child: Text(this.post.description),
+                  ),
                 )
               ],
             ),
           ),
-        ),
-      ],
-    );
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                PageRoute.Page.commentScreen.route,
+                arguments: {
+                  "post": this.post,
+                },
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 12, left: 12),
+                        child: Text(
+                          this.post.commentsCount.toString() + " comments",
+                          style:
+                              TextStyle(color: Colors.black.withOpacity(0.4)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 8),
+                        child: widget.user?.photoUrl != null
+                            ? CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage("${widget.user?.photoUrl}"),
+                                  radius: 14,
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                      "assets/icons_profile/profile.png"),
+                                  radius: 14,
+                                ),
+                              ),
+                      ),
+                      Opacity(
+                        opacity: .4,
+                        child: Text(
+                          'Add a comment',
+                          style: TextStyle(),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    });
   }
 
   void _likePost() {

@@ -66,14 +66,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     try {
       print("Cai to try");
-      if (state is LoadingState) {
-        var result = (await this.repository.deletePost(event.postId));
-        // if (result == "ALL_DELETED") {
-        //   yield* this._mapGetComments(event.postId, 1, []);
-        // }
-
-        //TODO: Não recarregar a lista, apenas remover da lista atual os comentários removidos
-        //fruits.where((f) => f.startsWith('a')).toList();
+      var result = (await this.repository.deletePost(event.postId));
+      if (result == "ALL_DELETED") {
+        print("deletou");
+        yield SuccessDeletePostState(event.postId);
       }
     } catch (_) {
       yield ErrorDeletePostState("Error on delete post $_");
