@@ -176,8 +176,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
             ),
           ),
         ),
-        bottomNavigationBar:
-            NavigatorBar(currentPage: widget.args == null || widget.args["id"] == null ? PageRoute.Page.myProfileScreen.route : PageRoute.Page.profileScreen.route),
+        bottomNavigationBar: NavigatorBar(
+            currentPage: widget.args == null || widget.args["id"] == null
+                ? PageRoute.Page.myProfileScreen.route
+                : PageRoute.Page.profileScreen.route),
         endDrawer: widget.args == null || widget.args["id"] == null
             ? MenuProfile(
                 profileName: this.user?.fullname,
@@ -198,10 +200,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       }
       return Column(
         children: [
-          GridPosts(
-            context: context,
-            posts: posts,
-          ),
+          GridPosts(context: context, userId: userId, posts: posts),
           Visibility(
             visible: posts.length >= _postsPerPageCount && _hasMorePosts,
             child: loadingMorePosts
@@ -419,13 +418,15 @@ class IconDataProfile extends StatelessWidget {
 class GridPosts extends StatelessWidget {
   final context;
   final List<TimelinePost> posts;
+  final String userId;
 
-  GridPosts({this.context, this.posts});
+  GridPosts({this.context, this.posts, this.userId});
 
   _goToTimelinePost(posts, postSelected) async {
     await Navigator.of(context).pushNamed(
       PageRoute.Page.timelineProfileScreen.route,
       arguments: {
+        "userId": userId,
         "posts": posts,
         "postSelected": postSelected,
       },
