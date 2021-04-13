@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -151,42 +152,22 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
     };
   }
 
-  void uploadFileBackground(XFile file) async {
-    // uploader
-    try {
-      await uploader.enqueue(
-          url: DotEnv.env['API_URL'] + "posts", //required: url to upload to
-          //
-          files: [
-            FileItem(
-              filename: basename(file.path),
-              savedDir: dirname(file.path),
-              fieldname: "file",
-            )
-          ], // required: list of files that you want to upload
-          method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
-          headers: await getHeaders(),
-          data: {
-            "metadata": '{"type": "video", "description": "Upload"}'
-          }, // any data you want to send in upload request
-          showNotification:
-              false, // send local notification (android only) for upload status
-          tag: "upload 1");
-    } catch (e) {
-      print('Error upload: $e');
-    } // unique tag for upload task
-  }
-
   void onStopButtonPressed(BuildContext context) {
     stopVideoRecording().then((file) async {
       if (mounted) setState(() {});
       if (file != null) {
-        GallerySaver.saveVideo(file.path).then((res) {
+        GallerySaver.saveVideo(file.path).then((res) async {
+          String filePath = file.path;
+          bool mirroredVideo = false;
+          if (indexCamera == 1) {
+            mirroredVideo = true;
+          }
           videoFile = file;
           Navigator.of(context).pushNamed(
             PageRoute.Page.postPreviewScreen.route,
             arguments: {
-              "filePath": file.path,
+              "filePath": filePath,
+              "mirroredVideo": mirroredVideo.toString()
             },
           );
         });
