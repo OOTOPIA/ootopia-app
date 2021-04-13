@@ -24,6 +24,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (event is CreatePostEvent) {
       yield LoadingCreatePostState();
       yield* _mapCreatePostToState(event);
+    } else if (event is DeletePostEvent) {
+      print("Fui chamado 1");
+      yield* _mapDeletePostToState(event);
     }
   }
 
@@ -56,5 +59,24 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       completer.completeError(error);
     });
     return completer.future;
+  }
+
+  Stream<PostState> _mapDeletePostToState(DeletePostEvent event) async* {
+    print("antes do try");
+
+    try {
+      print("Cai to try");
+      if (state is LoadingState) {
+        var result = (await this.repository.deletePost(event.postId));
+        // if (result == "ALL_DELETED") {
+        //   yield* this._mapGetComments(event.postId, 1, []);
+        // }
+
+        //TODO: Não recarregar a lista, apenas remover da lista atual os comentários removidos
+        //fruits.where((f) => f.startsWith('a')).toList();
+      }
+    } catch (_) {
+      yield ErrorDeletePostState("Error on delete post $_");
+    }
   }
 }

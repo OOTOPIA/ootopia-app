@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/screens/components/dialog_confirm.dart';
+import 'package:ootopia_app/screens/components/popup_menu_post.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
@@ -39,8 +42,14 @@ class PhotoTimeline extends StatefulWidget {
 class _PhotoTimelineState extends State<PhotoTimeline> {
   TimelinePost post;
   final TimelinePostBloc timelineBloc;
+  PostBloc postBloc;
   bool loggedIn = false;
-  _PhotoTimelineState({this.post, this.timelineBloc, this.loggedIn});
+
+  _PhotoTimelineState({
+    this.post,
+    this.timelineBloc,
+    this.loggedIn,
+  });
 
   bool dragging = false;
 
@@ -59,6 +68,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
         mute: true,
       ),
     )..addListener(listener);
+    postBloc = BlocProvider.of<PostBloc>(context);
     //_videoMetaData = const YoutubeMetaData();
     //_playerState = PlayerState.unknown;
   }
@@ -87,6 +97,36 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
         "id": post.userId,
       },
     );
+  }
+
+  _popupMenuReturn(String selectedOption) {
+    print("Meu app >>>> $selectedOption");
+
+    switch (selectedOption) {
+      case 'Excluir':
+        _showMyDialog();
+        break;
+      default:
+    }
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return DialogConfirm(
+          textAlert: 'Desejá realmente deletar seu post ?',
+          callbackConfirmAlertDialog: _deletePost,
+        );
+      },
+    );
+  }
+
+  _deletePost() {
+    print('>>> deletado inicio');
+    postBloc.add(DeletePostEvent(widget.post.id));
+    print('>>> deletado fim');
   }
 
   @override
@@ -144,13 +184,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                 ],
               ),
             ),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/options_group.png'),
-                color: Colors.black12,
-              ),
-              onPressed: null,
-            ),
+            PopupMenuPost(
+              isAnabled: true,
+              callbackReturnPopupMenu: _popupMenuReturn,
+            )
           ],
         ),
         Container(

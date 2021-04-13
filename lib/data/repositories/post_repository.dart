@@ -114,4 +114,23 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       print('Error upload: $e');
     }
   }
+
+  @override
+  Future<String> deletePost(String postId) async {
+    try {
+      final request = http.Request(
+          "DELETE", Uri.parse(DotEnv.env['API_URL'] + 'posts/$postId'));
+      request.headers.addAll(await this.getHeaders());
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        return "ALL_DELETED";
+      } else {
+        throw Exception('Failed to delete post');
+      }
+    } catch (error) {
+      throw Exception('Failed to delete post ' + error);
+    }
+  }
 }
