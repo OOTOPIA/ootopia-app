@@ -166,7 +166,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
                     if (state is LoadedPostsProfileSucessState) {
                       loadingPosts = false;
                       _hasMorePosts = state.posts.length == _postsPerPageCount;
-                      posts.addAll(state.posts);
+                      posts.addAll(
+                          state.posts.where((post) => post.userId == userId));
                     } else if (state is LoadPostsProfileErrorState) {
                       loadPostsError = true;
                     }
