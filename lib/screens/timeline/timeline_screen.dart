@@ -288,7 +288,6 @@ class _TimelinePageState extends State<TimelinePage>
                     _hasMoreItems = state.posts.length == _itemsPerPageCount;
                     _allPosts.addAll(state.posts);
                   } else if (state is OnDeletedPostState) {
-                    print("remove o post ae ${state.postId}");
                     _allPosts.removeWhere((post) => post.id == state.postId);
                   }
                 },
@@ -364,14 +363,16 @@ class _TimelinePageState extends State<TimelinePage>
                         }
                         if (index == _allPosts.length) {
                           return Center(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: _hasMoreItems
-                                ? CircularProgressIndicator()
-                                : Container(),
-                          ));
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: _hasMoreItems
+                                  ? CircularProgressIndicator()
+                                  : Container(),
+                            ),
+                          );
                         }
                         return PhotoTimeline(
+                          key: ObjectKey(_allPosts[index]),
                           index: index,
                           post: _allPosts[index],
                           timelineBloc: this.timelineBloc,
@@ -396,7 +397,7 @@ class _TimelinePageState extends State<TimelinePage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'nothing data :(',
+                'No posts',
               ),
             ],
           ),

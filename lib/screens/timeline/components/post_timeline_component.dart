@@ -22,14 +22,15 @@ class PhotoTimeline extends StatefulWidget {
   bool loggedIn = false;
   final FlickMultiManager flickMultiManager;
 
-  PhotoTimeline({
-    this.index,
-    this.post,
-    this.timelineBloc,
-    this.loggedIn,
-    this.user,
-    this.flickMultiManager,
-  });
+  PhotoTimeline(
+      {Key key,
+      this.index,
+      this.post,
+      this.timelineBloc,
+      this.loggedIn,
+      this.user,
+      this.flickMultiManager})
+      : super(key: key);
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
@@ -124,9 +125,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
   }
 
   _deletePost() {
-    print('>>> deletado inicio');
     postBloc.add(DeletePostEvent(widget.post.id));
-    print('>>> deletado fim');
   }
 
   @override
