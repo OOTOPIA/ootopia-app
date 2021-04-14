@@ -115,7 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
         body: SingleChildScrollView(
           child: Container(
             // this will set the outer container size to the height of your screen
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height +
+                (30 * (posts.length > 4 ? posts.length / 4 : 1)),
             child: Column(
               children: [
                 Row(
@@ -464,7 +465,7 @@ class GridPosts extends StatelessWidget {
             }),
           )
         : Expanded(
-            child: Center(child: Text("Esse usuário ainda não tem postagem")),
+            child: Center(child: Text("No posts")),
           );
   }
 }
