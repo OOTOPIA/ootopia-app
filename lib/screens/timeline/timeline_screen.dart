@@ -285,8 +285,10 @@ class _TimelinePageState extends State<TimelinePage>
                       ),
                     );
                   } else if (state is LoadedSucessState) {
-                    _hasMoreItems = state.posts.length == _itemsPerPageCount;
-                    _allPosts.addAll(state.posts);
+                    if (!state.onlyForRefreshCurrentList) {
+                      _hasMoreItems = state.posts.length == _itemsPerPageCount;
+                      _allPosts.addAll(state.posts);
+                    }
                   } else if (state is OnDeletedPostState) {
                     _allPosts.removeWhere((post) => post.id == state.postId);
                   }
