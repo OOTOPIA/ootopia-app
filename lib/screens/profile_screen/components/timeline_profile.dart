@@ -91,18 +91,6 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     }
   }
 
-  _removeItem(String postId) {
-    var indexPost = _allPosts.indexWhere((post) => post.id == postId);
-
-    if (indexPost >= 0) {
-      _allPosts.remove(_allPosts[indexPost]);
-    }
-
-    if (_allPosts.length <= 0) {
-      Navigator.of(context).pop();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<TimelinePostBloc, TimelinePostState>(
@@ -118,7 +106,16 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           _allPosts.addAll(state.posts);
           print("PAGINATION ${state.posts.length} ${_allPosts.length}");
         } else if (state is OnDeletedPostState) {
-          _removeItem(state.postId);
+          var indexPost =
+              _allPosts.indexWhere((post) => post.id == state.postId);
+
+          if (indexPost >= 0) {
+            _allPosts.remove(_allPosts[indexPost]);
+          }
+
+          // if (_allPosts.length <= 0) {
+          //   Navigator.pop(context, true);
+          // }
         }
       },
       child: _blocBuilder(),

@@ -22,13 +22,9 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      setState(() {
-        isUserOwnsPost = user.id == widget.post.userId;
-      });
+      isUserOwnsPost = user.id == widget.post.userId;
     } else {
-      setState(() {
-        isUserOwnsPost = false;
-      });
+      isUserOwnsPost = false;
     }
   }
 
