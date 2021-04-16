@@ -34,7 +34,7 @@ class LoadedSucessState extends TimelinePostState {
 }
 
 class OnDeletedPostState extends TimelinePostState {
-  final String postId;
+  final postId;
   const OnDeletedPostState(this.postId);
   @override
   List<Object> get props => [postId];

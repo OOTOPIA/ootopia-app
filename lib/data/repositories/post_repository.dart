@@ -120,8 +120,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     print("chamou o repository");
     try {
       print("dentro do try");
-      return "ALL_DELETED";
-      /*final request = http.Request(
+      final request = http.Request(
           "DELETE", Uri.parse(DotEnv.env['API_URL'] + 'posts/$postId'));
       request.headers.addAll(await this.getHeaders());
 
@@ -135,7 +134,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       } else {
         print("deu ruim");
         throw Exception('Failed to delete post');
-      }*/
+      }
     } catch (error) {
       throw Exception('Failed to delete post ' + error);
     }

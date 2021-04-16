@@ -24,15 +24,15 @@ class DialogConfirm extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Confirmar'),
+          child: Text('Recusar'),
           onPressed: () {
-            this.callbackConfirmAlertDialog();
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Recusar'),
+          child: Text('Confirmar'),
           onPressed: () {
+            this.callbackConfirmAlertDialog();
             Navigator.of(context).pop();
           },
         ),

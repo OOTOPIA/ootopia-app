@@ -55,8 +55,9 @@ class UpdateTimelinePostEvent extends TimelinePostEvent {
 
 class OnDeletePostFromTimelineEvent extends TimelinePostEvent {
   final String postId;
+  final bool isProfile;
 
-  const OnDeletePostFromTimelineEvent(this.postId);
+  const OnDeletePostFromTimelineEvent(this.postId, this.isProfile);
 
   @override
   List<Object> get props => [postId];

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
@@ -21,16 +23,18 @@ class PhotoTimeline extends StatefulWidget {
   User user;
   bool loggedIn = false;
   final FlickMultiManager flickMultiManager;
+  bool isProfile;
 
-  PhotoTimeline(
-      {Key key,
-      this.index,
-      this.post,
-      this.timelineBloc,
-      this.loggedIn,
-      this.user,
-      this.flickMultiManager})
-      : super(key: key);
+  PhotoTimeline({
+    Key key,
+    this.index,
+    this.post,
+    this.timelineBloc,
+    this.loggedIn,
+    this.user,
+    this.flickMultiManager,
+    this.isProfile,
+  }) : super(key: key);
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
@@ -40,11 +44,13 @@ class PhotoTimeline extends StatefulWidget {
       );
 }
 
-class _PhotoTimelineState extends State<PhotoTimeline> {
+class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   TimelinePost post;
   final TimelinePostBloc timelineBloc;
   PostBloc postBloc;
   bool loggedIn = false;
+  User user;
+  bool isUserOwnsPost = false;
 
   _PhotoTimelineState({
     this.post,
@@ -100,12 +106,32 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
     );
   }
 
+  // renderSnackBar() {
+  //   return ElevatedButton(
+  //     child: const Text("You must be logged in and be the owner of this post"),
+  //     onPressed: () {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: const Text(
+  //               "You must be logged in and be the owner of this post"),
+  //           duration: Duration(seconds: 6),
+  //           backgroundColor: Colors.yellow,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   _popupMenuReturn(String selectedOption) {
     print("Meu app >>>> $selectedOption");
 
     switch (selectedOption) {
       case 'Excluir':
         _showMyDialog();
+        break;
+
+      case 'isUserNotOwnsPost':
+        // renderSnackBar();
         break;
       default:
     }
@@ -125,7 +151,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
   }
 
   _deletePost() {
-    postBloc.add(DeletePostEvent(widget.post.id));
+    postBloc.add(DeletePostEvent(widget.post.id, widget.isProfile));
   }
 
   @override
@@ -134,7 +160,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
       listener: (context, state) {
         if (state is SuccessDeletePostState) {
           print("chama o evento na timeline");
-          this.timelineBloc.add(OnDeletePostFromTimelineEvent(state.postId));
+          this.timelineBloc.add(
+                OnDeletePostFromTimelineEvent(state.postId, state.isProfile),
+              );
         }
       },
       child: _blocBuilder(),
@@ -198,8 +226,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> {
                 ),
               ),
               PopupMenuPost(
-                isAnabled: true,
+                isAnabled: isUserOwnsPost,
                 callbackReturnPopupMenu: _popupMenuReturn,
+                post: post,
               )
             ],
           ),

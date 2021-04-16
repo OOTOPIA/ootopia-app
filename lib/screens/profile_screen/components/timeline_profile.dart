@@ -15,8 +15,6 @@ import '../../../shared/secure-store-mixin.dart';
 
 class TimelineScreenProfileScreen extends StatelessWidget {
   final Map<String, dynamic> args;
-  //List<TimelinePost> posts;
-  //int postSelected;
 
   TimelineScreenProfileScreen(this.args);
 
@@ -40,7 +38,10 @@ class ListPostProfileComponent extends StatefulWidget {
   bool loggedIn = false;
   int postSelected;
 
-  ListPostProfileComponent({this.posts, this.postSelected});
+  ListPostProfileComponent({
+    this.posts,
+    this.postSelected,
+  });
 
   @override
   _ListPostProfileComponentState createState() =>
@@ -76,20 +77,31 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
 
     Timer(
       Duration(milliseconds: 300),
-      () => itemScrollController.jumpTo(index: widget.postSelected),
+      () {
+        jumpTo();
+      },
     );
   }
 
-  void jumpTo(int index) => itemScrollController.jumpTo(
-        index: index,
-        alignment: 0,
-      );
+  jumpTo() => itemScrollController.jumpTo(index: widget.postSelected);
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
       print("LOGGED USER: " + user.fullname);
+    }
+  }
+
+  _removeItem(String postId) {
+    var indexPost = _allPosts.indexWhere((post) => post.id == postId);
+
+    if (indexPost >= 0) {
+      _allPosts.remove(_allPosts[indexPost]);
+    }
+
+    if (_allPosts.length <= 0) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -107,6 +119,8 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           _hasMoreItems = state.posts.length == _itemsPerPageCount;
           _allPosts.addAll(state.posts);
           print("PAGINATION ${state.posts.length} ${_allPosts.length}");
+        } else if (state is OnDeletedPostState) {
+          _removeItem(state.postId);
         }
       },
       child: _blocBuilder(),
@@ -163,10 +177,12 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                           );
                         }
                         return PhotoTimeline(
+                          key: ObjectKey(_allPosts[index]),
                           post: _allPosts[index],
                           timelineBloc: this.timelineBloc,
                           loggedIn: this.loggedIn,
                           flickMultiManager: flickMultiManager,
+                          isProfile: true,
                         );
                       },
                     ),
@@ -195,7 +211,9 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   }
 
   Future<void> _getData() async {
-    timelineBloc.add(GetTimelinePostsEvent(
-        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount, user.id));
+    timelineBloc.add(
+      GetTimelinePostsEvent(
+          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount, user.id),
+    );
   }
 }

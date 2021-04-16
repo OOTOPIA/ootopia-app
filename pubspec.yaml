@@ -73,6 +73,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icons/icon_launcher.png"
+  image_path_ios: "assets/icons/icon_launcher_ios.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

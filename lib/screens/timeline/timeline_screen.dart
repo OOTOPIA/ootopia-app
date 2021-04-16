@@ -305,6 +305,16 @@ class _TimelinePageState extends State<TimelinePage>
     );
   }
 
+  _removeItem(String postId) {
+    var indexPost = _allPosts.indexWhere((post) => post.id == postId);
+
+    print("Meu id $indexPost");
+
+    if (indexPost >= 0) {
+      _allPosts.remove(_allPosts[indexPost]);
+    }
+  }
+
   _blocBuilder() {
     return BlocBuilder<TimelinePostBloc, TimelinePostState>(
       builder: (context, state) {
@@ -381,6 +391,7 @@ class _TimelinePageState extends State<TimelinePage>
                           loggedIn: this.loggedIn,
                           user: user,
                           flickMultiManager: flickMultiManager,
+                          isProfile: false,
                         );
                       },
                     ),
@@ -405,6 +416,17 @@ class _TimelinePageState extends State<TimelinePage>
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPhotoTimeline(index) {
+    return PhotoTimeline(
+      index: index,
+      post: _allPosts[index],
+      timelineBloc: this.timelineBloc,
+      loggedIn: this.loggedIn,
+      user: user,
+      flickMultiManager: flickMultiManager,
     );
   }
 
