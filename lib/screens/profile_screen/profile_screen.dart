@@ -115,7 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
         body: SingleChildScrollView(
           child: Container(
             // this will set the outer container size to the height of your screen
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height +
+                (30 * (posts.length > 4 ? posts.length / 4 : 1)),
             child: Column(
               children: [
                 Row(
@@ -165,7 +166,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
                     if (state is LoadedPostsProfileSucessState) {
                       loadingPosts = false;
                       _hasMorePosts = state.posts.length == _postsPerPageCount;
-                      posts.addAll(state.posts);
+                      posts.addAll(
+                          state.posts.where((post) => post.userId == userId));
                     } else if (state is LoadPostsProfileErrorState) {
                       loadPostsError = true;
                     }
@@ -200,10 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       }
       return Column(
         children: [
-          GridPosts(
-            context: context,
-            posts: posts,
-          ),
+          GridPosts(context: context, userId: userId, posts: posts),
           Visibility(
             visible: posts.length >= _postsPerPageCount && _hasMorePosts,
             child: loadingMorePosts
@@ -421,13 +420,15 @@ class IconDataProfile extends StatelessWidget {
 class GridPosts extends StatelessWidget {
   final context;
   final List<TimelinePost> posts;
+  final String userId;
 
-  GridPosts({this.context, this.posts});
+  GridPosts({this.context, this.posts, this.userId});
 
   _goToTimelinePost(posts, postSelected) async {
     await Navigator.of(context).pushNamed(
       PageRoute.Page.timelineProfileScreen.route,
       arguments: {
+        "userId": userId,
         "posts": posts,
         "postSelected": postSelected,
       },
@@ -465,7 +466,7 @@ class GridPosts extends StatelessWidget {
             }),
           )
         : Expanded(
-            child: Center(child: Text("Esse usuário ainda não tem postagem")),
+            child: Center(child: Text("No posts")),
           );
   }
 }

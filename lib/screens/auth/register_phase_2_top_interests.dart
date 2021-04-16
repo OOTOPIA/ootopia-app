@@ -107,9 +107,20 @@ class _RegisterPhase2TopInterestsPageState
               widget.args['user'].registerPhase = state.user.registerPhase;
               widget.args['user'].photoUrl = state.user.photoUrl;
               setCurrentUser(jsonEncode(widget.args['user'].toJson()));
-              Navigator.of(context).pushNamedAndRemoveUntil(
+              if (widget.args != null &&
+                  widget.args['returnToPageWithArgs'] != null) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
                   PageRoute.Page.timelineScreen.route,
-                  ModalRoute.withName('/'));
+                  ModalRoute.withName('/'),
+                  arguments: {
+                    "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                  },
+                );
+              } else {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    PageRoute.Page.timelineScreen.route,
+                    ModalRoute.withName('/'));
+              }
             }
           },
           child: _blocBuilder(),

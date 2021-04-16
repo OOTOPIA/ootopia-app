@@ -25,9 +25,9 @@ class TimelineScreenProfileScreen extends StatelessWidget {
         title: Text('Publicações'),
       ),
       body: ListPostProfileComponent(
-        posts: this.args["posts"],
-        postSelected: this.args["postSelected"],
-      ),
+          posts: this.args["posts"],
+          postSelected: this.args["postSelected"],
+          userId: this.args["userId"]),
       bottomNavigationBar: NavigatorBar(),
     );
   }
@@ -37,11 +37,9 @@ class ListPostProfileComponent extends StatefulWidget {
   List<TimelinePost> posts;
   bool loggedIn = false;
   int postSelected;
+  String userId;
 
-  ListPostProfileComponent({
-    this.posts,
-    this.postSelected,
-  });
+  ListPostProfileComponent({this.userId, this.posts, this.postSelected});
 
   @override
   _ListPostProfileComponentState createState() =>
@@ -211,9 +209,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   }
 
   Future<void> _getData() async {
-    timelineBloc.add(
-      GetTimelinePostsEvent(
-          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount, user.id),
-    );
+    timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
+        (currentPage - 1) * _itemsPerPageCount, widget.userId));
   }
 }

@@ -25,7 +25,7 @@ class LoadingState extends AuthState {
 }
 
 class LoadedSucessState extends AuthState {
-  User user;
+  final User user;
   LoadedSucessState(this.user);
   @override
   List<Object> get props => [user];

@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/portrait_controls.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import './flick_multi_manager.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -24,7 +25,8 @@ class FlickMultiPlayer extends StatefulWidget {
   _FlickMultiPlayerState createState() => _FlickMultiPlayerState();
 }
 
-class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
+class _FlickMultiPlayerState extends State<FlickMultiPlayer>
+    with SecureStoreMixin {
   FlickManager flickManager;
   VideoPlayerController videoPlayerController;
 
@@ -43,6 +45,8 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
     );
 
     widget.flickMultiManager.init(flickManager);
+
+    flickManager.flickControlManager.mute();
   }
 
   @override
@@ -60,6 +64,14 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer> {
       onVisibilityChanged: (visiblityInfo) {
         if (visiblityInfo.visibleFraction > 0.9) {
           widget.flickMultiManager.play(flickManager);
+          flickManager.flickControlManager.mute();
+          getTimelineVideosIsMuted().then((value) {
+            if (!value) {
+              flickManager.flickControlManager.unmute();
+            } else {
+              flickManager.flickControlManager.mute();
+            }
+          });
         }
       },
       child: ConstrainedBox(

@@ -13,6 +13,18 @@ class SecureStoreMixin {
     await this.setSecureStore("auth_token", value);
   }
 
+  void setTimelineVideosMuted() async {
+    await this.setSecureStore("timeline_muted", "true");
+  }
+
+  void setTimelineVideosUnmuted() async {
+    await this.setSecureStore("timeline_muted", "false");
+  }
+
+  Future<bool> getTimelineVideosIsMuted() async {
+    return await this.getSecureStore("timeline_muted") == "true";
+  }
+
   Future<bool> getUserIsLoggedIn() async {
     String token = await this.getAuthToken();
     return token != null;

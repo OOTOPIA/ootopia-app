@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -18,6 +19,7 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'dart:math' as math;
 
 class PostPreviewPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -37,11 +39,16 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       TextEditingController();
   final TextEditingController _geolocationInputController =
       TextEditingController();
+  double mirror = 0;
 
   bool _isLoading = true;
   bool _isLoadingUpload = false;
   bool _errorOnGetTags = false;
   bool _createdPost = false;
+  bool _processingVideoInBackground = false;
+  bool _processingVideoInBackgroundError = false;
+  bool _readyToSendPost =
+      false; //Será "true" quando o usuário tentar enviar um vídeo que está sendo processado em background com o ffmpeg
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
   String tagsErrorMessage = "";
@@ -152,6 +159,23 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   }
 
   void _sendPost() {
+    if (_processingVideoInBackgroundError) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              "There was a problem loading the video, please try to upload the video again."),
+        ),
+      );
+      return;
+    }
+
+    if (_processingVideoInBackground) {
+      _readyToSendPost = true;
+      setState(() {
+        _isLoadingUpload = true;
+      });
+    }
+
     if (_selectedTags.length < 3) {
       setState(() {
         tagsErrorMessage = "Please select at least 3 tags";
@@ -184,10 +208,53 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     flickManager = FlickManager(
       videoPlayerController: videoPlayer,
-      autoPlay: true,
+      autoPlay: false,
     );
 
     flickMultiManager.init(flickManager);
+
+    flickManager.flickControlManager.mute();
+
+    if (widget.args["mirroredVideo"] == "true") {
+      mirror = math.pi;
+      _processingVideoInBackground = true;
+      FlutterFFmpeg _ffmpeg = new FlutterFFmpeg();
+      String filePath = widget.args["filePath"];
+      filePath = filePath.replaceAll(".mp4", "-updated.mp4");
+      postData.filePath = filePath;
+      _ffmpeg
+          .execute("-y -i " +
+              widget.args["filePath"] +
+              " -vf hflip -c:v mpeg4 -bf 1 -b:v 2048k " +
+              filePath)
+          .then((_) {
+        if (this.mounted) {
+          setState(() {
+            _processingVideoInBackground = false;
+            if (_readyToSendPost) {
+              _isLoadingUpload = false;
+              _readyToSendPost = false;
+              _sendPost();
+            }
+          });
+        }
+      }).catchError((onError) {
+        _processingVideoInBackground = false;
+        _processingVideoInBackgroundError = true;
+        if (_readyToSendPost && this.mounted) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  "There was a problem uploading the video, please try to upload the video again."),
+            ),
+          );
+          setState(() {
+            _isLoadingUpload = false;
+            _readyToSendPost = false;
+          });
+        }
+      });
+    }
 
     _getTags();
     _getLocation();
@@ -271,18 +338,56 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                         maxHeight: MediaQuery.of(context).size.height * .6),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      child: FlickVideoPlayer(
-                        preferredDeviceOrientationFullscreen: [],
-                        flickManager: flickManager,
-                        flickVideoWithControls: FlickVideoWithControls(
-                          controls: PlayerControls(
-                            flickMultiManager: flickMultiManager,
-                            flickManager: flickManager,
+                    child: Stack(
+                      alignment: AlignmentDirectional.bottomCenter,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          child: Transform(
+                            alignment: Alignment.center,
+                            child: FlickVideoPlayer(
+                              preferredDeviceOrientationFullscreen: [],
+                              flickManager: flickManager,
+                              flickVideoWithControls: FlickVideoWithControls(
+                                controls: null,
+                              ),
+                            ),
+                            transform: Matrix4.rotationY(mirror),
                           ),
                         ),
-                      ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(
+                                  GlobalConstants.of(context).spacingSmall),
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: Colors.black38,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: SizedBox(
+                                width: 28,
+                                height: 28,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  icon: Icon(
+                                      flickManager.flickControlManager.isMute
+                                          ? Icons.volume_off
+                                          : Icons.volume_up,
+                                      size: 20),
+                                  onPressed: () => {
+                                    setState(() {
+                                      flickMultiManager.toggleMute();
+                                    }),
+                                  },
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
