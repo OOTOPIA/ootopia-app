@@ -35,6 +35,9 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
       yield* _mapGetTimelinePostsToState(event);
     } else if (event is LikePostEvent) {
       yield* _mapPostLikedToState(event);
+    } else if (event is OnDeletePostFromTimelineEvent) {
+      yield OnDeletedPostState(event.postId);
+      yield LoadedSucessState([], true);
     }
   }
 
@@ -44,7 +47,7 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
       var posts = (await this
           .repository
           .getPosts(event.limit, event.offset, event.userId));
-      yield LoadedSucessState(posts);
+      yield LoadedSucessState(posts, false);
     } catch (_) {
       yield ErrorState("Error loading posts");
     }
@@ -64,7 +67,7 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
             return post;
           }).toList();
           yield LoadingState();
-          yield LoadedSucessState(posts);
+          yield LoadedSucessState(posts, false);
         }
       }
     } catch (_) {

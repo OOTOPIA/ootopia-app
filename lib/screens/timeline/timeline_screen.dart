@@ -310,8 +310,12 @@ class _TimelinePageState extends State<TimelinePage>
                       ),
                     );
                   } else if (state is LoadedSucessState) {
-                    _hasMoreItems = state.posts.length == _itemsPerPageCount;
-                    _allPosts.addAll(state.posts);
+                    if (!state.onlyForRefreshCurrentList) {
+                      _hasMoreItems = state.posts.length == _itemsPerPageCount;
+                      _allPosts.addAll(state.posts);
+                    }
+                  } else if (state is OnDeletedPostState) {
+                    _allPosts.removeWhere((post) => post.id == state.postId);
                   }
                 },
                 child: _blocBuilder(),
@@ -324,6 +328,16 @@ class _TimelinePageState extends State<TimelinePage>
         currentPage: PageRoute.Page.timelineScreen.route,
       ),
     );
+  }
+
+  _removeItem(String postId) {
+    var indexPost = _allPosts.indexWhere((post) => post.id == postId);
+
+    print("Meu id $indexPost");
+
+    if (indexPost >= 0) {
+      _allPosts.remove(_allPosts[indexPost]);
+    }
   }
 
   _blocBuilder() {
@@ -386,20 +400,23 @@ class _TimelinePageState extends State<TimelinePage>
                         }
                         if (index == _allPosts.length) {
                           return Center(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: _hasMoreItems
-                                ? CircularProgressIndicator()
-                                : Container(),
-                          ));
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: _hasMoreItems
+                                  ? CircularProgressIndicator()
+                                  : Container(),
+                            ),
+                          );
                         }
                         return PhotoTimeline(
+                          key: ObjectKey(_allPosts[index]),
                           index: index,
                           post: _allPosts[index],
                           timelineBloc: this.timelineBloc,
                           loggedIn: this.loggedIn,
                           user: user,
                           flickMultiManager: flickMultiManager,
+                          isProfile: false,
                         );
                       },
                     ),
@@ -418,12 +435,23 @@ class _TimelinePageState extends State<TimelinePage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'nothing data :(',
+                'No posts',
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPhotoTimeline(index) {
+    return PhotoTimeline(
+      index: index,
+      post: _allPosts[index],
+      timelineBloc: this.timelineBloc,
+      loggedIn: this.loggedIn,
+      user: user,
+      flickMultiManager: flickMultiManager,
     );
   }
 

@@ -64,6 +64,11 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       userId = widget.args["id"];
     }
     getUserProfile(userId);
+    getPostsEvent();
+  }
+
+  getPostsEvent() {
+    this.posts = [];
     profileBloc.add(GetPostsProfileEvent(_postsPerPageCount, 0, userId));
   }
 
@@ -202,7 +207,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
       }
       return Column(
         children: [
-          GridPosts(context: context, userId: userId, posts: posts),
+          GridPosts(
+            context: context,
+            userId: userId,
+            posts: posts,
+            getPostCallback: getPostsEvent,
+          ),
           Visibility(
             visible: posts.length >= _postsPerPageCount && _hasMorePosts,
             child: loadingMorePosts
@@ -421,8 +431,9 @@ class GridPosts extends StatelessWidget {
   final context;
   final List<TimelinePost> posts;
   final String userId;
+  final Function getPostCallback;
 
-  GridPosts({this.context, this.posts, this.userId});
+  GridPosts({this.context, this.posts, this.userId, this.getPostCallback});
 
   _goToTimelinePost(posts, postSelected) async {
     await Navigator.of(context).pushNamed(
@@ -433,6 +444,8 @@ class GridPosts extends StatelessWidget {
         "postSelected": postSelected,
       },
     );
+
+    this.getPostCallback();
   }
 
   @override

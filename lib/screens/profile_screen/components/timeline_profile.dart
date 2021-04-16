@@ -15,8 +15,6 @@ import '../../../shared/secure-store-mixin.dart';
 
 class TimelineScreenProfileScreen extends StatelessWidget {
   final Map<String, dynamic> args;
-  //List<TimelinePost> posts;
-  //int postSelected;
 
   TimelineScreenProfileScreen(this.args);
 
@@ -77,14 +75,13 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
 
     Timer(
       Duration(milliseconds: 300),
-      () => itemScrollController.jumpTo(index: widget.postSelected),
+      () {
+        jumpTo();
+      },
     );
   }
 
-  void jumpTo(int index) => itemScrollController.jumpTo(
-        index: index,
-        alignment: 0,
-      );
+  jumpTo() => itemScrollController.jumpTo(index: widget.postSelected);
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
@@ -108,6 +105,17 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           _hasMoreItems = state.posts.length == _itemsPerPageCount;
           _allPosts.addAll(state.posts);
           print("PAGINATION ${state.posts.length} ${_allPosts.length}");
+        } else if (state is OnDeletedPostState) {
+          var indexPost =
+              _allPosts.indexWhere((post) => post.id == state.postId);
+
+          if (indexPost >= 0) {
+            _allPosts.remove(_allPosts[indexPost]);
+          }
+
+          // if (_allPosts.length <= 0) {
+          //   Navigator.pop(context, true);
+          // }
         }
       },
       child: _blocBuilder(),
@@ -164,10 +172,12 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                           );
                         }
                         return PhotoTimeline(
+                          key: ObjectKey(_allPosts[index]),
                           post: _allPosts[index],
                           timelineBloc: this.timelineBloc,
                           loggedIn: this.loggedIn,
                           flickMultiManager: flickMultiManager,
+                          isProfile: true,
                         );
                       },
                     ),

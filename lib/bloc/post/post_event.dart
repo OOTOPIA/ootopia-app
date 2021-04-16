@@ -15,3 +15,13 @@ class CreatePostEvent extends PostEvent {
   @override
   List<Object> get props => [this.post];
 }
+
+class DeletePostEvent extends PostEvent {
+  final String postId;
+  final bool isProfile;
+
+  DeletePostEvent(this.postId, this.isProfile);
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}

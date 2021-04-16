@@ -10,9 +10,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:video_player/video_player.dart';
 
 class FlickMultiPlayer extends StatefulWidget {
-  const FlickMultiPlayer(
-      {Key key, this.url, this.image, this.flickMultiManager})
-      : super(key: key);
+  const FlickMultiPlayer({
+    Key key,
+    this.url,
+    this.image,
+    this.flickMultiManager,
+  }) : super(key: key);
 
   final String url;
   final String image;

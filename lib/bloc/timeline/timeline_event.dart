@@ -53,13 +53,14 @@ class UpdateTimelinePostEvent extends TimelinePostEvent {
   List<Object> get props => [post];
 }
 
-class DeleteTimelinePostEvent extends TimelinePostEvent {
-  final TimelinePost post;
+class OnDeletePostFromTimelineEvent extends TimelinePostEvent {
+  final String postId;
+  final bool isProfile;
 
-  const DeleteTimelinePostEvent(this.post);
+  const OnDeletePostFromTimelineEvent(this.postId, this.isProfile);
 
   @override
-  List<Object> get props => [post];
+  List<Object> get props => [postId];
 }
 
 class NetworkErrorEvent extends Error {}

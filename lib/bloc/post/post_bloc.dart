@@ -24,6 +24,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (event is CreatePostEvent) {
       yield LoadingCreatePostState();
       yield* _mapCreatePostToState(event);
+    } else if (event is DeletePostEvent) {
+      print("Fui chamado 1");
+      yield* _mapDeletePostToState(event);
     }
   }
 
@@ -56,5 +59,20 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       completer.completeError(error);
     });
     return completer.future;
+  }
+
+  Stream<PostState> _mapDeletePostToState(DeletePostEvent event) async* {
+    print("antes do try");
+
+    try {
+      print("Cai to try");
+      var result = (await this.repository.deletePost(event.postId));
+      if (result == "ALL_DELETED") {
+        print("deletou");
+        yield SuccessDeletePostState(event.postId, event.isProfile);
+      }
+    } catch (_) {
+      yield ErrorDeletePostState("Error on delete post $_");
+    }
   }
 }

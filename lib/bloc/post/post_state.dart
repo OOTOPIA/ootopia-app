@@ -39,3 +39,18 @@ class ErrorCreatePostState extends PostState {
   @override
   List<Object> get props => [message];
 }
+
+class SuccessDeletePostState extends PostState {
+  final String postId;
+  final bool isProfile;
+  const SuccessDeletePostState(this.postId, this.isProfile);
+  @override
+  List<Object> get props => [postId];
+}
+
+class ErrorDeletePostState extends PostState {
+  final String message;
+  ErrorDeletePostState(this.message);
+  @override
+  List<Object> get props => [message];
+}
