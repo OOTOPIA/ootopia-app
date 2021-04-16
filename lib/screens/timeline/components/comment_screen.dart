@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
@@ -19,6 +21,7 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   TextEditingController _inputController = TextEditingController();
+  FocusNode _focus = new FocusNode();
   User user;
 
   CommentBloc commentBloc;
@@ -36,10 +39,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     _checkUserIsLoggedIn();
     commentBloc = BlocProvider.of<CommentBloc>(context);
     _getComments([]);
+    _focus.addListener(_onFocusChange);
   }
 
   bool _enabledToDeleteOtherComments() {
     return this.user != null && this.user.id == widget.args['post'].userId;
+  }
+
+  void _onFocusChange() {
+    if (_focus.hasFocus && !loggedIn) {
+      this.openLoginPage();
+    }
   }
 
   Future<void> _getComments(List<Comment> allComments,
@@ -90,39 +100,35 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               child: BlocBuilder<CommentBloc, CommentState>(
                 builder: (context, state) {
                   return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FocusScope(
-                        child: Focus(
-                          onFocusChange: (_) => isLogged(),
-                          child: TextField(
-                            style: TextStyle(color: Colors.black),
-                            controller: _inputController,
-                            decoration: InputDecoration(
-                              labelText: 'Escreva seu comentário',
-                              hintStyle: TextStyle(color: Colors.black),
-                              suffixIcon: newCommentLoading
-                                  ? Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 14.0),
-                                          child: SizedBox(
-                                            width: 16,
-                                            height: 16,
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  : IconButton(
-                                      icon: Icon(Icons.send),
-                                      onPressed: () => _addComment(),
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      focusNode: _focus,
+                      style: TextStyle(color: Colors.black),
+                      controller: _inputController,
+                      decoration: InputDecoration(
+                        labelText: 'Escreva seu comentário',
+                        hintStyle: TextStyle(color: Colors.black),
+                        suffixIcon: newCommentLoading
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 14.0),
+                                    child: SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(),
                                     ),
-                            ),
-                          ),
-                        ),
-                      ));
+                                  )
+                                ],
+                              )
+                            : IconButton(
+                                icon: Icon(Icons.send),
+                                onPressed: () => _addComment(),
+                              ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
@@ -289,9 +295,23 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     _removeFocusInput();
   }
 
-  isLogged() {
+  openLoginPage() {
     if (!loggedIn) {
-      Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+      FocusScope.of(context).unfocus();
+      _inputController.clear();
+      Timer(Duration(milliseconds: 100), () {
+        Navigator.of(context).pushNamed(
+          PageRoute.Page.loginScreen.route,
+          arguments: {
+            "returnToPageWithArgs": {
+              "pageRoute": PageRoute.Page.commentScreen.route,
+              "arguments": {
+                "post": widget.args['post'],
+              }
+            }
+          },
+        );
+      });
       return;
     }
   }

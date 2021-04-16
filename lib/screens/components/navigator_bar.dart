@@ -77,8 +77,15 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
 
             case 1:
               if (!loggedIn) {
-                await Navigator.of(context)
-                    .pushNamed(PageRoute.Page.loginScreen.route);
+                await Navigator.of(context).pushNamed(
+                  PageRoute.Page.loginScreen.route,
+                  arguments: {
+                    "returnToPageWithArgs": {
+                      "pageRoute": PageRoute.Page.cameraScreen.route,
+                      "arguments": null
+                    }
+                  },
+                );
                 return;
               }
 
@@ -92,16 +99,30 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
 
             case 2:
               if (!loggedIn) {
-                await Navigator.of(context)
-                    .pushNamed(PageRoute.Page.loginScreen.route);
+                await Navigator.of(context).pushNamed(
+                  PageRoute.Page.loginScreen.route,
+                  arguments: {
+                    "returnToPageWithArgs": {
+                      "pageRoute": PageRoute.Page.myProfileScreen.route,
+                      "arguments": null
+                    }
+                  },
+                );
                 return;
               } else if (loggedIn) {
                 if (user.registerPhase == 2) {
                   Navigator.of(context).pushNamedIfNotCurrent(
                       PageRoute.Page.myProfileScreen.route);
                 } else {
-                  Navigator.of(context)
-                      .pushNamed(PageRoute.Page.registerPhase2Screen.route);
+                  Navigator.of(context).pushNamed(
+                    PageRoute.Page.registerPhase2Screen.route,
+                    arguments: {
+                      "returnToPageWithArgs": {
+                        "pageRoute": PageRoute.Page.myProfileScreen.route,
+                        "arguments": null
+                      }
+                    },
+                  );
                 }
               }
               break;
