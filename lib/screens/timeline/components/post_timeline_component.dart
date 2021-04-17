@@ -20,7 +20,7 @@ class PhotoTimeline extends StatefulWidget {
   final int index;
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
-  User user;
+  final User user;
   bool loggedIn = false;
   final FlickMultiManager flickMultiManager;
   bool isProfile;
@@ -38,10 +38,10 @@ class PhotoTimeline extends StatefulWidget {
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
-        post: this.post,
-        timelineBloc: this.timelineBloc,
-        loggedIn: this.loggedIn,
-      );
+      post: this.post,
+      timelineBloc: this.timelineBloc,
+      loggedIn: this.loggedIn,
+      user: this.user);
 }
 
 class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
@@ -52,11 +52,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   User user;
   bool isUserOwnsPost = false;
 
-  _PhotoTimelineState({
-    this.post,
-    this.timelineBloc,
-    this.loggedIn,
-  });
+  _PhotoTimelineState({this.post, this.timelineBloc, this.loggedIn, this.user});
 
   bool dragging = false;
 
@@ -68,6 +64,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   @override
   void initState() {
     super.initState();
+    _checkUserIsLoggedIn();
     _controller = YoutubePlayerController(
       initialVideoId: 'MxcJtLbIhvs',
       flags: YoutubePlayerFlags(
@@ -78,6 +75,16 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     postBloc = BlocProvider.of<PostBloc>(context);
     //_videoMetaData = const YoutubeMetaData();
     //_playerState = PlayerState.unknown;
+  }
+
+  void _checkUserIsLoggedIn() async {
+    loggedIn = await getUserIsLoggedIn();
+    if (loggedIn) {
+      user = await getCurrentUser();
+      if (this.mounted) {
+        setState(() {});
+      }
+    }
   }
 
   void listener() {
@@ -99,9 +106,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   void _goToProfile() async {
     Navigator.of(context).pushNamed(
-      PageRoute.Page.profileScreen.route,
+      user != null && post.userId == user.id
+          ? PageRoute.Page.myProfileScreen.route
+          : PageRoute.Page.profileScreen.route,
       arguments: {
-        "id": post.userId,
+        "id": user == null ? post.userId : null,
       },
     );
   }

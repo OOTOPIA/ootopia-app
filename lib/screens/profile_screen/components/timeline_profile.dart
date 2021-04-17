@@ -172,13 +172,13 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                           );
                         }
                         return PhotoTimeline(
-                          key: ObjectKey(_allPosts[index]),
-                          post: _allPosts[index],
-                          timelineBloc: this.timelineBloc,
-                          loggedIn: this.loggedIn,
-                          flickMultiManager: flickMultiManager,
-                          isProfile: true,
-                        );
+                            key: ObjectKey(_allPosts[index]),
+                            post: _allPosts[index],
+                            timelineBloc: this.timelineBloc,
+                            loggedIn: this.loggedIn,
+                            flickMultiManager: flickMultiManager,
+                            isProfile: true,
+                            user: this.user);
                       },
                     ),
                   ),
