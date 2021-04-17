@@ -444,17 +444,6 @@ class _TimelinePageState extends State<TimelinePage>
     );
   }
 
-  Widget _buildPhotoTimeline(index) {
-    return PhotoTimeline(
-      index: index,
-      post: _allPosts[index],
-      timelineBloc: this.timelineBloc,
-      loggedIn: this.loggedIn,
-      user: user,
-      flickMultiManager: flickMultiManager,
-    );
-  }
-
   Future<void> _getData() async {
     timelineBloc.add(GetTimelinePostsEvent(
         _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
