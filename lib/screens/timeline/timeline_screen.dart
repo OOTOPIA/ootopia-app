@@ -109,18 +109,33 @@ class _TimelinePageState extends State<TimelinePage>
     });
   }
 
-  void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) {
+  void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) async {
+    await _checkUserIsLoggedIn();
     if (value != null && value.length > 0) {
       _sharedFiles = value;
       var videoFile = _sharedFiles[0];
 
       if (videoFile.path.isNotEmpty) {
-        Navigator.of(context).pushNamed(
-          PageRoute.Page.postPreviewScreen.route,
-          arguments: {
-            "filePath": videoFile.path,
-          },
-        );
+        if (user == null) {
+          await Navigator.of(context).pushNamed(
+            PageRoute.Page.loginScreen.route,
+            arguments: {
+              "returnToPageWithArgs": {
+                "pageRoute": PageRoute.Page.postPreviewScreen.route,
+                "arguments": {
+                  "filePath": videoFile.path,
+                }
+              }
+            },
+          );
+        } else {
+          Navigator.of(context).pushNamed(
+            PageRoute.Page.postPreviewScreen.route,
+            arguments: {
+              "filePath": videoFile.path,
+            },
+          );
+        }
       }
     }
   }
