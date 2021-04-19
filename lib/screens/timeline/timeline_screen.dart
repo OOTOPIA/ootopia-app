@@ -40,20 +40,7 @@ class _TimelinePageState extends State<TimelinePage>
   bool _hasMoreItems = true;
   bool showUploadedVideoMessage = false;
 
-  List<TimelinePost> _allPosts = [
-    TimelinePost(
-      id: "69360449-1434-4683-a6a4-f9321baca5ed",
-      userId: "00851c9d-fb60-40b5-8ab2-91bb59bd8163",
-      username: "Claudio Oliveira",
-      photoUrl:
-          "https://ootopia-staging.s3.amazonaws.com/users/00851c9d-fb60-40b5-8ab2-91bb59bd8163/photo-1617115171207.jpg",
-      liked: false,
-      likesCount: 0,
-      commentsCount: 0,
-      tags: [],
-      description: "Little example of Youtube player usage",
-    )
-  ];
+  List<TimelinePost> _allPosts = [];
 
   FlickMultiManager flickMultiManager;
 
@@ -363,21 +350,7 @@ class _TimelinePageState extends State<TimelinePage>
                   child: RefreshIndicator(
                     onRefresh: () async {
                       setState(() {
-                        _allPosts = [
-                          TimelinePost(
-                            id: "69360449-1434-4683-a6a4-f9321baca5ed",
-                            userId: "00851c9d-fb60-40b5-8ab2-91bb59bd8163",
-                            username: "Claudio Oliveira",
-                            photoUrl:
-                                "https://ootopia-staging.s3.amazonaws.com/users/00851c9d-fb60-40b5-8ab2-91bb59bd8163/photo-1617115171207.jpg",
-                            liked: false,
-                            likesCount: 0,
-                            commentsCount: 0,
-                            tags: [],
-                            description:
-                                "Little example of Youtube player usage",
-                          ),
-                        ];
+                        _allPosts = [];
                         currentPage = 1;
                       });
                       _getData();
@@ -388,7 +361,6 @@ class _TimelinePageState extends State<TimelinePage>
                       shrinkWrap: true,
                       cacheExtent: 1000,
                       itemCount: _allPosts.length +
-                          1 +
                           (_hasMoreItems
                               ? 1
                               : 0), //Adicionei +1 manualmente devido à POC do youtube
