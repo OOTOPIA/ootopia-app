@@ -65,14 +65,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
-    _controller = YoutubePlayerController(
-      initialVideoId: 'MxcJtLbIhvs',
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-        mute: true,
-      ),
-    )..addListener(listener);
     postBloc = BlocProvider.of<PostBloc>(context);
+    // _controller = YoutubePlayerController(
+    //   initialVideoId: 'MxcJtLbIhvs',
+    //   flags: YoutubePlayerFlags(
+    //     autoPlay: true,
+    //     mute: true,
+    //   ),
+    // )..addListener(listener);
     //_videoMetaData = const YoutubeMetaData();
     //_playerState = PlayerState.unknown;
   }
@@ -100,7 +100,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     super.dispose();
   }
 
@@ -304,21 +304,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20)),
             ),
-            child: widget.index == 0
-                ? YoutubePlayer(
-                    controller: _controller,
-                    showVideoProgressIndicator: true,
-                    onReady: () {
-                      print("ready!!");
-                      _isPlayerReady = true;
-                      //_controller.addListener(listener);
-                    },
-                  )
-                : FlickMultiPlayer(
-                    url: this.post.videoUrl,
-                    flickMultiManager: widget.flickMultiManager,
-                    image: this.post.thumbnailUrl,
-                  ),
+            child: FlickMultiPlayer(
+              url: this.post.videoUrl,
+              flickMultiManager: widget.flickMultiManager,
+              image: this.post.thumbnailUrl,
+            ),
           ),
           Row(
             children: [
@@ -520,3 +510,14 @@ class HashtagName extends StatelessWidget {
     );
   }
 }
+
+// Usar caso seja necessário no futuro, atualmente o player do youtube será desabilitado
+// YoutubePlayer(
+//   controller: _controller,
+//   showVideoProgressIndicator: true,
+//   onReady: () {
+//     print("ready!!");
+//     _isPlayerReady = true;
+//     //_controller.addListener(listener);
+//   },
+// )
