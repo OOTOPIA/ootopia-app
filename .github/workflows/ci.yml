@@ -5,8 +5,8 @@ on:
       - master
 
 jobs:
-  flutter_test:
-    name: Run flutter test and analyze
+  build_android:
+    name: Build Flutter (Android)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,5 +17,5 @@ jobs:
         with:
           channel: "stable"
       - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
+      - run: flutter clean
+      - run: flutter build apk
