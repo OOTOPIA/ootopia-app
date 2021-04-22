@@ -23,7 +23,8 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
+class _ProfileScreenState extends State<ProfileScreen>
+    with SecureStoreMixin, SingleTickerProviderStateMixin {
   UserBloc profileBloc;
   UserRepositoryImpl profileRepositoryImpl = UserRepositoryImpl();
 
@@ -39,6 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   int currentPage = 1;
   String userId = "";
   String appVersion;
+  TabController _tabController;
+  int _activeTabIndex = 0;
 
   @override
   void initState() {
@@ -46,6 +49,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
     _checkUserIsLoggedIn();
     profileBloc = BlocProvider.of<UserBloc>(context);
     getAppInfo();
+    _tabController = new TabController(length: 2, vsync: this);
+    _tabController.addListener(_setActiveTabIndex);
+  }
+
+  void _setActiveTabIndex() {
+    setState(() {
+      _activeTabIndex = _tabController.index;
+    });
   }
 
   Future<void> getAppInfo() async {
@@ -93,106 +104,214 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: userProfile != null
-              ? Text(
-                  userProfile.fullname,
-                  style: TextStyle(color: Colors.black),
-                )
-              : Text(''),
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xffC0D9E8),
-                  Color(0xffffffff),
-                ],
-              ),
-            ),
-          ),
+      appBar: AppBar(
+        title: userProfile != null
+            ? Text(
+                userProfile.fullname,
+                style: TextStyle(color: Colors.black),
+              )
+            : Text(''),
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            // this will set the outer container size to the height of your screen
-            height: MediaQuery.of(context).size.height +
-                (30 * (posts.length > 4 ? posts.length / 4 : 1)),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Avatar(
-                      photoUrl:
-                          userProfile == null ? null : userProfile.photoUrl,
-                    ),
-                    DataProfile(),
-                  ],
-                ),
-                (userProfile != null && userProfile.bio != null)
-                    ? Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        child: RichText(
-                          textAlign: TextAlign.left,
-                          text: (userProfile != null && userProfile.bio != null
-                              ? TextSpan(
-                                  text: ('Bio: '),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                      fontSize: 16),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: userProfile.bio,
-                                      style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : TextSpan(text: "")),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                CaptionOfItems(
-                  backgroundCaption: Color(0xffE6ECDA),
-                  backgroundIcon: Color(0xff598006),
-                  colorIcon: Colors.black,
-                  pathIcon: 'assets/icons/add.png',
-                ),
-                BlocListener<UserBloc, UserState>(
-                  listener: (context, state) {
-                    if (state is LoadedPostsProfileSucessState) {
-                      loadingPosts = false;
-                      _hasMorePosts = state.posts.length == _postsPerPageCount;
-                      posts.addAll(
-                          state.posts.where((post) => post.userId == userId));
-                    } else if (state is LoadPostsProfileErrorState) {
-                      loadPostsError = true;
-                    }
-                  },
-                  child: _postsBlocBuilder(),
-                ),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xffC0D9E8),
+                Color(0xffffffff),
               ],
             ),
           ),
         ),
-        bottomNavigationBar: NavigatorBar(
-            currentPage: widget.args == null || widget.args["id"] == null
-                ? PageRoute.Page.myProfileScreen.route
-                : PageRoute.Page.profileScreen.route),
-        endDrawer: widget.args == null || widget.args["id"] == null
-            ? MenuProfile(
-                profileName: this.user?.fullname,
-                appVersion: this.appVersion,
-              )
-            : null);
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          // this will set the outer container size to the height of your screen
+          height: MediaQuery.of(context).size.height +
+              (30 * (posts.length > 4 ? posts.length / 4 : 1)),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Avatar(
+                    photoUrl: userProfile == null ? null : userProfile.photoUrl,
+                  ),
+                  DataProfile(),
+                ],
+              ),
+              (userProfile != null && userProfile.bio != null)
+                  ? Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: RichText(
+                        textAlign: TextAlign.left,
+                        text: (userProfile != null && userProfile.bio != null
+                            ? TextSpan(
+                                text: ('Bio: '),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    fontSize: 16),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: userProfile.bio,
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : TextSpan(text: "")),
+                      ),
+                    )
+                  : SizedBox.shrink(),
+              Padding(
+                padding: EdgeInsets.only(top: 6),
+                child: Container(
+                  child: TabBar(
+                    controller: _tabController,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorColor: Colors.transparent,
+                    tabs: [
+                      TabItem(
+                        backgroundColor: Color(0xff598006),
+                        iconAssetPath: 'assets/icons/add.png',
+                        borderBottomColor: Color(0xffbbd784),
+                        text: "Posts",
+                        isActiveTab: _activeTabIndex == 0,
+                      ),
+                      TabItem(
+                        backgroundColor: Color(0xfffc0499),
+                        iconAssetPath: 'assets/icons/ootopia.png',
+                        borderBottomColor: Color(0xfff074be),
+                        text: "OOZ Wallet",
+                        isActiveTab: _activeTabIndex == 1,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                child: Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      BlocListener<UserBloc, UserState>(
+                        listener: (context, state) {
+                          if (state is LoadedPostsProfileSucessState) {
+                            loadingPosts = false;
+                            _hasMorePosts =
+                                state.posts.length == _postsPerPageCount;
+                            posts.addAll(state.posts
+                                .where((post) => post.userId == userId));
+                          } else if (state is LoadPostsProfileErrorState) {
+                            loadPostsError = true;
+                          }
+                          setState(() {});
+                        },
+                        child: _postsBlocBuilder(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(
+                          GlobalConstants.of(context).spacingNormal,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                CircleActionButton(
+                                  iconAssetPath: 'assets/icons/plus.png',
+                                  text: 'Add money',
+                                  onClick: () {
+                                    print("add money!");
+                                  },
+                                ),
+                                CircleActionButton(
+                                  iconAssetPath: 'assets/icons/arrow_right.png',
+                                  text: 'Send money',
+                                  onClick: () {
+                                    print("send money!");
+                                  },
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(bottom: 6),
+                                          child: Text(
+                                            "Balance in OOz",
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                            top: 4,
+                                            right: 8,
+                                            bottom: 4,
+                                            left: 8,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Color(0xfffc23a6),
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(30),
+                                            ),
+                                          ),
+                                          child: RichText(
+                                            text: TextSpan(
+                                              text: "OOz ",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: "215,03",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: NavigatorBar(
+          currentPage: widget.args == null || widget.args["id"] == null
+              ? PageRoute.Page.myProfileScreen.route
+              : PageRoute.Page.profileScreen.route),
+      endDrawer: widget.args == null || widget.args["id"] == null
+          ? MenuProfile(
+              profileName: this.user?.fullname,
+              appVersion: this.appVersion,
+            )
+          : null,
+    );
   }
 
   _postsBlocBuilder() {
@@ -262,58 +381,105 @@ class _ProfileScreenState extends State<ProfileScreen> with SecureStoreMixin {
   }
 }
 
-class CaptionOfItems extends StatelessWidget {
-  final Color backgroundCaption;
-  final Color backgroundIcon;
-  final Color colorIcon;
-  final String pathIcon;
+class TabItem extends StatelessWidget {
+  final String iconAssetPath;
+  final String text;
+  final Color backgroundColor;
+  final Color borderBottomColor;
+  final bool isActiveTab;
 
-  const CaptionOfItems({
-    this.backgroundCaption,
-    this.backgroundIcon,
-    this.colorIcon,
-    this.pathIcon,
+  TabItem({
+    this.iconAssetPath,
+    this.text,
+    this.backgroundColor,
+    this.borderBottomColor,
+    this.isActiveTab,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-            height: 36,
-            margin: EdgeInsets.only(bottom: 8, top: 8),
-            width: MediaQuery.of(context).size.width - 16,
-            decoration: BoxDecoration(
-              color: this.backgroundCaption,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(150),
-                topLeft: Radius.circular(150),
+    return Opacity(
+      opacity: (this.isActiveTab ? 1 : 0.5),
+      child: Column(
+        children: [
+          SizedBox(
+            width: 33,
+            height: 33,
+            child: Container(
+              decoration: BoxDecoration(
+                color: this.backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(150)),
               ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: this.backgroundIcon,
-                    borderRadius: BorderRadius.all(Radius.circular(150)),
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ImageIcon(
-                      AssetImage(this.pathIcon),
-                      color: this.colorIcon,
-                      size: 36,
-                    ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: ImageIcon(
+                    AssetImage(this.iconAssetPath),
+                    color: Colors.black,
+                    size: 36,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text('Posts'),
-                )
-              ],
-            )),
-      ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: Text(
+              this.text,
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          Container(
+            height: 3,
+            decoration: BoxDecoration(
+              color: this.borderBottomColor,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CircleActionButton extends StatelessWidget {
+  final String iconAssetPath;
+  final String text;
+  final Function onClick;
+
+  CircleActionButton({this.iconAssetPath, this.text, this.onClick});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        right: GlobalConstants.of(context).spacingNormal,
+      ),
+      child: Column(
+        children: [
+          Ink(
+            decoration: const ShapeDecoration(
+              color: Color(0xfffd81cc),
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              icon: ImageIcon(
+                AssetImage(this.iconAssetPath),
+              ),
+              color: Colors.white,
+              iconSize: 30,
+              onPressed: this.onClick,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: Text(
+              this.text,
+              style: TextStyle(color: Colors.black, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
