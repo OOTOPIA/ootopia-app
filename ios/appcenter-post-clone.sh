@@ -15,4 +15,6 @@ flutter doctor
 
 echo "Installed flutter to `pwd`/flutter"
 
+echo "API_URL=${API_URL}" > .env
+
 flutter build ios --release --no-codesign
