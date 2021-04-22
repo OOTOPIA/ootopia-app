@@ -110,7 +110,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           ? PageRoute.Page.myProfileScreen.route
           : PageRoute.Page.profileScreen.route,
       arguments: {
-        "id": user == null ? post.userId : null,
+        "id": user != null && post.userId == user.id ? null : post.userId,
       },
     );
   }
