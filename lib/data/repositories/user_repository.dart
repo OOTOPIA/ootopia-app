@@ -45,8 +45,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       } else {
         throw Exception('Failed to load profile');
       }
-    } catch (error) {
-      throw Exception('Failed to load profile' + error);
+    } catch (error, s) {
+      throw Exception('Failed to load profile $s');
     }
   }
 

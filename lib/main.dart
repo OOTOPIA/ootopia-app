@@ -8,10 +8,12 @@ import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
@@ -81,6 +83,11 @@ class ExpensesApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) => PostBloc(
             PostRepositoryImpl(),
+          ),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => WalletBloc(
+            WalletRepositoryImpl(),
           ),
         ),
       ],
