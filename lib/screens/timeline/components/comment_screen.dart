@@ -420,16 +420,6 @@ class CommentItem extends StatelessWidget {
         (this.currentUser != null && this.currentUser.id == comment.userId);
   }
 
-  /*void _goToProfile() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            user.registerPhase == 1 ? RegisterPhase2Page() : ProfileScreen(),
-      ),
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Opacity(
