@@ -22,7 +22,8 @@ class CameraApp extends StatefulWidget {
   _CameraAppState createState() => _CameraAppState();
 }
 
-class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
+class _CameraAppState extends State<CameraApp>
+    with SecureStoreMixin, SingleTickerProviderStateMixin {
   CameraController controller;
   List<CameraDescription> cameras;
   int indexCamera = 1;
@@ -37,10 +38,23 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  double _scale;
+  AnimationController _animController;
+
   @override
   void initState() {
     super.initState();
     requestPermissions();
+    _animController = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 300,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.2,
+    )..addListener(() {
+        setState(() {});
+      });
   }
 
   getLastVideoThumbnail() async {
@@ -110,6 +124,7 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
   void dispose() {
     super.dispose();
     controller?.dispose();
+    _animController.dispose();
   }
 
   void setCamera() async {
@@ -240,8 +255,50 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
     );
   }
 
+  Widget _animatedButton(context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 64,
+        width: 64,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.0),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x80000000),
+              blurRadius: 12.0,
+              offset: Offset(0.0, 5.0),
+            ),
+          ],
+          color: controller.value.isRecordingVideo ? Colors.red : Colors.white,
+        ),
+        child: Center(
+          child: SizedBox(width: 64, height: 64),
+        ),
+      ),
+    );
+  }
+
+  void _tapDown(details) {
+    if (!controller.value.isRecordingVideo) {
+      startVideoRecording();
+      _animController.forward();
+      print("START RECORD");
+    }
+  }
+
+  void _tapUp(context) {
+    if (controller.value.isRecordingVideo) {
+      print("ON STOP HERE");
+      onStopButtonPressed(context);
+      _animController.reverse();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Value =====================> ${_animController.value}");
+    _scale = 1 + _animController.value;
     if (controller == null || !controller.value.isInitialized) {
       return Container(
         child: Center(
@@ -277,115 +334,110 @@ class _CameraAppState extends State<CameraApp> with SecureStoreMixin {
       var scale = size.aspectRatio * controller.value.aspectRatio;
       if (scale < 1) scale = 1 / scale;
 
-      return Stack(
-        alignment: AlignmentDirectional.bottomCenter,
-        children: <Widget>[
-          Transform.scale(
-            scale: scale,
-            child: Center(
-              child: CameraPreview(controller),
-            ),
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: Text(''),
+          iconTheme: IconThemeData(
+            color: Colors.white, //change your color here
           ),
-          Padding(
-            padding: EdgeInsets.all(GlobalConstants.of(context).spacingNormal),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 36,
-                  height: 36,
-                ),
-                controller != null
-                    ? renderButtonsFlashCamera()
-                    : SizedBox(
-                        width: 36,
-                        height: 36,
-                      ),
-                GestureDetector(
-                  onLongPressStart: (details) {
-                    if (!controller.value.isRecordingVideo) {
-                      startVideoRecording();
-                      print("START RECORD");
-                    }
-                  },
-                  onLongPressEnd: (details) {
-                    if (controller.value.isRecordingVideo) {
-                      print("ON STOP HERE");
-                      onStopButtonPressed(context);
-                    }
-                  },
-                  child: Container(
-                    width: 68,
-                    height: 68,
-                    child: new LayoutBuilder(
-                      builder: (context, constraint) {
-                        return new Icon(Icons.fiber_manual_record,
-                            size: constraint.biggest.height,
-                            color: controller.value.isRecordingVideo
-                                ? Colors.red
-                                : Colors.white);
-                      },
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        body: Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: <Widget>[
+            Transform.scale(
+              scale: scale,
+              child: Center(
+                child: CameraPreview(controller),
+              ),
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.all(GlobalConstants.of(context).spacingNormal),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 36,
+                    height: 36,
+                  ),
+                  controller != null
+                      ? renderButtonsFlashCamera()
+                      : SizedBox(
+                          width: 36,
+                          height: 36,
+                        ),
+                  GestureDetector(
+                    onLongPressStart: _tapDown,
+                    onLongPressEnd: (details) {
+                      _tapUp(context);
+                    },
+                    child: Transform.scale(
+                      scale: _scale,
+                      child: _animatedButton(context),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(indexCamera == 0
-                      ? Icons.camera_front
-                      : Icons.camera_rear),
-                  iconSize: 30,
-                  color: Colors.white,
-                  onPressed: () => setCamera(),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    if (!controller.value.isRecordingVideo) {
-                      getVideoFromGallery(context);
-                    }
-                  },
-                  child: lastVideoThumbnail == null
-                      ? IconButton(
-                          icon: Icon(Icons.insert_photo),
-                          iconSize: 30,
-                          color: Colors.white,
-                          onPressed: () {},
-                        )
-                      : Padding(
-                          padding: EdgeInsets.only(
-                              left: GlobalConstants.of(context).spacingSmall),
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: FutureBuilder<Uint8List>(
-                              future: lastVideoThumbnail.thumbData,
-                              builder: (_, snapshot) {
-                                final bytes = snapshot.data;
-                                // If we have no data, display a spinner
-                                if (bytes == null)
-                                  return CircularProgressIndicator();
-                                // If there's data, display it as an image
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(6),
+                  IconButton(
+                    icon: Icon(indexCamera == 0
+                        ? Icons.camera_front
+                        : Icons.camera_rear),
+                    iconSize: 30,
+                    color: Colors.white,
+                    onPressed: () => setCamera(),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (!controller.value.isRecordingVideo) {
+                        getVideoFromGallery(context);
+                      }
+                    },
+                    child: lastVideoThumbnail == null
+                        ? IconButton(
+                            icon: Icon(Icons.insert_photo),
+                            iconSize: 30,
+                            color: Colors.white,
+                            onPressed: () {},
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(
+                                left: GlobalConstants.of(context).spacingSmall),
+                            child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: FutureBuilder<Uint8List>(
+                                future: lastVideoThumbnail.thumbData,
+                                builder: (_, snapshot) {
+                                  final bytes = snapshot.data;
+                                  // If we have no data, display a spinner
+                                  if (bytes == null)
+                                    return CircularProgressIndicator();
+                                  // If there's data, display it as an image
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(6),
+                                      ),
                                     ),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(6)),
-                                    child:
-                                        Image.memory(bytes, fit: BoxFit.cover),
-                                  ),
-                                );
-                              },
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(6)),
+                                      child: Image.memory(bytes,
+                                          fit: BoxFit.cover),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       );
     }
   }
