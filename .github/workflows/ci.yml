@@ -9,6 +9,11 @@ jobs:
     name: Build Flutter (Android)
     runs-on: ubuntu-latest
     steps:
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          API_URL: "https://api-ootopia.devmagic.com.br/"
+          file_name: .env
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
