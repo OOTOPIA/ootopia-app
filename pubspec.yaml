@@ -33,7 +33,7 @@ dependencies:
   flutter_svg: ^0.19.3
   camera: ^0.7.0+2
   gallery_saver: ^2.0.3
-  flutter_uploader: ^1.2.1
+  flutter_uploader: ^2.0.0-beta.3
   http: ^0.12.2
   rxdart: ^0.25.0
   intl: ^0.15.8

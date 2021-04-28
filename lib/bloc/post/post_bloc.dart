@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
@@ -42,6 +43,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   FutureOr<dynamic> createPost(PostCreate post, subscription) async {
+    WidgetsFlutterBinding.ensureInitialized();
     FlutterUploader uploader = FlutterUploader();
     var completer = new Completer();
 

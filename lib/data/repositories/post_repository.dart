@@ -93,21 +93,21 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       PostCreate post, FlutterUploader uploader) async {
     try {
       await uploader.enqueue(
-        url: DotEnv.env['API_URL'] + "posts",
-        files: [
-          FileItem(
-            filename: basename(post.filePath),
-            savedDir: dirname(post.filePath),
-            fieldname: "file",
-          )
-        ],
-        method: UploadMethod.POST,
-        headers: await getHeaders(),
-        data: {
-          "metadata": jsonEncode(post),
-        },
-        showNotification: false,
-        tag: "upload 1",
+        MultipartFormDataUpload(
+          url: DotEnv.env['API_URL'] + "posts",
+          files: [
+            FileItem(
+              path: dirname(post.filePath),
+              field: "file",
+            )
+          ],
+          method: UploadMethod.POST,
+          headers: await getHeaders(),
+          data: {
+            "metadata": jsonEncode(post),
+          },
+          tag: "upload 1",
+        ),
       );
       return post;
     } catch (e) {

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
@@ -80,23 +81,35 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  FutureOr<dynamic> updateUser(User user, tagsIds, subscription) async {
+  void backgroundHandler() {
+    WidgetsFlutterBinding.ensureInitialized();
     FlutterUploader uploader = FlutterUploader();
+  }
+
+  FutureOr<dynamic> updateUser(User user, tagsIds, subscription) async {
+    FlutterUploader().setBackgroundHandler(backgroundHandler);
     var completer = new Completer();
 
     if (user.photoFilePath == null || user.photoFilePath.isEmpty) {
       return await this.userRepository.updateUser(user, tagsIds);
     } else {
-      await this.userRepository.updateUser(user, tagsIds, uploader);
-      subscription = uploader.result.listen((result) {
-        if (result.status == UploadTaskStatus.complete) {
-          completer.complete(User.fromJson(json.decode(result.response)));
-        } else if (result.status == UploadTaskStatus.failed) {
-          completer.completeError(Exception("Error on upload"));
+      await this.userRepository.updateUser(user, tagsIds);
+      subscription = FlutterUploader().result.listen((result) {
+        print("current result ${result.response} ${completer.isCompleted}");
+        if (result.status == UploadTaskStatus.complete &&
+            !completer.isCompleted) {
+          user = User.fromJson(json.decode(result.response));
+          completer.complete(user);
         }
+        /* else if (result.status == UploadTaskStatus.failed &&
+            !completer.isCompleted) {
+          completer.completeError(Exception("Error on upload"));
+        }*/
       }, onDone: () {
-        completer.complete(user);
-      }, onError: (error) {
+        print("JA FOI!");
+        //completer.complete(user);
+      }, onError: (error, s) {
+        print("Deu erro mesmo $s");
         completer.completeError(error);
       });
       return completer.future;

@@ -234,7 +234,7 @@ packages:
       name: flutter_uploader
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "2.0.0-beta.6"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
