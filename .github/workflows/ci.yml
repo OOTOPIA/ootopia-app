@@ -27,7 +27,7 @@ jobs:
       - run: flutter clean
       - run: flutter build apk
       - name: App Center Distribute
-        uses: devussy/AppCenter-Distribute-Github-Action@v1.0.5
+        uses: devussy/AppCenter-Distribute-Github-Action@v1.0.2
         with:
           app: andrew-devmagic/Ootopia
           token: ${{ secrets.APP_CENTER_TOKEN }}
