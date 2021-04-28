@@ -19,7 +19,7 @@ jobs:
           envkey_API_URL: https://api-ootopia.devmagic.com.br/
       - name: Update build version
         shell: bash
-        run: 'sed -i "s/version: 0.0.0+0/version: 0.0.$GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER/1" config.xml'
+        run: 'sed -i "s/version: 0.0.0+0/version: 0.0.$GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER/1" pubspec.yaml'
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable"
