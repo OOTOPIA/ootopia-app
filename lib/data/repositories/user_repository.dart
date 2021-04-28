@@ -11,7 +11,6 @@ import 'package:path/path.dart';
 abstract class UserRepository {
   Future<Profile> getProfile(String id);
   Future<User> updateUser(User user, List<String> tagsIds);
-  Future<Map<String, String>> getHeaders();
 }
 
 const Map<String, String> API_HEADERS = {
@@ -19,17 +18,20 @@ const Map<String, String> API_HEADERS = {
 };
 
 class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
-  Future<Map<String, String>> getHeaders() async {
+  Future<Map<String, String>> getHeaders([String contentType]) async {
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
     String token = await getAuthToken();
 
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + token
-    };
+    Map<String, String> headers = {'Authorization': 'Bearer ' + token};
+
+    if (contentType == null) {
+      headers['Content-Type'] = 'application/json; charset=UTF-8';
+    }
+
+    return headers;
   }
 
   Future<Profile> getProfile(id) async {
@@ -66,7 +68,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       };
 
       if (user.photoFilePath != null) {
-        print("FILE PATH ${(user.photoFilePath)}");
         await FlutterUploader().enqueue(
           MultipartFormDataUpload(
             url: DotEnv.env['API_URL'] + "users/${user.id}",
@@ -77,7 +78,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
               )
             ], // required: list of files that you want to upload
             method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
-            headers: await this.getHeaders(),
+            headers: await this.getHeaders("multipart/form-data"),
             data: data, // any data you want to send in upload request
             tag: "Uploading user photo",
           ),

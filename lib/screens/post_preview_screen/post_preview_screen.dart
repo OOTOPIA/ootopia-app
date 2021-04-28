@@ -176,9 +176,9 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       });
     }
 
-    if (_selectedTags.length < 3) {
+    if (_selectedTags.length < 1) {
       setState(() {
-        tagsErrorMessage = "Please select at least 3 tags";
+        tagsErrorMessage = "Please select at least 1 tag";
       });
       return;
     }
@@ -533,7 +533,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       color: Colors.black54,
                     ),
                     title: Text(
-                      "Select at least 3 tags",
+                      "Select at least 1 tag",
                       style: TextStyle(
                         fontSize: 16,
                         fontStyle: FontStyle.normal,
@@ -553,7 +553,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         values.forEach((v) {
                           _selectedTags.add(v);
                         });
-                        if (_selectedTags.length >= 3) {
+                        if (_selectedTags.length >= 1) {
                           tagsErrorMessage = "";
                         }
                       });
