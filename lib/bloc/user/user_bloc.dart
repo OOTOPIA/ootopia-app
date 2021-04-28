@@ -95,7 +95,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } else {
       await this.userRepository.updateUser(user, tagsIds);
       subscription = FlutterUploader().result.listen((result) {
-        print("current result ${result.response} ${completer.isCompleted}");
         if (result.status == UploadTaskStatus.complete &&
             !completer.isCompleted) {
           user = User.fromJson(json.decode(result.response));

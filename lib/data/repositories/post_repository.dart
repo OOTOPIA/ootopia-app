@@ -13,7 +13,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class PostRepository {
   Future<List<TimelinePost>> getPosts([int limit, int offset, String userId]);
   Future<LikePostResult> likePost(String id);
-  Future<void> createPost(PostCreate post, FlutterUploader uploader);
+  Future<void> createPost(PostCreate post);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -21,17 +21,20 @@ const Map<String, String> API_HEADERS = {
 };
 
 class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
-  Future<Map<String, String>> getHeaders() async {
+  Future<Map<String, String>> getHeaders([String contentType]) async {
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
     String token = await getAuthToken();
 
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + token
-    };
+    Map<String, String> headers = {'Authorization': 'Bearer ' + token};
+
+    if (contentType == null) {
+      headers['Content-Type'] = 'application/json; charset=UTF-8';
+    }
+
+    return headers;
   }
 
   Future<List<TimelinePost>> getPosts(
@@ -89,20 +92,20 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   }
 
   @override
-  Future<PostCreate> createPost(
-      PostCreate post, FlutterUploader uploader) async {
+  Future<PostCreate> createPost(PostCreate post) async {
     try {
-      await uploader.enqueue(
+      print("Caiu aqui dentro");
+      await FlutterUploader().enqueue(
         MultipartFormDataUpload(
           url: DotEnv.env['API_URL'] + "posts",
           files: [
             FileItem(
-              path: dirname(post.filePath),
+              path: post.filePath,
               field: "file",
             )
           ],
           method: UploadMethod.POST,
-          headers: await getHeaders(),
+          headers: await getHeaders("multipart/form-data"),
           data: {
             "metadata": jsonEncode(post),
           },

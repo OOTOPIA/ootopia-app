@@ -42,18 +42,21 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  FutureOr<dynamic> createPost(PostCreate post, subscription) async {
+  void backgroundHandler() {
     WidgetsFlutterBinding.ensureInitialized();
     FlutterUploader uploader = FlutterUploader();
+  }
+
+  FutureOr<dynamic> createPost(PostCreate post, subscription) async {
+    FlutterUploader().setBackgroundHandler(backgroundHandler);
     var completer = new Completer();
 
-    await this.repository.createPost(post, uploader);
-    subscription = uploader.result.listen((result) {
+    await this.repository.createPost(post);
+    subscription = FlutterUploader().result.listen((result) {
+      print("LISTENNNN ${result.response}");
       if (result.status == UploadTaskStatus.complete &&
           !completer.isCompleted) {
         completer.complete(result.response);
-      } else if (result.status == UploadTaskStatus.failed) {
-        completer.completeError(Exception("Error on upload"));
       }
     }, onDone: () {
       if (!completer.isCompleted) completer.complete(post);
