@@ -10,8 +10,8 @@ import 'package:path/path.dart';
 
 abstract class UserRepository {
   Future<Profile> getProfile(String id);
-  Future<User> updateUser(User user, List<String> tagsIds,
-      [FlutterUploader uploader]);
+  Future<User> updateUser(User user, List<String> tagsIds);
+  Future<Map<String, String>> getHeaders();
 }
 
 const Map<String, String> API_HEADERS = {
@@ -51,8 +51,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   @override
-  Future<User> updateUser(User user, List<String> tagsIds,
-      [FlutterUploader uploader]) async {
+  Future<User> updateUser(User user, List<String> tagsIds) async {
     try {
       Map<String, String> data = {
         "birthdate": user.birthdate,
@@ -66,22 +65,22 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "tagsIds": tagsIds.join(",")
       };
 
-      if (uploader != null) {
-        await uploader.enqueue(
-          url: DotEnv.env['API_URL'] + "users/${user.id}",
-          files: [
-            FileItem(
-              filename: basename(user.photoFilePath),
-              savedDir: dirname(user.photoFilePath),
-              fieldname: "file",
-            )
-          ], // required: list of files that you want to upload
-          method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
-          headers: await this.getHeaders(),
-          data: data, // any data you want to send in upload request
-          showNotification:
-              false, // send local notification (android only) for upload status
-          tag: "Uploading user photo",
+      if (user.photoFilePath != null) {
+        print("FILE PATH ${(user.photoFilePath)}");
+        await FlutterUploader().enqueue(
+          MultipartFormDataUpload(
+            url: DotEnv.env['API_URL'] + "users/${user.id}",
+            files: [
+              FileItem(
+                path: user.photoFilePath,
+                field: "file",
+              )
+            ], // required: list of files that you want to upload
+            method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
+            headers: await this.getHeaders(),
+            data: data, // any data you want to send in upload request
+            tag: "Uploading user photo",
+          ),
         );
         return user;
       } else {
