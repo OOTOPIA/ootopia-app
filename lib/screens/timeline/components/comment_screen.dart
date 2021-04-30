@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
+import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -25,6 +26,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   User user;
 
   CommentBloc commentBloc;
+  TimelinePostBloc timelineBloc;
 
   bool newCommentLoading = false;
   bool loggedIn = false;
@@ -32,14 +34,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool allCommentsLoaded = false;
   bool loadingMoreComments = false;
   int currentPage = 1;
+  int postCommentsCount = 0;
 
   List<String> selectedCommentsIds = [];
 
   void initState() {
     _checkUserIsLoggedIn();
     commentBloc = BlocProvider.of<CommentBloc>(context);
+    timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     _getComments([]);
     _focus.addListener(_onFocusChange);
+    postCommentsCount = widget.args['post'].commentsCount;
   }
 
   bool _enabledToDeleteOtherComments() {
@@ -91,6 +96,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               listener: (context, state) {
                 if (state is CommentSuccessState) {
                   if (state.newCommentIsAdded) {
+                    if (newCommentLoading == true) {
+                      postCommentsCount++;
+                      timelineBloc.add(OnUpdatePostCommentsCountEvent(
+                          widget.args['post'].id, postCommentsCount));
+                    }
                     newCommentLoading = false;
                   }
                   allCommentsLoaded = state.allCommentsLoaded;
@@ -153,7 +163,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               ),
             ),
           );
-        } else if (state is LoadingState) {
+        } else if (state is LoadingCommentsState) {
           return Expanded(
             flex: 1,
             child: Center(
