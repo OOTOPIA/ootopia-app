@@ -128,7 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen>
         loadingPosts = false;
         loadingMorePosts = false;
         _hasMorePosts = posts.length == _postsPerPageCount;
-        this.posts.addAll(posts.where((post) => post.userId == userId));
+        this.posts.addAll(posts.where((post) =>
+            post.userId == userId &&
+            this.posts.where((p) => p.id == post.id).length == 0));
       });
     }).catchError((onError) {
       setState(() {
