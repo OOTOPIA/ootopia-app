@@ -20,8 +20,8 @@ class CommentStartState extends CommentState {
   List<Object> get props => null;
 }
 
-class LoadingState extends CommentState {
-  const LoadingState();
+class LoadingCommentsState extends CommentState {
+  const LoadingCommentsState();
   @override
   List<Object> get props => [];
 }

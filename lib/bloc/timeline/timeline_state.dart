@@ -40,6 +40,14 @@ class OnDeletedPostState extends TimelinePostState {
   List<Object> get props => [postId];
 }
 
+class OnUpdatePostCommentsCountState extends TimelinePostState {
+  final String postId;
+  final int commentsCount;
+  const OnUpdatePostCommentsCountState(this.postId, this.commentsCount);
+  @override
+  List<Object> get props => [postId, commentsCount];
+}
+
 class ErrorState extends TimelinePostState {
   final String message;
   const ErrorState(this.message);

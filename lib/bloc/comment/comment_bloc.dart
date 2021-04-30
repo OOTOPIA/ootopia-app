@@ -22,10 +22,10 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
   Stream<CommentState> mapEventToState(
     CommentEvent event,
   ) async* {
-    LoadingState();
+    LoadingCommentsState();
     if (event is GetCommentEvent) {
       if (!event.loadingMore) {
-        yield LoadingState();
+        yield LoadingCommentsState();
       }
       yield* _mapGetComments(event.postId, event.page, event.allComments);
     } else if (event is CreateCommentEvent) {
@@ -35,7 +35,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     } else if (event is UnselectAllCommentsEvent) {
       yield* _mapUnselectAllCommentsToState(event);
     } else if (event is DeleteSelectedCommentsEvent) {
-      yield LoadingState();
+      yield LoadingCommentsState();
       yield* _mapDeleteSelectedCommentsToState(event);
     }
     // else if (event is Comment) {
@@ -131,7 +131,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
   Stream<CommentState> _mapDeleteSelectedCommentsToState(
       DeleteSelectedCommentsEvent event) async* {
     try {
-      if (state is LoadingState) {
+      if (state is LoadingCommentsState) {
         var result = (await this
             .repository
             .deleteComments(event.postId, event.commentsIds));

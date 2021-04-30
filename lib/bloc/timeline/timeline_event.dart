@@ -53,6 +53,15 @@ class UpdateTimelinePostEvent extends TimelinePostEvent {
   List<Object> get props => [post];
 }
 
+class OnUpdatePostCommentsCountEvent extends TimelinePostEvent {
+  final String postId;
+  final int commentsCount;
+  const OnUpdatePostCommentsCountEvent(this.postId, this.commentsCount);
+
+  @override
+  List<Object> get props => [postId, commentsCount];
+}
+
 class OnDeletePostFromTimelineEvent extends TimelinePostEvent {
   final String postId;
   final bool isProfile;

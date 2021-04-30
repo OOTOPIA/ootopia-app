@@ -38,6 +38,9 @@ class TimelinePostBloc extends Bloc<TimelinePostEvent, TimelinePostState> {
     } else if (event is OnDeletePostFromTimelineEvent) {
       yield OnDeletedPostState(event.postId);
       yield LoadedSucessState([], true);
+    } else if (event is OnUpdatePostCommentsCountEvent) {
+      yield OnUpdatePostCommentsCountState(event.postId, event.commentsCount);
+      yield LoadedSucessState([], true);
     }
   }
 

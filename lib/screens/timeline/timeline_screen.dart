@@ -318,6 +318,10 @@ class _TimelinePageState extends State<TimelinePage>
                     }
                   } else if (state is OnDeletedPostState) {
                     _allPosts.removeWhere((post) => post.id == state.postId);
+                  } else if (state is OnUpdatePostCommentsCountState) {
+                    _allPosts
+                        .firstWhere((post) => post.id == state.postId)
+                        .commentsCount = state.commentsCount;
                   }
                 },
                 child: _blocBuilder(),
