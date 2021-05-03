@@ -56,13 +56,14 @@ dependencies:
   flick_video_player: ^0.2.0
   visibility_detector: ^0.1.5
   youtube_player_flutter: ^7.0.0+7
-  package_info: ^2.0.0
+  package_info: ^0.4.3+2
   multi_select_flutter: ^3.1.8
   url_launcher: ^5.7.10
   permission_handler: ^5.1.0+2
   photo_manager: ^0.6.0
   receive_sharing_intent: ^1.4.3
   flutter_ffmpeg: ^0.2.10
+  sentry_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
