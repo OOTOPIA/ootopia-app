@@ -8,6 +8,7 @@ import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -23,6 +24,7 @@ class CommentScreen extends StatefulWidget {
 class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   TextEditingController _inputController = TextEditingController();
   FocusNode _focus = new FocusNode();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   User user;
 
   CommentBloc commentBloc;
@@ -45,6 +47,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     _getComments([]);
     _focus.addListener(_onFocusChange);
     postCommentsCount = widget.args['post'].commentsCount;
+    this.trackingEvents.timelineViewedComments({
+      "postOwnerId": widget.args['post'].userId,
+      "commentsCount": widget.args['post'].commentsCount,
+    });
   }
 
   bool _enabledToDeleteOtherComments() {
@@ -299,6 +305,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               postId: widget.args['post'].id, text: _inputController.text),
         ),
       );
+      this.trackingEvents.timelineDidAComment({
+        "postOwnerId": widget.args['post'].userId,
+        "commentsCount": widget.args['post'].commentsCount,
+      }, widget.args['post'].id);
     });
 
     _inputController.clear();

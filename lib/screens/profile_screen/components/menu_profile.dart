@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class MenuProfile extends StatelessWidget with SecureStoreMixin {
   final String profileName;
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   String appVersion;
 
   MenuProfile({this.profileName, this.appVersion});
@@ -14,6 +16,7 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
       PageRoute.Page.timelineScreen.route,
       ModalRoute.withName('/'),
     );
+    this.trackingEvents.trackingLoggedOut();
   }
 
   // goToGame() {}

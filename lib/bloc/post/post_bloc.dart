@@ -6,12 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepositoryImpl repository = PostRepositoryImpl();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   PostBloc(this.repository) : super(PostInitialState());
 
@@ -37,6 +39,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       await this.createPost(event.post, resultSubscription);
       resultSubscription?.cancel();
       yield SuccessCreatePostState();
+      this.trackingEvents.timelineCreatedAPost();
     } catch (_) {
       yield ErrorCreatePostState("Error on create a post");
     }
