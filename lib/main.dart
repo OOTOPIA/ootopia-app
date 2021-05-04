@@ -27,6 +27,7 @@ import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'screens/profile_screen/components/menu_profile.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
@@ -46,9 +47,15 @@ Future main() async {
     child: new ExpensesApp(),
   );
 
-  runApp(
-    GlobalConstants(
-      child: configuredApp,
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+    },
+    appRunner: () => runApp(
+      GlobalConstants(
+        child: configuredApp,
+      ),
     ),
   );
 }
