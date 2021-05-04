@@ -8,6 +8,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_sc
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import '../../shared/analytics.server.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -29,6 +30,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
   final picker = ImagePicker();
   User user;
   String birthdateValidationErrorMessage = "";
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   // DateTime selectedDate = DateTime.now();
 
@@ -86,6 +88,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
   void initState() {
     super.initState();
     getLoggedUser();
+    this.trackingEvents.signupStartedSignupPartII();
   }
 
   @override
@@ -330,8 +333,15 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               setState(() {
                                 birthdateValidationErrorMessage = "";
                               });
+                              this
+                                  .trackingEvents
+                                  .signupCompletedStepIOfSignupII({
+                                "havePhoto": _image != null ? true : false
+                              });
+
                               user.birthdate =
                                   "${_yearController.text}-${_monthController.text}-${_dayController.text}";
+
                               Navigator.of(context).pushNamed(
                                 PageRoute
                                     .Page

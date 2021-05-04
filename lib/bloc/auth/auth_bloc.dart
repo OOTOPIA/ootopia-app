@@ -5,12 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthRepositoryImpl repository = AuthRepositoryImpl();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   AuthBloc(this.repository) : super(LoadingState());
 
@@ -44,6 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         User user = result;
         yield EmptyState();
         yield LoadedSucessState(user);
+        this.trackingEvents.trackingLoggedIn(user.id, user.fullname);
       }
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();
@@ -65,6 +68,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (result != null) {
         yield EmptyState();
         yield LoadedSucessState(result);
+        this
+            .trackingEvents
+            .trackingSignupCompletedSignup(result.id, result.fullname);
       }
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();

@@ -34,6 +34,7 @@ import 'data/repositories/comment_repository.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import './shared/analytics.server.dart';
 
 Future main() async {
   await DotEnv.load(fileName: ".env");
@@ -52,7 +53,29 @@ Future main() async {
   );
 }
 
-class ExpensesApp extends StatelessWidget {
+class ExpensesApp extends StatefulWidget {
+  @override
+  _ExpensesAppState createState() => _ExpensesAppState();
+}
+
+class _ExpensesAppState extends State<ExpensesApp> {
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //aqui
+    trackingEvents.trackingOpenedApp();
+  }
+
+  @override
+  void dispose() {
+    //aqui
+    trackingEvents.trackingClosedApp();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
