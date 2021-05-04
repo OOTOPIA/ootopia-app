@@ -9,10 +9,7 @@ class AnalyticsTracking {
   static AnalyticsTracking instance;
 
   AnalyticsTracking() {
-    print("Eaeee ${DotEnv.env["KEY_AMPLITUDE"]}");
     analytics.init(DotEnv.env["KEY_AMPLITUDE"]);
-    // this.trackingSignupCompletedSignup("1j2n31j2n313j2n32j3n3");
-    // this.timelineCreatedAPost();
   }
 
   static getInstance() {
