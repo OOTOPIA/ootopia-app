@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
@@ -7,6 +10,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
@@ -15,6 +19,8 @@ import 'feed_player/multi_manager/flick_multi_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import 'dart:math' as math;
 
 class PhotoTimeline extends StatefulWidget {
   final int index;
@@ -60,6 +66,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   PlayerState _playerState;
   YoutubeMetaData _videoMetaData;
   bool _isPlayerReady = false;
+
+  int valueHolder = 20;
+  bool _isDragging = false;
+  double _draggablePositionX = 0;
+  Timer _onDragCanceledTimer;
+
+  //final draggableKey = GlobalKey();
 
   @override
   void initState() {
@@ -310,46 +323,149 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               image: this.post.thumbnailUrl,
             ),
           ),
-          Row(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                      icon: !this.post.liked
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: Colors.grey.shade300,
+                width: 1,
+              ),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  right: 0,
+                  child: Container(
+                    height: 32,
+                    margin: EdgeInsets.all(2),
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(
+                        color: Colors.grey.shade300,
+                        width: 1,
+                      ),
+                    ),
+                    child: Text("00,00"),
+                  ),
+                ),
+                Container(
+                  width: _isDragging ? _draggablePositionX : 64,
+                  height: 36,
+                  decoration: _draggablePositionX > 36
+                      ? BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white,
+                              Colors.blueAccent,
+                            ],
+                          ),
+                        )
+                      : BoxDecoration(),
+                ),
+                Container(
+                  width: _isDragging ? _draggablePositionX + 36 : 64,
+                  height: 36,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        child: SizedBox(),
+                      ),
+                      CustomPaint(
+                        painter: CustomContainerShapeBorder(
+                          x: _draggablePositionX,
+                        ),
+                      ),
+                      Positioned(
+                        top: 6,
+                        left: _draggablePositionX >= 36
+                            ? _draggablePositionX - 22
+                            : 12,
+                        child: Visibility(
+                          visible: _isDragging,
+                          child: ImageIcon(
+                            AssetImage('assets/icons/heart_filled.png'),
+                            color: !this.post.liked
+                                ? Colors.white
+                                : Color(0xffcf0606),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Draggable(
+                  onDragStarted: () {
+                    setState(() {
+                      _isDragging = true;
+                    });
+                  },
+                  onDraggableCanceled: (velocity, offset) {
+                    //print("Velocity: ${velocity.pixelsPerSecond}");
+                    setState(() {});
+
+                    _onDragCanceledTimer =
+                        Timer.periodic(Duration(milliseconds: 1), (Timer t) {
+                      setState(() {
+                        _draggablePositionX = _draggablePositionX - 10;
+                        if (_draggablePositionX <= 0) {
+                          _draggablePositionX = 0;
+                          _isDragging = false;
+                          _onDragCanceledTimer.cancel();
+                        }
+                      });
+                    });
+                  },
+                  onDragUpdate: (details) {
+                    if (this.mounted) {
+                      setState(() {
+                        _draggablePositionX = details.localPosition.dx;
+                      });
+                    }
+                  },
+                  axis: Axis.horizontal,
+                  child: Container(
+                    padding: const EdgeInsets.all(0.0),
+                    height: 36.0, // you can adjust the width as you need
+                    child: Opacity(
+                      opacity: _isDragging ? 0.0 : 1.0,
+                      child: IconButton(
+                        padding: EdgeInsets.all(0),
+                        icon: !this.post.liked
+                            ? ImageIcon(
+                                AssetImage('assets/icons/heart_filled.png'),
+                                color: Colors.white,
+                              )
+                            : ImageIcon(
+                                AssetImage('assets/icons/heart_filled.png'),
+                                color: Color(0xffcf0606),
+                              ),
+                        onPressed: () => {this._likePost()},
+                      ),
+                    ),
+                  ),
+                  feedback: Visibility(
+                    visible: false,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: !this.post.liked
                           ? ImageIcon(
-                              AssetImage('assets/icons/heart.png'),
-                              color: Colors.black87,
+                              AssetImage('assets/icons/heart_filled.png'),
+                              color: Colors.white,
                             )
                           : ImageIcon(
                               AssetImage('assets/icons/heart_filled.png'),
-                              color: Theme.of(context).accentColor,
+                              color: Color(0xffcf0606),
                             ),
-                      onPressed: () => {this._likePost()}),
-                  IconButton(
-                    icon: ImageIcon(
-                      AssetImage('assets/icons/comment.png'),
-                      color: Colors.black87,
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.commentScreen.route,
-                        arguments: {
-                          "post": this.post,
-                        },
-                      );
-                    },
                   ),
-                ],
-              ),
-              IconButton(
-                icon: ImageIcon(
-                  AssetImage('assets/icons/bookmark.png'),
-                  color: Colors.black12,
                 ),
-                onPressed: null,
-              ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ],
+            ),
           ),
           Row(
             children: [
@@ -508,6 +624,71 @@ class HashtagName extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomContainerShapeBorder extends CustomPainter {
+  final double x;
+
+  CustomContainerShapeBorder({this.x = 0});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.blue.shade900;
+
+    double calcPosition = x >= 36 ? x - 36 : 0;
+
+    canvas.translate(calcPosition, 0);
+
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTRB(
+          0,
+          0,
+          46,
+          36,
+        ),
+        bottomLeft: Radius.circular(100),
+        topLeft: Radius.circular(100),
+        topRight: Radius.circular(12),
+        bottomRight: Radius.circular(12),
+      ),
+      paint,
+    );
+
+    canvas.translate(45, 0);
+
+    var path = Path();
+    path.lineTo(0, 18);
+    path.lineTo(18, 18);
+    path.close();
+    canvas.drawPath(path, paint);
+
+    var path2 = Path();
+    path2.lineTo(18, 18);
+    path2.lineTo(0, 36);
+    path2.close();
+    canvas.drawPath(path2, paint);
+    //var path = createPath(3, 36);
+    //canvas.drawPath(path, paint..color = Colors.green);
+    //canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+
+  Path createPath(int sides, double radius) {
+    var path = Path();
+    var angle = (math.pi * 2) / sides;
+    path.moveTo(radius * math.cos(0.0), radius * math.sin(0.0));
+    for (int i = 1; i <= sides; i++) {
+      double x = radius * math.cos(angle * i);
+      double y = radius * math.sin(angle * i);
+      path.lineTo(x, y);
+    }
+    path.close();
+    return path;
   }
 }
 
