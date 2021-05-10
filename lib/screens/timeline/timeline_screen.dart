@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
@@ -39,6 +41,10 @@ class _TimelinePageState extends State<TimelinePage>
   int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
   bool showUploadedVideoMessage = false;
+  GeneralConfigRepositoryImpl generalConfigRepositoryImpl =
+      GeneralConfigRepositoryImpl();
+
+  GeneralConfig transferOozToPostLimitConfig;
 
   List<TimelinePost> _allPosts = [];
 
@@ -64,12 +70,10 @@ class _TimelinePageState extends State<TimelinePage>
     });
 
     _checkUserIsLoggedIn();
-
     setTimelineVideosMuted();
 
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
-    timelineBloc.add(GetTimelinePostsEvent(
-        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+    _getTransferOozToPostLimitConfig(); //Os posts são recuperados aqui dentro
     flickMultiManager = FlickMultiManager();
 
     if (widget.args != null && widget.args["createdPost"] == true) {
@@ -107,6 +111,21 @@ class _TimelinePageState extends State<TimelinePage>
         }
       }
     });
+  }
+
+  void _getTransferOozToPostLimitConfig() async {
+    try {
+      transferOozToPostLimitConfig = await this
+          .generalConfigRepositoryImpl
+          .getConfig(GeneralConfigName.transferOOZToPostLimit);
+      setTransferOOZToPostLimit(transferOozToPostLimitConfig.value);
+      //Recuperamos os posts apenas após a configuração inicial para evitar problema com o limite de transferência de OOZ
+      timelineBloc.add(GetTimelinePostsEvent(
+          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+    } catch (e) {
+      //error
+      print("Erro! ${e.toString()}");
+    }
   }
 
   void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) async {

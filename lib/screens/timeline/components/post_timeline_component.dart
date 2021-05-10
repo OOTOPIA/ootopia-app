@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
@@ -58,6 +60,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   final TimelinePostBloc timelineBloc;
   WalletTransfersRepositoryImpl walletTransferRepositoryImpl =
       WalletTransfersRepositoryImpl();
+
   PostBloc postBloc;
   bool loggedIn = false;
   User user;
@@ -73,11 +76,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   YoutubeMetaData _videoMetaData;
   bool _isPlayerReady = false;
 
-  int valueHolder = 20;
   bool _isDragging = false;
   double _draggablePositionX = 0;
   Timer _onDragCanceledTimer;
-  double oozGoal = 20;
+  double oozGoal = 1;
   bool _sendOOZIsLoading = false;
   bool _oozIsSent = false;
   bool _oozError = false;
@@ -93,6 +95,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
+    _getTransferOozToPostLimitConfig();
     postBloc = BlocProvider.of<PostBloc>(context);
     // _controller = YoutubePlayerController(
     //   initialVideoId: 'MxcJtLbIhvs',
@@ -113,6 +116,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         setState(() {});
       }
     }
+  }
+
+  void _getTransferOozToPostLimitConfig() async {
+    oozGoal = await getTransferOOZToPostLimit();
+    setState(() {
+      print("OOZ GOAL????? ${oozGoal}");
+    });
   }
 
   void listener() {
@@ -142,22 +152,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       },
     );
   }
-
-  // renderSnackBar() {
-  //   return ElevatedButton(
-  //     child: const Text("You must be logged in and be the owner of this post"),
-  //     onPressed: () {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: const Text(
-  //               "You must be logged in and be the owner of this post"),
-  //           duration: Duration(seconds: 6),
-  //           backgroundColor: Colors.yellow,
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   _popupMenuReturn(String selectedOption) {
     print("Meu app >>>> $selectedOption");
@@ -650,7 +644,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         backgroundColor: Color(0xff0487FF),
       ),
       onPressed: () {
-        if (!_sendOOZIsLoading) {
+        if (!loggedIn) {
+          Navigator.of(context).pushNamed(
+            PageRoute.Page.loginScreen.route,
+          );
+        } else if (!_sendOOZIsLoading) {
           sendOOZ();
         }
       },
