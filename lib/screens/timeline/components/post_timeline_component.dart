@@ -7,6 +7,8 @@ import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
+import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,6 +55,8 @@ class PhotoTimeline extends StatefulWidget {
 class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   TimelinePost post;
   final TimelinePostBloc timelineBloc;
+  WalletTransfersRepositoryImpl walletTransferRepositoryImpl =
+      WalletTransfersRepositoryImpl();
   PostBloc postBloc;
   bool loggedIn = false;
   User user;
@@ -71,6 +75,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _isDragging = false;
   double _draggablePositionX = 0;
   Timer _onDragCanceledTimer;
+  double oozGoal = 20;
+  bool _sendOOZIsLoading = false;
+  bool _oozIsSent = false;
+  bool _oozError = false;
+  String _oozErrorMessage = "";
+  bool _oozSlidingOut = false;
+
+  GlobalKey _slideButtonKey = GlobalKey();
+  GlobalKey _oozInfoKey = GlobalKey();
 
   //final draggableKey = GlobalKey();
 
@@ -288,23 +301,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     },
                   ),
                 ),
-                // Container(
-                //   height: 10,
-                //   child: ListView(
-                //     scrollDirection: Axis.horizontal,
-                //     children: <HashtagName>[
-                //       HashtagName(
-                //         hashtagName: 'flowers',
-                //       ),
-                //       HashtagName(
-                //         hashtagName: 'urbangardening',
-                //       ),
-                //       HashtagName(
-                //         hashtagName: 'saveinsects',
-                //       ),
-                //     ],
-                //   ),
-                // )
               ],
             ),
           ),
@@ -334,13 +330,35 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               ),
             ),
             child: Stack(
+              key: _slideButtonKey,
               children: [
                 Positioned(
+                  left: 64,
+                  child: Opacity(
+                    opacity: 1.2 -
+                        ((((_draggablePositionX * 100) / 300) / 100)) -
+                        0.2,
+                    child: Container(
+                      margin: EdgeInsets.all(2),
+                      padding: EdgeInsets.only(top: 8, left: 6),
+                      child: Text(
+                        "slide to give a gratitude reward",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(
+                            0xffBEBDBD,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  key: _oozInfoKey,
                   right: 0,
                   child: Container(
                     height: 32,
                     margin: EdgeInsets.all(2),
-                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
                       border: Border.all(
@@ -348,7 +366,30 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         width: 1,
                       ),
                     ),
-                    child: Text("00,00"),
+                    child: Row(
+                      children: [
+                        this.post.oozToTransfer > 0 &&
+                                (_isDragging || _oozIsSent || _oozError) &&
+                                !_oozSlidingOut
+                            ? Container(
+                                margin: EdgeInsets.all(1),
+                                child: renderRewardStatus(),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(left: 6),
+                                child: ImageIcon(
+                                  AssetImage(
+                                      'assets/icons_profile/ootopia.png'),
+                                  color: Colors.black,
+                                ),
+                              ),
+                        Padding(
+                          padding: EdgeInsets.all(6),
+                          child:
+                              Text(this.post.oozToTransfer.toStringAsFixed(2)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -398,101 +439,94 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ],
                   ),
                 ),
-                Draggable(
-                  onDragStarted: () {
-                    setState(() {
-                      _isDragging = true;
-                    });
-                  },
-                  onDraggableCanceled: (velocity, offset) {
-                    //print("Velocity: ${velocity.pixelsPerSecond}");
-                    setState(() {});
+                Positioned(
+                  left:
+                      _draggablePositionX >= 36 ? _draggablePositionX - 22 : 0,
+                  child: Draggable(
+                    onDragStarted: () {
+                      setState(() {
+                        _isDragging = true;
+                      });
+                    },
+                    onDraggableCanceled: (velocity, offset) {
+                      //print("Velocity: ${velocity.pixelsPerSecond}");
+                      //setState(() {});
 
-                    _onDragCanceledTimer =
-                        Timer.periodic(Duration(milliseconds: 1), (Timer t) {
-                      setState(() {
-                        _draggablePositionX = _draggablePositionX - 10;
-                        if (_draggablePositionX <= 0) {
-                          _draggablePositionX = 0;
-                          _isDragging = false;
-                          _onDragCanceledTimer.cancel();
-                        }
-                      });
-                    });
-                  },
-                  onDragUpdate: (details) {
-                    if (this.mounted) {
-                      setState(() {
-                        _draggablePositionX = details.localPosition.dx;
-                      });
-                    }
-                  },
-                  axis: Axis.horizontal,
-                  child: Container(
-                    padding: const EdgeInsets.all(0.0),
-                    height: 36.0, // you can adjust the width as you need
-                    child: Opacity(
-                      opacity: _isDragging ? 0.0 : 1.0,
-                      child: IconButton(
-                        padding: EdgeInsets.all(0),
-                        icon: !this.post.liked
-                            ? ImageIcon(
-                                AssetImage('assets/icons/heart_filled.png'),
-                                color: Colors.white,
-                              )
-                            : ImageIcon(
-                                AssetImage('assets/icons/heart_filled.png'),
-                                color: Color(0xffcf0606),
-                              ),
-                        onPressed: () => {this._likePost()},
+                      /**/
+                    },
+                    onDragUpdate: (details) {
+                      if (this.mounted) {
+                        setState(() {
+                          if (details.localPosition.dx <= getMaxSlideWidth()) {
+                            _draggablePositionX = details.localPosition.dx;
+                          } else {
+                            _draggablePositionX = getMaxSlideWidth();
+                          }
+                          onSlideButton();
+                        });
+                      }
+                    },
+                    axis: Axis.horizontal,
+                    child: Container(
+                      padding: const EdgeInsets.all(0.0),
+                      height: 36.0, // you can adjust the width as you need
+                      child: Opacity(
+                        opacity: _isDragging ? 0.0 : 1.0,
+                        child: IconButton(
+                          padding: EdgeInsets.all(0),
+                          icon: !this.post.liked
+                              ? ImageIcon(
+                                  AssetImage('assets/icons/heart_filled.png'),
+                                  color: Colors.white,
+                                )
+                              : ImageIcon(
+                                  AssetImage('assets/icons/heart_filled.png'),
+                                  color: Color(0xffcf0606),
+                                ),
+                          onPressed: () => {this._likePost()},
+                        ),
                       ),
                     ),
-                  ),
-                  feedback: Visibility(
-                    visible: false,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: !this.post.liked
-                          ? ImageIcon(
-                              AssetImage('assets/icons/heart_filled.png'),
-                              color: Colors.white,
-                            )
-                          : ImageIcon(
-                              AssetImage('assets/icons/heart_filled.png'),
-                              color: Color(0xffcf0606),
-                            ),
-                    ),
+                    feedback: Container(),
                   ),
                 ),
               ],
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 3, left: 12),
+                padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
                 child: new RichText(
                   text: new TextSpan(
                     style: new TextStyle(fontSize: 14, color: Colors.black),
                     children: <TextSpan>[
-                      new TextSpan(
-                          text: 'Likes ',
-                          style: new TextStyle(fontWeight: FontWeight.bold)),
                       new TextSpan(text: this.post.likesCount.toString()),
+                      new TextSpan(
+                        text: ' Likes',
+                        style: new TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 3, left: 12),
-                child: Row(
-                  children: [
-                    ImageIcon(
-                      AssetImage('assets/icons_profile/ootopia.png'),
-                      color: Colors.black,
-                    ),
-                    Text('13.55')
-                  ],
+                padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
+                child: new RichText(
+                  text: new TextSpan(
+                    style: new TextStyle(fontSize: 14, color: Colors.black),
+                    children: <TextSpan>[
+                      new TextSpan(
+                        text: 'OOz ',
+                        style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      new TextSpan(
+                          text: this.post.oozTotalCollected.toStringAsFixed(2)),
+                    ],
+                  ),
                 ),
               )
             ],
@@ -576,6 +610,154 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           ),
         ],
       );
+    });
+  }
+
+  Widget renderRewardStatus() {
+    if (_oozIsSent || _oozError) {
+      return Container(
+        width: 26,
+        height: 26,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          border: Border.all(
+            color: Colors.grey.shade300,
+            width: 1,
+          ),
+        ),
+        child: IconButton(
+          padding: EdgeInsets.all(0),
+          icon: (_oozError
+              ? Icon(Icons.info, color: Color(0xffDD0606), size: 24)
+              : Icon(Icons.check, color: Colors.green.shade600, size: 24)),
+          onPressed: () {
+            if (_oozError) {
+              onClickOOZErrorIcon();
+            }
+          },
+        ),
+      );
+    }
+    return TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.black87,
+        padding: EdgeInsets.symmetric(horizontal: 6),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+        ),
+        backgroundColor: Color(0xff0487FF),
+      ),
+      onPressed: () {
+        if (!_sendOOZIsLoading) {
+          sendOOZ();
+        }
+      },
+      child: !_sendOOZIsLoading
+          ? Text(
+              "Send",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            )
+          : SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.transparent,
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+    );
+  }
+
+  void sendOOZ() async {
+    setState(() {
+      _sendOOZIsLoading = true;
+    });
+    try {
+      await this
+          .walletTransferRepositoryImpl
+          .transferOOZToPost(this.post.id, this.post.oozToTransfer);
+      setState(() {
+        _sendOOZIsLoading = false;
+        this.post.oozTotalCollected =
+            this.post.oozTotalCollected + this.post.oozToTransfer;
+      });
+      _showOOZIsSent();
+    } on FetchDataException catch (e) {
+      String errorMessage = e.toString();
+      print("Error: ${e.toString()}");
+      setState(() {
+        _sendOOZIsLoading = false;
+        _oozError = true;
+        _oozErrorMessage = "An error has occurred. Try again.";
+        if (errorMessage == "INSUFFICIENT_BALANCE") {
+          _oozErrorMessage = "Your current balance is insuficient";
+        }
+      });
+    }
+  }
+
+  void onClickOOZErrorIcon() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_oozErrorMessage),
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.black87,
+      ),
+    );
+    Timer(Duration(seconds: 1), () {
+      setState(() {
+        _oozError = false;
+      });
+      resetSlideButton();
+    });
+  }
+
+  void _showOOZIsSent() {
+    setState(() {
+      _oozIsSent = true;
+    });
+    Timer(Duration(seconds: 2), () {
+      setState(() {
+        _oozIsSent = false;
+      });
+      resetSlideButton();
+    });
+  }
+
+  double getMaxSlideWidth() {
+    final RenderBox renderBox =
+        _slideButtonKey.currentContext.findRenderObject();
+    final RenderBox renderBoxOOZInfo =
+        _oozInfoKey.currentContext.findRenderObject();
+    return (renderBox.size.width - renderBoxOOZInfo.size.width) - 26;
+  }
+
+  void onSlideButton() {
+    double perc = (_draggablePositionX * 100) / getMaxSlideWidth();
+    if (_draggablePositionX > 26) {
+      this.post.oozToTransfer = ((oozGoal * perc) / 100).roundToDouble();
+    } else {
+      this.post.oozToTransfer = 0.0;
+    }
+  }
+
+  void resetSlideButton() {
+    setState(() {
+      _oozSlidingOut = true;
+    });
+    _onDragCanceledTimer = Timer.periodic(Duration(milliseconds: 1), (Timer t) {
+      setState(() {
+        _draggablePositionX = _draggablePositionX - 3;
+        if (_draggablePositionX <= 0) {
+          _draggablePositionX = 0;
+          _onDragCanceledTimer.cancel();
+          _isDragging = false;
+          _oozSlidingOut = false;
+        }
+        onSlideButton();
+      });
     });
   }
 
