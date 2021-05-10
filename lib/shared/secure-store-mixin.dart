@@ -21,6 +21,15 @@ class SecureStoreMixin {
     await this.setSecureStore("timeline_muted", "false");
   }
 
+  void setTransferOOZToPostLimit(String limit) async {
+    await this.setSecureStore("transfer_ooz_to_post_limit", limit);
+  }
+
+  Future<double> getTransferOOZToPostLimit() async {
+    return double.parse(
+        await this.getSecureStore("transfer_ooz_to_post_limit"));
+  }
+
   Future<bool> getTimelineVideosIsMuted() async {
     return await this.getSecureStore("timeline_muted") == "true";
   }
