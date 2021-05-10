@@ -11,6 +11,7 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -18,6 +19,7 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserRepository userRepository;
   PostRepository postRepository;
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   UserBloc(this.userRepository, this.postRepository) : super(InitialState());
 
@@ -70,6 +72,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             await updateUser(event.user, event.tagsIds, resultSubscription);
         resultSubscription?.cancel();
         yield UpdateUserSuccessState(user);
+        this.trackingEvents.signupCompletedSignupPartII();
       } catch (err) {
         print("error when upload photo: ${err.toString()}");
         yield UpdateUserErrorState(

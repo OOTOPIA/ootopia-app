@@ -7,6 +7,7 @@ import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootopia_app/data/utils/string-utils.dart';
@@ -31,6 +32,7 @@ class _RegisterPhase2TopInterestsPageState
   final TextEditingController _inputController = TextEditingController();
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
   InterestsTagsRepositoryImpl repository = InterestsTagsRepositoryImpl();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   bool _isLoading = true;
   bool errorOnGetTags = false;
@@ -44,6 +46,9 @@ class _RegisterPhase2TopInterestsPageState
 
   void _submit() {
     userBloc.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
+    this
+        .trackingEvents
+        .signupCompletedStepIVOfSignupII({"tags": _selectedTagsIds});
   }
 
   Future<void> getTags() async {

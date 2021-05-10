@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -17,6 +18,7 @@ class _RegisterPhase2DailyLearningGoalPageState
     extends State<RegisterPhase2DailyLearningGoalPage> {
   final _formKey = GlobalKey<FormState>();
   double _learningGoalRating = 10;
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   @override
   void initState() {
@@ -137,6 +139,13 @@ class _RegisterPhase2DailyLearningGoalPageState
                           onPressed: () {
                             widget.args['user'].dailyLearningGoalInMinutes =
                                 _learningGoalRating.round();
+
+                            this
+                                .trackingEvents
+                                .signupCompletedStepIIOfSignupII({
+                              "dailyLearningGoalInMinutes":
+                                  widget.args['user'].dailyLearningGoalInMinutes
+                            });
                             Navigator.of(context).pushNamed(
                               PageRoute
                                   .Page.registerPhase2GeolocationScreen.route,

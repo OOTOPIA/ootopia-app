@@ -13,6 +13,7 @@ import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
@@ -61,6 +62,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool loggedIn = false;
   User user;
   bool isUserOwnsPost = false;
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   _PhotoTimelineState({this.post, this.timelineBloc, this.loggedIn, this.user});
 
@@ -772,8 +774,18 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           this.timelineBloc.add(LikePostEvent(this.post.id));
           this.post.liked = !this.post.liked;
           if (this.post.liked) {
+            this.trackingEvents.timelineGaveALike(
+              {
+                "userId": this.post.userId,
+              },
+            );
             this.post.likesCount = this.post.likesCount + 1;
           } else if (this.post.likesCount > 0) {
+            this.trackingEvents.timelineGaveADislike(
+              {
+                "userId": this.post.userId,
+              },
+            );
             this.post.likesCount = this.post.likesCount - 1;
           }
         },

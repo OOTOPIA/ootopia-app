@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -24,6 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool termsOpened = false;
   bool isLoading = false;
   bool showCheckBoxError = false;
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -53,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
+    this.trackingEvents.trackingSignupStartedSignup();
   }
 
   @override

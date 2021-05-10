@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart'
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'components/menu_profile.dart';
+import '../../shared/analytics.server.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:package_info/package_info.dart';
@@ -34,6 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   UserRepositoryImpl profileRepositoryImpl = UserRepositoryImpl();
   WalletRepositoryImpl walletRepositoryImpl = WalletRepositoryImpl();
   PostRepositoryImpl postRepositoryImpl = PostRepositoryImpl();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   WalletBloc walletBloc;
 
   bool loggedIn = false;
@@ -63,6 +65,12 @@ class _ProfileScreenState extends State<ProfileScreen>
     getAppInfo();
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
+    this.trackingEvents.profileViewedAProfile(
+      widget.args == null || widget.args["id"] == null
+          ? "Profile - Own profile"
+          : "Profile - Viewed a Profile",
+      {"profileId": userId},
+    );
   }
 
   void _setActiveTabIndex() {

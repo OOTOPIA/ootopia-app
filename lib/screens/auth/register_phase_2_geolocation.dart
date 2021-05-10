@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,6 +26,7 @@ class _RegisterPhase2GeolocationPageState
   FocusNode inputFocusNode = new FocusNode();
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   @override
   void initState() {
@@ -207,6 +209,14 @@ class _RegisterPhase2GeolocationPageState
                             ),
                           ),
                           onPressed: () {
+                            this
+                                .trackingEvents
+                                .signupCompletedStepIIIOfSignupII({
+                              "addressCity": widget.args['user'].addressCity,
+                              "addressState": widget.args['user'].addressState,
+                              "addressState":
+                                  widget.args['user'].addressCountryCode,
+                            });
                             Navigator.of(context).pushNamed(
                               PageRoute
                                   .Page.registerPhase2TopInterestsScreen.route,

@@ -1,5 +1,9 @@
 PODS:
   - Alamofire (5.2.2)
+  - Amplitude (7.2.0)
+  - amplitude_flutter (0.0.1):
+    - Amplitude (= 7.2.0)
+    - Flutter
   - camera (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -40,6 +44,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg/https-lts (from `.symlinks/plugins/flutter_ffmpeg/ios`)
@@ -62,9 +67,12 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Amplitude
     - mobile-ffmpeg-https
 
 EXTERNAL SOURCES:
+  amplitude_flutter:
+    :path: ".symlinks/plugins/amplitude_flutter/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
   Flutter:
@@ -104,6 +112,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
+  amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
   camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_ffmpeg: cf0a6941ef67e88248c998cc3e34f8acb0b4e454

@@ -27,6 +27,7 @@ import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'screens/profile_screen/components/menu_profile.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
@@ -34,6 +35,7 @@ import 'data/repositories/comment_repository.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import './shared/analytics.server.dart';
 
 Future main() async {
   await DotEnv.load(fileName: ".env");
@@ -45,14 +47,42 @@ Future main() async {
     child: new ExpensesApp(),
   );
 
-  runApp(
-    GlobalConstants(
-      child: configuredApp,
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+    },
+    appRunner: () => runApp(
+      GlobalConstants(
+        child: configuredApp,
+      ),
     ),
   );
 }
 
-class ExpensesApp extends StatelessWidget {
+class ExpensesApp extends StatefulWidget {
+  @override
+  _ExpensesAppState createState() => _ExpensesAppState();
+}
+
+class _ExpensesAppState extends State<ExpensesApp> {
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //aqui
+    trackingEvents.trackingOpenedApp();
+  }
+
+  @override
+  void dispose() {
+    //aqui
+    trackingEvents.trackingClosedApp();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
