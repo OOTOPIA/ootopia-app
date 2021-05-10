@@ -114,6 +114,10 @@ class AnalyticsTracking {
     this.trackingEvent("Timeline - Viewed comments", property);
   }
 
+  timelineDonatedOOZ() {
+    this.trackingEvent("Timeline - Donated OOz", null);
+  }
+
   timelineDidAComment(property, postId) {
     final Identify identify = Identify()
       ..set("PostId", postId)

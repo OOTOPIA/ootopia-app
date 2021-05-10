@@ -120,9 +120,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   void _getTransferOozToPostLimitConfig() async {
     oozGoal = await getTransferOOZToPostLimit();
-    setState(() {
-      print("OOZ GOAL????? ${oozGoal}");
-    });
+    setState(() {});
   }
 
   void listener() {
@@ -678,6 +676,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       await this
           .walletTransferRepositoryImpl
           .transferOOZToPost(this.post.id, this.post.oozToTransfer);
+      this.trackingEvents.timelineDonatedOOZ();
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
