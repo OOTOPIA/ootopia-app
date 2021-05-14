@@ -5,6 +5,7 @@ import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/models/wallets/transfer_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -30,7 +31,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen>
-    with SecureStoreMixin, SingleTickerProviderStateMixin {
+    with SecureStoreMixin, TickerProviderStateMixin {
   UserBloc profileBloc;
   UserRepositoryImpl profileRepositoryImpl = UserRepositoryImpl();
   WalletRepositoryImpl walletRepositoryImpl = WalletRepositoryImpl();
@@ -42,10 +43,12 @@ class _ProfileScreenState extends State<ProfileScreen>
   User user;
   Profile userProfile;
   Wallet wallet;
+  List<Transaction> transactions;
   bool loadingPosts = true;
   bool loadPostsError = false;
   bool loadingMorePosts = false;
   bool loadingWallet = true;
+  bool loadingTransactions = true;
   bool loadWalletError = false;
   List<TimelinePost> posts = [];
   int _postsPerPageCount = 12;
@@ -54,7 +57,12 @@ class _ProfileScreenState extends State<ProfileScreen>
   String userId = "";
   String appVersion;
   TabController _tabController;
+  TabController _tabControllerTransactions;
   int _activeTabIndex = 0;
+  int _activeTabIndexTransactions = 0;
+
+  @override
+  bool get wantKeepAlive => null;
 
   @override
   void initState() {
@@ -65,6 +73,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     getAppInfo();
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
+    _tabControllerTransactions = new TabController(length: 3, vsync: this);
+    _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
     this.trackingEvents.profileViewedAProfile(
       widget.args == null || widget.args["id"] == null
           ? "Profile - Own profile"
@@ -79,6 +89,12 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
+  void _setActiveTabIndexTransactions() {
+    setState(() {
+      _activeTabIndexTransactions = _tabControllerTransactions.index;
+    });
+  }
+
   Future<void> getAppInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     setState(() {
@@ -90,6 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     loggedIn = await getUserIsLoggedIn();
     if (widget.args == null || widget.args["id"] == null) {
       user = await getCurrentUser();
+      print("Meu ID ${user.id}");
       userId = user.id;
     } else {
       userId = widget.args["id"];
@@ -103,6 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     getUserProfile(userId);
     getUserPosts();
     getUserWallet();
+    getUserTransactionHistory('All');
   }
 
   Future getUserProfile(String id) async {
@@ -162,6 +180,26 @@ class _ProfileScreenState extends State<ProfileScreen>
       setState(() {
         loadingWallet = false;
         loadWalletError = true;
+      });
+    });
+  }
+
+  Future getUserTransactionHistory(String param) async {
+    setState(() {
+      loadingTransactions = true;
+    });
+    this
+        .walletRepositoryImpl
+        .getTransactionHistory(userId)
+        .then((transactions) {
+      this.transactions = transactions;
+      setState(() {
+        loadingTransactions = false;
+      });
+    }).catchError((onError) {
+      setState(() {
+        loadingTransactions = false;
+        // loadWalletError = true;
       });
     });
   }
@@ -282,7 +320,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        _postsTabView(),
+                        _postsTabView(), // É aqui
                         _walletTabView(),
                       ],
                     ),
@@ -471,8 +509,53 @@ class _ProfileScreenState extends State<ProfileScreen>
                     ],
                   ),
                 ),
-              )
+              ),
             ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 6),
+            child: Container(
+              child: TabBar(
+                controller: _tabControllerTransactions,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorColor: Color(0xfffc23a6),
+                indicatorWeight: 4,
+                isScrollable: false,
+                labelColor: Colors.black,
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+                unselectedLabelColor: Colors.black.withOpacity(0.5),
+                tabs: [
+                  Tab(
+                    text: "All",
+                  ),
+                  Tab(
+                    text: "Received",
+                  ),
+                  Tab(
+                    text: "Sent",
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabControllerTransactions,
+              children: [
+                TransactionWidget(transactions: this.transactions),
+                TransactionWidget(transactions: this.transactions),
+                TransactionWidget(transactions: this.transactions),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 16,
           ),
         ],
       ),
@@ -746,5 +829,91 @@ class GridPosts extends StatelessWidget {
         : Expanded(
             child: Center(child: Text("No posts")),
           );
+  }
+}
+
+class TransactionWidget extends StatelessWidget {
+  List<Transaction> transactions;
+
+  TransactionWidget({this.transactions});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "OOZ received on 28.09.2020",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ),
+        TransactionItemWidget(),
+      ],
+    );
+  }
+}
+
+class TransactionItemWidget extends StatelessWidget {
+  const TransactionItemWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(vertical: 4),
+      padding: EdgeInsets.only(left: 3),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(100),
+        border: Border.fromBorderSide(
+          BorderSide(
+            color: Color(0xffBDBDBD),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                height: 39,
+                width: 39,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.white,
+                  border: Border.fromBorderSide(
+                    BorderSide(
+                      color: Color(0xffBDBDBD),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(
+                  "from Pedro Rocha",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text("OOZ 10,00"),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -29,3 +29,23 @@ class LoadWalletErrorState extends WalletState {
   @override
   List<Object> get props => [message];
 }
+
+class LoadingTransactionHistoryState extends WalletState {
+  const LoadingTransactionHistoryState();
+  @override
+  List<Object> get props => [];
+}
+
+class LoadedTransactionHistorySucessState extends WalletState {
+  List<Transaction> transactions;
+  LoadedTransactionHistorySucessState({this.transactions});
+  @override
+  List<Object> get props => [transactions];
+}
+
+class LoadTransactionHistoryErrorState extends WalletState {
+  final String message;
+  const LoadTransactionHistoryErrorState(this.message);
+  @override
+  List<Object> get props => [message];
+}
