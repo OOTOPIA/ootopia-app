@@ -6,10 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:path/path.dart';
 
 abstract class UserRepository {
   Future<Profile> getProfile(String id);
+  Future<User> getMyAccountDetails();
   Future<User> updateUser(User user, List<String> tagsIds);
 }
 
@@ -32,6 +32,25 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     }
 
     return headers;
+  }
+
+  Future<User> getMyAccountDetails() async {
+    try {
+      final response = await http.get(
+        DotEnv.env['API_URL'] + "users/",
+        headers: await this.getHeaders(),
+      );
+      if (response.statusCode == 200) {
+        print("USER ACCOUNT ${response.body}");
+        await setCurrentUser(response.body);
+        User user = User.fromJson(json.decode(response.body));
+        return Future.value(user);
+      } else {
+        throw Exception('Failed to load user account details');
+      }
+    } catch (error, s) {
+      throw Exception('Failed to load user account details: $s');
+    }
   }
 
   Future<Profile> getProfile(id) async {

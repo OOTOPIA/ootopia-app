@@ -7,7 +7,8 @@ import 'dart:convert';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class WalletTransfersRepository {
-  Future<void> transferOOZToPost(String postId, double balance);
+  Future<void> transferOOZToPost(String postId, double balance,
+      [bool dontAskToConfirmAgain]);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -30,11 +31,18 @@ class WalletTransfersRepositoryImpl
     };
   }
 
-  Future<void> transferOOZToPost(String postId, double balance) async {
+  Future<void> transferOOZToPost(String postId, double balance,
+      [bool dontAskToConfirmAgain]) async {
     final response = await http.post(
       DotEnv.env['API_URL'] + 'wallet-transfers/post/$postId/transfer',
       headers: await this.getHeaders(),
-      body: jsonEncode(<String, String>{'balance': balance.toString()}),
+      body: jsonEncode(
+        <String, String>{
+          'balance': balance.toString(),
+          'dontAskAgainToConfirmGratitudeReward':
+              dontAskToConfirmAgain.toString(),
+        },
+      ),
     );
 
     if (response.statusCode == 200) {

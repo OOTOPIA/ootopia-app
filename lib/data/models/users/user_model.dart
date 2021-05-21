@@ -14,10 +14,11 @@ class User extends Equatable {
   double addressLongitude;
   int dailyLearningGoalInMinutes;
   bool enableSustainableAds = false;
+  bool dontAskAgainToConfirmGratitudeReward = false;
   int registerPhase;
   String token;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String createdAt;
+  String updatedAt;
 
   User({
     this.id,
@@ -32,6 +33,7 @@ class User extends Equatable {
     this.addressLongitude,
     this.dailyLearningGoalInMinutes,
     this.enableSustainableAds,
+    this.dontAskAgainToConfirmGratitudeReward,
     this.registerPhase,
     this.token,
     this.createdAt,
@@ -67,9 +69,13 @@ class User extends Equatable {
       enableSustainableAds: (json['enableSustainableAds'] == null
           ? false
           : json['enableSustainableAds']),
+      dontAskAgainToConfirmGratitudeReward:
+          (json['dontAskAgainToConfirmGratitudeReward'] == null
+              ? false
+              : json['dontAskAgainToConfirmGratitudeReward']),
       token: json['token'],
-      //createdAt: DateTime(json['createdAt']),
-      //updatedAt: DateTime(json['updatedAt']),
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 
@@ -105,6 +111,7 @@ class User extends Equatable {
         dailyLearningGoalInMinutes,
         registerPhase,
         enableSustainableAds,
+        dontAskAgainToConfirmGratitudeReward,
         token,
         createdAt,
         updatedAt
