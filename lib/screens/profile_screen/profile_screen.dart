@@ -20,6 +20,8 @@ import '../../shared/analytics.server.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:package_info/package_info.dart';
+import "package:collection/collection.dart";
+import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
   Map<String, dynamic> args;
@@ -120,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     getUserProfile(userId);
     getUserPosts();
     getUserWallet();
-    getUserTransactionHistory('All');
+    getUserTransactionHistory();
   }
 
   Future getUserProfile(String id) async {
@@ -184,19 +186,31 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
-  Future getUserTransactionHistory(String param) async {
+  Future getUserTransactionHistory([String param = ""]) async {
+    print("To aqui e fui chamado");
+
     setState(() {
       loadingTransactions = true;
     });
     this
         .walletRepositoryImpl
         .getTransactionHistory(userId)
-        .then((transactions) {
-      this.transactions = transactions;
+        .then((resultTransactions) {
+      print("primeirp ----> ${resultTransactions[0].createdAt}");
+      // resultTransactions.forEach((obj) => obj.dateTransaction = DateFormat('dd-MM-yyyy').format(obj['createdAt']));
+
+      var newMap = groupBy(resultTransactions,
+          (obj) => DateFormat('dd-MM-yyyy').format(obj['createdAt']));
+
+      print("Oi ----> $newMap");
+
+      this.transactions = resultTransactions;
+
       setState(() {
         loadingTransactions = false;
       });
     }).catchError((onError) {
+      print("error 1 --> ${onError.toString()}");
       setState(() {
         loadingTransactions = false;
         // loadWalletError = true;

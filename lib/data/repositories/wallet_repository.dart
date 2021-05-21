@@ -53,7 +53,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
-        print("WALLET RESPONSE ${response.body}");
+        print("WALLET RESPONSE --> ${response.body}");
         return (json.decode(response.body) as List)
             .map((i) => Transaction.fromJson(i))
             .toList();
@@ -61,7 +61,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
         throw Exception('Failed to load wallet');
       }
     } catch (error) {
-      throw Exception('Failed to load wallet. Error: ' + error);
+      throw Exception('Failed to load wallet. Error: ' + error.toString());
     }
   }
 }
