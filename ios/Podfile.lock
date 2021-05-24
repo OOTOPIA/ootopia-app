@@ -1,9 +1,5 @@
 PODS:
   - Alamofire (5.2.2)
-  - Amplitude (7.2.0)
-  - amplitude_flutter (0.0.1):
-    - Amplitude (= 7.2.0)
-    - Flutter
   - camera (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -36,6 +32,12 @@ PODS:
     - Flutter
   - receive_sharing_intent (0.0.1):
     - Flutter
+  - Sentry (6.1.4):
+    - Sentry/Core (= 6.1.4)
+  - Sentry/Core (6.1.4)
+  - sentry_flutter (0.0.1):
+    - Flutter
+    - Sentry (~> 6.1.4)
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
@@ -44,7 +46,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg/https-lts (from `.symlinks/plugins/flutter_ffmpeg/ios`)
@@ -60,6 +61,7 @@ DEPENDENCIES:
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
+  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -67,12 +69,10 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
-    - Amplitude
     - mobile-ffmpeg-https
+    - Sentry
 
 EXTERNAL SOURCES:
-  amplitude_flutter:
-    :path: ".symlinks/plugins/amplitude_flutter/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
   Flutter:
@@ -103,6 +103,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/photo_manager/ios"
   receive_sharing_intent:
     :path: ".symlinks/plugins/receive_sharing_intent/ios"
+  sentry_flutter:
+    :path: ".symlinks/plugins/sentry_flutter/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
   video_player:
@@ -112,8 +114,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
-  amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
   camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_ffmpeg: cf0a6941ef67e88248c998cc3e34f8acb0b4e454
@@ -130,6 +130,8 @@ SPEC CHECKSUMS:
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   photo_manager: f7c619c2cc8c2adb8d85c63363babac477de9c67
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
+  Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
+  sentry_flutter: 8b2b2e1c0101ef562106b5d272d3c0c741512c01
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
