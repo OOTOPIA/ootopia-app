@@ -2,7 +2,7 @@ name: CI
 on:
   pull_request:
     branches:
-      - master
+      - staging
 
 jobs:
   build_android:
@@ -16,7 +16,8 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
-          envkey_API_URL: https://api-ootopia.devmagic.com.br/
+          envkey_API_URL: ${{ secrets.API_URL }}
+          envkey_AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
       - name: Update build version
         shell: bash
         run: 'sed -i "s/version: 0.0.0+0/version: 0.0.$GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER/1" pubspec.yaml'
