@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
+import 'package:ootopia_app/bloc/wallet_transfer/wallet_transfer_bloc.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -49,10 +50,11 @@ class PhotoTimeline extends StatefulWidget {
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
-      post: this.post,
-      timelineBloc: this.timelineBloc,
-      loggedIn: this.loggedIn,
-      user: this.user);
+        post: this.post,
+        timelineBloc: this.timelineBloc,
+        loggedIn: this.loggedIn,
+        user: this.user,
+      );
 }
 
 class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
@@ -88,8 +90,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   GlobalKey _slideButtonKey = GlobalKey();
   GlobalKey _oozInfoKey = GlobalKey();
-
-  //final draggableKey = GlobalKey();
+  bool _dontAskToConfirmGratitudeReward = false;
 
   @override
   void initState() {
@@ -97,21 +98,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
     postBloc = BlocProvider.of<PostBloc>(context);
-    // _controller = YoutubePlayerController(
-    //   initialVideoId: 'MxcJtLbIhvs',
-    //   flags: YoutubePlayerFlags(
-    //     autoPlay: true,
-    //     mute: true,
-    //   ),
-    // )..addListener(listener);
-    //_videoMetaData = const YoutubeMetaData();
-    //_playerState = PlayerState.unknown;
   }
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
+      _dontAskToConfirmGratitudeReward =
+          user.dontAskAgainToConfirmGratitudeReward;
       if (this.mounted) {
         setState(() {});
       }
@@ -128,15 +122,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
-        //print("CURRENT TIME >>>> ${_controller.value.position.inSeconds}");
-        //print("METADATA >>>> ${_videoMetaData.duration.inSeconds}");
       });
     }
   }
 
   @override
   void dispose() {
-    //_controller.dispose();
     super.dispose();
   }
 
@@ -152,8 +143,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _popupMenuReturn(String selectedOption) {
-    print("Meu app >>>> $selectedOption");
-
     switch (selectedOption) {
       case 'Excluir':
         _showMyDialog();
@@ -172,7 +161,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return DialogConfirm(
-          textAlert: 'Desejá realmente deletar seu post ?',
+          textAlert: 'Deseja realmente deletar seu post ?',
           callbackConfirmAlertDialog: _deletePost,
         );
       },
@@ -349,38 +338,49 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 ),
                 Positioned(
                   key: _oozInfoKey,
+                  width: 120,
                   right: 0,
                   child: Container(
-                    height: 32,
+                    height: 36,
                     margin: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
+                    child: Stack(
                       children: [
-                        this.post.oozToTransfer > 0 &&
-                                (_isDragging || _oozIsSent || _oozError) &&
-                                !_oozSlidingOut
-                            ? Container(
-                                margin: EdgeInsets.all(1),
-                                child: renderRewardStatus(),
-                              )
-                            : Padding(
-                                padding: EdgeInsets.only(left: 6),
-                                child: ImageIcon(
-                                  AssetImage(
-                                      'assets/icons_profile/ootopia.png'),
-                                  color: Colors.black,
+                        Positioned(
+                          top: 0,
+                          width: 80,
+                          right: showOozToTransfer() ? 32 : 0,
+                          child: this.post.oozToTransfer > 0 &&
+                                  (_isDragging || _oozIsSent || _oozError) &&
+                                  !_oozSlidingOut
+                              ? Container(
+                                  margin: EdgeInsets.all(1),
+                                  child: renderRewardStatus(),
+                                )
+                              : Container(),
+                        ),
+                        Visibility(
+                          visible: showOozToTransfer(),
+                          child: Positioned(
+                            height: 32,
+                            right: 0,
+                            child: Container(
+                              width: 56,
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1,
                                 ),
                               ),
-                        Padding(
-                          padding: EdgeInsets.all(6),
-                          child:
-                              Text(this.post.oozToTransfer.toStringAsFixed(2)),
+                              child: Text(
+                                this.post.oozToTransfer.toStringAsFixed(2),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -402,7 +402,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       : BoxDecoration(),
                 ),
                 Container(
-                  width: _isDragging ? _draggablePositionX + 36 : 64,
+                  width: _isDragging
+                      ? (_draggablePositionX >= 36
+                          ? _draggablePositionX + 36
+                          : 80)
+                      : 64,
                   height: 36,
                   child: Stack(
                     children: [
@@ -422,11 +426,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             : 12,
                         child: Visibility(
                           visible: _isDragging,
-                          child: ImageIcon(
-                            AssetImage('assets/icons/heart_filled.png'),
-                            color: !this.post.liked
-                                ? Colors.white
-                                : Color(0xffcf0606),
+                          child: Image(
+                            image: AssetImage(!this.post.liked
+                                ? 'assets/icons_profile/woow.png'
+                                : 'assets/icons_profile/woow_active.png'),
                           ),
                         ),
                       ),
@@ -435,26 +438,25 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 ),
                 Positioned(
                   left:
-                      _draggablePositionX >= 36 ? _draggablePositionX - 22 : 0,
+                      _draggablePositionX >= 36 ? _draggablePositionX - 36 : 0,
                   child: Draggable(
                     onDragStarted: () {
                       setState(() {
                         _isDragging = true;
                       });
                     },
-                    onDraggableCanceled: (velocity, offset) {
-                      //print("Velocity: ${velocity.pixelsPerSecond}");
-                      //setState(() {});
-
-                      /**/
-                    },
+                    onDraggableCanceled: (velocity, offset) {},
                     onDragUpdate: (details) {
                       if (this.mounted) {
                         setState(() {
                           if (details.localPosition.dx <= getMaxSlideWidth()) {
                             _draggablePositionX = details.localPosition.dx;
                           } else {
-                            _draggablePositionX = getMaxSlideWidth();
+                            if (details.localPosition.dx <= 36) {
+                              _draggablePositionX = 36;
+                            } else {
+                              _draggablePositionX = getMaxSlideWidth();
+                            }
                           }
                           onSlideButton();
                         });
@@ -462,22 +464,26 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     },
                     axis: Axis.horizontal,
                     child: Container(
-                      padding: const EdgeInsets.all(0.0),
+                      padding: const EdgeInsets.all(3),
                       height: 36.0, // you can adjust the width as you need
                       child: Opacity(
-                        opacity: _isDragging ? 0.0 : 1.0,
-                        child: IconButton(
-                          padding: EdgeInsets.all(0),
-                          icon: !this.post.liked
-                              ? ImageIcon(
-                                  AssetImage('assets/icons/heart_filled.png'),
-                                  color: Colors.white,
-                                )
-                              : ImageIcon(
-                                  AssetImage('assets/icons/heart_filled.png'),
-                                  color: Color(0xffcf0606),
-                                ),
-                          onPressed: () => {this._likePost()},
+                        opacity: 1.0,
+                        child: SizedBox(
+                          width: 36,
+                          height: 36,
+                          child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            icon: !this.post.liked
+                                ? Image(
+                                    image: AssetImage(
+                                        'assets/icons_profile/woow.png'),
+                                  )
+                                : Image(
+                                    image: AssetImage(
+                                        'assets/icons_profile/woow_active.png'),
+                                  ),
+                            onPressed: () => {this._likePost()},
+                          ),
                         ),
                       ),
                     ),
@@ -498,7 +504,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     children: <TextSpan>[
                       new TextSpan(text: this.post.likesCount.toString()),
                       new TextSpan(
-                        text: ' Likes',
+                        text: ' wOOws!',
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -607,64 +613,110 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     });
   }
 
+  _showConfirmGratitudeReward() {
+    var dontAskIsChecked = false;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return GratitudeRewardDialog(
+          title: 'Gratitude Reward',
+          message:
+              'Do you confirm sending ${this.post.oozToTransfer.toStringAsFixed(2)} OOZ from your accont to the creator of this post?',
+          onCheckChanged: (bool isChecked) {
+            setState(() {
+              dontAskIsChecked = isChecked;
+            });
+          },
+          onClickPositiveButton: () {
+            this._dontAskToConfirmGratitudeReward = dontAskIsChecked;
+            sendOOZ();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
   Widget renderRewardStatus() {
     if (_oozIsSent || _oozError) {
       return Container(
         width: 26,
-        height: 26,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          border: Border.all(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
-        ),
+        height: 30,
+        decoration: (_oozError
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1,
+                ),
+                shape: BoxShape.rectangle,
+                color: Color(0xffDD0606),
+              )
+            : BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1,
+                ),
+              )),
         child: IconButton(
           padding: EdgeInsets.all(0),
           icon: (_oozError
-              ? Icon(Icons.info, color: Color(0xffDD0606), size: 24)
+              ? Icon(Icons.info, color: Colors.white, size: 24)
               : Icon(Icons.check, color: Colors.green.shade600, size: 24)),
-          onPressed: () {
-            if (_oozError) {
-              onClickOOZErrorIcon();
-            }
-          },
+          onPressed: () {},
         ),
       );
     }
-    return TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.black87,
-        padding: EdgeInsets.symmetric(horizontal: 6),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50)),
+    return SizedBox(
+      width: 60,
+      height: 30,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.black87,
+          padding: EdgeInsets.symmetric(horizontal: 6),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+          ),
+          backgroundColor: Color(0xff62c915),
+          alignment:
+              showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
         ),
-        backgroundColor: Color(0xff0487FF),
+        onPressed: () {
+          if (!loggedIn) {
+            Navigator.of(context).pushNamed(
+              PageRoute.Page.loginScreen.route,
+            );
+          } else if (!_sendOOZIsLoading) {
+            if (_dontAskToConfirmGratitudeReward) {
+              sendOOZ();
+            } else {
+              _showConfirmGratitudeReward();
+            }
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 6,
+          ),
+          child: !_sendOOZIsLoading
+              ? Text(
+                  "Send",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                )
+              : SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+        ),
       ),
-      onPressed: () {
-        if (!loggedIn) {
-          Navigator.of(context).pushNamed(
-            PageRoute.Page.loginScreen.route,
-          );
-        } else if (!_sendOOZIsLoading) {
-          sendOOZ();
-        }
-      },
-      child: !_sendOOZIsLoading
-          ? Text(
-              "Send",
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            )
-          : SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.transparent,
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
     );
   }
 
@@ -673,9 +725,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       _sendOOZIsLoading = true;
     });
     try {
-      await this
-          .walletTransferRepositoryImpl
-          .transferOOZToPost(this.post.id, this.post.oozToTransfer);
+      await this.walletTransferRepositoryImpl.transferOOZToPost(this.post.id,
+          this.post.oozToTransfer, this._dontAskToConfirmGratitudeReward);
       this.trackingEvents.timelineDonatedOOZ();
       setState(() {
         _sendOOZIsLoading = false;
@@ -691,18 +742,58 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         _oozError = true;
         _oozErrorMessage = "An error has occurred. Try again.";
         if (errorMessage == "INSUFFICIENT_BALANCE") {
-          _oozErrorMessage = "Your current balance is insuficient";
+          _oozErrorMessage = "Your have insufficient OOZ to give.";
         }
+        showOOZErrorMessage();
       });
     }
   }
 
-  void onClickOOZErrorIcon() {
+  void showOOZErrorMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(_oozErrorMessage),
-        duration: Duration(seconds: 5),
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              12,
+            ),
+          ),
+        ),
+        elevation: 3,
+        duration: Duration(seconds: 30),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              Icons.info_rounded,
+              color: Color(0xffDD0606),
+              size: 26,
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: GlobalConstants.of(context).spacingSmall,
+              ),
+              child: Text(
+                _oozErrorMessage,
+                style: TextStyle(color: Colors.black87),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: IconButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+                padding: EdgeInsets.all(0),
+                icon: Icon(
+                  Icons.close,
+                ),
+              ),
+            ),
+          ],
+        ),
+        behavior: SnackBarBehavior.floating,
       ),
     );
     Timer(Duration(seconds: 1), () {
@@ -740,6 +831,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     } else {
       this.post.oozToTransfer = 0.0;
     }
+  }
+
+  bool showOozToTransfer() {
+    return !_oozIsSent && !_oozError && !_sendOOZIsLoading;
   }
 
   void resetSlideButton() {
@@ -788,6 +883,150 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         },
       );
     }
+  }
+}
+
+class GratitudeRewardDialog extends StatefulWidget {
+  String title;
+  String message;
+  Function onClickPositiveButton;
+  Function onCheckChanged;
+
+  GratitudeRewardDialog({
+    this.title,
+    this.message,
+    this.onClickPositiveButton,
+    this.onCheckChanged,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _GratitudeRewardDialogState createState() => _GratitudeRewardDialogState(
+        title: this.title,
+        message: this.message,
+        onClickPositiveButton: this.onClickPositiveButton,
+        onCheckChanged: this.onCheckChanged,
+      );
+}
+
+class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
+  String title;
+  String message;
+  Function onClickPositiveButton;
+  Function onCheckChanged;
+  bool _isChecked = false;
+
+  _GratitudeRewardDialogState({
+    this.title,
+    this.message,
+    this.onClickPositiveButton,
+    this.onCheckChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        this.title,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.headline2.copyWith(
+              color: Colors.black87,
+            ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+              bottom: GlobalConstants.of(context).spacingNormal,
+            ),
+            child: Text(
+              this.message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText2.copyWith(
+                    color: Colors.black87,
+                  ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MaterialButton(
+                onPressed: () => this.onClickPositiveButton(),
+                elevation: 0,
+                color: Color(0xff62c915),
+                child: Text(
+                  'Confirm',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: GlobalConstants.of(context).spacingSmall,
+                ),
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  elevation: 0,
+                  color: Color(0xffd40016),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                _isChecked = !_isChecked;
+              });
+              if (this.onCheckChanged != null) {
+                this.onCheckChanged(this._isChecked);
+              }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  value: _isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      _isChecked = !_isChecked;
+                    });
+                    if (this.onCheckChanged != null) {
+                      this.onCheckChanged(this._isChecked);
+                    }
+                  },
+                ),
+                Flexible(
+                  child: Text(
+                    "Don't show this message again",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 

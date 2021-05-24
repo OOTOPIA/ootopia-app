@@ -25,6 +25,12 @@ class SecureStoreMixin {
     await this.setSecureStore("transfer_ooz_to_post_limit", limit);
   }
 
+  void updateUserDontAskToConfirmGratitudeReward(bool value) async {
+    User user = await getCurrentUser();
+    user.dontAskAgainToConfirmGratitudeReward = value;
+    setCurrentUser(json.encode(user.toJson()));
+  }
+
   Future<double> getTransferOOZToPostLimit() async {
     return double.parse(
         await this.getSecureStore("transfer_ooz_to_post_limit"));
