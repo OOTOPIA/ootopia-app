@@ -1,15 +1,15 @@
-// import 'package:amplitude_flutter/amplitude.dart';
-// import 'package:amplitude_flutter/identify.dart';
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/identify.dart';
 
-// import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 class AnalyticsTracking {
-  // final Amplitude analytics = Amplitude.getInstance(instanceName: "OOTOPIA");
-  // Identify identify;
+  final Amplitude analytics = Amplitude.getInstance(instanceName: "OOTOPIA");
+  Identify identify;
   static AnalyticsTracking instance;
 
   AnalyticsTracking() {
-    // analytics.init(DotEnv.env["KEY_AMPLITUDE"]);
+    analytics.init(DotEnv.env["KEY_AMPLITUDE"]);
   }
 
   static getInstance() {
@@ -20,12 +20,12 @@ class AnalyticsTracking {
     return instance;
   }
 
-  trackingDataUser(identify) {
-    // analytics.identify(identify);
+  trackingDataUser(Identify identify) {
+    analytics.identify(identify);
   }
 
   trackingEvent(String eventName, property) {
-    // analytics.logEvent(eventName, eventProperties: property);
+    analytics.logEvent(eventName, eventProperties: property);
   }
 
   trackingOpenedApp() {
@@ -37,16 +37,16 @@ class AnalyticsTracking {
   }
 
   trackingLoggedIn(String userId, String name) {
-    // analytics.setUserId(userId);
-    // final Identify identify = Identify()..set('Name', name);
-    // this.trackingDataUser(identify);
+    analytics.setUserId(userId);
+    final Identify identify = Identify()..set('Name', name);
+    this.trackingDataUser(identify);
     this.trackingEvent("Logged in", null);
   }
 
   trackingLoggedOut() {
     this.trackingEvent("Logged out", null);
-    // analytics.setUserId(null);
-    // analytics.regenerateDeviceId();
+    analytics.setUserId(null);
+    analytics.regenerateDeviceId();
   }
 
   trackingSignupStartedSignup() {
@@ -54,9 +54,9 @@ class AnalyticsTracking {
   }
 
   trackingSignupCompletedSignup(String userId, String name) {
-    // analytics.setUserId(userId);
-    // final Identify identify = Identify()..set('Name', name);
-    // this.trackingDataUser(identify);
+    analytics.setUserId(userId);
+    final Identify identify = Identify()..set('Name', name);
+    this.trackingDataUser(identify);
     this.trackingEvent("Signup - Completed signup", null);
   }
 
@@ -93,20 +93,20 @@ class AnalyticsTracking {
   }
 
   timelineCreatedAPost() {
-    // final Identify identify = Identify()..add('Content posted', 1);
-    // this.trackingDataUser(identify);
+    final Identify identify = Identify()..add('Content posted', 1);
+    this.trackingDataUser(identify);
     this.trackingEvent("Timeline - Created a post", null);
   }
 
   timelineGaveALike(property) {
-    // final Identify identify = Identify()..add('Likes given', 1);
-    // this.trackingDataUser(identify);
+    final Identify identify = Identify()..add('Likes given', 1);
+    this.trackingDataUser(identify);
     this.trackingEvent("Timeline - Gave a like", property);
   }
 
   timelineGaveADislike(property) {
-    // final Identify identify = Identify()..add('Likes given', -1);
-    // this.trackingDataUser(identify);
+    final Identify identify = Identify()..add('Likes given', -1);
+    this.trackingDataUser(identify);
     this.trackingEvent("Timeline - Gave a dislike", property);
   }
 
@@ -119,10 +119,10 @@ class AnalyticsTracking {
   }
 
   timelineDidAComment(property, postId) {
-    // final Identify identify = Identify()
-    // ..set("PostId", postId)
-    // ..add('Comments made', 1);
-    // this.trackingDataUser(identify);
+    final Identify identify = Identify()
+      ..set("PostId", postId)
+      ..add('Comments made', 1);
+    this.trackingDataUser(identify);
     this.trackingEvent("Timeline - Did a comment", property);
   }
 
