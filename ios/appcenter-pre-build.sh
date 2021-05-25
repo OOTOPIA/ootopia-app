@@ -7,3 +7,4 @@ cat > .env <<EOL
 API_URL=${API_URL}
 AMPLITUDE_KEY=${AMPLITUDE_KEY}
 EOL
+cat .env
