@@ -9,7 +9,7 @@ class AnalyticsTracking {
   static AnalyticsTracking instance;
 
   AnalyticsTracking() {
-    analytics.init(DotEnv.env["AMPLITUDE_KEY"]);
+    analytics.init("69b9fa483bef9f1f73e0193022003cbc");
   }
 
   static getInstance() {
