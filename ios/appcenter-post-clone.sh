@@ -15,6 +15,12 @@ flutter doctor
 
 echo "Installed flutter to `pwd`/flutter"
 
-echo "API_URL=${API_URL} AMPLITUDE_KEY=${AMPLITUDE_KEY}" > .env
+# echo "API_URL=${API_URL} 
+# AMPLITUDE_KEY=${AMPLITUDE_KEY}" > .env
+
+cat > .env <<EOL
+API_URL=${API_URL}
+AMPLITUDE_KEY=${AMPLITUDE_KEY}
+EOL
 
 flutter build ios --release --no-codesign
