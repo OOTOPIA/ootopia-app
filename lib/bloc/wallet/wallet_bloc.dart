@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ootopia_app/data/models/wallets/transfer_model.dart';
+import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 
@@ -46,7 +46,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   Stream<WalletState> _mapGetTransactionHistoryToState(
       GetTransactionHistoryEvent event) async* {
     try {
-      List<Transaction> transactions =
+      List<WalletTransfer> transactions =
           (await this.repository.getTransactionHistory(event.userId));
       print("Tudo certo");
       yield LoadedTransactionHistorySucessState(transactions: transactions);

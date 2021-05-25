@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
-class Transaction extends Equatable {
+class WalletTransfer extends Equatable {
   String id;
   String userId;
   String walletId;
@@ -16,7 +16,7 @@ class Transaction extends Equatable {
   String photoUrl;
   dynamic dateTransaction;
 
-  Transaction({
+  WalletTransfer({
     this.id,
     this.userId,
     this.walletId,
@@ -35,8 +35,8 @@ class Transaction extends Equatable {
     //     DateFormat('dd-MM-yyyy').format(DateTime.parse(createdAt));
   }
 
-  factory Transaction.fromJson(Map<String, dynamic> json) {
-    return Transaction(
+  factory WalletTransfer.fromJson(Map<String, dynamic> json) {
+    return WalletTransfer(
       id: json['id'],
       userId: json['userId'],
       walletId: json['walletId'],

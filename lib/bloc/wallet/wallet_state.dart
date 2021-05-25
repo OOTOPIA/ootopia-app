@@ -37,7 +37,7 @@ class LoadingTransactionHistoryState extends WalletState {
 }
 
 class LoadedTransactionHistorySucessState extends WalletState {
-  List<Transaction> transactions;
+  List<WalletTransfer> transactions;
   LoadedTransactionHistorySucessState({this.transactions});
   @override
   List<Object> get props => [transactions];

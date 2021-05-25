@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
-import 'package:ootopia_app/data/models/wallets/transfer_model.dart';
+import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'dart:convert';
 
@@ -8,7 +8,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class WalletRepository {
   Future<Wallet> getWallet(String userId);
-  Future<List<Transaction>> getTransactionHistory(String userId);
+  Future<List<WalletTransfer>> getTransactionHistory(String userId);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -46,7 +46,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
     }
   }
 
-  Future<List<Transaction>> getTransactionHistory(String userId) async {
+  Future<List<WalletTransfer>> getTransactionHistory(String userId) async {
     try {
       final response = await http.get(
         DotEnv.env['API_URL'] + "wallet-transfers/$userId/history",
@@ -55,7 +55,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
       if (response.statusCode == 200) {
         print("WALLET RESPONSE --> ${response.body}");
         return (json.decode(response.body) as List)
-            .map((i) => Transaction.fromJson(i))
+            .map((i) => WalletTransfer.fromJson(i))
             .toList();
       } else {
         throw Exception('Failed to load wallet');

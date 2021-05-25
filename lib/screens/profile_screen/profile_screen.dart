@@ -5,13 +5,15 @@ import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/models/wallets/transfer_model.dart';
+import 'package:ootopia_app/data/models/wallets/wallet_transfer_group_model.dart';
+import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_history.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -45,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   User user;
   Profile userProfile;
   Wallet wallet;
-  List<Transaction> transactions;
+  List<WalletTransferGroup> allWalletTransfers;
   bool loadingPosts = true;
   bool loadPostsError = false;
   bool loadingMorePosts = false;
@@ -199,12 +201,19 @@ class _ProfileScreenState extends State<ProfileScreen>
       print("primeirp ----> ${resultTransactions[0].createdAt}");
       // resultTransactions.forEach((obj) => obj.dateTransaction = DateFormat('dd-MM-yyyy').format(obj['createdAt']));
 
-      var newMap = groupBy(resultTransactions,
-          (obj) => DateFormat('dd-MM-yyyy').format(obj['createdAt']));
+      this.allWalletTransfers = [];
 
-      print("Oi ----> $newMap");
+      var transfersGroup = groupBy(
+          resultTransactions,
+          (obj) => DateFormat('dd-MM-yyyy')
+              .format(DateTime.parse(obj.createdAt))
+              .toString()).entries.toList().forEach((entry) {
+        this
+            .allWalletTransfers
+            .add(WalletTransferGroup(date: entry.key, transfers: entry.value));
+      });
 
-      this.transactions = resultTransactions;
+      //this.allWalletTransfers = resultTransactions;
 
       setState(() {
         loadingTransactions = false;
@@ -562,9 +571,12 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: TabBarView(
               controller: _tabControllerTransactions,
               children: [
-                TransactionWidget(transactions: this.transactions),
-                TransactionWidget(transactions: this.transactions),
-                TransactionWidget(transactions: this.transactions),
+                WalletTransferHistory(
+                    walletTransferGroup: this.allWalletTransfers),
+                WalletTransferHistory(
+                    walletTransferGroup: this.allWalletTransfers),
+                WalletTransferHistory(
+                    walletTransferGroup: this.allWalletTransfers),
               ],
             ),
           ),
@@ -843,91 +855,5 @@ class GridPosts extends StatelessWidget {
         : Expanded(
             child: Center(child: Text("No posts")),
           );
-  }
-}
-
-class TransactionWidget extends StatelessWidget {
-  List<Transaction> transactions;
-
-  TransactionWidget({this.transactions});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "OOZ received on 28.09.2020",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-        ),
-        TransactionItemWidget(),
-      ],
-    );
-  }
-}
-
-class TransactionItemWidget extends StatelessWidget {
-  const TransactionItemWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 45,
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 4),
-      padding: EdgeInsets.only(left: 3),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(100),
-        border: Border.fromBorderSide(
-          BorderSide(
-            color: Color(0xffBDBDBD),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                height: 39,
-                width: 39,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: Colors.white,
-                  border: Border.fromBorderSide(
-                    BorderSide(
-                      color: Color(0xffBDBDBD),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(
-                  "from Pedro Rocha",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("OOZ 10,00"),
-            ),
-          )
-        ],
-      ),
-    );
   }
 }
