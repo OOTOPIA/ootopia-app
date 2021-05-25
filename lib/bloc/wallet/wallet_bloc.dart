@@ -36,7 +36,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   Stream<WalletState> _mapGetWalletToState(GetWalletEvent event) async* {
     try {
       Wallet wallet = (await this.repository.getWallet(event.userId));
-      print("Tudo certo ${wallet.toString()}");
       yield LoadedWalletSucessState(wallet: wallet);
     } catch (_) {
       print("ERRO MANO NO WALLET");

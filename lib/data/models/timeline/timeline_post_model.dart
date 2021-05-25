@@ -12,6 +12,8 @@ class TimelinePost extends Equatable {
   String username;
   int likesCount;
   int commentsCount;
+  double oozToTransfer = 0;
+  double oozTotalCollected = 0;
   bool liked = false;
   List<String> tags;
   String city;
@@ -32,6 +34,7 @@ class TimelinePost extends Equatable {
     this.username,
     this.likesCount,
     this.commentsCount,
+    this.oozTotalCollected,
     this.liked,
     this.tags,
     this.city,
@@ -55,6 +58,9 @@ class TimelinePost extends Equatable {
       likesCount: parsedJson['likesCount'],
       liked: (parsedJson['liked'] == null ? false : parsedJson['liked']),
       commentsCount: parsedJson['commentsCount'],
+      oozTotalCollected: (parsedJson['oozTotalCollected'] == null
+          ? 0
+          : double.parse(parsedJson['oozTotalCollected'])),
       tags: List.from(parsedJson['tags']),
       city: parsedJson['city'],
       state: parsedJson['state'],

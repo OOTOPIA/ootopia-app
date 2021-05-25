@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/general_config_repository.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
@@ -39,6 +42,11 @@ class _TimelinePageState extends State<TimelinePage>
   int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
   bool showUploadedVideoMessage = false;
+  GeneralConfigRepositoryImpl generalConfigRepositoryImpl =
+      GeneralConfigRepositoryImpl();
+  UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
+
+  GeneralConfig transferOozToPostLimitConfig;
 
   List<TimelinePost> _allPosts = [];
 
@@ -62,14 +70,10 @@ class _TimelinePageState extends State<TimelinePage>
         onReceiveVideoFromAnotherApp(value);
       });
     });
-
-    _checkUserIsLoggedIn();
-
     setTimelineVideosMuted();
 
     timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
-    timelineBloc.add(GetTimelinePostsEvent(
-        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+    performAllRequests();
     flickMultiManager = FlickMultiManager();
 
     if (widget.args != null && widget.args["createdPost"] == true) {
@@ -109,6 +113,26 @@ class _TimelinePageState extends State<TimelinePage>
     });
   }
 
+  performAllRequests() async {
+    await _checkUserIsLoggedIn();
+    _getTransferOozToPostLimitConfig();
+  }
+
+  void _getTransferOozToPostLimitConfig() async {
+    try {
+      transferOozToPostLimitConfig = await this
+          .generalConfigRepositoryImpl
+          .getConfig(GeneralConfigName.transferOOZToPostLimit);
+      setTransferOOZToPostLimit(transferOozToPostLimitConfig.value);
+      //Recuperamos os posts apenas após a configuração inicial para evitar problema com o limite de transferência de OOZ
+      timelineBloc.add(GetTimelinePostsEvent(
+          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+    } catch (e) {
+      //error
+      print("Erro! ${e.toString()}");
+    }
+  }
+
   void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) async {
     await _checkUserIsLoggedIn();
     if (value != null && value.length > 0) {
@@ -143,6 +167,7 @@ class _TimelinePageState extends State<TimelinePage>
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
+      await this.userRepositoryImpl.getMyAccountDetails();
       user = await getCurrentUser();
       print("LOGGED USER: " + user.fullname);
     }
@@ -372,7 +397,7 @@ class _TimelinePageState extends State<TimelinePage>
                         _allPosts = [];
                         currentPage = 1;
                       });
-                      _getData();
+                      performAllRequests();
                     },
                     child: ListView.separated(
                       separatorBuilder: (BuildContext context, int index) =>

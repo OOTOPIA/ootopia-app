@@ -9,7 +9,7 @@ class AnalyticsTracking {
   static AnalyticsTracking instance;
 
   AnalyticsTracking() {
-    analytics.init(DotEnv.env["KEY_AMPLITUDE"]);
+    analytics.init(DotEnv.env["AMPLITUDE_KEY"]);
   }
 
   static getInstance() {
@@ -112,6 +112,10 @@ class AnalyticsTracking {
 
   timelineViewedComments(property) {
     this.trackingEvent("Timeline - Viewed comments", property);
+  }
+
+  timelineDonatedOOZ() {
+    this.trackingEvent("Timeline - Donated OOz", null);
   }
 
   timelineDidAComment(property, postId) {
