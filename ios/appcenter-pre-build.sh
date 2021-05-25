@@ -1,0 +1,3 @@
+#!/bin/bash
+cd ${APPCENTER_SOURCE_DIRECTORY}
+echo "API_URL=${API_URL} \nAMPLITUDE_KEY=${AMPLITUDE_KEY}" > .env
