@@ -17,4 +17,15 @@ class GetWalletEvent extends WalletEvent {
   List<Object> get props => [userId];
 }
 
+class GetTransactionHistoryEvent extends WalletEvent {
+  final int limit;
+  final int offset;
+  final String userId;
+  final String action;
+  const GetTransactionHistoryEvent(
+      this.limit, this.offset, this.userId, this.action);
+  @override
+  List<Object> get props => [this.limit, this.offset, this.userId, this.action];
+}
+
 class NetworkErrorEvent extends Error {}
