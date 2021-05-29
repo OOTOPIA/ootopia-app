@@ -46,8 +46,10 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   Stream<WalletState> _mapGetTransactionHistoryToState(
       GetTransactionHistoryEvent event) async* {
     try {
-      List<WalletTransfer> transactions =
-          (await this.repository.getTransactionHistory(event.userId));
+      List<WalletTransfer> transactions = (await this
+          .repository
+          .getTransactionHistory(
+              event.limit, event.offset, event.userId, event.action));
       print("Tudo certo");
       yield LoadedTransactionHistorySucessState(transactions: transactions);
     } catch (_) {

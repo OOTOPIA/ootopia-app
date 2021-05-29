@@ -8,7 +8,8 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class WalletRepository {
   Future<Wallet> getWallet(String userId);
-  Future<List<WalletTransfer>> getTransactionHistory(String userId);
+  Future<List<WalletTransfer>> getTransactionHistory(
+      [int limit, int offset, String userId, String action]);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -46,10 +47,26 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
     }
   }
 
-  Future<List<WalletTransfer>> getTransactionHistory(String userId) async {
+  Future<List<WalletTransfer>> getTransactionHistory(
+      [int limit, int offset, String userId, String action]) async {
     try {
+      Map<String, String> queryParams = {};
+
+      if (limit != null && offset != null) {
+        queryParams['limit'] = limit.toString();
+        queryParams['offset'] = offset.toString();
+      }
+
+      if (action != null) {
+        queryParams['action'] = action.toString();
+      }
+
+      String queryString = Uri(queryParameters: queryParams).query;
+
       final response = await http.get(
-        DotEnv.env['API_URL'] + "wallet-transfers/$userId/history",
+        DotEnv.env['API_URL'] +
+            "wallet-transfers/$userId/history?" +
+            queryString,
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {

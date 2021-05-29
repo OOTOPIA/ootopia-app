@@ -47,7 +47,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   User user;
   Profile userProfile;
   Wallet wallet;
-  List<WalletTransferGroup> allWalletTransfers;
+  List<WalletTransferGroup> allWalletTransfers = [];
+  List<WalletTransferGroup> receivedWalletTransfers = [];
+  List<WalletTransferGroup> sentWalletTransfers = [];
   bool loadingPosts = true;
   bool loadPostsError = false;
   bool loadingMorePosts = false;
@@ -56,8 +58,13 @@ class _ProfileScreenState extends State<ProfileScreen>
   bool loadWalletError = false;
   List<TimelinePost> posts = [];
   int _postsPerPageCount = 12;
+  int _walletTransferPerPageCount = 12;
   bool _hasMorePosts = true;
   int currentPage = 1;
+  int walletTransferCurrentPage = 1;
+  int walletTransferReceivedCurrentPage = 1;
+  int walletTransferSentCurrentPage = 1;
+  int tabIndexSelected = 0;
   String userId = "";
   String appVersion;
   TabController _tabController;
@@ -121,6 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   void _performAllRequests() {
     this.posts = [];
     currentPage = 1;
+    walletTransferCurrentPage = 1;
+    walletTransferReceivedCurrentPage = 1;
+    walletTransferSentCurrentPage = 1;
     getUserProfile(userId);
     getUserPosts();
     getUserWallet();
@@ -188,32 +198,52 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
-  Future getUserTransactionHistory([String param = ""]) async {
-    print("To aqui e fui chamado");
-
+  Future getUserTransactionHistory([String param]) async {
     setState(() {
       loadingTransactions = true;
     });
+    int currentPage;
+
+    if (param != null && param == "received") {
+      currentPage = walletTransferReceivedCurrentPage;
+    } else if (param != null && param == "sent") {
+      currentPage = walletTransferSentCurrentPage;
+    } else {
+      currentPage = walletTransferCurrentPage;
+    }
+
     this
         .walletRepositoryImpl
-        .getTransactionHistory(userId)
+        .getTransactionHistory(_walletTransferPerPageCount,
+            (currentPage - 1) * _walletTransferPerPageCount, userId, param)
         .then((resultTransactions) {
-      print("primeirp ----> ${resultTransactions[0].createdAt}");
-      // resultTransactions.forEach((obj) => obj.dateTransaction = DateFormat('dd-MM-yyyy').format(obj['createdAt']));
-
-      this.allWalletTransfers = [];
-
-      var transfersGroup = groupBy(
+      groupBy(
           resultTransactions,
           (obj) => DateFormat('dd-MM-yyyy')
               .format(DateTime.parse(obj.createdAt))
               .toString()).entries.toList().forEach((entry) {
-        this
-            .allWalletTransfers
-            .add(WalletTransferGroup(date: entry.key, transfers: entry.value));
+        if (param != null && param == "received") {
+          this.receivedWalletTransfers.add(
+                WalletTransferGroup(
+                  date: entry.key,
+                  transfers: entry.value
+                      .where((obj) => obj.action == "received")
+                      .toList(),
+                ),
+              );
+        } else if (param != null && param == "sent") {
+          this.sentWalletTransfers.add(
+                WalletTransferGroup(
+                  date: entry.key,
+                  transfers:
+                      entry.value.where((obj) => obj.action == "sent").toList(),
+                ),
+              );
+        } else {
+          this.allWalletTransfers.add(
+              WalletTransferGroup(date: entry.key, transfers: entry.value));
+        }
       });
-
-      //this.allWalletTransfers = resultTransactions;
 
       setState(() {
         loadingTransactions = false;
@@ -550,6 +580,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                   fontWeight: FontWeight.bold,
                 ),
                 unselectedLabelColor: Colors.black.withOpacity(0.5),
+                onTap: (index) {
+                  tabIndexSelected = index;
+                  if (this.tabIndexSelected == 1) {
+                    if (this.receivedWalletTransfers.length <= 0) {
+                      getUserTransactionHistory("received");
+                    }
+                  } else if (this.tabIndexSelected == 2) {
+                    if (this.sentWalletTransfers.length <= 0) {
+                      getUserTransactionHistory("sent");
+                    }
+                  } else {
+                    if (this.allWalletTransfers.length <= 0) {
+                      getUserTransactionHistory();
+                    }
+                  }
+                },
                 tabs: [
                   Tab(
                     text: "All",
@@ -574,12 +620,59 @@ class _ProfileScreenState extends State<ProfileScreen>
                 WalletTransferHistory(
                     walletTransferGroup: this.allWalletTransfers),
                 WalletTransferHistory(
-                    walletTransferGroup: this.allWalletTransfers),
+                    walletTransferGroup: this.receivedWalletTransfers),
                 WalletTransferHistory(
-                    walletTransferGroup: this.allWalletTransfers),
+                    walletTransferGroup: this.sentWalletTransfers),
               ],
             ),
           ),
+          loadingTransactions
+              ? Center(child: CircularProgressIndicator())
+              : FlatButton(
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                      GlobalConstants.of(context).spacingSmall,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(Icons.expand_more_rounded,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                  onPressed: () {
+                    if (this.tabIndexSelected == 1) {
+                      setState(() {
+                        walletTransferReceivedCurrentPage++;
+                      });
+                      getUserTransactionHistory("received");
+                    } else if (this.tabIndexSelected == 2) {
+                      setState(() {
+                        walletTransferSentCurrentPage++;
+                      });
+                      getUserTransactionHistory("sent");
+                    } else {
+                      setState(() {
+                        walletTransferCurrentPage++;
+                      });
+                      getUserTransactionHistory();
+                    }
+                  },
+                  color: Colors.white,
+                  splashColor: Colors.black54,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
           SizedBox(
             height: 16,
           ),
