@@ -52,8 +52,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       String errorMessage = e.toString();
 
       if (errorMessage == "INVALID_PASSWORD") {
+        yield EmptyState();
         yield ErrorState("Invalid email and/or password");
       } else {
+        yield EmptyState();
         yield ErrorState("Error on login");
       }
     }
