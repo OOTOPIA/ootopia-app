@@ -50,12 +50,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();
-
-      if (errorMessage == "INVALID_PASSWORD") {
-        yield EmptyState();
+      yield EmptyState();
+      if (errorMessage == "INVALID_PASSWORD") {  
         yield ErrorState("Invalid email and/or password");
       } else {
-        yield EmptyState();
         yield ErrorState("Error on login");
       }
     }
