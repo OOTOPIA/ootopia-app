@@ -88,8 +88,10 @@ class TransactionItemWidget extends StatelessWidget {
                           backgroundColor: Colors.black,
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
-                            backgroundImage:
-                                AssetImage("assets/icons_profile/profile.png"),
+                            backgroundImage: AssetImage(
+                                walletTransfer.fromPlatform
+                                    ? "assets/icons/icon_launcher.png"
+                                    : "assets/icons_profile/profile.png"),
                             radius: 19,
                           ),
                         ),
@@ -102,7 +104,7 @@ class TransactionItemWidget extends StatelessWidget {
                         child: Text(
                           walletTransfer.origin == "video_like"
                               ? "Gratitude reward"
-                              : "transfer",
+                              : "Transfer",
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -115,8 +117,10 @@ class TransactionItemWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(
                           walletTransfer.action == "sent"
-                              ? "to" + " ${walletTransfer.otherUsername}"
-                              : "from" + " ${walletTransfer.otherUsername}",
+                              ? "to" +
+                                  " ${(walletTransfer.otherUsername != null ? walletTransfer.otherUsername : "<vazio>")}"
+                              : "from" +
+                                  " ${(walletTransfer.fromPlatform ? "OOTOPIA" : (walletTransfer.otherUsername != null ? walletTransfer.otherUsername : "<vazio>"))}",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
