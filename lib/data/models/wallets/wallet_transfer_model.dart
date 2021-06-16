@@ -14,6 +14,7 @@ class WalletTransfer extends Equatable {
   String createdAt;
   String updatedAt;
   String photoUrl;
+  bool fromPlatform = false;
   dynamic dateTransaction;
 
   WalletTransfer({
@@ -30,6 +31,7 @@ class WalletTransfer extends Equatable {
     this.updatedAt,
     this.photoUrl,
     this.dateTransaction,
+    this.fromPlatform,
   }) {
     // this.dateTransaction =
     //     DateFormat('dd-MM-yyyy').format(DateTime.parse(createdAt));
@@ -52,6 +54,8 @@ class WalletTransfer extends Equatable {
       updatedAt: json['updatedAt'],
       photoUrl: json['photoUrl'],
       dateTransaction: json['dateTransaction'],
+      fromPlatform:
+          (json['fromPlatform'] == null ? false : json['fromPlatform']),
     );
   }
 
@@ -70,5 +74,6 @@ class WalletTransfer extends Equatable {
         updatedAt,
         photoUrl,
         dateTransaction,
+        fromPlatform,
       ];
 }
