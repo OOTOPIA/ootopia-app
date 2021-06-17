@@ -94,7 +94,6 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   @override
   Future<PostCreate> createPost(PostCreate post) async {
     try {
-      print("Caiu aqui dentro");
       await FlutterUploader().enqueue(
         MultipartFormDataUpload(
           url: DotEnv.env['API_URL'] + "posts",
@@ -120,22 +119,16 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
 
   @override
   Future<String> deletePost(String postId) async {
-    print("chamou o repository");
     try {
-      print("dentro do try");
       final request = http.Request(
           "DELETE", Uri.parse(DotEnv.env['API_URL'] + 'posts/$postId'));
       request.headers.addAll(await this.getHeaders());
 
       final response = await request.send();
 
-      print("depois do send");
-
       if (response.statusCode == 200) {
-        print("deletou?");
         return "ALL_DELETED";
       } else {
-        print("deu ruim");
         throw Exception('Failed to delete post');
       }
     } catch (error) {
