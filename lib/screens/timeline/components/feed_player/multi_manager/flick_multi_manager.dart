@@ -18,18 +18,15 @@ class FlickMultiManager {
     if (_flickManagers.length == 1) {
       flickManager.flickVideoManager.addListener(() {
         distributionSystem.distributionWatchVideo(
-          position: flickManager
+          positionInMs: flickManager
               .flickVideoManager.videoPlayerValue.position.inMilliseconds,
-          duration: flickManager
+          durationInMs: flickManager
               .flickVideoManager.videoPlayerValue.duration.inMilliseconds,
         );
-        print("<----------------------------->");
-        print(
-            "Milisegundos ${flickManager.flickVideoManager.videoPlayerValue.position.inMilliseconds}");
-        print(
-            "Chamado position ${flickManager.flickVideoManager.videoPlayerValue.position}");
-        print(
-            "Chamado duration ${flickManager.flickVideoManager.videoPlayerValue.duration.inMilliseconds}");
+        //print("<----------------------------->");
+        //print("Milisegundos ${flickManager.flickVideoManager.videoPlayerValue.position.inMilliseconds}");
+        //print("Chamado position ${flickManager.flickVideoManager.videoPlayerValue.position}");
+        //print("Chamado duration ${flickManager.flickVideoManager.videoPlayerValue.duration.inMilliseconds}");
       });
       play(flickManager);
     }
