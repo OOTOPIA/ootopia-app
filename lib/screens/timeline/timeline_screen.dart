@@ -12,6 +12,7 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -31,7 +32,10 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePageState extends State<TimelinePage>
-    with SecureStoreMixin, SingleTickerProviderStateMixin {
+    with
+        SecureStoreMixin,
+        SingleTickerProviderStateMixin,
+        WidgetsBindingObserver {
   StreamSubscription _intentDataStreamSubscription;
   List<SharedMediaFile> _sharedFiles;
   TimelinePostBloc timelineBloc;
@@ -55,6 +59,8 @@ class _TimelinePageState extends State<TimelinePage>
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
@@ -111,6 +117,8 @@ class _TimelinePageState extends State<TimelinePage>
         }
       }
     });
+
+    OOzDistributionSystem.getInstance().startTimelineView();
   }
 
   performAllRequests() async {
@@ -186,7 +194,42 @@ class _TimelinePageState extends State<TimelinePage>
   @override
   void dispose() {
     _intentDataStreamSubscription.cancel();
+    OOzDistributionSystem.getInstance().endTimelineView("dispose");
     super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    OOzDistributionSystem.getInstance().endTimelineView("deactivate");
+    super.deactivate();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // These are the callbacks
+    switch (state) {
+      case AppLifecycleState.resumed:
+        OOzDistributionSystem.getInstance().endTimelineView("resumed");
+
+        // widget is resumed
+        break;
+      case AppLifecycleState.inactive:
+        OOzDistributionSystem.getInstance().endTimelineView("inactive");
+
+        // widget is inactive
+        break;
+      case AppLifecycleState.paused:
+        OOzDistributionSystem.getInstance().endTimelineView("paused");
+
+        // widget is paused
+        break;
+      case AppLifecycleState.detached:
+        OOzDistributionSystem.getInstance().endTimelineView("detached");
+
+        // widget is detached
+        break;
+    }
   }
 
   @override

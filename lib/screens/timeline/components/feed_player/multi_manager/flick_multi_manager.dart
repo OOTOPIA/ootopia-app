@@ -1,9 +1,12 @@
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
 
 class FlickMultiManager {
   List<FlickManager> _flickManagers = [];
   FlickManager _activeManager;
   bool _isMute = false;
+  OOzDistributionSystem distributionSystem =
+      OOzDistributionSystem.getInstance();
 
   init(FlickManager flickManager) {
     _flickManagers.add(flickManager);
@@ -13,6 +16,21 @@ class FlickMultiManager {
       flickManager?.flickControlManager?.unmute();
     }
     if (_flickManagers.length == 1) {
+      flickManager.flickVideoManager.addListener(() {
+        distributionSystem.distributionWatchVideo(
+          position: flickManager
+              .flickVideoManager.videoPlayerValue.position.inMilliseconds,
+          duration: flickManager
+              .flickVideoManager.videoPlayerValue.duration.inMilliseconds,
+        );
+        print("<----------------------------->");
+        print(
+            "Milisegundos ${flickManager.flickVideoManager.videoPlayerValue.position.inMilliseconds}");
+        print(
+            "Chamado position ${flickManager.flickVideoManager.videoPlayerValue.position}");
+        print(
+            "Chamado duration ${flickManager.flickVideoManager.videoPlayerValue.duration.inMilliseconds}");
+      });
       play(flickManager);
     }
   }

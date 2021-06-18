@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_history.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'components/menu_profile.dart';
@@ -35,7 +36,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen>
-    with SecureStoreMixin, TickerProviderStateMixin {
+    with SecureStoreMixin, TickerProviderStateMixin, WidgetsBindingObserver {
   UserBloc profileBloc;
   UserRepositoryImpl profileRepositoryImpl = UserRepositoryImpl();
   WalletRepositoryImpl walletRepositoryImpl = WalletRepositoryImpl();
@@ -78,6 +79,8 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     _checkUserIsLoggedIn();
     profileBloc = BlocProvider.of<UserBloc>(context);
     walletBloc = BlocProvider.of<WalletBloc>(context);
@@ -104,6 +107,41 @@ class _ProfileScreenState extends State<ProfileScreen>
     setState(() {
       _activeTabIndexTransactions = _tabControllerTransactions.index;
     });
+  }
+
+  @override
+  void deactivate() {
+    OOzDistributionSystem.getInstance().endTimelineView("deactivate profile");
+    super.deactivate();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // These are the callbacks
+    print("Lifecycle ===> $state");
+    switch (state) {
+      case AppLifecycleState.resumed:
+        OOzDistributionSystem.getInstance().endTimelineView("resumed profile");
+
+        // widget is resumed
+        break;
+      case AppLifecycleState.inactive:
+        OOzDistributionSystem.getInstance().endTimelineView("inactive profile");
+
+        // widget is inactive
+        break;
+      case AppLifecycleState.paused:
+        OOzDistributionSystem.getInstance().endTimelineView("paused profile");
+
+        // widget is paused
+        break;
+      case AppLifecycleState.detached:
+        OOzDistributionSystem.getInstance().endTimelineView("detached profile");
+
+        // widget is detached
+        break;
+    }
   }
 
   Future<void> getAppInfo() async {
