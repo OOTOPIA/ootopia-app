@@ -1,4 +1,5 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/models/post/post_created_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
@@ -14,6 +15,7 @@ abstract class PostRepository {
   Future<List<TimelinePost>> getPosts([int limit, int offset, String userId]);
   Future<LikePostResult> likePost(String id);
   Future<void> createPost(PostCreate post);
+  Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -133,6 +135,36 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       }
     } catch (error) {
       throw Exception('Failed to delete post ' + error);
+    }
+  }
+
+  @override
+  Future recordWatchedPosts(List<WatchVideoModel> watchedPosts) async {
+    try {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        return;
+      }
+
+      String allObjsJsonString = "";
+
+      for (var i = 0; i < watchedPosts.length; i++) {
+        WatchVideoModel watchedPost = watchedPosts[i];
+        allObjsJsonString += jsonEncode(watchedPost.toMap()) +
+            (i == watchedPosts.length - 1 ? "" : ",");
+      }
+
+      final response = await http.post(
+        DotEnv.env['API_URL'] + "posts/watched",
+        headers: await this.getHeaders(),
+        body: jsonEncode(<String, String>{
+          'data': "[" + allObjsJsonString + "]",
+        }),
+      );
+
+      print('errerere');
+    } catch (e) {
+      print('Error send watched post: $e');
     }
   }
 }

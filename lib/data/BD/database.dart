@@ -7,52 +7,40 @@ import './watch_video/watch_video_model.dart';
 import 'package:path/path.dart';
 
 class OOTOPIADatabase {
-  static OOTOPIADatabase _instance;
+  static final OOTOPIADatabase instance = OOTOPIADatabase.init();
 
   static Database _database;
 
+  String _databaseName = 'ootopia.db';
   List<BaseModel> tables = [
     WatchVideoModel(),
   ];
 
-  String _databaseName = 'ootopia_db.db';
-
-  //OOTOPIADatabase._createInstance();
-
-  OOTOPIADatabase();
+  OOTOPIADatabase.init();
 
   static getInstance() {
-    if (_instance == null) {
-      _instance = OOTOPIADatabase();
-    }
-
-    return _instance;
+    return instance;
   }
 
   Future<Database> get database async {
-    if (_database == null) {
-      print("CAIU AQUI DENTRO");
-      _database = await initializeDatabase();
-      print("CAIU AQUI DEPOIS DE DENTRO");
-    }
+    if (_database != null) return _database;
 
-    print("NEM CAIU VEI");
-
+    _database = await _initDB(_databaseName);
     return _database;
   }
 
-  Future<Database> initializeDatabase() async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, _databaseName);
+  Future<Database> _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
 
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: (Database db, int newVersion) async {
-        for (var table in tables) {
-          await table.createTable();
-        }
-      },
-    );
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
+
+  Future _createDB(Database db, int newVersion) async {
+    for (var table in tables) {
+      await table.createTable(db);
+    }
+  }
+
+  Future close() async => (await instance.database).close();
 }

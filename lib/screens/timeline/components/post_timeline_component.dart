@@ -297,6 +297,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   bottomRight: Radius.circular(20)),
             ),
             child: FlickMultiPlayer(
+              postId: this.post.id,
               url: this.post.videoUrl,
               flickMultiManager: widget.flickMultiManager,
               image: this.post.thumbnailUrl,

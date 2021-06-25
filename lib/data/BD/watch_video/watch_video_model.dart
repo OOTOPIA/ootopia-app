@@ -5,10 +5,22 @@ import 'package:sqflite/sqflite.dart';
 class WatchVideoModel implements BaseModel {
   int id;
   String postId;
-  int positionInMs;
+  int timeInMilliseconds;
   int durationInMs;
+  int watched;
+  int uploaded; //To check if this is uploaded to the server
+  int createdAtInMs;
+  int updatedAtInMs;
 
-  WatchVideoModel([this.postId, this.positionInMs, this.durationInMs]);
+  WatchVideoModel([
+    this.postId,
+    this.timeInMilliseconds,
+    this.durationInMs,
+    this.watched,
+    this.uploaded,
+    this.createdAtInMs,
+    this.updatedAtInMs,
+  ]);
 
   @override
   String tableName() {
@@ -16,16 +28,17 @@ class WatchVideoModel implements BaseModel {
   }
 
   @override
-  Future createTable() async {
-    print("antes do create table");
-    Database db = await OOTOPIADatabase.getInstance().database;
-    print("depois do create table");
+  Future createTable(Database db) async {
     return await db.execute("""
       CREATE TABLE ${tableName()}(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        post_id TEXT,
-        position_in_ms INTEGER,
-        duration_in_ms INTEGER
+        ${WatchVideoFields.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+        ${WatchVideoFields.postId} TEXT,
+        ${WatchVideoFields.timeInMilliseconds} INTEGER,
+        ${WatchVideoFields.durationInMs} INTEGER,
+        ${WatchVideoFields.watched} INTEGER,
+        ${WatchVideoFields.uploaded} INTEGER,
+        ${WatchVideoFields.createdAtInMs} INTEGER,
+        ${WatchVideoFields.updatedAtInMs} INTEGER
       )
     """);
   }
@@ -33,10 +46,14 @@ class WatchVideoModel implements BaseModel {
   @override
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
-      'id': id,
-      'post_id': postId,
-      'position_in_ms': positionInMs,
-      'duration_in_ms': durationInMs,
+      WatchVideoFields.id: id,
+      WatchVideoFields.postId: postId,
+      WatchVideoFields.timeInMilliseconds: timeInMilliseconds,
+      WatchVideoFields.durationInMs: durationInMs,
+      WatchVideoFields.watched: watched,
+      WatchVideoFields.uploaded: uploaded,
+      WatchVideoFields.createdAtInMs: createdAtInMs,
+      WatchVideoFields.updatedAtInMs: updatedAtInMs,
     };
     return map;
   }
@@ -44,10 +61,36 @@ class WatchVideoModel implements BaseModel {
   @override
   WatchVideoModel fromMap(Map<String, dynamic> map) {
     var model = WatchVideoModel();
-    model.id = map['id'];
-    model.postId = map['post_id'];
-    model.positionInMs = map['position_in_ms'];
-    model.durationInMs = map['duration_in_ms'];
+    model.id = map[WatchVideoFields.id];
+    model.postId = map[WatchVideoFields.postId];
+    model.timeInMilliseconds = map[WatchVideoFields.timeInMilliseconds];
+    model.durationInMs = map[WatchVideoFields.durationInMs];
+    model.watched = map[WatchVideoFields.watched];
+    model.uploaded = map[WatchVideoFields.uploaded];
+    model.createdAtInMs = map[WatchVideoFields.createdAtInMs];
+    model.updatedAtInMs = map[WatchVideoFields.updatedAtInMs];
     return model;
   }
+}
+
+class WatchVideoFields {
+  static final List<String> values = [
+    id,
+    postId,
+    timeInMilliseconds,
+    durationInMs,
+    watched,
+    uploaded,
+    createdAtInMs,
+    updatedAtInMs
+  ];
+
+  static final String id = '_id';
+  static final String postId = 'post_id';
+  static final String timeInMilliseconds = 'time_in_milliseconds';
+  static final String durationInMs = 'duration_in_ms';
+  static final String watched = 'watched';
+  static final String uploaded = 'uploaded';
+  static final String createdAtInMs = 'created_at_in_ms';
+  static final String updatedAtInMs = 'updated_at_in_ms';
 }
