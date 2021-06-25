@@ -1,18 +1,41 @@
+import 'dart:async';
+
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
+import 'dart:math';
 
 class FlickMultiManager {
   List<FlickManager> _flickManagers = [];
   FlickManager _activeManager;
   bool _isMute = false;
+  OOzDistributionSystem distributionSystem =
+      OOzDistributionSystem.getInstance();
 
-  init(FlickManager flickManager) {
+  init(FlickManager flickManager, [String postId]) {
     _flickManagers.add(flickManager);
     if (_isMute) {
       flickManager?.flickControlManager?.mute();
     } else {
       flickManager?.flickControlManager?.unmute();
     }
-    if (_flickManagers.length == 1) {
+    if (postId != null && !flickManager.flickVideoManager.hasListeners) {
+      flickManager.flickVideoManager.addListener(() {
+        if (flickManager
+                .flickVideoManager.videoPlayerValue.position.inMilliseconds >
+            0) {
+          //Random random = new Random();
+          //int randomNumber = random.nextInt(1000) + 100;
+          Timer(Duration(milliseconds: 300), () {
+            distributionSystem.distributionWatchVideo(
+              postId: postId,
+              timeInMilliseconds: flickManager
+                  .flickVideoManager.videoPlayerValue.position.inMilliseconds,
+              durationInMs: flickManager
+                  .flickVideoManager.videoPlayerValue.duration.inMilliseconds,
+            );
+          });
+        }
+      });
       play(flickManager);
     }
   }

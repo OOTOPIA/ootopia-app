@@ -70,13 +70,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Stream<PostState> _mapDeletePostToState(DeletePostEvent event) async* {
-    print("antes do try");
-
     try {
       print("Cai to try");
       var result = (await this.repository.deletePost(event.postId));
       if (result == "ALL_DELETED") {
-        print("deletou");
         yield SuccessDeletePostState(event.postId, event.isProfile);
       }
     } catch (_) {
