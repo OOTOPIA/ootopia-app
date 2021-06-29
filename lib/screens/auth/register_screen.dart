@@ -294,7 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           child: RichText(
                                             text: new TextSpan(
                                               text:
-                                                  'We respect and protect your personal data. Why it will never be trade with third parties. We stand for total transparency and ethics! ',
+                                                  'We respect and protect your personal data. ',
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.white,
@@ -316,7 +316,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                                           launch(
                                                               'https://www.ootopia.org/pledge');
                                                         },
+                                                ),
+                                                new TextSpan(
+                                                  text:
+                                                      ' our pledge for transparency and high ethical standards.',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                  ),
                                                 )
+                                                //
                                               ],
                                             ),
                                           ),
