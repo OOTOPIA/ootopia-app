@@ -18,6 +18,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   AuthBloc authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool _showPassword = false;
+  bool _showRepeatPassword = false;
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
@@ -138,9 +140,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 children: [
                                   TextFormField(
                                     controller: _passwordController,
-                                    obscureText: true,
+                                    obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("Password"),
+                                        .loginInputTheme("Password").copyWith(
+                                          suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              _showPassword == false
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.white,
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _showPassword = !_showPassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'Informe a nova senha';
@@ -154,9 +170,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   ),
                                   TextFormField(
                                     controller: _repeatPasswordController,
-                                    obscureText: true,
+                                    obscureText: !_showRepeatPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme('Repeat password'),
+                                        .loginInputTheme('Repeat password').copyWith(
+                                          suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              _showRepeatPassword == false
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.white,
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _showRepeatPassword = !_showRepeatPassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'Por favor, informe sua senha';
