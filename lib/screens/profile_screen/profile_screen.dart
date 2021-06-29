@@ -537,20 +537,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           Row(
             children: [
-              CircleActionButton(
-                iconAssetPath: 'assets/icons/plus.png',
-                text: 'Add money',
-                onClick: () {
-                  print("add money!");
-                },
-              ),
-              CircleActionButton(
-                iconAssetPath: 'assets/icons/arrow_right.png',
-                text: 'Send money',
-                onClick: () {
-                  print("send money!");
-                },
-              ),
               Expanded(
                 child: Container(
                   width: double.infinity,
