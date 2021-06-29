@@ -23,8 +23,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapEventToState(
     AuthEvent event,
   ) async* {
-    // Emitting a state from the asynchronous generator
-    // Branching the executed logic by checking the event type
     LoadingState();
     if (event is LoadingSucessLoginEvent) {
       yield LoadingState();
@@ -32,11 +30,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapUserLoginToState(event);
     } else if (event is RegisterEvent) {
       yield* _mapUserRegisterToState(event);
-    } // else if (event is UpdateTimelinePostEvent) {
-    //   yield* _mapAlbumUpdatedToState(event);
-    // } else if (event is DeleteTimelinePostEvent) {
-    //   yield* _mapAlbumDeletedToState(event);
-    // }
+    } else if (event is RecoverPasswordEvent) {
+      yield* _mapRecoverPasswordToState(event);
+    } else if (event is ResetPasswordEvent) {
+      yield* _mapResetPasswordToState(event);
+    }
   }
 
   Stream<AuthState> _mapUserLoginToState(LoginEvent event) async* {
@@ -51,7 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();
       yield EmptyState();
-      if (errorMessage == "INVALID_PASSWORD") {  
+      if (errorMessage == "INVALID_PASSWORD") {
         yield ErrorState("Invalid email and/or password");
       } else {
         yield ErrorState("Error on login");
@@ -80,6 +78,47 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             "There is already a registered user with that email address");
       } else {
         yield ErrorState("Error on register");
+      }
+    }
+  }
+
+  Stream<AuthState> _mapRecoverPasswordToState(
+      RecoverPasswordEvent event) async* {
+    try {
+      print("RECOVER PASSWORD ${event.email}");
+      await this.repository.recoverPassword(event.email);
+      yield EmptyState();
+      yield LoadedSucessRecoverPasswordState();
+      this.trackingEvents.userRecoverPassword();
+    } on FetchDataException catch (e) {
+      String errorMessage = e.toString();
+
+      if (errorMessage == "USER_NOT_FOUND") {
+        yield ErrorRecoverPasswordState(
+            "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.");
+      } else {
+        yield ErrorRecoverPasswordState(
+            "Ocorreu um erro ao recuperar a senha. Tente novamente.");
+      }
+    }
+  }
+
+  Stream<AuthState> _mapResetPasswordToState(ResetPasswordEvent event) async* {
+    try {
+      print("RESET PASSWORD ${event.newPassword}");
+      await this.repository.resetPassword(event.newPassword);
+      yield EmptyState();
+      yield LoadedSucessResetPasswordState();
+      this.trackingEvents.userResetPassword()();
+    } on FetchDataException catch (e) {
+      String errorMessage = e.toString();
+
+      if (errorMessage == "TOKEN_EXPIRED") {
+        yield ErrorResetPasswordState(
+            "O token expirou. Envie o e-mail para iniciar o processo de recuperação de senha novamente.");
+      } else {
+        yield ErrorResetPasswordState(
+            "Ocorreu um erro ao atualizar a senha. Tente novamente.");
       }
     }
   }

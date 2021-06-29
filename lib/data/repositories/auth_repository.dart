@@ -11,6 +11,8 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class AuthRepository {
   Future<User> login(String email, String password);
   Future<User> register(String name, String email, String password);
+  Future recoverPassword(String email);
+  Future resetPassword(String newPassword);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -18,6 +20,17 @@ const Map<String, String> API_HEADERS = {
 };
 
 class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
+  Future<Map<String, String>> getRecoverPasswordHeader() async {
+    String recoverPasswordToken = await getRecoverPasswordToken();
+    if (recoverPasswordToken.isEmpty) {
+      return API_HEADERS;
+    }
+    return {
+      'Authorization': 'Bearer ' + recoverPasswordToken,
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+  }
+
   @override
   Future<User> login(String email, String password) async {
     if (email != null && password != null) {
@@ -76,5 +89,51 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
       }
     }
     return null;
+  }
+
+  @override
+  Future recoverPassword(String email) async {
+    if (email == null) {
+      return null;
+    }
+    final response = await http.post(
+      DotEnv.env['API_URL'] + "users/recover-password",
+      headers: API_HEADERS,
+      body: jsonEncode(<String, dynamic>{
+        "email": email,
+      }),
+    );
+
+    print("RECOVER PASSWORD RESPONSE ${response.body}");
+
+    if (response.statusCode != 200) {
+      Map<String, dynamic> decode = json.decode(response.body);
+      print("DECODED ERROR ${decode.toString()}");
+      if (decode['error'] == "User not found") {
+        throw FetchDataException("USER_NOT_FOUND");
+      } else {
+        throw FetchDataException('Failed to recover password');
+      }
+    }
+  }
+
+  @override
+  Future resetPassword(String newPassword) async {
+    if (newPassword == null) {
+      return null;
+    }
+    final response = await http.post(
+      DotEnv.env['API_URL'] + "users/reset-password",
+      headers: await getRecoverPasswordHeader(),
+      body: jsonEncode(<String, dynamic>{
+        "password": newPassword,
+      }),
+    );
+
+    if (response.statusCode == 401) {
+      throw FetchDataException("TOKEN_EXPIRED");
+    } else if (response.statusCode != 200) {
+      throw FetchDataException('Failed to reset password');
+    }
   }
 }

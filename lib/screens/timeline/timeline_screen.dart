@@ -21,7 +21,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 
+import 'package:uni_links/uni_links.dart';
+import 'package:flutter/services.dart';
+
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
+bool _initialUriIsHandled = false;
 
 class TimelinePage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -55,6 +60,12 @@ class _TimelinePageState extends State<TimelinePage>
   List<TimelinePost> _allPosts = [];
 
   FlickMultiManager flickMultiManager;
+
+  Uri _initialUri;
+  Uri _latestUri;
+  Object _err;
+
+  StreamSubscription _sub;
 
   @override
   void initState() {
@@ -109,7 +120,7 @@ class _TimelinePageState extends State<TimelinePage>
               }
             },
           );
-        } else {
+        } else if (widget.args['returnToPageWithArgs']['pageRoute'] != null) {
           Navigator.of(context).pushNamed(
             widget.args['returnToPageWithArgs']['pageRoute'],
             arguments: widget.args['returnToPageWithArgs']['arguments'],
@@ -119,6 +130,53 @@ class _TimelinePageState extends State<TimelinePage>
     });
 
     OOzDistributionSystem.getInstance().startTimelineView();
+
+    _handleIncomingLinks();
+    _handleInitialUri();
+  }
+
+  void _handleIncomingLinks() {
+    _sub = getLinksStream().listen((link) {
+      if (!mounted || link == null) return;
+      setState(() {
+        var linkSplit = link.split("resetPasswordToken=");
+        var token = linkSplit[linkSplit.length - 1];
+        if (token.isNotEmpty && token != null) {
+          print("TEM ALGO ERRADO NAO? kkkk $token");
+          setRecoverPasswordToken(token);
+          goToResetPassword();
+        }
+      });
+    }, onError: (Object err) {
+      if (!mounted) return;
+    });
+  }
+
+  Future<void> _handleInitialUri() async {
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      try {
+        final uri = await getInitialUri();
+        if (!mounted || uri == null) return;
+        setState(() {
+          var linkSplit = uri.toString().split("resetPasswordToken=");
+          var token = linkSplit[linkSplit.length - 1];
+          if (token.isNotEmpty && token != null) {
+            print("EITA ESSE É O TOKEN ENTAO BRABO $token");
+            setRecoverPasswordToken(token);
+            goToResetPassword();
+          }
+        });
+      } on PlatformException {} on FormatException catch (err) {
+        if (!mounted) return;
+      }
+    }
+  }
+
+  goToResetPassword() async {
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.resetPasswordScreen.route,
+    );
   }
 
   performAllRequests() async {

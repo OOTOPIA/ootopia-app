@@ -31,6 +31,14 @@ class SecureStoreMixin {
     setCurrentUser(json.encode(user.toJson()));
   }
 
+  void setRecoverPasswordToken(String value) async {
+    await this.setSecureStore("recover_password_token", value);
+  }
+
+  Future<String> getRecoverPasswordToken() async {
+    return await this.getSecureStore("recover_password_token");
+  }
+
   Future<double> getTransferOOZToPostLimit() async {
     return double.parse(
         await this.getSecureStore("transfer_ooz_to_post_limit"));
