@@ -25,6 +25,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool termsOpened = false;
   bool isLoading = false;
   bool showCheckBoxError = false;
+  bool _showPassword = false;
+  bool _showRepeatPassword = false;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -165,6 +167,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         TextFormField(
                                           controller: _nameController,
                                           keyboardType: TextInputType.name,
+                                          autocorrect: false,
+                                          textCapitalization:
+                                              TextCapitalization.words,
                                           autofocus: true,
                                           decoration:
                                               GlobalConstants.of(context)
@@ -204,10 +209,31 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         TextFormField(
                                           controller: _passwordController,
-                                          obscureText: true,
-                                          decoration:
-                                              GlobalConstants.of(context)
-                                                  .loginInputTheme('Password'),
+                                          obscureText: !_showPassword,
+                                          decoration: GlobalConstants.of(
+                                                  context)
+                                              .loginInputTheme(
+                                                'Password',
+                                              )
+                                              .copyWith(
+                                                suffixIcon: GestureDetector(
+                                                  child: _showPassword == false
+                                                      ? Icon(
+                                                          Icons.visibility_off,
+                                                          color: Colors.white,
+                                                        )
+                                                      : Icon(
+                                                          Icons.visibility,
+                                                          color: Colors.white,
+                                                        ),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _showPassword =
+                                                          !_showPassword;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
                                           validator: (value) {
                                             if (value.isEmpty) {
                                               return 'Please enter your password';
@@ -221,11 +247,32 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         TextFormField(
                                           controller: _repeatPasswordController,
-                                          obscureText: true,
-                                          decoration:
-                                              GlobalConstants.of(context)
-                                                  .loginInputTheme(
-                                                      'Repeat password'),
+                                          obscureText: !_showRepeatPassword,
+                                          decoration: GlobalConstants.of(
+                                                  context)
+                                              .loginInputTheme(
+                                                'Repeat password',
+                                              )
+                                              .copyWith(
+                                                suffixIcon: GestureDetector(
+                                                  child: _showRepeatPassword ==
+                                                          false
+                                                      ? Icon(
+                                                          Icons.visibility_off,
+                                                          color: Colors.white,
+                                                        )
+                                                      : Icon(
+                                                          Icons.visibility,
+                                                          color: Colors.white,
+                                                        ),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _showRepeatPassword =
+                                                          !_showRepeatPassword;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
                                           validator: (value) {
                                             if (value.isEmpty) {
                                               return 'Please repeat your password';
@@ -250,13 +297,33 @@ class _RegisterPageState extends State<RegisterPage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Flexible(
-                                          child: Text(
-                                            'We value and respect your data! That\'s why it will never be trade with third parties. We stand for total transparency and ethics!',
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                          child: RichText(
+                                            text: new TextSpan(
+                                              text:
+                                                  'We respect and protect your personal data. Why it will never be trade with third parties. We stand for total transparency and ethics! ',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              children: [
+                                                new TextSpan(
+                                                  text: 'Check here',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  recognizer:
+                                                      new TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          launch(
+                                                              'https://www.ootopia.org/pledge');
+                                                        },
+                                                )
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -327,29 +394,30 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         child: RichText(
                                           text: new TextSpan(
-                                              text: 'I accept the ',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ),
-                                              children: [
-                                                new TextSpan(
-                                                  text: 'use terms.',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.white,
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  recognizer:
-                                                      new TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          launch(
-                                                              'https://www.ootopia.org/terms-of-use');
-                                                        },
-                                                )
-                                              ]),
+                                            text: 'I accept the ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                            children: [
+                                              new TextSpan(
+                                                text: 'use terms.',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                recognizer:
+                                                    new TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        launch(
+                                                            'https://www.ootopia.org/terms-of-use');
+                                                      },
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
