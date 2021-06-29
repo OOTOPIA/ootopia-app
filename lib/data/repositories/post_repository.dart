@@ -154,15 +154,13 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
             (i == watchedPosts.length - 1 ? "" : ",");
       }
 
-      final response = await http.post(
+      await http.post(
         DotEnv.env['API_URL'] + "posts/watched",
         headers: await this.getHeaders(),
         body: jsonEncode(<String, String>{
           'data': "[" + allObjsJsonString + "]",
         }),
       );
-
-      print('errerere');
     } catch (e) {
       print('Error send watched post: $e');
     }

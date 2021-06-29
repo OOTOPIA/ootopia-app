@@ -15,9 +15,11 @@ class FlickMultiPlayer extends StatefulWidget {
     this.url,
     this.image,
     this.flickMultiManager,
+    this.userId,
     this.postId,
   }) : super(key: key);
 
+  final String userId;
   final String postId;
   final String url;
   final String image;
@@ -46,7 +48,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
       autoPlay: false,
     );
 
-    widget.flickMultiManager.init(flickManager, widget.postId);
+    widget.flickMultiManager.init(flickManager, widget.userId, widget.postId);
 
     flickManager.flickControlManager.mute();
   }

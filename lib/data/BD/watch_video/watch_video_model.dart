@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class WatchVideoModel implements BaseModel {
   int id;
+  String userId;
   String postId;
   int timeInMilliseconds;
   int durationInMs;
@@ -13,6 +14,7 @@ class WatchVideoModel implements BaseModel {
   int updatedAtInMs;
 
   WatchVideoModel([
+    this.userId,
     this.postId,
     this.timeInMilliseconds,
     this.durationInMs,
@@ -32,6 +34,7 @@ class WatchVideoModel implements BaseModel {
     return await db.execute("""
       CREATE TABLE ${tableName()}(
         ${WatchVideoFields.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+        ${WatchVideoFields.userId} TEXT,
         ${WatchVideoFields.postId} TEXT,
         ${WatchVideoFields.timeInMilliseconds} INTEGER,
         ${WatchVideoFields.durationInMs} INTEGER,
@@ -47,6 +50,7 @@ class WatchVideoModel implements BaseModel {
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       WatchVideoFields.id: id,
+      WatchVideoFields.userId: userId,
       WatchVideoFields.postId: postId,
       WatchVideoFields.timeInMilliseconds: timeInMilliseconds,
       WatchVideoFields.durationInMs: durationInMs,
@@ -62,6 +66,7 @@ class WatchVideoModel implements BaseModel {
   WatchVideoModel fromMap(Map<String, dynamic> map) {
     var model = WatchVideoModel();
     model.id = map[WatchVideoFields.id];
+    model.userId = map[WatchVideoFields.userId];
     model.postId = map[WatchVideoFields.postId];
     model.timeInMilliseconds = map[WatchVideoFields.timeInMilliseconds];
     model.durationInMs = map[WatchVideoFields.durationInMs];
@@ -76,6 +81,7 @@ class WatchVideoModel implements BaseModel {
 class WatchVideoFields {
   static final List<String> values = [
     id,
+    userId,
     postId,
     timeInMilliseconds,
     durationInMs,
@@ -86,6 +92,7 @@ class WatchVideoFields {
   ];
 
   static final String id = '_id';
+  static final String userId = 'user_id';
   static final String postId = 'post_id';
   static final String timeInMilliseconds = 'time_in_milliseconds';
   static final String durationInMs = 'duration_in_ms';

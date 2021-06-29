@@ -37,8 +37,13 @@ class OOzDistributionSystem {
     }
   }
 
-  distributionWatchVideo(
-      {String postId, int timeInMilliseconds, int durationInMs}) async {
+  distributionWatchVideo({
+    String userId,
+    String postId,
+    int timeInMilliseconds,
+    int durationInMs,
+    int creationTimeInMs,
+  }) async {
     try {
       if (timeInMilliseconds < 100) {
         return;
@@ -53,19 +58,20 @@ class OOzDistributionSystem {
       }
       WatchVideoModel watchVideo = await watchVideoProvider.getByPostId(postId);
 
-      if (uploadingWatchedPosts) {
+      if (uploadingWatchedPosts ||
+          (watchVideo != null && creationTimeInMs < watchVideo.createdAtInMs)) {
         return;
       }
 
       if (watchVideo == null) {
-        final newWatchVideo = await watchVideoProvider
-            .insert(WatchVideoModel(postId, timeInMilliseconds, durationInMs));
+        await watchVideoProvider.insert(WatchVideoModel(userId, postId,
+            timeInMilliseconds, durationInMs, 0, 0, creationTimeInMs));
       } else {
         int watched = (timeInMilliseconds >= durationInMs ? 1 : 0);
         if ((timeInMilliseconds < watchVideo.timeInMilliseconds) ||
             timeInMilliseconds >= durationInMs) {
-          final newWatchVideo = await watchVideoProvider.insert(WatchVideoModel(
-              postId, timeInMilliseconds, durationInMs, watched));
+          await watchVideoProvider.insert(WatchVideoModel(userId, postId,
+              timeInMilliseconds, durationInMs, watched, 0, creationTimeInMs));
         } else {
           watchVideo.timeInMilliseconds = timeInMilliseconds;
           watchVideo.watched = watched;
@@ -87,12 +93,14 @@ class OOzDistributionSystem {
     List<WatchVideoModel> watchedPosts =
         await _watchVideoProvider.getNotUploadedPosts();
 
+    watchedPosts =
+        await _watchVideoProvider.removeDuplicateEntries(watchedPosts);
+
     if (watchedPosts.length <= 0) {
       return;
     }
 
     await prefs.setBool(prefsUploadingWatchedVideo, true);
-
     await _postsRepository.recordWatchedPosts(watchedPosts);
 
     for (WatchVideoModel watchedPost in watchedPosts) {
