@@ -11,28 +11,30 @@ class FlickMultiManager {
   OOzDistributionSystem distributionSystem =
       OOzDistributionSystem.getInstance();
 
-  init(FlickManager flickManager, [String postId]) {
+  init(FlickManager flickManager, [String userId, String postId]) {
     _flickManagers.add(flickManager);
     if (_isMute) {
       flickManager?.flickControlManager?.mute();
     } else {
       flickManager?.flickControlManager?.unmute();
     }
-    if (postId != null && !flickManager.flickVideoManager.hasListeners) {
+    if (userId != null &&
+        postId != null &&
+        !flickManager.flickVideoManager.hasListeners) {
       flickManager.flickVideoManager.addListener(() {
         if (flickManager
                 .flickVideoManager.videoPlayerValue.position.inMilliseconds >
             0) {
-          //Random random = new Random();
-          //int randomNumber = random.nextInt(1000) + 100;
-          Timer(Duration(milliseconds: 300), () {
+          var creationTimeInMs = (new DateTime.now().millisecondsSinceEpoch);
+          Timer(Duration(milliseconds: (new Random()).nextInt(1000) + 100), () {
             distributionSystem.distributionWatchVideo(
-              postId: postId,
-              timeInMilliseconds: flickManager
-                  .flickVideoManager.videoPlayerValue.position.inMilliseconds,
-              durationInMs: flickManager
-                  .flickVideoManager.videoPlayerValue.duration.inMilliseconds,
-            );
+                userId: userId,
+                postId: postId,
+                timeInMilliseconds: flickManager
+                    .flickVideoManager.videoPlayerValue.position.inMilliseconds,
+                durationInMs: flickManager
+                    .flickVideoManager.videoPlayerValue.duration.inMilliseconds,
+                creationTimeInMs: creationTimeInMs);
           });
         }
       });
