@@ -165,15 +165,12 @@ class _LoginPageState extends State<LoginPage> {
                                         .loginInputTheme("Password")
                                         .copyWith(
                                           suffixIcon: GestureDetector(
-                                            child: _showPassword == false
-                                                ? Icon(
-                                                    Icons.visibility_off,
-                                                    color: Colors.white,
-                                                  )
-                                                : Icon(
-                                                    Icons.visibility,
-                                                    color: Colors.white,
-                                                  ),
+                                            child: Icon(
+                                              _showPassword == false
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.white,
+                                            ),
                                             onTap: () {
                                               setState(() {
                                                 _showPassword = !_showPassword;

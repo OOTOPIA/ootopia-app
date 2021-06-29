@@ -210,30 +210,28 @@ class _RegisterPageState extends State<RegisterPage> {
                                         TextFormField(
                                           controller: _passwordController,
                                           obscureText: !_showPassword,
-                                          decoration: GlobalConstants.of(
-                                                  context)
-                                              .loginInputTheme(
-                                                'Password',
-                                              )
-                                              .copyWith(
-                                                suffixIcon: GestureDetector(
-                                                  child: _showPassword == false
-                                                      ? Icon(
-                                                          Icons.visibility_off,
-                                                          color: Colors.white,
-                                                        )
-                                                      : Icon(
-                                                          Icons.visibility,
-                                                          color: Colors.white,
-                                                        ),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      _showPassword =
-                                                          !_showPassword;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
+                                          decoration:
+                                              GlobalConstants.of(context)
+                                                  .loginInputTheme(
+                                                    'Password',
+                                                  )
+                                                  .copyWith(
+                                                    suffixIcon: GestureDetector(
+                                                      child: Icon(
+                                                        _showPassword == false
+                                                            ? Icons
+                                                                .visibility_off
+                                                            : Icons.visibility,
+                                                        color: Colors.white,
+                                                      ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _showPassword =
+                                                              !_showPassword;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
                                           validator: (value) {
                                             if (value.isEmpty) {
                                               return 'Please enter your password';
@@ -255,16 +253,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                               )
                                               .copyWith(
                                                 suffixIcon: GestureDetector(
-                                                  child: _showRepeatPassword ==
-                                                          false
-                                                      ? Icon(
-                                                          Icons.visibility_off,
-                                                          color: Colors.white,
-                                                        )
-                                                      : Icon(
-                                                          Icons.visibility,
-                                                          color: Colors.white,
-                                                        ),
+                                                  child: Icon(
+                                                    _showRepeatPassword == false
+                                                        ? Icons.visibility_off
+                                                        : Icons.visibility,
+                                                    color: Colors.white,
+                                                  ),
                                                   onTap: () {
                                                     setState(() {
                                                       _showRepeatPassword =
