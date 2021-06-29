@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   AuthBloc authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool _showPassword = false;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -138,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!',
+                                  'If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the community that is \r\ncreating a more beautiful world.',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
@@ -169,9 +170,24 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
-                                    obscureText: true,
+                                    obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("Password"),
+                                        .loginInputTheme("Password")
+                                        .copyWith(
+                                          suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              _showPassword == false
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.white,
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _showPassword = !_showPassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'Please enter your password';

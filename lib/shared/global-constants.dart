@@ -16,10 +16,12 @@ class GlobalConstants extends InheritedWidget {
 
   final double logoHeight = 82;
 
-  InputDecoration loginInputTheme(String hintText) {
+  InputDecoration loginInputTheme(String labelText) {
     return InputDecoration(
       counterText: "",
-      hintText: hintText,
+      labelText: labelText,
+      labelStyle: TextStyle(color: Colors.white),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black54, width: 1.5),
         borderRadius: BorderRadius.circular(100),
