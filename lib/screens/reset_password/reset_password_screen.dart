@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
@@ -7,42 +5,35 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-class LoginPage extends StatefulWidget {
+class ResetPasswordPage extends StatefulWidget {
   Map<String, dynamic> args;
 
-  LoginPage([this.args]);
+  ResetPasswordPage([this.args]);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
   AuthBloc authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _repeatPasswordController =
+      TextEditingController();
 
   @override
   void initState() {
     super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
-    Timer(Duration(milliseconds: 1000), () {
-      if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
-        if (widget.args['returnToPageWithArgs']['newPassword'] != null) {
-          _passwordController.text =
-              widget.args['returnToPageWithArgs']['newPassword'];
-        }
-      }
-    });
   }
 
   void _submit() {
     setState(() {
       isLoading = true;
       authBloc.add(EmptyEvent());
-      authBloc.add(LoginEvent(_emailController.text, _passwordController.text));
+      authBloc.add(ResetPasswordEvent(_passwordController.text));
     });
   }
 
@@ -51,34 +42,24 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is ErrorState) {
+          if (state is ErrorResetPasswordState) {
+            isLoading = false;
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
               ),
             );
-          } else if (state is LoadedSucessState) {
-            print("LOGGED!!!!!");
-            /*Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Color(0xff66bb6a),
-                content: Text("Successfully Logged In"),
-              ),
-            );*/
-            if (widget.args != null &&
-                widget.args['returnToPageWithArgs'] != null) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route,
-                ModalRoute.withName('/'),
-                arguments: {
-                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
-                },
-              );
-            } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  PageRoute.Page.timelineScreen.route,
-                  ModalRoute.withName('/'));
-            }
+          } else if (state is LoadedSucessResetPasswordState) {
+            isLoading = false;
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              PageRoute.Page.loginScreen.route,
+              ModalRoute.withName('/'),
+              arguments: {
+                "returnToPageWithArgs": {
+                  "newPassword": _passwordController.text,
+                }
+              },
+            );
           }
         },
         child: _blocBuilder(),
@@ -137,28 +118,32 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.subtitle1,
+                                Flexible(
+                                  child: Text(
+                                    'Alterar senha',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
                                 ),
                               ],
                             ),
                             Padding(
                               padding: EdgeInsets.only(
                                 top: GlobalConstants.of(context).spacingMedium,
+                                bottom:
+                                    GlobalConstants.of(context).spacingLarge,
                               ),
                               child: Column(
                                 children: [
                                   TextFormField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    autofocus: true,
+                                    controller: _passwordController,
+                                    obscureText: true,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("E-mail"),
+                                        .loginInputTheme("Password"),
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Please enter your e-mail';
+                                        return 'Informe a nova senha';
                                       }
                                       return null;
                                     },
@@ -168,45 +153,20 @@ class _LoginPageState extends State<LoginPage> {
                                         .spacingNormal,
                                   ),
                                   TextFormField(
-                                    controller: _passwordController,
+                                    controller: _repeatPasswordController,
                                     obscureText: true,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("Password"),
+                                        .loginInputTheme('Repeat password'),
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Please enter your password';
+                                        return 'Por favor, informe sua senha';
+                                      }
+                                      if (value != _passwordController.text) {
+                                        return 'Senhas não combinam';
                                       }
                                       return null;
                                     },
                                   )
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingLarge,
-                                bottom:
-                                    GlobalConstants.of(context).spacingLarge,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(PageRoute
-                                          .Page.recoverPasswordScreen.route);
-                                    },
-                                    child: Text(
-                                      'I forgot my password',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -224,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Login",
+                                "Enviar",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -238,48 +198,6 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             },
                             color: Colors.white,
-                            splashColor: Colors.black54,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: Colors.white,
-                                width: 2,
-                                style: BorderStyle.solid,
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                          SizedBox(
-                            height: GlobalConstants.of(context).spacingNormal,
-                          ),
-                          FlatButton(
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                GlobalConstants.of(context).spacingNormal,
-                              ),
-                              child: Text(
-                                "Create account",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (widget.args != null &&
-                                  widget.args['returnToPageWithArgs'] != null) {
-                                Navigator.of(context).pushNamed(
-                                  PageRoute.Page.registerScreen.route,
-                                  arguments: {
-                                    "returnToPageWithArgs":
-                                        widget.args['returnToPageWithArgs']
-                                  },
-                                );
-                              } else {
-                                Navigator.of(context).pushNamed(
-                                    PageRoute.Page.registerScreen.route);
-                              }
-                            },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(

@@ -25,6 +25,8 @@ import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/recover_password/recover_password_screen.dart';
+import 'package:ootopia_app/screens/reset_password/reset_password_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
@@ -200,6 +202,8 @@ class MainPage extends HookWidget {
         PLayerVideoFullscreen(args: args),
     PageRoute.Page.menuProfile: (args) => MenuProfile(),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
+    PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
+    PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args)
   };
 
   @override

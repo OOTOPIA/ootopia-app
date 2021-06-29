@@ -37,3 +37,29 @@ class ErrorState extends AuthState {
   @override
   List<Object> get props => [message];
 }
+
+class LoadedSucessRecoverPasswordState extends AuthState {
+  LoadedSucessRecoverPasswordState();
+  @override
+  List<Object> get props => [];
+}
+
+class ErrorRecoverPasswordState extends AuthState {
+  final String message;
+  const ErrorRecoverPasswordState(this.message);
+  @override
+  List<Object> get props => [message];
+}
+
+class LoadedSucessResetPasswordState extends AuthState {
+  LoadedSucessResetPasswordState();
+  @override
+  List<Object> get props => [];
+}
+
+class ErrorResetPasswordState extends AuthState {
+  final String message;
+  const ErrorResetPasswordState(this.message);
+  @override
+  List<Object> get props => [message];
+}

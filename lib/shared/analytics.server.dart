@@ -92,6 +92,14 @@ class AnalyticsTracking {
     this.trackingEvent("Signup - Completed signup part II", null);
   }
 
+  userRecoverPassword() {
+    this.trackingEvent("Recover Password - Password recovery email sent", null);
+  }
+
+  userResetPassword() {
+    this.trackingEvent("Reset Password - Password changed", null);
+  }
+
   timelineCreatedAPost() {
     final Identify identify = Identify()..add('Content posted', 1);
     this.trackingDataUser(identify);
