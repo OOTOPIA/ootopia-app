@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -27,7 +26,7 @@ class RegisterPhase2TopInterestsPage extends StatefulWidget {
 
 class _RegisterPhase2TopInterestsPageState
     extends State<RegisterPhase2TopInterestsPage> with SecureStoreMixin {
-  UserBloc userBloc;
+  UserBloc? userBloc;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _inputController = TextEditingController();
   final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
@@ -45,7 +44,7 @@ class _RegisterPhase2TopInterestsPageState
   List<Item> _secondaryTagsCopy = [];
 
   void _submit() {
-    userBloc.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
+    userBloc!.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
     this
         .trackingEvents
         .signupCompletedStepIVOfSignupII({"tags": _selectedTagsIds});
@@ -55,9 +54,6 @@ class _RegisterPhase2TopInterestsPageState
     this.repository.getTags().then((tags) {
       setState(() {
         _isLoading = false;
-        if (tags == null) {
-          return;
-        }
         _allTags = tags;
         _allTags.forEach((tag) {
           if (tag.type == "top") {
@@ -152,8 +148,8 @@ class _RegisterPhase2TopInterestsPageState
           buttonTextColor: Colors.black,
         );
       }
-      return ModalProgressHUD(
-        inAsyncCall: _isLoading,
+      return LoadingOverlay(
+        isLoading: _isLoading,
         child: _isLoading
             ? Container()
             : Center(
@@ -210,7 +206,7 @@ class _RegisterPhase2TopInterestsPageState
                                     _secondaryTagsCopy =
                                         _secondaryTags.where((tag) {
                                       return StringUtils.removeDiacritics(
-                                              tag.title.toLowerCase())
+                                              tag.title!.toLowerCase())
                                           .startsWith(val);
                                     }).toList();
                                   });
@@ -242,7 +238,6 @@ class _RegisterPhase2TopInterestsPageState
                                   ),
                                 ),
                                 onPressed: () {
-                                  print("pressed!!");
                                   setState(() {
                                     _submit();
                                   });
@@ -273,8 +268,8 @@ class _RegisterPhase2TopInterestsPageState
   void _addTag(Item item, [bool active = false]) {
     setState(() {
       var list = _topTags.where((tag) {
-        return StringUtils.removeDiacritics(tag.title.toLowerCase()) ==
-            StringUtils.removeDiacritics(item.title.toLowerCase());
+        return StringUtils.removeDiacritics(tag.title!.toLowerCase()) ==
+            StringUtils.removeDiacritics(item.title!.toLowerCase());
       }).toList();
 
       if (list.length == 0) {
@@ -301,7 +296,7 @@ class _RegisterPhase2TopInterestsPageState
     });
   }
 
-  tags(List<Item> items, [Function onPressed]) {
+  tags(List<Item> items, [Function? onPressed]) {
     //Quando atualizamos a view com o setState, as tags selecionadas eram deselecionadas, então o código abaixo corrige isso
     List<Item> itemsCopy = [];
     items.forEach((item) {
@@ -311,6 +306,9 @@ class _RegisterPhase2TopInterestsPageState
         customData: item.customData,
       ));
     });
+    if (itemsCopy.length <= 0) {
+      return Container();
+    }
     return Tags(
       key: GlobalKey<TagsState>(),
       textField: null,
@@ -325,8 +323,8 @@ class _RegisterPhase2TopInterestsPageState
           // uniquely identify widgets.
           key: Key(index.toString()),
           index: index, // required
-          title: item.title,
-          active: item.active,
+          title: item.title!,
+          active: item.active!,
           customData: item.customData,
           activeColor: Color(0xff0B8C1E),
           textStyle: TextStyle(
@@ -346,12 +344,5 @@ class _RegisterPhase2TopInterestsPageState
         );
       },
     );
-  }
-
-// Allows you to get a list of all the ItemTags
-  _getAllItem() {
-    List<Item> lst = _tagStateKey.currentState?.getAllItem;
-    if (lst != null)
-      lst.where((a) => a.active == true).forEach((a) => print(a.title));
   }
 }

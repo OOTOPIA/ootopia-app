@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 class OOTOPIADatabase {
   static final OOTOPIADatabase instance = OOTOPIADatabase.init();
 
-  static Database _database;
+  static Database? _database;
 
   String _databaseName = 'ootopia.db';
   List<BaseModel> tables = [
@@ -23,10 +23,10 @@ class OOTOPIADatabase {
   }
 
   Future<Database> get database async {
-    if (_database != null) return _database;
+    if (_database != null) return _database!;
 
     _database = await _initDB(_databaseName);
-    return _database;
+    return _database!;
   }
 
   Future<Database> _initDB(String filePath) async {

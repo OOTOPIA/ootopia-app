@@ -5,7 +5,7 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OOzDistributionSystem {
-  static OOzDistributionSystem instance;
+  static OOzDistributionSystem? instance;
 
   final OOTOPIADatabase dbHelper = OOTOPIADatabase.init();
   final WatchVideoProvider watchVideoProvider = WatchVideoProvider();
@@ -38,11 +38,11 @@ class OOzDistributionSystem {
   }
 
   distributionWatchVideo({
-    String userId,
-    String postId,
-    int timeInMilliseconds,
-    int durationInMs,
-    int creationTimeInMs,
+    required String userId,
+    required String postId,
+    required int timeInMilliseconds,
+    required int durationInMs,
+    required int creationTimeInMs,
   }) async {
     try {
       if (timeInMilliseconds < 100) {
@@ -56,27 +56,43 @@ class OOzDistributionSystem {
       } else {
         uploadingWatchedPosts = false;
       }
-      WatchVideoModel watchVideo = await watchVideoProvider.getByPostId(postId);
+      WatchVideoModel? watchVideo =
+          (await watchVideoProvider.getByPostId(postId));
 
       if (uploadingWatchedPosts ||
-          (watchVideo != null && creationTimeInMs < watchVideo.createdAtInMs)) {
+          (watchVideo != null &&
+              creationTimeInMs < watchVideo.createdAtInMs!)) {
         return;
       }
 
       if (watchVideo == null) {
-        await watchVideoProvider.insert(WatchVideoModel(userId, postId,
-            timeInMilliseconds, durationInMs, 0, 0, creationTimeInMs));
+        await watchVideoProvider.insert(WatchVideoModel(
+          userId: userId,
+          postId: postId,
+          timeInMilliseconds: timeInMilliseconds,
+          durationInMs: durationInMs,
+          watched: 0,
+          uploaded: 0,
+          createdAtInMs: creationTimeInMs,
+        ));
       } else {
         int watched = (timeInMilliseconds >= durationInMs ? 1 : 0);
-        if ((timeInMilliseconds < watchVideo.timeInMilliseconds) ||
+        if ((timeInMilliseconds < watchVideo.timeInMilliseconds!) ||
             timeInMilliseconds >= durationInMs) {
-          await watchVideoProvider.insert(WatchVideoModel(userId, postId,
-              timeInMilliseconds, durationInMs, watched, 0, creationTimeInMs));
+          await watchVideoProvider.insert(WatchVideoModel(
+            userId: userId,
+            postId: postId,
+            timeInMilliseconds: timeInMilliseconds,
+            durationInMs: durationInMs,
+            watched: watched,
+            uploaded: 0,
+            createdAtInMs: creationTimeInMs,
+          ));
         } else {
           watchVideo.timeInMilliseconds = timeInMilliseconds;
           watchVideo.watched = watched;
           await watchVideoProvider.update(watchVideo);
-          watchVideo = await watchVideoProvider.getByPostId(postId);
+          watchVideo = (await watchVideoProvider.getByPostId(postId))!;
         }
       }
     } catch (err) {

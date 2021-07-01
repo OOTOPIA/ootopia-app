@@ -6,8 +6,7 @@ abstract class WalletTransferState extends Equatable {
 
 class EmptyState extends WalletTransferState {
   @override
-  // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class LoadingGratitudeRewardState extends WalletTransferState {

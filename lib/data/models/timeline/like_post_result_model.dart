@@ -4,7 +4,7 @@ class LikePostResult extends Equatable {
   int count;
   bool liked = false;
 
-  LikePostResult({this.count, this.liked});
+  LikePostResult({required this.count, required this.liked});
 
   factory LikePostResult.fromJson(Map<String, dynamic> parsedJson) {
     return LikePostResult(

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RecoverPasswordPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   RecoverPasswordPage([this.args]);
 
@@ -15,7 +15,7 @@ class RecoverPasswordPage extends StatefulWidget {
 }
 
 class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
-  AuthBloc authBloc;
+  late AuthBloc authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool emailIsSent = false;
@@ -73,8 +73,8 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
         if (state is ErrorState) {
           isLoading = false;
         }
-        return ModalProgressHUD(
-          inAsyncCall: isLoading,
+        return LoadingOverlay(
+          isLoading: isLoading,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -170,7 +170,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme("E-mail"),
                                       validator: (value) {
-                                        if (value.isEmpty) {
+                                        if (value == null || value.isEmpty) {
                                           return 'Por favor, informe seu e-mail';
                                         }
                                         return null;
@@ -205,7 +205,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 ),
                               ),
                               onPressed: () {
-                                if (_formKey.currentState.validate()) {
+                                if (_formKey.currentState!.validate()) {
                                   _submit();
                                 }
                               },

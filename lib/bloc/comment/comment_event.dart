@@ -14,7 +14,11 @@ class GetCommentEvent extends CommentEvent {
   final bool loadingMore;
 
   @required
-  GetCommentEvent({this.postId, this.page, this.allComments, this.loadingMore});
+  GetCommentEvent(
+      {required this.postId,
+      required this.page,
+      required this.allComments,
+      required this.loadingMore});
 
   @override
   List<Object> get props => [this.postId, this.page];
@@ -23,7 +27,7 @@ class GetCommentEvent extends CommentEvent {
 class CreateCommentEvent extends CommentEvent {
   final CommentCreate comment;
 
-  CreateCommentEvent({this.comment});
+  CreateCommentEvent({required this.comment});
 
   @override
   List<Object> get props => [this.comment];
@@ -31,24 +35,21 @@ class CreateCommentEvent extends CommentEvent {
 
 class LoadingSucessCommentsEvent extends CommentEvent {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
 class OnToggleSelectCommentEvent extends CommentEvent {
   final Comment comment;
 
-  OnToggleSelectCommentEvent({this.comment});
+  OnToggleSelectCommentEvent({required this.comment});
 
   @override
-  // TODO: implement props
   List<Object> get props => [this.comment];
 }
 
 class UnselectAllCommentsEvent extends CommentEvent {
   UnselectAllCommentsEvent();
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
@@ -58,6 +59,5 @@ class DeleteSelectedCommentsEvent extends CommentEvent {
 
   DeleteSelectedCommentsEvent(this.postId, this.commentsIds);
   @override
-  // TODO: implement props
   List<Object> get props => [this.commentsIds];
 }

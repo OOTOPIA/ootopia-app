@@ -3,10 +3,10 @@ import 'package:meta/meta.dart';
 
 class AppConfig extends InheritedWidget {
   AppConfig({
-    @required this.appName,
-    @required this.flavorName,
-    @required this.apiBaseUrl,
-    @required Widget child,
+    required this.appName,
+    required this.flavorName,
+    required this.apiBaseUrl,
+    required Widget child,
   }) : super(child: child);
 
   final String appName;
@@ -14,7 +14,7 @@ class AppConfig extends InheritedWidget {
   final String apiBaseUrl;
 
   static AppConfig of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AppConfig>();
+    return context.dependOnInheritedWidgetOfExactType<AppConfig>()!;
   }
 
   @override

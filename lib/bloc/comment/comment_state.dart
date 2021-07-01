@@ -7,7 +7,7 @@ abstract class CommentState extends Equatable {
 class EmptyState extends CommentState {
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class CommentInitialState extends CommentState {
@@ -17,7 +17,7 @@ class CommentInitialState extends CommentState {
 
 class CommentStartState extends CommentState {
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class LoadingCommentsState extends CommentState {

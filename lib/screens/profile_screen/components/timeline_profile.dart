@@ -39,7 +39,11 @@ class ListPostProfileComponent extends StatefulWidget {
   int postSelected;
   String userId;
 
-  ListPostProfileComponent({this.userId, this.posts, this.postSelected});
+  ListPostProfileComponent({
+    required this.userId,
+    required this.posts,
+    required this.postSelected,
+  });
 
   @override
   _ListPostProfileComponentState createState() =>
@@ -48,16 +52,16 @@ class ListPostProfileComponent extends StatefulWidget {
 
 class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     with SecureStoreMixin {
-  TimelinePostBloc timelineBloc;
+  late TimelinePostBloc timelineBloc;
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
-  FlickMultiManager flickMultiManager;
+  late FlickMultiManager flickMultiManager;
 
   bool loggedIn = false;
-  User user;
+  User? user;
 
   int currentPage = 1;
   final int _itemsPerPageCount = 10;
@@ -87,7 +91,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      print("LOGGED USER: " + user.fullname);
+      print("LOGGED USER: " + user!.fullname!);
     }
   }
 
@@ -176,13 +180,14 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                           );
                         }
                         return PhotoTimeline(
-                            key: ObjectKey(_allPosts[index]),
-                            post: _allPosts[index],
-                            timelineBloc: this.timelineBloc,
-                            loggedIn: this.loggedIn,
-                            flickMultiManager: flickMultiManager,
-                            isProfile: true,
-                            user: this.user);
+                          key: ObjectKey(_allPosts[index]),
+                          post: _allPosts[index],
+                          timelineBloc: this.timelineBloc,
+                          loggedIn: this.loggedIn,
+                          flickMultiManager: flickMultiManager,
+                          isProfile: true,
+                          user: this.user,
+                        );
                       },
                     ),
                   ),

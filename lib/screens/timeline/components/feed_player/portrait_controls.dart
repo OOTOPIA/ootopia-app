@@ -6,9 +6,12 @@ import 'package:provider/provider.dart';
 import './multi_manager/flick_multi_manager.dart';
 
 class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
-  FeedPlayerPortraitControls(
-      {Key key, this.flickMultiManager, this.flickManager, this.url})
-      : super(key: key);
+  FeedPlayerPortraitControls({
+    Key? key,
+    required this.flickMultiManager,
+    required this.flickManager,
+    required this.url,
+  }) : super(key: key);
 
   final FlickMultiManager flickMultiManager;
   final FlickManager flickManager;
@@ -42,7 +45,7 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
             child: FlickToggleSoundAction(
               toggleMute: () {
                 flickMultiManager.toggleMute();
-                if (flickManager.flickControlManager.isMute) {
+                if (flickManager.flickControlManager!.isMute) {
                   setTimelineVideosMuted();
                 } else {
                   setTimelineVideosUnmuted();
@@ -69,7 +72,7 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
                   child: FlickSoundToggle(
                     toggleMute: () {
                       flickMultiManager.toggleMute();
-                      if (flickManager.flickControlManager.isMute) {
+                      if (flickManager.flickControlManager!.isMute) {
                         setTimelineVideosMuted();
                       } else {
                         setTimelineVideosUnmuted();

@@ -3,11 +3,11 @@ import 'package:ootopia_app/shared/global-constants.dart';
 
 class TryAgain extends StatefulWidget {
   final Function onClickButton;
-  final String buttonText;
-  final String messageText;
-  final Color buttonTextColor;
-  final Color messageTextColor;
-  final Color buttonBackgroundColor;
+  final String? buttonText;
+  final String? messageText;
+  final Color? buttonTextColor;
+  final Color? messageTextColor;
+  final Color? buttonBackgroundColor;
   final bool showOnlyButton;
   TryAgain(
     this.onClickButton, {
@@ -61,8 +61,8 @@ class _TryAgainState extends State<TryAgain> {
                         ),
                         child: Text(
                           widget.messageText != null &&
-                                  widget.messageText.isNotEmpty
-                              ? widget.messageText
+                                  widget.messageText!.isNotEmpty
+                              ? widget.messageText!
                               : "There was a problem,\nplease try again.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -104,8 +104,8 @@ class _TryAgainState extends State<TryAgain> {
                               margin: const EdgeInsets.only(left: 10.0),
                               child: Text(
                                 widget.buttonText != null &&
-                                        widget.buttonText.isNotEmpty
-                                    ? widget.buttonText
+                                        widget.buttonText!.isNotEmpty
+                                    ? widget.buttonText!
                                     : "Try again",
                                 style: TextStyle(
                                   fontSize: 14,
@@ -129,7 +129,7 @@ class _TryAgainState extends State<TryAgain> {
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
                           color: widget.buttonBackgroundColor != null
-                              ? widget.buttonBackgroundColor
+                              ? widget.buttonBackgroundColor!
                               : Theme.of(context).accentColor,
                           width: 2,
                           style: BorderStyle.solid,

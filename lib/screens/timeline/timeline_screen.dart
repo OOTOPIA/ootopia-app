@@ -29,9 +29,9 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 bool _initialUriIsHandled = false;
 
 class TimelinePage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
-  TimelinePage([this.args]);
+  TimelinePage(this.args);
   @override
   _TimelinePageState createState() => _TimelinePageState();
 }
@@ -41,11 +41,11 @@ class _TimelinePageState extends State<TimelinePage>
         SecureStoreMixin,
         SingleTickerProviderStateMixin,
         WidgetsBindingObserver {
-  StreamSubscription _intentDataStreamSubscription;
-  List<SharedMediaFile> _sharedFiles;
-  TimelinePostBloc timelineBloc;
+  late StreamSubscription _intentDataStreamSubscription;
+  late List<SharedMediaFile> _sharedFiles;
+  late TimelinePostBloc timelineBloc;
   bool loggedIn = false;
-  User user;
+  User? user;
   int currentPage = 1;
   final int _itemsPerPageCount = 10;
   int _nextPageThreshold = 5;
@@ -55,23 +55,19 @@ class _TimelinePageState extends State<TimelinePage>
       GeneralConfigRepositoryImpl();
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
-  GeneralConfig transferOozToPostLimitConfig;
+  late GeneralConfig transferOozToPostLimitConfig;
 
   List<TimelinePost> _allPosts = [];
 
-  FlickMultiManager flickMultiManager;
+  late FlickMultiManager flickMultiManager;
 
-  Uri _initialUri;
-  Uri _latestUri;
-  Object _err;
-
-  StreamSubscription _sub;
+  late StreamSubscription _sub;
 
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
@@ -93,7 +89,7 @@ class _TimelinePageState extends State<TimelinePage>
     performAllRequests();
     flickMultiManager = FlickMultiManager();
 
-    if (widget.args != null && widget.args["createdPost"] == true) {
+    if (widget.args != null && widget.args!["createdPost"] == true) {
       setState(() {
         showUploadedVideoMessage = true;
       });
@@ -107,10 +103,11 @@ class _TimelinePageState extends State<TimelinePage>
       );
     }
     Timer(Duration(milliseconds: 1000), () {
-      if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
-        if (widget.args['returnToPageWithArgs']['pageRoute'] ==
+      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+        if (widget.args!['returnToPageWithArgs']['pageRoute'] ==
                 PageRoute.Page.myProfileScreen.route &&
-            user.registerPhase == 1) {
+            user != null &&
+            user!.registerPhase == 1) {
           Navigator.of(context).pushNamed(
             PageRoute.Page.registerPhase2Screen.route,
             arguments: {
@@ -120,10 +117,10 @@ class _TimelinePageState extends State<TimelinePage>
               }
             },
           );
-        } else if (widget.args['returnToPageWithArgs']['pageRoute'] != null) {
+        } else if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
           Navigator.of(context).pushNamed(
-            widget.args['returnToPageWithArgs']['pageRoute'],
-            arguments: widget.args['returnToPageWithArgs']['arguments'],
+            widget.args!['returnToPageWithArgs']['pageRoute'],
+            arguments: widget.args!['returnToPageWithArgs']['arguments'],
           );
         }
       }
@@ -180,8 +177,10 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   performAllRequests() async {
+    print("PERFORM ALL BEFORE");
     await _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
+    print("PERFORM ALL AFTER");
   }
 
   void _getTransferOozToPostLimitConfig() async {
@@ -230,12 +229,18 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  void _checkUserIsLoggedIn() async {
-    loggedIn = await getUserIsLoggedIn();
-    if (loggedIn) {
-      await this.userRepositoryImpl.getMyAccountDetails();
-      user = await getCurrentUser();
-      print("LOGGED USER: " + user.fullname);
+  Future<bool> _checkUserIsLoggedIn() async {
+    try {
+      loggedIn = await getUserIsLoggedIn();
+      if (loggedIn) {
+        await this.userRepositoryImpl.getMyAccountDetails();
+        user = await getCurrentUser();
+        print("LOGGED USER: " + user!.fullname!);
+      }
+      return loggedIn;
+    } catch (err) {
+      print("Deu erro: $err");
+      return false;
     }
   }
 
@@ -244,7 +249,7 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   void _goToProfile() {
-    Navigator.of(context).pushNamed(user.registerPhase == 1
+    Navigator.of(context).pushNamed(user!.registerPhase == 1
         ? PageRoute.Page.registerPhase2Screen.route
         : PageRoute.Page.profileScreen.route);
   }

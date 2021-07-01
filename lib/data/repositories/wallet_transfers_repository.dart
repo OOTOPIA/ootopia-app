@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'dart:convert';
@@ -8,7 +8,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class WalletTransfersRepository {
   Future<void> transferOOZToPost(String postId, double balance,
-      [bool dontAskToConfirmAgain]);
+      [bool? dontAskToConfirmAgain]);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -23,7 +23,9 @@ class WalletTransfersRepositoryImpl
     if (!loggedIn) {
       return API_HEADERS;
     }
-    String token = await getAuthToken();
+
+    String? token = await getAuthToken();
+    if (token == null) return API_HEADERS;
 
     return {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -32,9 +34,10 @@ class WalletTransfersRepositoryImpl
   }
 
   Future<void> transferOOZToPost(String postId, double balance,
-      [bool dontAskToConfirmAgain]) async {
+      [bool? dontAskToConfirmAgain]) async {
     final response = await http.post(
-      DotEnv.env['API_URL'] + 'wallet-transfers/post/$postId/transfer',
+      Uri.parse(
+          dotenv.env['API_URL']! + 'wallet-transfers/post/$postId/transfer'),
       headers: await this.getHeaders(),
       body: jsonEncode(
         <String, String>{

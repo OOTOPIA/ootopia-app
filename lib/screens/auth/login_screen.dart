@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class LoginPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   LoginPage([this.args]);
 
@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  AuthBloc authBloc;
+  AuthBloc? authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool _showPassword = false;
@@ -30,10 +30,10 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
     Timer(Duration(milliseconds: 1000), () {
-      if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
-        if (widget.args['returnToPageWithArgs']['newPassword'] != null) {
+      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+        if (widget.args!['returnToPageWithArgs']['newPassword'] != null) {
           _passwordController.text =
-              widget.args['returnToPageWithArgs']['newPassword'];
+              widget.args!['returnToPageWithArgs']['newPassword'];
         }
       }
     });
@@ -42,8 +42,9 @@ class _LoginPageState extends State<LoginPage> {
   void _submit() {
     setState(() {
       isLoading = true;
-      authBloc.add(EmptyEvent());
-      authBloc.add(LoginEvent(_emailController.text, _passwordController.text));
+      authBloc!.add(EmptyEvent());
+      authBloc!
+          .add(LoginEvent(_emailController.text, _passwordController.text));
     });
   }
 
@@ -60,19 +61,13 @@ class _LoginPageState extends State<LoginPage> {
             );
           } else if (state is LoadedSucessState) {
             print("LOGGED!!!!!");
-            /*Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Color(0xff66bb6a),
-                content: Text("Successfully Logged In"),
-              ),
-            );*/
             if (widget.args != null &&
-                widget.args['returnToPageWithArgs'] != null) {
+                widget.args!['returnToPageWithArgs'] != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                 PageRoute.Page.timelineScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {
-                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                  "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
                 },
               );
             } else {
@@ -96,8 +91,8 @@ class _LoginPageState extends State<LoginPage> {
         if (state is ErrorState) {
           isLoading = false;
         }
-        return ModalProgressHUD(
-          inAsyncCall: isLoading,
+        return LoadingOverlay(
+          isLoading: isLoading,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -158,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme("E-mail"),
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return 'Please enter your e-mail';
                                       }
                                       return null;
@@ -189,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                         ),
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return 'Please enter your password';
                                       }
                                       return null;
@@ -249,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 _submit();
                               }
                             },
@@ -283,12 +278,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () {
                               if (widget.args != null &&
-                                  widget.args['returnToPageWithArgs'] != null) {
+                                  widget.args!['returnToPageWithArgs'] !=
+                                      null) {
                                 Navigator.of(context).pushNamed(
                                   PageRoute.Page.registerScreen.route,
                                   arguments: {
                                     "returnToPageWithArgs":
-                                        widget.args['returnToPageWithArgs']
+                                        widget.args!['returnToPageWithArgs']
                                   },
                                 );
                               } else {

@@ -5,7 +5,7 @@ import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 class WalletTransferHistory extends StatelessWidget {
   List<WalletTransferGroup> walletTransferGroup;
 
-  WalletTransferHistory({this.walletTransferGroup});
+  WalletTransferHistory({required this.walletTransferGroup});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +41,7 @@ class TransactionItemWidget extends StatelessWidget {
   final List<WalletTransfer> walletTransfers;
   const TransactionItemWidget(
     this.walletTransfers, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

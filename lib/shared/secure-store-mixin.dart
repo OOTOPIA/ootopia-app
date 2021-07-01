@@ -5,12 +5,14 @@ import 'dart:convert';
 class SecureStoreMixin {
   final secureStore = new FlutterSecureStorage();
 
-  void setCurrentUser(String json) async {
+  Future<bool> setCurrentUser(String json) async {
     await this.setSecureStore("user", json);
+    return true;
   }
 
-  void setAuthToken(String value) async {
+  Future<bool> setAuthToken(String value) async {
     await this.setSecureStore("auth_token", value);
+    return true;
   }
 
   void setTimelineVideosMuted() async {
@@ -49,11 +51,11 @@ class SecureStoreMixin {
   }
 
   Future<bool> getUserIsLoggedIn() async {
-    String token = await this.getAuthToken();
+    String? token = await this.getAuthToken();
     return token != null;
   }
 
-  Future<String> getAuthToken() async {
+  Future<String?> getAuthToken() async {
     return await this.getSecureStore("auth_token");
   }
 
@@ -61,8 +63,9 @@ class SecureStoreMixin {
     return User.fromJson(json.decode(await this.getSecureStore("user")));
   }
 
-  void setSecureStore(String key, String data) async {
+  Future<bool> setSecureStore(String key, String data) async {
     await secureStore.write(key: key, value: data);
+    return true;
   }
 
   Future<dynamic> getSecureStore(String key) async {

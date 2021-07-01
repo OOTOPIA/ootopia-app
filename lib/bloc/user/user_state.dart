@@ -38,14 +38,14 @@ class GetProfileInitialState extends UserState {
 
 class GetProfileLoadedSucessState extends UserState {
   Profile profile;
-  GetProfileLoadedSucessState({this.profile});
+  GetProfileLoadedSucessState({required this.profile});
   @override
   List<Object> get props => [this.profile];
 }
 
 class GetProfileErrorState extends UserState {
   final String message;
-  const GetProfileErrorState({this.message});
+  const GetProfileErrorState({required this.message});
   @override
   List<Object> get props => [this.message];
 }
@@ -59,7 +59,7 @@ class UpdateUserSuccessState extends UserState {
 
 class UpdateUserErrorState extends UserState {
   final String message;
-  const UpdateUserErrorState({this.message});
+  const UpdateUserErrorState({required this.message});
   @override
   List<Object> get props => [this.message];
 }

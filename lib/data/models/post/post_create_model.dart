@@ -1,14 +1,14 @@
 class PostCreate {
-  String filePath;
-  String type;
-  String description;
-  List<String> tagsIds;
-  String addressCountryCode;
-  String addressState;
-  String addressCity;
-  double addressLatitude;
-  double addressLongitude;
-  String addressNumber;
+  String? filePath;
+  String? type;
+  String? description;
+  List<String>? tagsIds;
+  String? addressCountryCode;
+  String? addressState;
+  String? addressCity;
+  double? addressLatitude;
+  double? addressLongitude;
+  String? addressNumber;
 
   PostCreate({
     this.filePath,
@@ -28,7 +28,7 @@ class PostCreate {
     data['type'] = this.type;
     data['description'] = this.description;
     data['tagsIds'] =
-        this.tagsIds != null ? this.tagsIds.join(",") : this.tagsIds;
+        this.tagsIds != null ? this.tagsIds!.join(",") : this.tagsIds;
     data['addressCountryCode'] = this.addressCountryCode;
     data['addressState'] = this.addressState;
     data['addressCity'] = this.addressCity;

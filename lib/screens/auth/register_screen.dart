@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -11,7 +11,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:url_launcher/url_launcher.dart';
 
 class RegisterPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   RegisterPage([this.args]);
   @override
@@ -19,7 +19,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  AuthBloc authBloc;
+  AuthBloc? authBloc;
   final _formKey = GlobalKey<FormState>();
   bool _termsCheckbox = false;
   bool termsOpened = false;
@@ -47,8 +47,8 @@ class _RegisterPageState extends State<RegisterPage> {
         return;
       }
       isLoading = true;
-      authBloc.add(EmptyEvent());
-      authBloc.add(RegisterEvent(_nameController.text, _emailController.text,
+      authBloc!.add(EmptyEvent());
+      authBloc!.add(RegisterEvent(_nameController.text, _emailController.text,
           _passwordController.text));
     });
   }
@@ -73,12 +73,12 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           } else if (state is LoadedSucessState) {
             if (widget.args != null &&
-                widget.args['returnToPageWithArgs'] != null) {
+                widget.args!['returnToPageWithArgs'] != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                 PageRoute.Page.timelineScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {
-                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                  "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
                 },
               );
             } else {
@@ -100,8 +100,8 @@ class _RegisterPageState extends State<RegisterPage> {
       if (state is LoadedSucessState || state is ErrorState) {
         isLoading = false;
       }
-      return ModalProgressHUD(
-        inAsyncCall: isLoading,
+      return LoadingOverlay(
+        isLoading: isLoading,
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -176,7 +176,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   .loginInputTheme(
                                                       'Name and surname'),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return 'Please enter your name and surname';
                                             }
                                             return null;
@@ -194,7 +195,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                               GlobalConstants.of(context)
                                                   .loginInputTheme('E-mail'),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return 'Please enter your e-mail';
                                             } else if (!EmailValidator.validate(
                                                 value)) {
@@ -233,7 +235,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                     ),
                                                   ),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return 'Please enter your password';
                                             }
                                             return null;
@@ -268,7 +271,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 ),
                                               ),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return 'Please repeat your password';
                                             }
                                             if (value !=
@@ -469,7 +473,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if (_formKey.currentState.validate()) {
+                                    if (_formKey.currentState!.validate()) {
                                       _submit();
                                     }
                                   },

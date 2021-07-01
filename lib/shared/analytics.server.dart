@@ -1,15 +1,14 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AnalyticsTracking {
   final Amplitude analytics = Amplitude.getInstance(instanceName: "OOTOPIA");
-  Identify identify;
-  static AnalyticsTracking instance;
+  static AnalyticsTracking? instance;
 
   AnalyticsTracking() {
-    analytics.init(DotEnv.env["AMPLITUDE_KEY"]);
+    analytics.init(dotenv.env["AMPLITUDE_KEY"]!);
   }
 
   static getInstance() {

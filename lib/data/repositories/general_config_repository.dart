@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'dart:convert';
 
@@ -21,7 +21,9 @@ class GeneralConfigRepositoryImpl
     if (!loggedIn) {
       return API_HEADERS;
     }
-    String token = await getAuthToken();
+
+    String? token = await getAuthToken();
+    if (token == null) return API_HEADERS;
 
     return {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -32,7 +34,7 @@ class GeneralConfigRepositoryImpl
   Future<GeneralConfig> getConfig(String name) async {
     try {
       final response = await http.get(
-        DotEnv.env['API_URL'] + "general-config/$name",
+        Uri.parse(dotenv.env['API_URL']! + "general-config/$name"),
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
@@ -42,7 +44,7 @@ class GeneralConfigRepositoryImpl
         throw Exception('Failed to load wallet');
       }
     } catch (error) {
-      throw Exception('Failed to load wallet. Error: ' + error);
+      throw Exception('Failed to load wallet. Error: $error');
     }
   }
 }

@@ -29,23 +29,23 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'dart:math' as math;
 
 class PhotoTimeline extends StatefulWidget {
-  final int index;
+  final int? index;
   final TimelinePost post;
   final TimelinePostBloc timelineBloc;
-  final User user;
+  final User? user;
   bool loggedIn = false;
   final FlickMultiManager flickMultiManager;
   bool isProfile;
 
   PhotoTimeline({
-    Key key,
+    required Key key,
     this.index,
-    this.post,
-    this.timelineBloc,
-    this.loggedIn,
+    required this.post,
+    required this.timelineBloc,
+    required this.loggedIn,
     this.user,
-    this.flickMultiManager,
-    this.isProfile,
+    required this.flickMultiManager,
+    required this.isProfile,
   }) : super(key: key);
 
   @override
@@ -63,24 +63,29 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   WalletTransfersRepositoryImpl walletTransferRepositoryImpl =
       WalletTransfersRepositoryImpl();
 
-  PostBloc postBloc;
+  late PostBloc postBloc;
   bool loggedIn = false;
-  User user;
+  User? user;
   bool isUserOwnsPost = false;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
-  _PhotoTimelineState({this.post, this.timelineBloc, this.loggedIn, this.user});
+  _PhotoTimelineState({
+    required this.post,
+    required this.timelineBloc,
+    required this.loggedIn,
+    this.user,
+  });
 
   bool dragging = false;
 
-  YoutubePlayerController _controller;
-  PlayerState _playerState;
-  YoutubeMetaData _videoMetaData;
+  late YoutubePlayerController _controller;
+  late PlayerState _playerState;
+  late YoutubeMetaData _videoMetaData;
   bool _isPlayerReady = false;
 
   bool _isDragging = false;
   double _draggablePositionX = 0;
-  Timer _onDragCanceledTimer;
+  late Timer _onDragCanceledTimer;
   double oozGoal = 1;
   bool _sendOOZIsLoading = false;
   bool _oozIsSent = false;
@@ -105,7 +110,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     if (loggedIn) {
       user = await getCurrentUser();
       _dontAskToConfirmGratitudeReward =
-          user.dontAskAgainToConfirmGratitudeReward;
+          user!.dontAskAgainToConfirmGratitudeReward == null
+              ? false
+              : user!.dontAskAgainToConfirmGratitudeReward!;
       if (this.mounted) {
         setState(() {});
       }
@@ -133,11 +140,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   void _goToProfile() async {
     Navigator.of(context).pushNamed(
-      user != null && post.userId == user.id
+      user != null && post.userId == user!.id
           ? PageRoute.Page.myProfileScreen.route
           : PageRoute.Page.profileScreen.route,
       arguments: {
-        "id": user != null && post.userId == user.id ? null : post.userId,
+        "id": user != null && post.userId == user!.id ? null : post.userId,
       },
     );
   }
@@ -201,10 +208,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: this.post?.photoUrl != null
+                      child: this.post.photoUrl != null
                           ? CircleAvatar(
                               backgroundImage:
-                                  NetworkImage("${this.post?.photoUrl}"),
+                                  NetworkImage("${this.post.photoUrl}"),
                               radius: 16,
                             )
                           : CircleAvatar(
@@ -225,14 +232,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         ),
                         Visibility(
                           visible: (this.post.city != null &&
-                                  this.post.city.isNotEmpty) ||
+                                  this.post.city!.isNotEmpty) ||
                               (this.post.state != null &&
-                                  this.post.state.isNotEmpty),
+                                  this.post.state!.isNotEmpty),
                           child: Text(
-                            '${this.post?.city}' +
+                            '${this.post.city}' +
                                 (this.post.state != null &&
-                                        this.post.state.isNotEmpty
-                                    ? ', ${this.post?.state}'
+                                        this.post.state!.isNotEmpty
+                                    ? ', ${this.post.state}'
                                     : ''),
                             textAlign: TextAlign.start,
                             style: TextStyle(fontSize: 12),
@@ -276,10 +283,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: this.post?.tags?.length,
+                    itemCount: this.post.tags.length,
                     itemBuilder: (ctx, index) {
                       return HashtagName(
-                        hashtagName: this.post?.tags[index],
+                        hashtagName: this.post.tags[index],
                       );
                     },
                   ),
@@ -297,7 +304,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   bottomRight: Radius.circular(20)),
             ),
             child: FlickMultiPlayer(
-              userId: (user != null ? user.id : null),
+              userId: (user != null ? user!.id : null),
               postId: this.post.id,
               url: this.post.videoUrl,
               flickMultiManager: widget.flickMultiManager,
@@ -820,9 +827,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   double getMaxSlideWidth() {
     final RenderBox renderBox =
-        _slideButtonKey.currentContext.findRenderObject();
+        _slideButtonKey.currentContext!.findRenderObject() as RenderBox;
     final RenderBox renderBoxOOZInfo =
-        _oozInfoKey.currentContext.findRenderObject();
+        _oozInfoKey.currentContext!.findRenderObject() as RenderBox;
     return (renderBox.size.width - renderBoxOOZInfo.size.width) - 26;
   }
 
@@ -895,11 +902,11 @@ class GratitudeRewardDialog extends StatefulWidget {
   Function onCheckChanged;
 
   GratitudeRewardDialog({
-    this.title,
-    this.message,
-    this.onClickPositiveButton,
-    this.onCheckChanged,
-    Key key,
+    required this.title,
+    required this.message,
+    required this.onClickPositiveButton,
+    required this.onCheckChanged,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -919,10 +926,10 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
   bool _isChecked = false;
 
   _GratitudeRewardDialogState({
-    this.title,
-    this.message,
-    this.onClickPositiveButton,
-    this.onCheckChanged,
+    required this.title,
+    required this.message,
+    required this.onClickPositiveButton,
+    required this.onCheckChanged,
   });
 
   @override
@@ -931,7 +938,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
       title: Text(
         this.title,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline2.copyWith(
+        style: Theme.of(context).textTheme.headline2!.copyWith(
               color: Colors.black87,
             ),
       ),
@@ -945,7 +952,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
             child: Text(
               this.message,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyText2.copyWith(
+              style: Theme.of(context).textTheme.bodyText2!.copyWith(
                     color: Colors.black87,
                   ),
             ),
@@ -1035,7 +1042,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
 class HashtagName extends StatelessWidget {
   String hashtagName;
 
-  HashtagName({this.hashtagName});
+  HashtagName({required this.hashtagName});
 
   @override
   Widget build(BuildContext context) {

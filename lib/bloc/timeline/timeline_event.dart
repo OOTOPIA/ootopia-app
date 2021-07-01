@@ -16,10 +16,10 @@ class LoadingTimelinePostEvent extends TimelinePostEvent {
 class GetTimelinePostsEvent extends TimelinePostEvent {
   final int limit;
   final int offset;
-  String userId;
+  String? userId;
   GetTimelinePostsEvent(this.limit, this.offset, [this.userId]);
   @override
-  List<Object> get props => [this.limit, this.offset, this.userId];
+  List<dynamic> get props => [this.limit, this.offset, this.userId];
 }
 
 class GetTimelinePostEvent extends TimelinePostEvent {
