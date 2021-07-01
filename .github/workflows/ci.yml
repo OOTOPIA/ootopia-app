@@ -26,7 +26,7 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter clean
-      - run: flutter build apk
+      - run: flutter build apk --no-sound-null-safety
       - name: App Center Distribute
         uses: devussy/AppCenter-Distribute-Github-Action@v1.0.2
         with:
