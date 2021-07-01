@@ -12,7 +12,7 @@ class SkeletonProfileScreen extends StatelessWidget {
         crossAxisCount: 4,
         children: List.generate(20, (index) {
           return Shimmer.fromColors(
-            baseColor: Colors.grey[100],
+            baseColor: Colors.grey[100]!,
             highlightColor: Color(0xffC0D9E8),
             child: Container(
               decoration: BoxDecoration(

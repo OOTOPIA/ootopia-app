@@ -6,35 +6,34 @@ import 'dart:math';
 
 class FlickMultiManager {
   List<FlickManager> _flickManagers = [];
-  FlickManager _activeManager;
+  FlickManager? _activeManager;
   bool _isMute = false;
   OOzDistributionSystem distributionSystem =
       OOzDistributionSystem.getInstance();
 
-  init(FlickManager flickManager, [String userId, String postId]) {
+  init(FlickManager flickManager, [String? userId, String? postId]) {
     _flickManagers.add(flickManager);
     if (_isMute) {
-      flickManager?.flickControlManager?.mute();
+      flickManager.flickControlManager!.mute();
     } else {
-      flickManager?.flickControlManager?.unmute();
+      flickManager.flickControlManager!.unmute();
     }
     if (userId != null &&
         postId != null &&
-        !flickManager.flickVideoManager.hasListeners) {
-      flickManager.flickVideoManager.addListener(() {
-        if (flickManager
-                .flickVideoManager.videoPlayerValue.position.inMilliseconds >
-            0) {
+        !flickManager.flickVideoManager!.hasListeners) {
+      flickManager.flickVideoManager!.addListener(() {
+        var videoPlayerValue =
+            flickManager.flickVideoManager!.videoPlayerValue!;
+        if (videoPlayerValue.position.inMilliseconds > 0) {
           var creationTimeInMs = (new DateTime.now().millisecondsSinceEpoch);
           Timer(Duration(milliseconds: (new Random()).nextInt(1000) + 100), () {
             distributionSystem.distributionWatchVideo(
-                userId: userId,
-                postId: postId,
-                timeInMilliseconds: flickManager
-                    .flickVideoManager.videoPlayerValue.position.inMilliseconds,
-                durationInMs: flickManager
-                    .flickVideoManager.videoPlayerValue.duration.inMilliseconds,
-                creationTimeInMs: creationTimeInMs);
+              userId: userId,
+              postId: postId,
+              timeInMilliseconds: videoPlayerValue.position.inMilliseconds,
+              durationInMs: videoPlayerValue.duration.inMilliseconds,
+              creationTimeInMs: creationTimeInMs,
+            );
           });
         }
       });
@@ -63,7 +62,7 @@ class FlickMultiManager {
     _activeManager?.flickControlManager?.pause();
   }
 
-  play([FlickManager flickManager]) {
+  play([FlickManager? flickManager]) {
     if (flickManager != null) {
       _activeManager?.flickControlManager?.pause();
       _activeManager = flickManager;
@@ -80,11 +79,14 @@ class FlickMultiManager {
 
   toggleMute() {
     _activeManager?.flickControlManager?.toggleMute();
-    _isMute = _activeManager?.flickControlManager?.isMute;
+    _isMute = _activeManager?.flickControlManager?.isMute == null
+        ? false
+        : _activeManager!.flickControlManager!.isMute;
     if (_isMute) {
-      _flickManagers.forEach((manager) => manager.flickControlManager.mute());
+      _flickManagers.forEach((manager) => manager.flickControlManager!.mute());
     } else {
-      _flickManagers.forEach((manager) => manager.flickControlManager.unmute());
+      _flickManagers
+          .forEach((manager) => manager.flickControlManager!.unmute());
     }
   }
 }

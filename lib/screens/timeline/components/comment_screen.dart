@@ -25,10 +25,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   TextEditingController _inputController = TextEditingController();
   FocusNode _focus = new FocusNode();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  User user;
+  User? user;
 
-  CommentBloc commentBloc;
-  TimelinePostBloc timelineBloc;
+  late CommentBloc commentBloc;
+  late TimelinePostBloc timelineBloc;
 
   bool newCommentLoading = false;
   bool loggedIn = false;
@@ -54,7 +54,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   bool _enabledToDeleteOtherComments() {
-    return this.user != null && this.user.id == widget.args['post'].userId;
+    return this.user != null && this.user!.id == widget.args['post'].userId;
   }
 
   void _onFocusChange() {
@@ -238,14 +238,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                   return GestureDetector(
                     onLongPress: () {
                       if (this._enabledToDeleteOtherComments() ||
-                          this.user.id == comment.userId) {
+                          this.user!.id == comment.userId) {
                         this._toggleSelectedComment(comment);
                       }
                     },
                     onTap: () {
                       if (this._enabledToDeleteOtherComments() ||
                           (this.user != null &&
-                              this.user.id == comment.userId)) {
+                              this.user!.id == comment.userId)) {
                         if (!selectMode) {
                           setState(() {
                             if (selectedCommentsIds.indexOf(comment.id) != -1) {
@@ -288,7 +288,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      print("LOGGED USER: " + user.fullname);
+      print("LOGGED USER: " + user!.fullname!);
     }
   }
 
@@ -339,7 +339,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void _removeFocusInput() {
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-      FocusManager.instance.primaryFocus.unfocus();
+      FocusManager.instance.primaryFocus!.unfocus();
     }
   }
 
@@ -423,21 +423,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 }
 
 class CommentItem extends StatelessWidget {
-  User currentUser;
+  User? currentUser;
   Comment comment;
   bool enabledToDeleteOtherComments;
   bool selectMode;
-  User user;
 
-  CommentItem(
-      {this.currentUser,
-      this.comment,
-      this.enabledToDeleteOtherComments,
-      this.selectMode});
+  CommentItem({
+    this.currentUser,
+    required this.comment,
+    required this.enabledToDeleteOtherComments,
+    required this.selectMode,
+  });
 
   bool _enabledToDeleteOtherComments() {
     return enabledToDeleteOtherComments ||
-        (this.currentUser != null && this.currentUser.id == comment.userId);
+        (this.currentUser != null && this.currentUser!.id == comment.userId);
   }
 
   @override
@@ -469,11 +469,11 @@ class CommentItem extends StatelessWidget {
                       backgroundImage: NetworkImage(this.comment.photoUrl ==
                               null
                           ? (this.currentUser != null &&
-                                  this.currentUser.id == this.comment.userId &&
-                                  this.currentUser.photoUrl != null
-                              ? this.currentUser.photoUrl
+                                  this.currentUser!.id == this.comment.userId &&
+                                  this.currentUser!.photoUrl != null
+                              ? this.currentUser!.photoUrl!
                               : "")
-                          : this.comment.photoUrl),
+                          : this.comment.photoUrl!),
                       minRadius: 16,
                     ),
                   ),
@@ -482,10 +482,9 @@ class CommentItem extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       text: (this.comment.username != null
-                              ? this.comment.username
-                              : (this.currentUser != null &&
-                                      this.currentUser.fullname != null
-                                  ? this.currentUser.fullname
+                              ? this.comment.username!
+                              : (this.currentUser != null
+                                  ? this.currentUser!.fullname!
                                   : "")) +
                           ': ',
                       style: TextStyle(
@@ -529,7 +528,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     this.hasSelectedCommentsIds,
     this.onLeadingClick,
     this.onDeleteClick, {
-    Key key,
+    Key? key,
   })  : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 

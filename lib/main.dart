@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
@@ -42,12 +42,12 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import './shared/analytics.server.dart';
 
 Future main() async {
-  await DotEnv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
 
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',
-    apiBaseUrl: DotEnv.env['API_URL'],
+    apiBaseUrl: dotenv.env['API_URL']!,
     child: new ExpensesApp(),
   );
 
@@ -210,7 +210,7 @@ class MainPage extends HookWidget {
   Widget build(BuildContext context) {
     final navigatorKey = GlobalObjectKey<NavigatorState>(context);
     return WillPopScope(
-      onWillPop: () async => !await navigatorKey.currentState.maybePop(),
+      onWillPop: () async => !(await navigatorKey.currentState!.maybePop()),
       child: Navigator(
         key: navigatorKey,
         initialRoute: PageRoute.Page.timelineScreen.route,
@@ -222,7 +222,9 @@ class MainPage extends HookWidget {
 
           return MaterialPageRoute(
             settings: settings,
-            builder: (context) => _fragments[page](settings.arguments as Map),
+            builder: (context) => (settings.arguments == null
+                ? _fragments[page]!(null)
+                : _fragments[page]!(settings.arguments as Map)),
           );
         },
       ),

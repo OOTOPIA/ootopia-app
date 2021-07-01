@@ -6,7 +6,7 @@ class GeneralConfig extends Equatable {
   String name;
   String value;
 
-  GeneralConfig({this.name, this.value});
+  GeneralConfig({required this.name, required this.value});
 
   factory GeneralConfig.fromJson(Map<String, dynamic> parsedJson) {
     return GeneralConfig(

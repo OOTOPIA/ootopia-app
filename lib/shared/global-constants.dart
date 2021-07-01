@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class GlobalConstants extends InheritedWidget {
   static GlobalConstants of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<GlobalConstants>();
+      context.dependOnInheritedWidgetOfExactType<GlobalConstants>()!;
 
-  const GlobalConstants({Widget child, Key key})
+  const GlobalConstants({required Widget child, Key? key})
       : super(key: key, child: child);
 
   final double spacingSmall = 8;

@@ -4,11 +4,14 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class MenuProfile extends StatelessWidget with SecureStoreMixin {
-  final String profileName;
+  final String? profileName;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  String appVersion;
+  String? appVersion;
 
-  MenuProfile({this.profileName, this.appVersion});
+  MenuProfile({
+    this.profileName,
+    this.appVersion,
+  });
 
   clearAuth(context) async {
     await cleanAuthToken();
@@ -94,7 +97,11 @@ class ItemMenu extends StatelessWidget {
   final String title;
   final void Function(BuildContext context) onTapFunction;
 
-  ItemMenu({this.onTapFunction, this.pathImage, this.title});
+  ItemMenu({
+    required this.onTapFunction,
+    required this.pathImage,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {

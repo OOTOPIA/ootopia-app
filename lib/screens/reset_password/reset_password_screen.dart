@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ResetPasswordPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   ResetPasswordPage([this.args]);
 
@@ -15,7 +15,7 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
-  AuthBloc authBloc;
+  late AuthBloc authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool _showPassword = false;
@@ -78,8 +78,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         if (state is ErrorState) {
           isLoading = false;
         }
-        return ModalProgressHUD(
-          inAsyncCall: isLoading,
+        return LoadingOverlay(
+          isLoading: isLoading,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -142,7 +142,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     controller: _passwordController,
                                     obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("Password").copyWith(
+                                        .loginInputTheme("Password")
+                                        .copyWith(
                                           suffixIcon: GestureDetector(
                                             child: Icon(
                                               _showPassword == false
@@ -158,7 +159,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           ),
                                         ),
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return 'Informe a nova senha';
                                       }
                                       return null;
@@ -172,7 +173,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     controller: _repeatPasswordController,
                                     obscureText: !_showRepeatPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme('Repeat password').copyWith(
+                                        .loginInputTheme('Repeat password')
+                                        .copyWith(
                                           suffixIcon: GestureDetector(
                                             child: Icon(
                                               _showRepeatPassword == false
@@ -182,13 +184,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                             ),
                                             onTap: () {
                                               setState(() {
-                                                _showRepeatPassword = !_showRepeatPassword;
+                                                _showRepeatPassword =
+                                                    !_showRepeatPassword;
                                               });
                                             },
                                           ),
                                         ),
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return 'Por favor, informe sua senha';
                                       }
                                       if (value != _passwordController.text) {
@@ -223,7 +226,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 _submit();
                               }
                             },

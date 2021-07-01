@@ -9,7 +9,7 @@ abstract class AuthState extends Equatable {
 class EmptyState extends AuthState {
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class InitialState extends AuthState {

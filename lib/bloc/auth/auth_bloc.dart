@@ -44,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         User user = result;
         yield EmptyState();
         yield LoadedSucessState(user);
-        this.trackingEvents.trackingLoggedIn(user.id, user.fullname);
+        this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
       }
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();
@@ -68,7 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield LoadedSucessState(result);
         this
             .trackingEvents
-            .trackingSignupCompletedSignup(result.id, result.fullname);
+            .trackingSignupCompletedSignup(result.id!, result.fullname!);
       }
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();

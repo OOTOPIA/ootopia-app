@@ -93,27 +93,24 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     FlutterUploader().setBackgroundHandler(backgroundHandler);
     var completer = new Completer();
 
-    if (user.photoFilePath == null || user.photoFilePath.isEmpty) {
+    if (user.photoFilePath == null ||
+        (user.photoFilePath != null && user.photoFilePath!.isEmpty)) {
       return await this.userRepository.updateUser(user, tagsIds);
     } else {
       await this.userRepository.updateUser(user, tagsIds);
-      subscription = FlutterUploader().result.listen((result) {
-        if (result.status == UploadTaskStatus.complete &&
-            !completer.isCompleted) {
-          user = User.fromJson(json.decode(result.response));
-          completer.complete(user);
-        }
-        /* else if (result.status == UploadTaskStatus.failed &&
-            !completer.isCompleted) {
-          completer.completeError(Exception("Error on upload"));
-        }*/
-      }, onDone: () {
-        print("JA FOI!");
-        //completer.complete(user);
-      }, onError: (error, s) {
-        print("Deu erro mesmo $s");
-        completer.completeError(error);
-      });
+      subscription = FlutterUploader().result.listen(
+          (result) {
+            if (result.status == UploadTaskStatus.complete &&
+                !completer.isCompleted) {
+              user = User.fromJson(json.decode(result.response!));
+              completer.complete(user);
+            }
+          },
+          onDone: () {},
+          onError: (error, s) {
+            print("on completeError $s");
+            completer.completeError(error);
+          });
       return completer.future;
     }
   }

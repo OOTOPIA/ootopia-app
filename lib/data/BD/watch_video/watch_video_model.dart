@@ -3,17 +3,17 @@ import 'package:ootopia_app/data/BD/base_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WatchVideoModel implements BaseModel {
-  int id;
-  String userId;
-  String postId;
-  int timeInMilliseconds;
-  int durationInMs;
-  int watched;
-  int uploaded; //To check if this is uploaded to the server
-  int createdAtInMs;
-  int updatedAtInMs;
+  int? id;
+  String? userId;
+  String? postId;
+  int? timeInMilliseconds;
+  int? durationInMs;
+  int? watched;
+  int? uploaded; //To check if this is uploaded to the server
+  int? createdAtInMs;
+  int? updatedAtInMs;
 
-  WatchVideoModel([
+  WatchVideoModel({
     this.userId,
     this.postId,
     this.timeInMilliseconds,
@@ -22,7 +22,7 @@ class WatchVideoModel implements BaseModel {
     this.uploaded,
     this.createdAtInMs,
     this.updatedAtInMs,
-  ]);
+  });
 
   @override
   String tableName() {
@@ -64,16 +64,17 @@ class WatchVideoModel implements BaseModel {
 
   @override
   WatchVideoModel fromMap(Map<String, dynamic> map) {
-    var model = WatchVideoModel();
+    var model = WatchVideoModel(
+      userId: map[WatchVideoFields.userId],
+      postId: map[WatchVideoFields.postId],
+      timeInMilliseconds: map[WatchVideoFields.timeInMilliseconds],
+      durationInMs: map[WatchVideoFields.durationInMs],
+      watched: map[WatchVideoFields.watched],
+      uploaded: map[WatchVideoFields.uploaded],
+      createdAtInMs: map[WatchVideoFields.createdAtInMs],
+      updatedAtInMs: map[WatchVideoFields.updatedAtInMs],
+    );
     model.id = map[WatchVideoFields.id];
-    model.userId = map[WatchVideoFields.userId];
-    model.postId = map[WatchVideoFields.postId];
-    model.timeInMilliseconds = map[WatchVideoFields.timeInMilliseconds];
-    model.durationInMs = map[WatchVideoFields.durationInMs];
-    model.watched = map[WatchVideoFields.watched];
-    model.uploaded = map[WatchVideoFields.uploaded];
-    model.createdAtInMs = map[WatchVideoFields.createdAtInMs];
-    model.updatedAtInMs = map[WatchVideoFields.updatedAtInMs];
     return model;
   }
 }

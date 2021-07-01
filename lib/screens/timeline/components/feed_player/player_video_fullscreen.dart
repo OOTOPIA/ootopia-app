@@ -7,7 +7,7 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
 
 class PLayerVideoFullscreen extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   PLayerVideoFullscreen({this.args});
 
@@ -16,18 +16,18 @@ class PLayerVideoFullscreen extends StatefulWidget {
 }
 
 class _PLayerVideoFullscreenState extends State<PLayerVideoFullscreen> {
-  FlickManager flickManager;
-  VideoPlayerController videoPlayer;
+  late FlickManager flickManager;
+  late VideoPlayerController videoPlayer;
   bool isPortrait = true;
 
-  FlickMultiManager flickMultiManager;
+  late FlickMultiManager flickMultiManager;
 
   @override
   void initState() {
     super.initState();
 
     flickMultiManager = FlickMultiManager();
-    videoPlayer = VideoPlayerController.network(widget.args["url"]);
+    videoPlayer = VideoPlayerController.network(widget.args!["url"]);
 
     videoPlayer
       ..addListener(() {
@@ -76,18 +76,17 @@ class _PLayerVideoFullscreenState extends State<PLayerVideoFullscreen> {
 }
 
 class PlayerControls extends StatelessWidget {
-  const PlayerControls(
-      {Key key, this.flickMultiManager, this.flickManager, this.url})
-      : super(key: key);
+  const PlayerControls({
+    Key? key,
+    required this.flickMultiManager,
+    required this.flickManager,
+  }) : super(key: key);
 
   final FlickMultiManager flickMultiManager;
   final FlickManager flickManager;
-  final String url;
 
   @override
   Widget build(BuildContext context) {
-    FlickDisplayManager displayManager =
-        Provider.of<FlickDisplayManager>(context);
     return Container(
       color: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),

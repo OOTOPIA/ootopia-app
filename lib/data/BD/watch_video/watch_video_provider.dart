@@ -1,5 +1,6 @@
 import 'package:ootopia_app/data/BD/database.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -23,7 +24,7 @@ class WatchVideoProvider with SecureStoreMixin {
     return watchVideoModel;
   }
 
-  Future<WatchVideoModel> getByPostId(String postId) async {
+  Future<WatchVideoModel?> getByPostId(String postId) async {
     final db = await OOTOPIADatabase.init().database;
 
     final maps = await db.query(WatchVideoModel().tableName(),
@@ -36,7 +37,7 @@ class WatchVideoProvider with SecureStoreMixin {
         whereArgs: [postId],
         orderBy: "${WatchVideoFields.id} DESC");
 
-    if (maps.isNotEmpty) {
+    if (maps.isNotEmpty && maps.length > 0) {
       return WatchVideoModel().fromMap(maps.first);
     } else {
       return null;
@@ -67,8 +68,12 @@ class WatchVideoProvider with SecureStoreMixin {
   Future<List<WatchVideoModel>> getNotUploadedPosts() async {
     final db = await OOTOPIADatabase.init().database;
 
-    var user = await getCurrentUser();
-    String userId = (user != null ? user.id : null);
+    User? user;
+    bool loggedIn = await getUserIsLoggedIn();
+    if (loggedIn) {
+      user = await getCurrentUser();
+    }
+    String? userId = (user != null ? user.id : null);
 
     final maps = await db.query(WatchVideoModel().tableName(),
         columns: WatchVideoFields.values,
@@ -99,8 +104,8 @@ class WatchVideoProvider with SecureStoreMixin {
               .toList()
               .length) >
           1;
-      if (checkDuplicate && entriesToRemove.indexOf(watchVideo.id) == -1) {
-        entriesToRemove.add(watchVideo.id);
+      if (checkDuplicate && entriesToRemove.indexOf(watchVideo.id!) == -1) {
+        entriesToRemove.add(watchVideo.id!);
       }
     }
 

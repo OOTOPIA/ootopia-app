@@ -13,11 +13,11 @@ class LoadingGratitudeRewardEvent extends WalletTransferEvent {
 class SendGratitudeRewardEvent extends WalletTransferEvent {
   final String postId;
   final double balance;
-  final bool dontAskToConfirmAgain;
+  final bool? dontAskToConfirmAgain;
   const SendGratitudeRewardEvent(this.postId, this.balance,
       [this.dontAskToConfirmAgain]);
   @override
-  List<Object> get props => [postId, balance, dontAskToConfirmAgain];
+  List<dynamic> get props => [postId, balance, dontAskToConfirmAgain];
 }
 
 class NetworkErrorEvent extends Error {}

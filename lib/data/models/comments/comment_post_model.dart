@@ -5,23 +5,24 @@ class Comment extends Equatable {
   String postId;
   String userId;
   String text;
-  String photoUrl;
-  String username;
+  String? photoUrl;
+  String? username;
   bool deleted = false;
   bool selected = false;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
-  Comment(
-      {this.id,
-      this.postId,
-      this.userId,
-      this.text,
-      this.photoUrl,
-      this.username,
-      this.deleted,
-      this.createdAt,
-      this.updatedAt});
+  Comment({
+    required this.id,
+    required this.postId,
+    required this.userId,
+    required this.text,
+    this.photoUrl,
+    required this.username,
+    required this.deleted,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
@@ -38,7 +39,7 @@ class Comment extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<dynamic> get props => [
         id,
         postId,
         userId,

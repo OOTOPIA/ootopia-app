@@ -5,10 +5,10 @@ class TimelinePost extends Equatable {
   String userId;
   String description;
   String type;
-  String imageUrl;
+  String? imageUrl;
   String videoUrl;
   String thumbnailUrl;
-  String photoUrl;
+  String? photoUrl;
   String username;
   int likesCount;
   int commentsCount;
@@ -16,27 +16,27 @@ class TimelinePost extends Equatable {
   double oozTotalCollected = 0;
   bool liked = false;
   List<String> tags;
-  String city;
-  String state;
-  String country;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? city;
+  String? state;
+  String? country;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   TimelinePost({
-    this.id,
-    this.userId,
-    this.description,
-    this.type,
+    required this.id,
+    required this.userId,
+    required this.description,
+    required this.type,
     this.imageUrl,
-    this.videoUrl,
-    this.thumbnailUrl,
-    this.photoUrl,
-    this.username,
-    this.likesCount,
-    this.commentsCount,
-    this.oozTotalCollected,
-    this.liked,
-    this.tags,
+    required this.videoUrl,
+    required this.thumbnailUrl,
+    required this.photoUrl,
+    required this.username,
+    required this.likesCount,
+    required this.commentsCount,
+    required this.oozTotalCollected,
+    required this.liked,
+    required this.tags,
     this.city,
     this.state,
     this.country,
@@ -71,7 +71,7 @@ class TimelinePost extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<dynamic> get props => [
         id,
         userId,
         description,

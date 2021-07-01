@@ -1,24 +1,24 @@
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  String id;
-  String fullname;
-  String email;
-  String birthdate;
-  String photoUrl;
-  String photoFilePath; //Used to upload user photo
-  String addressCountryCode;
-  String addressState;
-  String addressCity;
-  double addressLatitude;
-  double addressLongitude;
-  int dailyLearningGoalInMinutes;
-  bool enableSustainableAds = false;
-  bool dontAskAgainToConfirmGratitudeReward = false;
-  int registerPhase;
-  String token;
-  String createdAt;
-  String updatedAt;
+  String? id;
+  String? fullname;
+  String? email;
+  String? birthdate;
+  String? photoUrl;
+  String? photoFilePath; //Used to upload user photo
+  String? addressCountryCode;
+  String? addressState;
+  String? addressCity;
+  double? addressLatitude;
+  double? addressLongitude;
+  int? dailyLearningGoalInMinutes;
+  bool? enableSustainableAds = false;
+  bool? dontAskAgainToConfirmGratitudeReward = false;
+  int? registerPhase;
+  String? token;
+  String? createdAt;
+  String? updatedAt;
 
   User({
     this.id,
@@ -97,7 +97,7 @@ class User extends Equatable {
       };
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         fullname,
         email,

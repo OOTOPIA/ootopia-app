@@ -5,14 +5,15 @@ import 'package:ootopia_app/data/models/post/post_created_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'package:path/path.dart';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class PostRepository {
-  Future<List<TimelinePost>> getPosts([int limit, int offset, String userId]);
+  Future<List<TimelinePost>> getPosts(
+      [int? limit, int? offset, String? userId]);
   Future<LikePostResult> likePost(String id);
   Future<void> createPost(PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
@@ -23,12 +24,14 @@ const Map<String, String> API_HEADERS = {
 };
 
 class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
-  Future<Map<String, String>> getHeaders([String contentType]) async {
+  Future<Map<String, String>> getHeaders([String? contentType]) async {
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
-    String token = await getAuthToken();
+
+    String? token = await getAuthToken();
+    if (token == null) return API_HEADERS;
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
 
@@ -40,7 +43,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   }
 
   Future<List<TimelinePost>> getPosts(
-      [int limit, int offset, String userId]) async {
+      [int? limit, int? offset, String? userId]) async {
     try {
       Map<String, String> queryParams = {};
 
@@ -56,7 +59,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       String queryString = Uri(queryParameters: queryParams).query;
 
       final response = await http.get(
-        DotEnv.env['API_URL'] + "posts?" + queryString,
+        Uri.parse(dotenv.env['API_URL']! + "posts?" + queryString),
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
@@ -68,62 +71,55 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         throw Exception('Failed to load post');
       }
     } catch (error) {
-      throw Exception('Failed to load posts' + error);
+      throw Exception('Failed to load posts $error');
     }
   }
 
   @override
   Future<LikePostResult> likePost(String id) async {
     try {
-      if (id != null) {
-        final response = await http.post(
-          DotEnv.env['API_URL'] + "posts/$id/like",
-          headers: await this.getHeaders(),
-        );
+      final response = await http.post(
+        Uri.parse(dotenv.env['API_URL']! + "posts/$id/like"),
+        headers: await this.getHeaders(),
+      );
 
-        if (response.statusCode == 200) {
-          return LikePostResult.fromJson(json.decode(response.body));
-        } else {
-          throw Exception('Failed to like a post');
-        }
+      if (response.statusCode == 200) {
+        return LikePostResult.fromJson(json.decode(response.body));
+      } else {
+        throw Exception('Failed to like a post');
       }
     } catch (error) {
-      throw Exception('Failed to like a post ' + error);
+      throw Exception('Failed to like a post $error');
     }
-    return null;
   }
 
   @override
   Future<PostCreate> createPost(PostCreate post) async {
-    try {
-      await FlutterUploader().enqueue(
-        MultipartFormDataUpload(
-          url: DotEnv.env['API_URL'] + "posts",
-          files: [
-            FileItem(
-              path: post.filePath,
-              field: "file",
-            )
-          ],
-          method: UploadMethod.POST,
-          headers: await getHeaders("multipart/form-data"),
-          data: {
-            "metadata": jsonEncode(post),
-          },
-          tag: "upload 1",
-        ),
-      );
-      return post;
-    } catch (e) {
-      print('Error upload: $e');
-    }
+    await FlutterUploader().enqueue(
+      MultipartFormDataUpload(
+        url: dotenv.env['API_URL']! + "posts",
+        files: [
+          FileItem(
+            path: post.filePath!,
+            field: "file",
+          )
+        ],
+        method: UploadMethod.POST,
+        headers: await getHeaders("multipart/form-data"),
+        data: {
+          "metadata": jsonEncode(post),
+        },
+        tag: "upload 1",
+      ),
+    );
+    return post;
   }
 
   @override
   Future<String> deletePost(String postId) async {
     try {
       final request = http.Request(
-          "DELETE", Uri.parse(DotEnv.env['API_URL'] + 'posts/$postId'));
+          "DELETE", Uri.parse(dotenv.env['API_URL']! + 'posts/$postId'));
       request.headers.addAll(await this.getHeaders());
 
       final response = await request.send();
@@ -134,7 +130,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         throw Exception('Failed to delete post');
       }
     } catch (error) {
-      throw Exception('Failed to delete post ' + error);
+      throw Exception('Failed to delete post $error');
     }
   }
 
@@ -155,7 +151,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       }
 
       await http.post(
-        DotEnv.env['API_URL'] + "posts/watched",
+        Uri.parse(dotenv.env['API_URL']! + "posts/watched"),
         headers: await this.getHeaders(),
         body: jsonEncode(<String, String>{
           'data': "[" + allObjsJsonString + "]",

@@ -5,9 +5,12 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/navigator-state.dart';
 
 class NavigatorBar extends StatefulWidget {
-  const NavigatorBar({Key key, this.currentPage}) : super(key: key);
+  const NavigatorBar({
+    Key? key,
+    this.currentPage,
+  }) : super(key: key);
 
-  final String currentPage;
+  final String? currentPage;
 
   @override
   _NavigatorBarState createState() => _NavigatorBarState();
@@ -15,7 +18,7 @@ class NavigatorBar extends StatefulWidget {
 
 class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
   bool loggedIn = false;
-  User user;
+  User? user;
 
   @override
   void initState() {
@@ -27,7 +30,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      print("LOGGED USER: ${user.toJson()}");
+      print("LOGGED USER: ${user!.toJson()}");
     }
   }
 
@@ -110,7 +113,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
                 );
                 return;
               } else if (loggedIn) {
-                if (user.registerPhase == 2) {
+                if (user!.registerPhase == 2) {
                   Navigator.of(context).pushNamedIfNotCurrent(
                       PageRoute.Page.myProfileScreen.route);
                 } else {

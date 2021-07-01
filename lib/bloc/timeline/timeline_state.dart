@@ -8,8 +8,7 @@ abstract class TimelinePostState extends Equatable {
 
 class EmptyState extends TimelinePostState {
   @override
-  // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class InitialState extends TimelinePostState {
