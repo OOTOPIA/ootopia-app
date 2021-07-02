@@ -28,5 +28,5 @@ flutter clean
 flutter pub cache repair
 flutter pub get
 sudo gem install cocoapods
-cd ios && pod init && pod install --repo-update
+cd ios && pod install --repo-update
 flutter build ios --release --no-codesign --no-sound-null-safety
