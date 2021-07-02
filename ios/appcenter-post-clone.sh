@@ -24,9 +24,4 @@ AMPLITUDE_KEY=${AMPLITUDE_KEY}
 EOL
 cat .env
 
-flutter clean
-flutter pub cache repair
-flutter pub get
-sudo gem install cocoapods
-cd ios && pod install --repo-update && pod update mobile-ffmpeg-https
 flutter build ios --release --no-codesign --no-sound-null-safety
