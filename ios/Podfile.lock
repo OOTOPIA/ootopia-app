@@ -7,11 +7,16 @@ PODS:
   - camera (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_ffmpeg/https-lts (0.2.10):
+  - flutter_ffmpeg/https-lts (0.4.0):
     - Flutter
-    - mobile-ffmpeg-https (= 4.3.1.LTS)
+    - mobile-ffmpeg-https (= 4.4.LTS)
   - flutter_inappwebview (0.0.1):
     - Flutter
+    - flutter_inappwebview/Core (= 0.0.1)
+    - OrderedSet (~> 5.0)
+  - flutter_inappwebview/Core (0.0.1):
+    - Flutter
+    - OrderedSet (~> 5.0)
   - flutter_secure_storage (3.3.1):
     - Flutter
   - flutter_uploader (1.2.0):
@@ -28,8 +33,11 @@ PODS:
     - Flutter
   - image_picker (0.0.1):
     - Flutter
-  - mobile-ffmpeg-https (4.3.1.LTS)
+  - mobile-ffmpeg-https (4.4.LTS)
+  - OrderedSet (5.0.0)
   - package_info (0.0.1):
+    - Flutter
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
@@ -37,19 +45,23 @@ PODS:
     - Flutter
   - photo_manager (0.0.1):
     - Flutter
+    - FlutterMacOS
   - receive_sharing_intent (0.0.1):
     - Flutter
-  - Sentry (6.1.4):
-    - Sentry/Core (= 6.1.4)
-  - Sentry/Core (6.1.4)
+  - Sentry (7.1.3):
+    - Sentry/Core (= 7.1.3)
+  - Sentry/Core (7.1.3)
   - sentry_flutter (0.0.1):
     - Flutter
-    - Sentry (~> 6.1.4)
+    - FlutterMacOS
+    - Sentry (~> 7.1.3)
   - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
+  - uni_links (0.0.1):
+    - Flutter
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
@@ -70,6 +82,7 @@ DEPENDENCIES:
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
@@ -77,6 +90,7 @@ DEPENDENCIES:
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -87,6 +101,7 @@ SPEC REPOS:
     - Amplitude
     - FMDB
     - mobile-ffmpeg-https
+    - OrderedSet
     - Sentry
 
 EXTERNAL SOURCES:
@@ -114,6 +129,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
@@ -128,6 +145,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  uni_links:
+    :path: ".symlinks/plugins/uni_links/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
   video_player:
@@ -139,27 +158,30 @@ SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
   amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
-  camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
+  camera: 3164201dc344383e62282964016528c4f5a9ad50
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_ffmpeg: cf0a6941ef67e88248c998cc3e34f8acb0b4e454
-  flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
+  flutter_ffmpeg: bc8496ea20331e486cd29a03a3c6ff10d32db565
+  flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   flutter_uploader: 2b07c4d41cf1218f25e6d5b8bcfa2d913838e27c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
   geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
-  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
-  mobile-ffmpeg-https: aebe327c4cdacde636defa4118465413f099667d
+  image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
+  mobile-ffmpeg-https: 7ec3461d626f2d86be1e904bcfb29ed0be8cad7a
+  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  photo_manager: f7c619c2cc8c2adb8d85c63363babac477de9c67
+  photo_manager: 61cdd6835af271b9ad1bb533fccf71d5db02fff3
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
-  Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
-  sentry_flutter: 8b2b2e1c0101ef562106b5d272d3c0c741512c01
+  Sentry: 6d963d64804dd06d96e778be729613f481394312
+  sentry_flutter: f20d4f199442900fbdab2b8496f1d2091d8b94d9
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f

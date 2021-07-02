@@ -5,8 +5,11 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/navigator-state.dart';
 
 class NavigatorBar extends StatefulWidget {
+  final Function? onClickButton;
+
   const NavigatorBar({
     Key? key,
+    this.onClickButton,
     this.currentPage,
   }) : super(key: key);
 
@@ -76,6 +79,10 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
                 context,
                 ModalRoute.withName(PageRoute.Page.timelineScreen.route),
               );
+
+              if (widget.onClickButton != null) {
+                widget.onClickButton!();
+              }
               break;
 
             case 1:
