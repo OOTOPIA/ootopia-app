@@ -58,6 +58,8 @@ class _TimelinePageState extends State<TimelinePage>
 
   late GeneralConfig transferOozToPostLimitConfig;
 
+  ScrollController _scrollController = new ScrollController();
+
   List<TimelinePost> _allPosts = [];
 
   late FlickMultiManager flickMultiManager;
@@ -131,6 +133,14 @@ class _TimelinePageState extends State<TimelinePage>
 
     _handleIncomingLinks();
     _handleInitialUri();
+  }
+
+  void goToTopTimeline() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   void _handleIncomingLinks() {
@@ -382,6 +392,7 @@ class _TimelinePageState extends State<TimelinePage>
           ),
         ),
         bottomNavigationBar: NavigatorBar(
+          onClickButton: () => goToTopTimeline(),
           currentPage: PageRoute.Page.timelineScreen.route,
         ),
       ),
@@ -424,6 +435,7 @@ class _TimelinePageState extends State<TimelinePage>
                       performAllRequests();
                     },
                     child: ListView.separated(
+                      controller: _scrollController,
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
                       shrinkWrap: true,
