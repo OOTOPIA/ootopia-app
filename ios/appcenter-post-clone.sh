@@ -24,5 +24,4 @@ AMPLITUDE_KEY=${AMPLITUDE_KEY}
 EOL
 cat .env
 
-flutter pub upgrade
 flutter build ios --no-sound-null-safety --release --no-codesign
