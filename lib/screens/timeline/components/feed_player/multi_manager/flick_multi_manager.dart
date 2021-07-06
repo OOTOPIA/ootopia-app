@@ -4,13 +4,14 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'dart:math';
 
+import 'package:ootopia_app/shared/ooz_distribution/ooz_distribution_service.dart';
+
 class FlickMultiManager {
   List<FlickManager> _flickManagers = [];
   FlickManager? _activeManager;
   bool _isMute = false;
   OOzDistributionSystem distributionSystem =
       OOzDistributionSystem.getInstance();
-
   init(FlickManager flickManager, [String? userId, String? postId]) {
     _flickManagers.add(flickManager);
     if (_isMute) {
@@ -20,21 +21,20 @@ class FlickMultiManager {
     }
     if (userId != null &&
         postId != null &&
-        !flickManager.flickVideoManager!.hasListeners) {
+        !flickManager.flickVideoManager!.videoPlayerValue!.isInitialized &&
+        OOZDistributionService.getInstance().distributionData[postId] == null) {
       flickManager.flickVideoManager!.addListener(() {
         var videoPlayerValue =
             flickManager.flickVideoManager!.videoPlayerValue!;
         if (videoPlayerValue.position.inMilliseconds > 0) {
           var creationTimeInMs = (new DateTime.now().millisecondsSinceEpoch);
-          Timer(Duration(milliseconds: (new Random()).nextInt(1000) + 100), () {
-            distributionSystem.distributionWatchVideo(
-              userId: userId,
-              postId: postId,
-              timeInMilliseconds: videoPlayerValue.position.inMilliseconds,
-              durationInMs: videoPlayerValue.duration.inMilliseconds,
-              creationTimeInMs: creationTimeInMs,
-            );
-          });
+          OOZDistributionService.getInstance().updateVideoPosition(
+            postId,
+            userId,
+            videoPlayerValue.position.inMilliseconds,
+            videoPlayerValue.duration.inMilliseconds,
+            creationTimeInMs,
+          );
         }
       });
       play(flickManager);
