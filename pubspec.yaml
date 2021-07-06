@@ -47,7 +47,7 @@ dependencies:
   shimmer: ^2.0.0
   geolocator: ^7.2.0+1
   geocoding: ^2.0.0
-  flutter_tags: ^1.0.0-nullsafety.1
+  flutter_tags: ^0.4.9+1
   image_picker: ^0.8.1+2
   flutter_hooks: ^0.18.0
   video_player: ^2.1.6
