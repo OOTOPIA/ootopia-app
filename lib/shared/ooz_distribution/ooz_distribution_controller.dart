@@ -45,7 +45,6 @@ abstract class OOZDistributionControllerBase with Store {
     } else if (this.timeInMilliseconds != null &&
         timeInMilliseconds < this.timeInMilliseconds!) {
       create = true;
-      print("OLD ${this.timeInMilliseconds} AND NEW $timeInMilliseconds");
       this._created = false;
     }
 
@@ -80,7 +79,6 @@ abstract class OOZDistributionControllerBase with Store {
 
     if (create && !_created && watchVideo == null) {
       this._created = true;
-      print("HEY HEY HEY CREATE THIS NOW");
       watchVideoProvider.insert(WatchVideoModel(
         userId: userId,
         postId: postId,
@@ -91,12 +89,9 @@ abstract class OOZDistributionControllerBase with Store {
         createdAtInMs: creationTimeInMs,
       ));
     } else if (update && watchVideo != null) {
-      print("HEY I'LL UPDATE THIS");
       watchVideo.timeInMilliseconds = timeInMilliseconds;
       watchVideo.watched = watched;
       await watchVideoProvider.update(watchVideo);
     }
-    print(
-        "THIS IS CURRENT DATA $postId: $timeInMilliseconds; $durationInMs; $creationTimeInMs");
   }
 }
