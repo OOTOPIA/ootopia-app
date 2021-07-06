@@ -38,6 +38,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import './shared/analytics.server.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/l10n.dart';
 
 Future main() async {
   await DotEnv.load(fileName: ".env");
@@ -129,6 +132,13 @@ class _ExpensesAppState extends State<ExpensesApp> {
         ),
       ],
       child: MaterialApp(
+        supportedLocales: L10n.all,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
         theme: ThemeData(
           accentColor: Color(0xff0253e7),
           textTheme: TextTheme(

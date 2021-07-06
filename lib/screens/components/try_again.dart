@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TryAgain extends StatefulWidget {
   final Function onClickButton;
@@ -63,7 +64,7 @@ class _TryAgainState extends State<TryAgain> {
                           widget.messageText != null &&
                                   widget.messageText.isNotEmpty
                               ? widget.messageText
-                              : "There was a problem,\nplease try again.",
+                              : AppLocalizations.of(context).thereWasAProblemPleaseTryAgain,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14,
@@ -106,7 +107,7 @@ class _TryAgainState extends State<TryAgain> {
                                 widget.buttonText != null &&
                                         widget.buttonText.isNotEmpty
                                     ? widget.buttonText
-                                    : "Try again",
+                                    : AppLocalizations.of(context).tryAgain,
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,

@@ -1,0 +1,69 @@
+{
+    "language":"English",
+    "@language":{
+        "description": "The current language"
+    },
+    "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
+    "email": "E-mail",
+    "pleaseEnterYourEmail": "Please enter your e-mail",
+    "password": "Password",
+    "pleaseEnterYourPassword": "Please Enter Your Password",
+    "repeatPassword": "Repeat password",
+    "iForgotMyPassword": "I Forgot My Password",
+    "pleaseRepeatYourPassword": "Please repeat your password",
+    "passwordDoesNotMatch": "Password does not match",
+    "login": "Login",
+    "createAccount": "Create account",
+
+
+    "regenerationGame": "Regeneration game",
+    "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
+    "confirm": "Confirm",
+
+
+    "pleaseWait": "Please, wait...",
+    "failedToGetCurrentLocation": "Failed to get current location",
+    "weCouldntGetYourLocation2": "We couldn't get your location.",
+    "weCouldntGetYourLocation": "We couldn't get your location. But don't worry, you can inform it at another time.",
+    "thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts": "The place where you live is the where your positive impact counts.",
+    "tryToRetrieveYourCurrentLocationClickingByGetLocationAgain": "\nTry to retrieve your current location clicking by \"Get location again\"",
+    "getCurrentLocation": "Get current location",
+
+    "dateOfBirth": "Date of Birth",
+    "day": "day",
+    "month": "month",
+    "year": "year",
+    "pleaseEnterAValidBirthdateInFormat": "Please enter a valid birthdate in format DD/MM/YYYY",
+    "pleaseEnterAValidBirthdate": "Please enter a valid birthdate",
+
+    "others": "Others",
+
+    "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
+    "nameAndSurname": "Name and surname",
+    "pleaseEnterYourNameAndSurname": "Please enter your name and surname",
+    "pleaseEnterYourEmail": "Please enter your email",
+    "pleaseEnterAValidEmail": "Please enter a valid e-mail",
+
+    "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
+
+    "iAcceptThe": "I accept the ",
+    "useTerms": "use terms.",
+    "youNeedToAcceptTheTermsOfUseToContinue": "You need to accept the Terms of Use to continue",
+
+    "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "You need to enable some \npermissions to allow full \nuse of the camera.",
+
+    "decline": "Decline",
+
+    "theVideoIsLoading": "The video is loading",
+    "home": "Home",
+    "add": "Add",
+    "profile": "Profile",
+    "delete": "Delete",
+
+    "thereWasAProblemPleaseTryAgain": "There was a problem,\nplease try again.",
+    "tryAgain": "Try again",
+
+    "@helloWorld": {
+        "description": "A programmer greeting"
+    }
+}

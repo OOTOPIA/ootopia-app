@@ -20,6 +20,7 @@ import 'package:flutter/services.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'dart:math' as math;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PostPreviewPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -85,7 +86,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   void _getLocation() {
     setState(() {
       geolocationErrorMessage = "";
-      geolocationMessage = "Please, wait...";
+      geolocationMessage = AppLocalizations.of(context).pleaseWait;
     });
     Geolocation.determinePosition().then((Position position) async {
       List<Placemark> placemarks =
@@ -104,13 +105,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           postData.addressLongitude = position.longitude;
           postData.addressNumber = placemark.name;
         } else {
-          geolocationMessage = "Failed to get current location";
-          geolocationErrorMessage = "We couldn't get your location.";
+          geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
+          geolocationErrorMessage = AppLocalizations.of(context).weCouldntGetYourLocation2;
         }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        geolocationMessage = "Failed to get current location";
+        geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
         geolocationErrorMessage = error.toString();
       });
     });
