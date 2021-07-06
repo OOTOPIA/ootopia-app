@@ -9,6 +9,7 @@ set -x
 cd ..
 git clone -b stable https://github.com/flutter/flutter.git
 export PATH=`pwd`/flutter/bin:$PATH
+export "EXTRA_FRONT_END_OPTIONS=--no-sound-null-safety"
 
 flutter channel stable
 flutter doctor
