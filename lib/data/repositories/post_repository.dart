@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/data/repositories/api.dart';
 import 'dart:convert';
 import 'package:path/path.dart';
 
@@ -150,12 +151,11 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
             (i == watchedPosts.length - 1 ? "" : ",");
       }
 
-      await http.post(
-        Uri.parse(dotenv.env['API_URL']! + "posts/watched"),
-        headers: await this.getHeaders(),
-        body: jsonEncode(<String, String>{
-          'data': "[" + allObjsJsonString + "]",
-        }),
+      await ApiClient.api().post(
+        "posts/watched",
+        data: {
+          "data": "[" + allObjsJsonString + "]",
+        },
       );
     } catch (e) {
       print('Error send watched post: $e');
