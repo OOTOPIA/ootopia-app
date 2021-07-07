@@ -63,6 +63,71 @@
     "thereWasAProblemPleaseTryAgain": "There was a problem,\nplease try again.",
     "tryAgain": "Try again",
 
+    "discardChanges":"Discard changes",
+    "doYouWantToDiscardTheChanges": "If you come back you will end up losing the changes made. Do you want to discard the changes?",
+    "noContinueEditing": "No, continue editing",
+    "yes": "Yes",
+    "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "There was a problem loading the video, please try to upload the video again.",
+    "pleaseSelectAtLeast1Tag": "Please select at least 1 tag",
+    "selectAtLeast1Tag": "Select at least 1 tag",
+    "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "There was a problem uploading the video, please try to upload the video again.",
+    "newPost": "New Post",
+    "sendPost": "Send post",
+    "writeADescription": "Write a description",
+    "selectTags": "Select tags",
+    "errorLoadingTagsTryAgain": "Error loading tags. Try again.",
+
+    "exit": "Exit",
+    "appVersion": "App Version",
+    "madeWithLoveOnThisWonderfulPlanet": "Made with love on this wonderful planet.",
+    "loggedInAs": "Logged in as",
+
+    "publications": "Publications",
+    "initial": "Initial",
+    "nothingData": "nothing data :(",
+
+    "gratitudeReward": "Gratitude reward",
+    "transfer": "transfer",
+    "to": "to",
+    "from": "from",
+
+    "profileOwnProfile": "Profile - Own profile",
+    "profileViewedAProfile": "Profile - Viewed a Profile",
+
+    "posts": "Posts",
+    "wallet": "Wallet",
+
+    "errorOnGetPosts": "Error on get posts",
+    "addMoney": "Add money",
+    "sendMoney": "Send money",
+    "balanceIn": "Balance in",
+
+    "all": "All",
+    "received": "Received",
+    "sent": "Sent",
+    "send": "Send",
+    "noPosts": "No posts",
+
+    "increaseVolumeBy10": "Increase volume by 10",
+
+    "selected": "selected",
+    "comments": "Comments",
+    "writeYourComment": "Write your comment",
+    "noComment": "No comment",
+    "caution": "Caution",
+    "commentsWillBePermanentlyRemoved": "Comments will be permanently removed.",
+    "cancel": "cancel",
+    "doYouReallyWantToDeleteYourPost": "Do you really want to delete your post?",
+    "slideToGiveAGratitudeReward": "slide to give a gratitude reward",
+    "addAComment":"Add a comment",
+    "doYouConfirmSending": "Do you confirm sending",
+    "fromYourAccontToTheCreatorOfThisPost": "from your accont to the creator of this post?",
+    "anErrorHasOccurredTryAgain": "An error has occurred. Try again",
+    "yourHaveInsufficientOOZToGive": "Your have insufficient OOZ to give.",
+    "dontShowThisMessageAgain": "Don't show this message again",
+
+    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Your video is being processed. Wait until processing is complete.",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }

@@ -5,6 +5,7 @@ import 'package:ootopia_app/screens/timeline/components/feed_player/portrait_con
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PLayerVideoFullscreen extends StatefulWidget {
   Map<String, dynamic> args;
@@ -133,7 +134,7 @@ class PlayerControls extends StatelessWidget {
                   // ),
                   IconButton(
                     icon: const Icon(Icons.fullscreen),
-                    tooltip: 'Increase volume by 10',
+                    tooltip: AppLocalizations.of(context).increaseVolumeBy10,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

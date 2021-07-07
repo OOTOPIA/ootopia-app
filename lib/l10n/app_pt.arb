@@ -56,8 +56,71 @@
     "delete": "Excluir",
 
     "thereWasAProblemPleaseTryAgain": "Ocorreu um problema,\npor favor, tente novamente.",
-    "tryAgain": "Tente novamente"
+    "tryAgain": "Tente novamente",
 
+    "discardChanges": "Descartar mudanças",
+    "doYouWantToDiscardTheChanges": "Se você voltar vai acabar perdendo as mudanças feitas. Você quer descartar as alterações?",
+    "noContinueEditing": "Não, continue editando",
+    "yes": "Sim",
+    "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao carregar o vídeo, tente enviar o vídeo novamente.",
+    "pleaseSelectAtLeast1Tag": "Please select at least 1 tag",
+    "selectAtLeast1Tag": "Selecione pelo menos 1 tag",
+    "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao enviar o vídeo, tente enviar o vídeo novamente.",
+    "newPost": "Nova postagem",
+    "sendPost": "Enviar postagem",
+    "writeADescription": "Escreva uma descrição",
+    "selectTags": "Selecione as tags",
+    "errorLoadingTagsTryAgain": "Erro ao carregar tags. Tente novamente.",
 
+    "exit": "Sair",
+    "appVersion": "Versão do aplicativo",
+    "madeWithLoveOnThisWonderfulPlanet": "Feito com amor nesse planeta maravilhoso.",
+    "loggedInAs": "Logado como",
+
+    "publications": "Publicações",
+    "initial": "Inicial",
+    "nothingData": "nada dados :(",
+
+    "gratitudeReward": "Recompensa de gratidão",
+    "transfer": "transferir",
+    "to": "para",
+    "from": "de",
+
+    "profileOwnProfile": "Perfil - Perfil próprio",
+    "profileViewedAProfile": "Perfil - Visualizou um Perfil",
+
+    "posts": "Postagens",
+    "wallet": "Carteira",
+    "errorOnGetPosts": "Erro ao obter postagens",
+    "addMoney": "Adicionar dinheiro",
+    "sendMoney": "Send money",
+    "balanceIn": "Saldo em",
+    "all": "Tudo",
+    "received": "Recebido",
+    "sent": "Enviei",
+    "send": "Enviar",
+    "noPosts": "Sem postagens",
+
+    "increaseVolumeBy10": "Aumentar o volume em 10",
+
+    "selected": "selecionado",
+    "comments": "Comentários",
+    "writeYourComment": "Escreva seu comentário",
+    "noComment": "Nenhum comentário",
+    "caution": "Atenção",
+    "commentsWillBePermanentlyRemoved": "Os comentários serão removidos permanentemente.",
+    "cancel": "cancelar",
+
+    "doYouReallyWantToDeleteYourPost": "Deseja realmente deletar seu post ?",
+    "slideToGiveAGratitudeReward": "deslize para dar uma recompensa de gratidão",
+    "addAComment":"Adicione um comentário",
+    "doYouConfirmSending": "Você confirma o envio",
+    "fromYourAccontToTheCreatorOfThisPost": "de sua conta para o criador deste post?",
+
+    "anErrorHasOccurredTryAgain": "Ocorreu um erro. Tente novamente",
+    "yourHaveInsufficientOOZToGive": "Você tem OOZ insuficiente para dar.",
+    "dontShowThisMessageAgain": "Não mostrar esta mensagem novamente",
+
+    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Seu vídeo está sendo processado. Aguarde até que o processamento seja concluído."
 
 }

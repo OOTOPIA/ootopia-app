@@ -12,6 +12,7 @@ import 'package:ootopia_app/screens/timeline/components/post_timeline_component.
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../shared/secure-store-mixin.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimelineScreenProfileScreen extends StatelessWidget {
   final Map<String, dynamic> args;
@@ -22,7 +23,7 @@ class TimelineScreenProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Publicações'),
+        title: Text(AppLocalizations.of(context).publications),
       ),
       body: ListPostProfileComponent(
           posts: this.args["posts"],
@@ -131,7 +132,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
       builder: (context, state) {
         if (state is InitialState) {
           return Center(
-            child: Text("Initial"),
+            child: Text(AppLocalizations.of(context).initial),
           );
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -200,7 +201,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'nothing data :(',
+                AppLocalizations.of(context).nothingData,
               ),
             ],
           ),

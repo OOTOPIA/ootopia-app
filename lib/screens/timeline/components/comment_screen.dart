@@ -12,6 +12,7 @@ import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CommentScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -81,9 +82,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         appBar: CustomAppBar(
           selectedCommentsIds.length > 0
               ? selectedCommentsIds.length.toString() +
-                  ' selecionado' +
+                  " "+AppLocalizations.of(context).selected +
                   (selectedCommentsIds.length > 1 ? 's' : '')
-              : 'Comentários',
+              : AppLocalizations.of(context).comments,
           selectedCommentsIds.length > 0
               ? Icon(Icons.close)
               : Icon(Icons.chevron_left),
@@ -122,7 +123,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       style: TextStyle(color: Colors.black),
                       controller: _inputController,
                       decoration: InputDecoration(
-                        labelText: 'Escreva seu comentário',
+                        labelText: AppLocalizations.of(context).writeYourComment,
                         hintStyle: TextStyle(color: Colors.black),
                         suffixIcon: newCommentLoading
                             ? Row(
@@ -181,7 +182,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             return Expanded(
               flex: 1,
               child: Center(
-                child: Text('Nenhum comentário'),
+                child: Text(AppLocalizations.of(context).noComment),
               ),
             );
           }
@@ -277,7 +278,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         return Expanded(
           flex: 1,
           child: Center(
-            child: Text('Nenhum comentário'),
+            child: Text(AppLocalizations.of(context).noComment),
           ),
         );
       },
@@ -385,20 +386,20 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Atenção',
+            AppLocalizations.of(context).caution,
             style: Theme.of(context).textTheme.headline2,
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Os comentários serão removidos permanentemente.',
+                Text(AppLocalizations.of(context).commentsWillBePermanentlyRemoved,
                     style: Theme.of(context).textTheme.bodyText2),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('CANCELAR'),
+              child: Text(AppLocalizations.of(context).cancel.toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop();
               },

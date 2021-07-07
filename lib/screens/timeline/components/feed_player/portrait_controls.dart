@@ -4,6 +4,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import './multi_manager/flick_multi_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
   FeedPlayerPortraitControls(
@@ -80,7 +81,7 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
                 ),
                 IconButton(
                   icon: const Icon(Icons.fullscreen),
-                  tooltip: 'Increase volume by 10',
+                  tooltip: AppLocalizations.of(context).increaseVolumeBy10,
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                         PageRoute.Page.playerVideoFullScreen.route,

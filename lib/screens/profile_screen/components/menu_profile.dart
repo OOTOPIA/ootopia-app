@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MenuProfile extends StatelessWidget with SecureStoreMixin {
   final String profileName;
@@ -46,7 +47,7 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
         ),
         ItemMenu(
           pathImage: 'assets/icons_profile/menu_profile.png',
-          title: 'Profile',
+          title: AppLocalizations.of(context).profile,
           onTapFunction: goToProfile,
         ),
         // ItemMenu(
@@ -56,7 +57,7 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
         // ),
         ItemMenu(
           pathImage: 'assets/icons_profile/menu_left.png',
-          title: 'Sair',
+          title: AppLocalizations.of(context).exit,
           onTapFunction: clearAuth,
         ),
         Expanded(
@@ -68,15 +69,15 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
                   child: Column(
                     children: [
                       Text(
-                        'OOTOPIA App Version $appVersion.',
+                        "OOTOPIA ${AppLocalizations.of(context).appVersion} $appVersion.",
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        'Feito com amor neste planeta maravilhoso.',
+                        AppLocalizations.of(context).madeWithLoveOnThisWonderfulPlanet,
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        'Logado como $profileName',
+                        "${AppLocalizations.of(context).loggedInAs} $profileName",
                         textAlign: TextAlign.center,
                       ),
                     ],
