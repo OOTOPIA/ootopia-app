@@ -4,6 +4,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPhase2DailyLearningGoalPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -72,7 +73,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                         ),
                         Text(
-                          'Regeneration Game',
+                          AppLocalizations.of(context)!.regenerationGame,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -93,7 +94,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                         ),
                         Text(
-                          'Set the time for your daily learning goal:',
+                          AppLocalizations.of(context)!.setTheTimeForYourDailyLearningGoal,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -128,7 +129,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              "Confirm",
+                              AppLocalizations.of(context)!.confirm,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

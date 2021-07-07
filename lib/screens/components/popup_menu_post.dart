@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PopupMenuPost extends StatefulWidget {
   final bool isAnabled;
@@ -67,13 +68,13 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
                   padding: EdgeInsets.only(right: 4),
                 ),
                 Text(
-                  'Excluir',
+                  AppLocalizations.of(context)!.delete,
                   style: TextStyle(color: Colors.black, fontSize: 14),
                 ),
               ],
             ),
           ),
-          value: 'Excluir',
+          value: AppLocalizations.of(context)!.delete,
         ),
       ],
       onSelected: (String value) => _selectedOption(value),

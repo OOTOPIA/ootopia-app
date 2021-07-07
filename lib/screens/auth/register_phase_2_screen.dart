@@ -9,6 +9,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import '../../shared/analytics.server.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -187,7 +188,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                           ),
                         ),
                         Text(
-                          'Date of Birth',
+                          AppLocalizations.of(context)!.dateOfBirth,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -218,7 +219,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme('day'),
+                                      .loginInputTheme(AppLocalizations.of(context)!.day),
                                   onChanged: (String text) {
                                     if (text.length == 2 &&
                                         int.parse(text) <= 31) {
@@ -242,7 +243,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme('month'),
+                                      .loginInputTheme(AppLocalizations.of(context)!.month),
                                   onChanged: (String text) {
                                     if (text.length == 2 &&
                                         int.parse(text) <= 12) {
@@ -272,7 +273,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                     }
                                   },
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme('year'),
+                                      .loginInputTheme(AppLocalizations.of(context)!.year),
                                 ),
                               ),
                             ),
@@ -303,7 +304,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              "Confirm",
+                              AppLocalizations.of(context)!.confirm,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -340,11 +341,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               setState(() {
                                 String year = _yearController.text;
                                 if (year.length < 4) {
-                                  birthdateValidationErrorMessage =
-                                      "Please enter a valid birthdate in format DD/MM/YYYY";
+                                  birthdateValidationErrorMessage = AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
                                 } else {
-                                  birthdateValidationErrorMessage =
-                                      "Please enter a valid birthdate";
+                                  birthdateValidationErrorMessage = AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
                                 }
                               });
                             }

@@ -20,6 +20,8 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'components/menu_profile.dart';
 import '../../shared/analytics.server.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:package_info/package_info.dart';
@@ -88,8 +90,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
     this.trackingEvents.profileViewedAProfile(
       widget.args == null || (widget.args != null && widget.args!["id"] == null)
-          ? "Profile - Own profile"
-          : "Profile - Viewed a Profile",
+          ? AppLocalizations.of(context)!.profileOwnProfile
+          : AppLocalizations.of(context)!.profileViewedAProfile,
       {"profileId": userId},
     );
   }
@@ -387,14 +389,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                             backgroundColor: Color(0xff598006),
                             iconAssetPath: 'assets/icons/add.png',
                             borderBottomColor: Color(0xffbbd784),
-                            text: "Posts",
+                            text: AppLocalizations.of(context)!.posts,
                             isActiveTab: _activeTabIndex == 0,
                           ),
                           TabItem(
                             backgroundColor: Color(0xfffc0499),
                             iconAssetPath: 'assets/icons/ootopia.png',
                             borderBottomColor: Color(0xfff074be),
-                            text: "OOZ Wallet",
+                            text: "OOZ ${AppLocalizations.of(context)!.wallet}",
                             isActiveTab: _activeTabIndex == 1,
                           ),
                         ],
@@ -437,7 +439,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     }
     if (loadPostsError) {
       return Center(
-        child: Text("Error on get posts"),
+        child: Text(AppLocalizations.of(context)!.errorOnGetPosts),
       );
     }
     return Column(
@@ -541,7 +543,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       Padding(
                         padding: EdgeInsets.only(bottom: 6),
                         child: Text(
-                          "Balance in OOz",
+                          "${AppLocalizations.of(context)!.balanceIn} OOz",
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -618,13 +620,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                 },
                 tabs: [
                   Tab(
-                    text: "All",
+                    text: AppLocalizations.of(context)!.all,
                   ),
                   Tab(
-                    text: "Received",
+                    text: AppLocalizations.of(context)!.received,
                   ),
                   Tab(
-                    text: "Sent",
+                    text: AppLocalizations.of(context)!.sent,
                   ),
                 ],
               ),
@@ -972,7 +974,7 @@ class GridPosts extends StatelessWidget {
             }),
           )
         : Expanded(
-            child: Center(child: Text("No posts")),
+            child: Center(child: Text(AppLocalizations.of(context)!.noPosts)),
           );
   }
 }

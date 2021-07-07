@@ -3,6 +3,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/navigator-state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NavigatorBar extends StatefulWidget {
   final Function? onClickButton;
@@ -41,7 +42,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
     return Scaffold.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "O vídeo esta sendo carregado",
+          AppLocalizations.of(context)!.theVideoIsLoading,
           style: TextStyle(color: Colors.black),
         ),
         duration: Duration(seconds: 6),
@@ -161,7 +162,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
             ),
             title: Text(
-              'Home',
+              AppLocalizations.of(context)!.home,
               style: TextStyle(fontSize: 8),
             ),
           ),
@@ -201,7 +202,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
             ),
             title: Text(
-              'Add',
+              AppLocalizations.of(context)!.add,
               style: TextStyle(fontSize: 8),
             ),
           ),
@@ -229,7 +230,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
             ),
             title: Text(
-              'Profile',
+              AppLocalizations.of(context)!.profile,
               style: TextStyle(fontSize: 8),
             ),
           ),

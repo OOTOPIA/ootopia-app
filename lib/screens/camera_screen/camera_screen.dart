@@ -13,6 +13,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -330,7 +331,7 @@ class _CameraAppState extends State<CameraApp>
                   child: TryAgain(
                     requestPermissions,
                     messageText:
-                        "You need to enable some \npermissions to allow full \nuse of the camera.",
+                        AppLocalizations.of(context)!.youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
                   ),
                 ),
               ),

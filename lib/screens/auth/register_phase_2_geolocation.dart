@@ -6,6 +6,7 @@ import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -37,7 +38,7 @@ class _RegisterPhase2GeolocationPageState
   void _getLocation() {
     setState(() {
       geolocationErrorMessage = "";
-      geolocationMessage = "Please, wait...";
+      geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
     });
     Geolocation.determinePosition().then((Position position) async {
       List<Placemark> placemarks =
@@ -55,14 +56,13 @@ class _RegisterPhase2GeolocationPageState
           widget.args['user'].addressLatitude = position.latitude;
           widget.args['user'].addressLongitude = position.longitude;
         } else {
-          geolocationMessage = "Failed to get current location";
-          geolocationErrorMessage =
-              "We couldn't get your location. But don't worry, you can inform it at another time.";
+          geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
+          geolocationErrorMessage = AppLocalizations.of(context)!.weCouldntGetYourLocation;
         }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        geolocationMessage = "Failed to get current location";
+        geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
         geolocationErrorMessage = error.toString();
       });
     });
@@ -117,7 +117,7 @@ class _RegisterPhase2GeolocationPageState
                             bottom: GlobalConstants.of(context).spacingMedium,
                           ),
                           child: Text(
-                            'The place where you live is the where your positive impact counts.',
+                            AppLocalizations.of(context)!.thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
@@ -144,8 +144,7 @@ class _RegisterPhase2GeolocationPageState
                               bottom: GlobalConstants.of(context).spacingSmall,
                             ),
                             child: Text(
-                              geolocationErrorMessage +
-                                  "\nTry to retrieve your current location clicking by \"Get location again\"",
+                              geolocationErrorMessage + AppLocalizations.of(context)!.tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.redAccent,
@@ -166,7 +165,7 @@ class _RegisterPhase2GeolocationPageState
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Get current location",
+                                AppLocalizations.of(context)!.getCurrentLocation,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -200,7 +199,7 @@ class _RegisterPhase2GeolocationPageState
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              "Confirm",
+                              AppLocalizations.of(context)!.confirm,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

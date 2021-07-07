@@ -13,6 +13,7 @@ import 'package:ootopia_app/data/utils/string-utils.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -192,7 +193,7 @@ class _RegisterPhase2TopInterestsPageState
                                 controller: _inputController,
                                 autofocus: false,
                                 decoration: GlobalConstants.of(context)
-                                    .loginInputTheme("Others"),
+                                    .loginInputTheme(AppLocalizations.of(context)!.others),
                                 onChanged: (String val) {
                                   if (val.isEmpty) {
                                     setState(() {
@@ -229,7 +230,7 @@ class _RegisterPhase2TopInterestsPageState
                                     GlobalConstants.of(context).spacingNormal,
                                   ),
                                   child: Text(
-                                    "Confirm",
+                                    AppLocalizations.of(context)!.confirm,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

@@ -27,6 +27,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'dart:math' as math;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PhotoTimeline extends StatefulWidget {
   final int? index;
@@ -168,7 +169,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return DialogConfirm(
-          textAlert: 'Deseja realmente deletar seu post ?',
+          textAlert: AppLocalizations.of(context)!.doYouReallyWantToDeleteYourPost,
           callbackConfirmAlertDialog: _deletePost,
         );
       },
@@ -334,7 +335,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       margin: EdgeInsets.all(2),
                       padding: EdgeInsets.only(top: 8, left: 6),
                       child: Text(
-                        "slide to give a gratitude reward",
+                        AppLocalizations.of(context)!.slideToGiveAGratitudeReward,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(
@@ -573,7 +574,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       Padding(
                         padding: EdgeInsets.only(bottom: 12, left: 12),
                         child: Text(
-                          this.post.commentsCount.toString() + " comments",
+                          this.post.commentsCount.toString() + " ${AppLocalizations.of(context)!.comments}",
                           style:
                               TextStyle(color: Colors.black.withOpacity(0.4)),
                         ),
@@ -607,7 +608,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       Opacity(
                         opacity: .4,
                         child: Text(
-                          'Add a comment',
+                          AppLocalizations.of(context)!.addAComment,
                           style: TextStyle(),
                         ),
                       )
@@ -629,9 +630,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return GratitudeRewardDialog(
-          title: 'Gratitude Reward',
+          title: AppLocalizations.of(context)!.gratitudeReward,
           message:
-              'Do you confirm sending ${this.post.oozToTransfer.toStringAsFixed(2)} OOZ from your accont to the creator of this post?',
+              '${AppLocalizations.of(context)!.doYouConfirmSending} ${this.post.oozToTransfer.toStringAsFixed(2)} OOZ ${AppLocalizations.of(context)!.fromYourAccontToTheCreatorOfThisPost}',
           onCheckChanged: (bool isChecked) {
             setState(() {
               dontAskIsChecked = isChecked;
@@ -711,7 +712,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           ),
           child: !_sendOOZIsLoading
               ? Text(
-                  "Send",
+                  AppLocalizations.of(context)!.send,
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -749,9 +750,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         _oozError = true;
-        _oozErrorMessage = "An error has occurred. Try again.";
+        _oozErrorMessage = AppLocalizations.of(context)!.anErrorHasOccurredTryAgain;
         if (errorMessage == "INSUFFICIENT_BALANCE") {
-          _oozErrorMessage = "Your have insufficient OOZ to give.";
+          _oozErrorMessage = AppLocalizations.of(context)!.yourHaveInsufficientOOZToGive;
         }
         showOOZErrorMessage();
       });
@@ -965,7 +966,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                 elevation: 0,
                 color: Color(0xff62c915),
                 child: Text(
-                  'Confirm',
+                  AppLocalizations.of(context)!.confirm,
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -985,7 +986,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                   elevation: 0,
                   color: Color(0xffd40016),
                   child: Text(
-                    'Cancel',
+                    AppLocalizations.of(context)!.cancel,
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -1022,7 +1023,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                 ),
                 Flexible(
                   child: Text(
-                    "Don't show this message again",
+                    AppLocalizations.of(context)!.dontShowThisMessageAgain,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.normal,

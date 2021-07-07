@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DialogConfirm extends StatelessWidget {
   final String textAlert;
@@ -24,13 +25,13 @@ class DialogConfirm extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Recusar'),
+          child: Text(AppLocalizations.of(context)!.decline),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Confirmar'),
+          child: Text(AppLocalizations.of(context)!.confirm),
           onPressed: () {
             this.callbackConfirmAlertDialog();
             Navigator.of(context).pop();

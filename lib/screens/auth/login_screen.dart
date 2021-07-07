@@ -6,6 +6,7 @@ import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -134,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the community that is \r\ncreating a more beautiful world.',
+                                  AppLocalizations.of(context)!.helloWIfNotNowThenWhenorld,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
@@ -151,10 +152,10 @@ class _LoginPageState extends State<LoginPage> {
                                     keyboardType: TextInputType.emailAddress,
                                     autofocus: true,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("E-mail"),
+                                        .loginInputTheme(AppLocalizations.of(context)!.email),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please enter your e-mail';
+                                        return AppLocalizations.of(context)!.pleaseEnterYourEmail;
                                       }
                                       return null;
                                     },
@@ -167,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _passwordController,
                                     obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("Password")
+                                        .loginInputTheme(AppLocalizations.of(context)!.password)
                                         .copyWith(
                                           suffixIcon: GestureDetector(
                                             child: Icon(
@@ -185,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please enter your password';
+                                        return AppLocalizations.of(context)!.pleaseEnterYourPassword;
                                       }
                                       return null;
                                     },
@@ -208,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                           .Page.recoverPasswordScreen.route);
                                     },
                                     child: Text(
-                                      'I forgot my password',
+                                      AppLocalizations.of(context)!.iForgotMyPassword,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 16,
@@ -235,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Login",
+                                AppLocalizations.of(context)!.login,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -268,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Create account",
+                                AppLocalizations.of(context)!.createAccount,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

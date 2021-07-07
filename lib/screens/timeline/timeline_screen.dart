@@ -19,6 +19,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 
@@ -411,7 +412,7 @@ class _TimelinePageState extends State<TimelinePage>
       builder: (context, state) {
         if (state is InitialState) {
           return Center(
-            child: Text("Initial"),
+            child: Text(AppLocalizations.of(context)!.initial),
           );
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -487,7 +488,7 @@ class _TimelinePageState extends State<TimelinePage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Não há publicações',
+                AppLocalizations.of(context)!.noPosts,
               ),
             ],
           ),
@@ -526,7 +527,7 @@ class NewVideoUploadedMessageBox extends StatelessWidget {
                     left: GlobalConstants.of(context).spacingSmall,
                   ),
                   child: Text(
-                    "Your video is being processed. Wait until processing is complete.",
+                    AppLocalizations.of(context)!.yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

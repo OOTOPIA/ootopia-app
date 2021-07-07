@@ -9,6 +9,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -147,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Create your account and join the \nmovement to heal planet Earth!',
+                                        AppLocalizations.of(context)!.createYourAccountAndJoinTheMovementToHealPlanetEarth,
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
@@ -174,11 +175,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                           decoration:
                                               GlobalConstants.of(context)
                                                   .loginInputTheme(
-                                                      'Name and surname'),
+                                                    AppLocalizations.of(context)!.nameAndSurname
+                                                  ),
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please enter your name and surname';
+                                              return AppLocalizations.of(context)!.pleaseEnterYourNameAndSurname;
                                             }
                                             return null;
                                           },
@@ -193,14 +195,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                               TextInputType.emailAddress,
                                           decoration:
                                               GlobalConstants.of(context)
-                                                  .loginInputTheme('E-mail'),
+                                                  .loginInputTheme(AppLocalizations.of(context)!.email),
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please enter your e-mail';
+                                              return AppLocalizations.of(context)!.pleaseEnterYourEmail;
                                             } else if (!EmailValidator.validate(
                                                 value)) {
-                                              return 'Please enter a valid e-mail';
+                                              return AppLocalizations.of(context)!.pleaseEnterAValidEmail;
                                             }
                                             return null;
                                           },
@@ -215,7 +217,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           decoration:
                                               GlobalConstants.of(context)
                                                   .loginInputTheme(
-                                                    'Password',
+                                                    AppLocalizations.of(context)!.password,
                                                   )
                                                   .copyWith(
                                                     suffixIcon: GestureDetector(
@@ -237,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please enter your password';
+                                              return AppLocalizations.of(context)!.pleaseEnterYourPassword;
                                             }
                                             return null;
                                           },
@@ -252,7 +254,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           decoration: GlobalConstants.of(
                                                   context)
                                               .loginInputTheme(
-                                                'Repeat password',
+                                                AppLocalizations.of(context)!.repeatPassword,
                                               )
                                               .copyWith(
                                                 suffixIcon: GestureDetector(
@@ -273,11 +275,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return 'Please repeat your password';
+                                              return AppLocalizations.of(context)!.pleaseRepeatYourPassword;
                                             }
                                             if (value !=
                                                 _passwordController.text) {
-                                              return 'Password does not match';
+                                              return AppLocalizations.of(context)!.passwordDoesNotMatch;
                                             }
                                             return null;
                                           },
@@ -298,7 +300,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           child: RichText(
                                             text: new TextSpan(
                                               text:
-                                                  'We respect and protect your personal data. ',
+                                                  AppLocalizations.of(context)!.weEespectAndProtectYourPersonalData + " ",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.white,
@@ -306,7 +308,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                               ),
                                               children: [
                                                 new TextSpan(
-                                                  text: 'Check here',
+                                                  text: AppLocalizations.of(context)!.checkHere,
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.white,
@@ -323,7 +325,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 ),
                                                 new TextSpan(
                                                   text:
-                                                      ' our pledge for transparency and high ethical standards.',
+                                                      '' + AppLocalizations.of(context)!.ourPledgeForTransparencyAndHighEthicalStandards,
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.white,
@@ -401,14 +403,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         child: RichText(
                                           text: new TextSpan(
-                                            text: 'I accept the ',
+                                            text: AppLocalizations.of(context)!.iAcceptThe,
                                             style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.white,
                                             ),
                                             children: [
                                               new TextSpan(
-                                                text: 'use terms.',
+                                                text: AppLocalizations.of(context)!.useTerms,
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.white,
@@ -440,7 +442,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   ).spacingNormal,
                                                 ),
                                                 child: Text(
-                                                  "You need to accept the Terms of Use to continue",
+                                                  AppLocalizations.of(context)!.youNeedToAcceptTheTermsOfUseToContinue,
                                                   style: TextStyle(
                                                     color: Colors.redAccent,
                                                   ),
@@ -464,7 +466,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       GlobalConstants.of(context).spacingNormal,
                                     ),
                                     child: Text(
-                                      "Create account",
+                                      AppLocalizations.of(context)!.createAccount,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
