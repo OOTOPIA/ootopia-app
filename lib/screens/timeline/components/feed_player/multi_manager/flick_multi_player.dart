@@ -11,12 +11,16 @@ import 'package:video_player/video_player.dart';
 
 class FlickMultiPlayer extends StatefulWidget {
   const FlickMultiPlayer({
-    Key key,
-    this.url,
-    this.image,
-    this.flickMultiManager,
+    Key? key,
+    required this.url,
+    required this.image,
+    required this.flickMultiManager,
+    required this.userId,
+    required this.postId,
   }) : super(key: key);
 
+  final String? userId;
+  final String postId;
   final String url;
   final String image;
   final FlickMultiManager flickMultiManager;
@@ -27,8 +31,8 @@ class FlickMultiPlayer extends StatefulWidget {
 
 class _FlickMultiPlayerState extends State<FlickMultiPlayer>
     with SecureStoreMixin {
-  FlickManager flickManager;
-  VideoPlayerController videoPlayerController;
+  late FlickManager flickManager;
+  late VideoPlayerController videoPlayerController;
 
   @override
   void initState() {
@@ -44,9 +48,9 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
       autoPlay: false,
     );
 
-    widget.flickMultiManager.init(flickManager);
+    widget.flickMultiManager.init(flickManager, widget.userId, widget.postId);
 
-    flickManager.flickControlManager.mute();
+    flickManager.flickControlManager!.mute();
   }
 
   @override
@@ -64,12 +68,12 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
       onVisibilityChanged: (visiblityInfo) {
         if (visiblityInfo.visibleFraction > 0.9) {
           widget.flickMultiManager.play(flickManager);
-          flickManager.flickControlManager.mute();
+          flickManager.flickControlManager!.mute();
           getTimelineVideosIsMuted().then((value) {
             if (!value) {
-              flickManager.flickControlManager.unmute();
+              flickManager.flickControlManager!.unmute();
             } else {
-              flickManager.flickControlManager.mute();
+              flickManager.flickControlManager!.mute();
             }
           });
         }
@@ -81,9 +85,9 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
           borderRadius: BorderRadius.all(Radius.circular(20)),
           child: FlickVideoPlayer(
             preferredDeviceOrientationFullscreen: [
-              flickManager.flickVideoManager.videoPlayerValue.size.width >
+              flickManager.flickVideoManager!.videoPlayerValue!.size.width >
                       flickManager
-                          .flickVideoManager.videoPlayerValue.size.height
+                          .flickVideoManager!.videoPlayerValue!.size.height
                   ? DeviceOrientation.landscapeLeft
                   : DeviceOrientation.portraitUp
             ],

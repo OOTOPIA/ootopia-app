@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'dart:convert';
 
@@ -16,7 +16,7 @@ const Map<String, String> API_HEADERS = {
 class InterestsTagsRepositoryImpl
     with SecureStoreMixin
     implements InterestsTagsRepository {
-  Future<List<InterestsTags>> getTags([String language]) async {
+  Future<List<InterestsTags>> getTags([String? language]) async {
     try {
       Map<String, String> queryParams = {};
 
@@ -27,7 +27,7 @@ class InterestsTagsRepositoryImpl
       String queryString = Uri(queryParameters: queryParams).query;
 
       final response = await http.get(
-        DotEnv.env['API_URL'] + "interests-tags?" + queryString,
+        Uri.parse(dotenv.env['API_URL']! + "interests-tags?" + queryString),
         headers: API_HEADERS,
       );
       if (response.statusCode == 200) {

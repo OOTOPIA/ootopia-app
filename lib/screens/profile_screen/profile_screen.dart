@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_history.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'components/menu_profile.dart';
@@ -28,7 +29,7 @@ import "package:collection/collection.dart";
 import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   ProfileScreen([this.args]);
 
@@ -37,18 +38,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen>
-    with SecureStoreMixin, TickerProviderStateMixin {
-  UserBloc profileBloc;
+    with SecureStoreMixin, TickerProviderStateMixin, WidgetsBindingObserver {
+  late UserBloc profileBloc;
   UserRepositoryImpl profileRepositoryImpl = UserRepositoryImpl();
   WalletRepositoryImpl walletRepositoryImpl = WalletRepositoryImpl();
   PostRepositoryImpl postRepositoryImpl = PostRepositoryImpl();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  WalletBloc walletBloc;
+  late WalletBloc walletBloc;
 
   bool loggedIn = false;
-  User user;
-  Profile userProfile;
-  Wallet wallet;
+  late User user;
+  Profile? userProfile;
+  late Wallet wallet;
   List<WalletTransferGroup> allWalletTransfers = [];
   List<WalletTransferGroup> receivedWalletTransfers = [];
   List<WalletTransferGroup> sentWalletTransfers = [];
@@ -68,18 +69,17 @@ class _ProfileScreenState extends State<ProfileScreen>
   int walletTransferSentCurrentPage = 1;
   int tabIndexSelected = 0;
   String userId = "";
-  String appVersion;
-  TabController _tabController;
-  TabController _tabControllerTransactions;
+  late String appVersion;
+  late TabController _tabController;
+  late TabController _tabControllerTransactions;
   int _activeTabIndex = 0;
   int _activeTabIndexTransactions = 0;
 
   @override
-  bool get wantKeepAlive => null;
-
-  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+
     _checkUserIsLoggedIn();
     profileBloc = BlocProvider.of<UserBloc>(context);
     walletBloc = BlocProvider.of<WalletBloc>(context);
@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     _tabControllerTransactions = new TabController(length: 3, vsync: this);
     _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
     this.trackingEvents.profileViewedAProfile(
-      widget.args == null || widget.args["id"] == null
+      widget.args == null || (widget.args != null && widget.args!["id"] == null)
           ? AppLocalizations.of(context).profileOwnProfile
           : AppLocalizations.of(context).profileViewedAProfile,
       {"profileId": userId},
@@ -108,6 +108,41 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
+  @override
+  void deactivate() {
+    OOzDistributionSystem.getInstance().endTimelineView("deactivate profile");
+    super.deactivate();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // These are the callbacks
+    print("Lifecycle ===> $state");
+    switch (state) {
+      case AppLifecycleState.resumed:
+        OOzDistributionSystem.getInstance().endTimelineView("resumed profile");
+
+        // widget is resumed
+        break;
+      case AppLifecycleState.inactive:
+        OOzDistributionSystem.getInstance().endTimelineView("inactive profile");
+
+        // widget is inactive
+        break;
+      case AppLifecycleState.paused:
+        OOzDistributionSystem.getInstance().endTimelineView("paused profile");
+
+        // widget is paused
+        break;
+      case AppLifecycleState.detached:
+        OOzDistributionSystem.getInstance().endTimelineView("detached profile");
+
+        // widget is detached
+        break;
+    }
+  }
+
   Future<void> getAppInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     setState(() {
@@ -117,12 +152,12 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
-    if (widget.args == null || widget.args["id"] == null) {
+    if (widget.args == null || widget.args!["id"] == null) {
       user = await getCurrentUser();
       print("Meu ID ${user.id}");
-      userId = user.id;
+      userId = user.id!;
     } else {
-      userId = widget.args["id"];
+      userId = widget.args!["id"];
     }
     _performAllRequests();
   }
@@ -141,9 +176,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   Future getUserProfile(String id) async {
     this.profileRepositoryImpl.getProfile(id).then((user) {
-      if (user == null) {
-        return;
-      }
       setState(() {
         userProfile = user;
       });
@@ -200,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
-  Future getUserTransactionHistory([String param]) async {
+  Future getUserTransactionHistory([String? param]) async {
     setState(() {
       loadingTransactions = true;
     });
@@ -221,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         .then((resultTransactions) {
       groupBy(
           resultTransactions,
-          (obj) => DateFormat('dd-MM-yyyy')
+          (WalletTransfer obj) => DateFormat('dd-MM-yyyy')
               .format(DateTime.parse(obj.createdAt))
               .toString()).entries.toList().forEach((entry) {
         if (param != null && param == "received") {
@@ -269,7 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       appBar: AppBar(
         title: userProfile != null
             ? Text(
-                userProfile.fullname,
+                userProfile!.fullname,
                 style: TextStyle(color: Colors.black),
               )
             : Text(''),
@@ -311,19 +343,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                     children: [
                       Avatar(
                         photoUrl:
-                            userProfile == null ? null : userProfile.photoUrl,
+                            userProfile == null ? null : userProfile!.photoUrl,
                       ),
                       DataProfile(),
                     ],
                   ),
-                  (userProfile != null && userProfile.bio != null)
+                  (userProfile != null && userProfile!.bio != null)
                       ? Container(
                           width: double.infinity,
                           padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                           child: RichText(
                             textAlign: TextAlign.left,
                             text:
-                                (userProfile != null && userProfile.bio != null
+                                (userProfile != null && userProfile!.bio != null
                                     ? TextSpan(
                                         text: ('Bio: '),
                                         style: TextStyle(
@@ -333,7 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                         ),
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: userProfile.bio,
+                                            text: userProfile!.bio,
                                             style: TextStyle(
                                               color: Colors.black87,
                                               fontWeight: FontWeight.normal,
@@ -387,12 +419,14 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
       ),
       bottomNavigationBar: NavigatorBar(
-          currentPage: widget.args == null || widget.args["id"] == null
+          currentPage: widget.args == null ||
+                  (widget.args != null && widget.args!["id"] == null)
               ? PageRoute.Page.myProfileScreen.route
               : PageRoute.Page.profileScreen.route),
-      endDrawer: widget.args == null || widget.args["id"] == null
+      endDrawer: widget.args == null ||
+              (widget.args != null && widget.args!["id"] == null)
           ? MenuProfile(
-              profileName: this.user?.fullname,
+              profileName: this.user.fullname,
               appVersion: this.appVersion,
             )
           : null,
@@ -501,20 +535,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           Row(
             children: [
-              CircleActionButton(
-                iconAssetPath: 'assets/icons/plus.png',
-                text: AppLocalizations.of(context).addMoney,
-                onClick: () {
-                  print("add money!");
-                },
-              ),
-              CircleActionButton(
-                iconAssetPath: 'assets/icons/arrow_right.png',
-                text: AppLocalizations.of(context).sendMoney,
-                onClick: () {
-                  print("send money!");
-                },
-              ),
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -692,11 +712,11 @@ class TabItem extends StatelessWidget {
   final bool isActiveTab;
 
   TabItem({
-    this.iconAssetPath,
-    this.text,
-    this.backgroundColor,
-    this.borderBottomColor,
-    this.isActiveTab,
+    required this.iconAssetPath,
+    required this.text,
+    required this.backgroundColor,
+    required this.borderBottomColor,
+    required this.isActiveTab,
   });
 
   @override
@@ -750,7 +770,8 @@ class CircleActionButton extends StatelessWidget {
   final String text;
   final Function onClick;
 
-  CircleActionButton({this.iconAssetPath, this.text, this.onClick});
+  CircleActionButton(
+      {required this.iconAssetPath, required this.text, required this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -771,7 +792,7 @@ class CircleActionButton extends StatelessWidget {
               ),
               color: Colors.white,
               iconSize: 30,
-              onPressed: this.onClick,
+              onPressed: () => this.onClick,
             ),
           ),
           Padding(
@@ -788,7 +809,7 @@ class CircleActionButton extends StatelessWidget {
 }
 
 class Avatar extends StatelessWidget {
-  String photoUrl;
+  String? photoUrl;
 
   Avatar({this.photoUrl});
 
@@ -806,14 +827,15 @@ class Avatar extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(150),
       ),
-      child: CircleAvatar(
-        backgroundImage: this.photoUrl != null
-            ? NetworkImage(
-                "${this.photoUrl}",
-              )
-            : AssetImage('assets/icons_profile/profile.png'),
-        minRadius: 60,
-      ),
+      child: this.photoUrl != null
+          ? CircleAvatar(
+              backgroundImage: NetworkImage("${this.photoUrl}"),
+              radius: 16,
+            )
+          : CircleAvatar(
+              backgroundImage: AssetImage("assets/icons_profile/profile.png"),
+              radius: 16,
+            ),
     );
   }
 }
@@ -877,10 +899,10 @@ class DataProfile extends StatelessWidget {
 
 class IconDataProfile extends StatelessWidget {
   String pathIcon;
-  String valueData;
-  Color colorIcon;
+  String? valueData;
+  Color? colorIcon;
 
-  IconDataProfile({this.pathIcon, this.valueData, this.colorIcon});
+  IconDataProfile({required this.pathIcon, this.valueData, this.colorIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -890,7 +912,7 @@ class IconDataProfile extends StatelessWidget {
           AssetImage(this.pathIcon),
           color: colorIcon,
         ),
-        Text(' ' + this.valueData ?? '--')
+        Text(' ' + (this.valueData != null ? this.valueData! : '--'))
       ],
     );
   }
@@ -902,7 +924,11 @@ class GridPosts extends StatelessWidget {
   final String userId;
   final Function getPostCallback;
 
-  GridPosts({this.context, this.posts, this.userId, this.getPostCallback});
+  GridPosts(
+      {this.context,
+      required this.posts,
+      required this.userId,
+      required this.getPostCallback});
 
   _goToTimelinePost(posts, postSelected) async {
     await Navigator.of(context).pushNamed(

@@ -14,7 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegisterPhase2Page extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   RegisterPhase2Page([this.args]);
   @override
@@ -27,28 +27,11 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
   final TextEditingController _monthController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  File _image;
+  File? _image;
   final picker = ImagePicker();
-  User user;
+  User? user;
   String birthdateValidationErrorMessage = "";
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-
-  // DateTime selectedDate = DateTime.now();
-
-  // _selectDate(BuildContext context, [bool showYearFirst = false]) async {
-  //   final DateTime picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime.now(),
-  //     initialDatePickerMode:
-  //         showYearFirst ? DatePickerMode.year : DatePickerMode.day,
-  //   );
-  //   if (picked != null && picked != selectedDate)
-  //     setState(() {
-  //       selectedDate = picked;
-  //     });
-  // }
 
   Future getLoggedUser() async {
     setState(() {
@@ -62,9 +45,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
-      if (pickedFile != null) {
+      if (user != null && pickedFile != null) {
         _image = File(pickedFile.path);
-        user.photoFilePath = pickedFile.path;
+        user!.photoFilePath = pickedFile.path;
       }
     });
   }
@@ -160,7 +143,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                                       BorderRadius.circular(
                                                           300),
                                                   child: Image.file(
-                                                    _image,
+                                                    _image!,
                                                     fit: BoxFit.cover,
                                                     width: 140,
                                                     height: 140,
@@ -340,7 +323,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                 "havePhoto": _image != null ? true : false
                               });
 
-                              user.birthdate =
+                              user!.birthdate =
                                   "${_yearController.text}-${_monthController.text}-${_dayController.text}";
 
                               Navigator.of(context).pushNamed(
@@ -351,7 +334,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                 arguments: {
                                   "user": user,
                                   "returnToPageWithArgs":
-                                      widget.args["returnToPageWithArgs"],
+                                      widget.args!["returnToPageWithArgs"],
                                 },
                               );
                             } else {

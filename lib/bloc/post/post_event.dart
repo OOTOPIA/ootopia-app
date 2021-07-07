@@ -10,7 +10,7 @@ abstract class PostEvent extends Equatable {
 class CreatePostEvent extends PostEvent {
   final PostCreate post;
 
-  CreatePostEvent({this.post});
+  CreatePostEvent({required this.post});
 
   @override
   List<Object> get props => [this.post];

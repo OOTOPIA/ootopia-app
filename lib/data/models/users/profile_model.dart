@@ -4,13 +4,13 @@ class Profile extends Equatable {
   String id;
   String fullname;
   String birthdate;
-  String bio;
-  String photoUrl;
+  String? bio;
+  String? photoUrl;
 
   Profile({
-    this.id,
-    this.fullname,
-    this.birthdate,
+    required this.id,
+    required this.fullname,
+    required this.birthdate,
     this.bio,
     this.photoUrl,
   });
@@ -26,7 +26,7 @@ class Profile extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         fullname,
         birthdate,

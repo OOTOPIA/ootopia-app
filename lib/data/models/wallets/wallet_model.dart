@@ -8,11 +8,11 @@ class Wallet extends Equatable {
   String updatedAt;
 
   Wallet({
-    this.id,
-    this.userId,
-    this.totalBalance,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.userId,
+    required this.totalBalance,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Wallet.fromJson(Map<String, dynamic> parsedJson) {

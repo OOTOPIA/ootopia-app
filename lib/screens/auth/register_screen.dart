@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   RegisterPage([this.args]);
   @override
@@ -20,12 +20,14 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  AuthBloc authBloc;
+  AuthBloc? authBloc;
   final _formKey = GlobalKey<FormState>();
   bool _termsCheckbox = false;
   bool termsOpened = false;
   bool isLoading = false;
   bool showCheckBoxError = false;
+  bool _showPassword = false;
+  bool _showRepeatPassword = false;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -46,8 +48,8 @@ class _RegisterPageState extends State<RegisterPage> {
         return;
       }
       isLoading = true;
-      authBloc.add(EmptyEvent());
-      authBloc.add(RegisterEvent(_nameController.text, _emailController.text,
+      authBloc!.add(EmptyEvent());
+      authBloc!.add(RegisterEvent(_nameController.text, _emailController.text,
           _passwordController.text));
     });
   }
@@ -72,12 +74,12 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           } else if (state is LoadedSucessState) {
             if (widget.args != null &&
-                widget.args['returnToPageWithArgs'] != null) {
+                widget.args!['returnToPageWithArgs'] != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                 PageRoute.Page.timelineScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {
-                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                  "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
                 },
               );
             } else {
@@ -99,8 +101,8 @@ class _RegisterPageState extends State<RegisterPage> {
       if (state is LoadedSucessState || state is ErrorState) {
         isLoading = false;
       }
-      return ModalProgressHUD(
-        inAsyncCall: isLoading,
+      return LoadingOverlay(
+        isLoading: isLoading,
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -166,6 +168,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         TextFormField(
                                           controller: _nameController,
                                           keyboardType: TextInputType.name,
+                                          autocorrect: false,
+                                          textCapitalization:
+                                              TextCapitalization.words,
                                           autofocus: true,
                                           decoration:
                                               GlobalConstants.of(context)
@@ -173,7 +178,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                                     AppLocalizations.of(context).nameAndSurname
                                                   ),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return AppLocalizations.of(context).pleaseEnterYourNameAndSurname;
                                             }
                                             return null;
@@ -191,7 +197,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                               GlobalConstants.of(context)
                                                   .loginInputTheme(AppLocalizations.of(context).email),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return AppLocalizations.of(context).pleaseEnterYourEmail;
                                             } else if (!EmailValidator.validate(
                                                 value)) {
@@ -206,12 +213,32 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         TextFormField(
                                           controller: _passwordController,
-                                          obscureText: true,
+                                          obscureText: !_showPassword,
                                           decoration:
                                               GlobalConstants.of(context)
-                                                  .loginInputTheme(AppLocalizations.of(context).password),
+                                                  .loginInputTheme(
+                                                    AppLocalizations.of(context).password,
+                                                  )
+                                                  .copyWith(
+                                                    suffixIcon: GestureDetector(
+                                                      child: Icon(
+                                                        _showPassword == false
+                                                            ? Icons
+                                                                .visibility_off
+                                                            : Icons.visibility,
+                                                        color: Colors.white,
+                                                      ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _showPassword =
+                                                              !_showPassword;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return AppLocalizations.of(context).pleaseEnterYourPassword;
                                             }
                                             return null;
@@ -223,13 +250,31 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         TextFormField(
                                           controller: _repeatPasswordController,
-                                          obscureText: true,
-                                          decoration:
-                                              GlobalConstants.of(context)
-                                                  .loginInputTheme(
-                                                      AppLocalizations.of(context).repeatPassword),
+                                          obscureText: !_showRepeatPassword,
+                                          decoration: GlobalConstants.of(
+                                                  context)
+                                              .loginInputTheme(
+                                                AppLocalizations.of(context).repeatPassword,
+                                              )
+                                              .copyWith(
+                                                suffixIcon: GestureDetector(
+                                                  child: Icon(
+                                                    _showRepeatPassword == false
+                                                        ? Icons.visibility_off
+                                                        : Icons.visibility,
+                                                    color: Colors.white,
+                                                  ),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _showRepeatPassword =
+                                                          !_showRepeatPassword;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
                                           validator: (value) {
-                                            if (value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return AppLocalizations.of(context).pleaseRepeatYourPassword;
                                             }
                                             if (value !=
@@ -252,13 +297,42 @@ class _RegisterPageState extends State<RegisterPage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Flexible(
-                                          child: Text(
-                                            AppLocalizations.of(context).weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                          child: RichText(
+                                            text: new TextSpan(
+                                              text:
+                                                  'We respect and protect your personal data. ',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              children: [
+                                                new TextSpan(
+                                                  text: 'Check here',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  recognizer:
+                                                      new TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          launch(
+                                                              'https://www.ootopia.org/pledge');
+                                                        },
+                                                ),
+                                                new TextSpan(
+                                                  text:
+                                                      ' our pledge for transparency and high ethical standards.',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                                //
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -329,29 +403,30 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                         child: RichText(
                                           text: new TextSpan(
-                                              text: AppLocalizations.of(context).iAcceptThe,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ),
-                                              children: [
-                                                new TextSpan(
-                                                  text: AppLocalizations.of(context).useTerms,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.white,
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  recognizer:
-                                                      new TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          launch(
-                                                              'https://www.ootopia.org/terms-of-use');
-                                                        },
-                                                )
-                                              ]),
+                                            text: AppLocalizations.of(context).iAcceptThe,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                            children: [
+                                              new TextSpan(
+                                                text: AppLocalizations.of(context).useTerms,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                recognizer:
+                                                    new TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        launch(
+                                                            'https://www.ootopia.org/terms-of-use');
+                                                      },
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -400,7 +475,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if (_formKey.currentState.validate()) {
+                                    if (_formKey.currentState!.validate()) {
                                       _submit();
                                     }
                                   },

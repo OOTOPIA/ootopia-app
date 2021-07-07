@@ -6,7 +6,7 @@ class WalletTransferGroup extends Equatable {
   String date;
   List<WalletTransfer> transfers;
 
-  WalletTransferGroup({this.date, this.transfers});
+  WalletTransferGroup({required this.date, required this.transfers});
 
   @override
   List<Object> get props => [

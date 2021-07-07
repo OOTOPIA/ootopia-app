@@ -1,18 +1,42 @@
+import 'dart:async';
+
 import 'package:flick_video_player/flick_video_player.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
+import 'dart:math';
+
+import 'package:ootopia_app/shared/ooz_distribution/ooz_distribution_service.dart';
 
 class FlickMultiManager {
   List<FlickManager> _flickManagers = [];
-  FlickManager _activeManager;
+  FlickManager? _activeManager;
   bool _isMute = false;
-
-  init(FlickManager flickManager) {
+  OOzDistributionSystem distributionSystem =
+      OOzDistributionSystem.getInstance();
+  init(FlickManager flickManager, [String? userId, String? postId]) {
     _flickManagers.add(flickManager);
     if (_isMute) {
-      flickManager?.flickControlManager?.mute();
+      flickManager.flickControlManager!.mute();
     } else {
-      flickManager?.flickControlManager?.unmute();
+      flickManager.flickControlManager!.unmute();
     }
-    if (_flickManagers.length == 1) {
+    if (userId != null &&
+        postId != null &&
+        !flickManager.flickVideoManager!.videoPlayerValue!.isInitialized &&
+        OOZDistributionService.getInstance().distributionData[postId] == null) {
+      flickManager.flickVideoManager!.addListener(() {
+        var videoPlayerValue =
+            flickManager.flickVideoManager!.videoPlayerValue!;
+        if (videoPlayerValue.position.inMilliseconds > 0) {
+          var creationTimeInMs = (new DateTime.now().millisecondsSinceEpoch);
+          OOZDistributionService.getInstance().updateVideoPosition(
+            postId,
+            userId,
+            videoPlayerValue.position.inMilliseconds,
+            videoPlayerValue.duration.inMilliseconds,
+            creationTimeInMs,
+          );
+        }
+      });
       play(flickManager);
     }
   }
@@ -38,7 +62,7 @@ class FlickMultiManager {
     _activeManager?.flickControlManager?.pause();
   }
 
-  play([FlickManager flickManager]) {
+  play([FlickManager? flickManager]) {
     if (flickManager != null) {
       _activeManager?.flickControlManager?.pause();
       _activeManager = flickManager;
@@ -55,11 +79,14 @@ class FlickMultiManager {
 
   toggleMute() {
     _activeManager?.flickControlManager?.toggleMute();
-    _isMute = _activeManager?.flickControlManager?.isMute;
+    _isMute = _activeManager?.flickControlManager?.isMute == null
+        ? false
+        : _activeManager!.flickControlManager!.isMute;
     if (_isMute) {
-      _flickManagers.forEach((manager) => manager.flickControlManager.mute());
+      _flickManagers.forEach((manager) => manager.flickControlManager!.mute());
     } else {
-      _flickManagers.forEach((manager) => manager.flickControlManager.unmute());
+      _flickManagers
+          .forEach((manager) => manager.flickControlManager!.unmute());
     }
   }
 }

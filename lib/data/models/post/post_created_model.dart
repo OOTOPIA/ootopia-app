@@ -1,24 +1,24 @@
 import 'package:camera/camera.dart';
 
 class PostCreated {
-  String id;
-  String userId;
-  String type;
-  String description;
-  List<String> tagsIds;
-  String addressCountryCode;
-  String addressState;
-  String addressCity;
-  double addressLatitude;
-  double addressLongitude;
-  int addressNumber;
-  String imageUrl;
-  String videoUrl;
-  String streamMediaId;
-  String videoStatus;
-  String thumbnailUrl;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? id;
+  String? userId;
+  String? type;
+  String? description;
+  List<String>? tagsIds;
+  String? addressCountryCode;
+  String? addressState;
+  String? addressCity;
+  double? addressLatitude;
+  double? addressLongitude;
+  int? addressNumber;
+  String? imageUrl;
+  String? videoUrl;
+  String? streamMediaId;
+  String? videoStatus;
+  String? thumbnailUrl;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   PostCreated({
     this.id,

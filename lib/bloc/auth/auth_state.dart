@@ -9,7 +9,7 @@ abstract class AuthState extends Equatable {
 class EmptyState extends AuthState {
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class InitialState extends AuthState {
@@ -34,6 +34,32 @@ class LoadedSucessState extends AuthState {
 class ErrorState extends AuthState {
   final String message;
   const ErrorState(this.message);
+  @override
+  List<Object> get props => [message];
+}
+
+class LoadedSucessRecoverPasswordState extends AuthState {
+  LoadedSucessRecoverPasswordState();
+  @override
+  List<Object> get props => [];
+}
+
+class ErrorRecoverPasswordState extends AuthState {
+  final String message;
+  const ErrorRecoverPasswordState(this.message);
+  @override
+  List<Object> get props => [message];
+}
+
+class LoadedSucessResetPasswordState extends AuthState {
+  LoadedSucessResetPasswordState();
+  @override
+  List<Object> get props => [];
+}
+
+class ErrorResetPasswordState extends AuthState {
+  final String message;
+  const ErrorResetPasswordState(this.message);
   @override
   List<Object> get props => [message];
 }

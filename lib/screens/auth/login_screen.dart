@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  Map<String, dynamic>? args;
 
   LoginPage([this.args]);
 
@@ -16,9 +18,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  AuthBloc authBloc;
+  AuthBloc? authBloc;
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool _showPassword = false;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -27,13 +30,22 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
+    Timer(Duration(milliseconds: 1000), () {
+      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+        if (widget.args!['returnToPageWithArgs']['newPassword'] != null) {
+          _passwordController.text =
+              widget.args!['returnToPageWithArgs']['newPassword'];
+        }
+      }
+    });
   }
 
   void _submit() {
     setState(() {
       isLoading = true;
-      authBloc.add(EmptyEvent());
-      authBloc.add(LoginEvent(_emailController.text, _passwordController.text));
+      authBloc!.add(EmptyEvent());
+      authBloc!
+          .add(LoginEvent(_emailController.text, _passwordController.text));
     });
   }
 
@@ -50,19 +62,13 @@ class _LoginPageState extends State<LoginPage> {
             );
           } else if (state is LoadedSucessState) {
             print("LOGGED!!!!!");
-            /*Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Color(0xff66bb6a),
-                content: Text("Successfully Logged In"),
-              ),
-            );*/
             if (widget.args != null &&
-                widget.args['returnToPageWithArgs'] != null) {
+                widget.args!['returnToPageWithArgs'] != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
                 PageRoute.Page.timelineScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {
-                  "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+                  "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
                 },
               );
             } else {
@@ -86,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
         if (state is ErrorState) {
           isLoading = false;
         }
-        return ModalProgressHUD(
-          inAsyncCall: isLoading,
+        return LoadingOverlay(
+          isLoading: isLoading,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -148,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(AppLocalizations.of(context).email),
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return AppLocalizations.of(context).pleaseEnterYourEmail;
                                       }
                                       return null;
@@ -160,11 +166,26 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
-                                    obscureText: true,
+                                    obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(AppLocalizations.of(context).password),
+                                        .loginInputTheme(AppLocalizations.of(context).password)
+                                        .copyWith(
+                                          suffixIcon: GestureDetector(
+                                            child: Icon(
+                                              _showPassword == false
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
+                                              color: Colors.white,
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _showPassword = !_showPassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
                                     validator: (value) {
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return AppLocalizations.of(context).pleaseEnterYourPassword;
                                       }
                                       return null;
@@ -182,14 +203,20 @@ class _LoginPageState extends State<LoginPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    AppLocalizations.of(context).iForgotMyPassword,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
-                                      color: Colors.white,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(PageRoute
+                                          .Page.recoverPasswordScreen.route);
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context).iForgotMyPassword,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -218,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 _submit();
                               }
                             },
@@ -252,12 +279,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () {
                               if (widget.args != null &&
-                                  widget.args['returnToPageWithArgs'] != null) {
+                                  widget.args!['returnToPageWithArgs'] !=
+                                      null) {
                                 Navigator.of(context).pushNamed(
                                   PageRoute.Page.registerScreen.route,
                                   arguments: {
                                     "returnToPageWithArgs":
-                                        widget.args['returnToPageWithArgs']
+                                        widget.args!['returnToPageWithArgs']
                                   },
                                 );
                               } else {

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
@@ -31,10 +31,10 @@ class PostPreviewPage extends StatefulWidget {
 }
 
 class _PostPreviewPageState extends State<PostPreviewPage> {
-  FlickManager flickManager;
-  VideoPlayerController videoPlayer;
-  FlickMultiManager flickMultiManager;
-  PostBloc postBloc;
+  late FlickManager flickManager;
+  late VideoPlayerController videoPlayer;
+  late FlickMultiManager flickMultiManager;
+  late PostBloc postBloc;
   InterestsTagsRepositoryImpl _tagsRepository = InterestsTagsRepositoryImpl();
   final TextEditingController _descriptionInputController =
       TextEditingController();
@@ -68,9 +68,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     this._tagsRepository.getTags().then((tags) {
       setState(() {
         _isLoading = false;
-        if (tags == null) {
-          return;
-        }
         _items = tags
             .map((tag) => MultiSelectItem<InterestsTags>(tag, tag.name))
             .toList();
@@ -98,12 +95,18 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           _geolocationInputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
-          postData.addressCity = placemark.subAdministrativeArea;
-          postData.addressState = placemark.administrativeArea;
-          postData.addressCountryCode = placemark.isoCountryCode;
+          postData.addressCity = placemark.subAdministrativeArea != null
+              ? placemark.subAdministrativeArea!
+              : "";
+          postData.addressState = placemark.administrativeArea != null
+              ? placemark.administrativeArea!
+              : "";
+          postData.addressCountryCode =
+              placemark.isoCountryCode != null ? placemark.isoCountryCode! : "";
           postData.addressLatitude = position.latitude;
           postData.addressLongitude = position.longitude;
-          postData.addressNumber = placemark.name;
+          postData.addressNumber =
+              placemark.name != null ? placemark.name! : "";
         } else {
           geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
           geolocationErrorMessage = AppLocalizations.of(context).weCouldntGetYourLocation2;
@@ -121,8 +124,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     if (_createdPost) {
       return true;
     }
-    if (flickManager.flickControlManager.isFullscreen) {
-      flickManager.flickControlManager.toggleFullscreen();
+    if (flickManager.flickControlManager!.isFullscreen) {
+      flickManager.flickControlManager!.toggleFullscreen();
       return false;
     }
     return (await showDialog(
@@ -214,7 +217,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     flickMultiManager.init(flickManager);
 
-    flickManager.flickControlManager.mute();
+    flickManager.flickControlManager!.mute();
 
     if (widget.args["mirroredVideo"] == "true") {
       mirror = math.pi;
@@ -328,8 +331,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
   _blocBuilder() {
     return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
-      return ModalProgressHUD(
-        inAsyncCall: _isLoadingUpload,
+      return LoadingOverlay(
+        isLoading: _isLoadingUpload,
         child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
@@ -373,7 +376,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                                 child: IconButton(
                                   padding: EdgeInsets.all(0),
                                   icon: Icon(
-                                      flickManager.flickControlManager.isMute
+                                      flickManager.flickControlManager!.isMute
                                           ? Icons.volume_off
                                           : Icons.volume_up,
                                       size: 20),
@@ -513,7 +516,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 ),
                 Visibility(
                   visible: !_errorOnGetTags && !_isLoading,
-                  child: MultiSelectDialogField(
+                  child: MultiSelectDialogField<InterestsTags?>(
                     listType: MultiSelectListType.CHIP,
                     selectedColor: Colors.blue,
                     selectedItemsTextStyle: TextStyle(color: Colors.white),
@@ -552,7 +555,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       _selectedTags = [];
                       setState(() {
                         values.forEach((v) {
-                          _selectedTags.add(v);
+                          _selectedTags.add(v!);
                         });
                         if (_selectedTags.length >= 1) {
                           tagsErrorMessage = "";
@@ -656,76 +659,76 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   }
 }
 
-class PlayerControls extends StatelessWidget {
-  const PlayerControls(
-      {Key key, this.flickMultiManager, this.flickManager, this.filePath})
-      : super(key: key);
+// class PlayerControls extends StatelessWidget {
+//   const PlayerControls(
+//       {Key key, this.flickMultiManager, this.flickManager, this.filePath})
+//       : super(key: key);
 
-  final FlickMultiManager flickMultiManager;
-  final FlickManager flickManager;
-  final String filePath;
+//   final FlickMultiManager flickMultiManager;
+//   final FlickManager flickManager;
+//   final String filePath;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FlickAutoHideChild(
-            showIfVideoNotInitialized: false,
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: BoxDecoration(
-                  color: Colors.black38,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: FlickLeftDuration(),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: FlickAutoHideChild(
-              autoHide: false,
-              showIfVideoNotInitialized: false,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: FlickSoundToggle(
-                      toggleMute: () => flickMultiManager.toggleMute(),
-                      color: Colors.white,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      left: GlobalConstants.of(context).spacingNormal,
-                    ),
-                    child: FlickFullScreenToggle(
-                      toggleFullscreen: () {
-                        flickManager.flickControlManager.toggleFullscreen();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       color: Colors.transparent,
+//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.end,
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: <Widget>[
+//           FlickAutoHideChild(
+//             showIfVideoNotInitialized: false,
+//             child: Align(
+//               alignment: Alignment.topRight,
+//               child: Container(
+//                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+//                 decoration: BoxDecoration(
+//                   color: Colors.black38,
+//                   borderRadius: BorderRadius.circular(20),
+//                 ),
+//                 child: FlickLeftDuration(),
+//               ),
+//             ),
+//           ),
+//           Expanded(
+//             child: Container(),
+//           ),
+//           Align(
+//             alignment: Alignment.bottomRight,
+//             child: FlickAutoHideChild(
+//               autoHide: false,
+//               showIfVideoNotInitialized: false,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.end,
+//                 children: <Widget>[
+//                   Container(
+//                     padding: EdgeInsets.all(2),
+//                     decoration: BoxDecoration(
+//                       color: Colors.black38,
+//                       borderRadius: BorderRadius.circular(20),
+//                     ),
+//                     child: FlickSoundToggle(
+//                       toggleMute: () => flickMultiManager.toggleMute(),
+//                       color: Colors.white,
+//                     ),
+//                   ),
+//                   Container(
+//                     padding: EdgeInsets.only(
+//                       left: GlobalConstants.of(context).spacingNormal,
+//                     ),
+//                     child: FlickFullScreenToggle(
+//                       toggleFullscreen: () {
+//                         flickManager.flickControlManager.toggleFullscreen();
+//                       },
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

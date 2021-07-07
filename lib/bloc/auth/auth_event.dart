@@ -40,3 +40,19 @@ class EmptyEvent extends AuthEvent {
   const EmptyEvent();
   List<Object> get props => [];
 }
+
+class RecoverPasswordEvent extends AuthEvent {
+  final String email;
+  const RecoverPasswordEvent(this.email);
+
+  @override
+  List<Object> get props => [email];
+}
+
+class ResetPasswordEvent extends AuthEvent {
+  final String newPassword;
+  const ResetPasswordEvent(this.newPassword);
+
+  @override
+  List<Object> get props => [newPassword];
+}

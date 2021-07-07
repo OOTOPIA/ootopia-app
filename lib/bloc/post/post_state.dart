@@ -7,7 +7,7 @@ abstract class PostState extends Equatable {
 class EmptyState extends PostState {
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class PostInitialState extends PostState {

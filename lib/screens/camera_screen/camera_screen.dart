@@ -9,7 +9,7 @@ import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:path/path.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,22 +25,22 @@ class CameraApp extends StatefulWidget {
 
 class _CameraAppState extends State<CameraApp>
     with SecureStoreMixin, SingleTickerProviderStateMixin {
-  CameraController controller;
-  List<CameraDescription> cameras;
+  CameraController? controller;
+  late List<CameraDescription> cameras;
   int indexCamera = 1;
   bool isRecord = false;
-  XFile imageFile;
-  XFile videoFile;
+  late XFile imageFile;
+  late XFile videoFile;
   bool permissionsIsNeeded = true;
-  AssetEntity lastVideoThumbnail;
+  late AssetEntity lastVideoThumbnail;
   final picker = ImagePicker();
 
   final FlutterUploader uploader = FlutterUploader();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  double _scale;
-  AnimationController _animController;
+  late double _scale;
+  late AnimationController _animController;
 
   @override
   void initState() {
@@ -78,9 +78,9 @@ class _CameraAppState extends State<CameraApp>
     var storageStatus = await Permission.storage.status;
     var cameraStatus = await Permission.camera.status;
     var microphoneStatus = await Permission.microphone.status;
-    if (storageStatus.isUndetermined ||
-        cameraStatus.isUndetermined ||
-        microphoneStatus.isUndetermined ||
+    if (storageStatus.isRestricted ||
+        cameraStatus.isRestricted ||
+        microphoneStatus.isRestricted ||
         storageStatus.isDenied ||
         cameraStatus.isDenied ||
         microphoneStatus.isDenied) {
@@ -117,20 +117,22 @@ class _CameraAppState extends State<CameraApp>
 
       setCamera();
     } on CameraException catch (e) {
-      logError(e.code, e.description);
+      logError(e.code, e.description == null ? "" : e.description!);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller?.dispose();
+    if (controller != null) {
+      controller!.dispose();
+    }
     _animController.dispose();
   }
 
   void setCamera() async {
     if (controller != null) {
-      await controller.dispose();
+      await controller!.dispose();
     }
 
     indexCamera = indexCamera == 0 ? 1 : 0;
@@ -138,7 +140,7 @@ class _CameraAppState extends State<CameraApp>
       cameras[indexCamera],
       ResolutionPreset.medium,
     );
-    controller.initialize().then((_) {
+    controller!.initialize().then((_) {
       if (!mounted) {
         return;
       }
@@ -147,20 +149,29 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future<void> startVideoRecording() async {
-    if (!controller.value.isInitialized || controller.value.isRecordingVideo) {
+    if (!controller!.value.isInitialized ||
+        controller!.value.isRecordingVideo) {
       return null;
     }
 
-    await controller.startVideoRecording();
+    await controller!.startVideoRecording();
     setState(() {});
   }
 
   Future<Map<String, String>> getHeaders() async {
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
-      return null;
+      return {
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
     }
-    String token = await getAuthToken();
+    String? token = await getAuthToken();
+
+    if (token == null) {
+      return {
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+    }
 
     return {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -191,13 +202,13 @@ class _CameraAppState extends State<CameraApp>
     });
   }
 
-  Future<XFile> stopVideoRecording() async {
-    if (!controller.value.isRecordingVideo) {
+  Future<XFile?> stopVideoRecording() async {
+    if (!controller!.value.isRecordingVideo) {
       return null;
     }
 
     try {
-      return controller.stopVideoRecording();
+      return controller!.stopVideoRecording();
     } on CameraException catch (e) {
       print(e);
       return null;
@@ -205,7 +216,7 @@ class _CameraAppState extends State<CameraApp>
   }
 
   void showInSnackBar(String message) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
+    _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(message)));
   }
 
   void logError(String code, String message) =>
@@ -221,7 +232,7 @@ class _CameraAppState extends State<CameraApp>
     print('Hello $mode');
 
     try {
-      await controller.setFlashMode(mode);
+      await controller!.setFlashMode(mode);
     } on CameraException catch (e) {
       print('Erro da camera $e');
       rethrow;
@@ -229,7 +240,7 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future getVideoFromGallery(BuildContext context) async {
-    await controller.dispose();
+    await controller!.dispose();
     final pickedFile = await picker.getVideo(source: ImageSource.gallery);
     indexCamera = 1;
     controller = null;
@@ -271,7 +282,7 @@ class _CameraAppState extends State<CameraApp>
               offset: Offset(0.0, 5.0),
             ),
           ],
-          color: controller.value.isRecordingVideo ? Colors.red : Colors.white,
+          color: controller!.value.isRecordingVideo ? Colors.red : Colors.white,
         ),
         child: Center(
           child: SizedBox(width: 64, height: 64),
@@ -281,7 +292,7 @@ class _CameraAppState extends State<CameraApp>
   }
 
   void _tapDown(details) {
-    if (!controller.value.isRecordingVideo) {
+    if (!controller!.value.isRecordingVideo) {
       startVideoRecording();
       _animController.forward();
       print("START RECORD");
@@ -289,7 +300,7 @@ class _CameraAppState extends State<CameraApp>
   }
 
   void _tapUp(context) {
-    if (controller.value.isRecordingVideo) {
+    if (controller!.value.isRecordingVideo) {
       print("ON STOP HERE");
       onStopButtonPressed(context);
       _animController.reverse();
@@ -298,9 +309,8 @@ class _CameraAppState extends State<CameraApp>
 
   @override
   Widget build(BuildContext context) {
-    print("Value =====================> ${_animController.value}");
     _scale = 1 + _animController.value;
-    if (controller == null || !controller.value.isInitialized) {
+    if (controller == null || !controller!.value.isInitialized) {
       return Container(
         child: Center(
           child: SizedBox(
@@ -331,8 +341,7 @@ class _CameraAppState extends State<CameraApp>
       );
     } else {
       final size = MediaQuery.of(context).size;
-      //final deviceRatio = size.width / size.height;
-      var scale = size.aspectRatio * controller.value.aspectRatio;
+      var scale = size.aspectRatio * controller!.value.aspectRatio;
       if (scale < 1) scale = 1 / scale;
 
       return Scaffold(
@@ -351,7 +360,7 @@ class _CameraAppState extends State<CameraApp>
             Transform.scale(
               scale: scale,
               child: Center(
-                child: CameraPreview(controller),
+                child: CameraPreview(controller!),
               ),
             ),
             Padding(
@@ -390,7 +399,7 @@ class _CameraAppState extends State<CameraApp>
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (!controller.value.isRecordingVideo) {
+                      if (!controller!.value.isRecordingVideo) {
                         getVideoFromGallery(context);
                       }
                     },
@@ -407,7 +416,7 @@ class _CameraAppState extends State<CameraApp>
                             child: SizedBox(
                               width: 30,
                               height: 30,
-                              child: FutureBuilder<Uint8List>(
+                              child: FutureBuilder<Uint8List?>(
                                 future: lastVideoThumbnail.thumbData,
                                 builder: (_, snapshot) {
                                   final bytes = snapshot.data;

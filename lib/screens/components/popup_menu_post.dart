@@ -9,21 +9,25 @@ class PopupMenuPost extends StatefulWidget {
   final Function callbackReturnPopupMenu;
   final post;
 
-  PopupMenuPost({this.isAnabled, this.callbackReturnPopupMenu, this.post});
+  PopupMenuPost({
+    required this.isAnabled,
+    required this.callbackReturnPopupMenu,
+    required this.post,
+  });
   @override
   _PopupMenuPostState createState() => _PopupMenuPostState();
 }
 
 class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
   bool loggedIn = false;
-  User user;
+  User? user;
   bool isUserOwnsPost = false;
 
   _checkUserIsLoggedInAndUserOwnsThePost() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      isUserOwnsPost = user.id == widget.post.userId;
+      isUserOwnsPost = user!.id == widget.post.userId;
     } else {
       isUserOwnsPost = false;
     }
@@ -73,7 +77,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
           value: 'Excluir',
         ),
       ],
-      onSelected: (_) => _selectedOption(_),
+      onSelected: (String value) => _selectedOption(value),
     );
   }
 }

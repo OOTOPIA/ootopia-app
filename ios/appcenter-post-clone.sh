@@ -9,6 +9,7 @@ set -x
 cd ..
 git clone -b stable https://github.com/flutter/flutter.git
 export PATH=`pwd`/flutter/bin:$PATH
+export "EXTRA_FRONT_END_OPTIONS=--no-sound-null-safety"
 
 flutter channel stable
 flutter doctor
@@ -24,4 +25,5 @@ AMPLITUDE_KEY=${AMPLITUDE_KEY}
 EOL
 cat .env
 
-flutter build ios --release --no-codesign
+flutter pub upgrade
+flutter build ios --no-sound-null-safety --release --no-codesign

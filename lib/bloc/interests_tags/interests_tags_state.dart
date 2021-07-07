@@ -6,7 +6,7 @@ abstract class InterestsTagsState extends Equatable {
 
 class EmptyState extends InterestsTagsState {
   @override
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class InitialState extends InterestsTagsState {

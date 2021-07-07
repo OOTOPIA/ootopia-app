@@ -6,8 +6,8 @@ class DialogConfirm extends StatelessWidget {
   final Function callbackConfirmAlertDialog;
 
   DialogConfirm({
-    this.textAlert,
-    this.callbackConfirmAlertDialog,
+    required this.textAlert,
+    required this.callbackConfirmAlertDialog,
   });
 
   @override

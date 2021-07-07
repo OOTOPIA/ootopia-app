@@ -12,6 +12,8 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:ootopia_app/screens/timeline/components/regeneration_status_icons.dart';
+import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -21,23 +23,31 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 
+import 'package:uni_links/uni_links.dart';
+import 'package:flutter/services.dart';
+
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-class TimelinePage extends StatefulWidget {
-  Map<String, dynamic> args;
+bool _initialUriIsHandled = false;
 
-  TimelinePage([this.args]);
+class TimelinePage extends StatefulWidget {
+  Map<String, dynamic>? args;
+
+  TimelinePage(this.args);
   @override
   _TimelinePageState createState() => _TimelinePageState();
 }
 
 class _TimelinePageState extends State<TimelinePage>
-    with SecureStoreMixin, SingleTickerProviderStateMixin {
-  StreamSubscription _intentDataStreamSubscription;
-  List<SharedMediaFile> _sharedFiles;
-  TimelinePostBloc timelineBloc;
+    with
+        SecureStoreMixin,
+        SingleTickerProviderStateMixin,
+        WidgetsBindingObserver {
+  late StreamSubscription _intentDataStreamSubscription;
+  late List<SharedMediaFile> _sharedFiles;
+  late TimelinePostBloc timelineBloc;
   bool loggedIn = false;
-  User user;
+  User? user;
   int currentPage = 1;
   final int _itemsPerPageCount = 10;
   int _nextPageThreshold = 5;
@@ -47,15 +57,21 @@ class _TimelinePageState extends State<TimelinePage>
       GeneralConfigRepositoryImpl();
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
-  GeneralConfig transferOozToPostLimitConfig;
+  late GeneralConfig transferOozToPostLimitConfig;
+
+  ScrollController _scrollController = new ScrollController();
 
   List<TimelinePost> _allPosts = [];
 
-  FlickMultiManager flickMultiManager;
+  late FlickMultiManager flickMultiManager;
+
+  late StreamSubscription _sub;
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance!.addObserver(this);
 
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
@@ -77,7 +93,7 @@ class _TimelinePageState extends State<TimelinePage>
     performAllRequests();
     flickMultiManager = FlickMultiManager();
 
-    if (widget.args != null && widget.args["createdPost"] == true) {
+    if (widget.args != null && widget.args!["createdPost"] == true) {
       setState(() {
         showUploadedVideoMessage = true;
       });
@@ -91,10 +107,11 @@ class _TimelinePageState extends State<TimelinePage>
       );
     }
     Timer(Duration(milliseconds: 1000), () {
-      if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
-        if (widget.args['returnToPageWithArgs']['pageRoute'] ==
+      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+        if (widget.args!['returnToPageWithArgs']['pageRoute'] ==
                 PageRoute.Page.myProfileScreen.route &&
-            user.registerPhase == 1) {
+            user != null &&
+            user!.registerPhase == 1) {
           Navigator.of(context).pushNamed(
             PageRoute.Page.registerPhase2Screen.route,
             arguments: {
@@ -104,19 +121,78 @@ class _TimelinePageState extends State<TimelinePage>
               }
             },
           );
-        } else {
+        } else if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
           Navigator.of(context).pushNamed(
-            widget.args['returnToPageWithArgs']['pageRoute'],
-            arguments: widget.args['returnToPageWithArgs']['arguments'],
+            widget.args!['returnToPageWithArgs']['pageRoute'],
+            arguments: widget.args!['returnToPageWithArgs']['arguments'],
           );
         }
       }
     });
+
+    OOzDistributionSystem.getInstance().startTimelineView();
+
+    _handleIncomingLinks();
+    _handleInitialUri();
+  }
+
+  void goToTopTimeline() {
+    _scrollController.animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _handleIncomingLinks() {
+    _sub = getLinksStream().listen((link) {
+      if (!mounted || link == null) return;
+      setState(() {
+        var linkSplit = link.split("resetPasswordToken=");
+        var token = linkSplit[linkSplit.length - 1];
+        if (token.isNotEmpty && token != null) {
+          print("TEM ALGO ERRADO NAO? kkkk $token");
+          setRecoverPasswordToken(token);
+          goToResetPassword();
+        }
+      });
+    }, onError: (Object err) {
+      if (!mounted) return;
+    });
+  }
+
+  Future<void> _handleInitialUri() async {
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      try {
+        final uri = await getInitialUri();
+        if (!mounted || uri == null) return;
+        setState(() {
+          var linkSplit = uri.toString().split("resetPasswordToken=");
+          var token = linkSplit[linkSplit.length - 1];
+          if (token.isNotEmpty && token != null) {
+            print("EITA ESSE É O TOKEN ENTAO BRABO $token");
+            setRecoverPasswordToken(token);
+            goToResetPassword();
+          }
+        });
+      } on PlatformException {} on FormatException catch (err) {
+        if (!mounted) return;
+      }
+    }
+  }
+
+  goToResetPassword() async {
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.resetPasswordScreen.route,
+    );
   }
 
   performAllRequests() async {
+    print("PERFORM ALL BEFORE");
     await _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
+    print("PERFORM ALL AFTER");
   }
 
   void _getTransferOozToPostLimitConfig() async {
@@ -165,12 +241,18 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  void _checkUserIsLoggedIn() async {
-    loggedIn = await getUserIsLoggedIn();
-    if (loggedIn) {
-      await this.userRepositoryImpl.getMyAccountDetails();
-      user = await getCurrentUser();
-      print("LOGGED USER: " + user.fullname);
+  Future<bool> _checkUserIsLoggedIn() async {
+    try {
+      loggedIn = await getUserIsLoggedIn();
+      if (loggedIn) {
+        await this.userRepositoryImpl.getMyAccountDetails();
+        user = await getCurrentUser();
+        print("LOGGED USER: " + user!.fullname!);
+      }
+      return loggedIn;
+    } catch (err) {
+      print("Deu erro: $err");
+      return false;
     }
   }
 
@@ -179,7 +261,7 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   void _goToProfile() {
-    Navigator.of(context).pushNamed(user.registerPhase == 1
+    Navigator.of(context).pushNamed(user!.registerPhase == 1
         ? PageRoute.Page.registerPhase2Screen.route
         : PageRoute.Page.profileScreen.route);
   }
@@ -187,186 +269,139 @@ class _TimelinePageState extends State<TimelinePage>
   @override
   void dispose() {
     _intentDataStreamSubscription.cancel();
+    OOzDistributionSystem.getInstance().endTimelineView("dispose");
     super.dispose();
   }
 
   @override
+  void deactivate() {
+    OOzDistributionSystem.getInstance().endTimelineView("deactivate");
+    super.deactivate();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // These are the callbacks
+    switch (state) {
+      case AppLifecycleState.resumed:
+        OOzDistributionSystem.getInstance().endTimelineView("resumed");
+
+        // widget is resumed
+        break;
+      case AppLifecycleState.inactive:
+        OOzDistributionSystem.getInstance().endTimelineView("inactive");
+
+        // widget is inactive
+        break;
+      case AppLifecycleState.paused:
+        OOzDistributionSystem.getInstance().endTimelineView("paused");
+
+        // widget is paused
+        break;
+      case AppLifecycleState.detached:
+        OOzDistributionSystem.getInstance().endTimelineView("detached");
+
+        // widget is detached
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Image.asset('assets/images/logo.png', height: 42),
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xffC0D9E8),
-                Color(0xffffffff),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Color(0xffC0D9E8),
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, value) {
+              return [
+                SliverAppBar(
+                  centerTitle: true,
+                  title: Padding(
+                    padding: EdgeInsets.all(3),
+                    child: Image.asset('assets/images/logo.png', height: 42),
+                  ),
+                  floating: false,
+                  toolbarHeight: 90,
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  // Make the initial height of the SliverAppBar larger than normal.
+                  //expandedHeight: 50,
+                  brightness: Brightness.light,
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xffC0D9E8),
+                          Color(0xffffffff),
+                        ],
+                      ),
+                    ),
+                  ),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(0.0),
+                    child: RegenerationStatusIcons(
+                      onClick: () => this._goToProfile(),
+                    ),
+                  ),
+                ),
+              ];
+            },
+            body: Column(
+              children: [
+                Visibility(
+                  visible: showUploadedVideoMessage,
+                  child: NewVideoUploadedMessageBox(),
+                ),
+                Expanded(
+                  child: Center(
+                    child: BlocListener<TimelinePostBloc, TimelinePostState>(
+                      listener: (context, state) {
+                        if (state is ErrorState) {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(state.message),
+                            ),
+                          );
+                        } else if (state is LoadedSucessState) {
+                          if (!state.onlyForRefreshCurrentList) {
+                            _hasMoreItems =
+                                state.posts.length == _itemsPerPageCount;
+                            _allPosts.addAll(state.posts);
+                          }
+                        } else if (state is OnDeletedPostState) {
+                          _allPosts
+                              .removeWhere((post) => post.id == state.postId);
+                        } else if (state is OnUpdatePostCommentsCountState) {
+                          _allPosts
+                              .firstWhere((post) => post.id == state.postId)
+                              .commentsCount = state.commentsCount;
+                        }
+                      },
+                      child: _blocBuilder(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-        // backgroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ImageIcon(
-                  AssetImage('assets/icons/profile.png'),
-                  color: Colors.black,
-                ),
-                GestureDetector(
-                  onTap: () => _goToProfile(),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * .20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: .4,
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * .15,
-                      lineHeight: 16.0,
-                      percent: 0.5,
-                      backgroundColor: Colors.transparent,
-                      progressColor: Color(0xff1BE7FA),
-                    ),
-                  ),
-                ),
-                ImageIcon(
-                  AssetImage('assets/icons/location.png'),
-                  color: Colors.black,
-                ),
-                GestureDetector(
-                  onTap: () => _goToProfile(),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * .20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: .4,
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * .15,
-                      lineHeight: 16.0,
-                      percent: 0.5,
-                      backgroundColor: Colors.transparent,
-                      progressColor: Color(0xff0AA7EA),
-                    ),
-                  ),
-                ),
-                ImageIcon(
-                  AssetImage('assets/icons/earth.png'),
-                  color: Colors.black,
-                ),
-                GestureDetector(
-                  onTap: () => _goToProfile(),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * .20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: .4,
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width * .15,
-                      lineHeight: 16.0,
-                      percent: 0.1,
-                      backgroundColor: Colors.transparent,
-                      progressColor: Color(0xff026FF2),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: showUploadedVideoMessage,
-            child: Padding(
-              padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xff73d778),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(
-                    GlobalConstants.of(context).spacingNormal,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.done, color: Colors.white),
-                      Flexible(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: GlobalConstants.of(context).spacingSmall,
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context).yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: BlocListener<TimelinePostBloc, TimelinePostState>(
-                listener: (context, state) {
-                  if (state is ErrorState) {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                      ),
-                    );
-                  } else if (state is LoadedSucessState) {
-                    if (!state.onlyForRefreshCurrentList) {
-                      _hasMoreItems = state.posts.length == _itemsPerPageCount;
-                      _allPosts.addAll(state.posts);
-                    }
-                  } else if (state is OnDeletedPostState) {
-                    _allPosts.removeWhere((post) => post.id == state.postId);
-                  } else if (state is OnUpdatePostCommentsCountState) {
-                    _allPosts
-                        .firstWhere((post) => post.id == state.postId)
-                        .commentsCount = state.commentsCount;
-                  }
-                },
-                child: _blocBuilder(),
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: NavigatorBar(
-        currentPage: PageRoute.Page.timelineScreen.route,
+        bottomNavigationBar: NavigatorBar(
+          onClickButton: () => goToTopTimeline(),
+          currentPage: PageRoute.Page.timelineScreen.route,
+        ),
       ),
     );
   }
 
   _removeItem(String postId) {
     var indexPost = _allPosts.indexWhere((post) => post.id == postId);
-
-    print("Meu id $indexPost");
-
     if (indexPost >= 0) {
       _allPosts.remove(_allPosts[indexPost]);
     }
@@ -401,6 +436,7 @@ class _TimelinePageState extends State<TimelinePage>
                       performAllRequests();
                     },
                     child: ListView.separated(
+                      controller: _scrollController,
                       separatorBuilder: (BuildContext context, int index) =>
                           const Divider(),
                       shrinkWrap: true,
@@ -464,5 +500,42 @@ class _TimelinePageState extends State<TimelinePage>
   Future<void> _getData() async {
     timelineBloc.add(GetTimelinePostsEvent(
         _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+  }
+}
+
+class NewVideoUploadedMessageBox extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Color(0xff73d778),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(
+            GlobalConstants.of(context).spacingNormal,
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.done, color: Colors.white),
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: GlobalConstants.of(context).spacingSmall,
+                  ),
+                  child: Text(
+                    "Your video is being processed. Wait until processing is complete.",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

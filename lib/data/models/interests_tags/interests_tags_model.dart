@@ -11,14 +11,14 @@ class InterestsTags extends Equatable {
   String updatedAt;
 
   InterestsTags({
-    this.id,
-    this.name,
-    this.type,
-    this.active,
-    this.tagOrder,
-    this.language,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.active,
+    required this.tagOrder,
+    required this.language,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory InterestsTags.fromJson(Map<String, dynamic> parsedJson) {

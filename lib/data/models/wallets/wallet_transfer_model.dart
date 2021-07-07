@@ -5,31 +5,33 @@ class WalletTransfer extends Equatable {
   String id;
   String userId;
   String walletId;
-  String otherUserId;
-  String postId;
-  String otherUsername;
+  String? otherUserId;
+  String? postId;
+  String? otherUsername;
   String origin;
   String action;
   double balance;
   String createdAt;
   String updatedAt;
-  String photoUrl;
+  String? photoUrl;
+  bool fromPlatform = false;
   dynamic dateTransaction;
 
   WalletTransfer({
-    this.id,
-    this.userId,
-    this.walletId,
+    required this.id,
+    required this.userId,
+    required this.walletId,
     this.otherUserId,
     this.postId,
     this.otherUsername,
-    this.origin,
-    this.action,
-    this.balance,
-    this.createdAt,
-    this.updatedAt,
+    required this.origin,
+    required this.action,
+    required this.balance,
+    required this.createdAt,
+    required this.updatedAt,
     this.photoUrl,
     this.dateTransaction,
+    required this.fromPlatform,
   }) {
     // this.dateTransaction =
     //     DateFormat('dd-MM-yyyy').format(DateTime.parse(createdAt));
@@ -52,11 +54,13 @@ class WalletTransfer extends Equatable {
       updatedAt: json['updatedAt'],
       photoUrl: json['photoUrl'],
       dateTransaction: json['dateTransaction'],
+      fromPlatform:
+          (json['fromPlatform'] == null ? false : json['fromPlatform']),
     );
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         userId,
         walletId,
@@ -70,5 +74,6 @@ class WalletTransfer extends Equatable {
         updatedAt,
         photoUrl,
         dateTransaction,
+        fromPlatform,
       ];
 }

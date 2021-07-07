@@ -7,7 +7,7 @@ abstract class InterestsTagsEvent extends Equatable {
 class GetTagsEvent extends InterestsTagsEvent {
   final String language;
 
-  GetTagsEvent([this.language]);
+  GetTagsEvent({required this.language});
 
   @override
   List<Object> get props => [];

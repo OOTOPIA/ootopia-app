@@ -78,5 +78,20 @@
 		<integer>3</integer>
 		<key>FUMaximumUploadOperation</key>
 		<integer>3</integer>
+		<key>FlutterDeepLinkingEnabled</key>
+		<true/>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>recover-password.ootopia.org</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+				<string>customscheme</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>

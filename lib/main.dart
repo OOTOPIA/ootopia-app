@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
@@ -25,6 +25,8 @@ import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/recover_password/recover_password_screen.dart';
+import 'package:ootopia_app/screens/reset_password/reset_password_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
@@ -43,12 +45,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/l10n.dart';
 
 Future main() async {
-  await DotEnv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
 
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',
-    apiBaseUrl: DotEnv.env['API_URL'],
+    apiBaseUrl: dotenv.env['API_URL']!,
     child: new ExpensesApp(),
   );
 
@@ -56,6 +58,7 @@ Future main() async {
     (options) {
       options.dsn =
           'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+      options.debug = false;
     },
     appRunner: () => runApp(
       GlobalConstants(
@@ -209,13 +212,15 @@ class MainPage extends HookWidget {
         PLayerVideoFullscreen(args: args),
     PageRoute.Page.menuProfile: (args) => MenuProfile(),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
+    PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
+    PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args)
   };
 
   @override
   Widget build(BuildContext context) {
     final navigatorKey = GlobalObjectKey<NavigatorState>(context);
     return WillPopScope(
-      onWillPop: () async => !await navigatorKey.currentState.maybePop(),
+      onWillPop: () async => !(await navigatorKey.currentState!.maybePop()),
       child: Navigator(
         key: navigatorKey,
         initialRoute: PageRoute.Page.timelineScreen.route,
@@ -227,7 +232,9 @@ class MainPage extends HookWidget {
 
           return MaterialPageRoute(
             settings: settings,
-            builder: (context) => _fragments[page](settings.arguments as Map),
+            builder: (context) => (settings.arguments == null
+                ? _fragments[page]!(null)
+                : _fragments[page]!(settings.arguments as Map)),
           );
         },
       ),

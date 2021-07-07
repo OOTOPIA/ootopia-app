@@ -7,7 +7,7 @@ abstract class WalletState extends Equatable {
 class EmptyState extends WalletState {
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [];
 }
 
 class LoadingWalletState extends WalletState {
@@ -18,7 +18,7 @@ class LoadingWalletState extends WalletState {
 
 class LoadedWalletSucessState extends WalletState {
   Wallet wallet;
-  LoadedWalletSucessState({this.wallet});
+  LoadedWalletSucessState({required this.wallet});
   @override
   List<Object> get props => [wallet];
 }
@@ -38,7 +38,7 @@ class LoadingTransactionHistoryState extends WalletState {
 
 class LoadedTransactionHistorySucessState extends WalletState {
   List<WalletTransfer> transactions;
-  LoadedTransactionHistorySucessState({this.transactions});
+  LoadedTransactionHistorySucessState({required this.transactions});
   @override
   List<Object> get props => [transactions];
 }

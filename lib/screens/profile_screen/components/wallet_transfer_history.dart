@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class WalletTransferHistory extends StatelessWidget {
   List<WalletTransferGroup> walletTransferGroup;
 
-  WalletTransferHistory({this.walletTransferGroup});
+  WalletTransferHistory({required this.walletTransferGroup});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +42,7 @@ class TransactionItemWidget extends StatelessWidget {
   final List<WalletTransfer> walletTransfers;
   const TransactionItemWidget(
     this.walletTransfers, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -89,8 +89,10 @@ class TransactionItemWidget extends StatelessWidget {
                           backgroundColor: Colors.black,
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
-                            backgroundImage:
-                                AssetImage("assets/icons_profile/profile.png"),
+                            backgroundImage: AssetImage(
+                                walletTransfer.fromPlatform
+                                    ? "assets/icons/icon_launcher.png"
+                                    : "assets/icons_profile/profile.png"),
                             radius: 19,
                           ),
                         ),
@@ -116,8 +118,10 @@ class TransactionItemWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(
                           walletTransfer.action == "sent"
-                              ? AppLocalizations.of(context).to + " ${walletTransfer.otherUsername}"
-                              : AppLocalizations.of(context).from + " ${walletTransfer.otherUsername}",
+                              ? AppLocalizations.of(context).to +
+                                  " ${(walletTransfer.otherUsername != null ? walletTransfer.otherUsername : "<vazio>")}"
+                              : AppLocalizations.of(context).from +
+                                  " ${(walletTransfer.fromPlatform ? "OOTOPIA" : (walletTransfer.otherUsername != null ? walletTransfer.otherUsername : "<vazio>"))}",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
