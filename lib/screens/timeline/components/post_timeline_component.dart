@@ -4,12 +4,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
-import 'package:ootopia_app/bloc/user/user_bloc.dart';
-import 'package:ootopia_app/bloc/wallet_transfer/wallet_transfer_bloc.dart';
-import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
+
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
@@ -197,12 +194,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _blocBuilder() {
+    print(GlobalConstants.of(context).spacingNormal);
     return BlocBuilder<TimelinePostBloc, TimelinePostState>(
         builder: (context, state) {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(
+                horizontal: GlobalConstants.of(context).spacingNormal),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
