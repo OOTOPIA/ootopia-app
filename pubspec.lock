@@ -345,10 +345,12 @@ packages:
   flutter_tags:
     dependency: "direct main"
     description:
-      name: flutter_tags
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.9+1"
+      path: "."
+      ref: master
+      resolved-ref: "798db4f83485135cd48a32f08857e9da66d00d97"
+      url: "https://github.com/OOTOPIA/flutter_tags.git"
+    source: git
+    version: "1.0.0-nullsafety.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
