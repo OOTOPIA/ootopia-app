@@ -50,7 +50,7 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
         ),
         ItemMenu(
           pathImage: 'assets/icons_profile/menu_profile.png',
-          title: AppLocalizations.of(context).profile,
+          title: AppLocalizations.of(context)!.profile,
           onTapFunction: goToProfile,
         ),
         // ItemMenu(
@@ -60,7 +60,7 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
         // ),
         ItemMenu(
           pathImage: 'assets/icons_profile/menu_left.png',
-          title: AppLocalizations.of(context).exit,
+          title: AppLocalizations.of(context)!.exit,
           onTapFunction: clearAuth,
         ),
         Expanded(
@@ -72,15 +72,15 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
                   child: Column(
                     children: [
                       Text(
-                        "OOTOPIA ${AppLocalizations.of(context).appVersion} $appVersion.",
+                        "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        AppLocalizations.of(context).madeWithLoveOnThisWonderfulPlanet,
+                        AppLocalizations.of(context)!.madeWithLoveOnThisWonderfulPlanet,
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        "${AppLocalizations.of(context).loggedInAs} $profileName",
+                        "${AppLocalizations.of(context)!.loggedInAs} $profileName",
                         textAlign: TextAlign.center,
                       ),
                     ],

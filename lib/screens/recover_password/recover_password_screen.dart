@@ -4,6 +4,7 @@ import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecoverPasswordPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -119,7 +120,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      'Recuperar senha\r\n\r\nInforme seu e-mail para iniciar o processo de recuperação de senha',
+                                      AppLocalizations.of(context)!.recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess,
                                       textAlign: TextAlign.center,
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
@@ -143,7 +144,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      'Enviado!\r\n\r\nSe este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.',
+                                      AppLocalizations.of(context)!.sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword,
                                       textAlign: TextAlign.center,
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
@@ -168,10 +169,10 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                       keyboardType: TextInputType.emailAddress,
                                       autofocus: true,
                                       decoration: GlobalConstants.of(context)
-                                          .loginInputTheme("E-mail"),
+                                          .loginInputTheme(AppLocalizations.of(context)!.email),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Por favor, informe seu e-mail';
+                                          return AppLocalizations.of(context)!.pleaseEnterYourEmail;
                                         }
                                         return null;
                                       },
@@ -196,7 +197,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                   GlobalConstants.of(context).spacingNormal,
                                 ),
                                 child: Text(
-                                  "Enviar",
+                                  AppLocalizations.of(context)!.send,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

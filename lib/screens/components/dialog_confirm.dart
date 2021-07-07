@@ -25,13 +25,13 @@ class DialogConfirm extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text(AppLocalizations.of(context).decline),
+          child: Text(AppLocalizations.of(context)!.decline),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context).confirm),
+          child: Text(AppLocalizations.of(context)!.confirm),
           onPressed: () {
             this.callbackConfirmAlertDialog();
             Navigator.of(context).pop();

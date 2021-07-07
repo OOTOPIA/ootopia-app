@@ -83,7 +83,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   void _getLocation() {
     setState(() {
       geolocationErrorMessage = "";
-      geolocationMessage = AppLocalizations.of(context).pleaseWait;
+      geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
     });
     Geolocation.determinePosition().then((Position position) async {
       List<Placemark> placemarks =
@@ -108,13 +108,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           postData.addressNumber =
               placemark.name != null ? placemark.name! : "";
         } else {
-          geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
-          geolocationErrorMessage = AppLocalizations.of(context).weCouldntGetYourLocation2;
+          geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
+          geolocationErrorMessage = AppLocalizations.of(context)!.weCouldntGetYourLocation2;
         }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
+        geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
         geolocationErrorMessage = error.toString();
       });
     });
@@ -134,25 +134,25 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                AppLocalizations.of(context).discardChanges,
+                AppLocalizations.of(context)!.discardChanges,
                 style: Theme.of(context).textTheme.headline2,
               ),
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
                     Text(
-                        AppLocalizations.of(context).doYouWantToDiscardTheChanges,
+                        AppLocalizations.of(context)!.doYouWantToDiscardTheChanges,
                         style: Theme.of(context).textTheme.bodyText2),
                   ],
                 ),
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text(AppLocalizations.of(context).noContinueEditing),
+                  child: Text(AppLocalizations.of(context)!.noContinueEditing),
                   onPressed: () => Navigator.of(context).pop(false),
                 ),
                 TextButton(
-                  child: Text(AppLocalizations.of(context).yes),
+                  child: Text(AppLocalizations.of(context)!.yes),
                   onPressed: () => Navigator.of(context).pop(true),
                 ),
               ],
@@ -167,7 +167,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              AppLocalizations.of(context).thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
+              AppLocalizations.of(context)!.thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
         ),
       );
       return;
@@ -182,7 +182,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     if (_selectedTags.length < 1) {
       setState(() {
-        tagsErrorMessage = AppLocalizations.of(context).pleaseSelectAtLeast1Tag;
+        tagsErrorMessage = AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
       });
       return;
     }
@@ -249,7 +249,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           Scaffold.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                  AppLocalizations.of(context).thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
+                  AppLocalizations.of(context)!.thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
             ),
           );
           setState(() {
@@ -280,7 +280,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            AppLocalizations.of(context).newPost,
+            AppLocalizations.of(context)!.newPost,
             style: TextStyle(color: Colors.black),
           ),
           iconTheme: IconThemeData(
@@ -402,7 +402,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       color: Colors.black, fontWeight: FontWeight.normal),
                   autofocus: false,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).writeADescription,
+                    hintText: AppLocalizations.of(context)!.writeADescription,
                     hintStyle: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.normal),
                     border: UnderlineInputBorder(
@@ -469,7 +469,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                             GlobalConstants.of(context).spacingNormal,
                           ),
                           child: Text(
-                            AppLocalizations.of(context).getCurrentLocation,
+                            AppLocalizations.of(context)!.getCurrentLocation,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
@@ -502,7 +502,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     ),
                     child: Text(
                       geolocationErrorMessage +
-                          AppLocalizations.of(context).tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                          AppLocalizations.of(context)!.tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 12,
@@ -537,14 +537,14 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       color: Colors.black54,
                     ),
                     title: Text(
-                      AppLocalizations.of(context).selectAtLeast1Tag,
+                      AppLocalizations.of(context)!.selectAtLeast1Tag,
                       style: TextStyle(
                         fontSize: 16,
                         fontStyle: FontStyle.normal,
                       ),
                     ),
                     buttonText: Text(
-                      AppLocalizations.of(context).selectTags,
+                      AppLocalizations.of(context)!.selectTags,
                       style: TextStyle(
                         fontSize: 16,
                         fontStyle: FontStyle.normal,
@@ -578,7 +578,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     child: TryAgain(
                       _getTags,
                       showOnlyButton: true,
-                      buttonText: AppLocalizations.of(context).errorLoadingTagsTryAgain,
+                      buttonText: AppLocalizations.of(context)!.errorLoadingTagsTryAgain,
                       buttonBackgroundColor: Colors.white,
                       messageTextColor: Colors.white,
                       buttonTextColor: Colors.black,
@@ -630,7 +630,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         GlobalConstants.of(context).spacingNormal,
                       ),
                       child: Text(
-                        AppLocalizations.of(context).sendPost,
+                        AppLocalizations.of(context)!.sendPost,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

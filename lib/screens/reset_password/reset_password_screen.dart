@@ -4,6 +4,7 @@ import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -122,7 +123,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               children: [
                                 Flexible(
                                   child: Text(
-                                    'Alterar senha',
+                                    AppLocalizations.of(context)!.changePassword,
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.subtitle1,
@@ -142,7 +143,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     controller: _passwordController,
                                     obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme("Password")
+                                        .loginInputTheme(AppLocalizations.of(context)!.password)
                                         .copyWith(
                                           suffixIcon: GestureDetector(
                                             child: Icon(
@@ -160,7 +161,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                         ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Informe a nova senha';
+                                        return AppLocalizations.of(context)!.enterNewPassword;
                                       }
                                       return null;
                                     },
@@ -173,7 +174,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     controller: _repeatPasswordController,
                                     obscureText: !_showRepeatPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme('Repeat password')
+                                        .loginInputTheme(AppLocalizations.of(context)!.repeatPassword)
                                         .copyWith(
                                           suffixIcon: GestureDetector(
                                             child: Icon(
@@ -192,10 +193,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                         ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Por favor, informe sua senha';
+                                        return AppLocalizations.of(context)!.pleaseEnterYourPassword;
                                       }
                                       if (value != _passwordController.text) {
-                                        return 'Senhas não combinam';
+                                        return AppLocalizations.of(context)!.passwordsDontMatch;
                                       }
                                       return null;
                                     },
@@ -217,7 +218,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                "Enviar",
+                                AppLocalizations.of(context)!.send,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

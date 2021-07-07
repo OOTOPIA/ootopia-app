@@ -42,7 +42,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
     return Scaffold.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          AppLocalizations.of(context).theVideoIsLoading,
+          AppLocalizations.of(context)!.theVideoIsLoading,
           style: TextStyle(color: Colors.black),
         ),
         duration: Duration(seconds: 6),
@@ -162,7 +162,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
             ),
             title: Text(
-              AppLocalizations.of(context).home,
+              AppLocalizations.of(context)!.home,
               style: TextStyle(fontSize: 8),
             ),
           ),
@@ -202,7 +202,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
             ),
             title: Text(
-              AppLocalizations.of(context).add,
+              AppLocalizations.of(context)!.add,
               style: TextStyle(fontSize: 8),
             ),
           ),
@@ -230,7 +230,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               ),
             ),
             title: Text(
-              AppLocalizations.of(context).profile,
+              AppLocalizations.of(context)!.profile,
               style: TextStyle(fontSize: 8),
             ),
           ),

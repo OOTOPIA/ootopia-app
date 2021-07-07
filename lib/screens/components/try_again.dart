@@ -64,7 +64,7 @@ class _TryAgainState extends State<TryAgain> {
                           widget.messageText != null &&
                                   widget.messageText!.isNotEmpty
                               ? widget.messageText!
-                              : AppLocalizations.of(context).thereWasAProblemPleaseTryAgain,
+                              : AppLocalizations.of(context)!.thereWasAProblemPleaseTryAgain,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14,
@@ -107,7 +107,7 @@ class _TryAgainState extends State<TryAgain> {
                                 widget.buttonText != null &&
                                         widget.buttonText!.isNotEmpty
                                     ? widget.buttonText!
-                                    : AppLocalizations.of(context).tryAgain,
+                                    : AppLocalizations.of(context)!.tryAgain,
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,

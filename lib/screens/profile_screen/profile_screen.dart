@@ -90,8 +90,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
     this.trackingEvents.profileViewedAProfile(
       widget.args == null || (widget.args != null && widget.args!["id"] == null)
-          ? AppLocalizations.of(context).profileOwnProfile
-          : AppLocalizations.of(context).profileViewedAProfile,
+          ? AppLocalizations.of(context)!.profileOwnProfile
+          : AppLocalizations.of(context)!.profileViewedAProfile,
       {"profileId": userId},
     );
   }
@@ -389,14 +389,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                             backgroundColor: Color(0xff598006),
                             iconAssetPath: 'assets/icons/add.png',
                             borderBottomColor: Color(0xffbbd784),
-                            text: AppLocalizations.of(context).posts,
+                            text: AppLocalizations.of(context)!.posts,
                             isActiveTab: _activeTabIndex == 0,
                           ),
                           TabItem(
                             backgroundColor: Color(0xfffc0499),
                             iconAssetPath: 'assets/icons/ootopia.png',
                             borderBottomColor: Color(0xfff074be),
-                            text: "OOZ ${AppLocalizations.of(context).wallet}",
+                            text: "OOZ ${AppLocalizations.of(context)!.wallet}",
                             isActiveTab: _activeTabIndex == 1,
                           ),
                         ],
@@ -439,7 +439,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     }
     if (loadPostsError) {
       return Center(
-        child: Text(AppLocalizations.of(context).errorOnGetPosts),
+        child: Text(AppLocalizations.of(context)!.errorOnGetPosts),
       );
     }
     return Column(
@@ -543,7 +543,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       Padding(
                         padding: EdgeInsets.only(bottom: 6),
                         child: Text(
-                          "${AppLocalizations.of(context).balanceIn} OOz",
+                          "${AppLocalizations.of(context)!.balanceIn} OOz",
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -620,13 +620,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                 },
                 tabs: [
                   Tab(
-                    text: AppLocalizations.of(context).all,
+                    text: AppLocalizations.of(context)!.all,
                   ),
                   Tab(
-                    text: AppLocalizations.of(context).received,
+                    text: AppLocalizations.of(context)!.received,
                   ),
                   Tab(
-                    text: AppLocalizations.of(context).sent,
+                    text: AppLocalizations.of(context)!.sent,
                   ),
                 ],
               ),
@@ -974,7 +974,7 @@ class GridPosts extends StatelessWidget {
             }),
           )
         : Expanded(
-            child: Center(child: Text(AppLocalizations.of(context).noPosts)),
+            child: Center(child: Text(AppLocalizations.of(context)!.noPosts)),
           );
   }
 }

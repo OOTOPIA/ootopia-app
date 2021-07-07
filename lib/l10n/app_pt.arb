@@ -121,6 +121,17 @@
     "yourHaveInsufficientOOZToGive": "Você tem OOZ insuficiente para dar.",
     "dontShowThisMessageAgain": "Não mostrar esta mensagem novamente",
 
-    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Seu vídeo está sendo processado. Aguarde até que o processamento seja concluído."
+    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Seu vídeo está sendo processado. Aguarde até que o processamento seja concluído.",
+    "weEespectAndProtectYourPersonalData": "Respeitamos e protegemos seus dados pessoais.",
+    "checkHere": "Verifique aqui",
+    "ourPledgeForTransparencyAndHighEthicalStandards": " our pledge for transparency and high ethical standards.",
+
+    "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Enviado! \r\n\r\nSe este for seu e-mail, um link deve estar na sua caixa de entrada para que você possa atualizar sua senha.",
+    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recuperar senha\r\n\r\nInforme seu e-mail para iniciar o processo de recuperação de senha",
+    "pleaseEnterYourEmail": "Por favor, informe seu e-mail",
+    "changePassword": "Alterar senha",
+    "enterNewPassword": "Informe a nova senha",
+    "pleaseEnterYourPassword": "Por favor, informe sua senha",
+    "passwordsDontMatch": "Senhas não combinam"
 
 }

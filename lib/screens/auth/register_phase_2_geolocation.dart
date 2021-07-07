@@ -38,7 +38,7 @@ class _RegisterPhase2GeolocationPageState
   void _getLocation() {
     setState(() {
       geolocationErrorMessage = "";
-      geolocationMessage = AppLocalizations.of(context).pleaseWait;
+      geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
     });
     Geolocation.determinePosition().then((Position position) async {
       List<Placemark> placemarks =
@@ -56,13 +56,13 @@ class _RegisterPhase2GeolocationPageState
           widget.args['user'].addressLatitude = position.latitude;
           widget.args['user'].addressLongitude = position.longitude;
         } else {
-          geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
-          geolocationErrorMessage = AppLocalizations.of(context).weCouldntGetYourLocation;
+          geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
+          geolocationErrorMessage = AppLocalizations.of(context)!.weCouldntGetYourLocation;
         }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        geolocationMessage = AppLocalizations.of(context).failedToGetCurrentLocation;
+        geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
         geolocationErrorMessage = error.toString();
       });
     });
@@ -117,7 +117,7 @@ class _RegisterPhase2GeolocationPageState
                             bottom: GlobalConstants.of(context).spacingMedium,
                           ),
                           child: Text(
-                            AppLocalizations.of(context).thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts,
+                            AppLocalizations.of(context)!.thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
@@ -144,7 +144,7 @@ class _RegisterPhase2GeolocationPageState
                               bottom: GlobalConstants.of(context).spacingSmall,
                             ),
                             child: Text(
-                              geolocationErrorMessage + AppLocalizations.of(context).tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                              geolocationErrorMessage + AppLocalizations.of(context)!.tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.redAccent,
@@ -165,7 +165,7 @@ class _RegisterPhase2GeolocationPageState
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                AppLocalizations.of(context).getCurrentLocation,
+                                AppLocalizations.of(context)!.getCurrentLocation,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -199,7 +199,7 @@ class _RegisterPhase2GeolocationPageState
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              AppLocalizations.of(context).confirm,
+                              AppLocalizations.of(context)!.confirm,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

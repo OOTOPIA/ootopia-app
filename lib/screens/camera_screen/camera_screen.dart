@@ -331,7 +331,7 @@ class _CameraAppState extends State<CameraApp>
                   child: TryAgain(
                     requestPermissions,
                     messageText:
-                        AppLocalizations.of(context).youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
+                        AppLocalizations.of(context)!.youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
                   ),
                 ),
               ),

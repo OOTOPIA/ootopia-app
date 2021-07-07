@@ -84,7 +84,7 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
                 ),
                 IconButton(
                   icon: const Icon(Icons.fullscreen),
-                  tooltip: AppLocalizations.of(context).increaseVolumeBy10,
+                  tooltip: AppLocalizations.of(context)!.increaseVolumeBy10,
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                         PageRoute.Page.playerVideoFullScreen.route,

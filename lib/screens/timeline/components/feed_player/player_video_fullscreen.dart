@@ -133,7 +133,7 @@ class PlayerControls extends StatelessWidget {
                   // ),
                   IconButton(
                     icon: const Icon(Icons.fullscreen),
-                    tooltip: AppLocalizations.of(context).increaseVolumeBy10,
+                    tooltip: AppLocalizations.of(context)!.increaseVolumeBy10,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

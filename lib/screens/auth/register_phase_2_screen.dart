@@ -188,7 +188,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                           ),
                         ),
                         Text(
-                          AppLocalizations.of(context).dateOfBirth,
+                          AppLocalizations.of(context)!.dateOfBirth,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -219,7 +219,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(AppLocalizations.of(context).day),
+                                      .loginInputTheme(AppLocalizations.of(context)!.day),
                                   onChanged: (String text) {
                                     if (text.length == 2 &&
                                         int.parse(text) <= 31) {
@@ -243,7 +243,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(AppLocalizations.of(context).month),
+                                      .loginInputTheme(AppLocalizations.of(context)!.month),
                                   onChanged: (String text) {
                                     if (text.length == 2 &&
                                         int.parse(text) <= 12) {
@@ -273,7 +273,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                     }
                                   },
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(AppLocalizations.of(context).year),
+                                      .loginInputTheme(AppLocalizations.of(context)!.year),
                                 ),
                               ),
                             ),
@@ -304,7 +304,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              AppLocalizations.of(context).confirm,
+                              AppLocalizations.of(context)!.confirm,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -341,9 +341,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               setState(() {
                                 String year = _yearController.text;
                                 if (year.length < 4) {
-                                  birthdateValidationErrorMessage = AppLocalizations.of(context).pleaseEnterAValidBirthdateInFormat;
+                                  birthdateValidationErrorMessage = AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
                                 } else {
-                                  birthdateValidationErrorMessage = AppLocalizations.of(context).pleaseEnterAValidBirthdate;
+                                  birthdateValidationErrorMessage = AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
                                 }
                               });
                             }

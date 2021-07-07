@@ -169,7 +169,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return DialogConfirm(
-          textAlert: AppLocalizations.of(context).doYouReallyWantToDeleteYourPost,
+          textAlert: AppLocalizations.of(context)!.doYouReallyWantToDeleteYourPost,
           callbackConfirmAlertDialog: _deletePost,
         );
       },
@@ -335,7 +335,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       margin: EdgeInsets.all(2),
                       padding: EdgeInsets.only(top: 8, left: 6),
                       child: Text(
-                        AppLocalizations.of(context).slideToGiveAGratitudeReward,
+                        AppLocalizations.of(context)!.slideToGiveAGratitudeReward,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(
@@ -574,7 +574,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       Padding(
                         padding: EdgeInsets.only(bottom: 12, left: 12),
                         child: Text(
-                          this.post.commentsCount.toString() + " ${AppLocalizations.of(context).comments}",
+                          this.post.commentsCount.toString() + " ${AppLocalizations.of(context)!.comments}",
                           style:
                               TextStyle(color: Colors.black.withOpacity(0.4)),
                         ),
@@ -608,7 +608,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       Opacity(
                         opacity: .4,
                         child: Text(
-                          AppLocalizations.of(context).addAComment,
+                          AppLocalizations.of(context)!.addAComment,
                           style: TextStyle(),
                         ),
                       )
@@ -630,9 +630,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return GratitudeRewardDialog(
-          title: AppLocalizations.of(context).gratitudeReward,
+          title: AppLocalizations.of(context)!.gratitudeReward,
           message:
-              '${AppLocalizations.of(context).doYouConfirmSending} ${this.post.oozToTransfer.toStringAsFixed(2)} OOZ ${AppLocalizations.of(context).fromYourAccontToTheCreatorOfThisPost}',
+              '${AppLocalizations.of(context)!.doYouConfirmSending} ${this.post.oozToTransfer.toStringAsFixed(2)} OOZ ${AppLocalizations.of(context)!.fromYourAccontToTheCreatorOfThisPost}',
           onCheckChanged: (bool isChecked) {
             setState(() {
               dontAskIsChecked = isChecked;
@@ -712,7 +712,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           ),
           child: !_sendOOZIsLoading
               ? Text(
-                  AppLocalizations.of(context).send,
+                  AppLocalizations.of(context)!.send,
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -750,9 +750,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         _oozError = true;
-        _oozErrorMessage = AppLocalizations.of(context).anErrorHasOccurredTryAgain;
+        _oozErrorMessage = AppLocalizations.of(context)!.anErrorHasOccurredTryAgain;
         if (errorMessage == "INSUFFICIENT_BALANCE") {
-          _oozErrorMessage = AppLocalizations.of(context).yourHaveInsufficientOOZToGive;
+          _oozErrorMessage = AppLocalizations.of(context)!.yourHaveInsufficientOOZToGive;
         }
         showOOZErrorMessage();
       });
@@ -966,7 +966,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                 elevation: 0,
                 color: Color(0xff62c915),
                 child: Text(
-                  AppLocalizations.of(context).confirm,
+                  AppLocalizations.of(context)!.confirm,
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -986,7 +986,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                   elevation: 0,
                   color: Color(0xffd40016),
                   child: Text(
-                    AppLocalizations.of(context).cancel,
+                    AppLocalizations.of(context)!.cancel,
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -1023,7 +1023,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                 ),
                 Flexible(
                   child: Text(
-                    AppLocalizations.of(context).dontShowThisMessageAgain,
+                    AppLocalizations.of(context)!.dontShowThisMessageAgain,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.normal,

@@ -82,9 +82,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         appBar: CustomAppBar(
           selectedCommentsIds.length > 0
               ? selectedCommentsIds.length.toString() +
-                  " "+AppLocalizations.of(context).selected +
+                  " "+AppLocalizations.of(context)!.selected +
                   (selectedCommentsIds.length > 1 ? 's' : '')
-              : AppLocalizations.of(context).comments,
+              : AppLocalizations.of(context)!.comments,
           selectedCommentsIds.length > 0
               ? Icon(Icons.close)
               : Icon(Icons.chevron_left),
@@ -123,7 +123,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       style: TextStyle(color: Colors.black),
                       controller: _inputController,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).writeYourComment,
+                        labelText: AppLocalizations.of(context)!.writeYourComment,
                         hintStyle: TextStyle(color: Colors.black),
                         suffixIcon: newCommentLoading
                             ? Row(
@@ -182,7 +182,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             return Expanded(
               flex: 1,
               child: Center(
-                child: Text(AppLocalizations.of(context).noComment),
+                child: Text(AppLocalizations.of(context)!.noComment),
               ),
             );
           }
@@ -278,7 +278,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         return Expanded(
           flex: 1,
           child: Center(
-            child: Text(AppLocalizations.of(context).noComment),
+            child: Text(AppLocalizations.of(context)!.noComment),
           ),
         );
       },
@@ -386,20 +386,20 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            AppLocalizations.of(context).caution,
+            AppLocalizations.of(context)!.caution,
             style: Theme.of(context).textTheme.headline2,
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(AppLocalizations.of(context).commentsWillBePermanentlyRemoved,
+                Text(AppLocalizations.of(context)!.commentsWillBePermanentlyRemoved,
                     style: Theme.of(context).textTheme.bodyText2),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(AppLocalizations.of(context).cancel.toUpperCase()),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
               onPressed: () {
                 Navigator.of(context).pop();
               },

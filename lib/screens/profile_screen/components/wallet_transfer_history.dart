@@ -104,8 +104,8 @@ class TransactionItemWidget extends StatelessWidget {
                         padding: EdgeInsets.only(left: 8),
                         child: Text(
                           walletTransfer.origin == "video_like"
-                              ? AppLocalizations.of(context).gratitudeReward
-                              : AppLocalizations.of(context).transfer,
+                              ? AppLocalizations.of(context)!.gratitudeReward
+                              : AppLocalizations.of(context)!.transfer,
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -118,9 +118,9 @@ class TransactionItemWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(
                           walletTransfer.action == "sent"
-                              ? AppLocalizations.of(context).to +
+                              ? AppLocalizations.of(context)!.to +
                                   " ${(walletTransfer.otherUsername != null ? walletTransfer.otherUsername : "<vazio>")}"
-                              : AppLocalizations.of(context).from +
+                              : AppLocalizations.of(context)!.from +
                                   " ${(walletTransfer.fromPlatform ? "OOTOPIA" : (walletTransfer.otherUsername != null ? walletTransfer.otherUsername : "<vazio>"))}",
                           style: TextStyle(
                             fontSize: 14,

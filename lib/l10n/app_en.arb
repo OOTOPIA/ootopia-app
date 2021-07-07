@@ -127,6 +127,17 @@
     "dontShowThisMessageAgain": "Don't show this message again",
 
     "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Your video is being processed. Wait until processing is complete.",
+    "weEespectAndProtectYourPersonalData": "We respect and protect your personal data.",
+    "checkHere": "Check here",
+    "ourPledgeForTransparencyAndHighEthicalStandards": " our pledge for transparency and high ethical standards.",
+    
+    "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Sent! \r\n\r\nIf this is your email, a link should be in your inbox so you can update your password.",
+    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recover password\r\n\r\nPlease enter your email to start the password recovery process",
+    "pleaseEnterYourEmail": "Please enter your email",
+    "changePassword": "Change Password",
+    "enterNewPassword": "Enter new password",
+    "pleaseEnterYourPassword": "Please enter your password",
+    "passwordsDontMatch": "Passwords don't match",
 
     "@helloWorld": {
         "description": "A programmer greeting"

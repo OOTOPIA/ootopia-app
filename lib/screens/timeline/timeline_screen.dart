@@ -412,7 +412,7 @@ class _TimelinePageState extends State<TimelinePage>
       builder: (context, state) {
         if (state is InitialState) {
           return Center(
-            child: Text(AppLocalizations.of(context).initial),
+            child: Text(AppLocalizations.of(context)!.initial),
           );
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -488,7 +488,7 @@ class _TimelinePageState extends State<TimelinePage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                AppLocalizations.of(context).noPosts,
+                AppLocalizations.of(context)!.noPosts,
               ),
             ],
           ),
@@ -527,7 +527,7 @@ class NewVideoUploadedMessageBox extends StatelessWidget {
                     left: GlobalConstants.of(context).spacingSmall,
                   ),
                   child: Text(
-                    "Your video is being processed. Wait until processing is complete.",
+                    AppLocalizations.of(context)!.yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

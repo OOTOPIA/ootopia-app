@@ -73,7 +73,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                         ),
                         Text(
-                          AppLocalizations.of(context).regenerationGame,
+                          AppLocalizations.of(context)!.regenerationGame,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -94,7 +94,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                         ),
                         Text(
-                          AppLocalizations.of(context).setTheTimeForYourDailyLearningGoal,
+                          AppLocalizations.of(context)!.setTheTimeForYourDailyLearningGoal,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -129,7 +129,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              AppLocalizations.of(context).confirm,
+                              AppLocalizations.of(context)!.confirm,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

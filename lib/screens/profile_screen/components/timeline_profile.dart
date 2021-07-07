@@ -23,7 +23,7 @@ class TimelineScreenProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).publications),
+        title: Text(AppLocalizations.of(context)!.publications),
       ),
       body: ListPostProfileComponent(
           posts: this.args["posts"],
@@ -136,7 +136,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
       builder: (context, state) {
         if (state is InitialState) {
           return Center(
-            child: Text(AppLocalizations.of(context).initial),
+            child: Text(AppLocalizations.of(context)!.initial),
           );
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -206,7 +206,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                AppLocalizations.of(context).nothingData,
+                AppLocalizations.of(context)!.nothingData,
               ),
             ],
           ),
