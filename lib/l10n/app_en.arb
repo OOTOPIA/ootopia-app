@@ -129,7 +129,7 @@
     "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Your video is being processed. Wait until processing is complete.",
     "weEespectAndProtectYourPersonalData": "We respect and protect your personal data.",
     "checkHere": "Check here",
-    "ourPledgeForTransparencyAndHighEthicalStandards": " our pledge for transparency and high ethical standards.",
+    "ourPledgeForTransparencyAndHighEthicalStandards": "our pledge for transparency and high ethical standards.",
     
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Sent! \r\n\r\nIf this is your email, a link should be in your inbox so you can update your password.",
     "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recover password\r\n\r\nPlease enter your email to start the password recovery process",
@@ -139,6 +139,14 @@
     "pleaseEnterYourPassword": "Please enter your password",
     "passwordsDontMatch": "Passwords don't match",
 
+    "locationServicesAreDisabled": "Location services are disabled.",
+    "locationPermissionsArePermanentlyDeniedWeCannotRequestPermissionsGoToSettingsToEnableIt": "Location permissions are permanently denied, we cannot request permissions. Go to Settings to enable it.",
+    "locationPermissionsAreDenied": "Location permissions are denied.",
+    
+    "errorLoadinPosts": "error loading posts",
+    "erroLoadingProfile": "Erro loading profile",
+    "anErrorOccurredWhileSavingUserData": "An error occurred while saving user data.",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }

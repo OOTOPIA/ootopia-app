@@ -124,7 +124,7 @@
     "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Seu vídeo está sendo processado. Aguarde até que o processamento seja concluído.",
     "weEespectAndProtectYourPersonalData": "Respeitamos e protegemos seus dados pessoais.",
     "checkHere": "Verifique aqui",
-    "ourPledgeForTransparencyAndHighEthicalStandards": " our pledge for transparency and high ethical standards.",
+    "ourPledgeForTransparencyAndHighEthicalStandards": "nossa promessa de transparência e elevados padrões éticos.",
 
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Enviado! \r\n\r\nSe este for seu e-mail, um link deve estar na sua caixa de entrada para que você possa atualizar sua senha.",
     "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recuperar senha\r\n\r\nInforme seu e-mail para iniciar o processo de recuperação de senha",
@@ -132,6 +132,14 @@
     "changePassword": "Alterar senha",
     "enterNewPassword": "Informe a nova senha",
     "pleaseEnterYourPassword": "Por favor, informe sua senha",
-    "passwordsDontMatch": "Senhas não combinam"
+    "passwordsDontMatch": "Senhas não combinam",
+
+    "locationServicesAreDisabled": "Os serviços de localização estão desativados.",
+    "locationPermissionsArePermanentlyDeniedWeCannotRequestPermissionsGoToSettingsToEnableIt": "As permissões de localização são negadas permanentemente, não podemos solicitar permissões. Vá para Configurações para habilitá-lo.",
+    "locationPermissionsAreDenied": "As permissões de localização são negadas.",
+
+    "errorLoadinPosts": "erro ao carregar postagens",
+    "erroLoadingProfile": "Erro ao carregar perfil",
+    "anErrorOccurredWhileSavingUserData": "Ocorreu um erro ao salvar os dados do usuário."
 
 }

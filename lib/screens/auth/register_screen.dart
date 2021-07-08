@@ -325,7 +325,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 ),
                                                 new TextSpan(
                                                   text:
-                                                      '' + AppLocalizations.of(context)!.ourPledgeForTransparencyAndHighEthicalStandards,
+                                                      ' ' + AppLocalizations.of(context)!.ourPledgeForTransparencyAndHighEthicalStandards,
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.white,
