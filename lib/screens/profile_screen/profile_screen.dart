@@ -77,23 +77,24 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
 
-    _checkUserIsLoggedIn();
-    profileBloc = BlocProvider.of<UserBloc>(context);
-    walletBloc = BlocProvider.of<WalletBloc>(context);
-    getAppInfo();
-    _tabController = new TabController(length: 2, vsync: this);
-    _tabController.addListener(_setActiveTabIndex);
-    _tabControllerTransactions = new TabController(length: 3, vsync: this);
-    _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
-    this.trackingEvents.profileViewedAProfile(
-      widget.args == null || (widget.args != null && widget.args!["id"] == null)
-          ? AppLocalizations.of(context)!.profileOwnProfile
-          : AppLocalizations.of(context)!.profileViewedAProfile,
-      {"profileId": userId},
-    );
+      _checkUserIsLoggedIn();
+      profileBloc = BlocProvider.of<UserBloc>(context);
+      walletBloc = BlocProvider.of<WalletBloc>(context);
+      getAppInfo();
+      _tabController = new TabController(length: 2, vsync: this);
+      _tabController.addListener(_setActiveTabIndex);
+      _tabControllerTransactions = new TabController(length: 3, vsync: this);
+      _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
+      this.trackingEvents.profileViewedAProfile(
+        widget.args == null || (widget.args != null && widget.args!["id"] == null)
+            ? AppLocalizations.of(context)!.profileOwnProfile
+            : AppLocalizations.of(context)!.profileViewedAProfile,
+        {"profileId": userId},
+      );
+    });
+    super.initState();
   }
 
   void _setActiveTabIndex() {

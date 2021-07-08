@@ -84,7 +84,7 @@
 
     "publications": "Publications",
     "initial": "Initial",
-    "nothingData": "nothing data :(",
+    "noPosts": "no posts :(",
 
     "gratitudeReward": "Gratitude reward",
     "transfer": "transfer",
@@ -110,15 +110,15 @@
 
     "increaseVolumeBy10": "Increase volume by 10",
 
-    "selected": "selected",
+    "selected": "Selected",
     "comments": "Comments",
     "writeYourComment": "Write your comment",
     "noComment": "No comment",
     "caution": "Caution",
     "commentsWillBePermanentlyRemoved": "Comments will be permanently removed.",
-    "cancel": "cancel",
+    "cancel": "Cancel",
     "doYouReallyWantToDeleteYourPost": "Do you really want to delete your post?",
-    "slideToGiveAGratitudeReward": "slide to give a gratitude reward",
+    "slideToGiveAGratitudeReward": "Slide to give a gratitude reward",
     "addAComment":"Add a comment",
     "doYouConfirmSending": "Do you confirm sending",
     "fromYourAccontToTheCreatorOfThisPost": "from your accont to the creator of this post?",
@@ -127,9 +127,9 @@
     "dontShowThisMessageAgain": "Don't show this message again",
 
     "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Your video is being processed. Wait until processing is complete.",
-    "weEespectAndProtectYourPersonalData": "We respect and protect your personal data.",
+    "weRespectAndProtectYourPersonalData": "We respect and protect your personal data.",
     "checkHere": "Check here",
-    "ourPledgeForTransparencyAndHighEthicalStandards": " our pledge for transparency and high ethical standards.",
+    "ourPledgeForTransparencyAndHighEthicalStandards": "our pledge for transparency and high ethical standards.",
     
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Sent! \r\n\r\nIf this is your email, a link should be in your inbox so you can update your password.",
     "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recover password\r\n\r\nPlease enter your email to start the password recovery process",
@@ -139,6 +139,14 @@
     "pleaseEnterYourPassword": "Please enter your password",
     "passwordsDontMatch": "Passwords don't match",
 
+    "locationServicesAreDisabled": "Location services are disabled.",
+    "locationPermissionsArePermanentlyDeniedWeCannotRequestPermissionsGoToSettingsToEnableIt": "Location permissions are permanently denied, we cannot request permissions. Go to Settings to enable it.",
+    "locationPermissionsAreDenied": "Location permissions are denied.",
+    
+    "errorLoadinPosts": "error loading posts",
+    "erroLoadingProfile": "Erro loading profile",
+    "anErrorOccurredWhileSavingUserData": "An error occurred while saving user data.",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }
