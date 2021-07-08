@@ -4,12 +4,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
-import 'package:ootopia_app/bloc/user/user_bloc.dart';
-import 'package:ootopia_app/bloc/wallet_transfer/wallet_transfer_bloc.dart';
-import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
+
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
@@ -169,7 +166,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return DialogConfirm(
-          textAlert: AppLocalizations.of(context)!.doYouReallyWantToDeleteYourPost,
+          textAlert:
+              AppLocalizations.of(context)!.doYouReallyWantToDeleteYourPost,
           callbackConfirmAlertDialog: _deletePost,
         );
       },
@@ -196,67 +194,72 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _blocBuilder() {
+    print(GlobalConstants.of(context).spacingNormal);
     return BlocBuilder<TimelinePostBloc, TimelinePostState>(
         builder: (context, state) {
       return Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () => _goToProfile(),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: this.post.photoUrl != null
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage("${this.post.photoUrl}"),
-                              radius: 16,
-                            )
-                          : CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  "assets/icons_profile/profile.png"),
-                              radius: 16,
-                            ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          this.post.username,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Visibility(
-                          visible: (this.post.city != null &&
-                                  this.post.city!.isNotEmpty) ||
-                              (this.post.state != null &&
-                                  this.post.state!.isNotEmpty),
-                          child: Text(
-                            '${this.post.city}' +
-                                (this.post.state != null &&
-                                        this.post.state!.isNotEmpty
-                                    ? ', ${this.post.state}'
-                                    : ''),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: GlobalConstants.of(context).spacingNormal),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => _goToProfile(),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: this.post.photoUrl != null
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage("${this.post.photoUrl}"),
+                                radius: 16,
+                              )
+                            : CircleAvatar(
+                                backgroundImage: AssetImage(
+                                    "assets/icons_profile/profile.png"),
+                                radius: 16,
+                              ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            this.post.username,
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Visibility(
+                            visible: (this.post.city != null &&
+                                    this.post.city!.isNotEmpty) ||
+                                (this.post.state != null &&
+                                    this.post.state!.isNotEmpty),
+                            child: Text(
+                              '${this.post.city}' +
+                                  (this.post.state != null &&
+                                          this.post.state!.isNotEmpty
+                                      ? ', ${this.post.state}'
+                                      : ''),
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              PopupMenuPost(
-                isAnabled: isUserOwnsPost,
-                callbackReturnPopupMenu: _popupMenuReturn,
-                post: post,
-              )
-            ],
+                PopupMenuPost(
+                  isAnabled: isUserOwnsPost,
+                  callbackReturnPopupMenu: _popupMenuReturn,
+                  post: post,
+                )
+              ],
+            ),
           ),
           Container(
             width: double.infinity,
@@ -271,13 +274,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               color: Color(0xff1A4188),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '#',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    'Learning Tags',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -286,8 +293,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     scrollDirection: Axis.horizontal,
                     itemCount: this.post.tags.length,
                     itemBuilder: (ctx, index) {
-                      return HashtagName(
-                        hashtagName: this.post.tags[index],
+                      return Opacity(
+                        opacity: 0.8,
+                        child: HashtagName(
+                          hashtagName: this.post.tags[index],
+                        ),
                       );
                     },
                   ),
@@ -335,7 +345,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       margin: EdgeInsets.all(2),
                       padding: EdgeInsets.only(top: 8, left: 6),
                       child: Text(
-                        AppLocalizations.of(context)!.slideToGiveAGratitudeReward,
+                        AppLocalizations.of(context)!
+                            .slideToGiveAGratitudeReward,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(
@@ -574,7 +585,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       Padding(
                         padding: EdgeInsets.only(bottom: 12, left: 12),
                         child: Text(
-                          this.post.commentsCount.toString() + " ${AppLocalizations.of(context)!.comments}",
+                          this.post.commentsCount.toString() +
+                              " ${AppLocalizations.of(context)!.comments}",
                           style:
                               TextStyle(color: Colors.black.withOpacity(0.4)),
                         ),
@@ -750,9 +762,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         _oozError = true;
-        _oozErrorMessage = AppLocalizations.of(context)!.anErrorHasOccurredTryAgain;
+        _oozErrorMessage =
+            AppLocalizations.of(context)!.anErrorHasOccurredTryAgain;
         if (errorMessage == "INSUFFICIENT_BALANCE") {
-          _oozErrorMessage = AppLocalizations.of(context)!.yourHaveInsufficientOOZToGive;
+          _oozErrorMessage =
+              AppLocalizations.of(context)!.yourHaveInsufficientOOZToGive;
         }
         showOOZErrorMessage();
       });
@@ -1050,17 +1064,14 @@ class HashtagName extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(3),
       padding: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.white,
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
       child: Center(
         child: Text(
-          this.hashtagName,
-          style: TextStyle(fontSize: 12, color: Colors.white),
+          "#$hashtagName",
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ),
     );
