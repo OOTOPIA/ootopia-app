@@ -79,7 +79,7 @@
 
     "publications": "Publicações",
     "initial": "Inicial",
-    "nothingData": "nada dados :(",
+    "noPosts": "sem publicações :(",
 
     "gratitudeReward": "Recompensa de gratidão",
     "transfer": "transferir",
@@ -93,7 +93,7 @@
     "wallet": "Carteira",
     "errorOnGetPosts": "Erro ao obter postagens",
     "addMoney": "Adicionar dinheiro",
-    "sendMoney": "Send money",
+    "sendMoney": "Enviar dinheiro",
     "balanceIn": "Saldo em",
     "all": "Tudo",
     "received": "Recebido",
@@ -103,16 +103,16 @@
 
     "increaseVolumeBy10": "Aumentar o volume em 10",
 
-    "selected": "selecionado",
+    "selected": "Selecionado",
     "comments": "Comentários",
     "writeYourComment": "Escreva seu comentário",
     "noComment": "Nenhum comentário",
     "caution": "Atenção",
     "commentsWillBePermanentlyRemoved": "Os comentários serão removidos permanentemente.",
-    "cancel": "cancelar",
+    "cancel": "Cancelar",
 
     "doYouReallyWantToDeleteYourPost": "Deseja realmente deletar seu post ?",
-    "slideToGiveAGratitudeReward": "deslize para dar uma recompensa de gratidão",
+    "slideToGiveAGratitudeReward": "Deslize para dar uma recompensa de gratidão",
     "addAComment":"Adicione um comentário",
     "doYouConfirmSending": "Você confirma o envio",
     "fromYourAccontToTheCreatorOfThisPost": "de sua conta para o criador deste post?",
@@ -122,7 +122,7 @@
     "dontShowThisMessageAgain": "Não mostrar esta mensagem novamente",
 
     "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Seu vídeo está sendo processado. Aguarde até que o processamento seja concluído.",
-    "weEespectAndProtectYourPersonalData": "Respeitamos e protegemos seus dados pessoais.",
+    "weRespectAndProtectYourPersonalData": "Respeitamos e protegemos seus dados pessoais.",
     "checkHere": "Verifique aqui",
     "ourPledgeForTransparencyAndHighEthicalStandards": "nossa promessa de transparência e elevados padrões éticos.",
 
