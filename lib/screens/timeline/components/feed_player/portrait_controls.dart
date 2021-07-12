@@ -12,11 +12,13 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
     required this.flickMultiManager,
     required this.flickManager,
     required this.url,
+    this.onDoubleTap,
   }) : super(key: key);
 
   final FlickMultiManager flickMultiManager;
   final FlickManager flickManager;
   final String url;
+  final Function? onDoubleTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +45,17 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
             ),
           ),
           Expanded(
-            child: FlickToggleSoundAction(
-              toggleMute: () {
-                flickMultiManager.toggleMute();
-                if (flickManager.flickControlManager!.isMute) {
-                  setTimelineVideosMuted();
-                } else {
-                  setTimelineVideosUnmuted();
-                }
-                displayManager.handleShowPlayerControls();
-              },
-              child: FlickSeekVideoAction(
-                child: Center(child: FlickVideoBuffer()),
+            child: Container(
+              child: GestureDetector(
+                onTap: () {
+                  flickManager.flickDisplayManager!.handleVideoTap();
+                  print("tapped one time!!");
+                },
+                onDoubleTap: () {
+                  if (this.onDoubleTap != null) {
+                    this.onDoubleTap!();
+                  }
+                },
               ),
             ),
           ),
