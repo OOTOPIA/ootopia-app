@@ -31,16 +31,18 @@ class _RegisterPhase2GeolocationPageState
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _getLocation(context);
+    });
     super.initState();
-    _getLocation();
   }
 
-  void _getLocation() {
+  void _getLocation(BuildContext context) {
     setState(() {
       geolocationErrorMessage = "";
       geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
     });
-    Geolocation.determinePosition().then((Position position) async {
+    Geolocation.determinePosition(context).then((Position position) async {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       setState(() {
@@ -133,7 +135,7 @@ class _RegisterPhase2GeolocationPageState
                             decoration: GlobalConstants.of(context)
                                 .loginInputTheme(geolocationMessage),
                             onEditingComplete: () =>
-                                Geolocation.determinePosition(),
+                                Geolocation.determinePosition(context),
                           ),
                         ),
                         Visibility(
@@ -174,7 +176,7 @@ class _RegisterPhase2GeolocationPageState
                               ),
                             ),
                             onPressed: () {
-                              _getLocation();
+                              _getLocation(context);
                             },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(

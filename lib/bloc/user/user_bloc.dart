@@ -12,6 +12,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -52,6 +53,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield LoadedPostsProfileSucessState(posts);
     } catch (_) {
       yield LoadPostsProfileErrorState("error loading posts");
+      // AppLocalizations.of(context)!.errorLoadinPosts
     }
   }
 
@@ -61,6 +63,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield GetProfileLoadedSucessState(profile: profile);
     } catch (_) {
       yield GetProfileErrorState(message: "Erro loading profile");
+      // AppLocalizations.of(context)!.erroLoadingProfile
     }
   }
 
@@ -77,10 +80,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         print("error when upload photo: ${err.toString()}");
         yield UpdateUserErrorState(
             message: "An error occurred while saving user data.");
+            // AppLocalizations.of(context)!.anErrorOccurredWhileSavingUserData
       }
     } catch (_) {
       yield UpdateUserErrorState(
           message: "An error occurred while saving user data.");
+          // AppLocalizations.of(context)!.anErrorOccurredWhileSavingUserData
     }
   }
 

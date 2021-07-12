@@ -206,7 +206,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                AppLocalizations.of(context)!.nothingData,
+                AppLocalizations.of(context)!.noPosts,
               ),
             ],
           ),

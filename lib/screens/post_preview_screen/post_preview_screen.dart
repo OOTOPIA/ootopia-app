@@ -80,12 +80,12 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     });
   }
 
-  void _getLocation() {
+  void _getLocation(context) {
     setState(() {
       geolocationErrorMessage = "";
       geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
     });
-    Geolocation.determinePosition().then((Position position) async {
+    Geolocation.determinePosition(context).then((Position position) async {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       setState(() {
@@ -200,6 +200,9 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _getLocation(context);
+    });
     super.initState();
 
     postBloc = BlocProvider.of<PostBloc>(context);
@@ -261,7 +264,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     }
 
     _getTags();
-    _getLocation();
   }
 
   @override
@@ -478,7 +480,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                           ),
                         ),
                         onPressed: () {
-                          _getLocation();
+                          _getLocation(context);
                         },
                         splashColor: Colors.black54,
                         shape: RoundedRectangleBorder(

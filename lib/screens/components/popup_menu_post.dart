@@ -56,6 +56,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+      child: Icon(Icons.more_vert),
       itemBuilder: (_) => <PopupMenuItem<String>>[
         PopupMenuItem<String>(
           child: Opacity(
