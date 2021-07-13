@@ -587,111 +587,355 @@ class TermsWidget extends StatelessWidget {
             flex: 7,
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "USE TERMS",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                  TextTitleTerms(
+                      text: AppLocalizations.of(context)!.termsOfUse),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TextTitleTerms(
+                      text: AppLocalizations.of(context)!.termsOfUsePrimary),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!.termsOfUseSecond),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  RichText(
+                    text: new TextSpan(
+                      children: [
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseThird,
+                          style: new TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                            },
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseFourth,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseFifth,
+                          style: new TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                            },
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseSixth,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                  RichText(
+                    text: new TextSpan(
+                      children: [
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseSeventh,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseEighth,
+                          style: new TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                            },
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!.termsOfUseNinth,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                  TextTitleTerms(
+                    text: AppLocalizations.of(context)!
+                        .transparencyAndRespectForYourData,
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  RichText(
+                    text: new TextSpan(
+                      children: [
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!
+                              .transparencyAndRespectForYourDataPrimary,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!
+                              .transparencyAndRespectForYourDataSecond,
+                          style: new TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                            },
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!
+                              .transparencyAndRespectForYourDataThird,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                        new TextSpan(
+                          text: AppLocalizations.of(context)!
+                              .transparencyAndRespectForYourDataFourth,
+                          style: new TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                            },
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                  TextTitleTerms(
+                    text: AppLocalizations.of(context)!.impressum,
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                  TextTerms(text: AppLocalizations.of(context)!.corporateName),
+                  TextTerms(text: AppLocalizations.of(context)!.address),
+                  TextTerms(text: AppLocalizations.of(context)!.localization),
+                  TextTerms(text: AppLocalizations.of(context)!.cnpj),
+                  TextTerms(text: AppLocalizations.of(context)!.contact),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTitleTerms(
+                    text: AppLocalizations.of(context)!.theOOTOPIAService,
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .theOOTOPIAServicePrimary),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .theOOTOPIAServiceSecond),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    "These Terms of Use (or “Terms”) govern your use of OOTOPIA, except where we expressly state that separate terms (and not these) apply, and provide information about the OOTOPIA Service (the “Service”), outlined below. When you create an OOTOPIA account or use OOTOPIA, you agree to these terms.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.theOOTOPIAServiceThird),
+                  SizedBox(
+                    height: 16,
                   ),
-                  // SizedBox(
-                  //   height: 16,
-                  // ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .theOOTOPIAServiceFourth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.theOOTOPIAServiceFifth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.theOOTOPIAServiceSixth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .theOOTOPIAServiceSeventh),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .theOOTOPIAServiceEighth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTitleTerms(
+                      text: AppLocalizations.of(context)!.yourCommitments),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.yourCommitmentsPrimary),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.yourCommitmentsSecond),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!.yourCommitmentsThird),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.yourCommitmentsFourth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!.yourCommitmentsFifth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!.yourCommitmentsSixth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.yourCommitmentsSeventh),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.yourCommitmentsEighth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!.yourCommitmentsNinth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!.yourCommitmentsTenth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsEleventh),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text:
+                          AppLocalizations.of(context)!.yourCommitmentsTwelfth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsThirteenth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsFourteenth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsFifteenth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsSixteenth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsSeventeenth),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  TextTerms(
+                      text: AppLocalizations.of(context)!
+                          .yourCommitmentsEighteenth),
+                  SizedBox(
+                    height: 16,
+                  ),
                 ],
               ),
             ),
@@ -788,6 +1032,51 @@ class TermsWidget extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class TextTitleTerms extends StatelessWidget {
+  final String text;
+  const TextTitleTerms({
+    required this.text,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          this.text,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TextTerms extends StatelessWidget {
+  final String text;
+  const TextTerms({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      this.text,
+      style: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
       ),
     );
   }
