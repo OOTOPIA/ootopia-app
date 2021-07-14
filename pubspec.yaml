@@ -105,6 +105,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/icons_profile/
+    - assets/videos/
     - .env
 
   # To add assets to your application, add an assets section, like this:
