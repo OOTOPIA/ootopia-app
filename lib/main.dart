@@ -27,6 +27,7 @@ import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.d
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/recover_password/recover_password_screen.dart';
 import 'package:ootopia_app/screens/reset_password/reset_password_screen.dart';
+import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
@@ -213,7 +214,8 @@ class MainPage extends HookWidget {
     PageRoute.Page.menuProfile: (args) => MenuProfile(),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
-    PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args)
+    PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
+    PageRoute.Page.splashScreen: (args) => SplashScreen(args),
   };
 
   @override
@@ -223,7 +225,7 @@ class MainPage extends HookWidget {
       onWillPop: () async => !(await navigatorKey.currentState!.maybePop()),
       child: Navigator(
         key: navigatorKey,
-        initialRoute: PageRoute.Page.timelineScreen.route,
+        initialRoute: PageRoute.Page.splashScreen.route,
         onGenerateRoute: (settings) {
           final pageName = settings.name;
 

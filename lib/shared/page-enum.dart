@@ -17,7 +17,8 @@ enum Page {
   menuProfile,
   postPreviewScreen,
   recoverPasswordScreen,
-  resetPasswordScreen
+  resetPasswordScreen,
+  splashScreen,
 }
 
 extension PageRoute on Page {
