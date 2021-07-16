@@ -124,8 +124,11 @@ class _RegisterPageState extends State<RegisterPage> {
             }
           }
         },
-        child: Scaffold(
-          body: _blocBuilder(),
+        child: WillPopScope(
+          onWillPop: () => backButtonPage(),
+          child: Scaffold(
+            body: _blocBuilder(),
+          ),
         ),
       ),
     );
