@@ -21,6 +21,7 @@ import 'package:ootopia_app/screens/timeline/components/post_timeline_controller
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'image_post_timeline_component.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
@@ -328,16 +329,18 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20)),
                   ),
-                  child: FlickMultiPlayer(
-                    userId: (user != null ? user!.id : null),
-                    postId: this.post.id,
-                    url: this.post.videoUrl,
-                    flickMultiManager: widget.flickMultiManager,
-                    image: this.post.thumbnailUrl,
-                    onDoubleTapVideo: () {
-                      this._likePost(false, true);
-                    },
-                  ),
+                  child: this.post.type == "image" ? 
+                      ImagePostTimeline(image: this.post.imageUrl as String)
+                    : FlickMultiPlayer(
+                      userId: (user != null ? user!.id : null),
+                      postId: this.post.id,
+                      url: this.post.videoUrl,
+                      flickMultiManager: widget.flickMultiManager,
+                      image: this.post.thumbnailUrl,
+                      onDoubleTapVideo: () {
+                        this._likePost(false, true);
+                      },
+                    ),
                 ),
                 Align(
                   alignment: Alignment.center,
