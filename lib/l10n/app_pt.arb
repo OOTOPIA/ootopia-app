@@ -14,6 +14,8 @@
 
     "regenerationGame": "Jogo de regeneração",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
+    "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
+
     "confirm": "Confirme",
 
     "pleaseWait": "Por favor, aguarde...",

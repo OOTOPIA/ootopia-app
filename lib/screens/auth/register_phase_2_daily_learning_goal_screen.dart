@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
@@ -5,6 +7,7 @@ import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
 class RegisterPhase2DailyLearningGoalPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -20,10 +23,20 @@ class _RegisterPhase2DailyLearningGoalPageState
   final _formKey = GlobalKey<FormState>();
   double _learningGoalRating = 10;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  late VideoPlayerController _videoPlayerController;
+  bool _isNotLearningGoalRating = false;
+  Timer? timerOpacity;
 
   @override
   void initState() {
     super.initState();
+    _videoPlayerController =
+        VideoPlayerController.asset('assets/videos/ootopia_learning.mp4')
+          ..initialize().then((value) {
+            _videoPlayerController.play();
+            setState(() {});
+          });
+
     setState(() {
       if (widget.args['user'].dailyLearningGoalInMinutes != null &&
           widget.args['user'].dailyLearningGoalInMinutes >= 10) {
@@ -31,6 +44,12 @@ class _RegisterPhase2DailyLearningGoalPageState
             widget.args['user'].dailyLearningGoalInMinutes.toDouble();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _videoPlayerController.dispose();
   }
 
   @override
@@ -82,19 +101,90 @@ class _RegisterPhase2DailyLearningGoalPageState
                             top: GlobalConstants.of(context).spacingNormal,
                             bottom: GlobalConstants.of(context).spacingLarge,
                           ),
-                          child: SizedBox(
-                            height: 200,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                shape: BoxShape.rectangle,
-                                color: Colors.grey,
-                              ),
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _videoPlayerController.value.isPlaying
+                                      ? _videoPlayerController.pause()
+                                      : _videoPlayerController.play();
+
+                                  timerOpacity?.cancel();
+                                  timerOpacity = Timer(
+                                      Duration(seconds: 1),
+                                      () =>
+                                          setState(() => timerOpacity = null));
+                                });
+                              },
+                              child: Container(
+                                  height:
+                                      _videoPlayerController.value.size.height,
+                                  width:
+                                      _videoPlayerController.value.size.width,
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child:
+                                            VideoPlayer(_videoPlayerController),
+                                      ),
+                                      AnimatedOpacity(
+                                        opacity: timerOpacity != null ? 1 : 0.0,
+                                        duration: Duration(milliseconds: 200),
+                                        child: timerOpacity != null
+                                            ? Center(
+                                                child: Icon(
+                                                  (_videoPlayerController
+                                                          .value.isPlaying
+                                                      ? Icons
+                                                          .pause_circle_outline
+                                                      : Icons
+                                                          .play_circle_outline),
+                                                  size: 64,
+                                                  color: Colors.black87,
+                                                ),
+                                              )
+                                            : IgnorePointer(
+                                                child: Center(
+                                                  child: Icon(
+                                                    (_videoPlayerController
+                                                            .value.isPlaying
+                                                        ? Icons
+                                                            .pause_circle_outline
+                                                        : Icons
+                                                            .play_circle_outline),
+                                                    size: 64,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                              ),
+                                      )
+                                    ],
+                                  )),
                             ),
                           ),
                         ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //     top: GlobalConstants.of(context).spacingNormal,
+                        //     bottom: GlobalConstants.of(context).spacingLarge,
+                        //   ),
+                        //   child: SizedBox(
+                        //     height: 200,
+                        //     child: Container(
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(12),
+                        //         shape: BoxShape.rectangle,
+                        //         color: Colors.green,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+
                         Text(
-                          AppLocalizations.of(context)!.setTheTimeForYourDailyLearningGoal,
+                          AppLocalizations.of(context)!
+                              .setTheTimeForYourDailyLearningGoal,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
@@ -108,18 +198,37 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                           child: Slider(
                             value: _learningGoalRating,
-                            min: 10,
+                            min: 00,
                             max: 60,
-                            divisions: 5,
+                            divisions: 6,
                             onChanged: (newRating) {
                               setState(() {
                                 _learningGoalRating = newRating;
+                                if (_learningGoalRating < 10) {
+                                  _isNotLearningGoalRating = true;
+                                } else {
+                                  _isNotLearningGoalRating = false;
+                                }
                               });
                             },
                             label:
                                 "${_learningGoalRating.toStringAsFixed(0)} min.",
                           ),
                         ),
+                        _isNotLearningGoalRating
+                            ? SizedBox(
+                                height:
+                                    GlobalConstants.of(context).spacingLarge,
+                              )
+                            : Container(),
+                        _isNotLearningGoalRating
+                            ? Text(
+                                AppLocalizations.of(context)!
+                                    .isNotLearningGoalRating,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              )
+                            : Container(),
                         SizedBox(
                           height: GlobalConstants.of(context).spacingLarge,
                         ),
