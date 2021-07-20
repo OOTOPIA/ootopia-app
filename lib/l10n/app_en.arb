@@ -18,6 +18,7 @@
 
     "regenerationGame": "Regeneration game",
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
+    "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
 
 
