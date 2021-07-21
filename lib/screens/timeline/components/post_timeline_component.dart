@@ -329,18 +329,19 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20)),
                   ),
-                  child: this.post.type == "image" ? 
-                      ImagePostTimeline(image: this.post.imageUrl as String)
-                    : FlickMultiPlayer(
-                      userId: (user != null ? user!.id : null),
-                      postId: this.post.id,
-                      url: this.post.videoUrl,
-                      flickMultiManager: widget.flickMultiManager,
-                      image: this.post.thumbnailUrl,
-                      onDoubleTapVideo: () {
-                        this._likePost(false, true);
-                      },
-                    ),
+                  child: this.post.type == "image"
+                      ? ImagePostTimeline(
+                          image: this.post.imageUrl as String,
+                          onDoubleTapVideo: () => this._likePost(false, true),
+                        )
+                      : FlickMultiPlayer(
+                          userId: (user != null ? user!.id : null),
+                          postId: this.post.id,
+                          url: this.post.videoUrl,
+                          flickMultiManager: widget.flickMultiManager,
+                          image: this.post.thumbnailUrl,
+                          onDoubleTapVideo: () => this._likePost(false, true),
+                        ),
                 ),
                 Align(
                   alignment: Alignment.center,

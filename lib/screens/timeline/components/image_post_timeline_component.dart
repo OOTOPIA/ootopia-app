@@ -7,9 +7,11 @@ class ImagePostTimeline extends StatefulWidget {
   const ImagePostTimeline({
     Key? key,
     required this.image,
+    this.onDoubleTapVideo,
   }) : super(key: key);
 
   final String image;
+  final Function? onDoubleTapVideo;
 
   @override
   _ImagePostTimeline createState() => _ImagePostTimeline();
@@ -19,7 +21,7 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
   @override
   Widget build(BuildContext context) {
     Image image = Image.network(
-      "https://images.unsplash.com/photo-1533422902779-aff35862e462?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aG9yaXpvbnRhbHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
+      widget.image,
       fit: BoxFit.cover,
     );
     Size imageSize = Size(100.toDouble(), 100.toDouble());
@@ -34,35 +36,33 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
       },
     ));
 
-    return Container(
-      height: imageSize.height > MediaQuery.of(context).size.height * .7
-          ? MediaQuery.of(context).size.height * .6
-          : imageSize.height,
-      width: imageSize.width,
-      decoration: BoxDecoration(
-          color: Color(0xff1A4188),
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          image: DecorationImage(
-            fit: imageSize.height > MediaQuery.of(context).size.height * .7
-                ? BoxFit.fill
-                : BoxFit.fitWidth,
-            alignment: FractionalOffset.center,
-            image: NetworkImage(
-                "https://images.unsplash.com/photo-1533422902779-aff35862e462?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aG9yaXpvbnRhbHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"),
-          )),
-      // constraints: BoxConstraints(
-      //   maxHeight: imageSize.height > (MediaQuery.of(context).size.height / 2)
-      //       ? (MediaQuery.of(context).size.height / 2)
-      //       : imageSize.height - 48,
-      // ),
-      // child: Center(
-      //     child:
-      //         ClipRRect(borderRadius: BorderRadius.circular(20), child: image)),
+    return GestureDetector(
+      onDoubleTap: () {
+        if (this.widget.onDoubleTapVideo != null) {
+          this.widget.onDoubleTapVideo!();
+        }
+      },
+      child: Container(
+        height: imageSize.height > MediaQuery.of(context).size.height * .7
+            ? MediaQuery.of(context).size.height * .6
+            : imageSize.height,
+        width: imageSize.width,
+        decoration: BoxDecoration(
+            color: Color(0xff1A4188),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            image: DecorationImage(
+              fit: imageSize.height > MediaQuery.of(context).size.height * .7
+                  ? BoxFit.fitWidth
+                  : BoxFit.fill,
+              alignment: FractionalOffset.center,
+              image: NetworkImage(widget.image),
+            )),
+      ),
     );
   }
 }
