@@ -1,4 +1,3 @@
-import 'package:ootopia_app/data/BD/database.dart';
 import 'package:ootopia_app/data/BD/base_model.dart';
 import 'package:sqflite/sqflite.dart';
 
