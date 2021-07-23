@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -108,13 +109,16 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           postData.addressNumber =
               placemark.name != null ? placemark.name! : "";
         } else {
-          geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
-          geolocationErrorMessage = AppLocalizations.of(context)!.weCouldntGetYourLocation2;
+          geolocationMessage =
+              AppLocalizations.of(context)!.failedToGetCurrentLocation;
+          geolocationErrorMessage =
+              AppLocalizations.of(context)!.weCouldntGetYourLocation2;
         }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
+        geolocationMessage =
+            AppLocalizations.of(context)!.failedToGetCurrentLocation;
         geolocationErrorMessage = error.toString();
       });
     });
@@ -141,7 +145,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 child: ListBody(
                   children: <Widget>[
                     Text(
-                        AppLocalizations.of(context)!.doYouWantToDiscardTheChanges,
+                        AppLocalizations.of(context)!
+                            .doYouWantToDiscardTheChanges,
                         style: Theme.of(context).textTheme.bodyText2),
                   ],
                 ),
@@ -166,8 +171,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     if (_processingVideoInBackgroundError) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              AppLocalizations.of(context)!.thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
+          content: Text(AppLocalizations.of(context)!
+              .thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
         ),
       );
       return;
@@ -182,7 +187,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     if (_selectedTags.length < 1) {
       setState(() {
-        tagsErrorMessage = AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
+        tagsErrorMessage =
+            AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
       });
       return;
     }
@@ -251,8 +257,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
         if (_readyToSendPost && this.mounted) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                  AppLocalizations.of(context)!.thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
+              content: Text(AppLocalizations.of(context)!
+                  .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
             ),
           );
           setState(() {
@@ -281,26 +287,68 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          ),
           title: Text(
             AppLocalizations.of(context)!.newPost,
-            style: TextStyle(color: Colors.black),
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xffC0D9E8),
-                  Color(0xffffffff),
-                ],
-              ),
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
             ),
           ),
+          actions: [
+            TextButton(
+                onPressed: () {},
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.check,
+                      color: Color(0xff018F9C),
+                    ),
+                    SizedBox(
+                      width: GlobalConstants.of(context).spacingSmall,
+                    ),
+                    Text(
+                      "Publish",
+                      style: TextStyle(
+                        color: Color(0xff018F9C),
+                      ),
+                    ),
+                    SizedBox(
+                      width: GlobalConstants.of(context).spacingNormal,
+                    ),
+                  ],
+                ))
+          ],
+          // title: Text(
+          //   AppLocalizations.of(context)!.newPost,
+          //   style: TextStyle(color: Colors.black),
+          // ),
+          // iconTheme: IconThemeData(
+          //   color: Colors.black, //change your color here
+          // ),
+          // elevation: 0,
+          // flexibleSpace: Container(
+          //   decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //       begin: Alignment.topCenter,
+          //       end: Alignment.bottomCenter,
+          //       colors: [
+          //         Color(0xffC0D9E8),
+          //         Color(0xffffffff),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ),
         body: BlocListener<PostBloc, PostState>(
           listener: (context, state) {
@@ -504,7 +552,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     ),
                     child: Text(
                       geolocationErrorMessage +
-                          AppLocalizations.of(context)!.tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                          AppLocalizations.of(context)!
+                              .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 12,
@@ -580,7 +629,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     child: TryAgain(
                       _getTags,
                       showOnlyButton: true,
-                      buttonText: AppLocalizations.of(context)!.errorLoadingTagsTryAgain,
+                      buttonText: AppLocalizations.of(context)!
+                          .errorLoadingTagsTryAgain,
                       buttonBackgroundColor: Colors.white,
                       messageTextColor: Colors.white,
                       buttonTextColor: Colors.black,
