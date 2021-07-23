@@ -31,6 +31,7 @@ import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
+import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'screens/profile_screen/components/menu_profile.dart';
@@ -74,22 +75,42 @@ class ExpensesApp extends StatefulWidget {
   _ExpensesAppState createState() => _ExpensesAppState();
 }
 
-class _ExpensesAppState extends State<ExpensesApp> {
+class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //aqui
     trackingEvents.trackingOpenedApp();
+    WidgetsBinding.instance!.addObserver(this);
+    AppUsageTime.instance.startTimer();
   }
 
   @override
   void dispose() {
-    //aqui
     trackingEvents.trackingClosedApp();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        AppUsageTime.instance.startTimer();
+        break;
+      case AppLifecycleState.inactive:
+        AppUsageTime.instance.stopTimer();
+        //print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        //print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        //print("app in detached");
+        break;
+    }
   }
 
   @override

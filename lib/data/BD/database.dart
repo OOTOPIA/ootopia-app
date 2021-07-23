@@ -1,7 +1,5 @@
 import 'package:ootopia_app/data/BD/base_model.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'dart:async';
 import './watch_video/watch_video_model.dart';
 import 'package:path/path.dart';

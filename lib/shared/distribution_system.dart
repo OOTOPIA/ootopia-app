@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OOzDistributionSystem {
   static OOzDistributionSystem? instance;
 
-  final OOTOPIADatabase dbHelper = OOTOPIADatabase.init();
   final WatchVideoProvider watchVideoProvider = WatchVideoProvider();
 
   String prefsUploadingWatchedVideo = "uploading_watched_posts";

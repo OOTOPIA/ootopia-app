@@ -16,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late VideoPlayerController _videoPlayerController;
+  bool videoIsFinished = false;
 
   @override
   void initState() {
@@ -28,7 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (!_videoPlayerController.value.isPlaying &&
                     _videoPlayerController.value.isInitialized &&
                     (_videoPlayerController.value.duration ==
-                        _videoPlayerController.value.position)) {
+                        _videoPlayerController.value.position) &&
+                    !videoIsFinished) {
+                  videoIsFinished = true;
                   Navigator.of(context).pushReplacementNamed(
                     PageRoute.Page.timelineScreen.route,
                   );
