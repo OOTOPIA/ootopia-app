@@ -164,48 +164,48 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        // theme: ThemeData(
-        //   accentColor: Color(0xff0253e7),
-        //   textTheme: TextTheme(
-        //     headline1: TextStyle(fontSize: 72.0, fontWeigsdht: FontWeight.bold),
-        //     headline2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        //     headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),s
-        //     bodyText2: TextStyle(
-        //       fontSize: 14.0,
-        //       fontFamily: 'Hind',
-        //       color: Colors.black,
-        //     ),
-        //     subtitle1: TextStyle(
-        //       fontSize: 16,
-        //       fontWeight: FontWeight.bold,
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        //   inputDecorationTheme: InputDecorationTheme(
-        //     border: OutlineInputBorder(
-        //       borderSide: BorderSide(color: Colors.black54, width: 1.5),
-        //       borderRadius: BorderRadius.circular(100),
-        //     ),
-        //     hintStyle: TextStyle(color: Colors.white),
-        //     filled: true,
-        //     fillColor: Colors.white12,
-        //     contentPadding: EdgeInsets.only(
-        //       left: GlobalConstants.of(context).spacingNormal,
-        //       bottom: GlobalConstants.of(context).spacingSmall,
-        //       top: GlobalConstants.of(context).spacingSmall,
-        //       right: GlobalConstants.of(context).spacingNormal,
-        //     ),
-        //     focusedBorder: OutlineInputBorder(
-        //       borderSide:
-        //           BorderSide(color: Theme.of(context).accentColor, width: 1.5),
-        //       borderRadius: BorderRadius.circular(100),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderSide: BorderSide(color: Colors.black54, width: 1.5),
-        //       borderRadius: BorderRadius.circular(100),
-        //     ),
-        //   ),
-        // ),
+        theme: ThemeData(
+          accentColor: Color(0xff0253e7),
+          textTheme: TextTheme(
+            headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+            headline2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+            bodyText2: TextStyle(
+              fontSize: 14.0,
+              fontFamily: 'Hind',
+              color: Colors.black,
+            ),
+            subtitle1: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black54, width: 1.5),
+              borderRadius: BorderRadius.circular(100),
+            ),
+            hintStyle: TextStyle(color: Colors.white),
+            filled: true,
+            fillColor: Colors.white12,
+            contentPadding: EdgeInsets.only(
+              left: GlobalConstants.of(context).spacingNormal,
+              bottom: GlobalConstants.of(context).spacingSmall,
+              top: GlobalConstants.of(context).spacingSmall,
+              right: GlobalConstants.of(context).spacingNormal,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).accentColor, width: 1.5),
+              borderRadius: BorderRadius.circular(100),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black54, width: 1.5),
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ),
         home: MainPage(),
       ),
     );

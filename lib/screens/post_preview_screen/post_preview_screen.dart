@@ -298,6 +298,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
             },
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
           ),
+          titleSpacing: 0,
           title: Text(
             AppLocalizations.of(context)!.newPost,
             style: TextStyle(
@@ -395,18 +396,22 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     child: Stack(
                       alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: Transform(
-                            alignment: Alignment.center,
-                            child: FlickVideoPlayer(
-                              preferredDeviceOrientationFullscreen: [],
-                              flickManager: flickManager,
-                              flickVideoWithControls: FlickVideoWithControls(
-                                controls: null,
+                        Padding(
+                          padding: EdgeInsets.all(
+                              GlobalConstants.of(context).spacingNormal),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(21)),
+                            child: Transform(
+                              alignment: Alignment.center,
+                              child: FlickVideoPlayer(
+                                preferredDeviceOrientationFullscreen: [],
+                                flickManager: flickManager,
+                                flickVideoWithControls: FlickVideoWithControls(
+                                  controls: null,
+                                ),
                               ),
+                              transform: Matrix4.rotationY(mirror),
                             ),
-                            transform: Matrix4.rotationY(mirror),
                           ),
                         ),
                         Row(
@@ -414,7 +419,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.all(
-                                  GlobalConstants.of(context).spacingSmall),
+                                  GlobalConstants.of(context).spacingMedium),
                               padding: EdgeInsets.all(2),
                               decoration: BoxDecoration(
                                 color: Colors.black38,
@@ -445,28 +450,34 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     ),
                   ),
                 ),
-                TextFormField(
-                  controller: _descriptionInputController,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.normal),
-                  autofocus: false,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.writeADescription,
-                    hintStyle: TextStyle(
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: GlobalConstants.of(context).spacingNormal),
+                  child: TextFormField(
+                    controller: _descriptionInputController,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.normal),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black12, width: 1.5),
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.writeADescription,
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.normal),
+                      border: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.black12, width: 1.5),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.black12, width: 1.5),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).accentColor, width: 1.5),
+                      ),
                     ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black12, width: 1.5),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).accentColor, width: 1.5),
-                    ),
+                    onChanged: (String val) {},
                   ),
-                  onChanged: (String val) {},
                 ),
                 SizedBox(
                   height: GlobalConstants.of(context).spacingNormal,
@@ -670,38 +681,38 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 SizedBox(
                   height: GlobalConstants.of(context).spacingNormal,
                 ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xff73d778),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: FlatButton(
-                    child: Padding(
-                      padding: EdgeInsets.all(
-                        GlobalConstants.of(context).spacingNormal,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.sendPost,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    onPressed: () => _sendPost(),
-                    splashColor: Colors.black54,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xff73d778),
-                        width: 2,
-                        style: BorderStyle.solid,
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     color: Color(0xff73d778),
+                //     borderRadius: BorderRadius.circular(50),
+                //   ),
+                //   child: FlatButton(
+                //     child: Padding(
+                //       padding: EdgeInsets.all(
+                //         GlobalConstants.of(context).spacingNormal,
+                //       ),
+                //       child: Text(
+                //         AppLocalizations.of(context)!.sendPost,
+                //         style: TextStyle(
+                //           fontSize: 16,
+                //           fontWeight: FontWeight.bold,
+                //           color: Colors.black,
+                //         ),
+                //       ),
+                //     ),
+                //     onPressed: () => _sendPost(),
+                //     splashColor: Colors.black54,
+                //     shape: RoundedRectangleBorder(
+                //       side: BorderSide(
+                //         color: Color(0xff73d778),
+                //         width: 2,
+                //         style: BorderStyle.solid,
+                //       ),
+                //       borderRadius: BorderRadius.circular(50),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -710,77 +721,3 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     });
   }
 }
-
-// class PlayerControls extends StatelessWidget {
-//   const PlayerControls(
-//       {Key key, this.flickMultiManager, this.flickManager, this.filePath})
-//       : super(key: key);
-
-//   final FlickMultiManager flickMultiManager;
-//   final FlickManager flickManager;
-//   final String filePath;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.transparent,
-//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.end,
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: <Widget>[
-//           FlickAutoHideChild(
-//             showIfVideoNotInitialized: false,
-//             child: Align(
-//               alignment: Alignment.topRight,
-//               child: Container(
-//                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-//                 decoration: BoxDecoration(
-//                   color: Colors.black38,
-//                   borderRadius: BorderRadius.circular(20),
-//                 ),
-//                 child: FlickLeftDuration(),
-//               ),
-//             ),
-//           ),
-//           Expanded(
-//             child: Container(),
-//           ),
-//           Align(
-//             alignment: Alignment.bottomRight,
-//             child: FlickAutoHideChild(
-//               autoHide: false,
-//               showIfVideoNotInitialized: false,
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.end,
-//                 children: <Widget>[
-//                   Container(
-//                     padding: EdgeInsets.all(2),
-//                     decoration: BoxDecoration(
-//                       color: Colors.black38,
-//                       borderRadius: BorderRadius.circular(20),
-//                     ),
-//                     child: FlickSoundToggle(
-//                       toggleMute: () => flickMultiManager.toggleMute(),
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.only(
-//                       left: GlobalConstants.of(context).spacingNormal,
-//                     ),
-//                     child: FlickFullScreenToggle(
-//                       toggleFullscreen: () {
-//                         flickManager.flickControlManager.toggleFullscreen();
-//                       },
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
