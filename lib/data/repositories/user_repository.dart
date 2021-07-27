@@ -5,12 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class UserRepository {
   Future<Profile> getProfile(String id);
   Future<User> getMyAccountDetails();
   Future<User> updateUser(User user, List<String> tagsIds);
+  Future recordTimeUserUsedApp(int timeInMilliseconds);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -121,6 +123,25 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       }
     } catch (error) {
       throw Exception('Failed to update user ' + error.toString());
+    }
+  }
+
+  @override
+  Future recordTimeUserUsedApp(int timeInMilliseconds) async {
+    try {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        return;
+      }
+
+      await ApiClient.api().post(
+        "users/usage-time",
+        data: {
+          "timeInMilliseconds": timeInMilliseconds,
+        },
+      );
+    } catch (e) {
+      print('Error send user usage time: $e');
     }
   }
 }
