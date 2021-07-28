@@ -463,17 +463,20 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       hintText: AppLocalizations.of(context)!.writeADescription,
                       hintStyle: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.normal),
-                      border: UnderlineInputBorder(
+                      border: OutlineInputBorder(
                         borderSide:
-                            BorderSide(color: Colors.black12, width: 1.5),
+                            BorderSide(color: Colors.black54, width: .25),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      enabledBorder: UnderlineInputBorder(
+                      focusedBorder: OutlineInputBorder(
                         borderSide:
-                            BorderSide(color: Colors.black12, width: 1.5),
+                            BorderSide(color: Color(0xff707070), width: .25),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme.of(context).accentColor, width: 1.5),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xff707070), width: .25),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                     onChanged: (String val) {},
@@ -583,15 +586,16 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     selectedColor: Colors.blue,
                     selectedItemsTextStyle: TextStyle(color: Colors.white),
                     searchable: true,
+                    searchHint: "Hello",
                     searchTextStyle: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.normal,
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(40)),
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
                       border: Border.all(
-                        color: Colors.black12,
-                        width: 2,
+                        color: Color(0xff707070),
+                        width: .25,
                       ),
                     ),
                     buttonIcon: Icon(

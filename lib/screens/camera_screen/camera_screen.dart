@@ -1,22 +1,24 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_crop/image_crop.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:photo_manager/photo_manager.dart';
+
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:path/path.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-import 'package:permission_handler/permission_handler.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class CameraApp extends StatefulWidget {
   @override
@@ -330,8 +332,8 @@ class _CameraAppState extends State<CameraApp>
                   width: 300,
                   child: TryAgain(
                     requestPermissions,
-                    messageText:
-                        AppLocalizations.of(context)!.youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
+                    messageText: AppLocalizations.of(context)!
+                        .youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
                   ),
                 ),
               ),
@@ -458,6 +460,33 @@ class CameraScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CameraApp(),
+    );
+  }
+}
+
+class CropImage extends StatefulWidget {
+  File? imageFile;
+  CropImage({
+    Key? key,
+    this.imageFile,
+  }) : super(key: key);
+
+  @override
+  _CropImageState createState() => _CropImageState();
+}
+
+class _CropImageState extends State<CropImage> {
+  final cropKey = GlobalKey<CropState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black, padding: const EdgeInsets.all(20.0), child: null,
+      // Crop(
+      //   key: cropKey,
+      //   image: Image.file(widget.imageFile),
+      //   aspectRatio: 4.0 / 3.0,
+      // ),
     );
   }
 }
