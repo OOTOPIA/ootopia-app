@@ -4,14 +4,11 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -243,7 +240,6 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future getVideoFromGallery(BuildContext context) async {
-    await controller!.dispose();
     final pickedFile = await picker.getVideo(source: ImageSource.gallery);
     indexCamera = 1;
     controller = null;
@@ -253,12 +249,70 @@ class _CameraAppState extends State<CameraApp>
       if (pickedFile != null) {
         Navigator.of(context).pushNamed(
           PageRoute.Page.postPreviewScreen.route,
-          arguments: {
-            "filePath": pickedFile.path,
-          },
+          arguments: {"filePath": pickedFile.path, "type": "video"},
         );
       }
     });
+  }
+
+  Future getImageFromGallery(BuildContext context) async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    indexCamera = 1;
+    controller = null;
+    setCamera();
+
+    setState(() {
+      if (pickedFile != null) {
+        Navigator.of(context).pushNamed(
+          PageRoute.Page.postPreviewScreen.route,
+          arguments: {"filePath": pickedFile.path, "type": "image"},
+        );
+      }
+    });
+  }
+
+  Future _selectImageOrVideo() async {
+    await controller!.dispose();
+
+    switch (await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text(
+              'O que deseja postar',
+              style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            ),
+            titleTextStyle: null,
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () => getVideoFromGallery(context),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 8),
+                      child: Icon(Icons.video_camera_back),
+                    ),
+                    Text('Video'),
+                  ],
+                ),
+              ),
+              SimpleDialogOption(
+                  onPressed: () => getImageFromGallery(context),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, right: 10),
+                        child: Icon(Icons.image),
+                      ),
+                      Text('Image'),
+                    ],
+                  )),
+            ],
+          );
+        })) {
+    }
   }
 
   Widget renderButtonsFlashCamera() {
@@ -439,7 +493,7 @@ class _CameraAppState extends State<CameraApp>
                   GestureDetector(
                     onTap: () {
                       if (!controller!.value.isRecordingVideo) {
-                        getVideoFromGallery(context);
+                        _selectImageOrVideo();
                       }
                     },
                     child: lastVideoThumbnail == null
