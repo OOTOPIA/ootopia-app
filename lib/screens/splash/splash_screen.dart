@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -20,25 +22,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    _videoPlayerController =
-        VideoPlayerController.asset('assets/videos/ootopia_splash.mp4')
-          ..initialize().then((value) {
-            _videoPlayerController.play();
-            _videoPlayerController.addListener(() {
-              setState(() {
-                if (!_videoPlayerController.value.isPlaying &&
-                    _videoPlayerController.value.isInitialized &&
-                    (_videoPlayerController.value.duration ==
-                        _videoPlayerController.value.position) &&
-                    !videoIsFinished) {
-                  videoIsFinished = true;
-                  Navigator.of(context).pushReplacementNamed(
-                    PageRoute.Page.homeScreen.route,
-                  );
-                }
-              });
-            });
-          });
+    _videoPlayerController = VideoPlayerController.asset(
+        'assets/videos/ootopia_splash.mp4')
+      ..initialize()
+      ..addListener(() {
+        Timer(Duration(milliseconds: 300), () => _videoPlayerController.play());
+
+        setState(() {
+          if (!_videoPlayerController.value.isPlaying &&
+              _videoPlayerController.value.isInitialized &&
+              (_videoPlayerController.value.duration ==
+                  _videoPlayerController.value.position) &&
+              !videoIsFinished) {
+            videoIsFinished = true;
+            Navigator.of(context).pushReplacementNamed(
+              PageRoute.Page.homeScreen.route,
+            );
+          }
+        });
+      });
 
     super.initState();
   }
