@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -51,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var authStore = Provider.of<AuthStore>(context);
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -62,10 +65,11 @@ class _LoginPageState extends State<LoginPage> {
             );
           } else if (state is LoadedSucessState) {
             print("LOGGED!!!!!");
+            authStore.setUserIsLogged();
             if (widget.args != null &&
                 widget.args!['returnToPageWithArgs'] != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route,
+                PageRoute.Page.homeScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {
                   "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
@@ -73,8 +77,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             } else {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                  PageRoute.Page.timelineScreen.route,
-                  ModalRoute.withName('/'));
+                  PageRoute.Page.homeScreen.route, ModalRoute.withName('/'));
             }
           }
         },
@@ -135,7 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)!.helloWIfNotNowThenWhenorld,
+                                  AppLocalizations.of(context)!
+                                      .helloWIfNotNowThenWhenorld,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
@@ -152,10 +156,13 @@ class _LoginPageState extends State<LoginPage> {
                                     keyboardType: TextInputType.emailAddress,
                                     autofocus: true,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(AppLocalizations.of(context)!.email),
+                                        .loginInputTheme(
+                                            AppLocalizations.of(context)!
+                                                .email),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return AppLocalizations.of(context)!.pleaseEnterYourEmail;
+                                        return AppLocalizations.of(context)!
+                                            .pleaseEnterYourEmail;
                                       }
                                       return null;
                                     },
@@ -168,7 +175,9 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _passwordController,
                                     obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(AppLocalizations.of(context)!.password)
+                                        .loginInputTheme(
+                                            AppLocalizations.of(context)!
+                                                .password)
                                         .copyWith(
                                           suffixIcon: GestureDetector(
                                             child: Icon(
@@ -186,7 +195,8 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return AppLocalizations.of(context)!.pleaseEnterYourPassword;
+                                        return AppLocalizations.of(context)!
+                                            .pleaseEnterYourPassword;
                                       }
                                       return null;
                                     },
@@ -209,7 +219,8 @@ class _LoginPageState extends State<LoginPage> {
                                           .Page.recoverPasswordScreen.route);
                                     },
                                     child: Text(
-                                      AppLocalizations.of(context)!.iForgotMyPassword,
+                                      AppLocalizations.of(context)!
+                                          .iForgotMyPassword,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 16,

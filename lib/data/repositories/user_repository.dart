@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -13,6 +15,7 @@ abstract class UserRepository {
   Future<User> getMyAccountDetails();
   Future<User> updateUser(User user, List<String> tagsIds);
   Future recordTimeUserUsedApp(int timeInMilliseconds);
+  Future<DailyGoalStatsModel?> getDailyGoalStats();
 }
 
 const Map<String, String> API_HEADERS = {
@@ -142,6 +145,32 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       );
     } catch (e) {
       print('Error send user usage time: $e');
+    }
+  }
+
+  @override
+  Future<DailyGoalStatsModel?> getDailyGoalStats() async {
+    try {
+      print("PEGA PEGA PEGA");
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        print("NOT LOGGED TO GET DAILY GOAL STATS");
+        return null;
+      }
+      User user = await getCurrentUser();
+
+      Response res = await ApiClient.api().get(
+        "users/${user.id}/daily-goal-stats",
+      );
+      print("ESSE É O RESULTADO >>>>>>>>>>>>>> ${res.data}");
+      if (res.statusCode != 200) {
+        throw Exception(res.data);
+      }
+      var result = DailyGoalStatsModel.fromJson(res.data);
+      print("DAILY STATS $result");
+      return result;
+    } catch (e) {
+      throw Exception('Failed to get daily goal stats ' + e.toString());
     }
   }
 }
