@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -54,6 +56,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
   String tagsErrorMessage = "";
+  Image? image;
+  Size? imageSize;
 
   PostCreate postData = PostCreate();
 
@@ -228,7 +232,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     flickManager.flickControlManager!.mute();
 
-    if (widget.args["mirroredVideo"] == "true") {
+    if (widget.args["mirrored"] == "true") {
       mirror = math.pi;
       _processingVideoInBackground = true;
       FlutterFFmpeg _ffmpeg = new FlutterFFmpeg();
@@ -269,6 +273,10 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       });
     }
 
+    if (widget.args["type"] == "image") {
+      _getSizeImage();
+    }
+
     _getTags();
   }
 
@@ -279,6 +287,28 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
+  }
+
+  void _getSizeImage() {
+    this.image = Image.file(
+      File(widget.args["filePath"]),
+      fit: BoxFit.cover,
+    );
+    this.imageSize = Size(100.toDouble(), 100.toDouble());
+
+    Completer<ui.Image> completer = Completer<ui.Image>();
+    this
+        .image!
+        .image
+        .resolve(ImageConfiguration())
+        .addListener(ImageStreamListener(
+      (ImageInfo image, bool synchronousCall) {
+        this.imageSize =
+            Size(image.image.width.toDouble(), image.image.height.toDouble());
+        completer.complete(image.image);
+        setState(() {});
+      },
+    ));
   }
 
   @override
@@ -308,7 +338,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           ),
           actions: [
             TextButton(
-                onPressed: () {},
+                onPressed: () => _sendPost(),
                 child: Row(
                   children: [
                     Icon(
@@ -392,60 +422,90 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 Container(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * .6),
+                      maxHeight: widget.args["type"] == "video"
+                          ? MediaQuery.of(context).size.height * .6
+                          : MediaQuery.of(context).size.height * .5,
+                    ),
                     child: Stack(
                       alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.all(
                               GlobalConstants.of(context).spacingNormal),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(21)),
-                            child: Transform(
-                              alignment: Alignment.center,
-                              child: FlickVideoPlayer(
-                                preferredDeviceOrientationFullscreen: [],
-                                flickManager: flickManager,
-                                flickVideoWithControls: FlickVideoWithControls(
-                                  controls: null,
+                          child: widget.args["type"] == "video"
+                              ? ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(21)),
+                                  child: Transform(
+                                    alignment: Alignment.center,
+                                    child: FlickVideoPlayer(
+                                      preferredDeviceOrientationFullscreen: [],
+                                      flickManager: flickManager,
+                                      flickVideoWithControls:
+                                          FlickVideoWithControls(
+                                        controls: null,
+                                      ),
+                                    ),
+                                    transform: Matrix4.rotationY(mirror),
+                                  ),
+                                )
+                              : Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff000000),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Image.file(
+                                    File(widget.args["filePath"]),
+                                    fit: this.imageSize!.height >
+                                            imageSize!.width
+                                        ? BoxFit.fitHeight
+                                        : BoxFit.fitWidth,
+                                  ),
                                 ),
-                              ),
-                              transform: Matrix4.rotationY(mirror),
-                            ),
-                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.all(
-                                  GlobalConstants.of(context).spacingMedium),
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.black38,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: SizedBox(
-                                width: 28,
-                                height: 28,
-                                child: IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  icon: Icon(
-                                      flickManager.flickControlManager!.isMute
-                                          ? Icons.volume_off
-                                          : Icons.volume_up,
-                                      size: 20),
-                                  onPressed: () => {
-                                    setState(() {
-                                      flickMultiManager.toggleMute();
-                                    }),
-                                  },
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        widget.args["type"] == "video"
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.all(
+                                        GlobalConstants.of(context)
+                                            .spacingMedium),
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black38,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: SizedBox(
+                                      width: 28,
+                                      height: 28,
+                                      child: IconButton(
+                                        padding: EdgeInsets.all(0),
+                                        icon: Icon(
+                                            flickManager
+                                                    .flickControlManager!.isMute
+                                                ? Icons.volume_off
+                                                : Icons.volume_up,
+                                            size: 20),
+                                        onPressed: () => {
+                                          setState(() {
+                                            flickMultiManager.toggleMute();
+                                          }),
+                                        },
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -581,59 +641,63 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 ),
                 Visibility(
                   visible: !_errorOnGetTags && !_isLoading,
-                  child: MultiSelectDialogField<InterestsTags?>(
-                    listType: MultiSelectListType.CHIP,
-                    selectedColor: Colors.blue,
-                    selectedItemsTextStyle: TextStyle(color: Colors.white),
-                    searchable: true,
-                    searchHint: "Hello",
-                    searchTextStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      border: Border.all(
-                        color: Color(0xff707070),
-                        width: .25,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: GlobalConstants.of(context).spacingNormal),
+                    child: MultiSelectDialogField<InterestsTags?>(
+                      listType: MultiSelectListType.CHIP,
+                      selectedColor: Colors.blue,
+                      selectedItemsTextStyle: TextStyle(color: Colors.white),
+                      searchable: true,
+                      searchHint: "Hello",
+                      searchTextStyle: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
                       ),
-                    ),
-                    buttonIcon: Icon(
-                      Icons.add,
-                      color: Colors.black54,
-                    ),
-                    title: Text(
-                      AppLocalizations.of(context)!.selectAtLeast1Tag,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.normal,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(
+                          color: Color(0xff707070),
+                          width: .25,
+                        ),
                       ),
-                    ),
-                    buttonText: Text(
-                      AppLocalizations.of(context)!.selectTags,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.normal,
+                      buttonIcon: Icon(
+                        Icons.add,
+                        color: Colors.black54,
                       ),
-                    ),
-                    items: _items,
-                    onConfirm: (values) {
-                      _selectedTags = [];
-                      setState(() {
-                        values.forEach((v) {
-                          _selectedTags.add(v!);
-                        });
-                        if (_selectedTags.length >= 1) {
-                          tagsErrorMessage = "";
-                        }
-                      });
-                    },
-                    chipDisplay: MultiSelectChipDisplay(
-                      onTap: (value) {
+                      title: Text(
+                        AppLocalizations.of(context)!.selectAtLeast1Tag,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      buttonText: Text(
+                        AppLocalizations.of(context)!.selectTags,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      items: _items,
+                      onConfirm: (values) {
+                        _selectedTags = [];
                         setState(() {
-                          _selectedTags.remove(value);
+                          values.forEach((v) {
+                            _selectedTags.add(v!);
+                          });
+                          if (_selectedTags.length >= 1) {
+                            tagsErrorMessage = "";
+                          }
                         });
                       },
+                      chipDisplay: MultiSelectChipDisplay(
+                        onTap: (value) {
+                          setState(() {
+                            _selectedTags.remove(value);
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),

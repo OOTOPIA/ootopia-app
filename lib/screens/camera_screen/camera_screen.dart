@@ -196,7 +196,8 @@ class _CameraAppState extends State<CameraApp>
             PageRoute.Page.postPreviewScreen.route,
             arguments: {
               "filePath": filePath,
-              "mirroredVideo": mirroredVideo.toString()
+              "mirroredVideo": mirroredVideo.toString(),
+              "type": "video",
             },
           );
         });
@@ -293,6 +294,41 @@ class _CameraAppState extends State<CameraApp>
     );
   }
 
+  void _takePhoto() async {
+    if (!controller!.value.isTakingPicture) {
+      if (!controller!.value.isInitialized ||
+          controller!.value.isRecordingVideo) {
+        return null;
+      }
+
+      await controller!.takePicture().then((file) {
+        if (mounted) setState(() {});
+        if (file != null) {
+          GallerySaver.saveImage(file.path).then((res) async {
+            String filePath = file.path;
+            bool mirroredPhoto = false;
+            if (indexCamera == 1) {
+              mirroredPhoto = true;
+            }
+            imageFile = file;
+            Navigator.of(this.context).pushNamed(
+              PageRoute.Page.postPreviewScreen.route,
+              arguments: {
+                "filePath": filePath,
+                "mirrored": mirroredPhoto.toString(),
+                "type": "image"
+              },
+            );
+          });
+        }
+      });
+      setState(() {});
+
+      _animController.forward();
+      print("take photo");
+    }
+  }
+
   void _tapDown(details) {
     if (!controller!.value.isRecordingVideo) {
       startVideoRecording();
@@ -382,6 +418,7 @@ class _CameraAppState extends State<CameraApp>
                           height: 36,
                         ),
                   GestureDetector(
+                    onTap: _takePhoto,
                     onLongPressStart: _tapDown,
                     onLongPressEnd: (details) {
                       _tapUp(context);
@@ -480,13 +517,15 @@ class _CropImageState extends State<CropImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black, padding: const EdgeInsets.all(20.0), child: null,
-      // Crop(
-      //   key: cropKey,
-      //   image: Image.file(widget.imageFile),
-      //   aspectRatio: 4.0 / 3.0,
-      // ),
+    return SafeArea(
+      child: Container(
+        color: Colors.black, padding: const EdgeInsets.all(20.0), child: null,
+        // Crop(
+        //   key: cropKey,
+        //   image: Image.file(widget.imageFile),
+        //   aspectRatio: 4.0 / 3.0,
+        // ),
+      ),
     );
   }
 }
