@@ -16,6 +16,7 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
@@ -23,6 +24,8 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
+import 'package:ootopia_app/screens/home/home_screen.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/recover_password/recover_password_screen.dart';
@@ -31,8 +34,11 @@ import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/theme/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'screens/profile_screen/components/menu_profile.dart';
 import 'screens/timeline/timeline_screen.dart';
@@ -85,6 +91,10 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
     AppUsageTime.instance.startTimer();
+    AppTheme.instance(context).addListener(() {
+      setState(() {}); //To update theme if user toggle
+    });
+    AppTheme.instance(context).checkIsDarkMode();
   }
 
   @override
@@ -156,57 +166,29 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
         ),
       ],
-      child: MaterialApp(
-        supportedLocales: L10n.all,
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
+      child: MultiProvider(
+        providers: [
+          Provider<AuthStore>(
+            create: (_) => AuthStore(),
+          ),
+          Provider<HomeStore>(
+            create: (_) => HomeStore(),
+          ),
+          Provider<TimelineStore>(
+            create: (_) => TimelineStore(),
+          ),
         ],
-        theme: ThemeData(
-          accentColor: Color(0xff0253e7),
-          textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            headline2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-            bodyText2: TextStyle(
-              fontSize: 14.0,
-              fontFamily: 'Hind',
-              color: Colors.black,
-            ),
-            subtitle1: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black54, width: 1.5),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            hintStyle: TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.white12,
-            contentPadding: EdgeInsets.only(
-              left: GlobalConstants.of(context).spacingNormal,
-              bottom: GlobalConstants.of(context).spacingSmall,
-              top: GlobalConstants.of(context).spacingSmall,
-              right: GlobalConstants.of(context).spacingNormal,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).accentColor, width: 1.5),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black54, width: 1.5),
-              borderRadius: BorderRadius.circular(100),
-            ),
-          ),
+        child: MaterialApp(
+          supportedLocales: L10n.all,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          theme: AppTheme.instance(context).light,
+          home: MainPage(),
         ),
-        home: MainPage(),
       ),
     );
   }
@@ -214,6 +196,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
 
 class MainPage extends HookWidget {
   final Map<PageRoute.Page, Widget Function(dynamic)> _fragments = {
+    PageRoute.Page.homeScreen: (args) => HomeScreen(args: args),
     PageRoute.Page.timelineScreen: (args) => TimelinePage(args),
     PageRoute.Page.timelineProfileScreen: (args) =>
         TimelineScreenProfileScreen(args),

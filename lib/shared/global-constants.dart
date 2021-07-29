@@ -13,6 +13,7 @@ class GlobalConstants extends InheritedWidget {
   final double spacingMedium = 32;
   final double spacingLarge = 48;
   final double spacingXL = 64;
+  final double screenHorizontalSpace = 22;
 
   final double logoHeight = 82;
 
