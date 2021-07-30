@@ -207,6 +207,15 @@
     "accomplished": "Accomplished",
     "oozPartialBalance": "OOz Partial Balance",
     
+    "congratulations": "Congratulations!",
+    "youMetYourDailyGoalToHelpRegenerateThePlanet": "You met your daily goal to help regenerate the planet",
+    "totalBalance": "Total Balance",
+    "nextStepIsToHelpMeetYourCityGoal": "Next step is to help meet your city goal.",
+    "nextStepIsToHelpMeetYourGlobalGoal": "Next step is to help meet your global goal.",
+    "keepMakingOOTOPIAAlive": "Keep making OOTOPIA alive!",
+    "goOn": "Go On!",
+    "letIsCelebrate": "Let's celebrate!",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }
