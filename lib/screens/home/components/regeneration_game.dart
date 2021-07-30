@@ -7,6 +7,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegenerationGame extends StatefulWidget {
   RegenerationGame({Key? key}) : super(key: key);
@@ -251,12 +252,41 @@ class _RegenerationGameState extends State<RegenerationGame> {
       );
 
   Widget gameIconProgress(String type) {
+    goToCelebrationCity() async {//for tests
+      await Navigator.of(context).pushNamed(
+        PageRoute.Page.celebration.route,
+        arguments: {
+          "name": "Belo Horizonte!",
+          "goal": "city",
+          "balance": "17,25"
+        },
+      );
+    }
+
+    goToCelebrationGLobal() async {//for tests
+      await Navigator.of(context).pushNamed(
+        PageRoute.Page.celebration.route,
+        arguments: {
+          "name": "Luis Reis",
+          "goal": "global",
+          "balance": "17,25"
+        },
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         setState(() {
           if (authStore.currentUser != null) {
             detailedGoalType = type;
-            showDetailedGoal = true;
+            if (detailedGoalType == 'city') {
+              goToCelebrationCity();
+            } else if (detailedGoalType == 'global')  {
+              goToCelebrationGLobal();
+            }
+            else {
+              showDetailedGoal = true;
+            }
           }
         });
       },
