@@ -22,7 +22,6 @@ import 'components/menu_profile.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:package_info/package_info.dart';
 import "package:collection/collection.dart";
@@ -78,7 +77,6 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-
       _checkUserIsLoggedIn();
       profileBloc = BlocProvider.of<UserBloc>(context);
       walletBloc = BlocProvider.of<WalletBloc>(context);
@@ -88,7 +86,8 @@ class _ProfileScreenState extends State<ProfileScreen>
       _tabControllerTransactions = new TabController(length: 3, vsync: this);
       _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);
       this.trackingEvents.profileViewedAProfile(
-        widget.args == null || (widget.args != null && widget.args!["id"] == null)
+        widget.args == null ||
+                (widget.args != null && widget.args!["id"] == null)
             ? AppLocalizations.of(context)!.profileOwnProfile
             : AppLocalizations.of(context)!.profileViewedAProfile,
         {"profileId": userId},
@@ -419,18 +418,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ),
       ),
-      bottomNavigationBar: NavigatorBar(
-          currentPage: widget.args == null ||
-                  (widget.args != null && widget.args!["id"] == null)
-              ? PageRoute.Page.myProfileScreen.route
-              : PageRoute.Page.profileScreen.route),
-      endDrawer: widget.args == null ||
-              (widget.args != null && widget.args!["id"] == null)
-          ? MenuProfile(
-              profileName: this.user.fullname,
-              appVersion: this.appVersion,
-            )
-          : null,
     );
   }
 

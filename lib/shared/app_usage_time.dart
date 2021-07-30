@@ -8,14 +8,16 @@ class AppUsageTime {
 
   Stopwatch _watch = Stopwatch();
   Timer? _timer;
-  int _usageTimeSoFarInMilliseconds = 0;
+  int usageTimeSoFarInMilliseconds = 0;
   String _prefsKey = "last_usage_time";
+  SharedPreferences? prefs;
 
   AppUsageTime() {
-    SharedPreferences.getInstance().then((prefs) {
-      if (prefs.getInt(_prefsKey) != null) {
-        _usageTimeSoFarInMilliseconds = prefs.getInt(_prefsKey)!;
-        if (_usageTimeSoFarInMilliseconds > 0) _sendToApi();
+    SharedPreferences.getInstance().then((_prefs) {
+      prefs = _prefs;
+      if (prefs!.getInt(_prefsKey) != null) {
+        usageTimeSoFarInMilliseconds = prefs!.getInt(_prefsKey)!;
+        if (usageTimeSoFarInMilliseconds > 0) _sendToApi();
       }
     });
   }
@@ -25,7 +27,7 @@ class AppUsageTime {
 
   _updateUsageTime(Timer timer) {
     if (_watch.isRunning) {
-      _usageTimeSoFarInMilliseconds++;
+      usageTimeSoFarInMilliseconds++;
     }
   }
 
@@ -42,22 +44,20 @@ class AppUsageTime {
     if (_watch.isRunning) {
       _watch.stop();
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt(_prefsKey, _usageTimeSoFarInMilliseconds);
-
+    prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
     await _sendToApi();
   }
 
   _sendToApi() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (_usageTimeSoFarInMilliseconds > 0) {
+    if (usageTimeSoFarInMilliseconds > 0) {
       //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
       //Sendo assim o registro será enviado quando o app for aberto novamente
       Timer(Duration(seconds: 1), () async {
         var _usersRepository = UserRepositoryImpl();
         await _usersRepository
-            .recordTimeUserUsedApp(_usageTimeSoFarInMilliseconds);
-        _usageTimeSoFarInMilliseconds = 0;
+            .recordTimeUserUsedApp(usageTimeSoFarInMilliseconds);
+        usageTimeSoFarInMilliseconds = 0;
         prefs.setInt(_prefsKey, 0);
       });
     }

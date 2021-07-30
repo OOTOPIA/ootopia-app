@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 enum Page {
+  homeScreen,
   timelineScreen,
   timelineProfileScreen,
   commentScreen,

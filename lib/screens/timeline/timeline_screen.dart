@@ -6,17 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
+import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
-import 'package:ootopia_app/screens/timeline/components/regeneration_status_icons.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -58,14 +56,15 @@ class _TimelinePageState extends State<TimelinePage>
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
   late GeneralConfig transferOozToPostLimitConfig;
+  //TimelineStore store = TimelineStore();
 
   ScrollController _scrollController = new ScrollController();
-
   List<TimelinePost> _allPosts = [];
-
   late FlickMultiManager flickMultiManager;
-
   late StreamSubscription _sub;
+  bool showRemainingTime = false;
+  bool showRemainingTimeEnd = false;
+  DailyGoalStatsModel? dailyGoalStats;
 
   @override
   void initState() {
@@ -106,34 +105,13 @@ class _TimelinePageState extends State<TimelinePage>
         },
       );
     }
-    Timer(Duration(milliseconds: 1000), () {
-      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
-        if (widget.args!['returnToPageWithArgs']['pageRoute'] ==
-                PageRoute.Page.myProfileScreen.route &&
-            user != null &&
-            user!.registerPhase == 1) {
-          Navigator.of(context).pushNamed(
-            PageRoute.Page.registerPhase2Screen.route,
-            arguments: {
-              "returnToPageWithArgs": {
-                "pageRoute": PageRoute.Page.myProfileScreen.route,
-                "arguments": null
-              }
-            },
-          );
-        } else if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
-          Navigator.of(context).pushNamed(
-            widget.args!['returnToPageWithArgs']['pageRoute'],
-            arguments: widget.args!['returnToPageWithArgs']['arguments'],
-          );
-        }
-      }
-    });
 
     OOzDistributionSystem.getInstance().startTimelineView();
 
     _handleIncomingLinks();
     _handleInitialUri();
+
+    //store.startDailyGoalTimer();
   }
 
   void goToTopTimeline() {
@@ -192,6 +170,7 @@ class _TimelinePageState extends State<TimelinePage>
     print("PERFORM ALL BEFORE");
     await _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
+    //dailyGoalStats = await store.getDailyGoalStats();
     print("PERFORM ALL AFTER");
   }
 
@@ -256,16 +235,6 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  void _backButton(BuildContext context) {
-    Navigator.pop(context);
-  }
-
-  void _goToProfile() {
-    Navigator.of(context).pushNamed(user!.registerPhase == 1
-        ? PageRoute.Page.registerPhase2Screen.route
-        : PageRoute.Page.profileScreen.route);
-  }
-
   @override
   void dispose() {
     _intentDataStreamSubscription.cancel();
@@ -311,47 +280,14 @@ class _TimelinePageState extends State<TimelinePage>
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Color(0xffC0D9E8),
+        statusBarColor: Theme.of(context).scaffoldBackgroundColor,
         statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
         body: SafeArea(
           child: NestedScrollView(
-            headerSliverBuilder: (context, value) {
-              return [
-                SliverAppBar(
-                  centerTitle: true,
-                  title: Padding(
-                    padding: EdgeInsets.all(3),
-                    child: Image.asset('assets/images/logo.png', height: 42),
-                  ),
-                  floating: false,
-                  toolbarHeight: 90,
-                  elevation: 0,
-                  backgroundColor: Colors.white,
-                  // Make the initial height of the SliverAppBar larger than normal.
-                  //expandedHeight: 50,
-                  brightness: Brightness.light,
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xffC0D9E8),
-                          Color(0xffffffff),
-                        ],
-                      ),
-                    ),
-                  ),
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(0.0),
-                    child: RegenerationStatusIcons(
-                      onClick: () => this._goToProfile(),
-                    ),
-                  ),
-                ),
-              ];
+            headerSliverBuilder: (BuildContext context, bool _) {
+              return [];
             },
             body: Column(
               children: [
@@ -392,19 +328,8 @@ class _TimelinePageState extends State<TimelinePage>
             ),
           ),
         ),
-        bottomNavigationBar: NavigatorBar(
-          onClickButton: () => goToTopTimeline(),
-          currentPage: PageRoute.Page.timelineScreen.route,
-        ),
       ),
     );
-  }
-
-  _removeItem(String postId) {
-    var indexPost = _allPosts.indexWhere((post) => post.id == postId);
-    if (indexPost >= 0) {
-      _allPosts.remove(_allPosts[indexPost]);
-    }
   }
 
   _blocBuilder() {
@@ -417,66 +342,71 @@ class _TimelinePageState extends State<TimelinePage>
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
         } else if (state is LoadedSucessState) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: VisibilityDetector(
-                  key: ObjectKey(flickMultiManager),
-                  onVisibilityChanged: (visibility) {
-                    if (visibility.visibleFraction == 0 && this.mounted) {
-                      flickMultiManager.pause();
-                    }
-                  },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {
-                        _allPosts = [];
-                        currentPage = 1;
-                      });
-                      performAllRequests();
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: GlobalConstants.of(context).screenHorizontalSpace,
+            ),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: VisibilityDetector(
+                    key: ObjectKey(flickMultiManager),
+                    onVisibilityChanged: (visibility) {
+                      if (visibility.visibleFraction == 0 && this.mounted) {
+                        flickMultiManager.pause();
+                      }
                     },
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
-                      shrinkWrap: true,
-                      cacheExtent: 1000,
-                      itemCount: _allPosts.length +
-                          (_hasMoreItems
-                              ? 1
-                              : 0), //Adicionei +1 manualmente devido à POC do youtube
-                      itemBuilder: (context, index) {
-                        if (index == _allPosts.length - _nextPageThreshold &&
-                            _hasMoreItems) {
-                          currentPage++;
-                          _getData();
-                        }
-                        if (index == _allPosts.length) {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: _hasMoreItems
-                                  ? CircularProgressIndicator()
-                                  : Container(),
-                            ),
-                          );
-                        }
-                        return PhotoTimeline(
-                          key: ObjectKey(_allPosts[index]),
-                          index: index,
-                          post: _allPosts[index],
-                          timelineBloc: this.timelineBloc,
-                          loggedIn: this.loggedIn,
-                          user: user,
-                          flickMultiManager: flickMultiManager,
-                          isProfile: false,
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        setState(() {
+                          _allPosts = [];
+                          currentPage = 1;
+                        });
+                        performAllRequests();
                       },
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                        shrinkWrap: true,
+                        cacheExtent: 1000,
+                        itemCount: _allPosts.length +
+                            (_hasMoreItems
+                                ? 1
+                                : 0), //Adicionei +1 manualmente devido à POC do youtube
+                        itemBuilder: (context, index) {
+                          if (index == _allPosts.length - _nextPageThreshold &&
+                              _hasMoreItems) {
+                            currentPage++;
+                            _getData();
+                          }
+                          if (index == _allPosts.length) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: _hasMoreItems
+                                    ? CircularProgressIndicator()
+                                    : Container(),
+                              ),
+                            );
+                          }
+                          return PhotoTimeline(
+                            key: ObjectKey(_allPosts[index]),
+                            index: index,
+                            post: _allPosts[index],
+                            timelineBloc: this.timelineBloc,
+                            loggedIn: this.loggedIn,
+                            user: user,
+                            flickMultiManager: flickMultiManager,
+                            isProfile: false,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         } else if (state is ErrorState) {
           return TryAgain(
@@ -496,6 +426,61 @@ class _TimelinePageState extends State<TimelinePage>
       },
     );
   }
+
+  // Widget get remainingTime => Padding(
+  //       padding: EdgeInsets.only(
+  //         right: 19,
+  //       ),
+  //       child: GestureDetector(
+  //         onTap: () => setState(() {
+  //           if (dailyGoalStats != null) {
+  //             showRemainingTime = !showRemainingTime;
+  //             showRemainingTimeEnd = !showRemainingTime;
+  //           }
+  //         }),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             Icon(
+  //               FeatherIcons.clock,
+  //               color: Theme.of(context).iconTheme.color,
+  //             ),
+  //             AnimatedOpacity(
+  //               opacity: showRemainingTime ? 1 : 0,
+  //               duration: Duration(milliseconds: 500),
+  //               onEnd: () {},
+  //               child: Visibility(
+  //                 visible: showRemainingTime,
+  //                 child: Padding(
+  //                   padding: EdgeInsets.only(left: 4),
+  //                   child: Column(
+  //                     mainAxisAlignment: MainAxisAlignment.center,
+  //                     children: [
+  //                       Text(
+  //                         store.remainingTime,
+  //                         style:
+  //                             Theme.of(context).textTheme.bodyText2!.copyWith(
+  //                                   fontWeight: FontWeight.bold,
+  //                                   color: Color(0xff707070),
+  //                                 ),
+  //                       ),
+  //                       Text(
+  //                         AppLocalizations.of(context)!.remaining,
+  //                         style:
+  //                             Theme.of(context).textTheme.bodyText2!.copyWith(
+  //                                   fontSize: 12,
+  //                                   color: Color(0xff707070),
+  //                                 ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
 
   Future<void> _getData() async {
     timelineBloc.add(GetTimelinePostsEvent(
@@ -527,7 +512,8 @@ class NewVideoUploadedMessageBox extends StatelessWidget {
                     left: GlobalConstants.of(context).spacingSmall,
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
+                    AppLocalizations.of(context)!
+                        .yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

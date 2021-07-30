@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
               !videoIsFinished) {
             videoIsFinished = true;
             Navigator.of(context).pushReplacementNamed(
-              PageRoute.Page.timelineScreen.route,
+              PageRoute.Page.homeScreen.route,
             );
           }
         });

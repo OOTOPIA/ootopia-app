@@ -3,16 +3,24 @@ import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info/package_info.dart';
 
-class MenuProfile extends StatelessWidget with SecureStoreMixin {
-  final String? profileName;
-  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+class MenuProfile extends StatefulWidget {
+  @override
+  _MenuProfileState createState() => _MenuProfileState();
+}
+
+class _MenuProfileState extends State<MenuProfile> with SecureStoreMixin {
+  String? profileName;
   String? appVersion;
 
-  MenuProfile({
-    this.profileName,
-    this.appVersion,
-  });
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
+  @override
+  void initState() {
+    super.initState();
+    this.getAppInfo();
+  }
 
   clearAuth(context) async {
     await cleanAuthToken();
@@ -23,10 +31,15 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
     this.trackingEvents.trackingLoggedOut();
   }
 
-  // goToGame() {}
-
   goToProfile(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  Future<void> getAppInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      this.appVersion = info.version;
+    });
   }
 
   @override
@@ -53,11 +66,6 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
           title: AppLocalizations.of(context)!.profile,
           onTapFunction: goToProfile,
         ),
-        // ItemMenu(
-        //   pathImage: 'assets/icons_profile/menu_game.png',
-        //   title: 'Game',
-        //   onTapFunction: goToProfile,
-        // ),
         ItemMenu(
           pathImage: 'assets/icons_profile/menu_left.png',
           title: AppLocalizations.of(context)!.exit,
@@ -76,7 +84,8 @@ class MenuProfile extends StatelessWidget with SecureStoreMixin {
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        AppLocalizations.of(context)!.madeWithLoveOnThisWonderfulPlanet,
+                        AppLocalizations.of(context)!
+                            .madeWithLoveOnThisWonderfulPlanet,
                         textAlign: TextAlign.center,
                       ),
                       Text(
