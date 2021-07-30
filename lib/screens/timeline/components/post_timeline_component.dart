@@ -101,7 +101,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   late PostTimelineController postTimelineController;
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
-  double _bigLikeOpacityLevel = 0.0;
 
   @override
   void initState() {
@@ -192,7 +191,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if (state is SuccessDeletePostState) {
-          print("chama o evento na timeline");
           this.timelineBloc.add(
                 OnDeletePostFromTimelineEvent(state.postId, state.isProfile),
               );
@@ -208,72 +206,71 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       return Observer(builder: (_) {
         return Column(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: GlobalConstants.of(context).spacingNormal),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => _goToProfile(),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: this.post.photoUrl != null
-                              ? CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage("${this.post.photoUrl}"),
-                                  radius: 16,
-                                )
-                              : CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      "assets/icons_profile/profile.png"),
-                                  radius: 16,
-                                ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => _goToProfile(),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 6.0,
+                          right: 6.0,
+                          bottom: 6.0,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              this.post.username,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                        child: this.post.photoUrl != null
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage("${this.post.photoUrl}"),
+                                radius: 16,
+                              )
+                            : CircleAvatar(
+                                backgroundImage: AssetImage(
+                                    "assets/icons_profile/profile.png"),
+                                radius: 16,
                               ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            this.post.username,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
-                            Visibility(
-                              visible: (this.post.city != null &&
-                                      this.post.city!.isNotEmpty) ||
+                          ),
+                          Visibility(
+                            visible: (this.post.city != null &&
+                                    this.post.city!.isNotEmpty) ||
+                                (this.post.state != null &&
+                                    this.post.state!.isNotEmpty),
+                            child: Text(
+                              '${this.post.city}' +
                                   (this.post.state != null &&
-                                      this.post.state!.isNotEmpty),
-                              child: Text(
-                                '${this.post.city}' +
-                                    (this.post.state != null &&
-                                            this.post.state!.isNotEmpty
-                                        ? ', ${this.post.state}'
-                                        : ''),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(fontSize: 12),
-                              ),
+                                          this.post.state!.isNotEmpty
+                                      ? ', ${this.post.state}'
+                                      : ''),
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 12),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  PopupMenuPost(
-                    isAnabled: isUserOwnsPost,
-                    callbackReturnPopupMenu: _popupMenuReturn,
-                    post: post,
-                  )
-                ],
-              ),
+                ),
+                PopupMenuPost(
+                  isAnabled: isUserOwnsPost,
+                  callbackReturnPopupMenu: _popupMenuReturn,
+                  post: post,
+                )
+              ],
             ),
             Container(
               width: double.infinity,
               height: 34,
-              margin: EdgeInsets.only(left: 8, right: 8),
               padding: EdgeInsets.only(left: 12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -317,7 +314,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             Stack(
               children: [
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: Color(0xff1A4188),

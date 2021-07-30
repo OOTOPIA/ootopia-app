@@ -22,33 +22,34 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    super.initState();
     _videoPlayerController = VideoPlayerController.asset(
         'assets/videos/ootopia_splash.mp4')
       ..initialize()
       ..addListener(() {
         Timer(Duration(milliseconds: 300), () => _videoPlayerController.play());
 
-        setState(() {
-          if (!_videoPlayerController.value.isPlaying &&
-              _videoPlayerController.value.isInitialized &&
-              (_videoPlayerController.value.duration ==
-                  _videoPlayerController.value.position) &&
-              !videoIsFinished) {
-            videoIsFinished = true;
-            Navigator.of(context).pushReplacementNamed(
-              PageRoute.Page.timelineScreen.route,
-            );
-          }
-        });
+        if (mounted) {
+          setState(() {
+            if (!_videoPlayerController.value.isPlaying &&
+                _videoPlayerController.value.isInitialized &&
+                (_videoPlayerController.value.duration ==
+                    _videoPlayerController.value.position) &&
+                !videoIsFinished) {
+              videoIsFinished = true;
+              Navigator.of(context).pushReplacementNamed(
+                PageRoute.Page.homeScreen.route,
+              );
+            }
+          });
+        }
       });
-
-    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _videoPlayerController.dispose();
+    super.dispose();
   }
 
   @override
