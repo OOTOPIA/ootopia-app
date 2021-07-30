@@ -19,6 +19,7 @@ enum Page {
   recoverPasswordScreen,
   resetPasswordScreen,
   splashScreen,
+  celebration
 }
 
 extension PageRoute on Page {

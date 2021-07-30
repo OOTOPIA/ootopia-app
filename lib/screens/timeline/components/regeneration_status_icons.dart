@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegenerationStatusIcons extends StatefulWidget {
   Function onClick;
@@ -11,6 +12,39 @@ class RegenerationStatusIcons extends StatefulWidget {
 }
 
 class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
+
+  goToCelebrationUser() async {//for tests
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.celebration.route,
+      arguments: {
+        "name": "Luis Reis",
+        "goal": "user",
+        "balance": "17,25"
+      },
+    );
+  }
+
+  goToCelebrationCity() async {//for tests
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.celebration.route,
+      arguments: {
+        "name": "Belo Horizonte!",
+        "goal": "city",
+        "balance": "17,25"
+      },
+    );
+  }
+
+  goToCelebrationGLobaal() async {//for tests
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.celebration.route,
+      arguments: {
+        "name": "Luis Reis",
+        "goal": "global",
+        "balance": "17,25"
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +57,7 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
             color: Colors.black,
           ),
           GestureDetector(
-            onTap: () => widget.onClick,
+            onTap: () => goToCelebrationUser(),//for tests
             child: Container(
               width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(
@@ -47,7 +81,7 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
             color: Colors.black,
           ),
           GestureDetector(
-            onTap: () => widget.onClick,
+            onTap: () => goToCelebrationCity(),//for tests
             child: Container(
               width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(
@@ -71,7 +105,7 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
             color: Colors.black,
           ),
           GestureDetector(
-            onTap: () => widget.onClick,
+            onTap: () => goToCelebrationGLobaal(),//for tests
             child: Container(
               width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(

@@ -28,6 +28,7 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/recover_password/recover_password_screen.dart';
 import 'package:ootopia_app/screens/reset_password/reset_password_screen.dart';
 import 'package:ootopia_app/screens/splash/splash_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/celebrate_component.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
@@ -237,6 +238,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
+    PageRoute.Page.celebration: (args) => Celebration(args),
   };
 
   @override
