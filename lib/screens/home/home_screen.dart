@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () => _checkStores());
   }
 
   @override
@@ -54,12 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    authStore.checkUserIsLogged();
-    homeStore.getDailyGoalStats();
-    homeStore.startDailyGoalTimer();
-    if (homeStore.currentPageWidget == null) {
-      homeStore.setCurrentPageWidget(pages[0]);
-    }
     _checkPageParams();
     return WillPopScope(
       onWillPop: () async {
@@ -149,6 +144,23 @@ class _HomeScreenState extends State<HomeScreen> {
       duration: Duration(milliseconds: 300),
       curve: Curves.linear,
     );
+  }
+
+  _checkStores() {
+    try {
+      if (authStore.currentUser == null) {
+        authStore.checkUserIsLogged();
+      }
+      if (homeStore.dailyGoalStats == null) {
+        homeStore.startDailyGoalTimer();
+      }
+      homeStore.getDailyGoalStats();
+      if (homeStore.currentPageWidget == null) {
+        homeStore.setCurrentPageWidget(pages[0]);
+      }
+    } catch (err) {
+      print("TA ERRADO $err");
+    }
   }
 
   _checkPageParams() {
