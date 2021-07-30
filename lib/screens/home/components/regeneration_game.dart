@@ -263,7 +263,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
       );
     }
 
-    goToCelebrationGLobal() async {//for tests
+    goToCelebrationGlobal() async {//for tests
       await Navigator.of(context).pushNamed(
         PageRoute.Page.celebration.route,
         arguments: {
