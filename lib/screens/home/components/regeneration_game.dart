@@ -282,7 +282,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
             if (detailedGoalType == 'city') {
               goToCelebrationCity();
             } else if (detailedGoalType == 'global')  {
-              goToCelebrationGLobal();
+              goToCelebrationGlobal();
             }
             else {
               showDetailedGoal = true;
