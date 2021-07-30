@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class RegenerationGame extends StatefulWidget {
   RegenerationGame({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
 
   late HomeStore homeStore;
   late AuthStore authStore;
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   @override
   Widget build(BuildContext context) {
@@ -148,9 +151,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                         backgroundColor: Theme.of(context).backgroundColor,
                         percent: detailedGoalType == "personal" &&
                                 homeStore.dailyGoalStats != null
-                            ? (homeStore.dailyGoalStats!
-                                    .percentageOfDailyGoalAchieved /
-                                100)
+                            ? (homeStore.percentageOfDailyGoalAchieved / 100)
                             : 0,
                         progressColor: Theme.of(context).primaryColor,
                       ),
@@ -214,7 +215,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 6,
+                    top: 7,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -226,20 +227,33 @@ class _RegenerationGameState extends State<RegenerationGame> {
                               fontSize: 12,
                             ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            homeStore.dailyGoalStats != null
-                                ? "${homeStore.dailyGoalStats!.accumulatedOOZ}"
-                                : "0,00",
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle2!
-                                .copyWith(fontSize: 12),
-                          )
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/ooz_mini_blue.svg',
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: Text(
+                                homeStore.dailyGoalStats != null
+                                    ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
+                                    : "0,00",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2!
+                                    .copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                              ),
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -286,8 +300,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                 lineWidth: 2,
                 backgroundColor: Theme.of(context).primaryColorDark,
                 percent: type == "personal" && homeStore.dailyGoalStats != null
-                    ? (homeStore.dailyGoalStats!.percentageOfDailyGoalAchieved /
-                        100)
+                    ? (homeStore.percentageOfDailyGoalAchieved / 100)
                     : 0,
                 progressColor: Theme.of(context).primaryColor,
               ),
