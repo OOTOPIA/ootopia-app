@@ -198,7 +198,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     }
 
     postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
-    postData.type = "video";
+    postData.type = widget.args["type"] == "image" ? "image" : "video";
     postData.description = _descriptionInputController.text;
 
     postBloc.add(
@@ -430,8 +430,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.all(
-                              GlobalConstants.of(context).spacingNormal),
+                          padding: EdgeInsets.only(
+                            left: GlobalConstants.of(context).spacingNormal,
+                            right: GlobalConstants.of(context).spacingNormal,
+                            top: GlobalConstants.of(context).spacingNormal,
+                            bottom: GlobalConstants.of(context)
+                                .screenHorizontalSpace,
+                          ),
                           child: widget.args["type"] == "video"
                               ? ClipRRect(
                                   borderRadius:
@@ -520,9 +525,12 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         color: Colors.black, fontWeight: FontWeight.normal),
                     autofocus: false,
                     decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                       hintText: AppLocalizations.of(context)!.writeADescription,
                       hintStyle: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.normal),
+                          color: Colors.black.withOpacity(.3),
+                          fontWeight: FontWeight.normal),
                       border: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.black54, width: .25),
@@ -543,12 +551,24 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   ),
                 ),
                 SizedBox(
-                  height: GlobalConstants.of(context).spacingNormal,
+                  height: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
                 Container(
+                  height: 57,
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: GlobalConstants.of(context).spacingNormal),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(
+                      color: Color(0xff707070),
+                      width: .25,
+                    ),
+                  ),
                   child: TextFormField(
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color(0xff003694),
+                      fontSize: 16,
                       fontWeight: FontWeight.normal,
                     ),
                     enabled: false,
@@ -558,16 +578,12 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     autofocus: false,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(
-                        left: GlobalConstants.of(context).spacingSmall,
-                        right: GlobalConstants.of(context).spacingSmall,
+                        left: GlobalConstants.of(context).spacingNormal,
                         top: GlobalConstants.of(context).spacingNormal,
                         bottom: GlobalConstants.of(context).spacingSmall,
                       ),
                       hintText: geolocationMessage,
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      hintStyle: Theme.of(context).textTheme.subtitle1,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
@@ -582,12 +598,16 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       top: GlobalConstants.of(context).spacingNormal,
                     ),
                     child: Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal:
+                              GlobalConstants.of(context).spacingNormal),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: FlatButton(
+                        height: 57,
                         child: Padding(
                           padding: EdgeInsets.all(
                             GlobalConstants.of(context).spacingNormal,
@@ -607,11 +627,11 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         splashColor: Colors.black54,
                         shape: RoundedRectangleBorder(
                           side: BorderSide(
-                            color: Colors.black12,
-                            width: 1.5,
+                            color: Color(0xff707070),
+                            width: .25,
                             style: BorderStyle.solid,
                           ),
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
@@ -637,7 +657,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   ),
                 ),
                 SizedBox(
-                  height: GlobalConstants.of(context).spacingNormal,
+                  height: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
                 Visibility(
                   visible: !_errorOnGetTags && !_isLoading,
@@ -646,14 +666,19 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         horizontal: GlobalConstants.of(context).spacingNormal),
                     child: MultiSelectDialogField<InterestsTags?>(
                       listType: MultiSelectListType.CHIP,
-                      selectedColor: Colors.blue,
-                      selectedItemsTextStyle: TextStyle(color: Colors.white),
+                      selectedColor: Color(0xff03145C),
+                      selectedItemsTextStyle: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white),
                       searchable: true,
-                      searchHint: "Hello",
+                      checkColor: Colors.blueAccent,
                       searchTextStyle: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.normal,
                       ),
+                      unselectedColor: Colors.black.withOpacity(.05),
+                      barrierColor: Colors.black.withOpacity(.5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         border: Border.all(
@@ -667,10 +692,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       ),
                       title: Text(
                         AppLocalizations.of(context)!.selectAtLeast1Tag,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontStyle: FontStyle.normal,
-                        ),
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
                       buttonText: Text(
                         AppLocalizations.of(context)!.selectTags,
@@ -678,6 +700,22 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                           fontSize: 16,
                           fontStyle: FontStyle.normal,
                         ),
+                      ),
+                      confirmText: Text(
+                        AppLocalizations.of(context)!.confirm,
+                        style: TextStyle(
+                          color: Color(0xff018F9C),
+                        ),
+                      ),
+                      cancelText: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: TextStyle(
+                          color: Color(0xff018F9C),
+                        ),
+                      ),
+                      itemsTextStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
                       ),
                       items: _items,
                       onConfirm: (values) {
@@ -692,6 +730,12 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         });
                       },
                       chipDisplay: MultiSelectChipDisplay(
+                        chipColor: Color(0xff03145C),
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
                         onTap: (value) {
                           setState(() {
                             _selectedTags.remove(value);
@@ -749,38 +793,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 SizedBox(
                   height: GlobalConstants.of(context).spacingNormal,
                 ),
-                // Container(
-                //   width: double.infinity,
-                //   decoration: BoxDecoration(
-                //     color: Color(0xff73d778),
-                //     borderRadius: BorderRadius.circular(50),
-                //   ),
-                //   child: FlatButton(
-                //     child: Padding(
-                //       padding: EdgeInsets.all(
-                //         GlobalConstants.of(context).spacingNormal,
-                //       ),
-                //       child: Text(
-                //         AppLocalizations.of(context)!.sendPost,
-                //         style: TextStyle(
-                //           fontSize: 16,
-                //           fontWeight: FontWeight.bold,
-                //           color: Colors.black,
-                //         ),
-                //       ),
-                //     ),
-                //     onPressed: () => _sendPost(),
-                //     splashColor: Colors.black54,
-                //     shape: RoundedRectangleBorder(
-                //       side: BorderSide(
-                //         color: Color(0xff73d778),
-                //         width: 2,
-                //         style: BorderStyle.solid,
-                //       ),
-                //       borderRadius: BorderRadius.circular(50),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

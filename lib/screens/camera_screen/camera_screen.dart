@@ -41,6 +41,9 @@ class _CameraAppState extends State<CameraApp>
   late double _scale;
   late AnimationController _animController;
 
+  final cropKey = GlobalKey<CropState>();
+  late final crop;
+
   @override
   void initState() {
     super.initState();
@@ -245,7 +248,9 @@ class _CameraAppState extends State<CameraApp>
     controller = null;
     setCamera();
 
-    setState(() {
+    setState(() async {
+      await controller!.dispose();
+
       if (pickedFile != null) {
         Navigator.of(context).pushNamed(
           PageRoute.Page.postPreviewScreen.route,
@@ -255,14 +260,35 @@ class _CameraAppState extends State<CameraApp>
     });
   }
 
-  Future getImageFromGallery(BuildContext context) async {
+  Future getImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     indexCamera = 1;
     controller = null;
     setCamera();
 
-    setState(() {
+    setState(() async {
+      await controller!.dispose();
+
       if (pickedFile != null) {
+        print(">>>>>>> Hello World");
+
+        try {
+          File cropped = await ImageCrop.sampleImage(
+            file: File(pickedFile.path),
+            preferredWidth: 1024,
+            preferredHeight: 4096,
+          );
+        } catch (e) {
+          print(">>>>>>>>>> $e");
+        }
+        print(">>>>>>> Hello World");
+        // await Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => CropImage(
+        //               imageFile: File(pickedFile.path),
+        //             )));
+
         Navigator.of(context).pushNamed(
           PageRoute.Page.postPreviewScreen.route,
           arguments: {"filePath": pickedFile.path, "type": "image"},
@@ -272,15 +298,16 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future _selectImageOrVideo() async {
-    await controller!.dispose();
-
     switch (await showDialog(
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
             title: const Text(
               'O que deseja postar',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.normal,
+                  color: Colors.black),
             ),
             titleTextStyle: null,
             children: <Widget>[
@@ -298,20 +325,29 @@ class _CameraAppState extends State<CameraApp>
                 ),
               ),
               SimpleDialogOption(
-                  onPressed: () => getImageFromGallery(context),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 10),
-                        child: Icon(Icons.image),
-                      ),
-                      Text('Image'),
-                    ],
-                  )),
+                onPressed: () => Navigator.pop(context, "image"),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 10),
+                      child: Icon(Icons.image),
+                    ),
+                    Text('Image'),
+                  ],
+                ),
+              ),
             ],
           );
         })) {
+      case null:
+        print("dispe >>>>>>");
+        break;
+
+      case "image":
+        print("dispe >>>>>>");
+        getImageFromGallery();
+        break;
     }
   }
 
