@@ -74,7 +74,7 @@
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "There was a problem uploading the video, please try to upload the video again.",
     "newPost": "New Post",
     "sendPost": "Send post",
-    "writeADescription": "Write a description",
+    "writeADescription": "Write a caption...",
     "selectTags": "Select tags",
     "errorLoadingTagsTryAgain": "Error loading tags. Try again.",
 
@@ -127,7 +127,7 @@
     "yourHaveInsufficientOOZToGive": "Your have insufficient OOZ to give.",
     "dontShowThisMessageAgain": "Don't show this message again",
 
-    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Your video is being processed. Wait until processing is complete.",
+    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Your post is being processed. Wait until processing is complete.",
     "weRespectAndProtectYourPersonalData": "We respect and protect your personal data.",
     "checkHere": "Check here",
     "ourPledgeForTransparencyAndHighEthicalStandards": "our pledge for transparency and high ethical standards.",

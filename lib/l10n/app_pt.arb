@@ -70,7 +70,7 @@
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao enviar o vídeo, tente enviar o vídeo novamente.",
     "newPost": "Nova postagem",
     "sendPost": "Enviar postagem",
-    "writeADescription": "Escreva uma descrição",
+    "writeADescription": "Escreva uma legenda...",
     "selectTags": "Selecione as tags",
     "errorLoadingTagsTryAgain": "Erro ao carregar tags. Tente novamente.",
 
@@ -123,7 +123,7 @@
     "yourHaveInsufficientOOZToGive": "Você tem OOZ insuficiente para dar.",
     "dontShowThisMessageAgain": "Não mostrar esta mensagem novamente",
 
-    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Seu vídeo está sendo processado. Aguarde até que o processamento seja concluído.",
+    "yourVideoIsBeingProcessedWaitUntilProcessingIsComplete": "Sua publicação está sendo processada. Aguarde até que o processamento seja concluído.",
     "weRespectAndProtectYourPersonalData": "Respeitamos e protegemos seus dados pessoais.",
     "checkHere": "Verifique aqui",
     "ourPledgeForTransparencyAndHighEthicalStandards": "nossa promessa de transparência e elevados padrões éticos.",

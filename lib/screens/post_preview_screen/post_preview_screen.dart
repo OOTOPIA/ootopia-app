@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
@@ -53,6 +56,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
   String tagsErrorMessage = "";
+  Image? image;
+  Size? imageSize;
 
   PostCreate postData = PostCreate();
 
@@ -108,13 +113,16 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           postData.addressNumber =
               placemark.name != null ? placemark.name! : "";
         } else {
-          geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
-          geolocationErrorMessage = AppLocalizations.of(context)!.weCouldntGetYourLocation2;
+          geolocationMessage =
+              AppLocalizations.of(context)!.failedToGetCurrentLocation;
+          geolocationErrorMessage =
+              AppLocalizations.of(context)!.weCouldntGetYourLocation2;
         }
       });
     }).onError((error, stackTrace) {
       setState(() {
-        geolocationMessage = AppLocalizations.of(context)!.failedToGetCurrentLocation;
+        geolocationMessage =
+            AppLocalizations.of(context)!.failedToGetCurrentLocation;
         geolocationErrorMessage = error.toString();
       });
     });
@@ -141,7 +149,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 child: ListBody(
                   children: <Widget>[
                     Text(
-                        AppLocalizations.of(context)!.doYouWantToDiscardTheChanges,
+                        AppLocalizations.of(context)!
+                            .doYouWantToDiscardTheChanges,
                         style: Theme.of(context).textTheme.bodyText2),
                   ],
                 ),
@@ -166,8 +175,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     if (_processingVideoInBackgroundError) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              AppLocalizations.of(context)!.thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
+          content: Text(AppLocalizations.of(context)!
+              .thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
         ),
       );
       return;
@@ -182,13 +191,14 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     if (_selectedTags.length < 1) {
       setState(() {
-        tagsErrorMessage = AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
+        tagsErrorMessage =
+            AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
       });
       return;
     }
 
     postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
-    postData.type = "video";
+    postData.type = widget.args["type"] == "image" ? "image" : "video";
     postData.description = _descriptionInputController.text;
 
     postBloc.add(
@@ -222,7 +232,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     flickManager.flickControlManager!.mute();
 
-    if (widget.args["mirroredVideo"] == "true") {
+    if (widget.args["mirrored"] == "true") {
       mirror = math.pi;
       _processingVideoInBackground = true;
       FlutterFFmpeg _ffmpeg = new FlutterFFmpeg();
@@ -251,8 +261,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
         if (_readyToSendPost && this.mounted) {
           Scaffold.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                  AppLocalizations.of(context)!.thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
+              content: Text(AppLocalizations.of(context)!
+                  .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
             ),
           );
           setState(() {
@@ -261,6 +271,10 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           });
         }
       });
+    }
+
+    if (widget.args["type"] == "image") {
+      _getSizeImage();
     }
 
     _getTags();
@@ -275,32 +289,95 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     super.dispose();
   }
 
+  void _getSizeImage() {
+    this.image = Image.file(
+      File(widget.args["filePath"]),
+      fit: BoxFit.cover,
+    );
+    this.imageSize = Size(100.toDouble(), 100.toDouble());
+
+    Completer<ui.Image> completer = Completer<ui.Image>();
+    this
+        .image!
+        .image
+        .resolve(ImageConfiguration())
+        .addListener(ImageStreamListener(
+      (ImageInfo image, bool synchronousCall) {
+        this.imageSize =
+            Size(image.image.width.toDouble(), image.image.height.toDouble());
+        completer.complete(image.image);
+        setState(() {});
+      },
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: _onWillPop,
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          ),
+          titleSpacing: 0,
           title: Text(
             AppLocalizations.of(context)!.newPost,
-            style: TextStyle(color: Colors.black),
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xffC0D9E8),
-                  Color(0xffffffff),
-                ],
-              ),
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
             ),
           ),
+          actions: [
+            TextButton(
+                onPressed: () => _sendPost(),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.check,
+                      color: Color(0xff018F9C),
+                    ),
+                    SizedBox(
+                      width: GlobalConstants.of(context).spacingSmall,
+                    ),
+                    Text(
+                      "Publish",
+                      style: TextStyle(
+                        color: Color(0xff018F9C),
+                      ),
+                    ),
+                    SizedBox(
+                      width: GlobalConstants.of(context).spacingNormal,
+                    ),
+                  ],
+                ))
+          ],
+          // title: Text(
+          //   AppLocalizations.of(context)!.newPost,
+          //   style: TextStyle(color: Colors.black),
+          // ),
+          // iconTheme: IconThemeData(
+          //   color: Colors.black, //change your color here
+          // ),
+          // elevation: 0,
+          // flexibleSpace: Container(
+          //   decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //       begin: Alignment.topCenter,
+          //       end: Alignment.bottomCenter,
+          //       colors: [
+          //         Color(0xffC0D9E8),
+          //         Color(0xffffffff),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ),
         body: BlocListener<PostBloc, PostState>(
           listener: (context, state) {
@@ -343,90 +420,153 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 Container(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * .6),
+                      maxHeight: widget.args["type"] == "video"
+                          ? MediaQuery.of(context).size.height * .6
+                          : MediaQuery.of(context).size.height * .5,
+                    ),
                     child: Stack(
                       alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: Transform(
-                            alignment: Alignment.center,
-                            child: FlickVideoPlayer(
-                              preferredDeviceOrientationFullscreen: [],
-                              flickManager: flickManager,
-                              flickVideoWithControls: FlickVideoWithControls(
-                                controls: null,
-                              ),
-                            ),
-                            transform: Matrix4.rotationY(mirror),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: GlobalConstants.of(context).spacingNormal,
+                            right: GlobalConstants.of(context).spacingNormal,
+                            top: GlobalConstants.of(context).spacingNormal,
+                            bottom: GlobalConstants.of(context)
+                                .screenHorizontalSpace,
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.all(
-                                  GlobalConstants.of(context).spacingSmall),
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.black38,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: SizedBox(
-                                width: 28,
-                                height: 28,
-                                child: IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  icon: Icon(
-                                      flickManager.flickControlManager!.isMute
-                                          ? Icons.volume_off
-                                          : Icons.volume_up,
-                                      size: 20),
-                                  onPressed: () => {
-                                    setState(() {
-                                      flickMultiManager.toggleMute();
-                                    }),
-                                  },
-                                  color: Colors.white,
+                          child: widget.args["type"] == "video"
+                              ? ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(21)),
+                                  child: Transform(
+                                    alignment: Alignment.center,
+                                    child: FlickVideoPlayer(
+                                      preferredDeviceOrientationFullscreen: [],
+                                      flickManager: flickManager,
+                                      flickVideoWithControls:
+                                          FlickVideoWithControls(
+                                        controls: null,
+                                      ),
+                                    ),
+                                    transform: Matrix4.rotationY(mirror),
+                                  ),
+                                )
+                              : Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff000000),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Image.file(
+                                    File(widget.args["filePath"]),
+                                    fit: this.imageSize!.height >
+                                            imageSize!.width
+                                        ? BoxFit.fitHeight
+                                        : BoxFit.fitWidth,
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
                         ),
+                        widget.args["type"] == "video"
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.all(
+                                        GlobalConstants.of(context)
+                                            .spacingMedium),
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black38,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: SizedBox(
+                                      width: 28,
+                                      height: 28,
+                                      child: IconButton(
+                                        padding: EdgeInsets.all(0),
+                                        icon: Icon(
+                                            flickManager
+                                                    .flickControlManager!.isMute
+                                                ? Icons.volume_off
+                                                : Icons.volume_up,
+                                            size: 20),
+                                        onPressed: () => {
+                                          setState(() {
+                                            flickMultiManager.toggleMute();
+                                          }),
+                                        },
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
                 ),
-                TextFormField(
-                  controller: _descriptionInputController,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.normal),
-                  autofocus: false,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.writeADescription,
-                    hintStyle: TextStyle(
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: GlobalConstants.of(context).spacingNormal),
+                  child: TextFormField(
+                    controller: _descriptionInputController,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.normal),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black12, width: 1.5),
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                      hintText: AppLocalizations.of(context)!.writeADescription,
+                      hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(.3),
+                          fontWeight: FontWeight.normal),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.black54, width: .25),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xff707070), width: .25),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color(0xff707070), width: .25),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black12, width: 1.5),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).accentColor, width: 1.5),
-                    ),
+                    onChanged: (String val) {},
                   ),
-                  onChanged: (String val) {},
                 ),
                 SizedBox(
-                  height: GlobalConstants.of(context).spacingNormal,
+                  height: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
                 Container(
+                  height: 57,
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: GlobalConstants.of(context).spacingNormal),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(
+                      color: Color(0xff707070),
+                      width: .25,
+                    ),
+                  ),
                   child: TextFormField(
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color(0xff003694),
+                      fontSize: 16,
                       fontWeight: FontWeight.normal,
                     ),
                     enabled: false,
@@ -436,16 +576,12 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     autofocus: false,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(
-                        left: GlobalConstants.of(context).spacingSmall,
-                        right: GlobalConstants.of(context).spacingSmall,
+                        left: GlobalConstants.of(context).spacingNormal,
                         top: GlobalConstants.of(context).spacingNormal,
                         bottom: GlobalConstants.of(context).spacingSmall,
                       ),
                       hintText: geolocationMessage,
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      hintStyle: Theme.of(context).textTheme.subtitle1,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
@@ -460,12 +596,16 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       top: GlobalConstants.of(context).spacingNormal,
                     ),
                     child: Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal:
+                              GlobalConstants.of(context).spacingNormal),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: FlatButton(
+                        height: 57,
                         child: Padding(
                           padding: EdgeInsets.all(
                             GlobalConstants.of(context).spacingNormal,
@@ -485,11 +625,11 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         splashColor: Colors.black54,
                         shape: RoundedRectangleBorder(
                           side: BorderSide(
-                            color: Colors.black12,
-                            width: 1.5,
+                            color: Color(0xff707070),
+                            width: .25,
                             style: BorderStyle.solid,
                           ),
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
@@ -504,7 +644,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     ),
                     child: Text(
                       geolocationErrorMessage +
-                          AppLocalizations.of(context)!.tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                          AppLocalizations.of(context)!
+                              .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 12,
@@ -514,62 +655,91 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   ),
                 ),
                 SizedBox(
-                  height: GlobalConstants.of(context).spacingNormal,
+                  height: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
                 Visibility(
                   visible: !_errorOnGetTags && !_isLoading,
-                  child: MultiSelectDialogField<InterestsTags?>(
-                    listType: MultiSelectListType.CHIP,
-                    selectedColor: Colors.blue,
-                    selectedItemsTextStyle: TextStyle(color: Colors.white),
-                    searchable: true,
-                    searchTextStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(40)),
-                      border: Border.all(
-                        color: Colors.black12,
-                        width: 2,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: GlobalConstants.of(context).spacingNormal),
+                    child: MultiSelectDialogField<InterestsTags?>(
+                      listType: MultiSelectListType.CHIP,
+                      selectedColor: Color(0xff03145C),
+                      selectedItemsTextStyle: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white),
+                      searchable: true,
+                      checkColor: Colors.blueAccent,
+                      searchTextStyle: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
                       ),
-                    ),
-                    buttonIcon: Icon(
-                      Icons.add,
-                      color: Colors.black54,
-                    ),
-                    title: Text(
-                      AppLocalizations.of(context)!.selectAtLeast1Tag,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.normal,
+                      unselectedColor: Colors.black.withOpacity(.05),
+                      barrierColor: Colors.black.withOpacity(.5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(
+                          color: Color(0xff707070),
+                          width: .25,
+                        ),
                       ),
-                    ),
-                    buttonText: Text(
-                      AppLocalizations.of(context)!.selectTags,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.normal,
+                      buttonIcon: Icon(
+                        Icons.add,
+                        color: Colors.black54,
                       ),
-                    ),
-                    items: _items,
-                    onConfirm: (values) {
-                      _selectedTags = [];
-                      setState(() {
-                        values.forEach((v) {
-                          _selectedTags.add(v!);
-                        });
-                        if (_selectedTags.length >= 1) {
-                          tagsErrorMessage = "";
-                        }
-                      });
-                    },
-                    chipDisplay: MultiSelectChipDisplay(
-                      onTap: (value) {
+                      title: Text(
+                        AppLocalizations.of(context)!.selectAtLeast1Tag,
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                      buttonText: Text(
+                        AppLocalizations.of(context)!.selectTags,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      confirmText: Text(
+                        AppLocalizations.of(context)!.confirm,
+                        style: TextStyle(
+                          color: Color(0xff018F9C),
+                        ),
+                      ),
+                      cancelText: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: TextStyle(
+                          color: Color(0xff018F9C),
+                        ),
+                      ),
+                      itemsTextStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      items: _items,
+                      onConfirm: (values) {
+                        _selectedTags = [];
                         setState(() {
-                          _selectedTags.remove(value);
+                          values.forEach((v) {
+                            _selectedTags.add(v!);
+                          });
+                          if (_selectedTags.length >= 1) {
+                            tagsErrorMessage = "";
+                          }
                         });
                       },
+                      chipDisplay: MultiSelectChipDisplay(
+                        chipColor: Color(0xff03145C),
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                        onTap: (value) {
+                          setState(() {
+                            _selectedTags.remove(value);
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -580,7 +750,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     child: TryAgain(
                       _getTags,
                       showOnlyButton: true,
-                      buttonText: AppLocalizations.of(context)!.errorLoadingTagsTryAgain,
+                      buttonText: AppLocalizations.of(context)!
+                          .errorLoadingTagsTryAgain,
                       buttonBackgroundColor: Colors.white,
                       messageTextColor: Colors.white,
                       buttonTextColor: Colors.black,
@@ -620,38 +791,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 SizedBox(
                   height: GlobalConstants.of(context).spacingNormal,
                 ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xff73d778),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: FlatButton(
-                    child: Padding(
-                      padding: EdgeInsets.all(
-                        GlobalConstants.of(context).spacingNormal,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.sendPost,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    onPressed: () => _sendPost(),
-                    splashColor: Colors.black54,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color(0xff73d778),
-                        width: 2,
-                        style: BorderStyle.solid,
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -660,77 +799,3 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     });
   }
 }
-
-// class PlayerControls extends StatelessWidget {
-//   const PlayerControls(
-//       {Key key, this.flickMultiManager, this.flickManager, this.filePath})
-//       : super(key: key);
-
-//   final FlickMultiManager flickMultiManager;
-//   final FlickManager flickManager;
-//   final String filePath;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.transparent,
-//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.end,
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: <Widget>[
-//           FlickAutoHideChild(
-//             showIfVideoNotInitialized: false,
-//             child: Align(
-//               alignment: Alignment.topRight,
-//               child: Container(
-//                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-//                 decoration: BoxDecoration(
-//                   color: Colors.black38,
-//                   borderRadius: BorderRadius.circular(20),
-//                 ),
-//                 child: FlickLeftDuration(),
-//               ),
-//             ),
-//           ),
-//           Expanded(
-//             child: Container(),
-//           ),
-//           Align(
-//             alignment: Alignment.bottomRight,
-//             child: FlickAutoHideChild(
-//               autoHide: false,
-//               showIfVideoNotInitialized: false,
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.end,
-//                 children: <Widget>[
-//                   Container(
-//                     padding: EdgeInsets.all(2),
-//                     decoration: BoxDecoration(
-//                       color: Colors.black38,
-//                       borderRadius: BorderRadius.circular(20),
-//                     ),
-//                     child: FlickSoundToggle(
-//                       toggleMute: () => flickMultiManager.toggleMute(),
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.only(
-//                       left: GlobalConstants.of(context).spacingNormal,
-//                     ),
-//                     child: FlickFullScreenToggle(
-//                       toggleFullscreen: () {
-//                         flickManager.flickControlManager.toggleFullscreen();
-//                       },
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

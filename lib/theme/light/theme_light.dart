@@ -64,7 +64,7 @@ ThemeData lightTheme(BuildContext context) => ThemeData.light().copyWith(
         subtitle1: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: LightColors.whiteText,
+          color: LightColors.blackText,
         ),
         subtitle2: TextStyle(
           fontSize: 14,
