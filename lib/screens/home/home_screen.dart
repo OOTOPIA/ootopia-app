@@ -93,7 +93,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           builder: (_) => Scaffold(
             key: _key,
             appBar: appBar,
-            drawer: MenuDrawer(),
+            drawer: MenuDrawer(
+              onTapProfileItem: () {
+                _openProfile();
+              },
+            ),
             body: Stack(
               children: [
                 PageView.builder(
@@ -178,24 +182,40 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            if (authStore.currentUser!.registerPhase == 2) {
-              _goToPage(1);
-            } else {
-              Navigator.of(context).pushNamed(
-                PageRoute.Page.registerPhase2Screen.route,
-                arguments: {
-                  "returnToPageWithArgs": {
-                    "currentPageName": "my_profile",
-                    "arguments": null
-                  }
-                },
-              );
-            }
+            _openProfile();
           }
           break;
         default:
       }
     });
+  }
+
+  _openProfile() {
+    if (authStore.currentUser == null) {
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.loginScreen.route,
+        arguments: {
+          "returnToPageWithArgs": {
+            "currentPageName": "my_profile",
+            "arguments": null
+          }
+        },
+      );
+      return;
+    }
+    if (authStore.currentUser!.registerPhase == 2) {
+      _goToPage(1);
+    } else {
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.registerPhase2Screen.route,
+        arguments: {
+          "returnToPageWithArgs": {
+            "currentPageName": "my_profile",
+            "arguments": null
+          }
+        },
+      );
+    }
   }
 
   _goToPage(int index) {
@@ -221,18 +241,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   _checkPageParams() {
     Timer(Duration(milliseconds: 1500), () {
-      print("CHECKING PAGE PARAMS!!!!!!! ${widget.args}");
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
                 "my_profile" &&
             authStore.currentUser != null) {
           if (authStore.currentUser!.registerPhase == 2) {
-            print("CAIU AQUI 1");
             setState(() {
               PageViewController.instance.controller.jumpTo(1);
             });
           } else if (authStore.currentUser!.registerPhase == 1) {
-            print("CAIU AQUI 2");
             Navigator.of(context).pushNamed(
               PageRoute.Page.registerPhase2Screen.route,
               arguments: {

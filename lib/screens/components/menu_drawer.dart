@@ -8,6 +8,8 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 class MenuDrawer extends StatefulWidget {
+  Function? onTapProfileItem;
+  MenuDrawer({Key? key, this.onTapProfileItem}) : super(key: key);
   @override
   _MenuDrawerState createState() => _MenuDrawerState();
 }
@@ -16,7 +18,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   String? appVersion;
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  late AuthStore authStore;
+  AuthStore? authStore;
 
   @override
   void initState() {
@@ -25,16 +27,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   }
 
   clearAuth(context) async {
-    authStore.logout();
+    authStore!.logout();
     Navigator.of(context).pushNamedAndRemoveUntil(
       PageRoute.Page.homeScreen.route,
       ModalRoute.withName('/'),
     );
     this.trackingEvents.trackingLoggedOut();
-  }
-
-  goToProfile(BuildContext context) {
-    Navigator.pop(context);
   }
 
   Future<void> getAppInfo() async {
@@ -67,12 +65,18 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         ItemMenu(
           pathImage: 'assets/icons_profile/menu_profile.png',
           title: AppLocalizations.of(context)!.profile,
-          onTapFunction: goToProfile,
+          onTapFunction: (context) {
+            Navigator.of(context).pop();
+            widget.onTapProfileItem!();
+          },
         ),
-        ItemMenu(
-          pathImage: 'assets/icons_profile/menu_left.png',
-          title: AppLocalizations.of(context)!.exit,
-          onTapFunction: clearAuth,
+        Visibility(
+          visible: authStore != null && authStore!.currentUser != null,
+          child: ItemMenu(
+            pathImage: 'assets/icons_profile/menu_left.png',
+            title: AppLocalizations.of(context)!.exit,
+            onTapFunction: clearAuth,
+          ),
         ),
         Expanded(
           child: Column(
@@ -93,8 +97,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       ),
                       Text(
                         "${AppLocalizations.of(context)!.loggedInAs} " +
-                            (authStore.currentUser != null
-                                ? authStore.currentUser!.fullname!
+                            (authStore!.currentUser != null
+                                ? authStore!.currentUser!.fullname!
                                 : ""),
                         textAlign: TextAlign.center,
                       ),

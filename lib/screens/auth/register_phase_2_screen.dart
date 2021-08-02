@@ -218,8 +218,12 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   keyboardType: TextInputType.number,
                                   maxLength: 2,
                                   autofocus: false,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(AppLocalizations.of(context)!.day),
+                                      .loginInputTheme(
+                                          AppLocalizations.of(context)!.day),
                                   onChanged: (String text) {
                                     if (text.length == 2 &&
                                         int.parse(text) <= 31) {
@@ -243,7 +247,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   maxLength: 2,
                                   autofocus: false,
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(AppLocalizations.of(context)!.month),
+                                      .loginInputTheme(
+                                          AppLocalizations.of(context)!.month),
                                   onChanged: (String text) {
                                     if (text.length == 2 &&
                                         int.parse(text) <= 12) {
@@ -273,7 +278,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                     }
                                   },
                                   decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(AppLocalizations.of(context)!.year),
+                                      .loginInputTheme(
+                                          AppLocalizations.of(context)!.year),
                                 ),
                               ),
                             ),
@@ -341,9 +347,13 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               setState(() {
                                 String year = _yearController.text;
                                 if (year.length < 4) {
-                                  birthdateValidationErrorMessage = AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
+                                  birthdateValidationErrorMessage =
+                                      AppLocalizations.of(context)!
+                                          .pleaseEnterAValidBirthdateInFormat;
                                 } else {
-                                  birthdateValidationErrorMessage = AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
+                                  birthdateValidationErrorMessage =
+                                      AppLocalizations.of(context)!
+                                          .pleaseEnterAValidBirthdate;
                                 }
                               });
                             }

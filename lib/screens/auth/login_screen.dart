@@ -141,7 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                                   AppLocalizations.of(context)!
                                       .helloWIfNotNowThenWhenorld,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.subtitle1,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(color: Colors.white),
                                 ),
                               ],
                             ),
@@ -155,6 +158,9 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     autofocus: true,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!
@@ -174,6 +180,9 @@ class _LoginPageState extends State<LoginPage> {
                                   TextFormField(
                                     controller: _passwordController,
                                     obscureText: !_showPassword,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!
