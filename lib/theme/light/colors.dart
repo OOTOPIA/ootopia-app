@@ -8,7 +8,7 @@ class LightColors {
   static const Color whiteText = Color(0xffF7F7F7);
   static const Color silverText = Color(0xff7e838a);
   static const Color silver = Color(0xffdedede);
-  static const Color blue = Color(0xff0253e7);
+  static const Color blue = Color(0xff003694);
   static const Color accentBlue = Color(0xff00A5FC);
   static const Color highlightText = Color(0xff003694);
   static Color blackText = Colors.black;

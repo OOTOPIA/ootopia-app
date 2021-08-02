@@ -30,6 +30,9 @@ abstract class HomeStoreBase with Store {
   @observable
   DailyGoalStatsModel? dailyGoalStats;
 
+  @observable
+  double percentageOfDailyGoalAchieved = 0;
+
   Stopwatch _watch = Stopwatch();
   Timer? _dailyGoalTimer;
 
@@ -61,10 +64,17 @@ abstract class HomeStoreBase with Store {
               _totalAppUsageTimeSoFarInMs +=
                   AppUsageTime.instance.usageTimeSoFarInMilliseconds;
             }
+            percentageOfDailyGoalAchieved =
+                dailyGoalStats!.percentageOfDailyGoalAchieved;
             _timerIsStarted = true;
           } else {
             _remainingTimeInMs = _remainingTimeInMs - 1000;
             _totalAppUsageTimeSoFarInMs = _totalAppUsageTimeSoFarInMs + 1000;
+            var progressPerc = (_totalAppUsageTimeSoFarInMs /
+                    (dailyGoalStats!.dailyGoalInMinutes * 60000)) *
+                100;
+            percentageOfDailyGoalAchieved =
+                (progressPerc >= 100 ? 100 : progressPerc);
           }
           remainingTime = _msToTime(_remainingTimeInMs);
           totalAppUsageTimeSoFar =

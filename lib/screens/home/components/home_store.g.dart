@@ -86,6 +86,23 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  final _$percentageOfDailyGoalAchievedAtom =
+      Atom(name: 'HomeStoreBase.percentageOfDailyGoalAchieved');
+
+  @override
+  double get percentageOfDailyGoalAchieved {
+    _$percentageOfDailyGoalAchievedAtom.reportRead();
+    return super.percentageOfDailyGoalAchieved;
+  }
+
+  @override
+  set percentageOfDailyGoalAchieved(double value) {
+    _$percentageOfDailyGoalAchievedAtom
+        .reportWrite(value, super.percentageOfDailyGoalAchieved, () {
+      super.percentageOfDailyGoalAchieved = value;
+    });
+  }
+
   final _$remainingTimeAtom = Atom(name: 'HomeStoreBase.remainingTime');
 
   @override
@@ -192,6 +209,7 @@ currentPageWidget: ${currentPageWidget},
 showRemainingTime: ${showRemainingTime},
 showRemainingTimeEnd: ${showRemainingTimeEnd},
 dailyGoalStats: ${dailyGoalStats},
+percentageOfDailyGoalAchieved: ${percentageOfDailyGoalAchieved},
 remainingTime: ${remainingTime},
 totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar}
     ''';
