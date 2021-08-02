@@ -25,7 +25,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   }
 
   clearAuth(context) async {
-    await cleanAuthToken();
+    authStore.logout();
     Navigator.of(context).pushNamedAndRemoveUntil(
       PageRoute.Page.homeScreen.route,
       ModalRoute.withName('/'),

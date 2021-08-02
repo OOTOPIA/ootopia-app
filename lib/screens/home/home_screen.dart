@@ -8,6 +8,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/keep_alive_page.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -27,7 +28,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   late AuthStore authStore;
   late HomeStore homeStore;
@@ -38,16 +39,40 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   Widget? currentPageWidget;
+  bool createdPostAlertAlreadyShowed = false;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () => _checkStores());
+    WidgetsBinding.instance!.addObserver(this);
+    Future.delayed(Duration.zero, () {
+      _checkStores();
+      _checkPageParams();
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkStores();
+        break;
+      case AppLifecycleState.inactive:
+        //print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        //print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        //print("app in detached");
+        break;
+    }
   }
 
   @override
   void dispose() {
     homeStore.stopDailyGoalTimer();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -55,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    _checkPageParams();
     return WillPopScope(
       onWillPop: () async {
         return PageViewController.instance.back();
@@ -70,20 +94,44 @@ class _HomeScreenState extends State<HomeScreen> {
             key: _key,
             appBar: appBar,
             drawer: MenuDrawer(),
-            body: PageView.builder(
-              pageSnapping: false,
-              controller: PageViewController.instance.controller,
-              scrollDirection: Axis.horizontal,
-              physics: NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                homeStore.setCurrentPageIndex(index);
-                homeStore.setCurrentPageWidget(pages[index]);
-                setState(() {});
-              },
-              itemCount: pages.length,
-              itemBuilder: (context, index) {
-                return KeepAlivePage(child: pages[index]);
-              },
+            body: Stack(
+              children: [
+                PageView.builder(
+                  pageSnapping: false,
+                  controller: PageViewController.instance.controller,
+                  scrollDirection: Axis.horizontal,
+                  physics: NeverScrollableScrollPhysics(),
+                  onPageChanged: (index) {
+                    homeStore.setCurrentPageIndex(index);
+                    homeStore.setCurrentPageWidget(pages[index]);
+                    setState(() {});
+                  },
+                  itemCount: pages.length,
+                  itemBuilder: (context, index) {
+                    return KeepAlivePage(child: pages[index]);
+                  },
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AnimatedOpacity(
+                    opacity: homeStore.showCreatedPostAlert &&
+                            !homeStore.createdPostAlertAlreadyShowed &&
+                            !createdPostAlertAlreadyShowed
+                        ? 1
+                        : 0,
+                    duration: Duration(milliseconds: 300),
+                    child: NewPostUploadedMessageBox(),
+                    onEnd: () {
+                      Timer(Duration(seconds: 3000), () {
+                        homeStore.setCreatedPostAlertAlreadyShowed(true);
+                        setState(() {
+                          createdPostAlertAlreadyShowed = true;
+                        });
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             bottomNavigationBar: AppBottomNavigationBar(
               onTap: _bottomOnTapButtonHandler,
@@ -130,7 +178,19 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             );
           } else {
-            _goToPage(1);
+            if (authStore.currentUser!.registerPhase == 2) {
+              _goToPage(1);
+            } else {
+              Navigator.of(context).pushNamed(
+                PageRoute.Page.registerPhase2Screen.route,
+                arguments: {
+                  "returnToPageWithArgs": {
+                    "currentPageName": "my_profile",
+                    "arguments": null
+                  }
+                },
+              );
+            }
           }
           break;
         default:
@@ -147,34 +207,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _checkStores() {
-    try {
-      if (authStore.currentUser == null) {
-        authStore.checkUserIsLogged();
-      }
-      if (homeStore.dailyGoalStats == null) {
-        homeStore.startDailyGoalTimer();
-      }
-      homeStore.getDailyGoalStats();
-      if (homeStore.currentPageWidget == null) {
-        homeStore.setCurrentPageWidget(pages[0]);
-      }
-    } catch (err) {
-      print("TA ERRADO $err");
+    if (authStore.currentUser == null) {
+      authStore.checkUserIsLogged();
+    }
+    if (homeStore.dailyGoalStats == null) {
+      homeStore.startDailyGoalTimer();
+    }
+    homeStore.getDailyGoalStats();
+    if (homeStore.currentPageWidget == null) {
+      homeStore.setCurrentPageWidget(pages[0]);
     }
   }
 
   _checkPageParams() {
-    Timer(Duration(milliseconds: 1000), () {
+    Timer(Duration(milliseconds: 1500), () {
+      print("CHECKING PAGE PARAMS!!!!!!! ${widget.args}");
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
                 "my_profile" &&
-            authStore.currentUser != null &&
-            authStore.currentUser!.registerPhase == 1) {
-          setState(() {
-            PageViewController.instance.controller.jumpTo(1);
-          });
+            authStore.currentUser != null) {
+          if (authStore.currentUser!.registerPhase == 2) {
+            print("CAIU AQUI 1");
+            setState(() {
+              PageViewController.instance.controller.jumpTo(1);
+            });
+          } else if (authStore.currentUser!.registerPhase == 1) {
+            print("CAIU AQUI 2");
+            Navigator.of(context).pushNamed(
+              PageRoute.Page.registerPhase2Screen.route,
+              arguments: {
+                "returnToPageWithArgs": {
+                  "currentPageName": "my_profile",
+                  "arguments": null
+                }
+              },
+            );
+          }
         } else if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
-          print("CHANGEEESSSS ${widget.args!['returnToPageWithArgs']}");
           Navigator.of(context).pushNamed(
             widget.args!['returnToPageWithArgs']['pageRoute'],
             arguments: widget.args!['returnToPageWithArgs']['arguments'],
@@ -220,58 +289,60 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
 
-  Widget get remainingTime => Padding(
-        padding: EdgeInsets.only(
-          right: 19,
-        ),
-        child: GestureDetector(
-          onTap: () => setState(() {
-            print("OOPS ${homeStore.dailyGoalStats}");
-            if (homeStore.dailyGoalStats != null) {
-              homeStore.showRemainingTime = !homeStore.showRemainingTime;
-              homeStore.showRemainingTimeEnd = !homeStore.showRemainingTime;
-            }
-          }),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                FeatherIcons.clock,
-                color: Theme.of(context).iconTheme.color,
-              ),
-              AnimatedOpacity(
-                opacity: homeStore.showRemainingTime ? 1 : 0,
-                duration: Duration(milliseconds: 500),
-                onEnd: () {},
-                child: Visibility(
-                  visible: homeStore.showRemainingTime,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          homeStore.remainingTime,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff707070),
-                                  ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.remaining,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    fontSize: 12,
-                                    color: Color(0xff707070),
-                                  ),
-                        ),
-                      ],
+  Widget get remainingTime => Visibility(
+        visible: authStore.currentUser != null,
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: 19,
+          ),
+          child: GestureDetector(
+            onTap: () => setState(() {
+              if (homeStore.dailyGoalStats != null) {
+                homeStore.showRemainingTime = !homeStore.showRemainingTime;
+                homeStore.showRemainingTimeEnd = !homeStore.showRemainingTime;
+              }
+            }),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  FeatherIcons.clock,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                AnimatedOpacity(
+                  opacity: homeStore.showRemainingTime ? 1 : 0,
+                  duration: Duration(milliseconds: 500),
+                  onEnd: () {},
+                  child: Visibility(
+                    visible: homeStore.showRemainingTime,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            homeStore.remainingTime,
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff707070),
+                                    ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.remaining,
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontSize: 12,
+                                      color: Color(0xff707070),
+                                    ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       );

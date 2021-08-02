@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
             if (widget.args != null &&
                 widget.args!['returnToPageWithArgs'] != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route,
+                PageRoute.Page.homeScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {
                   "returnToPageWithArgs": widget.args!['returnToPageWithArgs']

@@ -76,12 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void initState() {
+    _tabController = new TabController(length: 2, vsync: this);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _checkUserIsLoggedIn();
       profileBloc = BlocProvider.of<UserBloc>(context);
       walletBloc = BlocProvider.of<WalletBloc>(context);
       getAppInfo();
-      _tabController = new TabController(length: 2, vsync: this);
       _tabController.addListener(_setActiveTabIndex);
       _tabControllerTransactions = new TabController(length: 3, vsync: this);
       _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);

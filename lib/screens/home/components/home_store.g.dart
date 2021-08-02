@@ -135,6 +135,49 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  final _$showCreatedPostAlertAtom =
+      Atom(name: 'HomeStoreBase.showCreatedPostAlert');
+
+  @override
+  bool get showCreatedPostAlert {
+    _$showCreatedPostAlertAtom.reportRead();
+    return super.showCreatedPostAlert;
+  }
+
+  @override
+  set showCreatedPostAlert(bool value) {
+    _$showCreatedPostAlertAtom.reportWrite(value, super.showCreatedPostAlert,
+        () {
+      super.showCreatedPostAlert = value;
+    });
+  }
+
+  final _$createdPostAlertAlreadyShowedAtom =
+      Atom(name: 'HomeStoreBase.createdPostAlertAlreadyShowed');
+
+  @override
+  bool get createdPostAlertAlreadyShowed {
+    _$createdPostAlertAlreadyShowedAtom.reportRead();
+    return super.createdPostAlertAlreadyShowed;
+  }
+
+  @override
+  set createdPostAlertAlreadyShowed(bool value) {
+    _$createdPostAlertAlreadyShowedAtom
+        .reportWrite(value, super.createdPostAlertAlreadyShowed, () {
+      super.createdPostAlertAlreadyShowed = value;
+    });
+  }
+
+  final _$startDailyGoalTimerAsyncAction =
+      AsyncAction('HomeStoreBase.startDailyGoalTimer');
+
+  @override
+  Future startDailyGoalTimer() {
+    return _$startDailyGoalTimerAsyncAction
+        .run(() => super.startDailyGoalTimer());
+  }
+
   final _$getDailyGoalStatsAsyncAction =
       AsyncAction('HomeStoreBase.getDailyGoalStats');
 
@@ -143,19 +186,17 @@ mixin _$HomeStore on HomeStoreBase, Store {
     return _$getDailyGoalStatsAsyncAction.run(() => super.getDailyGoalStats());
   }
 
-  final _$HomeStoreBaseActionController =
-      ActionController(name: 'HomeStoreBase');
+  final _$readyToShowCelebratePageAsyncAction =
+      AsyncAction('HomeStoreBase.readyToShowCelebratePage');
 
   @override
-  dynamic startDailyGoalTimer() {
-    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
-        name: 'HomeStoreBase.startDailyGoalTimer');
-    try {
-      return super.startDailyGoalTimer();
-    } finally {
-      _$HomeStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<bool> readyToShowCelebratePage() {
+    return _$readyToShowCelebratePageAsyncAction
+        .run(() => super.readyToShowCelebratePage());
   }
+
+  final _$HomeStoreBaseActionController =
+      ActionController(name: 'HomeStoreBase');
 
   @override
   dynamic stopDailyGoalTimer() {
@@ -202,6 +243,39 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  dynamic setShowCreatedPostAlert(bool value) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.setShowCreatedPostAlert');
+    try {
+      return super.setShowCreatedPostAlert(value);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setCreatedPostAlertAlreadyShowed(bool value) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.setCreatedPostAlertAlreadyShowed');
+    try {
+      return super.setCreatedPostAlertAlreadyShowed(value);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setCelebratePageAlreadyOpened(bool show) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.setCelebratePageAlreadyOpened');
+    try {
+      return super.setCelebratePageAlreadyOpened(show);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 currentPageIndex: ${currentPageIndex},
@@ -211,7 +285,9 @@ showRemainingTimeEnd: ${showRemainingTimeEnd},
 dailyGoalStats: ${dailyGoalStats},
 percentageOfDailyGoalAchieved: ${percentageOfDailyGoalAchieved},
 remainingTime: ${remainingTime},
-totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar}
+totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar},
+showCreatedPostAlert: ${showCreatedPostAlert},
+createdPostAlertAlreadyShowed: ${createdPostAlertAlreadyShowed}
     ''';
   }
 }
