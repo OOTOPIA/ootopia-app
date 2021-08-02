@@ -6,7 +6,7 @@ class TimelinePost extends Equatable {
   String description;
   String type;
   String? imageUrl;
-  String videoUrl;
+  String? videoUrl;
   String thumbnailUrl;
   String? photoUrl;
   String username;
@@ -28,9 +28,9 @@ class TimelinePost extends Equatable {
     required this.description,
     required this.type,
     this.imageUrl,
-    required this.videoUrl,
+    this.videoUrl,
     required this.thumbnailUrl,
-    required this.photoUrl,
+    this.photoUrl,
     required this.username,
     required this.likesCount,
     required this.commentsCount,
