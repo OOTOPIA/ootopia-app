@@ -211,5 +211,6 @@
     "remaining": "restante",
     "personalGoal": "Meta Pessoal",
     "accomplished": "Realizada",
-    "oozPartialBalance": "OOz Saldo Parcial"
+    "oozPartialBalance": "OOz Saldo Parcial",
+    "whatWillYouContribute" : "Com o que irá contribuir?"
 }

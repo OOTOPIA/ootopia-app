@@ -216,6 +216,8 @@
     "goOn": "Go On!",
     "letIsCelebrate": "Let's celebrate!",
 
+    "whatWillYouContribute": "What will you contribute?",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }

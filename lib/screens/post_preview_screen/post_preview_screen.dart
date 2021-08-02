@@ -131,7 +131,11 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     });
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(bool isNativeBackButton) async {
+    if (!isNativeBackButton) {
+      Navigator.pop(context);
+      return false;
+    }
     if (_createdPost) {
       return true;
     }
@@ -228,7 +232,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
     flickManager = FlickManager(
       videoPlayerController: videoPlayer,
-      autoPlay: false,
     );
 
     flickMultiManager.init(flickManager);
@@ -318,7 +321,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   Widget build(BuildContext context) {
     homeStore = Provider.of<HomeStore>(context);
     return new WillPopScope(
-      onWillPop: _onWillPop,
+      onWillPop: () => _onWillPop(true),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -327,7 +330,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
               Icons.arrow_back,
               color: Colors.black,
             ),
-            onPressed: _onWillPop,
+            onPressed: () => _onWillPop(false),
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
           ),
           titleSpacing: 0,
