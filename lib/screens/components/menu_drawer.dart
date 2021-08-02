@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 
-class MenuProfile extends StatefulWidget {
+class MenuDrawer extends StatefulWidget {
   @override
-  _MenuProfileState createState() => _MenuProfileState();
+  _MenuDrawerState createState() => _MenuDrawerState();
 }
 
-class _MenuProfileState extends State<MenuProfile> with SecureStoreMixin {
-  String? profileName;
+class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   String? appVersion;
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  late AuthStore authStore;
 
   @override
   void initState() {
@@ -23,9 +25,9 @@ class _MenuProfileState extends State<MenuProfile> with SecureStoreMixin {
   }
 
   clearAuth(context) async {
-    await cleanAuthToken();
+    authStore.logout();
     Navigator.of(context).pushNamedAndRemoveUntil(
-      PageRoute.Page.timelineScreen.route,
+      PageRoute.Page.homeScreen.route,
       ModalRoute.withName('/'),
     );
     this.trackingEvents.trackingLoggedOut();
@@ -44,6 +46,7 @@ class _MenuProfileState extends State<MenuProfile> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return Drawer(
         child: Column(
       children: [
@@ -89,7 +92,10 @@ class _MenuProfileState extends State<MenuProfile> with SecureStoreMixin {
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        "${AppLocalizations.of(context)!.loggedInAs} $profileName",
+                        "${AppLocalizations.of(context)!.loggedInAs} " +
+                            (authStore.currentUser != null
+                                ? authStore.currentUser!.fullname!
+                                : ""),
                         textAlign: TextAlign.center,
                       ),
                     ],

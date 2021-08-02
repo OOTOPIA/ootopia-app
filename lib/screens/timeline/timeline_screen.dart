@@ -291,10 +291,6 @@ class _TimelinePageState extends State<TimelinePage>
             },
             body: Column(
               children: [
-                Visibility(
-                  visible: showUploadedVideoMessage,
-                  child: NewVideoUploadedMessageBox(),
-                ),
                 Expanded(
                   child: Center(
                     child: BlocListener<TimelinePostBloc, TimelinePostState>(
@@ -485,43 +481,5 @@ class _TimelinePageState extends State<TimelinePage>
   Future<void> _getData() async {
     timelineBloc.add(GetTimelinePostsEvent(
         _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
-  }
-}
-
-class NewVideoUploadedMessageBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Color(0xff73d778),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(
-            GlobalConstants.of(context).spacingNormal,
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.done, color: Colors.white),
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: GlobalConstants.of(context).spacingSmall,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!
-                        .yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

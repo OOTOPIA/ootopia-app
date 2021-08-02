@@ -15,9 +15,11 @@ import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -44,6 +46,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   final TextEditingController _geolocationInputController =
       TextEditingController();
   double mirror = 0;
+  late HomeStore homeStore;
 
   bool _isLoading = true;
   bool _isLoadingUpload = false;
@@ -313,6 +316,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    homeStore = Provider.of<HomeStore>(context);
     return new WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -392,11 +396,11 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
             } else if (state is LoadingCreatePostState) {
               _isLoadingUpload = true;
             } else if (state is SuccessCreatePostState) {
-              //go to next page
+              homeStore.setShowCreatedPostAlert(true);
               _isLoadingUpload = false;
               _createdPost = true;
               Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route,
+                PageRoute.Page.homeScreen.route,
                 ModalRoute.withName('/'),
                 arguments: {"createdPost": true},
               );

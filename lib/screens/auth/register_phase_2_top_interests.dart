@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -14,6 +15,7 @@ import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -43,6 +45,8 @@ class _RegisterPhase2TopInterestsPageState
   List<Item> _secondaryTags = [];
   List<String> _selectedTagsIds = [];
   List<Item> _secondaryTagsCopy = [];
+
+  late AuthStore authStore;
 
   void _submit() {
     userBloc!.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
@@ -84,6 +88,7 @@ class _RegisterPhase2TopInterestsPageState
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -108,11 +113,12 @@ class _RegisterPhase2TopInterestsPageState
               _isLoading = false;
               widget.args['user'].registerPhase = state.user.registerPhase;
               widget.args['user'].photoUrl = state.user.photoUrl;
-              setCurrentUser(jsonEncode(widget.args['user'].toJson()));
+              setCurrentUser(jsonEncode(widget.args['user'].toJson()))
+                  .then((value) => authStore.setUserIsLogged());
               if (widget.args != null &&
                   widget.args['returnToPageWithArgs'] != null) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  PageRoute.Page.timelineScreen.route,
+                  PageRoute.Page.homeScreen.route,
                   ModalRoute.withName('/'),
                   arguments: {
                     "returnToPageWithArgs": widget.args['returnToPageWithArgs']
@@ -120,8 +126,9 @@ class _RegisterPhase2TopInterestsPageState
                 );
               } else {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                    PageRoute.Page.timelineScreen.route,
-                    ModalRoute.withName('/'));
+                  PageRoute.Page.homeScreen.route,
+                  ModalRoute.withName('/'),
+                );
               }
             }
           },
@@ -193,7 +200,8 @@ class _RegisterPhase2TopInterestsPageState
                                 controller: _inputController,
                                 autofocus: false,
                                 decoration: GlobalConstants.of(context)
-                                    .loginInputTheme(AppLocalizations.of(context)!.others),
+                                    .loginInputTheme(
+                                        AppLocalizations.of(context)!.others),
                                 onChanged: (String val) {
                                   if (val.isEmpty) {
                                     setState(() {

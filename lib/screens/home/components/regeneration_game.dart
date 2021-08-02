@@ -36,6 +36,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
   double screenWidth = 0;
 
   double detailedGoalIconPosition = 0;
+  bool celebratePageIsOpen = false;
 
   @override
   void initState() {
@@ -54,6 +55,9 @@ class _RegenerationGameState extends State<RegenerationGame> {
     homeStore = Provider.of<HomeStore>(context);
     authStore = Provider.of<AuthStore>(context);
     screenWidth = MediaQuery.of(context).size.width;
+    if (!celebratePageIsOpen) {
+      _checkShowCelebratePage();
+    }
     return Observer(
       builder: (_) => Column(
         children: [
@@ -273,8 +277,11 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                           .subtitle2!,
                                       children: [
                                         TextSpan(
-                                          text:
-                                              homeStore.totalAppUsageTimeSoFar,
+                                          text: homeStore.totalAppUsageTimeSoFar
+                                                  .isEmpty
+                                              ? "0h 0m 0s"
+                                              : homeStore
+                                                  .totalAppUsageTimeSoFar,
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle2!
@@ -356,61 +363,30 @@ class _RegenerationGameState extends State<RegenerationGame> {
       );
 
   Widget gameIconProgress(String type) {
-    goToCelebrationPersonal() async {
-      //for tests
-      await Navigator.of(context).pushNamed(
-        PageRoute.Page.celebration.route,
-        arguments: {
-          "name": "Luis Reis",
-          "goal": "personal",
-          "balance": "17,25"
-        },
-      );
-    }
-
-    goToCelebrationCity() async {
-      //for tests
-      await Navigator.of(context).pushNamed(
-        PageRoute.Page.celebration.route,
-        arguments: {
-          "name": "Belo Horizonte!",
-          "goal": "city",
-          "balance": "17,25"
-        },
-      );
-    }
-
-    goToCelebrationGlobal() async {
-      //for tests
-      await Navigator.of(context).pushNamed(
-        PageRoute.Page.celebration.route,
-        arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
-      );
-    }
-
     return GestureDetector(
       onTap: () {
         setState(() {
+          if (homeStore.dailyGoalStats == null) {
+            homeStore.getDailyGoalStats();
+          }
           if (authStore.currentUser != null) {
             detailedGoalType = type;
             if (detailedGoalType == 'city') {
-              goToCelebrationCity();
+              //goToCelebrationCity();
             } else if (detailedGoalType == 'global') {
-              goToCelebrationGlobal();
+              //goToCelebrationGlobal();
             } else {
-              if (homeStore.percentageOfDailyGoalAchieved < 100) {
+              setState(() {
+                showDetailedGoal = true;
+              });
+              Future.delayed(Duration(milliseconds: 100), () {
                 setState(() {
-                  showDetailedGoal = true;
+                  detailedGoalIconPosition = 0;
                 });
-                Future.delayed(Duration(milliseconds: 100), () {
-                  setState(() {
-                    detailedGoalIconPosition = 0;
-                  });
-                });
-              } else {
-                goToCelebrationPersonal();
-              }
+              });
             }
+          } else {
+            Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
           }
         });
       },
@@ -448,6 +424,54 @@ class _RegenerationGameState extends State<RegenerationGame> {
           ],
         ),
       ),
+    );
+  }
+
+  _checkShowCelebratePage() {
+    homeStore.readyToShowCelebratePage().then((bool ready) {
+      if (ready) {
+        setState(() {
+          celebratePageIsOpen = true;
+        });
+        homeStore.setCelebratePageAlreadyOpened(true);
+        _goToCelebrationPersonal();
+      }
+    });
+  }
+
+  _goToCelebrationPersonal() async {
+    //for tests
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.celebration.route,
+      arguments: {
+        "name": authStore.currentUser != null
+            ? authStore.currentUser!.fullname
+            : "",
+        "goal": "personal",
+        "balance": homeStore.dailyGoalStats != null
+            ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
+            : "0,00",
+      },
+    );
+  }
+
+  _goToCelebrationCity() async {
+    //for tests
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.celebration.route,
+      arguments: {
+        "name": "Belo Horizonte!",
+        "goal": "city",
+        "balance": "17,25"
+      },
+    );
+  }
+
+  _goToCelebrationGlobal() async {
+    //for tests
+    await Navigator.of(context).pushNamed(
+      PageRoute.Page.celebration.route,
+      arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
     );
   }
 }

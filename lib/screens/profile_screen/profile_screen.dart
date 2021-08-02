@@ -18,7 +18,7 @@ import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart'
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'components/menu_profile.dart';
+import '../components/menu_drawer.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -76,12 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void initState() {
+    _tabController = new TabController(length: 2, vsync: this);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _checkUserIsLoggedIn();
       profileBloc = BlocProvider.of<UserBloc>(context);
       walletBloc = BlocProvider.of<WalletBloc>(context);
       getAppInfo();
-      _tabController = new TabController(length: 2, vsync: this);
       _tabController.addListener(_setActiveTabIndex);
       _tabControllerTransactions = new TabController(length: 3, vsync: this);
       _tabControllerTransactions.addListener(_setActiveTabIndexTransactions);

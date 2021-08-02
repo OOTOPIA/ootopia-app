@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'home_store.g.dart';
 
@@ -12,6 +13,10 @@ class HomeStore = HomeStoreBase with _$HomeStore;
 
 abstract class HomeStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  String _personalCelebratePageEnabled = "show_personal_celebrate_page";
+  String _personalCelebratePageAlreadyOpened =
+      "personal_celebrate_page_already_opened";
+  SharedPreferences? prefs;
 
   BuildContext? context;
 
@@ -46,8 +51,17 @@ abstract class HomeStoreBase with Store {
   @observable
   String totalAppUsageTimeSoFar = "";
 
+  @observable
+  bool showCreatedPostAlert = false;
+
+  @observable
+  bool createdPostAlertAlreadyShowed = false;
+
   @action
-  startDailyGoalTimer() {
+  startDailyGoalTimer() async {
+    if (prefs == null) {
+      prefs = await SharedPreferences.getInstance();
+    }
     if (!_watch.isRunning) {
       _watch.start();
     }
@@ -75,6 +89,12 @@ abstract class HomeStoreBase with Store {
                 100;
             percentageOfDailyGoalAchieved =
                 (progressPerc >= 100 ? 100 : progressPerc);
+          }
+          if (percentageOfDailyGoalAchieved >= 100) {
+            prefs!.setBool(_personalCelebratePageEnabled, true);
+          } else {
+            prefs!.setBool(_personalCelebratePageEnabled, false);
+            prefs!.setBool(_personalCelebratePageAlreadyOpened, false);
           }
           remainingTime = _msToTime(_remainingTimeInMs);
           totalAppUsageTimeSoFar =
@@ -108,9 +128,40 @@ abstract class HomeStoreBase with Store {
   }
 
   @action
+  setShowCreatedPostAlert(bool value) {
+    showCreatedPostAlert = value;
+  }
+
+  @action
+  setCreatedPostAlertAlreadyShowed(bool value) {
+    createdPostAlertAlreadyShowed = value;
+  }
+
+  @action
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
     this.dailyGoalStats = await userRepository.getDailyGoalStats();
     return this.dailyGoalStats;
+  }
+
+  @action
+  Future<bool> readyToShowCelebratePage() async {
+    if (percentageOfDailyGoalAchieved >= 100 && prefs != null) {
+      final result = prefs!.getBool(_personalCelebratePageEnabled);
+      final alreadyOpened = prefs!.getBool(_personalCelebratePageAlreadyOpened);
+      return (result != null &&
+              result &&
+              (alreadyOpened == null || !alreadyOpened))
+          ? true
+          : false;
+    }
+    return false;
+  }
+
+  @action
+  setCelebratePageAlreadyOpened(bool show) {
+    if (prefs != null) {
+      prefs!.setBool(_personalCelebratePageAlreadyOpened, show);
+    }
   }
 
   _msToTime(duration, {bool? showSeconds}) {
