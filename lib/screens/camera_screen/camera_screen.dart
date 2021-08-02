@@ -17,6 +17,8 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
+import 'components/crop_widget.dart';
+
 class CameraApp extends StatefulWidget {
   @override
   _CameraAppState createState() => _CameraAppState();
@@ -270,28 +272,13 @@ class _CameraAppState extends State<CameraApp>
       await controller!.dispose();
 
       if (pickedFile != null) {
-        print(">>>>>>> Hello World");
-
-        try {
-          File cropped = await ImageCrop.sampleImage(
-            file: File(pickedFile.path),
-            preferredWidth: 1024,
-            preferredHeight: 4096,
-          );
-        } catch (e) {
-          print(">>>>>>>>>> $e");
-        }
-        print(">>>>>>> Hello World");
-        // await Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => CropImage(
-        //               imageFile: File(pickedFile.path),
-        //             )));
-
-        Navigator.of(context).pushNamed(
-          PageRoute.Page.postPreviewScreen.route,
-          arguments: {"filePath": pickedFile.path, "type": "image"},
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CropWidget(
+              imageFile: File(pickedFile.path),
+            ),
+          ),
         );
       }
     });
@@ -587,35 +574,6 @@ class CameraScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CameraApp(),
-    );
-  }
-}
-
-class CropImage extends StatefulWidget {
-  File? imageFile;
-  CropImage({
-    Key? key,
-    this.imageFile,
-  }) : super(key: key);
-
-  @override
-  _CropImageState createState() => _CropImageState();
-}
-
-class _CropImageState extends State<CropImage> {
-  final cropKey = GlobalKey<CropState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: Colors.black, padding: const EdgeInsets.all(20.0), child: null,
-        // Crop(
-        //   key: cropKey,
-        //   image: Image.file(widget.imageFile),
-        //   aspectRatio: 4.0 / 3.0,
-        // ),
-      ),
     );
   }
 }

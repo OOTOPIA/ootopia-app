@@ -323,9 +323,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
               Icons.arrow_back,
               color: Colors.black,
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: _onWillPop,
             tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
           ),
           titleSpacing: 0,
