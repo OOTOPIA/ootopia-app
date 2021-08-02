@@ -68,38 +68,48 @@ class _CropWidgetState extends State<CropWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          _buildCropImage(),
-          Container(
-            padding: const EdgeInsets.only(top: 20.0),
-            alignment: AlignmentDirectional.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                TextButton(
-                  child: Text(
-                    'Crop Image',
-                    style: Theme.of(context).textTheme.button,
-                  ),
-                  onPressed: () => _cropImage(),
-                ),
-              ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                color: Colors.black,
+                padding: const EdgeInsets.all(20.0),
+                child: _buildCropImage(),
+              ),
             ),
-          )
-        ],
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.only(top: 20.0),
+                alignment: AlignmentDirectional.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    TextButton(
+                      child: Text(
+                        'Crop Image',
+                        style: Theme.of(context).textTheme.button,
+                      ),
+                      onPressed: () => _cropImage(),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildCropImage() {
-    return Expanded(
-      child: Crop(
-        key: cropKey,
-        image: FileImage(widget.imageFile),
-      ),
+    return Crop(
+      key: cropKey,
+      image: FileImage(widget.imageFile),
     );
   }
 }
