@@ -216,7 +216,6 @@ class MainPage extends HookWidget {
         RegisterPhase2TopInterestsPage(args),
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
-    PageRoute.Page.menuProfile: (args) => MenuDrawer(),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
