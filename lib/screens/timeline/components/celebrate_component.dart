@@ -26,17 +26,16 @@ class CelebrationStates extends State<Celebration> {
   @override
   void initState() {
     _controller =
-        VideoPlayerController.asset('assets/videos/ootopia_celebration.mp4')
+        VideoPlayerController.asset('assets/videos/ootopia_celebration_cutter.mp4')
           ..initialize().then((_) => Timer(Duration(milliseconds: 300), () => _controller.play()))..addListener(() {
             setState(() {
-              if (
-              _controller.value.isInitialized && 4 == _controller.value.position.inSeconds) {
+              if (_controller.value.isInitialized && 2 == _controller.value.position.inSeconds) {
                   videoIsFinished = true;
-              }else {
+              } else {
                   videoIsFinished = false;
               }
               if(_controller.value.isPlaying &&
-              _controller.value.isInitialized && 4 == _controller.value.position.inSeconds){
+              _controller.value.isInitialized && 2 == _controller.value.position.inSeconds){
                 _controller.pause();
               }
             });
@@ -64,26 +63,18 @@ class CelebrationStates extends State<Celebration> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            child: Stack(
+          child: Stack(
           children: [
-            FutureBuilder(
-              future: _initializeVideoPlayerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return SizedBox.expand(
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        height: _controller.value.size.height,
-                        width: _controller.value.size.width,
-                        child: VideoPlayer(_controller,),
-                      ),
-                    ),
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
+            SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Container(
+                  height: _controller.value.size.height,
+                  width: _controller.value.size.width,
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: VideoPlayer(_controller),
+                ),
+              ),
             ),
             if(videoIsFinished) Center(
               child: Padding(
@@ -130,50 +121,62 @@ class CelebrationStates extends State<Celebration> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "OOz ${AppLocalizations.of(context)!.totalBalance}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                color: Color(0xFF003694)
-                              ),
+                        Container(
+                          height: 40,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.white
                             ),
-                            Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(18),
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Color(0xFF003694)
-                                  )
+                          ),
+                          child:
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "OOz ${AppLocalizations.of(context)!.totalBalance}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                  color: Color(0xFF003694)
                                 ),
-                                child: Padding(
-                                padding: EdgeInsets.only(left: 8,right: 8),
-                                child:
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ImageIcon(
-                                      AssetImage('assets/icons_profile/ootopia.png'),
-                                      color: Color(0xFF003694),
-                                      size: 32,
-                                    ),
-                                    Text(
-                                    widget.args["balance"],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                              ),
+                              Container(
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
+                                    color: Colors.white,
+                                    border: Border.all(
                                       color: Color(0xFF003694)
-                                    ),
                                     )
-                                  ],
-                                ) 
+                                  ),
+                                  child: Padding(
+                                  padding: EdgeInsets.only(left: 8,right: 8),
+                                  child:
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ImageIcon(
+                                        AssetImage('assets/icons_profile/ootopia.png'),
+                                        color: Color(0xFF003694),
+                                        size: 32,
+                                      ),
+                                      Text(
+                                      widget.args["balance"],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Color(0xFF003694)
+                                      ),
+                                      )
+                                    ],
+                                  ) 
+                                )
                               )
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 10),
