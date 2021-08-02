@@ -14,6 +14,8 @@ import 'package:photo_manager/photo_manager.dart';
 
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
+
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -244,17 +246,16 @@ class _CameraAppState extends State<CameraApp>
     }
   }
 
-  Future getVideoFromGallery(BuildContext context) async {
+  Future getVideoFromGallery() async {
     final pickedFile = await picker.getVideo(source: ImageSource.gallery);
     indexCamera = 1;
-    controller = null;
     setCamera();
 
     setState(() async {
       await controller!.dispose();
 
       if (pickedFile != null) {
-        Navigator.of(context).pushNamed(
+        await Navigator.of(context).pushNamed(
           PageRoute.Page.postPreviewScreen.route,
           arguments: {"filePath": pickedFile.path, "type": "video"},
         );
@@ -265,7 +266,6 @@ class _CameraAppState extends State<CameraApp>
   Future getImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     indexCamera = 1;
-    controller = null;
     setCamera();
 
     setState(() async {
@@ -289,8 +289,8 @@ class _CameraAppState extends State<CameraApp>
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: const Text(
-              'O que deseja postar',
+            title: Text(
+              AppLocalizations.of(context)!.whatWillYouContribute,
               style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.normal,
@@ -299,7 +299,7 @@ class _CameraAppState extends State<CameraApp>
             titleTextStyle: null,
             children: <Widget>[
               SimpleDialogOption(
-                onPressed: () => getVideoFromGallery(context),
+                onPressed: () => Navigator.pop(context, "video"),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -328,12 +328,14 @@ class _CameraAppState extends State<CameraApp>
           );
         })) {
       case null:
-        print("dispe >>>>>>");
         break;
 
       case "image":
-        print("dispe >>>>>>");
         getImageFromGallery();
+        break;
+
+      case "video":
+        getVideoFromGallery();
         break;
     }
   }
@@ -388,13 +390,15 @@ class _CameraAppState extends State<CameraApp>
               mirroredPhoto = true;
             }
             imageFile = file;
-            Navigator.of(this.context).pushNamed(
-              PageRoute.Page.postPreviewScreen.route,
-              arguments: {
-                "filePath": filePath,
-                "mirrored": mirroredPhoto.toString(),
-                "type": "image"
-              },
+
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CropWidget(
+                  imageFile: File(filePath),
+                  mirroredPhoto: mirroredPhoto,
+                ),
+              ),
             );
           });
         }

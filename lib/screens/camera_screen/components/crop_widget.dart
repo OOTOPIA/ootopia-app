@@ -2,12 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_crop/image_crop.dart';
+
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CropWidget extends StatefulWidget {
   File imageFile;
+  bool? mirroredPhoto;
 
-  CropWidget({Key? key, required this.imageFile}) : super(key: key);
+  CropWidget({
+    Key? key,
+    required this.imageFile,
+    this.mirroredPhoto,
+  }) : super(key: key);
 
   @override
   _CropWidgetState createState() => _CropWidgetState();
@@ -50,11 +56,13 @@ class _CropWidgetState extends State<CropWidget> {
     _lastCropped?.delete();
     _lastCropped = file;
 
-    debugPrint('$file');
-
-    await Navigator.of(context).pushNamed(
+    await Navigator.of(this.context).pushNamed(
       PageRoute.Page.postPreviewScreen.route,
-      arguments: {"filePath": file.path, "type": "image"},
+      arguments: {
+        "filePath": file.path,
+        "mirrored": widget.mirroredPhoto.toString(),
+        "type": "image"
+      },
     );
   }
 
