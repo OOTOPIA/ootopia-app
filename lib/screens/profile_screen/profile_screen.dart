@@ -18,7 +18,7 @@ import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart'
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'components/menu_profile.dart';
+import '../components/menu_drawer.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

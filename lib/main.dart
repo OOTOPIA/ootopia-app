@@ -41,7 +41,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'screens/profile_screen/components/menu_profile.dart';
+import 'screens/components/menu_drawer.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
 import 'data/repositories/comment_repository.dart';
@@ -216,7 +216,7 @@ class MainPage extends HookWidget {
         RegisterPhase2TopInterestsPage(args),
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
-    PageRoute.Page.menuProfile: (args) => MenuProfile(),
+    PageRoute.Page.menuProfile: (args) => MenuDrawer(),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
