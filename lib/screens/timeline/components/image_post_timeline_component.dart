@@ -43,12 +43,10 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
         }
       },
       child: Container(
-        height: imageSize.height > MediaQuery.of(context).size.height * .7
-            ? MediaQuery.of(context).size.height * .6
-            : imageSize.height,
-        width: imageSize.width,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            color: Color(0xff1A4188),
+            color: Color(0xff000000),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
@@ -56,9 +54,9 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
               topRight: Radius.circular(20),
             ),
             image: DecorationImage(
-              fit: imageSize.height > MediaQuery.of(context).size.height * .7
-                  ? BoxFit.fitWidth
-                  : BoxFit.fill,
+              fit: imageSize.height > imageSize.width
+                  ? BoxFit.fitHeight
+                  : BoxFit.fitWidth,
               alignment: FractionalOffset.center,
               image: NetworkImage(widget.image),
             )),

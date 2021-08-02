@@ -1,22 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
+
 import 'package:camera/camera.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_crop/image_crop.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:photo_manager/photo_manager.dart';
+
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:path/path.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-import 'package:permission_handler/permission_handler.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
-import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'components/crop_widget.dart';
 
 class CameraApp extends StatefulWidget {
   @override
@@ -41,6 +42,9 @@ class _CameraAppState extends State<CameraApp>
 
   late double _scale;
   late AnimationController _animController;
+
+  final cropKey = GlobalKey<CropState>();
+  late final crop;
 
   @override
   void initState() {
@@ -194,7 +198,8 @@ class _CameraAppState extends State<CameraApp>
             PageRoute.Page.postPreviewScreen.route,
             arguments: {
               "filePath": filePath,
-              "mirroredVideo": mirroredVideo.toString()
+              "mirroredVideo": mirroredVideo.toString(),
+              "type": "video",
             },
           );
         });
@@ -240,22 +245,97 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future getVideoFromGallery(BuildContext context) async {
-    await controller!.dispose();
     final pickedFile = await picker.getVideo(source: ImageSource.gallery);
     indexCamera = 1;
     controller = null;
     setCamera();
 
-    setState(() {
+    setState(() async {
+      await controller!.dispose();
+
       if (pickedFile != null) {
         Navigator.of(context).pushNamed(
           PageRoute.Page.postPreviewScreen.route,
-          arguments: {
-            "filePath": pickedFile.path,
-          },
+          arguments: {"filePath": pickedFile.path, "type": "video"},
         );
       }
     });
+  }
+
+  Future getImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    indexCamera = 1;
+    controller = null;
+    setCamera();
+
+    setState(() async {
+      await controller!.dispose();
+
+      if (pickedFile != null) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CropWidget(
+              imageFile: File(pickedFile.path),
+            ),
+          ),
+        );
+      }
+    });
+  }
+
+  Future _selectImageOrVideo() async {
+    switch (await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text(
+              'O que deseja postar',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.normal,
+                  color: Colors.black),
+            ),
+            titleTextStyle: null,
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () => getVideoFromGallery(context),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 8),
+                      child: Icon(Icons.video_camera_back),
+                    ),
+                    Text('Video'),
+                  ],
+                ),
+              ),
+              SimpleDialogOption(
+                onPressed: () => Navigator.pop(context, "image"),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 10),
+                      child: Icon(Icons.image),
+                    ),
+                    Text('Image'),
+                  ],
+                ),
+              ),
+            ],
+          );
+        })) {
+      case null:
+        print("dispe >>>>>>");
+        break;
+
+      case "image":
+        print("dispe >>>>>>");
+        getImageFromGallery();
+        break;
+    }
   }
 
   Widget renderButtonsFlashCamera() {
@@ -289,6 +369,41 @@ class _CameraAppState extends State<CameraApp>
         ),
       ),
     );
+  }
+
+  void _takePhoto() async {
+    if (!controller!.value.isTakingPicture) {
+      if (!controller!.value.isInitialized ||
+          controller!.value.isRecordingVideo) {
+        return null;
+      }
+
+      await controller!.takePicture().then((file) {
+        if (mounted) setState(() {});
+        if (file != null) {
+          GallerySaver.saveImage(file.path).then((res) async {
+            String filePath = file.path;
+            bool mirroredPhoto = false;
+            if (indexCamera == 1) {
+              mirroredPhoto = true;
+            }
+            imageFile = file;
+            Navigator.of(this.context).pushNamed(
+              PageRoute.Page.postPreviewScreen.route,
+              arguments: {
+                "filePath": filePath,
+                "mirrored": mirroredPhoto.toString(),
+                "type": "image"
+              },
+            );
+          });
+        }
+      });
+      setState(() {});
+
+      _animController.forward();
+      print("take photo");
+    }
   }
 
   void _tapDown(details) {
@@ -330,8 +445,8 @@ class _CameraAppState extends State<CameraApp>
                   width: 300,
                   child: TryAgain(
                     requestPermissions,
-                    messageText:
-                        AppLocalizations.of(context)!.youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
+                    messageText: AppLocalizations.of(context)!
+                        .youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera,
                   ),
                 ),
               ),
@@ -380,6 +495,7 @@ class _CameraAppState extends State<CameraApp>
                           height: 36,
                         ),
                   GestureDetector(
+                    onTap: _takePhoto,
                     onLongPressStart: _tapDown,
                     onLongPressEnd: (details) {
                       _tapUp(context);
@@ -400,7 +516,7 @@ class _CameraAppState extends State<CameraApp>
                   GestureDetector(
                     onTap: () {
                       if (!controller!.value.isRecordingVideo) {
-                        getVideoFromGallery(context);
+                        _selectImageOrVideo();
                       }
                     },
                     child: lastVideoThumbnail == null

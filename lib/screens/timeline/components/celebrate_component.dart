@@ -22,7 +22,6 @@ class CelebrationStates extends State<Celebration> {
     Navigator.pop(context);
   }
 
-  // setState(() {});
   @override
   void initState() {
     _controller = VideoPlayerController.asset(
@@ -66,175 +65,193 @@ class CelebrationStates extends State<Celebration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            child: Stack(
-      children: [
-        SizedBox.expand(
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: Container(
-              height: _controller.value.size.height,
-              width: _controller.value.size.width,
-              padding: EdgeInsets.only(bottom: 40),
-              child: VideoPlayer(_controller),
-            ),
-          ),
-        ),
-        if (videoIsFinished)
-          Center(
-              child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.args["goal"] != "global"
-                          ? AppLocalizations.of(context)!
-                              .congratulations
-                              .toUpperCase()
-                          : AppLocalizations.of(context)!
-                              .letIsCelebrate
-                              .toUpperCase(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                          color: Color(0xFF003694)),
-                    ),
-                    if (widget.args["goal"] != "global")
-                      Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Text(
-                            widget.args["name"],
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                color: Color(0xFF000000)),
-                          )),
-                    if (widget.args["goal"] == "user")
-                      Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .youMetYourDailyGoalToHelpRegenerateThePlanet,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Color(0xFF000000)),
-                        ),
-                      ),
-                  ],
+      body: Container(
+        child: Stack(
+          children: [
+            SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Container(
+                  height: _controller.value.size.height,
+                  width: _controller.value.size.width,
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: VideoPlayer(_controller),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 40,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+            ),
+            if (videoIsFinished)
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "OOz ${AppLocalizations.of(context)!.totalBalance}",
+                            widget.args["goal"] != "global"
+                                ? AppLocalizations.of(context)!
+                                    .congratulations
+                                    .toUpperCase()
+                                : AppLocalizations.of(context)!
+                                    .letIsCelebrate
+                                    .toUpperCase(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 24,
+                                fontSize: 32,
                                 color: Color(0xFF003694)),
                           ),
-                          Container(
-                              height: 30,
-                              decoration: BoxDecoration(
+                          if (widget.args["goal"] != "global")
+                            Padding(
+                                padding: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  widget.args["name"],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                      color: Color(0xFF000000)),
+                                )),
+                          if (widget.args["goal"] == "user")
+                            Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .youMetYourDailyGoalToHelpRegenerateThePlanet,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Color(0xFF000000)),
+                              ),
+                            ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18),
                                   color: Colors.white,
-                                  border: Border.all(color: Color(0xFF003694))),
-                              child: Padding(
-                                  padding: EdgeInsets.only(left: 8, right: 8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ImageIcon(
-                                        AssetImage(
-                                            'assets/icons_profile/ootopia.png'),
-                                        color: Color(0xFF003694),
-                                        size: 32,
-                                      ),
-                                      Text(
-                                        widget.args["balance"],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color(0xFF003694)),
-                                      )
-                                    ],
-                                  )))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: [
-                          if (widget.args["goal"] != "global")
-                            Text(
-                              widget.args["goal"] == "user"
-                                  ? AppLocalizations.of(context)!
-                                      .nextStepIsToHelpMeetYourCityGoal
-                                  : AppLocalizations.of(context)!
-                                      .nextStepIsToHelpMeetYourGlobalGoal,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16,
-                                  color: Color(0xFF000000)),
-                            ),
-                          Text(
-                            AppLocalizations.of(context)!
-                                .keepMakingOOTOPIAAlive,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Color(0xFF000000)),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 58,
-                            child: TextButton(
-                              style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Color(0xFF003694)),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(40.0),
-                                  ))),
-                              child: Text(
-                                AppLocalizations.of(context)!.goOn,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                                  border: Border.all(color: Colors.white),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "OOz ${AppLocalizations.of(context)!.totalBalance}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                          color: Color(0xFF003694)),
+                                    ),
+                                    Container(
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(18),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: Color(0xFF003694))),
+                                        child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 8, right: 8),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                ImageIcon(
+                                                  AssetImage(
+                                                      'assets/icons_profile/ootopia.png'),
+                                                  color: Color(0xFF003694),
+                                                  size: 32,
+                                                ),
+                                                Text(
+                                                  widget.args["balance"],
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Color(0xFF003694)),
+                                                )
+                                              ],
+                                            )))
+                                  ],
+                                ),
                               ),
-                              onPressed: () => {_backButton(context)},
-                            )))
-                  ],
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Column(
+                                  children: [
+                                    if (widget.args["goal"] != "global")
+                                      Text(
+                                        widget.args["goal"] == "user"
+                                            ? AppLocalizations.of(context)!
+                                                .nextStepIsToHelpMeetYourCityGoal
+                                            : AppLocalizations.of(context)!
+                                                .nextStepIsToHelpMeetYourGlobalGoal,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            color: Color(0xFF000000)),
+                                      ),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .keepMakingOOTOPIAAlive,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Color(0xFF000000)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 58,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                        alignment: Alignment.center,
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xFF003694)),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ))),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.goOn,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                    onPressed: () => {_backButton(context)},
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ))
-      ],
-    )));
+              )
+          ],
+        ),
+      ),
+    );
   }
 }
