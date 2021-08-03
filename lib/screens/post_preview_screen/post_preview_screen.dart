@@ -367,26 +367,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   ],
                 ))
           ],
-          // title: Text(
-          //   AppLocalizations.of(context)!.newPost,
-          //   style: TextStyle(color: Colors.black),
-          // ),
-          // iconTheme: IconThemeData(
-          //   color: Colors.black, //change your color here
-          // ),
-          // elevation: 0,
-          // flexibleSpace: Container(
-          //   decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //       begin: Alignment.topCenter,
-          //       end: Alignment.bottomCenter,
-          //       colors: [
-          //         Color(0xffC0D9E8),
-          //         Color(0xffffffff),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ),
         body: BlocListener<PostBloc, PostState>(
           listener: (context, state) {
@@ -562,7 +542,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   height: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
                 Container(
-                  height: 57,
+                  height: 60,
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingNormal),
@@ -670,6 +650,14 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 Visibility(
                   visible: !_errorOnGetTags && !_isLoading,
                   child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(
+                        color: Color(0xff707070),
+                        width: .25,
+                      ),
+                    ),
                     margin: EdgeInsets.symmetric(
                         horizontal: GlobalConstants.of(context).spacingNormal),
                     child: MultiSelectDialogField<InterestsTags?>(
@@ -690,12 +678,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         border: Border.all(
-                          color: Color(0xff707070),
-                          width: .25,
+                          color: Colors.transparent,
+                          width: 0,
                         ),
                       ),
                       buttonIcon: Icon(
                         Icons.add,
+                        size: 30,
                         color: Colors.black54,
                       ),
                       title: Text(
@@ -704,10 +693,9 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       ),
                       buttonText: Text(
                         AppLocalizations.of(context)!.selectTags,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontStyle: FontStyle.normal,
-                        ),
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       confirmText: Text(
                         AppLocalizations.of(context)!.confirm,
