@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration(milliseconds: 300), () {
       _checkStores();
       _checkPageParams();
     });
@@ -227,27 +227,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   _checkStores() {
+    homeStore.getDailyGoalStats();
     if (authStore.currentUser == null) {
       authStore.checkUserIsLogged();
     }
     if (homeStore.dailyGoalStats == null) {
       homeStore.startDailyGoalTimer();
     }
-    homeStore.getDailyGoalStats();
     if (homeStore.currentPageWidget == null) {
       homeStore.setCurrentPageWidget(pages[0]);
     }
   }
 
   _checkPageParams() {
-    Timer(Duration(milliseconds: 1500), () {
+    Timer(Duration(milliseconds: 1000), () {
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
                 "my_profile" &&
             authStore.currentUser != null) {
           if (authStore.currentUser!.registerPhase == 2) {
             setState(() {
-              PageViewController.instance.controller.jumpTo(1);
+              _goToPage(1);
             });
           } else if (authStore.currentUser!.registerPhase == 1) {
             Navigator.of(context).pushNamed(
