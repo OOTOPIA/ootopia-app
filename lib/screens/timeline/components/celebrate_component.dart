@@ -130,7 +130,7 @@ class CelebrationStates extends State<Celebration> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
