@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'badges_model.dart';
 
 class User extends Equatable {
   String? id;
@@ -19,6 +20,7 @@ class User extends Equatable {
   String? token;
   String? createdAt;
   String? updatedAt;
+  List<Badge>? badges;
 
   User({
     this.id,
@@ -38,6 +40,7 @@ class User extends Equatable {
     this.token,
     this.createdAt,
     this.updatedAt,
+    this.badges
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -76,6 +79,9 @@ class User extends Equatable {
       token: json['token'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
+      badges: (json['badges'] as List<Badge>)
+        .map((e) => Badge.fromJson(e as Map<String, dynamic>))
+        .toList()
     );
   }
 
@@ -94,6 +100,7 @@ class User extends Equatable {
         'registerPhase': registerPhase,
         'enableSustainableAds': enableSustainableAds,
         'token': token,
+        'badges': badges
       };
 
   @override
@@ -114,6 +121,7 @@ class User extends Equatable {
         dontAskAgainToConfirmGratitudeReward,
         token,
         createdAt,
-        updatedAt
+        updatedAt,
+        badges
       ];
 }

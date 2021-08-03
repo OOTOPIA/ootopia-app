@@ -798,32 +798,67 @@ class CircleActionButton extends StatelessWidget {
 
 class Avatar extends StatelessWidget {
   String? photoUrl;
+  Color? borderColor;
 
-  Avatar({this.photoUrl});
+  Avatar({this.photoUrl, this.borderColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: (MediaQuery.of(context).size.width * .40) - 16,
       height: (MediaQuery.of(context).size.width * .40) - 16,
-      padding: const EdgeInsets.all(4),
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
-          width: 2.0,
+          width: this.borderColor != null ? 3.0 : 0,
           color: Colors.black,
         ),
         borderRadius: BorderRadius.circular(150),
       ),
-      child: this.photoUrl != null
-          ? CircleAvatar(
-              backgroundImage: NetworkImage("${this.photoUrl}"),
-              radius: 16,
-            )
-          : CircleAvatar(
-              backgroundImage: AssetImage("assets/icons_profile/profile.png"),
-              radius: 16,
-            ),
+      child: 
+      Stack(
+        fit: StackFit.loose,
+        children: [
+          Container(
+            width: (MediaQuery.of(context).size.width * .40) - 16,
+            height: (MediaQuery.of(context).size.width * .40) - 16,
+            child: 
+              (
+                this.photoUrl != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage("${this.photoUrl}"),
+                    radius: 16,
+                  )
+                : CircleAvatar(
+                    backgroundImage: AssetImage("assets/icons_profile/profile.png"),
+                    radius: 16,
+                  )
+              ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  height: 33,
+                  width: 33,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                    // border: Border.all(
+                    //   width: 3.0,
+                    //   color: Colors.black,
+                    // ),
+                    borderRadius: BorderRadius.circular(150),
+                  ),
+                  child: Image.asset("assets/icons_profile/badge_sower.png",) 
+                    ,
+                )
+              ]
+            ,)
+          ,)
+      ],)
     );
   }
 }
