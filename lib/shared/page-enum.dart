@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 enum Page {
+  homeScreen,
   timelineScreen,
   timelineProfileScreen,
   commentScreen,
@@ -19,6 +20,7 @@ enum Page {
   recoverPasswordScreen,
   resetPasswordScreen,
   splashScreen,
+  celebration,
   profile
 }
 

@@ -72,6 +72,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
       );
       if (response.statusCode == 200) {
         print("WALLET RESPONSE HISTORY --> ${response.body}");
+
         return (json.decode(response.body) as List)
             .map((i) => WalletTransfer.fromJson(i))
             .toList();

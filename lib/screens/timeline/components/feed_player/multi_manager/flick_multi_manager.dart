@@ -63,18 +63,20 @@ class FlickMultiManager {
   }
 
   play([FlickManager? flickManager]) {
-    if (flickManager != null) {
-      _activeManager?.flickControlManager?.pause();
-      _activeManager = flickManager;
-    }
+    Future.delayed(Duration.zero, () {
+      if (flickManager != null) {
+        _activeManager?.flickControlManager?.pause();
+        _activeManager = flickManager;
+      }
 
-    if (_isMute) {
-      _activeManager?.flickControlManager?.mute();
-    } else {
-      _activeManager?.flickControlManager?.unmute();
-    }
+      if (_isMute) {
+        _activeManager?.flickControlManager?.mute();
+      } else {
+        _activeManager?.flickControlManager?.unmute();
+      }
 
-    _activeManager?.flickControlManager?.play();
+      _activeManager?.flickControlManager?.play();
+    });
   }
 
   toggleMute() {
