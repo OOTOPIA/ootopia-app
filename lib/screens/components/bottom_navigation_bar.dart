@@ -132,7 +132,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
                   color: Theme.of(context).accentColor,
                 ),
               ),
-              duration: Duration(milliseconds: 200),
+              duration: Duration(milliseconds: 100),
             ),
           ],
         ),

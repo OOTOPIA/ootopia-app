@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 
 class MenuDrawer extends StatefulWidget {
   Function? onTapProfileItem;
-  MenuDrawer({Key? key, this.onTapProfileItem}) : super(key: key);
+  Function? onTapLogoutItem;
+  MenuDrawer({Key? key, this.onTapProfileItem, this.onTapLogoutItem})
+      : super(key: key);
   @override
   _MenuDrawerState createState() => _MenuDrawerState();
 }
@@ -28,11 +30,11 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
 
   clearAuth(context) async {
     authStore!.logout();
+    this.trackingEvents.trackingLoggedOut();
     Navigator.of(context).pushNamedAndRemoveUntil(
       PageRoute.Page.homeScreen.route,
       ModalRoute.withName('/'),
     );
-    this.trackingEvents.trackingLoggedOut();
   }
 
   Future<void> getAppInfo() async {
@@ -67,7 +69,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
           title: AppLocalizations.of(context)!.profile,
           onTapFunction: (context) {
             Navigator.of(context).pop();
-            widget.onTapProfileItem!();
+            if (widget.onTapProfileItem != null) {
+              widget.onTapProfileItem!();
+            }
           },
         ),
         Visibility(
@@ -75,7 +79,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
           child: ItemMenu(
             pathImage: 'assets/icons_profile/menu_left.png',
             title: AppLocalizations.of(context)!.exit,
-            onTapFunction: clearAuth,
+            onTapFunction: (context) {
+              clearAuth(context);
+              if (widget.onTapLogoutItem != null) {
+                widget.onTapLogoutItem!();
+              }
+            },
           ),
         ),
         Expanded(
@@ -96,10 +105,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        "${AppLocalizations.of(context)!.loggedInAs} " +
-                            (authStore!.currentUser != null
-                                ? authStore!.currentUser!.fullname!
-                                : ""),
+                        (authStore!.currentUser != null
+                            ? "${AppLocalizations.of(context)!.loggedInAs} ${authStore!.currentUser!.fullname!}"
+                            : ""),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -125,7 +133,7 @@ class ItemMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () => onTapFunction(context),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
