@@ -132,10 +132,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   }
 
   Future<bool> _onWillPop(bool isNativeBackButton) async {
-    if (!isNativeBackButton) {
-      Navigator.pop(context);
-      return false;
-    }
     if (_createdPost) {
       return true;
     }
@@ -143,7 +139,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       flickManager.flickControlManager!.toggleFullscreen();
       return false;
     }
-    return (await showDialog(
+    bool returnDialog = await showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
@@ -174,8 +170,14 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
               ],
             );
           },
-        )) ??
+        ) ??
         false;
+
+    if (!isNativeBackButton && returnDialog) {
+      Navigator.pop(context);
+      return false;
+    }
+    return returnDialog;
   }
 
   void _sendPost() {
