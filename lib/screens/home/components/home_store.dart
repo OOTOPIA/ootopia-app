@@ -59,13 +59,15 @@ abstract class HomeStoreBase with Store {
 
   @action
   startDailyGoalTimer() async {
+    print("START DAILY GOAL TIMER >>>>>>>>>>>>>>>>>>>>>>");
     if (prefs == null) {
       prefs = await SharedPreferences.getInstance();
     }
     if (!_watch.isRunning) {
       _watch.start();
     }
-    if (_dailyGoalTimer == null) {
+    if (_dailyGoalTimer == null ||
+        (_dailyGoalTimer != null && !_dailyGoalTimer!.isActive)) {
       _dailyGoalTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
         if (_watch.isRunning && dailyGoalStats != null) {
           if (!_timerIsStarted) {
@@ -106,10 +108,8 @@ abstract class HomeStoreBase with Store {
 
   @action
   stopDailyGoalTimer() {
-    if (_watch.isRunning) {
-      _watch.stop();
-    }
-    _dailyGoalTimer = null;
+    _watch.stop();
+    _dailyGoalTimer?.cancel();
   }
 
   @action
@@ -179,7 +179,6 @@ abstract class HomeStoreBase with Store {
           "m " +
           (showSeconds == true ? strSeconds + "s" : "");
     } catch (err) {
-      print("ERROR>>> $err");
       return "error";
     }
   }

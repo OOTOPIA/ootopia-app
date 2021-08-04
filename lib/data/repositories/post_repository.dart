@@ -18,6 +18,7 @@ abstract class PostRepository {
   Future<LikePostResult> likePost(String id);
   Future<void> createPost(PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
+  Future recordTimelineWatched(int timeInMilliseconds);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -155,6 +156,25 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         "posts/watched",
         data: {
           "data": "[" + allObjsJsonString + "]",
+        },
+      );
+    } catch (e) {
+      print('Error send watched post: $e');
+    }
+  }
+
+  @override
+  Future recordTimelineWatched(int timeInMilliseconds) async {
+    try {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        return;
+      }
+
+      await ApiClient.api().post(
+        "posts/timeline-watched",
+        data: {
+          "timeInMilliseconds": timeInMilliseconds,
         },
       );
     } catch (e) {

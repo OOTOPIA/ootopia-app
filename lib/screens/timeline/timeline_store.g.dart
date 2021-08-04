@@ -24,41 +24,24 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
-  final _$remainingTimeAtom = Atom(name: 'TimelineStoreBase.remainingTime');
+  final _$startTimelineViewTimerAsyncAction =
+      AsyncAction('TimelineStoreBase.startTimelineViewTimer');
 
   @override
-  String get remainingTime {
-    _$remainingTimeAtom.reportRead();
-    return super.remainingTime;
-  }
-
-  @override
-  set remainingTime(String value) {
-    _$remainingTimeAtom.reportWrite(value, super.remainingTime, () {
-      super.remainingTime = value;
-    });
+  Future startTimelineViewTimer() {
+    return _$startTimelineViewTimerAsyncAction
+        .run(() => super.startTimelineViewTimer());
   }
 
   final _$TimelineStoreBaseActionController =
       ActionController(name: 'TimelineStoreBase');
 
   @override
-  dynamic startDailyGoalTimer() {
+  dynamic stopTimelineViewTimer() {
     final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
-        name: 'TimelineStoreBase.startDailyGoalTimer');
+        name: 'TimelineStoreBase.stopTimelineViewTimer');
     try {
-      return super.startDailyGoalTimer();
-    } finally {
-      _$TimelineStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<DailyGoalStatsModel?> getDailyGoalStats() {
-    final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
-        name: 'TimelineStoreBase.getDailyGoalStats');
-    try {
-      return super.getDailyGoalStats();
+      return super.stopTimelineViewTimer();
     } finally {
       _$TimelineStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -67,8 +50,7 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   @override
   String toString() {
     return '''
-dailyGoalStats: ${dailyGoalStats},
-remainingTime: ${remainingTime}
+dailyGoalStats: ${dailyGoalStats}
     ''';
   }
 }

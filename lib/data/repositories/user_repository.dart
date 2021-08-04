@@ -131,30 +131,24 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
 
   @override
   Future recordTimeUserUsedApp(int timeInMilliseconds) async {
-    try {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (!loggedIn) {
-        return;
-      }
-
-      await ApiClient.api().post(
-        "users/usage-time",
-        data: {
-          "timeInMilliseconds": timeInMilliseconds,
-        },
-      );
-    } catch (e) {
-      print('Error send user usage time: $e');
+    bool loggedIn = await getUserIsLoggedIn();
+    if (!loggedIn) {
+      return;
     }
+
+    await ApiClient.api().post(
+      "users/usage-time",
+      data: {
+        "timeInMilliseconds": timeInMilliseconds,
+      },
+    );
   }
 
   @override
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
     try {
-      print("PEGA PEGA PEGA");
       bool loggedIn = await getUserIsLoggedIn();
       if (!loggedIn) {
-        print("NOT LOGGED TO GET DAILY GOAL STATS");
         return null;
       }
       User user = await getCurrentUser();
@@ -162,12 +156,10 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       Response res = await ApiClient.api().get(
         "users/${user.id}/daily-goal-stats",
       );
-      print("ESSE É O RESULTADO >>>>>>>>>>>>>> ${res.data}");
       if (res.statusCode != 200) {
         throw Exception(res.data);
       }
       var result = DailyGoalStatsModel.fromJson(res.data);
-      print("DAILY STATS $result");
       return result;
     } catch (e) {
       throw Exception('Failed to get daily goal stats ' + e.toString());
