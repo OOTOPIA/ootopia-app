@@ -60,6 +60,13 @@ class AppUsageTime {
     await _sendToApi();
   }
 
+  resetUsageTime() {
+    if (prefs != null && prefs!.getInt(_prefsKey) != null) {
+      usageTimeSoFarInMilliseconds = 0;
+      prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
+    }
+  }
+
   _sendToApi() async {
     if (usageTimeSoFarInMilliseconds > 0) {
       //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)

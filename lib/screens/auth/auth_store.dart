@@ -1,4 +1,5 @@
 import "package:mobx/mobx.dart";
+import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -29,6 +30,7 @@ abstract class AuthStoreBase with Store {
 
   @action
   logout() async {
+    AppUsageTime.instance.resetUsageTime();
     await storage.cleanAuthToken();
     this._currentUser = null;
   }

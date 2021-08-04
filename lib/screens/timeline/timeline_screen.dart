@@ -12,9 +12,11 @@ import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -56,7 +58,7 @@ class _TimelinePageState extends State<TimelinePage>
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
   late GeneralConfig transferOozToPostLimitConfig;
-  //TimelineStore store = TimelineStore();
+  late TimelineStore timelineStore;
 
   ScrollController _scrollController = new ScrollController();
   List<TimelinePost> _allPosts = [];
@@ -111,7 +113,9 @@ class _TimelinePageState extends State<TimelinePage>
     _handleIncomingLinks();
     _handleInitialUri();
 
-    //store.startDailyGoalTimer();
+    Future.delayed(Duration.zero, () {
+      timelineStore.startTimelineViewTimer();
+    });
   }
 
   void goToTopTimeline() {
@@ -238,13 +242,12 @@ class _TimelinePageState extends State<TimelinePage>
   @override
   void dispose() {
     _intentDataStreamSubscription.cancel();
-    OOzDistributionSystem.getInstance().endTimelineView("dispose");
+    timelineStore.stopTimelineViewTimer();
     super.dispose();
   }
 
   @override
   void deactivate() {
-    OOzDistributionSystem.getInstance().endTimelineView("deactivate");
     super.deactivate();
   }
 
@@ -254,30 +257,23 @@ class _TimelinePageState extends State<TimelinePage>
     // These are the callbacks
     switch (state) {
       case AppLifecycleState.resumed:
-        OOzDistributionSystem.getInstance().endTimelineView("resumed");
-
-        // widget is resumed
+        timelineStore.startTimelineViewTimer();
         break;
       case AppLifecycleState.inactive:
-        OOzDistributionSystem.getInstance().endTimelineView("inactive");
-
-        // widget is inactive
+        timelineStore.stopTimelineViewTimer();
         break;
       case AppLifecycleState.paused:
-        OOzDistributionSystem.getInstance().endTimelineView("paused");
-
-        // widget is paused
+        timelineStore.stopTimelineViewTimer();
         break;
       case AppLifecycleState.detached:
-        OOzDistributionSystem.getInstance().endTimelineView("detached");
-
-        // widget is detached
+        timelineStore.stopTimelineViewTimer();
         break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    timelineStore = Provider.of<TimelineStore>(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Theme.of(context).scaffoldBackgroundColor,

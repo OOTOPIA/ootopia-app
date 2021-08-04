@@ -249,7 +249,11 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                             ": ",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .subtitle2!,
+                                            .subtitle2!
+                                            .copyWith(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.normal,
+                                            ),
                                         children: [
                                           TextSpan(
                                             text: (authStore.currentUser == null
@@ -259,7 +263,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                  fontSize: 12,
+                                                  fontSize: 13,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                           )
@@ -274,7 +278,11 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                           ": ",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle2!,
+                                          .subtitle2!
+                                          .copyWith(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.normal,
+                                          ),
                                       children: [
                                         TextSpan(
                                           text: homeStore.totalAppUsageTimeSoFar
@@ -286,7 +294,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                               .textTheme
                                               .subtitle2!
                                               .copyWith(
-                                                fontSize: 12,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         )
@@ -313,7 +321,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                          fontSize: 12,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.normal,
                                         ),
                                   ),
                                   Padding(
