@@ -79,41 +79,21 @@ class CardInformationBalance extends StatelessWidget {
                 )
               ],
             ),
-            trailing: Wrap(
-              spacing: 30,
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: <Widget>[
-                Image.asset('assets/icons/ooz-coin-small.png'),
-                Text(
-                    '${balanceOfTransactions.length > 7 ? NumberFormat.compact().format(double.parse(balanceOfTransactions)) : balanceOfTransactions}')
-              ],
+            trailing: Chip(
+              labelPadding: balanceOfTransactions.length == 2
+                  ? EdgeInsets.only(left: 32)
+                  : balanceOfTransactions.length == 3
+                      ? EdgeInsets.only(left: 27)
+                      : balanceOfTransactions.length == 4
+                          ? EdgeInsets.only(left: 20)
+                          : balanceOfTransactions.length == 5
+                              ? EdgeInsets.only(left: 13)
+                              : EdgeInsets.only(left: 5),
+              avatar: Image.asset('assets/icons/ooz-coin-small.png'),
+              backgroundColor: Colors.white,
+              label: Text(
+                  '${balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(balanceOfTransactions)) : balanceOfTransactions}'),
             ),
-            // trailing: Row(
-            //   mainAxisSize: MainAxisSize.min,
-            //   children: [
-
-            //     Image.asset('assets/icons/ooz-coin-small.png'),
-            //     if (balanceOfTransactions.length == 5)
-            //       SizedBox(
-            //         width: 35,
-            //       ),
-            //     if (balanceOfTransactions.length == 3)
-            //       SizedBox(
-            //         width: 47,
-            //       ),
-            //     if (balanceOfTransactions.length == 4)
-            //       SizedBox(
-            //         width: 47,
-            //       ),
-            //     if (balanceOfTransactions.length == 6)
-            //       SizedBox(
-            //         width: 26,
-            //       ),
-            //     Text(
-            //         '${balanceOfTransactions.length > 7 ? NumberFormat.compact().format(double.parse(balanceOfTransactions)) : balanceOfTransactions}')
-            //   ],
-            // ),
           ),
         ),
       ],

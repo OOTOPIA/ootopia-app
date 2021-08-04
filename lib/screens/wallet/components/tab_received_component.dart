@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/screens/wallet/components/card_information_balance.dart';
+import 'package:ootopia_app/screens/wallet/components/chip_information_date_and_sum.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TabReceivedComponent extends StatefulWidget {
   final WalletRepositoryImpl walletRepositoryImpl;
@@ -31,48 +33,28 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
           }
           if (snapshot.data!.isEmpty) {
             return Center(
-              child: Text('Texto'),
+              child: Text(AppLocalizations.of(context)!.youDontReceived),
             );
           }
 
           return ListView(
             children: snapshot.data!.entries.map((e) {
-              var numberToFormat = 125.5;
-              var _formattedNumber =
-                  NumberFormat.compact().format(numberToFormat);
-              print('Formatted Number is $_formattedNumber');
+              String sumFormated =
+                  widget.mapSumDaysTransfer[e.key].toString().length > 7
+                      ? NumberFormat.compact()
+                          .format(widget.mapSumDaysTransfer[e.key])
+                      : widget.mapSumDaysTransfer[e.key].toString();
+
+              int lengthItemMapSumOfDayTransfer = sumFormated.length;
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${e.key}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xff003694),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Wrap(
-                          spacing: 30,
-                          alignment: WrapAlignment.center,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            Image.asset('assets/icons/ooz-coin-small.png'),
-                            Text(
-                              '${widget.mapSumDaysTransfer.containsKey(e.key) ? widget.mapSumDaysTransfer[e.key] : ''}',
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                    ChipSumForDate(
+                      date: e.key,
+                      lengthItemMapSumOfDayTransfer:
+                          lengthItemMapSumOfDayTransfer,
+                      sumFormated: sumFormated,
                     ),
                     Column(
                       children: e.value.map((e) {

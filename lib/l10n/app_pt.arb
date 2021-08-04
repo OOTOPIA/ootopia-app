@@ -215,6 +215,9 @@
     "all": "Todas",
     "sent":"Enviadas",
     "received": "Recebidas",
+    "youDontReceived": "Você não recebeu moedas",
+    "youDontSent": "Você não enviou moedas",
+    "youDontNothing": "Você não tem nada",
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída"
 }

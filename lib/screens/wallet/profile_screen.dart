@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_all_component.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_received_component.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_send_component.dart';
@@ -71,13 +72,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           avatar:
                               Image.asset('assets/icons/ooz-coin-small.png'),
                           label: Container(
-                            width: 50,
+                            width: 65,
                             child: FutureBuilder<Wallet>(
                                 future: walletRepositoryImpl.getWallet(
                                     '19dce8cb-358b-4765-93e4-d1d581b75675'),
                                 builder: (context, snapshot) {
                                   return Text(
-                                    '${NumberFormat.compact().format(snapshot.data?.totalBalance)}',
+                                    '${snapshot.data!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(snapshot.data?.totalBalance) : snapshot.data?.totalBalance.toStringAsFixed(2)}',
                                     style: TextStyle(
                                       color: Color(0xff003694),
                                       fontSize: 16,
@@ -131,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.56,
                 child: TabBarView(
                   children: [
                     TabAllComponent(
