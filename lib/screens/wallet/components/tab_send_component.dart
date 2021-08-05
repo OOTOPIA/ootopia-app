@@ -35,7 +35,7 @@ class _TabSendComponentState extends State<TabSendComponent> {
               child: Text(AppLocalizations.of(context)!.youDontSent),
             );
           }
-
+          snapshot.data!.entries.map((e) => print(e.key));
           return ListView(
             children: snapshot.data!.entries.map((e) {
               String sumFormated =
@@ -58,11 +58,13 @@ class _TabSendComponentState extends State<TabSendComponent> {
                     Column(
                       children: e.value.map((e) {
                         return CardInformationBalance(
-                            '${e.balance}',
-                            'https://via.placeholder.com/140x100',
+                            '- ${e.balance}',
+                            '${e.photoUrl ?? ''}',
                             'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Down.com',
                             '${e.otherUsername ?? ''}',
-                            'Personal Goal Achieved');
+                            'Personal Goal Achieved',
+                            0xff000000,
+                            'Sent');
                       }).toList(),
                     )
                   ],

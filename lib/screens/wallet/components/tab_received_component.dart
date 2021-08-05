@@ -43,7 +43,10 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
                   widget.mapSumDaysTransfer[e.key].toString().length > 7
                       ? NumberFormat.compact()
                           .format(widget.mapSumDaysTransfer[e.key])
-                      : widget.mapSumDaysTransfer[e.key].toString();
+                          .replaceAll('.', ',')
+                      : widget.mapSumDaysTransfer[e.key]
+                          .toString()
+                          .replaceAll('.', ',');
 
               int lengthItemMapSumOfDayTransfer = sumFormated.length;
               return Padding(
@@ -60,10 +63,12 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
                       children: e.value.map((e) {
                         return CardInformationBalance(
                             '${e.balance}',
-                            'https://via.placeholder.com/140x100',
+                            '${e.photoUrl ?? ''}',
                             'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Down.com',
                             '${e.otherUsername ?? ''}',
-                            'Personal Goal Achieved');
+                            'Personal Goal Achieved',
+                            0xff018F9C,
+                            'Received');
                       }).toList(),
                     )
                   ],

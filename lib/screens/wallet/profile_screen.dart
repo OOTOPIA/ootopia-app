@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
-import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
-import 'package:ootopia_app/data/repositories/wallet_repository.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_all_component.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_received_component.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_send_component.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -19,28 +17,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  WalletRepositoryImpl walletRepositoryImpl = WalletRepositoryImpl();
-  Map<String, double> mapSumDaysTransfer = {};
-  Future<Map<String, List<WalletTransfer>>> getUserTransactionHistory(
-      [String? typeTransaction]) async {
-    var resultTransactions = await walletRepositoryImpl.getTransactionHistory(
-        50, 0, '19dce8cb-358b-4765-93e4-d1d581b75675', typeTransaction);
-    var map = groupBy(
-        resultTransactions,
-        (WalletTransfer obj) => DateFormat('MMM d, y')
-            .format(DateTime.parse(obj.createdAt))
-            .toString());
-    map.entries.forEach((element) {
-      var soma = 0.0;
-      element.value.forEach((element) {
-        soma = element.balance + soma;
-      });
-      mapSumDaysTransfer.addAll({element.key: soma});
-    });
-
-    return map;
-  }
-
+  WalletStore walletStore = WalletStore();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -69,16 +46,20 @@ class _ProfilePageState extends State<ProfilePage> {
                           shape: StadiumBorder(
                               side: BorderSide(color: Color(0xff003694))),
                           backgroundColor: Colors.white,
-                          avatar:
-                              Image.asset('assets/icons/ooz-coin-small.png'),
+                          avatar: SvgPicture.asset(
+                            'assets/icons/ooz-coin-blue-small.svg',
+                            color: Color(0xff003694),
+                          ),
                           label: Container(
-                            width: 65,
+                            width: 55,
                             child: FutureBuilder<Wallet>(
-                                future: walletRepositoryImpl.getWallet(
-                                    '19dce8cb-358b-4765-93e4-d1d581b75675'),
+                                future: walletStore.getBalanceUser(),
                                 builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return CircularProgressIndicator();
+                                  }
                                   return Text(
-                                    '${snapshot.data!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(snapshot.data?.totalBalance) : snapshot.data?.totalBalance.toStringAsFixed(2)}',
+                                    '${snapshot.data!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(snapshot.data?.totalBalance).replaceAll('.', ',') : snapshot.data?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}',
                                     style: TextStyle(
                                       color: Color(0xff003694),
                                       fontSize: 16,
@@ -136,21 +117,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: TabBarView(
                   children: [
                     TabAllComponent(
-                      walletRepositoryImpl: walletRepositoryImpl,
-                      getUserTransactionHistory: getUserTransactionHistory,
-                      mapSumDaysTransfer: mapSumDaysTransfer,
+                      walletRepositoryImpl: walletStore.walletRepositoryImpl,
+                      getUserTransactionHistory:
+                          walletStore.getUserTransactionHistory,
+                      mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
                     ),
                     TabReceivedComponent(
-                      walletRepositoryImpl: walletRepositoryImpl,
+                      walletRepositoryImpl: walletStore.walletRepositoryImpl,
                       getUserTransactionHistory:
-                          getUserTransactionHistory('received'),
-                      mapSumDaysTransfer: mapSumDaysTransfer,
+                          walletStore.getUserTransactionHistory('received'),
+                      mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
                     ),
                     TabSendComponent(
-                      walletRepositoryImpl: walletRepositoryImpl,
+                      walletRepositoryImpl: walletStore.walletRepositoryImpl,
                       getUserTransactionHistory:
-                          getUserTransactionHistory('sent'),
-                      mapSumDaysTransfer: mapSumDaysTransfer,
+                          walletStore.getUserTransactionHistory('sent'),
+                      mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
                     ),
                   ],
                 ),
@@ -166,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
     showModalBottomSheet(
         context: context,
         backgroundColor: Color(0xff018F9C),
-        builder: (BuildContext bc) {
+        builder: (BuildContext context) {
           return Container(
             padding: EdgeInsets.all(26),
             child: Wrap(
@@ -175,14 +157,21 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Regeneration Game',
+                      AppLocalizations.of(context)!.regenerationGame,
                       style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
-                    Icon(Icons.close)
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ))
                   ],
                 ),
                 Text(
-                  'The Regeneration Game is a way you can contribute to regenerative movement through the OOTOPIA app. The Personal Goal refers to the time you commit to playing the game per day. When you meet your daily goal, you receive a credit reward in OOz. Every day at 20:00, a new round begins, lasting 24 hours.',
+                  AppLocalizations.of(context)!.aboutRegenerationGame,
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 TextButton(
