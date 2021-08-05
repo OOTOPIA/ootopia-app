@@ -56,7 +56,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     await this.repository.createPost(post);
     subscription = FlutterUploader().result.listen((result) {
-      print("LISTENNNN ${result.response}");
       if (result.status == UploadTaskStatus.complete &&
           !completer.isCompleted) {
         completer.complete(result.response);

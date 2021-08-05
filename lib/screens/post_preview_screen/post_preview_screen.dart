@@ -210,6 +210,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     postData.type = widget.args["type"] == "image" ? "image" : "video";
     postData.description = _descriptionInputController.text;
 
+    if (postData.type == "video") {
+      postData.durationInSecs = (flickManager.flickVideoManager!
+                  .videoPlayerValue!.duration.inMilliseconds %
+              60000) /
+          1000;
+    }
+
     postBloc.add(
       CreatePostEvent(
         post: postData,
@@ -381,7 +388,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
             } else if (state is LoadingCreatePostState) {
               _isLoadingUpload = true;
             } else if (state is SuccessCreatePostState) {
-              homeStore.setShowCreatedPostAlert(true);
               _isLoadingUpload = false;
               _createdPost = true;
               Navigator.of(context).pushNamedAndRemoveUntil(

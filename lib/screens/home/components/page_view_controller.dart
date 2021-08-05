@@ -11,6 +11,10 @@ class PageViewController {
   static PageViewController get instance =>
       _instance == null ? _instance = PageViewController() : _instance!;
 
+  PageController newController() {
+    return controller = PageController(initialPage: 0, keepPage: true);
+  }
+
   bool back() {
     if (controller.page! > 0) {
       controller.animateToPage(
