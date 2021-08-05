@@ -18,6 +18,7 @@ import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart'
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import '../../data/models/users/badges_model.dart';
 import '../components/menu_drawer.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -342,8 +343,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                   Row(
                     children: [
                       Avatar(
-                        photoUrl:
-                            userProfile == null ? null : userProfile!.photoUrl,
+                        photoUrl: userProfile == null ? null : userProfile!.photoUrl,
+                        badges: userProfile!.badges,
+                        modal: "profile",
                       ),
                       DataProfile(),
                     ],
@@ -798,9 +800,10 @@ class CircleActionButton extends StatelessWidget {
 
 class Avatar extends StatelessWidget {
   String? photoUrl;
-  Color? borderColor;
+  List<Badge>? badges;
+  String? modal;
 
-  Avatar({this.photoUrl, this.borderColor});
+  Avatar({this.photoUrl, this.badges, this.modal});
 
   @override
   Widget build(BuildContext context) {
@@ -810,8 +813,8 @@ class Avatar extends StatelessWidget {
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
-          width: this.borderColor != null ? 3.0 : 0,
-          color: Colors.black,
+          width: this.modal == "profile" ? 3.0 : 0,
+          color: this.modal == "profile" ? (this.badges!.length > 0) ? Color(0Xff39A7B2) : Colors.black : Colors.white,
         ),
         borderRadius: BorderRadius.circular(150),
       ),
@@ -835,26 +838,20 @@ class Avatar extends StatelessWidget {
                   )
               ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
+          if  (this.badges!.length > 0) Padding(
+            padding: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.02),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  height: 33,
-                  width: 33,
-                  alignment: Alignment.centerRight,
-                  decoration: BoxDecoration(
-                    // border: Border.all(
-                    //   width: 3.0,
-                    //   color: Colors.black,
-                    // ),
-                    borderRadius: BorderRadius.circular(150),
+                 GestureDetector(
+                  child:  Container(
+                    width: 33, 
+                    height: 33, 
+                    child: Image.network(this.badges?[0].icon as String)
                   ),
-                  child: Image.asset("assets/icons_profile/badge_sower.png",) 
-                    ,
-                )
+                  onTap: () {},
+                ),
               ]
             ,)
           ,)

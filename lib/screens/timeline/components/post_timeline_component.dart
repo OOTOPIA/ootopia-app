@@ -261,10 +261,23 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ],
                   ),
                 ),
-                PopupMenuPost(
-                  isAnabled: isUserOwnsPost,
-                  callbackReturnPopupMenu: _popupMenuReturn,
-                  post: post,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if  (this.post.badges!.length > 0) GestureDetector(
+                      child:  Container(
+                        width: 25, 
+                        height: 25, 
+                        child: Image.network(this.post.badges?[0].icon as String)
+                      ),
+                      onTap: () {},
+                    ),
+                    PopupMenuPost(
+                      isAnabled: isUserOwnsPost,
+                      callbackReturnPopupMenu: _popupMenuReturn,
+                      post: post,
+                    ),
+                  ],
                 )
               ],
             ),

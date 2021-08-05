@@ -79,9 +79,13 @@ class User extends Equatable {
       token: json['token'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      badges: (json['badges'] as List<Badge>)
+      badges: (
+        json['badges'] == null ? 
+          []
+          : (json['badges'] as List<dynamic>)
         .map((e) => Badge.fromJson(e as Map<String, dynamic>))
         .toList()
+      )
     );
   }
 
