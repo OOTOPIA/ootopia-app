@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/wallet/profile_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -102,7 +103,9 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
                       onPressed: () => this._onTap(3),
                       icon: SvgPicture.asset(
                         'assets/icons/ooz_circle_icon.svg',
-                        color: unselectedIconColor,
+                        color: _checkIsSelected(3)
+                            ? selectedIconColor
+                            : unselectedIconColor,
                       ),
                       iconSize: 28,
                     ),
@@ -145,6 +148,9 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
     switch (index) {
       case 0:
         selected = (homeStore.currentPageWidget is TimelinePage);
+        break;
+      case 3:
+        selected = (homeStore.currentPageWidget is ProfilePage);
         break;
       case 4:
         selected = (homeStore.currentPageWidget is ProfileScreen);

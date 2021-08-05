@@ -80,12 +80,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         print("error when upload photo: ${err.toString()}");
         yield UpdateUserErrorState(
             message: "An error occurred while saving user data.");
-            // AppLocalizations.of(context)!.anErrorOccurredWhileSavingUserData
+        // AppLocalizations.of(context)!.anErrorOccurredWhileSavingUserData
       }
     } catch (_) {
       yield UpdateUserErrorState(
           message: "An error occurred while saving user data.");
-          // AppLocalizations.of(context)!.anErrorOccurredWhileSavingUserData
+      // AppLocalizations.of(context)!.anErrorOccurredWhileSavingUserData
     }
   }
 

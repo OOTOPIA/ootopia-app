@@ -24,6 +24,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
+import 'package:ootopia_app/screens/wallet/profile_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
@@ -87,7 +88,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
@@ -220,6 +220,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
+    PageRoute.Page.profile: (args) => ProfilePage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
   };
 
