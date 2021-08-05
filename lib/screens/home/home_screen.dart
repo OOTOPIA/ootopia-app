@@ -40,11 +40,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
+  late PageController controller;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
+    controller = PageViewController.instance.newController();
     Future.delayed(Duration(milliseconds: 1000), () {
       _checkStores();
       _checkPageParams();
@@ -111,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               children: [
                 PageView.builder(
                   pageSnapping: false,
-                  controller: PageViewController.instance.controller,
+                  controller: controller,
                   scrollDirection: Axis.horizontal,
                   physics: NeverScrollableScrollPhysics(),
                   onPageChanged: (index) {
@@ -135,14 +137,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         : 0,
                     duration: Duration(milliseconds: 300),
                     child: NewPostUploadedMessageBox(),
-                    onEnd: () {
-                      Timer(Duration(seconds: 3000), () {
-                        homeStore?.setCreatedPostAlertAlreadyShowed(true);
-                        setState(() {
-                          createdPostAlertAlreadyShowed = true;
-                        });
-                      });
-                    },
                   ),
                 ),
               ],
@@ -274,6 +268,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             arguments: widget.args!['returnToPageWithArgs']['arguments'],
           );
         }
+      }
+      if (widget.args != null &&
+          widget.args!['createdPost'] != null &&
+          widget.args!['createdPost'] == true) {
+        homeStore?.setShowCreatedPostAlert(true);
+        Timer(Duration(seconds: 5), () {
+          homeStore?.setShowCreatedPostAlert(false);
+          homeStore?.setCreatedPostAlertAlreadyShowed(true);
+          setState(() {});
+        });
       }
     });
   }
