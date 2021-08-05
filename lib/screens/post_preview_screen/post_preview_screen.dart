@@ -572,7 +572,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     autofocus: false,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(
-                        left: GlobalConstants.of(context).spacingNormal,
+                        left: GlobalConstants.of(context).spacingSmall,
                         top: GlobalConstants.of(context).spacingNormal,
                         bottom: GlobalConstants.of(context).spacingSmall,
                       ),
@@ -637,6 +637,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     padding: EdgeInsets.only(
                       top: GlobalConstants.of(context).spacingNormal,
                       bottom: GlobalConstants.of(context).spacingSmall,
+                      left: GlobalConstants.of(context).screenHorizontalSpace,
+                      right: GlobalConstants.of(context).screenHorizontalSpace,
                     ),
                     child: Text(
                       geolocationErrorMessage +
