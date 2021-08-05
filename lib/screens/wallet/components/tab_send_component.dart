@@ -38,13 +38,15 @@ class _TabSendComponentState extends State<TabSendComponent> {
           snapshot.data!.entries.map((e) => print(e.key));
           return ListView(
             children: snapshot.data!.entries.map((e) {
-              String sumFormated =
+              String sumFormated = '';
+              int lengthItemMapSumOfDayTransfer = 0;
+              sumFormated =
                   widget.mapSumDaysTransfer[e.key].toString().length > 7
                       ? NumberFormat.compact()
                           .format(widget.mapSumDaysTransfer[e.key])
                       : widget.mapSumDaysTransfer[e.key].toString();
 
-              int lengthItemMapSumOfDayTransfer = sumFormated.length;
+              lengthItemMapSumOfDayTransfer = sumFormated.length;
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

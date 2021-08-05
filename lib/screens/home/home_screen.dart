@@ -9,7 +9,7 @@ import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/keep_alive_page.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
-import 'package:ootopia_app/screens/wallet/profile_screen.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/menu_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';

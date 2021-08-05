@@ -39,16 +39,16 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
 
           return ListView(
             children: snapshot.data!.entries.map((e) {
-              String sumFormated =
+              String sumFormated = '';
+              int lengthItemMapSumOfDayTransfer = 0;
+              sumFormated =
                   widget.mapSumDaysTransfer[e.key].toString().length > 7
                       ? NumberFormat.compact()
                           .format(widget.mapSumDaysTransfer[e.key])
-                          .replaceAll('.', ',')
-                      : widget.mapSumDaysTransfer[e.key]
-                          .toString()
-                          .replaceAll('.', ',');
+                      : widget.mapSumDaysTransfer[e.key].toString();
 
-              int lengthItemMapSumOfDayTransfer = sumFormated.length;
+              lengthItemMapSumOfDayTransfer = sumFormated.length;
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

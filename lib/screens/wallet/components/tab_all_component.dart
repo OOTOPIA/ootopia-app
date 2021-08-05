@@ -5,6 +5,7 @@ import 'package:ootopia_app/screens/wallet/components/card_information_balance.d
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/screens/wallet/components/chip_information_date_and_sum.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/screens/wallet/helper/origin_ooz.dart';
 
 class TabAllComponent extends StatefulWidget {
   final WalletRepositoryImpl walletRepositoryImpl;
@@ -39,13 +40,17 @@ class _TabAllComponentState extends State<TabAllComponent> {
 
           return ListView(
             children: snapshot.data!.entries.map((e) {
-              String sumFormated =
-                  widget.mapSumDaysTransfer[e.key].toString().length > 7
-                      ? NumberFormat.compact()
-                          .format(widget.mapSumDaysTransfer[e.key])
-                      : widget.mapSumDaysTransfer[e.key].toString();
+              String sumFormated = '';
+              int lengthItemMapSumOfDayTransfer = 0;
+              setState(() {
+                sumFormated =
+                    widget.mapSumDaysTransfer[e.key].toString().length > 7
+                        ? NumberFormat.compact()
+                            .format(widget.mapSumDaysTransfer[e.key])
+                        : widget.mapSumDaysTransfer[e.key].toString();
 
-              int lengthItemMapSumOfDayTransfer = sumFormated.length;
+                lengthItemMapSumOfDayTransfer = sumFormated.length;
+              });
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -78,7 +83,7 @@ class _TabAllComponentState extends State<TabAllComponent> {
                             '${e.photoUrl ?? ''}',
                             'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Down.com',
                             '${e.otherUsername ?? ''}',
-                            'Personal Goal Achieved',
+                            '${OriginOOzCoin.INVITATION_CODE}',
                             colorOfBalance,
                             typeActionFromOrTo);
                       }).toList(),
