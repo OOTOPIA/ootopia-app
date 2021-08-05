@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -549,7 +550,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 ),
                 Container(
                   height: 60,
-                  alignment: Alignment.centerLeft,
                   margin: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingNormal),
                   decoration: BoxDecoration(
@@ -559,31 +559,54 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       width: .25,
                     ),
                   ),
-                  child: TextFormField(
-                    style: TextStyle(
-                      color: Color(0xff003694),
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    enabled: false,
-                    textAlign: TextAlign.left,
-                    controller: _geolocationInputController,
-                    keyboardType: TextInputType.number,
-                    autofocus: false,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(
-                        left: GlobalConstants.of(context).spacingSmall,
-                        top: GlobalConstants.of(context).spacingNormal,
-                        bottom: GlobalConstants.of(context).spacingSmall,
-                      ),
-                      hintText: geolocationMessage,
-                      hintStyle: Theme.of(context).textTheme.subtitle1,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      suffixIcon: Icon(Icons.public),
-                    ),
-                  ),
+                  child: geolocationErrorMessage.isNotEmpty
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      GlobalConstants.of(context).spacingSmall),
+                              child: Text(
+                                geolocationMessage,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                            )
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                      horizontal: GlobalConstants.of(context)
+                                          .spacingSmall)
+                                  .copyWith(bottom: 2),
+                              child: Icon(
+                                FeatherIcons.mapPin,
+                                color: Color(0xff003694),
+                              ),
+                            ),
+                            _geolocationInputController.text.isNotEmpty
+                                ? Text(
+                                    _geolocationInputController.text,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                          color: Color(0xff003694),
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  )
+                                : Container(
+                                    padding: EdgeInsets.only(left: 2),
+                                    height: 18,
+                                    width: 18,
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xff003694),
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                          ],
+                        ),
                 ),
                 Visibility(
                   visible: geolocationErrorMessage.isNotEmpty,
@@ -608,11 +631,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                           ),
                           child: Text(
                             AppLocalizations.of(context)!.getCurrentLocation,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
+                            style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
                         onPressed: () {
@@ -768,6 +787,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   visible: tagsErrorMessage.isNotEmpty,
                   child: Padding(
                     padding: EdgeInsets.only(
+                      left: GlobalConstants.of(context).screenHorizontalSpace,
+                      right: GlobalConstants.of(context).screenHorizontalSpace,
                       top: GlobalConstants.of(context).spacingNormal,
                       bottom: GlobalConstants.of(context).spacingSmall,
                     ),

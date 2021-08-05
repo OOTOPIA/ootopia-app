@@ -16,7 +16,7 @@
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
 
-    "confirm": "Confirme",
+    "confirm": "Confirmar",
 
     "pleaseWait": "Por favor, aguarde...",
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
@@ -213,5 +213,6 @@
     "accomplished": "Realizada",
     "oozPartialBalance": "OOz Saldo Parcial",
     "whatWillYouContribute" : "Com o que irá contribuir?",
-    "publish": "Publicar"
+    "publish": "Publicar",
+    "cropButton":"Cortar imagem"
 }

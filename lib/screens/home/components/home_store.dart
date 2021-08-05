@@ -59,7 +59,8 @@ abstract class HomeStoreBase with Store {
 
   @action
   startDailyGoalTimer() async {
-    print("START DAILY GOAL TIMER >>>>>>>>>>>>>>>>>>>>>>");
+    _timerIsStarted = false;
+    _totalAppUsageTimeSoFarInMs = 0;
     if (prefs == null) {
       prefs = await SharedPreferences.getInstance();
     }
@@ -94,6 +95,7 @@ abstract class HomeStoreBase with Store {
           }
           if (percentageOfDailyGoalAchieved >= 100) {
             prefs!.setBool(_personalCelebratePageEnabled, true);
+            AppUsageTime.instance.resetUsageTime();
           } else {
             prefs!.setBool(_personalCelebratePageEnabled, false);
             prefs!.setBool(_personalCelebratePageAlreadyOpened, false);
@@ -120,11 +122,6 @@ abstract class HomeStoreBase with Store {
   @action
   setCurrentPageIndex(int index) {
     currentPageIndex = index;
-  }
-
-  @action
-  openDrawer() {
-    print("HEY OPEN DRAWER BRO!");
   }
 
   @action

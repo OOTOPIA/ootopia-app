@@ -219,6 +219,7 @@
     "whatWillYouContribute": "What will you contribute?",
 
     "publish": "Publish",
+    "cropButton":"Crop image",
 
     "@helloWorld": {
         "description": "A programmer greeting"

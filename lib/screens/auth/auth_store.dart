@@ -26,11 +26,13 @@ abstract class AuthStoreBase with Store {
   @action
   setUserIsLogged() {
     this._currentUser = ObservableFuture(storage.getCurrentUser());
+    AppUsageTime.instance.startTimer();
   }
 
   @action
   logout() async {
     AppUsageTime.instance.resetUsageTime();
+    AppUsageTime.instance.stopTimer();
     await storage.cleanAuthToken();
     this._currentUser = null;
   }
