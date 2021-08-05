@@ -232,17 +232,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
-  dynamic openDrawer() {
-    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
-        name: 'HomeStoreBase.openDrawer');
-    try {
-      return super.openDrawer();
-    } finally {
-      _$HomeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setShowCreatedPostAlert(bool value) {
     final _$actionInfo = _$HomeStoreBaseActionController.startAction(
         name: 'HomeStoreBase.setShowCreatedPostAlert');
