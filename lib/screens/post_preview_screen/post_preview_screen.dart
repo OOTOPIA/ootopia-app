@@ -363,7 +363,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       width: GlobalConstants.of(context).spacingSmall,
                     ),
                     Text(
-                      "Publish",
+                      AppLocalizations.of(context)!.publish,
                       style: TextStyle(
                         color: Color(0xff018F9C),
                       ),

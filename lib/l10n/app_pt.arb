@@ -212,5 +212,6 @@
     "personalGoal": "Meta Pessoal",
     "accomplished": "Realizada",
     "oozPartialBalance": "OOz Saldo Parcial",
-    "whatWillYouContribute" : "Com o que irá contribuir?"
+    "whatWillYouContribute" : "Com o que irá contribuir?",
+    "publish": "Publicar"
 }

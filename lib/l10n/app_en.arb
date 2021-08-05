@@ -218,6 +218,8 @@
 
     "whatWillYouContribute": "What will you contribute?",
 
+    "publish": "Publish",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }
