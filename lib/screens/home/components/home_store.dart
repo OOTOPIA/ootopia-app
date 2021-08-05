@@ -59,6 +59,8 @@ abstract class HomeStoreBase with Store {
 
   @action
   startDailyGoalTimer() async {
+    _timerIsStarted = false;
+    _totalAppUsageTimeSoFarInMs = 0;
     if (prefs == null) {
       prefs = await SharedPreferences.getInstance();
     }
@@ -121,9 +123,6 @@ abstract class HomeStoreBase with Store {
   setCurrentPageIndex(int index) {
     currentPageIndex = index;
   }
-
-  @action
-  openDrawer() {}
 
   @action
   setShowCreatedPostAlert(bool value) {
