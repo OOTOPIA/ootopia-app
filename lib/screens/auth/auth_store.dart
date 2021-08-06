@@ -34,7 +34,7 @@ abstract class AuthStoreBase with Store {
     try {
       await AppUsageTime.instance.sendToApi();
     } catch (err) {}
-    Future.delayed(Duration(milliseconds: 100), () async {
+    Future.delayed(Duration(milliseconds: 500), () async {
       AppUsageTime.instance.stopTimer();
       await storage.cleanAuthToken();
       this._currentUser = null;
