@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'image_post_timeline_component.dart';
@@ -261,10 +262,39 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ],
                   ),
                 ),
-                PopupMenuPost(
-                  isAnabled: isUserOwnsPost,
-                  callbackReturnPopupMenu: _popupMenuReturn,
-                  post: post,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if  (this.post.badges!.length > 0) GestureDetector(
+                      child:  Container(
+                        width: 25, 
+                        height: 25, 
+                        child: Image.network(this.post.badges?[0].icon as String)
+                      ),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Color(0xff018F9C),
+                          builder: (BuildContext context) {
+                            return SnackBarWidget(
+                              menu: AppLocalizations.of(context)!.badgeSower,
+                              text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                              about: AppLocalizations.of(context)!.learnMore,
+                              contact: {
+                                "text": AppLocalizations.of(context)!.areYouASowerToo,
+                                "textLink": AppLocalizations.of(context)!.getInContact,
+                              }
+                            );
+                          }
+                        );
+                      }
+                    ),
+                    PopupMenuPost(
+                      isAnabled: isUserOwnsPost,
+                      callbackReturnPopupMenu: _popupMenuReturn,
+                      post: post,
+                    ),
+                  ],
                 )
               ],
             ),

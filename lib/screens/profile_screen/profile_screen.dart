@@ -16,7 +16,9 @@ import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_hi
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import '../../data/models/users/badges_model.dart';
 import '../components/menu_drawer.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -341,8 +343,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                   Row(
                     children: [
                       Avatar(
-                        photoUrl:
-                            userProfile == null ? null : userProfile!.photoUrl,
+                        photoUrl: userProfile == null ? null : userProfile!.photoUrl,
+                        badges: userProfile!.badges,
+                        modal: "profile",
                       ),
                       DataProfile(),
                     ],
@@ -797,32 +800,79 @@ class CircleActionButton extends StatelessWidget {
 
 class Avatar extends StatelessWidget {
   String? photoUrl;
+  List<Badge>? badges;
+  String? modal;
 
-  Avatar({this.photoUrl});
+  Avatar({this.photoUrl, this.badges, this.modal});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: (MediaQuery.of(context).size.width * .40) - 16,
       height: (MediaQuery.of(context).size.width * .40) - 16,
-      padding: const EdgeInsets.all(4),
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
-          width: 2.0,
-          color: Colors.black,
+          width: this.modal == "profile" ? 3.0 : 0,
+          color: this.modal == "profile" ? (this.badges!.length > 0) ? Color(0Xff39A7B2) : Colors.black : Colors.white,
         ),
         borderRadius: BorderRadius.circular(150),
       ),
-      child: this.photoUrl != null
-          ? CircleAvatar(
-              backgroundImage: NetworkImage("${this.photoUrl}"),
-              radius: 16,
-            )
-          : CircleAvatar(
-              backgroundImage: AssetImage("assets/icons_profile/profile.png"),
-              radius: 16,
+      child: 
+      Stack(
+        fit: StackFit.loose,
+        children: [
+          Container(
+            width: (MediaQuery.of(context).size.width * .40) - 16,
+            height: (MediaQuery.of(context).size.width * .40) - 16,
+            child: 
+              (
+                this.photoUrl != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage("${this.photoUrl}"),
+                    radius: 16,
+                  )
+                : CircleAvatar(
+                    backgroundImage: AssetImage("assets/icons_profile/profile.png"),
+                    radius: 16,
+                  )
+              ),
+          ),
+          if  (this.badges!.length > 0) Padding(
+            padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width * .02)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {       
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Color(0xff018F9C),
+                      builder: (BuildContext context) {
+                        return SnackBarWidget(
+                          menu: AppLocalizations.of(context)!.badgeSower,
+                          text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                          about: AppLocalizations.of(context)!.learnMore,
+                          contact: {
+                            "text": AppLocalizations.of(context)!.areYouASowerToo,
+                            "textLink": AppLocalizations.of(context)!.getInContact,
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 33,
+                    height: 33,
+                    child: Image.network(this.badges?[0].icon as String),
+                  ),
+                ),
+              ],
             ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import './../users/badges_model.dart';
 
 class TimelinePost extends Equatable {
   String id;
@@ -21,6 +22,7 @@ class TimelinePost extends Equatable {
   String? country;
   DateTime? createdAt;
   DateTime? updatedAt;
+  List<Badge>? badges;
 
   TimelinePost({
     required this.id,
@@ -42,6 +44,7 @@ class TimelinePost extends Equatable {
     this.country,
     this.createdAt,
     this.updatedAt,
+    this.badges
   });
 
   factory TimelinePost.fromJson(Map<String, dynamic> parsedJson) {
@@ -67,6 +70,14 @@ class TimelinePost extends Equatable {
       country: parsedJson['country'],
       createdAt: parsedJson['createdAt'],
       updatedAt: parsedJson['updatedAt'],
+      badges: (
+        parsedJson['badges'] == null ?
+          []
+          : (
+            parsedJson['badges'] as List<dynamic>
+          ).map((e) => Badge.fromJson(e as Map<String, dynamic>))
+            .toList()
+      )
     );
   }
 
@@ -90,5 +101,6 @@ class TimelinePost extends Equatable {
         country,
         createdAt,
         updatedAt,
+        badges
       ];
 }
