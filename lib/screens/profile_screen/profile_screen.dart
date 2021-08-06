@@ -838,42 +838,41 @@ class Avatar extends StatelessWidget {
                   )
               ),
           ),
-          if  (this.badges!.length > 0) Row(
+          if  (this.badges!.length > 0) Padding(
+            padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width * .02)),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                  TextButton(
-                    onPressed: () {       
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Color(0xff018F9C),
-                        builder: (BuildContext context) {
-                          return Snackbar(
-                            menu: AppLocalizations.of(context)!.badgeSower,
-                            text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                            about: AppLocalizations.of(context)!.learnMore,
-                            contact: {
-                              "text": AppLocalizations.of(context)!.areYouASowerToo,
-                              "textLink": AppLocalizations.of(context)!.getInConcatc,
-                            }
-                          );
-                        }
-                      );
-                    },
-                    style: ButtonStyle(
-                      alignment: Alignment.topRight
-                      
-                    ),
-                    child: Container(
-                      width: 33,
-                      height: 33,
-                      child: Image.network(this.badges?[0].icon as String)
-                    )
-                )
-              ]
-            )
-        ]
-      )
+                GestureDetector(
+                  onTap: () {       
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Color(0xff018F9C),
+                      builder: (BuildContext context) {
+                        return SnackBarWidget(
+                          menu: AppLocalizations.of(context)!.badgeSower,
+                          text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                          about: AppLocalizations.of(context)!.learnMore,
+                          contact: {
+                            "text": AppLocalizations.of(context)!.areYouASowerToo,
+                            "textLink": AppLocalizations.of(context)!.getInContact,
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    width: 33,
+                    height: 33,
+                    child: Image.network(this.badges?[0].icon as String),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

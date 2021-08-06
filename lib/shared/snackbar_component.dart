@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Snackbar extends StatefulWidget {
+class SnackBarWidget extends StatefulWidget {
   String menu;
   String text;
   Map<String,dynamic>? contact;
   String about;
 
-  Snackbar({required this.menu, required this.text, this.contact, required this.about});
+  SnackBarWidget({required this.menu, required this.text, this.contact, required this.about});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
 }
 
-class _SnackbarStates extends State<Snackbar> {
+class _SnackbarStates extends State<SnackBarWidget> {
 
-  Future<void> _makePhoneCall(String url) async {
+  Future<void> _openEmail(String url) async {
     await launch(url);
   }
 
@@ -30,7 +30,11 @@ class _SnackbarStates extends State<Snackbar> {
             children: [
               Text(
                 widget.menu,
-                style: TextStyle(color: Colors.white, fontSize: 22),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               IconButton(
                   onPressed: () {
@@ -56,7 +60,7 @@ class _SnackbarStates extends State<Snackbar> {
                 ),
                 TextButton(
                   onPressed: () => setState(() {
-                  _makePhoneCall('mailto:contact@ootopia.org');
+                  _openEmail('mailto:contact@ootopia.org');
                 }),
                   child:  Text(
                     widget.contact!["textLink"],

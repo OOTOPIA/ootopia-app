@@ -276,13 +276,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           context: context,
                           backgroundColor: Color(0xff018F9C),
                           builder: (BuildContext context) {
-                            return Snackbar(
+                            return SnackBarWidget(
                               menu: AppLocalizations.of(context)!.badgeSower,
                               text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                               about: AppLocalizations.of(context)!.learnMore,
                               contact: {
                                 "text": AppLocalizations.of(context)!.areYouASowerToo,
-                                "textLink": AppLocalizations.of(context)!.getInConcatc,
+                                "textLink": AppLocalizations.of(context)!.getInContact,
                               }
                             );
                           }
