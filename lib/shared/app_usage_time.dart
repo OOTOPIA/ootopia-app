@@ -22,7 +22,7 @@ class AppUsageTime {
           if (_watch.isRunning) {
             _watch.stop();
           }
-          await _sendToApi();
+          await sendToApi();
           if (!_watch.isRunning) {
             _watch.start();
           }
@@ -68,7 +68,7 @@ class AppUsageTime {
     }
   }
 
-  _sendToApi() async {
+  sendToApi() async {
     if (usageTimeSoFarInMilliseconds > 0) {
       //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
       //Sendo assim o registro será enviado quando o app for aberto novamente

@@ -182,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               PageRoute.Page.loginScreen.route,
               arguments: {
                 "returnToPageWithArgs": {
-                  "pageRoute": PageRoute.Page.cameraScreen.route,
+                  "currentPageName": "wallet",
                   "arguments": null
                 }
               },
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            _goToPage(2);
+            _openProfile();
           }
           break;
         default:
@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return;
     }
     if (authStore.currentUser!.registerPhase == 2) {
-      _goToPage(1);
+      _goToPage(2);
     } else {
       Navigator.of(context).pushNamed(
         PageRoute.Page.registerPhase2Screen.route,

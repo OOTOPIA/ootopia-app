@@ -31,9 +31,13 @@ abstract class AuthStoreBase with Store {
 
   @action
   logout() async {
-    AppUsageTime.instance.resetUsageTime();
-    AppUsageTime.instance.stopTimer();
-    await storage.cleanAuthToken();
-    this._currentUser = null;
+    try {
+      await AppUsageTime.instance.sendToApi();
+    } catch (err) {}
+    Future.delayed(Duration(milliseconds: 500), () async {
+      AppUsageTime.instance.stopTimer();
+      await storage.cleanAuthToken();
+      this._currentUser = null;
+    });
   }
 }
