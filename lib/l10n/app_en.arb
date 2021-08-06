@@ -219,10 +219,17 @@
 
     "whatWillYouContribute": "What will you contribute?",
 
+    "publish": "Publish",
+    "cropButton":"Crop image",
+
     "textExplainWallet" : "This is your OOz wallet. Here you can check your total \n balance and all incoming and outcoming transactions",
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
     "youDontNothing": "You don't have nothing",
+    "all": "all",
+    "sent":"sent",
+    "received": "received",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }
