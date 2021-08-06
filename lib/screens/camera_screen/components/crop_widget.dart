@@ -42,9 +42,7 @@ class _CropWidgetState extends State<CropWidget> {
     // scale up to use maximum possible number of pixels
     // this will sample image in higher resolution to make cropped image larger
     final sample = await ImageCrop.sampleImage(
-      file: widget.imageFile,
-      preferredSize: (2000 / scale).round(),
-    );
+        file: widget.imageFile, preferredSize: (1024 / scale).round());
 
     final file = await ImageCrop.cropImage(
       file: sample,

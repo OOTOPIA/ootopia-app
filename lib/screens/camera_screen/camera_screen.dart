@@ -386,9 +386,7 @@ class _CameraAppState extends State<CameraApp>
           GallerySaver.saveImage(file.path).then((res) async {
             String filePath = file.path;
             bool mirroredPhoto = false;
-            if (indexCamera == 1) {
-              mirroredPhoto = true;
-            }
+
             imageFile = file;
 
             await Navigator.push(
