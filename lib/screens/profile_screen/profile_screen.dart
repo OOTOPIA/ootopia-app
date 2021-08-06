@@ -16,6 +16,7 @@ import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_hi
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import '../../data/models/users/badges_model.dart';
 import '../components/menu_drawer.dart';
@@ -837,24 +838,42 @@ class Avatar extends StatelessWidget {
                   )
               ),
           ),
-          if  (this.badges!.length > 0) Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.02),
-            child: Row(
+          if  (this.badges!.length > 0) Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                 GestureDetector(
-                  child:  Container(
-                    width: 33, 
-                    height: 33, 
-                    child: Image.network(this.badges?[0].icon as String)
-                  ),
-                  onTap: () {},
-                ),
+                  TextButton(
+                    onPressed: () {       
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Color(0xff018F9C),
+                        builder: (BuildContext context) {
+                          return Snackbar(
+                            menu: AppLocalizations.of(context)!.badgeSower,
+                            text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                            about: AppLocalizations.of(context)!.learnMore,
+                            contact: {
+                              "text": AppLocalizations.of(context)!.areYouASowerToo,
+                              "textLink": AppLocalizations.of(context)!.getInConcatc,
+                            }
+                          );
+                        }
+                      );
+                    },
+                    style: ButtonStyle(
+                      alignment: Alignment.topRight
+                      
+                    ),
+                    child: Container(
+                      width: 33,
+                      height: 33,
+                      child: Image.network(this.badges?[0].icon as String)
+                    )
+                )
               ]
-            ,)
-          ,)
-      ],)
+            )
+        ]
+      )
     );
   }
 }

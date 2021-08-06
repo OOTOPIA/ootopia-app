@@ -226,6 +226,12 @@
     "all": "all",
     "sent":"sent",
     "received": "received",
+
+    "badgeSower": "Badge: Sower",
+    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Sower Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
+    "areYouASowerToo": "Are you a sower too?",
+    "getInConcatc": "Get in concatc!",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }

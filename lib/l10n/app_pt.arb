@@ -221,5 +221,11 @@
     "youDontSent": "Você não enviou moedas",
     "youDontNothing": "Você não tem nada",
 
-    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída"
+    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
+    
+    "badgeSower": "Distintivo: Semeador",
+    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Sower é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
+    "areYouASowerToo": "Você também é semeador?",
+    "getInConcatc": "Entre em contato!"
+
 }
