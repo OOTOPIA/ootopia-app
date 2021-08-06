@@ -74,10 +74,8 @@ class AppUsageTime {
       //Sendo assim o registro será enviado quando o app for aberto novamente
       Future.delayed(Duration.zero, () async {
         var _usersRepository = UserRepositoryImpl();
-        print("bbbbbb >>>>>>>>");
         await _usersRepository
             .recordTimeUserUsedApp(usageTimeSoFarInMilliseconds);
-        print("aaaaaa >>>>>>>>");
         usageTimeSoFarInMilliseconds = 0;
         prefs!.setInt(_prefsKey, 0);
         prefs!.setInt(_prefsPendingTimeKey, 0);
