@@ -7,13 +7,11 @@ abstract class AuthEvent extends Equatable {
 
 class LoadingLoginEvent extends AuthEvent {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
 class LoadingSucessLoginEvent extends AuthEvent {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 

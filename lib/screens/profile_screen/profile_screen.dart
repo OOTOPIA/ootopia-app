@@ -11,7 +11,6 @@ import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
-import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_history.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';

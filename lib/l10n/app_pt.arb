@@ -13,6 +13,7 @@
     "createAccount": "Criar Conta",
 
     "regenerationGame": "Jogo de regeneração",
+    "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. O objetivo pessoal refere-se ao tempo que você se compromete a jogar o jogo por dia. Ao atingir sua meta diária, você recebe uma recompensa de crédito em OOz. Todos os dias, às 20h, inicia-se uma nova rodada, com duração de 24 horas.",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
 
@@ -212,5 +213,10 @@
     "personalGoal": "Meta Pessoal",
     "accomplished": "Realizada",
     "oozPartialBalance": "OOz Saldo Parcial",
-    "whatWillYouContribute" : "Com o que irá contribuir?"
+    "whatWillYouContribute" : "Com o que irá contribuir?",
+    "youDontReceived": "Você não recebeu moedas",
+    "youDontSent": "Você não enviou moedas",
+    "youDontNothing": "Você não tem nada",
+
+    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída"
 }
