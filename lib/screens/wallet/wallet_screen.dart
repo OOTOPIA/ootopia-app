@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
@@ -116,24 +117,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: MediaQuery.of(context).size.height * 0.56,
                 child: TabBarView(
                   children: [
-                    TabAllComponent(
-                      walletRepositoryImpl: walletStore.walletRepositoryImpl,
-                      getUserTransactionHistory:
-                          walletStore.getUserTransactionHistory,
-                      mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
-                    ),
-                    TabReceivedComponent(
-                      walletRepositoryImpl: walletStore.walletRepositoryImpl,
-                      getUserTransactionHistory:
-                          walletStore.getUserTransactionHistory('received'),
-                      mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
-                    ),
-                    TabSendComponent(
-                      walletRepositoryImpl: walletStore.walletRepositoryImpl,
-                      getUserTransactionHistory:
-                          walletStore.getUserTransactionHistory('sent'),
-                      mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
-                    ),
+                    Observer(builder: (context) {
+                      return TabAllComponent(
+                        walletRepositoryImpl: walletStore.walletRepositoryImpl,
+                        getUserTransactionHistory:
+                            walletStore.getUserTransactionHistory,
+                        mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
+                      );
+                    }),
+                    Observer(builder: (context) {
+                      return TabReceivedComponent(
+                        walletRepositoryImpl: walletStore.walletRepositoryImpl,
+                        getUserTransactionHistory:
+                            walletStore.getUserTransactionHistory('received'),
+                        mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
+                      );
+                    }),
+                    Observer(builder: (context) {
+                      return TabSendComponent(
+                        walletRepositoryImpl: walletStore.walletRepositoryImpl,
+                        getUserTransactionHistory:
+                            walletStore.getUserTransactionHistory('sent'),
+                        mapSumDaysTransfer: walletStore.mapSumDaysTransfer,
+                      );
+                    }),
                   ],
                 ),
               )

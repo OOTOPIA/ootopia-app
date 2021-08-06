@@ -59,7 +59,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapUserRegisterToState(RegisterEvent event) async* {
     try {
-      print("NOVA CONTA ${event.email}");
       var result = (await this
           .repository
           .register(event.name, event.email, event.password));
@@ -85,7 +84,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapRecoverPasswordToState(
       RecoverPasswordEvent event) async* {
     try {
-      print("RECOVER PASSWORD ${event.email}");
       await this.repository.recoverPassword(event.email);
       yield EmptyState();
       yield LoadedSucessRecoverPasswordState();

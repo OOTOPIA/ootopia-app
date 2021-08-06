@@ -24,7 +24,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
-import 'package:ootopia_app/screens/wallet/profile_screen.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
@@ -113,13 +113,12 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.inactive:
         AppUsageTime.instance.stopTimer();
-        //print("app in inactive");
         break;
       case AppLifecycleState.paused:
-        //print("app in paused");
+        AppUsageTime.instance.stopTimer();
         break;
       case AppLifecycleState.detached:
-        //print("app in detached");
+        AppUsageTime.instance.stopTimer();
         break;
     }
   }

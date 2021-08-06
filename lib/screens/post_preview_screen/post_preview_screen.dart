@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -132,10 +133,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   }
 
   Future<bool> _onWillPop(bool isNativeBackButton) async {
-    if (!isNativeBackButton) {
-      Navigator.pop(context);
-      return false;
-    }
     if (_createdPost) {
       return true;
     }
@@ -143,7 +140,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       flickManager.flickControlManager!.toggleFullscreen();
       return false;
     }
-    return (await showDialog(
+    bool returnDialog = await showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
@@ -174,8 +171,14 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
               ],
             );
           },
-        )) ??
+        ) ??
         false;
+
+    if (!isNativeBackButton && returnDialog) {
+      Navigator.pop(context);
+      return false;
+    }
+    return returnDialog;
   }
 
   void _sendPost() {
@@ -207,6 +210,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
     postData.type = widget.args["type"] == "image" ? "image" : "video";
     postData.description = _descriptionInputController.text;
+
+    if (postData.type == "video") {
+      postData.durationInSecs = (flickManager.flickVideoManager!
+                  .videoPlayerValue!.duration.inMilliseconds %
+              60000) /
+          1000;
+    }
 
     postBloc.add(
       CreatePostEvent(
@@ -354,7 +364,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       width: GlobalConstants.of(context).spacingSmall,
                     ),
                     Text(
-                      "Publish",
+                      AppLocalizations.of(context)!.publish,
                       style: TextStyle(
                         color: Color(0xff018F9C),
                       ),
@@ -365,26 +375,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   ],
                 ))
           ],
-          // title: Text(
-          //   AppLocalizations.of(context)!.newPost,
-          //   style: TextStyle(color: Colors.black),
-          // ),
-          // iconTheme: IconThemeData(
-          //   color: Colors.black, //change your color here
-          // ),
-          // elevation: 0,
-          // flexibleSpace: Container(
-          //   decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //       begin: Alignment.topCenter,
-          //       end: Alignment.bottomCenter,
-          //       colors: [
-          //         Color(0xffC0D9E8),
-          //         Color(0xffffffff),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ),
         body: BlocListener<PostBloc, PostState>(
           listener: (context, state) {
@@ -399,7 +389,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
             } else if (state is LoadingCreatePostState) {
               _isLoadingUpload = true;
             } else if (state is SuccessCreatePostState) {
-              homeStore.setShowCreatedPostAlert(true);
               _isLoadingUpload = false;
               _createdPost = true;
               Navigator.of(context).pushNamedAndRemoveUntil(
@@ -560,42 +549,64 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   height: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
                 Container(
-                  height: 57,
-                  alignment: Alignment.centerLeft,
+                  height: 60,
                   margin: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingNormal),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     border: Border.all(
-                      color: Color(0xff707070),
+                      color: Color(0xff707070).withOpacity(.5),
                       width: .25,
                     ),
                   ),
-                  child: TextFormField(
-                    style: TextStyle(
-                      color: Color(0xff003694),
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    enabled: false,
-                    textAlign: TextAlign.left,
-                    controller: _geolocationInputController,
-                    keyboardType: TextInputType.number,
-                    autofocus: false,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(
-                        left: GlobalConstants.of(context).spacingNormal,
-                        top: GlobalConstants.of(context).spacingNormal,
-                        bottom: GlobalConstants.of(context).spacingSmall,
-                      ),
-                      hintText: geolocationMessage,
-                      hintStyle: Theme.of(context).textTheme.subtitle1,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      suffixIcon: Icon(Icons.public),
-                    ),
-                  ),
+                  child: geolocationErrorMessage.isNotEmpty
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      GlobalConstants.of(context).spacingSmall),
+                              child: Text(
+                                geolocationMessage,
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                            )
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                      horizontal: GlobalConstants.of(context)
+                                          .spacingSmall)
+                                  .copyWith(bottom: 2),
+                              child: Icon(
+                                FeatherIcons.mapPin,
+                                color: Color(0xff003694),
+                              ),
+                            ),
+                            _geolocationInputController.text.isNotEmpty
+                                ? Text(
+                                    _geolocationInputController.text,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                          color: Color(0xff003694),
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  )
+                                : Container(
+                                    padding: EdgeInsets.only(left: 2),
+                                    height: 18,
+                                    width: 18,
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xff003694),
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                          ],
+                        ),
                 ),
                 Visibility(
                   visible: geolocationErrorMessage.isNotEmpty,
@@ -620,11 +631,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                           ),
                           child: Text(
                             AppLocalizations.of(context)!.getCurrentLocation,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
+                            style: Theme.of(context).textTheme.subtitle1,
                           ),
                         ),
                         onPressed: () {
@@ -649,6 +656,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                     padding: EdgeInsets.only(
                       top: GlobalConstants.of(context).spacingNormal,
                       bottom: GlobalConstants.of(context).spacingSmall,
+                      left: GlobalConstants.of(context).screenHorizontalSpace,
+                      right: GlobalConstants.of(context).screenHorizontalSpace,
                     ),
                     child: Text(
                       geolocationErrorMessage +
@@ -668,6 +677,14 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                 Visibility(
                   visible: !_errorOnGetTags && !_isLoading,
                   child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(
+                        color: Color(0xff707070),
+                        width: .25,
+                      ),
+                    ),
                     margin: EdgeInsets.symmetric(
                         horizontal: GlobalConstants.of(context).spacingNormal),
                     child: MultiSelectDialogField<InterestsTags?>(
@@ -688,12 +705,13 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         border: Border.all(
-                          color: Color(0xff707070),
-                          width: .25,
+                          color: Colors.transparent,
+                          width: 0,
                         ),
                       ),
                       buttonIcon: Icon(
                         Icons.add,
+                        size: 30,
                         color: Colors.black54,
                       ),
                       title: Text(
@@ -702,10 +720,9 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       ),
                       buttonText: Text(
                         AppLocalizations.of(context)!.selectTags,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontStyle: FontStyle.normal,
-                        ),
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
                       confirmText: Text(
                         AppLocalizations.of(context)!.confirm,
@@ -770,6 +787,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   visible: tagsErrorMessage.isNotEmpty,
                   child: Padding(
                     padding: EdgeInsets.only(
+                      left: GlobalConstants.of(context).screenHorizontalSpace,
+                      right: GlobalConstants.of(context).screenHorizontalSpace,
                       top: GlobalConstants.of(context).spacingNormal,
                       bottom: GlobalConstants.of(context).spacingSmall,
                     ),

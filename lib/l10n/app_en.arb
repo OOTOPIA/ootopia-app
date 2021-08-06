@@ -219,6 +219,9 @@
 
     "whatWillYouContribute": "What will you contribute?",
 
+    "publish": "Publish",
+    "cropButton":"Crop image",
+
     "textExplainWallet" : "This is your OOz wallet. Here you can check your total \n balance and all incoming and outcoming transactions",
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
@@ -232,6 +235,7 @@
     "areYouASowerToo": "Are you a sower too?",
     "getInConcatc": "Get in concatc!",
 
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }

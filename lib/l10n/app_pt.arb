@@ -17,7 +17,7 @@
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
 
-    "confirm": "Confirme",
+    "confirm": "Confirmar",
 
     "pleaseWait": "Por favor, aguarde...",
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
@@ -214,6 +214,8 @@
     "accomplished": "Realizada",
     "oozPartialBalance": "OOz Saldo Parcial",
     "whatWillYouContribute" : "Com o que irá contribuir?",
+    "publish": "Publicar",
+    "cropButton":"Cortar imagem",
     "all": "Todas",
     "sent":"Enviadas",
     "received": "Recebidas",
@@ -226,6 +228,7 @@
     "badgeSower": "Distintivo: Semeador",
     "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Sower é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
     "areYouASowerToo": "Você também é semeador?",
-    "getInConcatc": "Entre em contato!"
+    "getInConcatc": "Entre em contato!",
 
+    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída"
 }

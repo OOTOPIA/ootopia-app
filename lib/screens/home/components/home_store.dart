@@ -59,13 +59,21 @@ abstract class HomeStoreBase with Store {
 
   @action
   startDailyGoalTimer() async {
+    _timerIsStarted = false;
+    _totalAppUsageTimeSoFarInMs = 0;
     if (prefs == null) {
       prefs = await SharedPreferences.getInstance();
     }
     if (!_watch.isRunning) {
       _watch.start();
     }
-    if (_dailyGoalTimer == null) {
+    if (dailyGoalStats != null) {
+      percentageOfDailyGoalAchieved =
+          dailyGoalStats!.percentageOfDailyGoalAchieved;
+      _totalAppUsageTimeSoFarInMs = dailyGoalStats!.totalAppUsageTimeSoFarInMs;
+    }
+    if (_dailyGoalTimer == null ||
+        (_dailyGoalTimer != null && !_dailyGoalTimer!.isActive)) {
       _dailyGoalTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
         if (_watch.isRunning && dailyGoalStats != null) {
           if (!_timerIsStarted) {
@@ -92,7 +100,16 @@ abstract class HomeStoreBase with Store {
           }
           if (percentageOfDailyGoalAchieved >= 100) {
             prefs!.setBool(_personalCelebratePageEnabled, true);
+            if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == false) {
+              AppUsageTime.instance.sendToApi();
+              AppUsageTime.instance.resetUsageTime();
+            }
           } else {
+            if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == true) {
+              AppUsageTime.instance.resetUsageTime();
+              percentageOfDailyGoalAchieved = 0;
+              _totalAppUsageTimeSoFarInMs = 0;
+            }
             prefs!.setBool(_personalCelebratePageEnabled, false);
             prefs!.setBool(_personalCelebratePageAlreadyOpened, false);
           }
@@ -106,10 +123,8 @@ abstract class HomeStoreBase with Store {
 
   @action
   stopDailyGoalTimer() {
-    if (_watch.isRunning) {
-      _watch.stop();
-    }
-    _dailyGoalTimer = null;
+    _watch.stop();
+    _dailyGoalTimer?.cancel();
   }
 
   @action
@@ -120,11 +135,6 @@ abstract class HomeStoreBase with Store {
   @action
   setCurrentPageIndex(int index) {
     currentPageIndex = index;
-  }
-
-  @action
-  openDrawer() {
-    print("HEY OPEN DRAWER BRO!");
   }
 
   @action
@@ -179,7 +189,6 @@ abstract class HomeStoreBase with Store {
           "m " +
           (showSeconds == true ? strSeconds + "s" : "");
     } catch (err) {
-      print("ERROR>>> $err");
       return "error";
     }
   }

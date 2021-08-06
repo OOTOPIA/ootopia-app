@@ -10,18 +10,19 @@ class AppUsageTime {
   Timer? _timer;
   int usageTimeSoFarInMilliseconds = 0;
   String _prefsKey = "last_usage_time";
+  String _prefsPendingTimeKey = "last_pending_usage_time";
   SharedPreferences? prefs;
 
   AppUsageTime() {
     SharedPreferences.getInstance().then((_prefs) async {
       prefs = _prefs;
-      if (prefs!.getInt(_prefsKey) != null) {
-        usageTimeSoFarInMilliseconds = prefs!.getInt(_prefsKey)!;
+      if (prefs!.getInt(_prefsPendingTimeKey) != null) {
+        usageTimeSoFarInMilliseconds = prefs!.getInt(_prefsPendingTimeKey)!;
         if (usageTimeSoFarInMilliseconds > 0) {
           if (_watch.isRunning) {
             _watch.stop();
           }
-          await _sendToApi();
+          await sendToApi();
           if (!_watch.isRunning) {
             _watch.start();
           }
@@ -56,11 +57,18 @@ class AppUsageTime {
     if (_watch.isRunning) {
       _watch.stop();
     }
-    prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
-    await _sendToApi();
+    prefs!.setInt(_prefsPendingTimeKey, usageTimeSoFarInMilliseconds);
   }
 
-  _sendToApi() async {
+  resetUsageTime() {
+    if (prefs != null && prefs!.getInt(_prefsKey) != null) {
+      usageTimeSoFarInMilliseconds = 0;
+      prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
+      prefs!.setInt(_prefsPendingTimeKey, usageTimeSoFarInMilliseconds);
+    }
+  }
+
+  sendToApi() async {
     if (usageTimeSoFarInMilliseconds > 0) {
       //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
       //Sendo assim o registro será enviado quando o app for aberto novamente
@@ -70,6 +78,7 @@ class AppUsageTime {
             .recordTimeUserUsedApp(usageTimeSoFarInMilliseconds);
         usageTimeSoFarInMilliseconds = 0;
         prefs!.setInt(_prefsKey, 0);
+        prefs!.setInt(_prefsPendingTimeKey, 0);
       });
     }
   }

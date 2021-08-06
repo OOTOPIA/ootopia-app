@@ -12,7 +12,11 @@ class WalletStore = _WalletStoreBase with _$WalletStore;
 
 abstract class _WalletStoreBase with Store {
   WalletRepositoryImpl walletRepositoryImpl = WalletRepositoryImpl();
+
+  @observable
   Map<String, double> mapSumDaysTransfer = {};
+
+  @action
   Future<Map<String, List<WalletTransfer>>> getUserTransactionHistory(
       [String? typeTransaction]) async {
     AuthStore authStore = AuthStore();

@@ -22,14 +22,12 @@ class OOzDistributionSystem {
   }
 
   startTimelineView() async {
-    print(">>>>>>>>>>>> START STATE");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('uploading_watched_posts', false);
     this.sendWatchedPostsToServer();
   }
 
   endTimelineView(String state) async {
-    print(">>>>>>>>>>>> CURRENT STATE $state");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (state == "detached") {
       await prefs.setBool(prefsUploadingWatchedVideo, false);

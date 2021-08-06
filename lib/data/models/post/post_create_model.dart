@@ -9,6 +9,7 @@ class PostCreate {
   double? addressLatitude;
   double? addressLongitude;
   String? addressNumber;
+  double? durationInSecs;
 
   PostCreate({
     this.filePath,
@@ -21,6 +22,7 @@ class PostCreate {
     this.addressLatitude,
     this.addressLongitude,
     this.addressNumber,
+    this.durationInSecs,
   });
 
   Map<String, dynamic> toJson() {
@@ -35,6 +37,7 @@ class PostCreate {
     data['addressLatitude'] = this.addressLatitude;
     data['addressLongitude'] = this.addressLongitude;
     data['addressNumber'] = this.addressNumber;
+    data['durationInSecs'] = this.durationInSecs;
     return data;
   }
 }
