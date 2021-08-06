@@ -70,6 +70,7 @@ abstract class HomeStoreBase with Store {
     if (dailyGoalStats != null) {
       percentageOfDailyGoalAchieved =
           dailyGoalStats!.percentageOfDailyGoalAchieved;
+      _totalAppUsageTimeSoFarInMs = dailyGoalStats!.totalAppUsageTimeSoFarInMs;
     }
     if (_dailyGoalTimer == null ||
         (_dailyGoalTimer != null && !_dailyGoalTimer!.isActive)) {
@@ -100,6 +101,7 @@ abstract class HomeStoreBase with Store {
           if (percentageOfDailyGoalAchieved >= 100) {
             prefs!.setBool(_personalCelebratePageEnabled, true);
             if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == false) {
+              AppUsageTime.instance.sendToApi();
               AppUsageTime.instance.resetUsageTime();
             }
           } else {
