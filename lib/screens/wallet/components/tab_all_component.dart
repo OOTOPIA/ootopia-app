@@ -42,15 +42,13 @@ class _TabAllComponentState extends State<TabAllComponent> {
             children: snapshot.data!.entries.map((e) {
               String sumFormated = '';
               int lengthItemMapSumOfDayTransfer = 0;
-              setState(() {
-                sumFormated =
-                    widget.mapSumDaysTransfer[e.key].toString().length > 7
-                        ? NumberFormat.compact()
-                            .format(widget.mapSumDaysTransfer[e.key])
-                        : widget.mapSumDaysTransfer[e.key].toString();
+              sumFormated =
+                  widget.mapSumDaysTransfer[e.key].toString().length > 7
+                      ? NumberFormat.compact()
+                          .format(widget.mapSumDaysTransfer[e.key])
+                      : widget.mapSumDaysTransfer[e.key].toString();
 
-                lengthItemMapSumOfDayTransfer = sumFormated.length;
-              });
+              lengthItemMapSumOfDayTransfer = sumFormated.length;
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
