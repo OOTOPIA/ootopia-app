@@ -146,12 +146,10 @@ class _CameraAppState extends State<CameraApp>
       cameras[indexCamera],
       ResolutionPreset.medium,
     );
-    controller!.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
+    await controller!.initialize();
+    await controller!.setFlashMode(FlashMode.off);
+
+    setState(() {});
   }
 
   Future<void> startVideoRecording() async {
