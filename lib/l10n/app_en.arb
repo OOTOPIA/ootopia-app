@@ -17,6 +17,7 @@
 
 
     "regenerationGame": "Regeneration game",
+    "aboutRegenerationGame": "The Regeneration Game is a way you can contribute to regenerative movement through the OOTOPIA app. The Personal Goal refers to the time you commit to playing the game per day. When you meet your daily goal, you receive a credit reward in OOz. Every day at 20:00, a new round begins, lasting 24 hours.",
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
@@ -221,6 +222,13 @@
     "publish": "Publish",
     "cropButton":"Crop image",
 
+    "textExplainWallet" : "This is your OOz wallet. Here you can check your total \n balance and all incoming and outcoming transactions",
+    "youDontReceived": "You have no received coins",
+    "youDontSent": "You don't have any submissions.",
+    "youDontNothing": "You don't have nothing",
+    "all": "all",
+    "sent":"sent",
+    "received": "received",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

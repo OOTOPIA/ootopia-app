@@ -11,6 +11,7 @@ import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -35,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   List<StatefulWidget> pages = [
     TimelinePage(null),
+    ProfilePage(),
     ProfileScreen(null),
   ];
 
@@ -174,6 +176,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Navigator.of(context).pushNamed(PageRoute.Page.cameraScreen.route);
           }
           break;
+        case 3:
+          if (authStore.currentUser == null) {
+            Navigator.of(context).pushNamed(
+              PageRoute.Page.loginScreen.route,
+              arguments: {
+                "returnToPageWithArgs": {
+                  "pageRoute": PageRoute.Page.cameraScreen.route,
+                  "arguments": null
+                }
+              },
+            );
+          } else {
+            _goToPage(1);
+          }
+          break;
         case 4:
           if (authStore.currentUser == null) {
             Navigator.of(context).pushNamed(
@@ -186,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            _openProfile();
+            _goToPage(2);
           }
           break;
         default:
