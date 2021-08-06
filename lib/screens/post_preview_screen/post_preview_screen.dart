@@ -555,7 +555,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     border: Border.all(
-                      color: Color(0xff707070),
+                      color: Color(0xff707070).withOpacity(.5),
                       width: .25,
                     ),
                   ),
