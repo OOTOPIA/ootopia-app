@@ -31,17 +31,13 @@ abstract class AuthStoreBase with Store {
 
   @action
   logout() async {
-    print("LOGOUT >>>>>>>>");
     try {
-      print("SEND TO API >>>>>>>>");
       await AppUsageTime.instance.sendToApi();
     } catch (err) {}
     Future.delayed(Duration(milliseconds: 100), () async {
-      print("STOP???? >>>>>>>>");
       AppUsageTime.instance.stopTimer();
       await storage.cleanAuthToken();
       this._currentUser = null;
-      print("WTF >>>>>>>>");
     });
   }
 }
