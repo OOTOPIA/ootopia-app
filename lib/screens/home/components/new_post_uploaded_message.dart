@@ -7,6 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class NewPostUploadedMessageBox extends StatelessWidget {
+  String text;
+  NewPostUploadedMessageBox({required this.text});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,8 +32,7 @@ class NewPostUploadedMessageBox extends StatelessWidget {
                     left: GlobalConstants.of(context).spacingSmall,
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!
-                        .yourVideoIsBeingProcessedWaitUntilProcessingIsComplete,
+                    text,
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

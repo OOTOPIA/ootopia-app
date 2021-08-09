@@ -28,7 +28,8 @@ class LoadingCreatePostState extends PostState {
 }
 
 class SuccessCreatePostState extends PostState {
-  const SuccessCreatePostState();
+  double oozToReward;
+  SuccessCreatePostState({required this.oozToReward});
   @override
   List<Object> get props => [];
 }
