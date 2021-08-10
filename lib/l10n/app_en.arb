@@ -234,7 +234,7 @@
     "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Sower Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
     "areYouASowerToo": "Are you a sower too?",
     "getInContact": "Get in contact!",
-
+    "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
     
     "@helloWorld": {
         "description": "A programmer greeting"

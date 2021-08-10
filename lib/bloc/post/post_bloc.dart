@@ -37,7 +37,17 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       var resultSubscription;
       await this.createPost(event.post, resultSubscription);
       resultSubscription?.cancel();
-      yield SuccessCreatePostState();
+      double oozToReward = 0;
+      double oozToRewardForVideo = 25;
+      double oozToRewardForImage = 15;
+      if (event.post.durationInSecs != null && event.post.type == "video") {
+        oozToReward = oozToRewardForVideo * (event.post.durationInSecs! / 60);
+      } else if (event.post.type == "image") {
+        oozToReward = oozToRewardForImage;
+      }
+      yield SuccessCreatePostState(
+        oozToReward: oozToReward,
+      );
       this.trackingEvents.timelineCreatedAPost();
     } catch (_) {
       yield ErrorCreatePostState("Error on create a post");

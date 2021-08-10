@@ -394,7 +394,10 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
               Navigator.of(context).pushNamedAndRemoveUntil(
                 PageRoute.Page.homeScreen.route,
                 ModalRoute.withName('/'),
-                arguments: {"createdPost": true},
+                arguments: {
+                  "createdPost": true,
+                  "oozToReward": state.oozToReward
+                },
               );
             }
           },
