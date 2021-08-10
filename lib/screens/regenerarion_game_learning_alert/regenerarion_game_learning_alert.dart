@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -16,8 +15,7 @@ class RegenerarionGameLearningAlert extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(
-                  "https://images.unsplash.com/photo-1568214697537-ace27ffd6cf3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80"),
+              image: AssetImage(this.args["imagePath"]),
               fit: BoxFit.cover,
             ),
           ),
@@ -31,7 +29,7 @@ class RegenerarionGameLearningAlert extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "REGENERATION GAME",
+                  AppLocalizations.of(context)!.regenerationGame.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
@@ -40,25 +38,23 @@ class RegenerarionGameLearningAlert extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                      color: Color(0xff00A5FC),
+                      color: Color(args["backgroundColorIcon"]),
                       borderRadius: BorderRadius.circular(100)),
                   padding: EdgeInsets.all(40),
-                  child:
-                      Icon(FeatherIcons.mapPin, size: 86, color: Colors.white),
+                  child: Icon(args["icon"], size: 86, color: Colors.white),
                 ),
-                Text("Personal level",
+                Text(this.args["title"],
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1!
                         .copyWith(fontSize: 40, color: Colors.white)),
-                Text(
-                    "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
+                Text(this.args["firstText"],
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1!
                         .copyWith(fontSize: 18, color: Colors.white)),
-                Text("Set your daily goal and start living OOTOPIA now!",
+                Text(this.args["SecondText"],
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         fontSize: 24,

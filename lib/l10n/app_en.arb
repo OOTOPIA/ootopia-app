@@ -237,7 +237,19 @@
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
 
     "close": "Close",
-    
+
+    "personalLevel": "Personal level",
+    "personalLevelText1": "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
+    "personalLevelText2": "Set your daily goal and start living OOTOPIA now!",
+
+    "cityLevel": "City level",
+    "cityLevelText1": "When we collaborate with our community we amplify the positive impact! The City Level goal is the sum of goals of all people using the app in your city.",
+    "cityLevelText2": "Keep engaged to help your city meet its daily goal!",
+
+    "planetaryLevel": "Planetary level",
+    "planetaryLevelText1": "Together we can change the world! The Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
+    "planetaryLevelText2": "We are almost there!Let's meet the planetary goal today!",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }
