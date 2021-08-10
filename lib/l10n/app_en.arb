@@ -238,6 +238,7 @@
     "gratitudeReward": "Gratitude reward",
     "personalGoalAchieved": "Personal Goal Achieved",
     "totalGameCompleted": "Today's Game Completed",
+    "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
     
     "@helloWorld": {
         "description": "A programmer greeting"

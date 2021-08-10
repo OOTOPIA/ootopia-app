@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/keep_alive_page.dart';
@@ -43,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
   late PageController controller;
+  double oozToRewardAfterSendPost = 0;
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   @override
   void initState() {
@@ -138,7 +141,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         ? 1
                         : 0,
                     duration: Duration(milliseconds: 300),
-                    child: NewPostUploadedMessageBox(),
+                    child: NewPostUploadedMessageBox(
+                        text: AppLocalizations.of(context)!
+                            .yourPublicationIsBeingProcessed
+                            .replaceAll("%",
+                                "${currencyFormatter.format(oozToRewardAfterSendPost)}")),
                   ),
                 ),
               ],
@@ -290,6 +297,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           widget.args!['createdPost'] != null &&
           widget.args!['createdPost'] == true) {
         homeStore?.setShowCreatedPostAlert(true);
+        oozToRewardAfterSendPost = widget.args!['oozToReward'];
         Timer(Duration(seconds: 5), () {
           homeStore?.setShowCreatedPostAlert(false);
           homeStore?.setCreatedPostAlertAlreadyShowed(true);
