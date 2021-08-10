@@ -231,5 +231,8 @@
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
-    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída"
+    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
+
+    "close": "Fechar"
+
 }

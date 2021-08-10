@@ -235,6 +235,8 @@
     "areYouASowerToo": "Are you a sower too?",
     "getInContact": "Get in contact!",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
+
+    "close": "Close",
     
     "@helloWorld": {
         "description": "A programmer greeting"
