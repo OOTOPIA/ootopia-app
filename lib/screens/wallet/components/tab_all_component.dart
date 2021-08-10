@@ -30,7 +30,9 @@ class _TabAllComponentState extends State<TabAllComponent> {
             return Text(snapshot.error.toString());
           }
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return  Center(
+              child:CircularProgressIndicator() 
+            );
           }
           if (snapshot.data!.isEmpty) {
             return Center(
@@ -61,29 +63,13 @@ class _TabAllComponentState extends State<TabAllComponent> {
                     ),
                     Column(
                       children: e.value.map((e) {
-                        int colorOfBalance = 0xff003694;
-                        String typeActionFromOrTo = '';
-                        switch (e.action) {
-                          case 'received':
-                            colorOfBalance = 0xff018F9C;
-                            typeActionFromOrTo =
-                                AppLocalizations.of(context)!.from;
-                            break;
-                          case 'sent':
-                            colorOfBalance = 0xff000000;
-                            typeActionFromOrTo =
-                                AppLocalizations.of(context)!.to;
-                            break;
-                          default:
-                        }
                         return CardInformationBalance(
-                            '${e.balance.toStringAsFixed(2)}',
-                            '${e.photoUrl ?? ''}',
-                            'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Down.com',
-                            '${e.otherUsername ?? ''}',
-                            '${OriginOOzCoin.INVITATION_CODE}',
-                            colorOfBalance,
-                            typeActionFromOrTo);
+                            balanceOfTransactions: '${e.balance.toStringAsFixed(2)}',
+                            iconForeground: '${e.photoUrl ?? ''}',
+                            iconBackground: '${e.icon }',
+                            toOrFrom: '${e.otherUsername ?? ''}',
+                            originTransaction: '${e.origin}',
+                            action: '${e.action}');
                       }).toList(),
                     )
                   ],

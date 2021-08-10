@@ -29,7 +29,9 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
             return Text(snapshot.error.toString());
           }
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return  Center(
+              child: CircularProgressIndicator(),
+            );
           }
           if (snapshot.data!.isEmpty) {
             return Center(
@@ -62,13 +64,13 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
                     Column(
                       children: e.value.map((e) {
                         return CardInformationBalance(
-                            '${e.balance}',
-                            '${e.photoUrl ?? ''}',
-                            'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Down.com',
-                            '${e.otherUsername ?? ''}',
-                            'Personal Goal Achieved',
-                            0xff018F9C,
-                            'Received');
+                            balanceOfTransactions:'${e.balance}',
+                            iconForeground: '${e.photoUrl ?? ''}',
+                            iconBackground: '${e.icon }',
+                            toOrFrom: '${e.otherUsername ?? ''}',
+                            originTransaction: '${e.origin}',
+                            action: '${e.action}',
+                            );
                       }).toList(),
                     )
                   ],

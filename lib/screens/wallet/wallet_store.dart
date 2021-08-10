@@ -31,7 +31,12 @@ abstract class _WalletStoreBase with Store {
     map.entries.forEach((element) {
       var soma = 0.0;
       element.value.forEach((element) {
-        soma = element.balance + soma;
+        if (element.action == 'sent') {
+          soma -= element.balance; 
+        }
+        else {
+          soma += element.balance;
+        }
       });
       mapSumDaysTransfer.addAll({element.key: soma});
     });
