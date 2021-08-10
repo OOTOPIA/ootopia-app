@@ -9,6 +9,7 @@ import 'package:ootopia_app/screens/wallet/components/tab_received_component.dar
 import 'package:ootopia_app/screens/wallet/components/tab_send_component.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -80,7 +81,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     TextButton(
                         onPressed: () {
-                          _configurandoModalBottomSheet(context);
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Color(0xff018F9C),
+                            builder: (BuildContext context) {
+                              return SnackBarWidget(
+                                menu: AppLocalizations.of(context)!.regenerationGame,
+                                text: AppLocalizations.of(context)!.aboutRegenerationGame,
+                                about: AppLocalizations.of(context)!.learnMore,
+                              );
+                            },
+                          );
                         },
                         child: Text(
                           AppLocalizations.of(context)!.learnMore,
@@ -151,46 +162,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _configurandoModalBottomSheet(context) {
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Color(0xff018F9C),
-        builder: (BuildContext context) {
-          return Container(
-            padding: EdgeInsets.all(26),
-            child: Wrap(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.regenerationGame,
-                      style: TextStyle(color: Colors.white, fontSize: 22),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ))
-                  ],
-                ),
-                Text(
-                  AppLocalizations.of(context)!.aboutRegenerationGame,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    AppLocalizations.of(context)!.learnMore,
-                    style: TextStyle(color: Color(0xff03DAC5)),
-                  ),
-                )
-              ],
-            ),
-          );
-        });
-  }
 }
