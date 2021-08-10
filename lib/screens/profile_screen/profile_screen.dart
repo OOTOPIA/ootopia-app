@@ -848,7 +848,8 @@ class Avatar extends StatelessWidget {
                   onTap: () {       
                     showModalBottomSheet(
                       context: context,
-                      backgroundColor: Color(0xff018F9C),
+                      barrierColor: Colors.black.withAlpha(1),
+                      backgroundColor: Colors.black.withAlpha(1),
                       builder: (BuildContext context) {
                         return SnackBarWidget(
                           menu: AppLocalizations.of(context)!.badgeSower,
