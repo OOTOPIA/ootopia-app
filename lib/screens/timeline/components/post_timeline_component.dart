@@ -273,13 +273,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       ),
                       onTap: () {
                         showModalBottomSheet(
+                          barrierColor: Colors.black.withAlpha(1),
                           context: context,
-                          backgroundColor: Color(0xff018F9C),
+                          backgroundColor: Colors.black.withAlpha(1),
                           builder: (BuildContext context) {
                             return SnackBarWidget(
                               menu: AppLocalizations.of(context)!.badgeSower,
                               text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                               about: AppLocalizations.of(context)!.learnMore,
+                              marginBottom: true,
                               contact: {
                                 "text": AppLocalizations.of(context)!.areYouASowerToo,
                                 "textLink": AppLocalizations.of(context)!.getInContact,
