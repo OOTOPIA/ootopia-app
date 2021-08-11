@@ -37,11 +37,11 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
     ));
 
     return GestureDetector(
-      onDoubleTap: () {
-        if (this.widget.onDoubleTapVideo != null) {
-          this.widget.onDoubleTapVideo!();
-        }
-      },
+      // onDoubleTap: () {
+      //   if (this.widget.onDoubleTapVideo != null) {
+      //     this.widget.onDoubleTapVideo!();
+      //   }
+      // },
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,

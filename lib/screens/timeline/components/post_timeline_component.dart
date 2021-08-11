@@ -265,32 +265,36 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if  (this.post.badges!.length > 0) GestureDetector(
-                      child:  Container(
-                        width: 25, 
-                        height: 25, 
-                        child: Image.network(this.post.badges?[0].icon as String)
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                          barrierColor: Colors.black.withAlpha(1),
-                          context: context,
-                          backgroundColor: Colors.black.withAlpha(1),
-                          builder: (BuildContext context) {
-                            return SnackBarWidget(
-                              menu: AppLocalizations.of(context)!.badgeSower,
-                              text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                              about: AppLocalizations.of(context)!.learnMore,
-                              marginBottom: true,
-                              contact: {
-                                "text": AppLocalizations.of(context)!.areYouASowerToo,
-                                "textLink": AppLocalizations.of(context)!.getInContact,
-                              }
-                            );
-                          }
-                        );
-                      }
-                    ),
+                    if (this.post.badges!.length > 0)
+                      GestureDetector(
+                          child: Container(
+                              width: 25,
+                              height: 25,
+                              child: Image.network(
+                                  this.post.badges?[0].icon as String)),
+                          onTap: () {
+                            showModalBottomSheet(
+                                barrierColor: Colors.black.withAlpha(1),
+                                context: context,
+                                backgroundColor: Colors.black.withAlpha(1),
+                                builder: (BuildContext context) {
+                                  return SnackBarWidget(
+                                      menu: AppLocalizations.of(context)!
+                                          .badgeSower,
+                                      text: AppLocalizations.of(context)!
+                                          .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                      about: AppLocalizations.of(context)!
+                                          .learnMore,
+                                      marginBottom: true,
+                                      contact: {
+                                        "text": AppLocalizations.of(context)!
+                                            .areYouASowerToo,
+                                        "textLink":
+                                            AppLocalizations.of(context)!
+                                                .getInContact,
+                                      });
+                                });
+                          }),
                     PopupMenuPost(
                       isAnabled: isUserOwnsPost,
                       callbackReturnPopupMenu: _popupMenuReturn,
@@ -572,19 +576,22 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           child: SizedBox(
                             width: 36,
                             height: 36,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              icon: !this.postTimelineController.post.liked
-                                  ? Image(
-                                      image: AssetImage(
-                                          'assets/icons_profile/woow.png'),
-                                    )
-                                  : Image(
-                                      image: AssetImage(
-                                          'assets/icons_profile/woow_active.png'),
-                                    ),
-                              onPressed: () => {this._likePost(true)},
-                            ),
+                            child: RotatedBox(
+                                quarterTurns: 1,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  icon: !this.postTimelineController.post.liked
+                                      ? Image(
+                                          image: AssetImage(
+                                              'assets/icons_profile/woow.png'),
+                                        )
+                                      : Image(
+                                          image: AssetImage(
+                                              'assets/icons_profile/woow_active.png'),
+                                        ),
+                                  onPressed: () => {},
+                                  //this._likePost(true)
+                                )),
                           ),
                         ),
                       ),
@@ -603,16 +610,16 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     text: new TextSpan(
                       style: new TextStyle(fontSize: 14, color: Colors.black),
                       children: <TextSpan>[
-                        new TextSpan(
-                            text: this
-                                .postTimelineController
-                                .post
-                                .likesCount
-                                .toString()),
-                        new TextSpan(
-                          text: ' wOOws!',
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        // new TextSpan(
+                        //     text: this
+                        //         .postTimelineController
+                        //         .post
+                        //         .likesCount
+                        //         .toString()),
+                        // new TextSpan(
+                        //   text: ' wOOws!',
+                        //   style: new TextStyle(fontWeight: FontWeight.bold),
+                        // ),
                       ],
                     ),
                   ),
