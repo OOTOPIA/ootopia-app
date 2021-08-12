@@ -25,6 +25,21 @@ mixin _$WalletStore on _WalletStoreBase, Store {
     });
   }
 
+  final _$walletAtom = Atom(name: '_WalletStoreBase.wallet');
+
+  @override
+  Wallet? get wallet {
+    _$walletAtom.reportRead();
+    return super.wallet;
+  }
+
+  @override
+  set wallet(Wallet? value) {
+    _$walletAtom.reportWrite(value, super.wallet, () {
+      super.wallet = value;
+    });
+  }
+
   final _$getUserTransactionHistoryAsyncAction =
       AsyncAction('_WalletStoreBase.getUserTransactionHistory');
 
@@ -38,7 +53,8 @@ mixin _$WalletStore on _WalletStoreBase, Store {
   @override
   String toString() {
     return '''
-mapSumDaysTransfer: ${mapSumDaysTransfer}
+mapSumDaysTransfer: ${mapSumDaysTransfer},
+wallet: ${wallet}
     ''';
   }
 }

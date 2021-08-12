@@ -70,6 +70,7 @@ class TabReceivedComponentState extends State<TabReceivedComponent> {
                             toOrFrom: '${e.otherUsername ?? ''}',
                             originTransaction: '${e.origin}',
                             action: '${e.action}',
+                            otherUserId: '${e.otherUserId}'
                             );
                       }).toList(),
                     )

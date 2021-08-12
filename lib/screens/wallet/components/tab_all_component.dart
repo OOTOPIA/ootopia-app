@@ -31,7 +31,7 @@ class _TabAllComponentState extends State<TabAllComponent> {
           }
           if (!snapshot.hasData) {
             return  Center(
-              child:CircularProgressIndicator() 
+              child: CircularProgressIndicator()
             );
           }
           if (snapshot.data!.isEmpty) {
@@ -69,7 +69,9 @@ class _TabAllComponentState extends State<TabAllComponent> {
                             iconBackground: '${e.icon }',
                             toOrFrom: '${e.otherUsername ?? ''}',
                             originTransaction: '${e.origin}',
-                            action: '${e.action}');
+                            action: '${e.action}',
+                            otherUserId: '${e.otherUserId}'
+                          );
                       }).toList(),
                     )
                   ],

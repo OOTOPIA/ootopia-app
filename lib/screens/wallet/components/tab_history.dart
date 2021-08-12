@@ -1,43 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
-import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/screens/wallet/components/card_information_balance.dart';
+import 'package:ootopia_app/data/repositories/wallet_repository.dart';
+import 'package:ootopia_app/screens/wallet/components/chip_information_date_and_sum.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'chip_information_date_and_sum.dart';
+import 'package:ootopia_app/screens/wallet/helper/origin_ooz.dart';
 
-class TabSendComponent extends StatefulWidget {
+class TabHistory extends StatefulWidget {
   final WalletRepositoryImpl walletRepositoryImpl;
   final getUserTransactionHistory;
   final mapSumDaysTransfer;
-  const TabSendComponent(
+  const TabHistory(
       {required this.walletRepositoryImpl,
       required this.getUserTransactionHistory,
       required this.mapSumDaysTransfer});
+
   @override
-  _TabSendComponentState createState() => _TabSendComponentState();
+  TabHistoryState createState() => TabHistoryState();
 }
 
-class _TabSendComponentState extends State<TabSendComponent> {
+class TabHistoryState extends State<TabHistory> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, List<WalletTransfer>>>(
-        future: widget.getUserTransactionHistory,
+        future: widget.getUserTransactionHistory(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
           if (!snapshot.hasData) {
             return  Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator()
             );
           }
           if (snapshot.data!.isEmpty) {
             return Center(
-              child: Text(AppLocalizations.of(context)!.youDontSent),
+              child: Text(AppLocalizations.of(context)!.youDontNothing),
             );
           }
-          snapshot.data!.entries.map((e) => print(e.key));
+
           return ListView(
             children: snapshot.data!.entries.map((e) {
               String sumFormated = '';
@@ -62,14 +64,14 @@ class _TabSendComponentState extends State<TabSendComponent> {
                     Column(
                       children: e.value.map((e) {
                         return CardInformationBalance(
-                            balanceOfTransactions: '${e.balance}',
+                            balanceOfTransactions: '${e.balance.toStringAsFixed(2)}',
                             iconForeground: '${e.photoUrl ?? ''}',
                             iconBackground: '${e.icon }',
                             toOrFrom: '${e.otherUsername ?? ''}',
                             originTransaction: '${e.origin}',
                             action: '${e.action}',
                             otherUserId: '${e.otherUserId}'
-                            );
+                          );
                       }).toList(),
                     )
                   ],

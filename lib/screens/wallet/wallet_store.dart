@@ -16,6 +16,9 @@ abstract class _WalletStoreBase with Store {
   @observable
   Map<String, double> mapSumDaysTransfer = {};
 
+  @observable
+  Wallet? wallet;
+
   @action
   Future<Map<String, List<WalletTransfer>>> getUserTransactionHistory(
       [String? typeTransaction]) async {
@@ -47,6 +50,7 @@ abstract class _WalletStoreBase with Store {
   Future<Wallet> getBalanceUser() async {
     AuthStore authStore = AuthStore();
     var authId = await authStore.checkUserIsLogged();
-    return await walletRepositoryImpl.getWallet(authId!.id.toString());
+    this.wallet = await walletRepositoryImpl.getWallet(authId!.id.toString());
+    return this.wallet!;
   }
 }
