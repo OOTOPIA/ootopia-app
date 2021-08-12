@@ -26,10 +26,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _performAllRequests() async {
-    walletStore.getWallet();
-    walletStore.getWalletTransfersHistory(0); //all
-    walletStore.getWalletTransfersHistory(0, "received"); //received
-    walletStore.getWalletTransfersHistory(0, "sent"); //sent
+    await walletStore.getWallet();
+    await walletStore.getWalletTransfersHistory(0); //all
+    await walletStore.getWalletTransfersHistory(0, "received"); //received
+    await walletStore.getWalletTransfersHistory(0, "sent"); //sent
+    setState(() {});
   }
 
   @override
