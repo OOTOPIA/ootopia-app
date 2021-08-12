@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CardInformationBalance extends StatelessWidget {
   final String iconForeground;
@@ -11,6 +12,7 @@ class CardInformationBalance extends StatelessWidget {
   final String originTransaction;
   final String toOrFrom;
   final String action;
+  final String? otherUserId;
 
   CardInformationBalance({
     required this.balanceOfTransactions,
@@ -18,7 +20,8 @@ class CardInformationBalance extends StatelessWidget {
     required this.iconBackground,
     required this.toOrFrom,
     required this.originTransaction,
-    required this.action
+    required this.action,
+    this.otherUserId
   });
 
   String getTransactionDescription(context) {
@@ -79,7 +82,16 @@ class CardInformationBalance extends StatelessWidget {
         break;
       default:
     }
-     
+
+    void _goToProfile() async {
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.profileScreen.route,
+        arguments: {
+          "id": this.otherUserId,
+        },
+      );
+    }
+
     var iconBackground = this.iconBackground.contains('.svg') ? SvgPicture.network(
         this.iconBackground,
         width: 52,
@@ -97,9 +109,16 @@ class CardInformationBalance extends StatelessWidget {
         height: 56,
         child: Stack(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: iconBackground
+            GestureDetector(
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: iconBackground
+              ),
+              onTap: () {
+                if(this.otherUserId != null) {
+                  _goToProfile();
+                }
+              },
             ),
             Positioned(
               bottom: 0,

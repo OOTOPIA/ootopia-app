@@ -25,20 +25,90 @@ mixin _$WalletStore on _WalletStoreBase, Store {
     });
   }
 
-  final _$getUserTransactionHistoryAsyncAction =
-      AsyncAction('_WalletStoreBase.getUserTransactionHistory');
+  final _$allGroupedTransfersByDateAtom =
+      Atom(name: '_WalletStoreBase.allGroupedTransfersByDate');
 
   @override
-  Future<Map<String, List<WalletTransfer>>> getUserTransactionHistory(
-      [String? typeTransaction]) {
-    return _$getUserTransactionHistoryAsyncAction
-        .run(() => super.getUserTransactionHistory(typeTransaction));
+  Map<String, List<WalletTransfer>>? get allGroupedTransfersByDate {
+    _$allGroupedTransfersByDateAtom.reportRead();
+    return super.allGroupedTransfersByDate;
+  }
+
+  @override
+  set allGroupedTransfersByDate(Map<String, List<WalletTransfer>>? value) {
+    _$allGroupedTransfersByDateAtom
+        .reportWrite(value, super.allGroupedTransfersByDate, () {
+      super.allGroupedTransfersByDate = value;
+    });
+  }
+
+  final _$sentGroupedTransfersByDateAtom =
+      Atom(name: '_WalletStoreBase.sentGroupedTransfersByDate');
+
+  @override
+  Map<String, List<WalletTransfer>>? get sentGroupedTransfersByDate {
+    _$sentGroupedTransfersByDateAtom.reportRead();
+    return super.sentGroupedTransfersByDate;
+  }
+
+  @override
+  set sentGroupedTransfersByDate(Map<String, List<WalletTransfer>>? value) {
+    _$sentGroupedTransfersByDateAtom
+        .reportWrite(value, super.sentGroupedTransfersByDate, () {
+      super.sentGroupedTransfersByDate = value;
+    });
+  }
+
+  final _$receivedGroupedTransfersByDateAtom =
+      Atom(name: '_WalletStoreBase.receivedGroupedTransfersByDate');
+
+  @override
+  Map<String, List<WalletTransfer>>? get receivedGroupedTransfersByDate {
+    _$receivedGroupedTransfersByDateAtom.reportRead();
+    return super.receivedGroupedTransfersByDate;
+  }
+
+  @override
+  set receivedGroupedTransfersByDate(Map<String, List<WalletTransfer>>? value) {
+    _$receivedGroupedTransfersByDateAtom
+        .reportWrite(value, super.receivedGroupedTransfersByDate, () {
+      super.receivedGroupedTransfersByDate = value;
+    });
+  }
+
+  final _$walletAtom = Atom(name: '_WalletStoreBase.wallet');
+
+  @override
+  Wallet? get wallet {
+    _$walletAtom.reportRead();
+    return super.wallet;
+  }
+
+  @override
+  set wallet(Wallet? value) {
+    _$walletAtom.reportWrite(value, super.wallet, () {
+      super.wallet = value;
+    });
+  }
+
+  final _$getWalletTransfersHistoryAsyncAction =
+      AsyncAction('_WalletStoreBase.getWalletTransfersHistory');
+
+  @override
+  Future<dynamic> getWalletTransfersHistory(int offset,
+      [String? walletTransferAction]) {
+    return _$getWalletTransfersHistoryAsyncAction.run(
+        () => super.getWalletTransfersHistory(offset, walletTransferAction));
   }
 
   @override
   String toString() {
     return '''
-mapSumDaysTransfer: ${mapSumDaysTransfer}
+mapSumDaysTransfer: ${mapSumDaysTransfer},
+allGroupedTransfersByDate: ${allGroupedTransfersByDate},
+sentGroupedTransfersByDate: ${sentGroupedTransfersByDate},
+receivedGroupedTransfersByDate: ${receivedGroupedTransfersByDate},
+wallet: ${wallet}
     ''';
   }
 }
