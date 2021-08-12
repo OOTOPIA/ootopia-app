@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
+import 'package:ootopia_app/data/repositories/api.dart';
 import 'dart:convert';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -9,7 +12,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class WalletRepository {
   Future<Wallet> getWallet(String userId);
   Future<List<WalletTransfer>> getTransactionHistory(
-      [int limit, int offset, String userId, String action]);
+      [int limit, int offset, String action]);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -50,7 +53,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
   }
 
   Future<List<WalletTransfer>> getTransactionHistory(
-      [int? limit, int? offset, String? userId, String? action]) async {
+      [int? limit, int? offset, String? action]) async {
     try {
       Map<String, String> queryParams = {};
 
@@ -63,24 +66,24 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
         queryParams['action'] = action.toString();
       }
 
+      User user = await getCurrentUser();
       String queryString = Uri(queryParameters: queryParams).query;
-      print(queryString);
-      final response = await http.get(
-        Uri.parse(
-            "${dotenv.env['API_URL']!}wallet-transfers/$userId/history?$queryString"),
-        headers: await this.getHeaders(),
-      );
-      if (response.statusCode == 200) {
-        print("WALLET RESPONSE HISTORY --> ${response.body}");
 
-        return (json.decode(response.body) as List)
+      Response response = await ApiClient.api().get(
+        "wallet-transfers/${user.id}/history?$queryString",
+      );
+
+      if (response.statusCode == 200) {
+        print("WALLET RESPONSE HISTORY --> ${response.data}");
+
+        return (response.data as List)
             .map((i) => WalletTransfer.fromJson(i))
             .toList();
       } else {
-        throw Future.error('Failed to load wallet');
+        throw Exception('Failed to load wallet');
       }
     } catch (error) {
-      throw Future.error('Failed to load wallet. Error: ' + error.toString());
+      throw Exception('Failed to load wallet: ' + error.toString());
     }
   }
 }

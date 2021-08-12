@@ -17,37 +17,52 @@ abstract class _WalletStoreBase with Store {
   Map<String, double> mapSumDaysTransfer = {};
 
   @observable
+  Map<String, List<WalletTransfer>>? allGroupedTransfersByDate;
+
+  @observable
+  Map<String, List<WalletTransfer>>? sentGroupedTransfersByDate;
+
+  @observable
+  Map<String, List<WalletTransfer>>? receivedGroupedTransfersByDate;
+
+  @observable
   Wallet? wallet;
 
   @action
-  Future<Map<String, List<WalletTransfer>>> getUserTransactionHistory(
-      [String? typeTransaction]) async {
-    AuthStore authStore = AuthStore();
-    var authId = await authStore.checkUserIsLogged();
+  Future getWalletTransfersHistory(int offset,
+      [String? walletTransferAction]) async {
     var resultTransactions = await walletRepositoryImpl.getTransactionHistory(
-        50, 0, authId!.id, typeTransaction);
+        50, offset, walletTransferAction);
     var map = groupBy(
-        resultTransactions,
-        (WalletTransfer obj) => DateFormat('MMM d, y')
-            .format(DateTime.parse(obj.createdAt))
-            .toString());
+      resultTransactions,
+      (WalletTransfer obj) => DateFormat('MMM d, y')
+          .format(DateTime.parse(obj.createdAt))
+          .toString(),
+    );
     map.entries.forEach((element) {
       var soma = 0.0;
       element.value.forEach((element) {
         if (element.action == 'sent') {
-          soma -= element.balance; 
-        }
-        else {
+          soma -= element.balance;
+        } else {
           soma += element.balance;
         }
       });
       mapSumDaysTransfer.addAll({element.key: soma});
     });
 
+    if (walletTransferAction == "sent") {
+      sentGroupedTransfersByDate = map;
+    } else if (walletTransferAction == "received") {
+      receivedGroupedTransfersByDate = map;
+    } else {
+      allGroupedTransfersByDate = map;
+    }
+
     return map;
   }
 
-  Future<Wallet> getBalanceUser() async {
+  Future<Wallet> getWallet() async {
     AuthStore authStore = AuthStore();
     var authId = await authStore.checkUserIsLogged();
     this.wallet = await walletRepositoryImpl.getWallet(authId!.id.toString());

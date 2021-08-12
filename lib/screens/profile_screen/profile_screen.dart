@@ -250,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     this
         .walletRepositoryImpl
         .getTransactionHistory(_walletTransferPerPageCount,
-            (currentPage - 1) * _walletTransferPerPageCount, userId, param)
+            (currentPage - 1) * _walletTransferPerPageCount, param)
         .then((resultTransactions) {
       groupBy(
           resultTransactions,
@@ -343,7 +343,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                   Row(
                     children: [
                       Avatar(
-                        photoUrl: userProfile == null ? null : userProfile!.photoUrl,
+                        photoUrl:
+                            userProfile == null ? null : userProfile!.photoUrl,
                         badges: userProfile!.badges,
                         modal: "profile",
                       ),
@@ -814,64 +815,70 @@ class Avatar extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           width: this.modal == "profile" ? 3.0 : 0,
-          color: this.modal == "profile" ? (this.badges!.length > 0) ? Color(0Xff39A7B2) : Colors.black : Colors.white,
+          color: this.modal == "profile"
+              ? (this.badges!.length > 0)
+                  ? Color(0Xff39A7B2)
+                  : Colors.black
+              : Colors.white,
         ),
         borderRadius: BorderRadius.circular(150),
       ),
-      child: 
-      Stack(
+      child: Stack(
         fit: StackFit.loose,
         children: [
           Container(
             width: (MediaQuery.of(context).size.width * .40) - 16,
             height: (MediaQuery.of(context).size.width * .40) - 16,
-            child: 
-              (
-                this.photoUrl != null
+            child: (this.photoUrl != null
                 ? CircleAvatar(
                     backgroundImage: NetworkImage("${this.photoUrl}"),
                     radius: 16,
                   )
                 : CircleAvatar(
-                    backgroundImage: AssetImage("assets/icons_profile/profile.png"),
+                    backgroundImage:
+                        AssetImage("assets/icons_profile/profile.png"),
                     radius: 16,
-                  )
-              ),
+                  )),
           ),
-          if  (this.badges!.length > 0) Padding(
-            padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width * .02)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {       
-                    showModalBottomSheet(
-                      context: context,
-                      barrierColor: Colors.black.withAlpha(1),
-                      backgroundColor: Colors.black.withAlpha(1),
-                      builder: (BuildContext context) {
-                        return SnackBarWidget(
-                          menu: AppLocalizations.of(context)!.badgeSower,
-                          text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                          about: AppLocalizations.of(context)!.learnMore,
-                          contact: {
-                            "text": AppLocalizations.of(context)!.areYouASowerToo,
-                            "textLink": AppLocalizations.of(context)!.getInContact,
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    width: 33,
-                    height: 33,
-                    child: Image.network(this.badges?[0].icon as String),
+          if (this.badges!.length > 0)
+            Padding(
+              padding: EdgeInsets.only(
+                  top: (MediaQuery.of(context).size.width * .02)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        barrierColor: Colors.black.withAlpha(1),
+                        backgroundColor: Colors.black.withAlpha(1),
+                        builder: (BuildContext context) {
+                          return SnackBarWidget(
+                            menu: AppLocalizations.of(context)!.badgeSower,
+                            text: AppLocalizations.of(context)!
+                                .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                            about: AppLocalizations.of(context)!.learnMore,
+                            contact: {
+                              "text":
+                                  AppLocalizations.of(context)!.areYouASowerToo,
+                              "textLink":
+                                  AppLocalizations.of(context)!.getInContact,
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: 33,
+                      height: 33,
+                      child: Image.network(this.badges?[0].icon as String),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
