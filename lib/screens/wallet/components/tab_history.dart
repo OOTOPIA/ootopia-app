@@ -49,6 +49,17 @@ class TabHistoryState extends State<TabHistory> {
 
   @override
   Widget build(BuildContext context) {
+    switch (widget.action) {
+      case "all":
+        groupedTransfersByDate = widget.store.allGroupedTransfersByDate;
+        break;
+      case "received":
+        groupedTransfersByDate = widget.store.receivedGroupedTransfersByDate;
+        break;
+      case "sent":
+        groupedTransfersByDate = widget.store.sentGroupedTransfersByDate;
+        break;
+    }
     return Observer(
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
