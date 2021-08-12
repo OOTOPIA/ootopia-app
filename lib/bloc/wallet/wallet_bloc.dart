@@ -38,7 +38,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       Wallet wallet = (await this.repository.getWallet(event.userId));
       yield LoadedWalletSucessState(wallet: wallet);
     } catch (_) {
-      print("ERRO MANO NO WALLET");
       yield LoadWalletErrorState("Error loading wallet");
     }
   }
@@ -46,14 +45,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   Stream<WalletState> _mapGetTransactionHistoryToState(
       GetTransactionHistoryEvent event) async* {
     try {
-      List<WalletTransfer> transactions = (await this
-          .repository
-          .getTransactionHistory(
-              event.limit, event.offset, event.userId, event.action));
-      print("Tudo certo");
+      List<WalletTransfer> transactions =
+          (await this.repository.getTransactionHistory(
+                event.limit,
+                event.offset,
+                event.action,
+              ));
       yield LoadedTransactionHistorySucessState(transactions: transactions);
     } catch (_) {
-      print("ERRO MANO NO WALLET");
       yield LoadWalletErrorState("Error loading wallet");
     }
   }

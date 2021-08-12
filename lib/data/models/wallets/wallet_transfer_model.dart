@@ -5,7 +5,7 @@ class WalletTransfer extends Equatable {
   String id;
   String userId;
   String walletId;
-  String icon;
+  String? icon;
   String? otherUserId;
   String? postId;
   String? otherUsername;
@@ -22,7 +22,7 @@ class WalletTransfer extends Equatable {
     required this.id,
     required this.userId,
     required this.walletId,
-    required this.icon,
+    this.icon,
     this.otherUserId,
     this.postId,
     this.otherUsername,
