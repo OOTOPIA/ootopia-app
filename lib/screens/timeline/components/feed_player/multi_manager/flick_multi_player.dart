@@ -18,7 +18,7 @@ class FlickMultiPlayer extends StatefulWidget {
     required this.flickMultiManager,
     required this.userId,
     required this.postId,
-    this.onDoubleTapVideo,
+    //this.onDoubleTapVideo,
   }) : super(key: key);
 
   final String? userId;
@@ -26,7 +26,7 @@ class FlickMultiPlayer extends StatefulWidget {
   final String url;
   final String image;
   final FlickMultiManager flickMultiManager;
-  final Function? onDoubleTapVideo;
+  //final Function? onDoubleTapVideo;
 
   @override
   _FlickMultiPlayerState createState() => _FlickMultiPlayerState();
@@ -124,7 +124,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
                 flickMultiManager: widget.flickMultiManager,
                 flickManager: flickManager,
                 url: widget.url,
-                onDoubleTap: this.widget.onDoubleTapVideo,
+                //onDoubleTap: this.widget.onDoubleTapVideo,
               ),
             ),
             flickVideoWithControlsFullscreen: FlickVideoWithControls(
