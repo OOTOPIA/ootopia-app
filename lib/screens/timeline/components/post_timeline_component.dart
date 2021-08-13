@@ -440,7 +440,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   ),
                   Positioned(
                     key: _oozInfoKey,
-                    width: 120,
+                    width: 150,
                     right: 0,
                     child: Container(
                       height: 36,
@@ -449,8 +449,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         children: [
                           Positioned(
                             top: 0,
-                            width: 80,
-                            right: showOozToTransfer() ? 32 : 0,
+                            width: 96,
+                            right: showOozToTransfer() ? 50 : 0,
                             child: this.post.oozToTransfer > 0 &&
                                     (_isDragging || _oozIsSent || _oozError) &&
                                     !_oozSlidingOut
@@ -466,47 +466,58 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               height: 32,
                               right: 0,
                               child: Container(
-                                width: 50,
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    color: Colors.grey.shade300,
-                                    width: 1,
+                                  width: 90,
+                                  padding: EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: 1,
+                                    ),
                                   ),
-                                ),
-                                child:Row(children: [
-                                  RotatedBox(
-                                quarterTurns: 1,
-                                child: IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  icon: _draggablePositionX == 0
-                                      ? Image(
-                                          image: AssetImage(
-                                              'assets/icons_profile/woow.png'),
-                                        )
-                                      : Image(
-                                          image: AssetImage(
-                                              'assets/icons_profile/woow_active.png'),
-                                        ),
-                                  onPressed: () => {},
-                                  //this._likePost(true)
-                                )),
-
-                                   _draggablePositionX>0? Text(
-                                  "+ "+this.post.oozToTransfer.toStringAsFixed(2),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.blueAccent),
-                                ):Text(
-                                  this.post.oozTotalCollected.toStringAsFixed(2),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black),
-                                )
-                                ],)
-                                
-                              ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 6),
+                                        child: _draggablePositionX == 0
+                                            ? Image(
+                                                image: AssetImage(
+                                                  'assets/icons/ooz_only.png',
+                                                ),
+                                                width: 16,
+                                              )
+                                            : Image(
+                                                image: AssetImage(
+                                                  'assets/icons/ooz_only_active.png',
+                                                ),
+                                                width: 16,
+                                              ),
+                                      ),
+                                      _draggablePositionX > 0
+                                          ? Text(
+                                              "+ " +
+                                                  this
+                                                      .post
+                                                      .oozToTransfer
+                                                      .toStringAsFixed(2),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.blueAccent),
+                                            )
+                                          : Text(
+                                              this
+                                                  .post
+                                                  .oozTotalCollected
+                                                  .toStringAsFixed(2),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            )
+                                    ],
+                                  )),
                             ),
                           ),
                         ],
