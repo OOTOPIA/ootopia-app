@@ -637,50 +637,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 ],
               ),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Padding(
-            //       padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
-            //       child: new RichText(
-            //         text: new TextSpan(
-            //           style: new TextStyle(fontSize: 14, color: Colors.black),
-            //           children: <TextSpan>[
-            //             // new TextSpan(
-            //             //     text: this
-            //             //         .postTimelineController
-            //             //         .post
-            //             //         .likesCount
-            //             //         .toString()),
-            //             // new TextSpan(
-            //             //   text: ' wOOws!',
-            //             //   style: new TextStyle(fontWeight: FontWeight.bold),
-            //             // ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //     Padding(
-            //       padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
-            //       child: new RichText(
-            //         text: new TextSpan(
-            //           style: new TextStyle(fontSize: 14, color: Colors.black),
-            //           children: <TextSpan>[
-            //             new TextSpan(
-            //               text: 'OOz ',
-            //               style: new TextStyle(
-            //                 fontWeight: FontWeight.bold,
-            //               ),
-            //             ),
-            //             new TextSpan(
-            //                 text:
-            //                     this.post.oozTotalCollected.toStringAsFixed(2)),
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            //   ],
-            // ),
             Visibility(
               visible: this.post.description != null &&
                   this.post.description.isNotEmpty,
