@@ -360,7 +360,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   child: this.post.type == "image"
                       ? ImagePostTimeline(
                           image: this.post.imageUrl as String,
-                          onDoubleTapVideo: () => this._likePost(false, true),
+                          //onDoubleTapVideo: () => this._likePost(false, true),
                         )
                       : FlickMultiPlayer(
                           userId: (user != null ? user!.id : null),
@@ -368,7 +368,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           url: this.post.videoUrl!,
                           flickMultiManager: widget.flickMultiManager,
                           image: this.post.thumbnailUrl,
-                          onDoubleTapVideo: () => this._likePost(false, true),
+                          //onDoubleTapVideo: () => this._likePost(false, true),
                         ),
                 ),
                 Align(
@@ -466,7 +466,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               height: 32,
                               right: 0,
                               child: Container(
-                                width: 56,
+                                width: 50,
                                 padding: EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.rectangle,
@@ -477,10 +477,35 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     width: 1,
                                   ),
                                 ),
-                                child: Text(
-                                  this.post.oozToTransfer.toStringAsFixed(2),
+                                child:Row(children: [
+                                  RotatedBox(
+                                quarterTurns: 1,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  icon: _draggablePositionX == 0
+                                      ? Image(
+                                          image: AssetImage(
+                                              'assets/icons_profile/woow.png'),
+                                        )
+                                      : Image(
+                                          image: AssetImage(
+                                              'assets/icons_profile/woow_active.png'),
+                                        ),
+                                  onPressed: () => {},
+                                  //this._likePost(true)
+                                )),
+
+                                   _draggablePositionX>0? Text(
+                                  "+ "+this.post.oozToTransfer.toStringAsFixed(2),
                                   textAlign: TextAlign.center,
-                                ),
+                                  style: TextStyle(color: Colors.blueAccent),
+                                ):Text(
+                                  this.post.oozTotalCollected.toStringAsFixed(2),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.black),
+                                )
+                                ],)
+                                
                               ),
                             ),
                           ),
@@ -580,7 +605,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 quarterTurns: 1,
                                 child: IconButton(
                                   padding: EdgeInsets.all(0),
-                                  icon: !this.postTimelineController.post.liked
+                                  icon: _draggablePositionX == 0
                                       ? Image(
                                           image: AssetImage(
                                               'assets/icons_profile/woow.png'),
@@ -601,50 +626,50 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
-                  child: new RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(fontSize: 14, color: Colors.black),
-                      children: <TextSpan>[
-                        // new TextSpan(
-                        //     text: this
-                        //         .postTimelineController
-                        //         .post
-                        //         .likesCount
-                        //         .toString()),
-                        // new TextSpan(
-                        //   text: ' wOOws!',
-                        //   style: new TextStyle(fontWeight: FontWeight.bold),
-                        // ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
-                  child: new RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(fontSize: 14, color: Colors.black),
-                      children: <TextSpan>[
-                        new TextSpan(
-                          text: 'OOz ',
-                          style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        new TextSpan(
-                            text:
-                                this.post.oozTotalCollected.toStringAsFixed(2)),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Padding(
+            //       padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
+            //       child: new RichText(
+            //         text: new TextSpan(
+            //           style: new TextStyle(fontSize: 14, color: Colors.black),
+            //           children: <TextSpan>[
+            //             // new TextSpan(
+            //             //     text: this
+            //             //         .postTimelineController
+            //             //         .post
+            //             //         .likesCount
+            //             //         .toString()),
+            //             // new TextSpan(
+            //             //   text: ' wOOws!',
+            //             //   style: new TextStyle(fontWeight: FontWeight.bold),
+            //             // ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
+            //       child: new RichText(
+            //         text: new TextSpan(
+            //           style: new TextStyle(fontSize: 14, color: Colors.black),
+            //           children: <TextSpan>[
+            //             new TextSpan(
+            //               text: 'OOz ',
+            //               style: new TextStyle(
+            //                 fontWeight: FontWeight.bold,
+            //               ),
+            //             ),
+            //             new TextSpan(
+            //                 text:
+            //                     this.post.oozTotalCollected.toStringAsFixed(2)),
+            //           ],
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
             Visibility(
               visible: this.post.description != null &&
                   this.post.description.isNotEmpty,
@@ -795,7 +820,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
-          backgroundColor: Color(0xff62c915),
+          backgroundColor: Colors.lightBlue,
           alignment:
               showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
         ),

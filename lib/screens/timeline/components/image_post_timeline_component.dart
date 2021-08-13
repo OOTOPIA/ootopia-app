@@ -7,11 +7,11 @@ class ImagePostTimeline extends StatefulWidget {
   const ImagePostTimeline({
     Key? key,
     required this.image,
-    this.onDoubleTapVideo,
+   //this.onDoubleTapVideo,
   }) : super(key: key);
 
   final String image;
-  final Function? onDoubleTapVideo;
+  //final Function? onDoubleTapVideo;
 
   @override
   _ImagePostTimeline createState() => _ImagePostTimeline();
