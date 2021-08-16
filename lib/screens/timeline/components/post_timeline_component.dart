@@ -787,7 +787,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
-          backgroundColor: Colors.lightBlue,
+          backgroundColor: Color(0xFF03DAC5),
           alignment:
               showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
         ),
