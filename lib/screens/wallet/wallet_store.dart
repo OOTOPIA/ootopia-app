@@ -26,6 +26,9 @@ abstract class _WalletStoreBase with Store {
   Map<String, List<WalletTransfer>>? receivedGroupedTransfersByDate;
 
   @observable
+  bool walletIsEmpty = false;
+
+  @observable
   Wallet? wallet;
 
   @action
@@ -58,7 +61,7 @@ abstract class _WalletStoreBase with Store {
     } else {
       allGroupedTransfersByDate = map;
     }
-
+    this.walletIsEmpty = map.entries.length == 0;
     return map;
   }
 

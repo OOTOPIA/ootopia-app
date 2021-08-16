@@ -102,95 +102,113 @@ class CardInformationBalance extends StatelessWidget {
 
     var iconForeground = this.iconForeground.isNotEmpty ? Image.network(this.iconForeground) : SvgPicture.asset("assets/icons/ooz_circle_icon_active.svg");
 
-    return ListTile(
-      contentPadding: EdgeInsets.only(top: 15, left: 5),
-      leading: Container(
-        width: 59,
-        height: 56,
-        child: Stack(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
           children: [
-            GestureDetector(
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                child: iconBackground
-              ),
-              onTap: () {
-                if(this.otherUserId != null) {
-                  _goToProfile();
-                }
-              },
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Container(
-                  padding: EdgeInsets.all(2),
-                  color: Colors.white,
-                  child: Container(
-                    width: 27,
-                    height: 27,
-                    child: iconForeground,
+            Container(
+              width: 66,
+              height: 56,
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: iconBackground
+                    ),
+                    onTap: () {
+                      if(this.otherUserId != null) {
+                        _goToProfile();
+                      }
+                    },
                   ),
-                ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        color: Colors.white,
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          child: iconForeground,
+                        ),
+                      ),
+                    ),
+                  ),
+                ]
               ),
+            ),
+            Container(// text and sent  
+              child:
+                Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      getTransactionTitle(context),
+                      style: TextStyle(
+                        color: Color(0xff018F9C),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12
+                      ),
+                    ),
+                    if (this.originTransaction !="gratitude_reward") Text(
+                      getTransactionDescription(context),
+                      style: TextStyle(
+                        color: Color(0xff707070),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '$typeActionFromOrTo',
+                            style: TextStyle(
+                              color: Color(0xff707070),
+                              fontSize: 12
+                            )
+                          ),
+                          TextSpan(
+                            text: ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
+                            style: TextStyle(
+                              color: Color(0xff707070),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                        ]
+                      )
+                    )
+                  ],
+                ),
             ),
           ],
         ),
-      ),
-      title: Text(
-        getTransactionTitle(context),
-        style: TextStyle(color: Color(0xff018F9C), fontSize: 12),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if(this.originTransaction !="gratitude_reward") Text(
-            getTransactionDescription(context),
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 14,
-            ),
-          ),
-          Row(
-            children: [
-              Text(
-                '$typeActionFromOrTo',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
+        SizedBox( // wallet Ozz
+          width: 80,
+          child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/ooz-coin-blue-small.svg',
+                  color: Color(colorOfBalance),
                 ),
-              ),
-              Text(
-                ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold),
-              )
-            ],
-          )
-        ],
-      ),
-      trailing: Chip(
-        labelPadding: this.balanceOfTransactions.length == 2
-            ? EdgeInsets.only(left: 32)
-            : this.balanceOfTransactions.length == 3
-                ? EdgeInsets.only(left: 27)
-                : this.balanceOfTransactions.length == 4
-                    ? EdgeInsets.only(left: 20)
-                    : this.balanceOfTransactions.length == 5
-                        ? EdgeInsets.only(left: 13)
-                        : EdgeInsets.only(left: 5),
-        avatar: SvgPicture.asset(
-          'assets/icons/ooz-coin-blue-small.svg',
-          color: Color(colorOfBalance),
+                Text(
+                  '${this.action == "sent" ? '-' : ''}${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+              ],
+            ),
         ),
-        backgroundColor: Colors.white,
-        label: Text(
-            '${this.action == "sent" ? '-' : ''}${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}'),
-      ),
+      ],
     );
   }
 }

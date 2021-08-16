@@ -64,7 +64,8 @@ class TabHistoryState extends State<TabHistory> {
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
         child: ListView(
-          children: groupedTransfersByDate == null
+          children: 
+          groupedTransfersByDate == null
               ? [
                   Padding(
                     padding: EdgeInsets.all(60),
@@ -84,28 +85,43 @@ class TabHistoryState extends State<TabHistory> {
                           : widget.store.mapSumDaysTransfer[e.key].toString();
                   lengthItemMapSumOfDayTransfer = sumFormated.length;
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      top: 16,
+                      bottom: 0,
+                    ),
                     child: Column(
                       children: [
-                        ChipSumForDate(
-                          date: e.key,
-                          lengthItemMapSumOfDayTransfer:
-                              lengthItemMapSumOfDayTransfer,
-                          sumFormated: sumFormated,
+                        Padding(
+                          padding:  EdgeInsets.only(
+                            bottom: 16,
+                          ),
+                          child: ChipSumForDate(
+                            date: e.key,
+                            lengthItemMapSumOfDayTransfer:
+                            lengthItemMapSumOfDayTransfer,
+                            sumFormated: sumFormated,
+                          ),
                         ),
                         Column(
                           children: e.value.map((e) {
-                            return CardInformationBalance(
-                                balanceOfTransactions:
-                                    '${e.balance.toStringAsFixed(2)}',
+                            return Padding(
+                              padding:  EdgeInsets.only(
+                                bottom: 16,
+                              ),
+                              child:  CardInformationBalance(
+                                balanceOfTransactions: '${e.balance.toStringAsFixed(2)}',
                                 iconForeground: '${e.photoUrl ?? ''}',
                                 iconBackground: '${e.icon}',
                                 toOrFrom: '${e.otherUsername ?? ''}',
                                 originTransaction: '${e.origin}',
                                 action: '${e.action}',
-                                otherUserId: '${e.otherUserId}');
+                                otherUserId: '${e.otherUserId}',
+                              ),
+                            );
                           }).toList(),
-                        )
+                        ),
                       ],
                     ),
                   );

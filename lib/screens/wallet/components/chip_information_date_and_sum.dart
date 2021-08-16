@@ -19,11 +19,11 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
   @override
   Widget build(BuildContext context) {
     String today = DateFormat('MMM d, y').format(DateTime.now());
-    return Row(
+    return 
+    Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
+        Text(// day
           '${today == widget.date ? 'Today' : widget.date}',
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -32,27 +32,26 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Chip(
-            labelPadding: widget.lengthItemMapSumOfDayTransfer == 2
-                ? EdgeInsets.only(left: 32)
-                : widget.lengthItemMapSumOfDayTransfer == 3
-                    ? EdgeInsets.only(left: 27)
-                    : widget.lengthItemMapSumOfDayTransfer == 4
-                        ? EdgeInsets.only(left: 20)
-                        : widget.lengthItemMapSumOfDayTransfer == 5
-                            ? EdgeInsets.only(left: 13)
-                            : EdgeInsets.only(left: 5),
-            backgroundColor: Colors.white,
-            avatar: SvgPicture.asset(
-              'assets/icons/ooz-coin-blue-small.svg',
-              color: Color(0xff003694),
+        SizedBox( // total by day
+          width: 80,
+          child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/ooz-coin-blue-small.svg',
+                  color: Color(0xff003694),
+                ),
+                Text(
+                  '${widget.sumFormated.replaceAll('.', ',')}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500
+                  ),
+                )
+              ],
             ),
-            label: Text(
-              '${widget.sumFormated.replaceAll('.', ',')}',
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            ))
+        ),
       ],
     );
   }
