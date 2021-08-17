@@ -482,7 +482,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       Container(
                                         padding:
                                             EdgeInsets.symmetric(horizontal: 6),
-                                        child: _draggablePositionX == 0
+                                        child: this.post.oozToTransfer == 0
                                             ? Image(
                                                 image: AssetImage(
                                                   'assets/icons/ooz_only.png',
@@ -496,7 +496,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                 width: 16,
                                               ),
                                       ),
-                                      _draggablePositionX > 0
+                                      this.post.oozToTransfer > 0
                                           ? Text(
                                               "+ " +
                                                   this
@@ -533,7 +533,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.white,
-                                Colors.blueAccent,
+                                Color(0xFF003286),
                               ],
                             ),
                           )
@@ -616,7 +616,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 quarterTurns: 1,
                                 child: IconButton(
                                   padding: EdgeInsets.all(0),
-                                  icon: _draggablePositionX == 0
+                                  icon: this.post.oozToTransfer == 0 
                                       ? Image(
                                           image: AssetImage(
                                               'assets/icons_profile/woow.png'),
@@ -787,7 +787,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
-          backgroundColor: Colors.lightBlue,
+          backgroundColor: Color(0xFF03DAC5),
           alignment:
               showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
         ),
