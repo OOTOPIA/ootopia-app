@@ -143,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
-                    walletStore.walletIsEmpty == true ? Container() : SizedBox(
+                    SizedBox(
                       height: 52,
                       child: 
                       Container(
@@ -172,36 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    walletStore.walletIsEmpty == true ?
-                      Opacity(
-                        opacity: 0.5,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.70,
-                          color: Colors.white,
-                          child: 
-                            Center(
-                              child:
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset('assets/icons/ooz-coin-medium.png',
-                                      width: 28,
-                                      height: 28,
-                                      color: Theme.of(context).textTheme.subtitle2!.color
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 16),
-                                      child: Text(
-                                        "Your wallet is empty",
-                                        style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 16,)
-                                      ),
-                                    ),
-                                  ],
-                                )
-                            )
-                        ),
-                      ) 
-                     : Container(
+                    Container(
                       height: MediaQuery.of(context).size.height * 0.61,
                       child: 
                       TabBarView(

@@ -43,7 +43,7 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
                   color: Color(0xff003694),
                 ),
                 Text(
-                  '${widget.sumFormated.replaceAll('.', ',')}',
+                  '${widget.sumFormated.length > 6 ? NumberFormat.compact().format(double.parse(widget.sumFormated)).replaceAll('.', ',') : this.widget.sumFormated.replaceAll('.', ',')}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500
