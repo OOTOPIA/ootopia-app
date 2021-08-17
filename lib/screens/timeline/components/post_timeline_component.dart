@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
@@ -70,6 +71,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   User? user;
   bool isUserOwnsPost = false;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   _PhotoTimelineState({
     required this.post,
@@ -499,19 +502,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       this.post.oozToTransfer > 0
                                           ? Text(
                                               "+ " +
-                                                  this
-                                                      .post
-                                                      .oozToTransfer
-                                                      .toStringAsFixed(2).replaceAll('.', ','),
+                                                  currencyFormatter.format(
+                                                      this.post.oozToTransfer),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Color(0xFF003694)),
                                             )
                                           : Text(
-                                              this
-                                                  .post
-                                                  .oozTotalCollected
-                                                  .toStringAsFixed(2).replaceAll('.', ','),
+                                              currencyFormatter.format(
+                                                  this.post.oozTotalCollected),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.black),
@@ -617,9 +616,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 child: IconButton(
                                   padding: EdgeInsets.all(0),
                                   icon: Image(
-                                          image: AssetImage(
-                                              'assets/icons_profile/woow.png'),
-                                        ),
+                                    image: AssetImage(
+                                        'assets/icons_profile/woow.png'),
+                                  ),
                                   onPressed: () => {},
                                   //this._likePost(true)
                                 )),
