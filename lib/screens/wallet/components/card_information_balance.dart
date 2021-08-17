@@ -108,14 +108,14 @@ class CardInformationBalance extends StatelessWidget {
     if (this.originTransaction.isNotEmpty &&
         this.originTransaction == "gratitude_reward") {
       if (this.iconForeground.isNotEmpty) {
-        iconForeground = Image.network(this.iconForeground);
+        iconForeground = Image.network(this.iconForeground,fit: BoxFit.fill);
       } else {
         iconForeground =
-            Image.asset("assets/icons/user_without_image_profile.png");
+            Image.asset("assets/icons/user_without_image_profile.png",fit: BoxFit.fill);
       }
     } else {
       iconForeground =
-          SvgPicture.asset("assets/icons/ooz_circle_icon_active.svg");
+          SvgPicture.asset("assets/icons/ooz_circle_icon_active.svg",fit: BoxFit.fill);
     }
 
     return Row(
@@ -157,23 +157,27 @@ class CardInformationBalance extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                      padding: EdgeInsets.all(1),
-                      color: Colors.white,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        child: GestureDetector(
-                            child: iconForeground,
-                            onTap: () {
-                              if (this.originTransaction ==
-                                  'gratitude_reward') {
-                                _goToProfile();
-                              }
-                            }),
-                      ),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.white
+                      )
+
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: GestureDetector(
+                        child: iconForeground,
+                        onTap: () {
+                          if (this.originTransaction ==
+                              'gratitude_reward') {
+                            _goToProfile();
+                          }
+                        }),
                     ),
                   ),
                 ),
@@ -193,7 +197,9 @@ class CardInformationBalance extends StatelessWidget {
                         fontSize: 12),
                   ),
                   if (this.originTransaction != "gratitude_reward")
-                    Text(
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4,horizontal: 0),
+                      child: Text(
                       getTransactionDescription(context),
                       style: TextStyle(
                         color: Color(0xff707070),
@@ -201,6 +207,7 @@ class CardInformationBalance extends StatelessWidget {
                         fontSize: 14,
                       ),
                     ),
+                  ),
                   RichText(
                       text: TextSpan(children: [
                     TextSpan(
@@ -238,7 +245,10 @@ class CardInformationBalance extends StatelessWidget {
               ),
               Text(
                 '${this.action == "sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
-                style: TextStyle(fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Color(colorOfBalance)
+                ),
               ),
             ],
           ),
