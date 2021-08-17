@@ -1,35 +1,150 @@
 import 'dart:async';
-
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
-import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class TimelineScreenProfileScreen extends StatelessWidget {
+class TimelineScreenProfileScreen extends StatefulWidget {
   final Map<String, dynamic> args;
 
   TimelineScreenProfileScreen(this.args);
 
   @override
+  _TimelineScreenProfileScreenState createState() =>
+      _TimelineScreenProfileScreenState();
+}
+
+class _TimelineScreenProfileScreenState
+    extends State<TimelineScreenProfileScreen> {
+  HomeStore? homeStore;
+  AuthStore? authStore;
+  _goToPage(int index) {
+    PageViewController.instance.controller.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
+    homeStore = Provider.of<HomeStore>(context);
+    _bottomOnTapButtonHandler(int index) {
+      print(authStore!.currentUser);
+      if (homeStore?.currentPageIndex == index) {
+        return;
+      }
+      setState(() {
+        switch (index) {
+          case 0:
+            _goToPage(0);
+            break;
+          case 2:
+            if (authStore!.currentUser == null) {
+              Navigator.of(context).pushNamed(
+                PageRoute.Page.loginScreen.route,
+                arguments: {
+                  "returnToPageWithArgs": {
+                    "pageRoute": PageRoute.Page.cameraScreen.route,
+                    "arguments": null
+                  }
+                },
+              );
+            } else {
+              Navigator.of(context)
+                  .pushNamed(PageRoute.Page.cameraScreen.route);
+            }
+            break;
+          case 3:
+            if (authStore!.currentUser == null) {
+              Navigator.of(context).pushNamed(
+                PageRoute.Page.loginScreen.route,
+                arguments: {
+                  "returnToPageWithArgs": {
+                    "currentPageName": "wallet",
+                    "arguments": null
+                  }
+                },
+              );
+            } else {
+              _goToPage(1);
+            }
+            break;
+          case 4:
+            if (authStore!.currentUser == null) {
+              Navigator.of(context).pushNamed(
+                PageRoute.Page.loginScreen.route,
+                arguments: {
+                  "returnToPageWithArgs": {
+                    "currentPageName": "my_profile",
+                    "arguments": null
+                  }
+                },
+              );
+            } else {
+              _goToPage(3);
+            }
+            break;
+          default:
+        }
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.publications),
+        centerTitle: true,
+        leading: InkWell(
+          onTap: () => Navigator.of(context).pop(),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 3.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 20,
+                ),
+                Text(
+                  'back',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        title: Image.asset(
+          'assets/images/logo.png',
+          height: 34,
+        ),
       ),
       body: ListPostProfileComponent(
-          posts: this.args["posts"],
-          postSelected: this.args["postSelected"],
-          userId: this.args["userId"]),
-      bottomNavigationBar: NavigatorBar(),
+          posts: this.widget.args["posts"],
+          postSelected: this.widget.args["postSelected"],
+          userId: this.widget.args["userId"]),
+      bottomNavigationBar: AppBottomNavigationBar(
+        onTap: _bottomOnTapButtonHandler,
+      ),
     );
   }
 }
@@ -93,6 +208,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     if (loggedIn) {
       user = await getCurrentUser();
       print("LOGGED USER: " + user!.fullname!);
+      print('object');
     }
   }
 
@@ -141,60 +257,63 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
         } else if (state is LoadedSucessState) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: VisibilityDetector(
-                  key: ObjectKey(flickMultiManager),
-                  onVisibilityChanged: (visibility) {
-                    if (visibility.visibleFraction == 0 && this.mounted) {
-                      flickMultiManager.pause();
-                    }
-                  },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {
-                        _allPosts = [];
-                        currentPage = 1;
-                      });
-                      _getData();
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: VisibilityDetector(
+                    key: ObjectKey(flickMultiManager),
+                    onVisibilityChanged: (visibility) {
+                      if (visibility.visibleFraction == 0 && this.mounted) {
+                        flickMultiManager.pause();
+                      }
                     },
-                    child: ScrollablePositionedList.builder(
-                      itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
-                      itemScrollController: this.itemScrollController,
-                      itemPositionsListener: this.itemPositionsListener,
-                      itemBuilder: (context, index) {
-                        /*if (index == _allPosts.length - _nextPageThreshold &&
-                            _hasMoreItems) {}*/
-                        if (index == _allPosts.length) {
-                          if (_hasMoreItems) {
-                            currentPage++;
-                            _getData();
-                          }
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: _hasMoreItems
-                                  ? CircularProgressIndicator()
-                                  : Container(),
-                            ),
-                          );
-                        }
-                        return PhotoTimeline(
-                          key: ObjectKey(_allPosts[index]),
-                          post: _allPosts[index],
-                          timelineBloc: this.timelineBloc,
-                          loggedIn: this.loggedIn,
-                          flickMultiManager: flickMultiManager,
-                          isProfile: true,
-                          user: this.user,
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        setState(() {
+                          _allPosts = [];
+                          currentPage = 1;
+                        });
+                        _getData();
                       },
+                      child: ScrollablePositionedList.builder(
+                        itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
+                        itemScrollController: this.itemScrollController,
+                        itemPositionsListener: this.itemPositionsListener,
+                        itemBuilder: (context, index) {
+                          /*if (index == _allPosts.length - _nextPageThreshold &&
+                              _hasMoreItems) {}*/
+                          if (index == _allPosts.length) {
+                            if (_hasMoreItems) {
+                              currentPage++;
+                              _getData();
+                            }
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: _hasMoreItems
+                                    ? CircularProgressIndicator()
+                                    : Container(),
+                              ),
+                            );
+                          }
+                          return PhotoTimeline(
+                            key: ObjectKey(_allPosts[index]),
+                            post: _allPosts[index],
+                            timelineBloc: this.timelineBloc,
+                            loggedIn: this.loggedIn,
+                            flickMultiManager: flickMultiManager,
+                            isProfile: true,
+                            user: this.user,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         } else if (state is ErrorState) {
           return TryAgain(
