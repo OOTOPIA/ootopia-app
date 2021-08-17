@@ -502,7 +502,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                   this
                                                       .post
                                                       .oozToTransfer
-                                                      .toStringAsFixed(2),
+                                                      .toStringAsFixed(2).replaceAll('.', ','),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Color(0xFF003694)),
@@ -511,7 +511,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                               this
                                                   .post
                                                   .oozTotalCollected
-                                                  .toStringAsFixed(2),
+                                                  .toStringAsFixed(2).replaceAll('.', ','),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.black),
