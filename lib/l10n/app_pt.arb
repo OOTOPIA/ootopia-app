@@ -13,7 +13,7 @@
     "createAccount": "Criar Conta",
 
     "regenerationGame": "Jogo de regeneração",
-    "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. O objetivo pessoal refere-se ao tempo que você se compromete a jogar o jogo por dia. Ao atingir sua meta diária, você recebe uma recompensa de crédito em OOz. Todos os dias, às 20h, inicia-se uma nova rodada, com duração de 24 horas.",
+    "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
 
@@ -201,7 +201,7 @@
     
     "congratulations": "Parabéns!",
     "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar a regenerar o planeta",    
-    "totalBalance": "Total somado",
+    "totalBalance": "Total Somado",
     "nextStepIsToHelpMeetYourCityGoal": "O próximo passo é ajudar a atingir o objetivo da sua cidade.",
     "keepMakingOOTOPIAAlive": "Continue fazendo OOTOPIA vivo!",
     "nextStepIsToHelpMeetYourGlobalGoal": "O próximo passo é ajudar a cumprir sua meta global.",
@@ -226,7 +226,7 @@
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
     "badgeSower": "Distintivo: Semeador",
-    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Sower é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
+    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Semeador é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
     "areYouASowerToo": "Você também é semeador?",
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
@@ -245,6 +245,12 @@
 
     "planetaryLevel": "Nível planetário",
     "planetaryLevelText1": "Juntos podemos mudar o mundo! O objetivo do Nível Planetário é a soma dos objetivos de todas as pessoas colaborando para criar o mundo maravilhoso em que queremos viver!",
-    "planetaryLevelText2": "Estamos quase lá! Vamos cumprir a meta planetária hoje!"
+    "planetaryLevelText2": "Estamos quase lá! Vamos cumprir a meta planetária hoje!",
+    "invitationCode": "Código de convite",
+    "gratitudeReward": "Recompensa de gratidão",
+    "personalGoalAchieved": "Meta pessoal atingida",
+    "totalGameCompleted": "Jogo total completado",
+
+    "thereAreNoWalletRecords": "Não há registros de OZZ"
 
 }

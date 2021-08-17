@@ -48,7 +48,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       yield SuccessCreatePostState(
         oozToReward: oozToReward,
       );
-      this.trackingEvents.timelineCreatedAPost();
+      this.trackingEvents.timelineCreatedAPost(event.post.type!);
     } catch (_) {
       yield ErrorCreatePostState("Error on create a post");
     }

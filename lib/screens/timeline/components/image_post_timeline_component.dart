@@ -7,11 +7,11 @@ class ImagePostTimeline extends StatefulWidget {
   const ImagePostTimeline({
     Key? key,
     required this.image,
-    this.onDoubleTapVideo,
+   //this.onDoubleTapVideo,
   }) : super(key: key);
 
   final String image;
-  final Function? onDoubleTapVideo;
+  //final Function? onDoubleTapVideo;
 
   @override
   _ImagePostTimeline createState() => _ImagePostTimeline();
@@ -37,11 +37,11 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
     ));
 
     return GestureDetector(
-      onDoubleTap: () {
-        if (this.widget.onDoubleTapVideo != null) {
-          this.widget.onDoubleTapVideo!();
-        }
-      },
+      // onDoubleTap: () {
+      //   if (this.widget.onDoubleTapVideo != null) {
+      //     this.widget.onDoubleTapVideo!();
+      //   }
+      // },
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,

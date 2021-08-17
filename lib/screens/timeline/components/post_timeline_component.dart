@@ -274,8 +274,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                   this.post.badges?[0].icon as String)),
                           onTap: () {
                             showModalBottomSheet(
+                                barrierColor: Colors.black.withAlpha(1),
                                 context: context,
-                                backgroundColor: Color(0xff018F9C),
+                                backgroundColor: Colors.black.withAlpha(1),
                                 builder: (BuildContext context) {
                                   return SnackBarWidget(
                                       menu: AppLocalizations.of(context)!
@@ -284,6 +285,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                           .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
+                                      marginBottom: true,
                                       contact: {
                                         "text": AppLocalizations.of(context)!
                                             .areYouASowerToo,
@@ -347,7 +349,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   child: this.post.type == "image"
                       ? ImagePostTimeline(
                           image: this.post.imageUrl as String,
-                          onDoubleTapVideo: () => this._likePost(false, true),
+                          //onDoubleTapVideo: () => this._likePost(false, true),
                         )
                       : FlickMultiPlayer(
                           userId: (user != null ? user!.id : null),
@@ -355,7 +357,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           url: this.post.videoUrl!,
                           flickMultiManager: widget.flickMultiManager,
                           image: this.post.thumbnailUrl,
-                          onDoubleTapVideo: () => this._likePost(false, true),
+                          //onDoubleTapVideo: () => this._likePost(false, true),
                         ),
                 ),
                 Align(
@@ -427,7 +429,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   ),
                   Positioned(
                     key: _oozInfoKey,
-                    width: 120,
+                    width: 150,
                     right: 0,
                     child: Container(
                       height: 36,
@@ -436,8 +438,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         children: [
                           Positioned(
                             top: 0,
-                            width: 80,
-                            right: showOozToTransfer() ? 32 : 0,
+                            width: 96,
+                            right: showOozToTransfer() ? 50 : 0,
                             child: this.post.oozToTransfer > 0 &&
                                     (_isDragging || _oozIsSent || _oozError) &&
                                     !_oozSlidingOut
@@ -453,22 +455,58 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               height: 32,
                               right: 0,
                               child: Container(
-                                width: 56,
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                    color: Colors.grey.shade300,
-                                    width: 1,
+                                  width: 90,
+                                  padding: EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: 1,
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  this.post.oozToTransfer.toStringAsFixed(2),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 6),
+                                        child: this.post.oozToTransfer == 0
+                                            ? Image(
+                                                image: AssetImage(
+                                                  'assets/icons/ooz_only.png',
+                                                ),
+                                                width: 16,
+                                              )
+                                            : Image(
+                                                image: AssetImage(
+                                                  'assets/icons/ooz_only_active.png',
+                                                ),
+                                                width: 16,
+                                              ),
+                                      ),
+                                      this.post.oozToTransfer > 0
+                                          ? Text(
+                                              "+ " +
+                                                  this
+                                                      .post
+                                                      .oozToTransfer
+                                                      .toStringAsFixed(2),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Color(0xFF003694)),
+                                            )
+                                          : Text(
+                                              this
+                                                  .post
+                                                  .oozTotalCollected
+                                                  .toStringAsFixed(2),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            )
+                                    ],
+                                  )),
                             ),
                           ),
                         ],
@@ -484,7 +522,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.white,
-                                Colors.blueAccent,
+                                Color(0xFF003286),
                               ],
                             ),
                           )
@@ -563,19 +601,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           child: SizedBox(
                             width: 36,
                             height: 36,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              icon: !this.postTimelineController.post.liked
-                                  ? Image(
-                                      image: AssetImage(
-                                          'assets/icons_profile/woow.png'),
-                                    )
-                                  : Image(
-                                      image: AssetImage(
-                                          'assets/icons_profile/woow_active.png'),
-                                    ),
-                              onPressed: () => {this._likePost(true)},
-                            ),
+                            child: RotatedBox(
+                                quarterTurns: 1,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  icon: Image(
+                                    image: AssetImage(
+                                        'assets/icons_profile/woow.png'),
+                                  ),
+                                  onPressed: () => {},
+                                  //this._likePost(true)
+                                )),
                           ),
                         ),
                       ),
@@ -584,50 +620,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   ),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
-                  child: new RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(fontSize: 14, color: Colors.black),
-                      children: <TextSpan>[
-                        new TextSpan(
-                            text: this
-                                .postTimelineController
-                                .post
-                                .likesCount
-                                .toString()),
-                        new TextSpan(
-                          text: ' wOOws!',
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 3, left: 12, right: 12),
-                  child: new RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(fontSize: 14, color: Colors.black),
-                      children: <TextSpan>[
-                        new TextSpan(
-                          text: 'OOz ',
-                          style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        new TextSpan(
-                            text:
-                                this.post.oozTotalCollected.toStringAsFixed(2)),
-                      ],
-                    ),
-                  ),
-                )
-              ],
             ),
             Visibility(
               visible: this.post.description != null &&
@@ -779,7 +771,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
-          backgroundColor: Color(0xff62c915),
+          backgroundColor: Color(0xFF03DAC5),
           alignment:
               showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
         ),

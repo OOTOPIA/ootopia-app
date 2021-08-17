@@ -38,6 +38,7 @@ import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/theme.dart';
@@ -177,6 +178,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
           Provider<TimelineStore>(
             create: (_) => TimelineStore(),
+          ),
+          Provider<WalletStore>(
+            create: (_) => WalletStore(),
           ),
         ],
         child: MaterialApp(

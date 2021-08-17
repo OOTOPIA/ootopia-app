@@ -17,7 +17,7 @@
 
 
     "regenerationGame": "Regeneration game",
-    "aboutRegenerationGame": "The Regeneration Game is a way you can contribute to regenerative movement through the OOTOPIA app. The Personal Goal refers to the time you commit to playing the game per day. When you meet your daily goal, you receive a credit reward in OOz. Every day at 20:00, a new round begins, lasting 24 hours.",
+    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to regenerative movement through the OOTOPIA app. Personal Goal refers to the amount of time you want to engage in the game. Every day, a new round of the game starts at 20h. Everytime you meet your daily goal, you receive rewards in OOz currency.",
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
@@ -226,18 +226,20 @@
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
     "youDontNothing": "You don't have nothing",
-    "all": "all",
-    "sent":"sent",
-    "received": "received",
+    "all": "All",
+    "sent":"Sent",
+    "received": "Received",
 
     "badgeSower": "Badge: Sower",
     "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Sower Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
     "areYouASowerToo": "Are you a sower too?",
     "getInContact": "Get in contact!",
+    "invitationCode": "Invitation code",
+    "gratitudeReward": "Gratitude reward",
+    "personalGoalAchieved": "Personal Goal Achieved",
+    "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
-
     "close": "Close",
-
     "personalLevel": "Personal level",
     "personalLevelText1": "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
     "personalLevelText2": "Set your daily goal and start living OOTOPIA now!",
@@ -249,6 +251,8 @@
     "planetaryLevel": "Planetary level",
     "planetaryLevelText1": "Together we can change the world! The Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
     "planetaryLevelText2": "We are almost there! Let's meet the planetary goal today!",
+    
+    "thereAreNoWalletRecords": "There are no OZZ records",
 
     "@helloWorld": {
         "description": "A programmer greeting"

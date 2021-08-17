@@ -99,10 +99,12 @@ class AnalyticsTracking {
     this.trackingEvent("Reset Password - Password changed", null);
   }
 
-  timelineCreatedAPost() {
+  timelineCreatedAPost(String type) {
     final Identify identify = Identify()..add('Content posted', 1);
     this.trackingDataUser(identify);
-    this.trackingEvent("Timeline - Created a post", null);
+    this.trackingEvent("Timeline - Created a post", {
+      type: type,
+    });
   }
 
   timelineGaveALike(property) {
