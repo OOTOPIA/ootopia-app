@@ -33,6 +33,31 @@ class SecureStoreMixin {
     setCurrentUser(json.encode(user.toJson()));
   }
 
+  updateUserRegenerarionGameLearningAlert(String type) async {
+    User user = await getCurrentUser();
+
+    print("Como veio o user ${user.personalDialogOpened}");
+
+    switch (type) {
+      case "personal":
+        user.personalDialogOpened = true;
+
+        break;
+
+      case "city":
+        user.cityDialogOpened = true;
+
+        break;
+
+      case "global":
+        user.globalDialogOpened = true;
+
+        break;
+    }
+
+    await setCurrentUser(json.encode(user.toJson()));
+  }
+
   void setRecoverPasswordToken(String value) async {
     await this.setSecureStore("recover_password_token", value);
   }

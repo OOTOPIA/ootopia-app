@@ -265,30 +265,34 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if  (this.post.badges!.length > 0) GestureDetector(
-                      child:  Container(
-                        width: 25, 
-                        height: 25, 
-                        child: Image.network(this.post.badges?[0].icon as String)
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Color(0xff018F9C),
-                          builder: (BuildContext context) {
-                            return SnackBarWidget(
-                              menu: AppLocalizations.of(context)!.badgeSower,
-                              text: AppLocalizations.of(context)!.theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                              about: AppLocalizations.of(context)!.learnMore,
-                              contact: {
-                                "text": AppLocalizations.of(context)!.areYouASowerToo,
-                                "textLink": AppLocalizations.of(context)!.getInContact,
-                              }
-                            );
-                          }
-                        );
-                      }
-                    ),
+                    if (this.post.badges!.length > 0)
+                      GestureDetector(
+                          child: Container(
+                              width: 25,
+                              height: 25,
+                              child: Image.network(
+                                  this.post.badges?[0].icon as String)),
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Color(0xff018F9C),
+                                builder: (BuildContext context) {
+                                  return SnackBarWidget(
+                                      menu: AppLocalizations.of(context)!
+                                          .badgeSower,
+                                      text: AppLocalizations.of(context)!
+                                          .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                      about: AppLocalizations.of(context)!
+                                          .learnMore,
+                                      contact: {
+                                        "text": AppLocalizations.of(context)!
+                                            .areYouASowerToo,
+                                        "textLink":
+                                            AppLocalizations.of(context)!
+                                                .getInContact,
+                                      });
+                                });
+                          }),
                     PopupMenuPost(
                       isAnabled: isUserOwnsPost,
                       callbackReturnPopupMenu: _popupMenuReturn,
@@ -312,17 +316,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'Learning Tags',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,

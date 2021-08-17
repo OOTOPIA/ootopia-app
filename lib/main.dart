@@ -24,6 +24,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
+import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -221,6 +222,8 @@ class MainPage extends HookWidget {
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
     PageRoute.Page.profile: (args) => ProfilePage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
+    PageRoute.Page.regenerarionGameLearningAlert: (args) =>
+        RegenerarionGameLearningAlert(args),
   };
 
   @override

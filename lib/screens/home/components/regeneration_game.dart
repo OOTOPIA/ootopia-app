@@ -38,6 +38,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
   double detailedGoalIconPosition = 0;
   bool celebratePageIsOpen = false;
 
+  bool clickedInPersonalDialogOpened = false;
+
   @override
   void initState() {
     super.initState();
@@ -372,19 +374,63 @@ class _RegenerationGameState extends State<RegenerationGame> {
       );
 
   Widget gameIconProgress(String type) {
+    print("Cheguei aqui 1");
+
     return GestureDetector(
       onTap: () {
+        //TODO refatorar esse codigo em algum momento
         setState(() {
+          print("Cheguei aqui 2");
+
           if (homeStore.dailyGoalStats == null) {
             homeStore.getDailyGoalStats();
           }
+
+          if (authStore.currentUser == null && type == 'city' ||
+              type == 'global') {
+            _goToRegenerationGameAlert(type);
+            return;
+          }
+
+          if (authStore.currentUser == null &&
+              !this.clickedInPersonalDialogOpened &&
+              type == 'personal') {
+            print("Cheguei aqui 3 perte 2");
+
+            this.clickedInPersonalDialogOpened = true;
+
+            _goToRegenerationGameAlert(type);
+            return;
+          }
+
           if (authStore.currentUser != null) {
+            print("Cheguei aqui 4");
+
+            print("opa");
             detailedGoalType = type;
             if (detailedGoalType == 'city') {
-              //goToCelebrationCity();
+              print("Cheguei aqui 5");
+
+              _goToRegenerationGameAlert(type);
             } else if (detailedGoalType == 'global') {
-              //goToCelebrationGlobal();
+              print("Cheguei aqui 6");
+
+              _goToRegenerationGameAlert(type);
             } else {
+              print(
+                  "Cheguei aqui 7 ${authStore.currentUser!.personalDialogOpened}");
+              print(
+                  "Cheguei aqui 7 ${authStore.currentUser!.cityDialogOpened}");
+              print(
+                  "Cheguei aqui 7 ${authStore.currentUser!.globalDialogOpened}");
+
+              if (authStore.currentUser!.personalDialogOpened == null ||
+                  authStore.currentUser!.personalDialogOpened == false) {
+                authStore.currentUser!.personalDialogOpened = true;
+
+                _goToRegenerationGameAlert(type);
+              }
+
               setState(() {
                 showDetailedGoal = true;
               });
@@ -461,6 +507,17 @@ class _RegenerationGameState extends State<RegenerationGame> {
             ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
             : "0,00",
       },
+    );
+  }
+
+  _goToRegenerationGameAlert(String type) async {
+    if (authStore.currentUser != null) {
+      authStore.updateUserRegenerarionGameLearningAlert(type);
+    }
+
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.regenerarionGameLearningAlert.route,
+      arguments: {"type": type, "context": context},
     );
   }
 
