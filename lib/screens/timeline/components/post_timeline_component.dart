@@ -505,7 +505,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                       .toStringAsFixed(2),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: Colors.blueAccent),
+                                                  color: Color(0xFF003694)),
                                             )
                                           : Text(
                                               this
@@ -616,14 +616,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 quarterTurns: 1,
                                 child: IconButton(
                                   padding: EdgeInsets.all(0),
-                                  icon: this.post.oozToTransfer == 0 
-                                      ? Image(
+                                  icon: Image(
                                           image: AssetImage(
                                               'assets/icons_profile/woow.png'),
-                                        )
-                                      : Image(
-                                          image: AssetImage(
-                                              'assets/icons_profile/woow_active.png'),
                                         ),
                                   onPressed: () => {},
                                   //this._likePost(true)
