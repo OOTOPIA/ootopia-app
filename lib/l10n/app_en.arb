@@ -240,6 +240,8 @@
     "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
     
+    "thereAreNoWalletRecords": "There are no OZZ records",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }

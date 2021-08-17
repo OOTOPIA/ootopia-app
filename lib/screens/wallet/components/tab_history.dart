@@ -5,6 +5,7 @@ import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/screens/wallet/components/card_information_balance.dart';
 import 'package:ootopia_app/screens/wallet/components/chip_information_date_and_sum.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TabHistory extends StatefulWidget {
   final String action;
@@ -64,7 +65,8 @@ class TabHistoryState extends State<TabHistory> {
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
         child: ListView(
-          children: groupedTransfersByDate == null
+          children: 
+          groupedTransfersByDate == null
               ? [
                   Padding(
                     padding: EdgeInsets.all(60),
@@ -73,39 +75,81 @@ class TabHistoryState extends State<TabHistory> {
                     ),
                   )
                 ]
+          : groupedTransfersByDate!.isEmpty ?
+              [
+                Opacity(
+                  opacity: 0.5,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.61,
+                    color: Colors.white,
+                    child: 
+                      Center(
+                        child:
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/icons/ooz-coin-medium.png',
+                                width: 28,
+                                height: 28,
+                                color: Theme.of(context).textTheme.subtitle2!.color
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 16),
+                                child: Text(
+                                  AppLocalizations.of(context)!.thereAreNoWalletRecords,
+                                  style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 16,)
+                                ),
+                              ),
+                            ],
+                          )
+                      )
+                  ),
+                ) 
+              ]
               : groupedTransfersByDate!.entries.map((e) {
+                  final f = new NumberFormat("0.00");
                   String sumFormated = '';
                   int lengthItemMapSumOfDayTransfer = 0;
                   sumFormated =
-                      widget.store.mapSumDaysTransfer[e.key].toString().length >
-                              7
-                          ? NumberFormat.compact()
-                              .format(widget.store.mapSumDaysTransfer[e.key])
-                          : widget.store.mapSumDaysTransfer[e.key].toString();
-                  lengthItemMapSumOfDayTransfer = sumFormated.length;
+                      f.format(widget.store.mapSumDaysTransfer[e.key]);
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.only(
+                      left: 24,
+                      right: 24,
+                      top: 16,
+                      bottom: 0,
+                    ),
                     child: Column(
                       children: [
-                        ChipSumForDate(
-                          date: e.key,
-                          lengthItemMapSumOfDayTransfer:
-                              lengthItemMapSumOfDayTransfer,
-                          sumFormated: sumFormated,
+                        Padding(
+                          padding:  EdgeInsets.only(
+                            bottom: 16,
+                          ),
+                          child: ChipSumForDate(
+                            date: e.key,
+                            lengthItemMapSumOfDayTransfer:
+                            lengthItemMapSumOfDayTransfer,
+                            sumFormated: sumFormated,
+                          ),
                         ),
                         Column(
                           children: e.value.map((e) {
-                            return CardInformationBalance(
-                                balanceOfTransactions:
-                                    '${e.balance.toStringAsFixed(2)}',
+                            return Padding(
+                              padding:  EdgeInsets.only(
+                                bottom: 16,
+                              ),
+                              child:  CardInformationBalance(
+                                balanceOfTransactions: '${e.balance.toStringAsFixed(2)}',
                                 iconForeground: '${e.photoUrl ?? ''}',
                                 iconBackground: '${e.icon}',
                                 toOrFrom: '${e.otherUsername ?? ''}',
                                 originTransaction: '${e.origin}',
                                 action: '${e.action}',
-                                otherUserId: '${e.otherUserId}');
+                                otherUserId: '${e.otherUserId}',
+                              ),
+                            );
                           }).toList(),
-                        )
+                        ),
                       ],
                     ),
                   );

@@ -26,6 +26,9 @@ abstract class _WalletStoreBase with Store {
   Map<String, List<WalletTransfer>>? receivedGroupedTransfersByDate;
 
   @observable
+  bool walletIsEmpty = false;
+
+  @observable
   Wallet? wallet;
 
   @action
@@ -40,7 +43,7 @@ abstract class _WalletStoreBase with Store {
           .toString(),
     );
     map.entries.forEach((element) {
-      var soma = 0.0;
+      var soma = 0.00;
       element.value.forEach((element) {
         if (element.action == 'sent') {
           soma -= element.balance;
@@ -58,7 +61,7 @@ abstract class _WalletStoreBase with Store {
     } else {
       allGroupedTransfersByDate = map;
     }
-
+    this.walletIsEmpty = map.entries.length == 0;
     return map;
   }
 

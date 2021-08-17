@@ -201,7 +201,7 @@
     
     "congratulations": "Parabéns!",
     "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar a regenerar o planeta",    
-    "totalBalance": "Total somado",
+    "totalBalance": "Total Somado",
     "nextStepIsToHelpMeetYourCityGoal": "O próximo passo é ajudar a atingir o objetivo da sua cidade.",
     "keepMakingOOTOPIAAlive": "Continue fazendo OOTOPIA vivo!",
     "nextStepIsToHelpMeetYourGlobalGoal": "O próximo passo é ajudar a cumprir sua meta global.",
@@ -235,5 +235,8 @@
     "invitationCode": "Código de convite",
     "gratitudeReward": "Recompensa de gratidão",
     "personalGoalAchieved": "Meta pessoal atingida",
-    "totalGameCompleted": "Jogo total completado"
+    "totalGameCompleted": "Jogo total completado",
+
+    "thereAreNoWalletRecords": "Não há registros de OZZ"
+
 }
