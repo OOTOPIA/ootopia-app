@@ -21,7 +21,8 @@ enum Page {
   resetPasswordScreen,
   splashScreen,
   celebration,
-  profile
+  profile,
+  regenerarionGameLearningAlert
 }
 
 extension PageRoute on Page {

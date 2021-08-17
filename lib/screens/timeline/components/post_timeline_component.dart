@@ -321,17 +321,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'Learning Tags',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,

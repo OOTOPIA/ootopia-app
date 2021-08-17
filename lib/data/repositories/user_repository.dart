@@ -145,6 +145,20 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   @override
+  Future updateUserRegenerarionGameLearningAlert(String type) async {
+    User user = await getCurrentUser();
+
+    bool loggedIn = await getUserIsLoggedIn();
+    if (!loggedIn) {
+      return;
+    }
+
+    await ApiClient.api().put(
+      "users/${user.id}/dialog-opened/$type",
+    );
+  }
+
+  @override
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
     try {
       bool loggedIn = await getUserIsLoggedIn();
