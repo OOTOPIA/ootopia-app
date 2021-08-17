@@ -36,8 +36,6 @@ class SecureStoreMixin {
   updateUserRegenerarionGameLearningAlert(String type) async {
     User user = await getCurrentUser();
 
-    print("Como veio o user ${user.personalDialogOpened}");
-
     switch (type) {
       case "personal":
         user.personalDialogOpened = true;

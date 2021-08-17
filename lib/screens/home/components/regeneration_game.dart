@@ -398,7 +398,6 @@ class _RegenerationGameState extends State<RegenerationGame> {
           }
 
           if (authStore.currentUser != null) {
-            print("opa");
             detailedGoalType = type;
             if (detailedGoalType == 'city') {
               _goToRegenerationGameAlert(type);

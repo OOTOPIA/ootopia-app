@@ -36,9 +36,7 @@ abstract class AuthStoreBase with Store {
 
       await storage.updateUserRegenerarionGameLearningAlert(type);
       this.setUserIsLogged();
-    } catch (e) {
-      print("Hello");
-    }
+    } catch (e) {}
   }
 
   @action
