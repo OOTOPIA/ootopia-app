@@ -19,6 +19,7 @@ abstract class PostRepository {
   Future<void> createPost(PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
   Future recordTimelineWatched(int timeInMilliseconds);
+  Future<TimelinePost> getPostById(String id);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -179,6 +180,16 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       );
     } catch (e) {
       print('Error send watched post: $e');
+    }
+  }
+
+  @override
+  Future<TimelinePost> getPostById(String id) async {
+    try {
+      var response = await ApiClient.api().get("posts/$id");
+      return TimelinePost.fromJson(response.data);
+    } catch (error) {
+      throw Exception('Failed to load post by id $error');
     }
   }
 }
