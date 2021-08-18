@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_history.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +19,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late WalletStore walletStore;
-  late HomeStore homeStore;
 
   @override
   void initState() {
@@ -41,11 +39,13 @@ class _ProfilePageState extends State<ProfilePage> {
     await walletStore.getWalletTransfersHistory(0); //all
     await walletStore.getWalletTransfersHistory(0, "received"); //received
     await walletStore.getWalletTransfersHistory(0, "sent"); //sent
+
+    setState(() {
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    homeStore = Provider.of<HomeStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     return DefaultTabController(
       length: 3,
