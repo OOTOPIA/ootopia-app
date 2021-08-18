@@ -12,6 +12,7 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,14 @@ class _TimelineScreenProfileScreenState
       duration: Duration(milliseconds: 300),
       curve: Curves.linear,
     );
+  List<TimelinePost> posts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.args['posts'] != null) {
+      this.posts = widget.args['posts'];
+    }
   }
 
   @override
@@ -139,12 +148,21 @@ class _TimelineScreenProfileScreenState
         ),
       ),
       body: ListPostProfileComponent(
+<<<<<<< HEAD
           posts: this.widget.args["posts"],
           postSelected: this.widget.args["postSelected"],
           userId: this.widget.args["userId"]),
       bottomNavigationBar: AppBottomNavigationBar(
         onTap: _bottomOnTapButtonHandler,
       ),
+=======
+        posts: this.posts,
+        postSelected: this.widget.args["postSelected"],
+        userId: this.widget.args["userId"],
+        postId: this.widget.args["postId"],
+      ),
+      bottomNavigationBar: NavigatorBar(),
+>>>>>>> staging
     );
   }
 }
@@ -154,11 +172,13 @@ class ListPostProfileComponent extends StatefulWidget {
   bool loggedIn = false;
   int postSelected;
   String userId;
+  String? postId;
 
   ListPostProfileComponent({
     required this.userId,
     required this.posts,
     required this.postSelected,
+    this.postId,
   });
 
   @override
@@ -174,6 +194,8 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
+  late TimelineProfileStore store;
+
   late FlickMultiManager flickMultiManager;
 
   bool loggedIn = false;
@@ -181,7 +203,6 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
 
   int currentPage = 1;
   final int _itemsPerPageCount = 10;
-  int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
   List<TimelinePost> _allPosts = [];
 
@@ -193,27 +214,43 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     flickMultiManager = FlickMultiManager();
     _allPosts = widget.posts;
 
-    Timer(
-      Duration(milliseconds: 300),
-      () {
-        jumpTo();
-      },
-    );
+    if (widget.postId == null) {
+      Timer(
+        Duration(milliseconds: 300),
+        () {
+          jumpTo();
+        },
+      );
+    } else {
+      _performAllRequests();
+    }
   }
 
   jumpTo() => itemScrollController.jumpTo(index: widget.postSelected);
+
+  _performAllRequests() {
+    Future.delayed(Duration.zero, () async {
+      var post = await store.getPostById(widget.postId!);
+      _allPosts.add(post);
+      setState(() {});
+    });
+  }
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
+<<<<<<< HEAD
       print("LOGGED USER: " + user!.fullname!);
       print('object');
+=======
+>>>>>>> staging
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    store = Provider.of<TimelineProfileStore>(context);
     return BlocListener<TimelinePostBloc, TimelinePostState>(
       listener: (context, state) {
         if (state is ErrorState) {
@@ -248,6 +285,24 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   }
 
   _blocBuilder() {
+    if (widget.postId != null && _allPosts.length > 0) {
+      return ScrollablePositionedList.builder(
+        itemCount: 1,
+        itemScrollController: this.itemScrollController,
+        itemPositionsListener: this.itemPositionsListener,
+        itemBuilder: (context, index) {
+          return PhotoTimeline(
+            key: ObjectKey(_allPosts[index]),
+            post: _allPosts[index],
+            timelineBloc: this.timelineBloc,
+            loggedIn: this.loggedIn,
+            flickMultiManager: flickMultiManager,
+            isProfile: true,
+            user: this.user,
+          );
+        },
+      );
+    }
     return BlocBuilder<TimelinePostBloc, TimelinePostState>(
       builder: (context, state) {
         if (state is InitialState) {
@@ -335,7 +390,9 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   }
 
   Future<void> _getData() async {
-    timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
-        (currentPage - 1) * _itemsPerPageCount, widget.userId));
+    if (widget.postId == null) {
+      timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
+          (currentPage - 1) * _itemsPerPageCount, widget.userId));
+    }
   }
 }

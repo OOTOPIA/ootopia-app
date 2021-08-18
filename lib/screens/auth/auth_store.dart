@@ -30,6 +30,16 @@ abstract class AuthStoreBase with Store {
   }
 
   @action
+  updateUserRegenerarionGameLearningAlert(String type) async {
+    try {
+      await userRepository.updateUserRegenerarionGameLearningAlert(type);
+
+      await storage.updateUserRegenerarionGameLearningAlert(type);
+      this.setUserIsLogged();
+    } catch (e) {}
+  }
+
+  @action
   logout() async {
     try {
       await AppUsageTime.instance.sendToApi();

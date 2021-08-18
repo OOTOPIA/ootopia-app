@@ -17,7 +17,7 @@
 
 
     "regenerationGame": "Regeneration game",
-    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to regenerative movement through the OOTOPIA app.  Personal Goal refers to the amount of time you want to engage in the game. Every day, a new round of the game starts at 20h. Everytime you meet your daily goal, you receive rewards in OOz currency.",
+    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to regenerative movement through the OOTOPIA app. Personal Goal refers to the amount of time you want to engage in the game. Every day, a new round of the game starts at 20h. Everytime you meet your daily goal, you receive rewards in OOz currency.",
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
@@ -240,7 +240,21 @@
     "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
     "back":"back",
+    "close": "Close",
+    "personalLevel": "Personal level",
+    "personalLevelText1": "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
+    "personalLevelText2": "Set your daily goal and start living OOTOPIA now!",
+
+    "cityLevel": "City level",
+    "cityLevelText1": "When we collaborate with our community we amplify the positive impact! The City Level goal is the sum of goals of all people using the app in your city.",
+    "cityLevelText2": "Keep engaged to help your city meet its daily goal!",
+
+    "planetaryLevel": "Planetary level",
+    "planetaryLevelText1": "Together we can change the world! The Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
+    "planetaryLevelText2": "We are almost there! Let's meet the planetary goal today!",
     
+    "thereAreNoWalletRecords": "There are no OZZ records",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }
