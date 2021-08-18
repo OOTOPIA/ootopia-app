@@ -232,6 +232,20 @@
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
+
+    "close": "Fechar",
+
+    "personalLevel": "Nível pessoal",
+    "personalLevelText1": "Cada pessoa e cada ação conta! No jogo regen, você recebe créditos em moeda OOz como recompensa por seu envolvimento com o aplicativo.",
+    "personalLevelText2": "Defina sua meta diária e comece a viver OOTOPIA agora!",
+
+    "cityLevel": "Nível da cidade",
+    "cityLevelText1": "Quando colaboramos com nossa comunidade, amplificamos o impacto positivo! O objetivo do nível de cidade é a soma dos objetivos de todas as pessoas que usam o aplicativo em sua cidade.",
+    "cityLevelText2": "Continue empenhado em ajudar sua cidade a cumprir suas metas diárias!",
+
+    "planetaryLevel": "Nível planetário",
+    "planetaryLevelText1": "Juntos podemos mudar o mundo! O objetivo do Nível Planetário é a soma dos objetivos de todas as pessoas colaborando para criar o mundo maravilhoso em que queremos viver!",
+    "planetaryLevelText2": "Estamos quase lá! Vamos cumprir a meta planetária hoje!",
     "invitationCode": "Código de convite",
     "gratitudeReward": "Recompensa de gratidão",
     "personalGoalAchieved": "Meta pessoal atingida",

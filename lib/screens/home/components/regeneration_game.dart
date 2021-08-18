@@ -38,6 +38,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
   double detailedGoalIconPosition = 0;
   bool celebratePageIsOpen = false;
 
+  bool clickedInPersonalDialogOpened = false;
+
   @override
   void initState() {
     super.initState();
@@ -374,17 +376,41 @@ class _RegenerationGameState extends State<RegenerationGame> {
   Widget gameIconProgress(String type) {
     return GestureDetector(
       onTap: () {
+        //TODO refatorar esse codigo em algum momento
         setState(() {
           if (homeStore.dailyGoalStats == null) {
             homeStore.getDailyGoalStats();
           }
+
+          if (authStore.currentUser == null && type == 'city' ||
+              type == 'global') {
+            _goToRegenerationGameAlert(type);
+            return;
+          }
+
+          if (authStore.currentUser == null &&
+              !this.clickedInPersonalDialogOpened &&
+              type == 'personal') {
+            this.clickedInPersonalDialogOpened = true;
+
+            _goToRegenerationGameAlert(type);
+            return;
+          }
+
           if (authStore.currentUser != null) {
             detailedGoalType = type;
             if (detailedGoalType == 'city') {
-              //goToCelebrationCity();
+              _goToRegenerationGameAlert(type);
             } else if (detailedGoalType == 'global') {
-              //goToCelebrationGlobal();
+              _goToRegenerationGameAlert(type);
             } else {
+              if (authStore.currentUser!.personalDialogOpened == null ||
+                  authStore.currentUser!.personalDialogOpened == false) {
+                authStore.currentUser!.personalDialogOpened = true;
+
+                _goToRegenerationGameAlert(type);
+              }
+
               setState(() {
                 showDetailedGoal = true;
               });
@@ -461,6 +487,17 @@ class _RegenerationGameState extends State<RegenerationGame> {
             ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
             : "0,00",
       },
+    );
+  }
+
+  _goToRegenerationGameAlert(String type) async {
+    if (authStore.currentUser != null) {
+      authStore.updateUserRegenerarionGameLearningAlert(type);
+    }
+
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.regenerarionGameLearningAlert.route,
+      arguments: {"type": type, "context": context},
     );
   }
 

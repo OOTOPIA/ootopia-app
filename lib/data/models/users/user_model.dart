@@ -21,6 +21,9 @@ class User extends Equatable {
   String? createdAt;
   String? updatedAt;
   List<Badge>? badges;
+  bool? personalDialogOpened = false;
+  bool? cityDialogOpened = false;
+  bool? globalDialogOpened = false;
 
   User({
     this.id,
@@ -40,7 +43,10 @@ class User extends Equatable {
     this.token,
     this.createdAt,
     this.updatedAt,
-    this.badges
+    this.badges,
+    this.personalDialogOpened,
+    this.cityDialogOpened,
+    this.globalDialogOpened,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -79,13 +85,19 @@ class User extends Equatable {
       token: json['token'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      badges: (
-        json['badges'] == null ? 
-          []
+      badges: (json['badges'] == null
+          ? []
           : (json['badges'] as List<dynamic>)
-        .map((e) => Badge.fromJson(e as Map<String, dynamic>))
-        .toList()
-      )
+              .map((e) => Badge.fromJson(e as Map<String, dynamic>))
+              .toList()),
+      personalDialogOpened: json['personalDialogOpened'] == null
+          ? false
+          : json['personalDialogOpened'],
+      cityDialogOpened:
+          json['cityDialogOpened'] == null ? false : json['cityDialogOpened'],
+      globalDialogOpened: json['globalDialogOpened'] == null
+          ? false
+          : json['globalDialogOpened'],
     );
   }
 
@@ -104,7 +116,10 @@ class User extends Equatable {
         'registerPhase': registerPhase,
         'enableSustainableAds': enableSustainableAds,
         'token': token,
-        'badges': badges
+        'badges': badges,
+        'personalDialogOpened': personalDialogOpened,
+        'cityDialogOpened': cityDialogOpened,
+        'globalDialogOpened': globalDialogOpened,
       };
 
   @override
@@ -126,6 +141,9 @@ class User extends Equatable {
         token,
         createdAt,
         updatedAt,
-        badges
+        badges,
+        personalDialogOpened,
+        cityDialogOpened,
+        globalDialogOpened,
       ];
 }
