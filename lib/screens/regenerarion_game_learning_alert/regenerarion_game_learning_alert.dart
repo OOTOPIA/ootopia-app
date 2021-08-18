@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,7 +21,7 @@ class _RegenerarionGameLearningAlertState
     extends State<RegenerarionGameLearningAlert> {
   String? _imagePath;
   Color? _backgroundColorIcon;
-  IconData? _icon;
+  String? _icon;
   String? _title;
   String? _firstText;
   String? _secondText;
@@ -32,7 +33,7 @@ class _RegenerarionGameLearningAlertState
       case "personal":
         _imagePath = "assets/images/personal_background.png";
         _backgroundColorIcon = Color(0xff00A5FC);
-        _icon = FeatherIcons.user;
+        _icon = "assets/icons/personal_icon.svg";
         _title = AppLocalizations.of(widget.args["context"])!.personalLevel;
         _firstText =
             AppLocalizations.of(widget.args["context"])!.personalLevelText1;
@@ -44,7 +45,7 @@ class _RegenerarionGameLearningAlertState
       case "city":
         _imagePath = "assets/images/city_background.png";
         _backgroundColorIcon = Color(0xff0072C5);
-        _icon = FeatherIcons.mapPin;
+        _icon = "assets/icons/city_icon.svg";
         _title = AppLocalizations.of(widget.args["context"])!.cityLevel;
         _firstText =
             AppLocalizations.of(widget.args["context"])!.cityLevelText1;
@@ -57,7 +58,7 @@ class _RegenerarionGameLearningAlertState
       case "global":
         _imagePath = "assets/images/planetary_background.png";
         _backgroundColorIcon = Color(0xff012588);
-        _icon = FeatherIcons.globe;
+        _icon = "assets/icons/global_icon.svg";
         _title = AppLocalizations.of(widget.args["context"])!.planetaryLevel;
         _firstText =
             AppLocalizations.of(widget.args["context"])!.planetaryLevelText1;
@@ -119,17 +120,21 @@ class _RegenerarionGameLearningAlertState
                         .regenerationGame
                         .toUpperCase(),
                     textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400),
                   ),
                   Container(
+                    width: 160,
+                    height: 160,
                     decoration: BoxDecoration(
                         color: _backgroundColorIcon,
                         borderRadius: BorderRadius.circular(100)),
-                    padding: EdgeInsets.all(24),
-                    child: Icon(_icon, size: 130, color: Colors.white),
+                    padding: EdgeInsets.all(28),
+                    child: SvgPicture.asset(
+                      _icon as String,
+                    ),
                   ),
                   Text(_title!,
                       textAlign: TextAlign.center,
@@ -138,10 +143,10 @@ class _RegenerarionGameLearningAlertState
                           .subtitle1!
                           .copyWith(fontSize: 40, color: Colors.white)),
                   Text(_firstText!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(fontSize: 18, color: Colors.white)),
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400)),
                   Text(_secondText!,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.subtitle1!.copyWith(
@@ -169,7 +174,7 @@ class _RegenerarionGameLearningAlertState
                           child: Text(
                             AppLocalizations.of(context)!.close,
                             style: TextStyle(
-                                color: Colors.black87,
+                                color: Colors.black87.withOpacity(.6),
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
