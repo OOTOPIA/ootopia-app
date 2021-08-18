@@ -1,19 +1,14 @@
 import 'dart:async';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/home/components/home_store.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
+import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -33,14 +28,6 @@ class TimelineScreenProfileScreen extends StatefulWidget {
 
 class _TimelineScreenProfileScreenState
     extends State<TimelineScreenProfileScreen> {
-  HomeStore? homeStore;
-  AuthStore? authStore;
-  _goToPage(int index) {
-    PageViewController.instance.controller.animateToPage(
-      index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.linear,
-    );
   List<TimelinePost> posts = [];
 
   @override
@@ -53,69 +40,6 @@ class _TimelineScreenProfileScreenState
 
   @override
   Widget build(BuildContext context) {
-    authStore = Provider.of<AuthStore>(context);
-    homeStore = Provider.of<HomeStore>(context);
-    _bottomOnTapButtonHandler(int index) {
-      print(authStore!.currentUser);
-      if (homeStore?.currentPageIndex == index) {
-        return;
-      }
-      setState(() {
-        switch (index) {
-          case 0:
-            _goToPage(0);
-            break;
-          case 2:
-            if (authStore!.currentUser == null) {
-              Navigator.of(context).pushNamed(
-                PageRoute.Page.loginScreen.route,
-                arguments: {
-                  "returnToPageWithArgs": {
-                    "pageRoute": PageRoute.Page.cameraScreen.route,
-                    "arguments": null
-                  }
-                },
-              );
-            } else {
-              Navigator.of(context)
-                  .pushNamed(PageRoute.Page.cameraScreen.route);
-            }
-            break;
-          case 3:
-            if (authStore!.currentUser == null) {
-              Navigator.of(context).pushNamed(
-                PageRoute.Page.loginScreen.route,
-                arguments: {
-                  "returnToPageWithArgs": {
-                    "currentPageName": "wallet",
-                    "arguments": null
-                  }
-                },
-              );
-            } else {
-              _goToPage(1);
-            }
-            break;
-          case 4:
-            if (authStore!.currentUser == null) {
-              Navigator.of(context).pushNamed(
-                PageRoute.Page.loginScreen.route,
-                arguments: {
-                  "returnToPageWithArgs": {
-                    "currentPageName": "my_profile",
-                    "arguments": null
-                  }
-                },
-              );
-            } else {
-              _goToPage(3);
-            }
-            break;
-          default:
-        }
-      });
-    }
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -148,21 +72,12 @@ class _TimelineScreenProfileScreenState
         ),
       ),
       body: ListPostProfileComponent(
-<<<<<<< HEAD
-          posts: this.widget.args["posts"],
-          postSelected: this.widget.args["postSelected"],
-          userId: this.widget.args["userId"]),
-      bottomNavigationBar: AppBottomNavigationBar(
-        onTap: _bottomOnTapButtonHandler,
-      ),
-=======
         posts: this.posts,
         postSelected: this.widget.args["postSelected"],
         userId: this.widget.args["userId"],
         postId: this.widget.args["postId"],
       ),
       bottomNavigationBar: NavigatorBar(),
->>>>>>> staging
     );
   }
 }
@@ -240,11 +155,6 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-<<<<<<< HEAD
-      print("LOGGED USER: " + user!.fullname!);
-      print('object');
-=======
->>>>>>> staging
     }
   }
 
@@ -313,7 +223,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           return Center(child: CircularProgressIndicator());
         } else if (state is LoadedSucessState) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
             child: Column(
               children: <Widget>[
                 Expanded(
