@@ -119,12 +119,12 @@ class _TimelineScreenProfileScreenState
                 Icon(
                   Icons.arrow_back,
                   color: Colors.black,
-                  size: 20,
+                  size: 17,
                 ),
                 Text(
-                  'back',
+                  AppLocalizations.of(context)!.back,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),

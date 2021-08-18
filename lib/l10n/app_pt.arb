@@ -235,5 +235,6 @@
     "invitationCode": "Código de convite",
     "gratitudeReward": "Recompensa de gratidão",
     "personalGoalAchieved": "Meta pessoal atingida",
-    "totalGameCompleted": "Jogo total completado"
+    "totalGameCompleted": "Jogo total completado",
+    "back":"voltar"
 }
