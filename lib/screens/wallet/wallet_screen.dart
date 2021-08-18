@@ -24,10 +24,11 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   @override
   void initState() {
+    super.initState();
+    
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
 
-    super.initState();
     Future.delayed(Duration.zero, () {
       walletStore.getWallet();
     });
@@ -52,7 +53,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       case 2:
         await walletStore.getWalletTransfersHistory(0, "sent"); //sent
         break;
-      default:
     }
 
     setState(() {
@@ -213,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.61,
+                      height: MediaQuery.of(context).size.height * 0.62,
                       child: TabBarView(
                         controller: _tabController,
                         children: [

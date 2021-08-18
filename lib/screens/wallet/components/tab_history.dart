@@ -67,8 +67,8 @@ class TabHistoryState extends State<TabHistory> {
         child: ListView(
           children: groupedTransfersByDate == null
               ? [
-                  Padding(
-                    padding: EdgeInsets.all(60),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.62,
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -79,7 +79,7 @@ class TabHistoryState extends State<TabHistory> {
                       Opacity(
                         opacity: 0.5,
                         child: Container(
-                            height: MediaQuery.of(context).size.height * 0.61,
+                            height: MediaQuery.of(context).size.height * 0.62,
                             color: Colors.white,
                             child: Center(
                                 child: Column(
