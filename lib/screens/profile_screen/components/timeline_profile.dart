@@ -42,7 +42,34 @@ class _TimelineScreenProfileScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.publications),
+        centerTitle: true,
+        leading: InkWell(
+          onTap: () => Navigator.of(context).pop(),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 3.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 17,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.back,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        title: Image.asset(
+          'assets/images/logo.png',
+          height: 34,
+        ),
       ),
       body: ListPostProfileComponent(
         posts: this.posts,
@@ -195,60 +222,63 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
         } else if (state is LoadingState) {
           return Center(child: CircularProgressIndicator());
         } else if (state is LoadedSucessState) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: VisibilityDetector(
-                  key: ObjectKey(flickMultiManager),
-                  onVisibilityChanged: (visibility) {
-                    if (visibility.visibleFraction == 0 && this.mounted) {
-                      flickMultiManager.pause();
-                    }
-                  },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {
-                        _allPosts = [];
-                        currentPage = 1;
-                      });
-                      _getData();
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: VisibilityDetector(
+                    key: ObjectKey(flickMultiManager),
+                    onVisibilityChanged: (visibility) {
+                      if (visibility.visibleFraction == 0 && this.mounted) {
+                        flickMultiManager.pause();
+                      }
                     },
-                    child: ScrollablePositionedList.builder(
-                      itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
-                      itemScrollController: this.itemScrollController,
-                      itemPositionsListener: this.itemPositionsListener,
-                      itemBuilder: (context, index) {
-                        /*if (index == _allPosts.length - _nextPageThreshold &&
-                            _hasMoreItems) {}*/
-                        if (index == _allPosts.length) {
-                          if (_hasMoreItems) {
-                            currentPage++;
-                            _getData();
-                          }
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: _hasMoreItems
-                                  ? CircularProgressIndicator()
-                                  : Container(),
-                            ),
-                          );
-                        }
-                        return PhotoTimeline(
-                          key: ObjectKey(_allPosts[index]),
-                          post: _allPosts[index],
-                          timelineBloc: this.timelineBloc,
-                          loggedIn: this.loggedIn,
-                          flickMultiManager: flickMultiManager,
-                          isProfile: true,
-                          user: this.user,
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        setState(() {
+                          _allPosts = [];
+                          currentPage = 1;
+                        });
+                        _getData();
                       },
+                      child: ScrollablePositionedList.builder(
+                        itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
+                        itemScrollController: this.itemScrollController,
+                        itemPositionsListener: this.itemPositionsListener,
+                        itemBuilder: (context, index) {
+                          /*if (index == _allPosts.length - _nextPageThreshold &&
+                              _hasMoreItems) {}*/
+                          if (index == _allPosts.length) {
+                            if (_hasMoreItems) {
+                              currentPage++;
+                              _getData();
+                            }
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: _hasMoreItems
+                                    ? CircularProgressIndicator()
+                                    : Container(),
+                              ),
+                            );
+                          }
+                          return PhotoTimeline(
+                            key: ObjectKey(_allPosts[index]),
+                            post: _allPosts[index],
+                            timelineBloc: this.timelineBloc,
+                            loggedIn: this.loggedIn,
+                            flickMultiManager: flickMultiManager,
+                            isProfile: true,
+                            user: this.user,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         } else if (state is ErrorState) {
           return TryAgain(

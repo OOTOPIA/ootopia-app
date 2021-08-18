@@ -545,7 +545,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
-                    onChanged: (String val) {},
                   ),
                 ),
                 SizedBox(
@@ -746,6 +745,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
                       items: _items,
                       onConfirm: (values) {
                         _selectedTags = [];
+                        FocusScope.of(context).requestFocus(new FocusNode());
                         setState(() {
                           values.forEach((v) {
                             _selectedTags.add(v!);
