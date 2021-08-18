@@ -24,6 +24,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
@@ -181,6 +182,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
           Provider<WalletStore>(
             create: (_) => WalletStore(),
+          ),
+          Provider<TimelineProfileStore>(
+            create: (_) => TimelineProfileStore(),
           ),
         ],
         child: MaterialApp(
