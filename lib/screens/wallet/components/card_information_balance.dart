@@ -108,14 +108,14 @@ class CardInformationBalance extends StatelessWidget {
     if (this.originTransaction.isNotEmpty &&
         this.originTransaction == "gratitude_reward") {
       if (this.iconForeground.isNotEmpty) {
-        iconForeground = Image.network(this.iconForeground,fit: BoxFit.fill);
+        iconForeground = Image.network(this.iconForeground,fit: BoxFit.cover);
       } else {
         iconForeground =
-            Image.asset("assets/icons/user_without_image_profile.png",fit: BoxFit.fill);
+            Image.asset("assets/icons/user_without_image_profile.png",fit: BoxFit.cover);
       }
     } else {
       iconForeground =
-          SvgPicture.asset("assets/icons/ooz_circle_icon_active.svg",fit: BoxFit.fill);
+          SvgPicture.asset("assets/icons/ooz_circle_icon_active.svg",fit: BoxFit.cover);
     }
 
     return Row(

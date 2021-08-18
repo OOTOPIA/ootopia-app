@@ -17,11 +17,16 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
   late WalletStore walletStore;
+  late TabController _tabController;
+  int _activeTabIndex = 0;
 
   @override
   void initState() {
+    _tabController = new TabController(length: 3, vsync: this);
+    _tabController.addListener(_setActiveTabIndex);
+
     super.initState();
     Future.delayed(Duration.zero, () {
       walletStore.getWallet();
@@ -36,11 +41,27 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _performAllRequests() async {
     await walletStore.getWallet();
-    await walletStore.getWalletTransfersHistory(0); //all
-    await walletStore.getWalletTransfersHistory(0, "received"); //received
-    await walletStore.getWalletTransfersHistory(0, "sent"); //sent
+    
+    switch (_activeTabIndex) {
+      case 0:
+        await walletStore.getWalletTransfersHistory(0); //all
+        break;
+      case 1:
+        await walletStore.getWalletTransfersHistory(0, "received"); //received
+        break;
+      case 2:
+        await walletStore.getWalletTransfersHistory(0, "sent"); //sent
+        break;
+      default:
+    }
 
     setState(() {
+    });
+  }
+
+  void _setActiveTabIndex() {
+    setState(() {
+      _activeTabIndex = _tabController.index;
     });
   }
 
@@ -173,6 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         child: TabBar(
+                          controller: _tabController,
                           unselectedLabelColor: Color(0xff707070),
                           labelColor: Color(0xff003694),
                           labelStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -193,6 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.61,
                       child: TabBarView(
+                        controller: _tabController,
                         children: [
                           TabHistory(walletStore, "all"),
                           TabHistory(walletStore, "received"),
