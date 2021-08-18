@@ -43,7 +43,7 @@ abstract class _WalletStoreBase with Store {
           .toString(),
     );
     map.entries.forEach((element) {
-      var soma = 0.00;
+      double soma = 0.00;
       element.value.forEach((element) {
         if (element.action == 'sent') {
           soma -= element.balance;
