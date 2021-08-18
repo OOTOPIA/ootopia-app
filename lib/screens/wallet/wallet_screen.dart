@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_history.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
@@ -18,11 +20,19 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late WalletStore walletStore;
+  late HomeStore homeStore;
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       walletStore.getWallet();
+    });
+
+    PageViewController.instance.addListener(() {
+      if (PageViewController.instance.controller.page == 1) {
+        _performAllRequests();
+      }
     });
   }
 
@@ -31,11 +41,11 @@ class _ProfilePageState extends State<ProfilePage> {
     await walletStore.getWalletTransfersHistory(0); //all
     await walletStore.getWalletTransfersHistory(0, "received"); //received
     await walletStore.getWalletTransfersHistory(0, "sent"); //sent
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    homeStore = Provider.of<HomeStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     return DefaultTabController(
       length: 3,
@@ -51,7 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: ListView(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24,vertical: 0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -69,15 +80,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               Container(
                                 height: 30,
                                 width: MediaQuery.of(context).size.width * 0.3,
-                                padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100.0),
-                                  border: Border.all(
-                                    color: Color(0xff003694)
-                                  ),
+                                  border: Border.all(color: Color(0xff003694)),
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     SvgPicture.asset(
                                       'assets/icons/ooz-coin-blue-small.svg',
@@ -110,7 +121,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 0),
                             child: RichText(
                               text: TextSpan(
                                 text: AppLocalizations.of(context)!.learnMore,
@@ -118,25 +130,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                   color: Color(0xff003694),
                                   fontSize: 14,
                                 ),
-                              recognizer: new TapGestureRecognizer()
-                                ..onTap = () => setState(() {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        barrierColor: Colors.black.withAlpha(1),
-                                        backgroundColor: Colors.black.withAlpha(1),
-                                        builder: (BuildContext context) {
-                                          return SnackBarWidget(
-                                            menu: AppLocalizations.of(context)!
-                                                .regenerationGame,
-                                            text: AppLocalizations.of(context)!
-                                                .aboutRegenerationGame,
-                                            about:
-                                                AppLocalizations.of(context)!.learnMore,
-                                            marginBottom: true,
+                                recognizer: new TapGestureRecognizer()
+                                  ..onTap = () => setState(
+                                        () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            barrierColor:
+                                                Colors.black.withAlpha(1),
+                                            backgroundColor:
+                                                Colors.black.withAlpha(1),
+                                            builder: (BuildContext context) {
+                                              return SnackBarWidget(
+                                                menu: AppLocalizations.of(
+                                                        context)!
+                                                    .regenerationGame,
+                                                text: AppLocalizations.of(
+                                                        context)!
+                                                    .aboutRegenerationGame,
+                                                about: AppLocalizations.of(
+                                                        context)!
+                                                    .learnMore,
+                                                marginBottom: true,
+                                              );
+                                            },
                                           );
                                         },
-                                      );
-                                    }),
+                                      ),
                               ),
                             ),
                           )
@@ -145,16 +164,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SizedBox(
                       height: 52,
-                      child: 
-                      Container(
+                      child: Container(
                         padding: EdgeInsetsDirectional.all(0),
                         decoration: BoxDecoration(
                           border: Border.all(
                             width: 1,
-                            color:  Color.fromRGBO(112, 112, 112, 0.2),
+                            color: Color.fromRGBO(112, 112, 112, 0.2),
                           ),
                         ),
-                        child: TabBar( 
+                        child: TabBar(
                           unselectedLabelColor: Color(0xff707070),
                           labelColor: Color(0xff003694),
                           labelStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -174,8 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.61,
-                      child: 
-                      TabBarView(
+                      child: TabBarView(
                         children: [
                           TabHistory(walletStore, "all"),
                           TabHistory(walletStore, "received"),
