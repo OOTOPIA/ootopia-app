@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_history.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
@@ -20,7 +21,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late WalletStore walletStore;
   late HomeStore homeStore;
-  bool awaitObservation = false;
 
   @override
   void initState() {
@@ -28,20 +28,19 @@ class _ProfilePageState extends State<ProfilePage> {
     Future.delayed(Duration.zero, () {
       walletStore.getWallet();
     });
+
+    PageViewController.instance.addListener(() {
+      if (PageViewController.instance.controller.page == 1) {
+        _performAllRequests();
+      }
+    });
   }
 
   Future<void> _performAllRequests() async {
-    awaitObservation = true;
     await walletStore.getWallet();
     await walletStore.getWalletTransfersHistory(0); //all
     await walletStore.getWalletTransfersHistory(0, "received"); //received
     await walletStore.getWalletTransfersHistory(0, "sent"); //sent
-    setState(() {
-    });
-
-    Future.delayed(Duration(seconds: 1), () {
-      awaitObservation = false;
-    });
   }
 
   @override
@@ -52,10 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
       length: 3,
       child: Observer(
         builder: (_) {
-          if (homeStore.currentPageIndex == 1 && awaitObservation == false) {
-            _performAllRequests();
-          }
-
           return Scaffold(
             body: Container(
               padding: EdgeInsets.only(top: 16),
@@ -136,29 +131,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                   fontSize: 14,
                                 ),
                                 recognizer: new TapGestureRecognizer()
-                                  ..onTap = () => setState(() {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          barrierColor:
-                                              Colors.black.withAlpha(1),
-                                          backgroundColor:
-                                              Colors.black.withAlpha(1),
-                                          builder: (BuildContext context) {
-                                            return SnackBarWidget(
-                                              menu:
-                                                  AppLocalizations.of(context)!
-                                                      .regenerationGame,
-                                              text:
-                                                  AppLocalizations.of(context)!
-                                                      .aboutRegenerationGame,
-                                              about:
-                                                  AppLocalizations.of(context)!
-                                                      .learnMore,
-                                              marginBottom: true,
-                                            );
-                                          },
-                                        );
-                                      }),
+                                  ..onTap = () => setState(
+                                        () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            barrierColor:
+                                                Colors.black.withAlpha(1),
+                                            backgroundColor:
+                                                Colors.black.withAlpha(1),
+                                            builder: (BuildContext context) {
+                                              return SnackBarWidget(
+                                                menu: AppLocalizations.of(
+                                                        context)!
+                                                    .regenerationGame,
+                                                text: AppLocalizations.of(
+                                                        context)!
+                                                    .aboutRegenerationGame,
+                                                about: AppLocalizations.of(
+                                                        context)!
+                                                    .learnMore,
+                                                marginBottom: true,
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
                               ),
                             ),
                           )
