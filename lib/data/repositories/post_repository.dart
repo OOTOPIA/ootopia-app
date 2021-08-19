@@ -16,7 +16,7 @@ abstract class PostRepository {
   Future<List<TimelinePost>> getPosts(
       [int? limit, int? offset, String? userId]);
   Future<LikePostResult> likePost(String id);
-  Future<void> createPost(PostCreate post);
+  Future<void> createPost(FlutterUploader uploader, PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
   Future recordTimelineWatched(int timeInMilliseconds);
   Future<TimelinePost> getPostById(String id);
@@ -97,8 +97,8 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   }
 
   @override
-  Future<PostCreate> createPost(PostCreate post) async {
-    await FlutterUploader().enqueue(
+  Future<String> createPost(FlutterUploader uploader, PostCreate post) async {
+    return await uploader.enqueue(
       MultipartFormDataUpload(
         url: dotenv.env['API_URL']! + "posts",
         files: [
@@ -115,7 +115,6 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         tag: "upload 1",
       ),
     );
-    return post;
   }
 
   @override

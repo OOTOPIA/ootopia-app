@@ -63,7 +63,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     FlutterUploader().setBackgroundHandler(backgroundHandler);
     var completer = new Completer();
 
-    await this.repository.createPost(post);
+    /*await this.repository.createPost(post);
     subscription = FlutterUploader().result.listen((result) {
       if (result.status == UploadTaskStatus.complete &&
           !completer.isCompleted) {
@@ -73,7 +73,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       if (!completer.isCompleted) completer.complete(post);
     }, onError: (error) {
       completer.completeError(error);
-    });
+    });*/
     return completer.future;
   }
 
