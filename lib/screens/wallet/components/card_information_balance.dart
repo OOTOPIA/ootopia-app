@@ -15,15 +15,18 @@ class CardInformationBalance extends StatelessWidget {
   final String toOrFrom;
   final String action;
   final String? otherUserId;
+  final String? postId;
 
-  CardInformationBalance(
-      {required this.balanceOfTransactions,
-      required this.iconForeground,
-      required this.iconBackground,
-      required this.toOrFrom,
-      required this.originTransaction,
-      required this.action,
-      this.otherUserId});
+  CardInformationBalance({
+    required this.balanceOfTransactions,
+    required this.iconForeground,
+    required this.iconBackground,
+    required this.toOrFrom,
+    required this.originTransaction,
+    required this.action,
+    this.otherUserId,
+    this.postId,
+  });
 
   String getTransactionDescription(context) {
     String origin = '';
@@ -108,14 +111,16 @@ class CardInformationBalance extends StatelessWidget {
     if (this.originTransaction.isNotEmpty &&
         this.originTransaction == "gratitude_reward") {
       if (this.iconForeground.isNotEmpty) {
-        iconForeground = Image.network(this.iconForeground);
+        iconForeground = Image.network(this.iconForeground, fit: BoxFit.cover);
       } else {
-        iconForeground =
-            Image.asset("assets/icons/user_without_image_profile.png");
+        iconForeground = Image.asset(
+            "assets/icons/user_without_image_profile.png",
+            fit: BoxFit.cover);
       }
     } else {
-      iconForeground =
-          SvgPicture.asset("assets/icons/ooz_circle_icon_active.svg");
+      iconForeground = SvgPicture.asset(
+          "assets/icons/ooz_circle_icon_active.svg",
+          fit: BoxFit.cover);
     }
 
     return Row(
@@ -129,12 +134,20 @@ class CardInformationBalance extends StatelessWidget {
               child: Stack(children: [
                 GestureDetector(
                   child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: iconBackground),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: iconBackground,
+                  ),
                   onTap: () {
                     if (this.otherUserId != null) {
                       if (this.originTransaction == 'gratitude_reward') {
-                        _goToProfile(); // implements open the video/image
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.timelineProfileScreen.route,
+                          arguments: {
+                            "userId": this.otherUserId,
+                            "postId": this.postId,
+                            "postSelected": 0,
+                          },
+                        );
                       } else if (this.originTransaction ==
                               "total_game_completed" ||
                           this.originTransaction == "personal_goal_achieved") {
@@ -144,8 +157,10 @@ class CardInformationBalance extends StatelessWidget {
                             backgroundColor: Colors.black.withAlpha(1),
                             builder: (BuildContext context) {
                               return SnackBarWidget(
-                                menu: AppLocalizations.of(context)!.regenerationGame,
-                                text: AppLocalizations.of(context)!.aboutRegenerationGame,
+                                menu: AppLocalizations.of(context)!
+                                    .regenerationGame,
+                                text: AppLocalizations.of(context)!
+                                    .aboutRegenerationGame,
                                 about: AppLocalizations.of(context)!.learnMore,
                                 marginBottom: true,
                               );
@@ -157,23 +172,21 @@ class CardInformationBalance extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                      padding: EdgeInsets.all(1),
-                      color: Colors.white,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        child: GestureDetector(
-                            child: iconForeground,
-                            onTap: () {
-                              if (this.originTransaction ==
-                                  'gratitude_reward') {
-                                _goToProfile();
-                              }
-                            }),
-                      ),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 2, color: Colors.white)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: GestureDetector(
+                          child: iconForeground,
+                          onTap: () {
+                            if (this.originTransaction == 'gratitude_reward') {
+                              _goToProfile();
+                            }
+                          }),
                     ),
                   ),
                 ),
@@ -193,12 +206,15 @@ class CardInformationBalance extends StatelessWidget {
                         fontSize: 12),
                   ),
                   if (this.originTransaction != "gratitude_reward")
-                    Text(
-                      getTransactionDescription(context),
-                      style: TextStyle(
-                        color: Color(0xff707070),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                      child: Text(
+                        getTransactionDescription(context),
+                        style: TextStyle(
+                          color: Color(0xff707070),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   RichText(
@@ -209,7 +225,7 @@ class CardInformationBalance extends StatelessWidget {
                             TextStyle(color: Color(0xff707070), fontSize: 12)),
                     TextSpan(
                         text:
-                        ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
+                            ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
                         style: TextStyle(
                             color: Color(0xff707070),
                             fontSize: 12,
@@ -238,7 +254,8 @@ class CardInformationBalance extends StatelessWidget {
               ),
               Text(
                 '${this.action == "sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
-                style: TextStyle(fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontWeight: FontWeight.w500, color: Color(colorOfBalance)),
               ),
             ],
           ),

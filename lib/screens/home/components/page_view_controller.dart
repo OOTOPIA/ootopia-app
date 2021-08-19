@@ -22,11 +22,6 @@ class PageViewController {
     return controller;
   }
 
-  // goToPage(int index) {
-  //   pageHistory.add(index);
-  //   controller.jumpToPage(index);
-  // }
-
   addListener(Function listener) {
     listeners.add(listener);
     listeners.forEach((l) => controller.addListener(() => l()));

@@ -239,6 +239,7 @@
     "personalGoalAchieved": "Personal Goal Achieved",
     "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
+    "back":"back",
     "close": "Close",
     "personalLevel": "Personal level",
     "personalLevelText1": "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
@@ -254,6 +255,10 @@
     "planetaryLevelText2pt2": "Let's meet the planetary goal today!",
     
     "thereAreNoWalletRecords": "There are no OZZ records",
+
+    "dialogTitleBeforeExiting": "Thank you for participating in OOTOPIA! We are doing this testing environment and every feedback will help us make the world a better place. We'd love to hear a little more from you, how was your experience today?",
+    "notNow": "Not now",
+    "shareMyExperience": "Share my experience",
 
     "@helloWorld": {
         "description": "A programmer greeting"

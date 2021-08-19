@@ -65,95 +65,99 @@ class TabHistoryState extends State<TabHistory> {
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
         child: ListView(
-          children: 
-          groupedTransfersByDate == null
+          children: groupedTransfersByDate == null
               ? [
-                  Padding(
-                    padding: EdgeInsets.all(60),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.62,
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
                   )
                 ]
-          : groupedTransfersByDate!.isEmpty ?
-              [
-                Opacity(
-                  opacity: 0.5,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.61,
-                    color: Colors.white,
-                    child: 
-                      Center(
-                        child:
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset('assets/icons/ooz-coin-medium.png',
-                                width: 28,
-                                height: 28,
-                                color: Theme.of(context).textTheme.subtitle2!.color
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 16),
-                                child: Text(
-                                  AppLocalizations.of(context)!.thereAreNoWalletRecords,
-                                  style: Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 16,)
+              : groupedTransfersByDate!.isEmpty
+                  ? [
+                      Opacity(
+                        opacity: 0.5,
+                        child: Container(
+                            height: MediaQuery.of(context).size.height * 0.62,
+                            color: Colors.white,
+                            child: Center(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/icons/ooz-coin-medium.png',
+                                    width: 28,
+                                    height: 28,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .color),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 16),
+                                  child: Text(
+                                      AppLocalizations.of(context)!
+                                          .thereAreNoWalletRecords,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2!
+                                          .copyWith(
+                                            fontSize: 16,
+                                          )),
                                 ),
-                              ),
-                            ],
-                          )
+                              ],
+                            ))),
                       )
-                  ),
-                ) 
-              ]
-              : groupedTransfersByDate!.entries.map((e) {
-                  final f = new NumberFormat("0.00");
-                  String sumFormated = '';
-                  int lengthItemMapSumOfDayTransfer = 0;
-                  sumFormated =
-                      f.format(widget.store.mapSumDaysTransfer[e.key]);
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      left: 24,
-                      right: 24,
-                      top: 16,
-                      bottom: 0,
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding:  EdgeInsets.only(
-                            bottom: 16,
-                          ),
-                          child: ChipSumForDate(
-                            date: e.key,
-                            lengthItemMapSumOfDayTransfer:
-                            lengthItemMapSumOfDayTransfer,
-                            sumFormated: sumFormated,
-                          ),
+                    ]
+                  : groupedTransfersByDate!.entries.map((e) {
+                      final f = new NumberFormat("0.00");
+                      String sumFormated = '';
+                      int lengthItemMapSumOfDayTransfer = 0;
+                      sumFormated =
+                          f.format(widget.store.mapSumDaysTransfer[e.key]);
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          top: 16,
+                          bottom: 0,
                         ),
-                        Column(
-                          children: e.value.map((e) {
-                            return Padding(
-                              padding:  EdgeInsets.only(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
                                 bottom: 16,
                               ),
-                              child:  CardInformationBalance(
-                                balanceOfTransactions: '${e.balance.toStringAsFixed(2)}',
-                                iconForeground: '${e.photoUrl ?? ''}',
-                                iconBackground: '${e.icon}',
-                                toOrFrom: '${e.otherUsername ?? ''}',
-                                originTransaction: '${e.origin}',
-                                action: '${e.action}',
-                                otherUserId: '${e.otherUserId}',
+                              child: ChipSumForDate(
+                                date: e.key,
+                                lengthItemMapSumOfDayTransfer:
+                                    lengthItemMapSumOfDayTransfer,
+                                sumFormated: sumFormated,
                               ),
-                            );
-                          }).toList(),
+                            ),
+                            Column(
+                              children: e.value.map((_e) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: 16,
+                                  ),
+                                  child: CardInformationBalance(
+                                    balanceOfTransactions:
+                                        '${_e.balance.toStringAsFixed(2)}',
+                                    iconForeground: '${_e.photoUrl ?? ''}',
+                                    iconBackground: '${_e.icon}',
+                                    toOrFrom: '${_e.otherUsername ?? ''}',
+                                    originTransaction: '${_e.origin}',
+                                    action: '${_e.action}',
+                                    otherUserId: '${_e.otherUserId}',
+                                    postId: _e.postId,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                      );
+                    }).toList(),
         ),
       ),
     );

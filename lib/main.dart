@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +26,9 @@ import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
+import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
+import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
@@ -63,6 +68,7 @@ Future main() async {
     appName: 'OOTOPIA',
     flavorName: 'production',
     apiBaseUrl: dotenv.env['API_URL']!,
+    crispWebsiteId: dotenv.env['CRISP_WEBSITE_ID']!,
     child: new ExpensesApp(),
   );
 
@@ -98,6 +104,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
       setState(() {}); //To update theme if user toggle
     });
     AppTheme.instance(context).checkIsDarkMode();
+    ChatDialogController.instance.init();
   }
 
   @override
@@ -182,6 +189,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           Provider<WalletStore>(
             create: (_) => WalletStore(),
           ),
+          Provider<TimelineProfileStore>(
+            create: (_) => TimelineProfileStore(),
+          ),
         ],
         child: MaterialApp(
           supportedLocales: L10n.all,
@@ -228,6 +238,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.celebration: (args) => Celebration(args),
     PageRoute.Page.regenerarionGameLearningAlert: (args) =>
         RegenerarionGameLearningAlert(args),
+    PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
   };
 
   @override
