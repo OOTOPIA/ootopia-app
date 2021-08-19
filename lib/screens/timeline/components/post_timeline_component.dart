@@ -397,7 +397,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
+              margin: EdgeInsets.symmetric(
+                  vertical: GlobalConstants.of(context).spacingSmall),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 border: Border.all(
@@ -470,6 +471,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     ),
                                   ),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         padding:
@@ -495,14 +497,16 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                       this.post.oozToTransfer),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: Color(0xFF003694)),
+                                                  color: Color(0xFF003694),
+                                                  fontWeight: FontWeight.bold),
                                             )
                                           : Text(
                                               currencyFormatter.format(
                                                   this.post.oozTotalCollected),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: Colors.black),
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
                                             )
                                     ],
                                   )),
@@ -919,7 +923,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   void onSlideButton() {
     double perc = (_draggablePositionX * 100) / getMaxSlideWidth();
-    if (_draggablePositionX > 26) {
+    if (_draggablePositionX > 1) {
       this.post.oozToTransfer = ((oozGoal * perc) / 100).roundToDouble();
     } else {
       this.post.oozToTransfer = 0.0;
