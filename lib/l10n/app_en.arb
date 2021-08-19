@@ -251,7 +251,8 @@
 
     "planetaryLevel": "Planetary level",
     "planetaryLevelText1": "Together we can change the world! The Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
-    "planetaryLevelText2": "We are almost there! Let's meet the planetary goal today!",
+    "planetaryLevelText2pt1": "We are almost there!",
+    "planetaryLevelText2pt2": "Let's meet the planetary goal today!",
     
     "thereAreNoWalletRecords": "There are no OZZ records",
 
