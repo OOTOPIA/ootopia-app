@@ -85,8 +85,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         ),
         Card(
           child: ListTile(
-            title: Text('Invite your friends'),
-            subtitle: Text('earn OOz when they signup'),
+            title: Text('${AppLocalizations.of(context)!.inviteYourFriends}'),
+            subtitle: Text('${AppLocalizations.of(context)!.earnOzzSignup}'),
             leading: SvgPicture.asset(
               'assets/icons/user-plus.svg',
               color: Colors.black,
@@ -97,8 +97,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         ),
         Card(
           child: ListTile(
-            title: Text('OOz Wallet'),
-            subtitle: Text('check your transactions'),
+            title: Text('OOz ${AppLocalizations.of(context)!.wallet}'),
+            subtitle:
+                Text('${AppLocalizations.of(context)!.checkYourTransactions}'),
             leading: Image.asset(
               'assets/icons/ooz-coin-small.png',
               color: Colors.black,
@@ -109,8 +110,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         ),
         Card(
           child: ListTile(
-            title: Text('Questions / suggestions'),
-            subtitle: Text('send your feedback'),
+            title: Text(
+                '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}'),
+            subtitle: Text('${AppLocalizations.of(context)!.sendYourFeedback}'),
             leading: Icon(Icons.person_add),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {},

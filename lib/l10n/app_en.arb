@@ -256,7 +256,8 @@
     "thereAreNoWalletRecords": "There are no OZZ records",
     
     "sendYourFeedback":"send your feedback",
-    "QuestionsOrSuggestions":"Questions / suggestions",
+    "questions":"questions",
+    "suggestions": "Suggestions",
     "checkYourTransactions":"check your transactions",
     "earnOzzSignup":"earn OOz when they signup",
     "inviteYourFriends":"Invite your friends",
