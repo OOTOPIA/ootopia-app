@@ -78,6 +78,7 @@ dependencies:
   image_crop: ^0.4.0
   flutter_feather_icons: ^2.0.0+1
   json_annotation: ^4.0.1
+  crisp: ^0.1.8
 
 dev_dependencies:
   flutter_test:

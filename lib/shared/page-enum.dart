@@ -22,7 +22,8 @@ enum Page {
   splashScreen,
   celebration,
   profile,
-  regenerarionGameLearningAlert
+  regenerarionGameLearningAlert,
+  chatWithUsersScreen
 }
 
 extension PageRoute on Page {

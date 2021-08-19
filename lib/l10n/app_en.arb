@@ -255,6 +255,10 @@
     
     "thereAreNoWalletRecords": "There are no OZZ records",
 
+    "dialogTitleBeforeExiting": "Thank you for participating in OOTOPIA! We are doing this testing environment and every feedback will help us make the world a better place. We'd love to hear a little more from you, how was your experience today?",
+    "notNow": "Not now",
+    "shareMyExperience": "Share my experience",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }
