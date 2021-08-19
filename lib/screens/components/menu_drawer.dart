@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
@@ -51,40 +53,60 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         child: Column(
       children: [
         DrawerHeader(
-          child: Image.asset('assets/images/logo.png', height: 30),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xffC0D9E8),
-                Color(0xffffffff),
+          child: Avatar(
+            photoUrl: authStore!.currentUser == null
+                ? null
+                : authStore!.currentUser!.photoUrl,
+            badges: authStore!.currentUser!.badges,
+            modal: "profile",
+          ),
+        ),
+        Text(
+          '${authStore!.currentUser!.fullname}',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Card(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppLocalizations.of(context)!.personalGoal),
+                Text(
+                  '10m |',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Icon(Icons.add),
+                Text('23')
               ],
             ),
           ),
         ),
-        ItemMenu(
-          pathImage: 'assets/icons_profile/menu_profile.png',
-          title: AppLocalizations.of(context)!.profile,
-          onTapFunction: (context) {
-            Navigator.of(context).pop();
-            if (widget.onTapProfileItem != null) {
-              widget.onTapProfileItem!();
-            }
-          },
+        Card(
+          child: ListTile(
+            title: Text('Invite your friends'),
+            subtitle: Text('earn OOz when they signup'),
+            leading: Icon(Icons.person_add),
+            trailing: Icon(Icons.arrow_forward_ios),
+          ),
         ),
-        Visibility(
-          visible: authStore != null && authStore!.currentUser != null,
-          child: ItemMenu(
-            pathImage: 'assets/icons_profile/menu_left.png',
-            title: AppLocalizations.of(context)!.exit,
-            onTapFunction: (context) {
-              clearAuth(context);
-              if (widget.onTapLogoutItem != null) {
-                widget.onTapLogoutItem!();
-              }
-            },
+        Card(
+          child: ListTile(
+            title: Text('OOz Wallet'),
+            subtitle: Text('check your transactions'),
+            leading: Image.asset(
+              'assets/icons/ooz-coin-small.png',
+              color: Colors.black,
+            ),
+            trailing: Icon(Icons.arrow_forward_ios),
+          ),
+        ),
+        Card(
+          child: ListTile(
+            title: Text('Questions / suggestions'),
+            subtitle: Text('send your feedback'),
+            leading: Icon(Icons.person_add),
+            trailing: Icon(Icons.arrow_forward_ios),
           ),
         ),
         Expanded(
@@ -112,11 +134,110 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       ),
                     ],
                   )),
+              Visibility(
+                visible: authStore != null && authStore!.currentUser != null,
+                child: ItemMenu(
+                  pathImage: 'assets/icons_profile/menu_left.png',
+                  title: AppLocalizations.of(context)!.exit,
+                  onTapFunction: (context) {
+                    clearAuth(context);
+                    if (widget.onTapLogoutItem != null) {
+                      widget.onTapLogoutItem!();
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),
       ],
     ));
+  }
+}
+
+class Avatar extends StatelessWidget {
+  String? photoUrl;
+  List<Badge>? badges;
+  String? modal;
+
+  Avatar({this.photoUrl, this.badges, this.modal});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: (MediaQuery.of(context).size.width * .40) - 16,
+      height: (MediaQuery.of(context).size.width * .40) - 16,
+      margin: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: this.modal == "profile" ? 3.0 : 0,
+          color: this.modal == "profile"
+              ? (this.badges!.length > 0)
+                  ? Color(0Xff39A7B2)
+                  : Colors.black
+              : Colors.white,
+        ),
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Stack(
+        fit: StackFit.loose,
+        children: [
+          Container(
+            width: (MediaQuery.of(context).size.width * .40) - 16,
+            height: (MediaQuery.of(context).size.width * .40) - 16,
+            child: (this.photoUrl != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage("${this.photoUrl}"),
+                    radius: 16,
+                  )
+                : CircleAvatar(
+                    backgroundImage:
+                        AssetImage("assets/icons_profile/profile.png"),
+                    radius: 16,
+                  )),
+          ),
+          if (this.badges!.length > 0)
+            Padding(
+              padding: EdgeInsets.only(
+                  top: (MediaQuery.of(context).size.width * .02)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        barrierColor: Colors.black.withAlpha(1),
+                        backgroundColor: Colors.black.withAlpha(1),
+                        builder: (BuildContext context) {
+                          return SnackBarWidget(
+                            menu: AppLocalizations.of(context)!.badgeSower,
+                            text: AppLocalizations.of(context)!
+                                .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                            about: AppLocalizations.of(context)!.learnMore,
+                            contact: {
+                              "text":
+                                  AppLocalizations.of(context)!.areYouASowerToo,
+                              "textLink":
+                                  AppLocalizations.of(context)!.getInContact,
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: 33,
+                      height: 33,
+                      child: Image.network(this.badges?[0].icon as String),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
 
