@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/keep_alive_page.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -52,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     controller = PageViewController.instance.newController();
+
     Future.delayed(Duration(milliseconds: 1000), () {
       _checkStores();
       _checkPageParams();
@@ -94,7 +97,46 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
     return WillPopScope(
       onWillPop: () async {
-        return PageViewController.instance.back();
+        var result = PageViewController.instance.back();
+        if (result &&
+            !(await ChatDialogController.instance
+                .getChatHasAlreadyBeenOpenedToday())) {
+          result = await showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(
+                          AppLocalizations.of(context)!
+                              .dialogTitleBeforeExiting,
+                          style: Theme.of(context).textTheme.bodyText2),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child:
+                        Text(AppLocalizations.of(context)!.shareMyExperience),
+                    onPressed: () => Navigator.of(context).pop(false),
+                  ),
+                  TextButton(
+                    child: Text(AppLocalizations.of(context)!.notNow),
+                    onPressed: () => Navigator.of(context).pop(true),
+                  ),
+                ],
+              );
+            },
+          );
+          if (!result) {
+            Navigator.of(context).pushNamed(
+              PageRoute.Page.chatWithUsersScreen.route,
+            );
+          }
+        }
+        return result;
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
@@ -132,20 +174,38 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   },
                 ),
                 Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                    iconSize: 40,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.chatWithUsersScreen.route,
+                      );
+                    },
+                    icon: Image.asset('assets/icons/crisp_icon.png'),
+                  ),
+                ),
+                Align(
                   alignment: Alignment.bottomCenter,
-                  child: AnimatedOpacity(
-                    opacity: homeStore != null &&
-                            (homeStore!.showCreatedPostAlert &&
-                                !homeStore!.createdPostAlertAlreadyShowed) &&
-                            !createdPostAlertAlreadyShowed
-                        ? 1
-                        : 0,
-                    duration: Duration(milliseconds: 300),
-                    child: NewPostUploadedMessageBox(
+                  child: Visibility(
+                    visible:
+                        (homeStore != null && homeStore!.showCreatedPostAlert),
+                    child: AnimatedOpacity(
+                      opacity: homeStore != null &&
+                              (homeStore!.showCreatedPostAlert &&
+                                  !homeStore!.createdPostAlertAlreadyShowed) &&
+                              !createdPostAlertAlreadyShowed
+                          ? 1
+                          : 0,
+                      duration: Duration(milliseconds: 300),
+                      child: NewPostUploadedMessageBox(
                         text: AppLocalizations.of(context)!
                             .yourPublicationIsBeingProcessed
                             .replaceAll("%",
-                                "${currencyFormatter.format(oozToRewardAfterSendPost)}")),
+                                "${currencyFormatter.format(oozToRewardAfterSendPost)}"),
+                      ),
+                    ),
                   ),
                 ),
               ],

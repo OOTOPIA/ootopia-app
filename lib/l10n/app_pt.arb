@@ -253,6 +253,10 @@
     "totalGameCompleted": "Jogo total completado",
     "back":"voltar",
 
+    "dialogTitleBeforeExiting": "Obrigado por participar da OOTOPIA! Estamos fazendo este ambiente de teste e cada feedback nos ajudará a tornar o mundo um lugar melhor. Adoraríamos ouvir um pouco mais de você, como foi sua experiência hoje?",
+    "notNow": "Agora não",
+    "shareMyExperience": "Compartilhar minha experiência",
+
     "thereAreNoWalletRecords": "Não há registros de OZZ"
 
 }

@@ -183,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  crisp:
+    dependency: "direct main"
+    description:
+      name: crisp
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.8"
   cross_file:
     dependency: transitive
     description:

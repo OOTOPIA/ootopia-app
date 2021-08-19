@@ -18,6 +18,7 @@ jobs:
         with:
           envkey_API_URL: ${{ secrets.API_URL }}
           envkey_AMPLITUDE_KEY: ${{ secrets.AMPLITUDE_KEY }}
+          envkey_CRISP_WEBSITE_ID: ${{ secrets.CRISP_WEBSITE_ID }}
       - name: Update build version
         shell: bash
         run: 'sed -i "s/version: 0.0.0+0/version: 0.0.$GITHUB_RUN_NUMBER+$GITHUB_RUN_NUMBER/1" pubspec.yaml'
