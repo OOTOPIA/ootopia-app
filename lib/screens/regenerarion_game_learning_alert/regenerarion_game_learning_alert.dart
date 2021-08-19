@@ -247,64 +247,71 @@ class _RegenerarionGameLearningAlertState
                           : SizedBox(),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 32)),
-                              alignment: Alignment.center,
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40.0),
-                              ))),
-                          child: Text(
-                            AppLocalizations.of(context)!.close,
-                            style: TextStyle(
-                                color: Colors.black87.withOpacity(.6),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(
+                                          vertical: 16, horizontal: 32)),
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40.0),
+                                  ))),
+                              child: Text(
+                                AppLocalizations.of(context)!.close,
+                                style: TextStyle(
+                                    color: Colors.black87.withOpacity(.6),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
                           ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
+                          SizedBox(
+                            width: 28,
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: TextButton(
+                              style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(
+                                          vertical: 16, horizontal: 32)),
+                                  alignment: Alignment.center,
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color(0xFF003694)),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40.0),
+                                  ))),
+                              child: Text(
+                                AppLocalizations.of(context)!.learnMore,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () => {},
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        width: 28,
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 32)),
-                              alignment: Alignment.center,
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF003694)),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40.0),
-                              ))),
-                          child: Text(
-                            AppLocalizations.of(context)!.learnMore,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () => {},
-                        ),
-                      ),
+                        height: 32,
+                      )
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
