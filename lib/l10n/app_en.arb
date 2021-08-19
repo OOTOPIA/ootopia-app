@@ -254,6 +254,12 @@
     "planetaryLevelText2": "We are almost there! Let's meet the planetary goal today!",
     
     "thereAreNoWalletRecords": "There are no OZZ records",
+    
+    "sendYourFeedback":"send your feedback",
+    "QuestionsOrSuggestions":"Questions / suggestions",
+    "checkYourTransactions":"check your transactions",
+    "earnOzzSignup":"earn OOz when they signup",
+    "inviteYourFriends":"Invite your friends",
 
     "@helloWorld": {
         "description": "A programmer greeting"

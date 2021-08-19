@@ -252,6 +252,12 @@
     "totalGameCompleted": "Jogo total completado",
     "back":"voltar",
 
-    "thereAreNoWalletRecords": "Não há registros de OZZ"
+    "thereAreNoWalletRecords": "Não há registros de OZZ",
+
+    "sendYourFeedback":"Envie seu feedback",
+    "QuestionsOrSuggestions":"Perguntas / sugestões",
+    "checkYourTransactions":"Confira suas transações",
+    "earnOzzSignup":"ganham OOz quando eles se inscrevem",
+    "inviteYourFriends":"Convide seus amigos"
 
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -86,8 +87,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
           child: ListTile(
             title: Text('Invite your friends'),
             subtitle: Text('earn OOz when they signup'),
-            leading: Icon(Icons.person_add),
+            leading: SvgPicture.asset(
+              'assets/icons/user-plus.svg',
+              color: Colors.black,
+            ),
             trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {},
           ),
         ),
         Card(
@@ -99,6 +104,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
               color: Colors.black,
             ),
             trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {},
           ),
         ),
         Card(
@@ -107,6 +113,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
             subtitle: Text('send your feedback'),
             leading: Icon(Icons.person_add),
             trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {},
           ),
         ),
         Expanded(
@@ -156,17 +163,17 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
 }
 
 class Avatar extends StatelessWidget {
-  String? photoUrl;
-  List<Badge>? badges;
-  String? modal;
+  final String? photoUrl;
+  final List<Badge>? badges;
+  final String? modal;
 
   Avatar({this.photoUrl, this.badges, this.modal});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (MediaQuery.of(context).size.width * .40) - 16,
-      height: (MediaQuery.of(context).size.width * .40) - 16,
+      width: (MediaQuery.of(context).size.width * .31) - 16,
+      height: (MediaQuery.of(context).size.width * .32) - 16,
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
@@ -180,7 +187,6 @@ class Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
       ),
       child: Stack(
-        fit: StackFit.loose,
         children: [
           Container(
             width: (MediaQuery.of(context).size.width * .40) - 16,
@@ -188,18 +194,16 @@ class Avatar extends StatelessWidget {
             child: (this.photoUrl != null
                 ? CircleAvatar(
                     backgroundImage: NetworkImage("${this.photoUrl}"),
-                    radius: 16,
                   )
                 : CircleAvatar(
                     backgroundImage:
                         AssetImage("assets/icons_profile/profile.png"),
-                    radius: 16,
                   )),
           ),
           if (this.badges!.length > 0)
             Padding(
               padding: EdgeInsets.only(
-                  top: (MediaQuery.of(context).size.width * .02)),
+                  top: (MediaQuery.of(context).size.width * .01)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -227,8 +231,8 @@ class Avatar extends StatelessWidget {
                       );
                     },
                     child: Container(
-                      width: 33,
-                      height: 33,
+                      width: 25,
+                      height: 25,
                       child: Image.network(this.badges?[0].icon as String),
                     ),
                   ),
