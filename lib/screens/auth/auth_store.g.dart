@@ -32,6 +32,15 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$updateUserRegenerarionGameLearningAlertAsyncAction =
+      AsyncAction('AuthStoreBase.updateUserRegenerarionGameLearningAlert');
+
+  @override
+  Future updateUserRegenerarionGameLearningAlert(String type) {
+    return _$updateUserRegenerarionGameLearningAlertAsyncAction
+        .run(() => super.updateUserRegenerarionGameLearningAlert(type));
+  }
+
   final _$logoutAsyncAction = AsyncAction('AuthStoreBase.logout');
 
   @override
