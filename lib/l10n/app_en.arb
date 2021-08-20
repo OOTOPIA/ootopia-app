@@ -251,7 +251,8 @@
 
     "planetaryLevel": "Planetary level",
     "planetaryLevelText1": "Together we can change the world! The Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
-    "planetaryLevelText2": "We are almost there! Let's meet the planetary goal today!",
+    "planetaryLevelText2pt1": "We are almost there!",
+    "planetaryLevelText2pt2": "Let's meet the planetary goal today!",
     
     "thereAreNoWalletRecords": "There are no OZZ records",
     
@@ -262,6 +263,11 @@
     "earnOzzSignup":"earn OOz when they signup",
     "inviteYourFriends":"Invite your friends",
     "enterToOotopia": " enter to ootopia",
+
+    "dialogTitleBeforeExiting": "Thank you for participating in OOTOPIA!",
+    "dialogDescriptionBeforeExiting": "We are doing this testing environment and every feedback will help us make the world a better place.\n\nWe'd love to hear a little more from you, how was your experience today?",
+    "notNow": "Not now",
+    "shareMyExperience": "Share my experience",
 
     "@helloWorld": {
         "description": "A programmer greeting"

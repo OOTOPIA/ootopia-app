@@ -8,6 +8,7 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -17,6 +18,7 @@ import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -40,7 +42,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   late FlickManager flickManager;
   late VideoPlayerController videoPlayer;
   late FlickMultiManager flickMultiManager;
-  late PostBloc postBloc;
   InterestsTagsRepositoryImpl _tagsRepository = InterestsTagsRepositoryImpl();
   final TextEditingController _descriptionInputController =
       TextEditingController();
@@ -48,9 +49,9 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       TextEditingController();
   double mirror = 0;
   late HomeStore homeStore;
+  late PostPreviewScreenStore postPreviewStore;
 
   bool _isLoading = true;
-  bool _isLoadingUpload = false;
   bool _errorOnGetTags = false;
   bool _createdPost = false;
   bool _processingVideoInBackground = false;
@@ -180,7 +181,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     return returnDialog;
   }
 
-  void _sendPost() {
+  void _sendPost() async {
     if (_processingVideoInBackgroundError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -191,19 +192,17 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       return;
     }
 
-    if (_processingVideoInBackground) {
-      _readyToSendPost = true;
-      setState(() {
-        _isLoadingUpload = true;
-      });
-    }
-
     if (_selectedTags.length < 1) {
       setState(() {
         tagsErrorMessage =
             AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
       });
       return;
+    }
+
+    if (_processingVideoInBackground) {
+      _readyToSendPost = true;
+      postPreviewStore.uploadIsLoading = true;
     }
 
     postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
@@ -217,11 +216,36 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           1000;
     }
 
-    postBloc.add(
+    print("ready to start upload");
+
+    await this.postPreviewStore.createPost(postData);
+
+    print("end of upload");
+
+    if (this.postPreviewStore.successOnUpload) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+        arguments: {
+          "createdPost": true,
+          "oozToReward": this.postPreviewStore.oozToReward
+        },
+      );
+    } else if (this.postPreviewStore.errorOnUpload) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!
+              .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
+              .replaceAll("video", postData.type!)),
+        ),
+      );
+    }
+
+    /*postBloc.add(
       CreatePostEvent(
         post: postData,
       ),
-    );
+    );*/
   }
 
   @override
@@ -230,8 +254,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       _getLocation(context);
     });
     super.initState();
-
-    postBloc = BlocProvider.of<PostBloc>(context);
 
     flickMultiManager = FlickMultiManager();
     videoPlayer = VideoPlayerController.file(File(widget.args["filePath"]))
@@ -264,7 +286,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           setState(() {
             _processingVideoInBackground = false;
             if (_readyToSendPost) {
-              _isLoadingUpload = false;
+              postPreviewStore.uploadIsLoading = false;
               _readyToSendPost = false;
               _sendPost();
             }
@@ -281,7 +303,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
             ),
           );
           setState(() {
-            _isLoadingUpload = false;
+            postPreviewStore.uploadIsLoading = false;
             _readyToSendPost = false;
           });
         }
@@ -329,502 +351,477 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   @override
   Widget build(BuildContext context) {
     homeStore = Provider.of<HomeStore>(context);
+    postPreviewStore = Provider.of<PostPreviewScreenStore>(context);
     return new WillPopScope(
       onWillPop: () => _onWillPop(true),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onPressed: () => _onWillPop(false),
-            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-          ),
-          titleSpacing: 0,
-          title: Text(
-            AppLocalizations.of(context)!.newPost,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-            ),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => _sendPost(),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.check,
-                      color: Color(0xff018F9C),
+        appBar: appBar(),
+        body: Observer(builder: (_) => body()),
+      ),
+    );
+  }
+
+  Widget body() {
+    return LoadingOverlay(
+      isLoading: postPreviewStore.uploadIsLoading,
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
+          child: Column(
+            children: [
+              Container(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: widget.args["type"] == "video"
+                        ? MediaQuery.of(context).size.height * .6
+                        : MediaQuery.of(context).size.height * .5,
+                  ),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomCenter,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: GlobalConstants.of(context).spacingNormal,
+                          right: GlobalConstants.of(context).spacingNormal,
+                          top: GlobalConstants.of(context).spacingNormal,
+                          bottom:
+                              GlobalConstants.of(context).screenHorizontalSpace,
+                        ),
+                        child: widget.args["type"] == "video"
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(21)),
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  child: FlickVideoPlayer(
+                                    preferredDeviceOrientationFullscreen: [],
+                                    flickManager: flickManager,
+                                    flickVideoWithControls:
+                                        FlickVideoWithControls(
+                                      controls: null,
+                                    ),
+                                  ),
+                                  transform: Matrix4.rotationY(mirror),
+                                ),
+                              )
+                            : Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    color: Color(0xff000000),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                    image: DecorationImage(
+                                      fit: this.imageSize!.height >
+                                              imageSize!.width
+                                          ? BoxFit.fitHeight
+                                          : BoxFit.fitWidth,
+                                      alignment: FractionalOffset.center,
+                                      image: FileImage(
+                                          File(widget.args["filePath"])),
+                                    )),
+                              ),
+                      ),
+                      widget.args["type"] == "video"
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.all(
+                                      GlobalConstants.of(context)
+                                          .spacingMedium),
+                                  padding: EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black38,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: SizedBox(
+                                    width: 28,
+                                    height: 28,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(0),
+                                      icon: Icon(
+                                          flickManager
+                                                  .flickControlManager!.isMute
+                                              ? Icons.volume_off
+                                              : Icons.volume_up,
+                                          size: 20),
+                                      onPressed: () => {
+                                        setState(() {
+                                          flickMultiManager.toggleMute();
+                                        }),
+                                      },
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: GlobalConstants.of(context).spacingNormal),
+                child: TextFormField(
+                  controller: _descriptionInputController,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.normal),
+                  autofocus: false,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    hintText: AppLocalizations.of(context)!.writeADescription,
+                    hintStyle: TextStyle(
+                        color: Colors.black.withOpacity(.3),
+                        fontWeight: FontWeight.normal),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black54, width: .25),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    SizedBox(
-                      width: GlobalConstants.of(context).spacingSmall,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xff707070), width: .25),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    Text(
-                      AppLocalizations.of(context)!.publish,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0xff707070), width: .25),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: GlobalConstants.of(context).screenHorizontalSpace,
+              ),
+              Container(
+                height: 60,
+                margin: EdgeInsets.symmetric(
+                    horizontal: GlobalConstants.of(context).spacingNormal),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  border: Border.all(
+                    color: Color(0xff707070).withOpacity(.5),
+                    width: .25,
+                  ),
+                ),
+                child: geolocationErrorMessage.isNotEmpty
+                    ? Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    GlobalConstants.of(context).spacingSmall),
+                            child: Text(
+                              geolocationMessage,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          )
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                    horizontal: GlobalConstants.of(context)
+                                        .spacingSmall)
+                                .copyWith(bottom: 2),
+                            child: Icon(
+                              FeatherIcons.mapPin,
+                              color: Color(0xff003694),
+                            ),
+                          ),
+                          _geolocationInputController.text.isNotEmpty
+                              ? Text(
+                                  _geolocationInputController.text,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .copyWith(
+                                        color: Color(0xff003694),
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                )
+                              : Container(
+                                  padding: EdgeInsets.only(left: 2),
+                                  height: 18,
+                                  width: 18,
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xff003694),
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                        ],
+                      ),
+              ),
+              Visibility(
+                visible: geolocationErrorMessage.isNotEmpty,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: GlobalConstants.of(context).spacingNormal,
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: GlobalConstants.of(context).spacingNormal),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: FlatButton(
+                      height: 57,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          GlobalConstants.of(context).spacingNormal,
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.getCurrentLocation,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                      ),
+                      onPressed: () {
+                        _getLocation(context);
+                      },
+                      splashColor: Colors.black54,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Color(0xff707070),
+                          width: .25,
+                          style: BorderStyle.solid,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: geolocationErrorMessage.isNotEmpty,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: GlobalConstants.of(context).spacingNormal,
+                    bottom: GlobalConstants.of(context).spacingSmall,
+                    left: GlobalConstants.of(context).screenHorizontalSpace,
+                    right: GlobalConstants.of(context).screenHorizontalSpace,
+                  ),
+                  child: Text(
+                    geolocationErrorMessage +
+                        AppLocalizations.of(context)!
+                            .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: GlobalConstants.of(context).screenHorizontalSpace,
+              ),
+              Visibility(
+                visible: !_errorOnGetTags && !_isLoading,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(
+                      color: Color(0xff707070),
+                      width: .25,
+                    ),
+                  ),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: GlobalConstants.of(context).spacingNormal),
+                  child: MultiSelectDialogField<InterestsTags?>(
+                    listType: MultiSelectListType.CHIP,
+                    selectedColor: Color(0xff03145C),
+                    selectedItemsTextStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white),
+                    searchable: true,
+                    checkColor: Colors.blueAccent,
+                    searchTextStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    unselectedColor: Colors.black.withOpacity(.05),
+                    barrierColor: Colors.black.withOpacity(.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 0,
+                      ),
+                    ),
+                    buttonIcon: Icon(
+                      Icons.add,
+                      size: 30,
+                      color: Colors.black54,
+                    ),
+                    title: Text(
+                      AppLocalizations.of(context)!.selectAtLeast1Tag,
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    buttonText: Text(
+                      AppLocalizations.of(context)!.selectTags,
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    confirmText: Text(
+                      AppLocalizations.of(context)!.confirm,
                       style: TextStyle(
                         color: Color(0xff018F9C),
                       ),
                     ),
-                    SizedBox(
-                      width: GlobalConstants.of(context).spacingNormal,
+                    cancelText: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        color: Color(0xff018F9C),
+                      ),
                     ),
-                  ],
-                ))
-          ],
-        ),
-        body: BlocListener<PostBloc, PostState>(
-          listener: (context, state) {
-            if (state is ErrorCreatePostState) {
-              _isLoading = false;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
+                    itemsTextStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    items: _items,
+                    onConfirm: (values) {
+                      _selectedTags = [];
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      setState(() {
+                        values.forEach((v) {
+                          _selectedTags.add(v!);
+                        });
+                        if (_selectedTags.length >= 1) {
+                          tagsErrorMessage = "";
+                        }
+                      });
+                    },
+                    chipDisplay: MultiSelectChipDisplay(
+                      chipColor: Color(0xff03145C),
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                      onTap: (value) {
+                        setState(() {
+                          _selectedTags.remove(value);
+                        });
+                      },
+                    ),
+                  ),
                 ),
-              );
-              _isLoadingUpload = false;
-            } else if (state is LoadingCreatePostState) {
-              _isLoadingUpload = true;
-            } else if (state is SuccessCreatePostState) {
-              _isLoadingUpload = false;
-              _createdPost = true;
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.homeScreen.route,
-                ModalRoute.withName('/'),
-                arguments: {
-                  "createdPost": true,
-                  "oozToReward": state.oozToReward
-                },
-              );
-            }
-          },
-          child: _blocBuilder(),
+              ),
+              Visibility(
+                visible: _errorOnGetTags && !_isLoading,
+                child: Container(
+                  width: double.infinity,
+                  child: TryAgain(
+                    _getTags,
+                    showOnlyButton: true,
+                    buttonText:
+                        AppLocalizations.of(context)!.errorLoadingTagsTryAgain,
+                    buttonBackgroundColor: Colors.white,
+                    messageTextColor: Colors.white,
+                    buttonTextColor: Colors.black,
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: tagsErrorMessage.isNotEmpty,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: GlobalConstants.of(context).screenHorizontalSpace,
+                    right: GlobalConstants.of(context).screenHorizontalSpace,
+                    top: GlobalConstants.of(context).spacingNormal,
+                    bottom: GlobalConstants.of(context).spacingSmall,
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    child: Text(
+                      tagsErrorMessage,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _isLoading,
+                child: Center(
+                  child: SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: GlobalConstants.of(context).spacingNormal,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  _blocBuilder() {
-    return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
-      return LoadingOverlay(
-        isLoading: _isLoadingUpload,
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
-            child: Column(
+  AppBar appBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
+        onPressed: () => _onWillPop(false),
+        tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+      ),
+      titleSpacing: 0,
+      title: Text(
+        AppLocalizations.of(context)!.newPost,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+        ),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () => _sendPost(),
+            child: Row(
               children: [
-                Container(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: widget.args["type"] == "video"
-                          ? MediaQuery.of(context).size.height * .6
-                          : MediaQuery.of(context).size.height * .5,
-                    ),
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: GlobalConstants.of(context).spacingNormal,
-                            right: GlobalConstants.of(context).spacingNormal,
-                            top: GlobalConstants.of(context).spacingNormal,
-                            bottom: GlobalConstants.of(context)
-                                .screenHorizontalSpace,
-                          ),
-                          child: widget.args["type"] == "video"
-                              ? ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(21)),
-                                  child: Transform(
-                                    alignment: Alignment.center,
-                                    child: FlickVideoPlayer(
-                                      preferredDeviceOrientationFullscreen: [],
-                                      flickManager: flickManager,
-                                      flickVideoWithControls:
-                                          FlickVideoWithControls(
-                                        controls: null,
-                                      ),
-                                    ),
-                                    transform: Matrix4.rotationY(mirror),
-                                  ),
-                                )
-                              : Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xff000000),
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(20),
-                                        bottomRight: Radius.circular(20),
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
-                                      image: DecorationImage(
-                                        fit: this.imageSize!.height >
-                                                imageSize!.width
-                                            ? BoxFit.fitHeight
-                                            : BoxFit.fitWidth,
-                                        alignment: FractionalOffset.center,
-                                        image: FileImage(
-                                            File(widget.args["filePath"])),
-                                      )),
-                                ),
-                        ),
-                        widget.args["type"] == "video"
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.all(
-                                        GlobalConstants.of(context)
-                                            .spacingMedium),
-                                    padding: EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black38,
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: SizedBox(
-                                      width: 28,
-                                      height: 28,
-                                      child: IconButton(
-                                        padding: EdgeInsets.all(0),
-                                        icon: Icon(
-                                            flickManager
-                                                    .flickControlManager!.isMute
-                                                ? Icons.volume_off
-                                                : Icons.volume_up,
-                                            size: 20),
-                                        onPressed: () => {
-                                          setState(() {
-                                            flickMultiManager.toggleMute();
-                                          }),
-                                        },
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ),
+                Icon(
+                  Icons.check,
+                  color: Color(0xff018F9C),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: GlobalConstants.of(context).spacingNormal),
-                  child: TextFormField(
-                    controller: _descriptionInputController,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.normal),
-                    autofocus: false,
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                      hintText: AppLocalizations.of(context)!.writeADescription,
-                      hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(.3),
-                          fontWeight: FontWeight.normal),
-                      border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.black54, width: .25),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xff707070), width: .25),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xff707070), width: .25),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
+                SizedBox(
+                  width: GlobalConstants.of(context).spacingSmall,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.publish,
+                  style: TextStyle(
+                    color: Color(0xff018F9C),
                   ),
                 ),
                 SizedBox(
-                  height: GlobalConstants.of(context).screenHorizontalSpace,
-                ),
-                Container(
-                  height: 60,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: GlobalConstants.of(context).spacingNormal),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    border: Border.all(
-                      color: Color(0xff707070).withOpacity(.5),
-                      width: .25,
-                    ),
-                  ),
-                  child: geolocationErrorMessage.isNotEmpty
-                      ? Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      GlobalConstants.of(context).spacingSmall),
-                              child: Text(
-                                geolocationMessage,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            )
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                      horizontal: GlobalConstants.of(context)
-                                          .spacingSmall)
-                                  .copyWith(bottom: 2),
-                              child: Icon(
-                                FeatherIcons.mapPin,
-                                color: Color(0xff003694),
-                              ),
-                            ),
-                            _geolocationInputController.text.isNotEmpty
-                                ? Text(
-                                    _geolocationInputController.text,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(
-                                          color: Color(0xff003694),
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                  )
-                                : Container(
-                                    padding: EdgeInsets.only(left: 2),
-                                    height: 18,
-                                    width: 18,
-                                    child: CircularProgressIndicator(
-                                      color: Color(0xff003694),
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                          ],
-                        ),
-                ),
-                Visibility(
-                  visible: geolocationErrorMessage.isNotEmpty,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: GlobalConstants.of(context).spacingNormal,
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal:
-                              GlobalConstants.of(context).spacingNormal),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: FlatButton(
-                        height: 57,
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                            GlobalConstants.of(context).spacingNormal,
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context)!.getCurrentLocation,
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ),
-                        onPressed: () {
-                          _getLocation(context);
-                        },
-                        splashColor: Colors.black54,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Color(0xff707070),
-                            width: .25,
-                            style: BorderStyle.solid,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: geolocationErrorMessage.isNotEmpty,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: GlobalConstants.of(context).spacingNormal,
-                      bottom: GlobalConstants.of(context).spacingSmall,
-                      left: GlobalConstants.of(context).screenHorizontalSpace,
-                      right: GlobalConstants.of(context).screenHorizontalSpace,
-                    ),
-                    child: Text(
-                      geolocationErrorMessage +
-                          AppLocalizations.of(context)!
-                              .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: GlobalConstants.of(context).screenHorizontalSpace,
-                ),
-                Visibility(
-                  visible: !_errorOnGetTags && !_isLoading,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      border: Border.all(
-                        color: Color(0xff707070),
-                        width: .25,
-                      ),
-                    ),
-                    margin: EdgeInsets.symmetric(
-                        horizontal: GlobalConstants.of(context).spacingNormal),
-                    child: MultiSelectDialogField<InterestsTags?>(
-                      listType: MultiSelectListType.CHIP,
-                      selectedColor: Color(0xff03145C),
-                      selectedItemsTextStyle: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white),
-                      searchable: true,
-                      checkColor: Colors.blueAccent,
-                      searchTextStyle: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                      unselectedColor: Colors.black.withOpacity(.05),
-                      barrierColor: Colors.black.withOpacity(.5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(
-                          color: Colors.transparent,
-                          width: 0,
-                        ),
-                      ),
-                      buttonIcon: Icon(
-                        Icons.add,
-                        size: 30,
-                        color: Colors.black54,
-                      ),
-                      title: Text(
-                        AppLocalizations.of(context)!.selectAtLeast1Tag,
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      buttonText: Text(
-                        AppLocalizations.of(context)!.selectTags,
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                      confirmText: Text(
-                        AppLocalizations.of(context)!.confirm,
-                        style: TextStyle(
-                          color: Color(0xff018F9C),
-                        ),
-                      ),
-                      cancelText: Text(
-                        AppLocalizations.of(context)!.cancel,
-                        style: TextStyle(
-                          color: Color(0xff018F9C),
-                        ),
-                      ),
-                      itemsTextStyle: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                      ),
-                      items: _items,
-                      onConfirm: (values) {
-                        _selectedTags = [];
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        setState(() {
-                          values.forEach((v) {
-                            _selectedTags.add(v!);
-                          });
-                          if (_selectedTags.length >= 1) {
-                            tagsErrorMessage = "";
-                          }
-                        });
-                      },
-                      chipDisplay: MultiSelectChipDisplay(
-                        chipColor: Color(0xff03145C),
-                        textStyle: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                        onTap: (value) {
-                          setState(() {
-                            _selectedTags.remove(value);
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: _errorOnGetTags && !_isLoading,
-                  child: Container(
-                    width: double.infinity,
-                    child: TryAgain(
-                      _getTags,
-                      showOnlyButton: true,
-                      buttonText: AppLocalizations.of(context)!
-                          .errorLoadingTagsTryAgain,
-                      buttonBackgroundColor: Colors.white,
-                      messageTextColor: Colors.white,
-                      buttonTextColor: Colors.black,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: tagsErrorMessage.isNotEmpty,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: GlobalConstants.of(context).screenHorizontalSpace,
-                      right: GlobalConstants.of(context).screenHorizontalSpace,
-                      top: GlobalConstants.of(context).spacingNormal,
-                      bottom: GlobalConstants.of(context).spacingSmall,
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      child: Text(
-                        tagsErrorMessage,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.redAccent,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: _isLoading,
-                  child: Center(
-                    child: SizedBox(
-                      width: 32,
-                      height: 32,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: GlobalConstants.of(context).spacingNormal,
+                  width: GlobalConstants.of(context).spacingNormal,
                 ),
               ],
-            ),
-          ),
-        ),
-      );
-    });
+            ))
+      ],
+    );
   }
 }

@@ -76,6 +76,21 @@ mixin _$WalletStore on _WalletStoreBase, Store {
     });
   }
 
+  final _$walletIsEmptyAtom = Atom(name: '_WalletStoreBase.walletIsEmpty');
+
+  @override
+  bool get walletIsEmpty {
+    _$walletIsEmptyAtom.reportRead();
+    return super.walletIsEmpty;
+  }
+
+  @override
+  set walletIsEmpty(bool value) {
+    _$walletIsEmptyAtom.reportWrite(value, super.walletIsEmpty, () {
+      super.walletIsEmpty = value;
+    });
+  }
+
   final _$walletAtom = Atom(name: '_WalletStoreBase.wallet');
 
   @override
@@ -108,6 +123,7 @@ mapSumDaysTransfer: ${mapSumDaysTransfer},
 allGroupedTransfersByDate: ${allGroupedTransfersByDate},
 sentGroupedTransfersByDate: ${sentGroupedTransfersByDate},
 receivedGroupedTransfersByDate: ${receivedGroupedTransfersByDate},
+walletIsEmpty: ${walletIsEmpty},
 wallet: ${wallet}
     ''';
   }

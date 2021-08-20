@@ -167,7 +167,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           ),
                           Icon(FeatherIcons.userPlus, color: Color(0xff00A5FC)),
                           Text(
-                            '${authStore!.currentUser!.badges!.length}',
+                            '23',
                             style: TextStyle(color: Color(0xff00A5FC)),
                           )
                         ],

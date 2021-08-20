@@ -25,6 +25,8 @@ class _RegenerarionGameLearningAlertState
   String? _title;
   String? _firstText;
   String? _secondText;
+  String? _secondTextPt2;
+
   String? _imageRights;
 
   @override
@@ -63,7 +65,9 @@ class _RegenerarionGameLearningAlertState
         _firstText =
             AppLocalizations.of(widget.args["context"])!.planetaryLevelText1;
         _secondText =
-            AppLocalizations.of(widget.args["context"])!.planetaryLevelText2;
+            AppLocalizations.of(widget.args["context"])!.planetaryLevelText2pt1;
+        _secondTextPt2 =
+            AppLocalizations.of(widget.args["context"])!.planetaryLevelText2pt2;
         _imageRights = "Picture by Margot Richard";
 
         break;
@@ -84,15 +88,9 @@ class _RegenerarionGameLearningAlertState
               ),
             ),
           ),
-          // SvgPicture.asset(
-          //   _imagePath as String,
-          //   fit: BoxFit.cover,
-          //   height: MediaQuery.of(context).size.height,
-          //   width: MediaQuery.of(context).size.width,
-          // ),
           Positioned(
             top: MediaQuery.of(context).size.height * .11,
-            right: -GlobalConstants.of(context).screenHorizontalSpace - 16,
+            right: -GlobalConstants.of(context).screenHorizontalSpace - 20,
             child: Transform.rotate(
                 angle: 3 * pi / 2,
                 child: Container(
@@ -109,112 +107,215 @@ class _RegenerarionGameLearningAlertState
           SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal:
-                      GlobalConstants.of(context).screenHorizontalSpace),
+                      horizontal:
+                          GlobalConstants.of(context).screenHorizontalSpace)
+                  .copyWith(top: 32),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    AppLocalizations.of(context)!
-                        .regenerationGame
-                        .toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                        color: _backgroundColorIcon,
-                        borderRadius: BorderRadius.circular(100)),
-                    padding: EdgeInsets.all(28),
-                    child: SvgPicture.asset(
-                      _icon as String,
-                    ),
-                  ),
-                  Text(_title!,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(fontSize: 40, color: Colors.white)),
-                  Text(_firstText!,
-                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400)),
-                  Text(_secondText!,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 32)),
-                              alignment: Alignment.center,
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40.0),
-                              ))),
-                          child: Text(
-                            AppLocalizations.of(context)!.close,
-                            style: TextStyle(
-                                color: Colors.black87.withOpacity(.6),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .regenerationGame
+                            .toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400)
+                            .copyWith(
+                          shadows: [
+                            Shadow(
+                              blurRadius: 3.0,
+                              color: Colors.black.withOpacity(.25),
+                              offset: Offset(
+                                0,
+                                5.0,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(
-                        width: 28,
+                        height: 24,
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: TextButton(
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 32)),
-                              alignment: Alignment.center,
-                              backgroundColor:
-                                  MaterialStateProperty.all(Color(0xFF003694)),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40.0),
-                              ))),
-                          child: Text(
-                            AppLocalizations.of(context)!.learnMore,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () => {},
+                      Container(
+                        width: 160,
+                        height: 160,
+                        decoration: BoxDecoration(
+                            color: _backgroundColorIcon,
+                            borderRadius: BorderRadius.circular(100)),
+                        padding: EdgeInsets.all(28),
+                        child: SvgPicture.asset(
+                          _icon as String,
                         ),
                       ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(_title!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(fontSize: 40, color: Colors.white)
+                              .copyWith(
+                            shadows: [
+                              Shadow(
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(.25),
+                                offset: Offset(
+                                  0,
+                                  5.0,
+                                ),
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(_firstText!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400)
+                              .copyWith(shadows: [
+                            Shadow(
+                              blurRadius: 3.0,
+                              color: Colors.black.withOpacity(.25),
+                              offset: Offset(
+                                0,
+                                5.0,
+                              ),
+                            ),
+                          ])),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(_secondText!,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(
+                                  fontSize: 24,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500)
+                              .copyWith(
+                            shadows: [
+                              Shadow(
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(.25),
+                                offset: Offset(
+                                  0,
+                                  5.0,
+                                ),
+                              ),
+                            ],
+                          )),
+                      _secondTextPt2 != null
+                          ? Text(_secondTextPt2!,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500)
+                                  .copyWith(
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 3.0,
+                                    color: Colors.black.withOpacity(.25),
+                                    offset: Offset(
+                                      0,
+                                      5.0,
+                                    ),
+                                  ),
+                                ],
+                              ))
+                          : SizedBox(),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(
+                                          vertical: 16, horizontal: 32)),
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40.0),
+                                  ))),
+                              child: Text(
+                                AppLocalizations.of(context)!.close,
+                                style: TextStyle(
+                                    color: Colors.black87.withOpacity(.6),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 28,
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: TextButton(
+                              style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(
+                                          vertical: 16, horizontal: 32)),
+                                  alignment: Alignment.center,
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color(0xFF003694)),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40.0),
+                                  ))),
+                              child: Text(
+                                AppLocalizations.of(context)!.learnMore,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () => {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32,
+                      )
                     ],
                   )
                 ],
               ),
             ),
-          ),
+          )
         ],
       ),
     );

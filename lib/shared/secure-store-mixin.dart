@@ -83,7 +83,8 @@ class SecureStoreMixin {
   }
 
   Future<User> getCurrentUser() async {
-    return User.fromJson(json.decode(await this.getSecureStore("user")));
+    var userStorage = await this.getSecureStore("user");
+    return User.fromJson(json.decode(userStorage));
   }
 
   Future<bool> setSecureStore(String key, String data) async {

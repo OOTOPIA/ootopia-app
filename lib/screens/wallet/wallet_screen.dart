@@ -55,6 +55,8 @@ class _ProfilePageState extends State<ProfilePage>
         await walletStore.getWalletTransfersHistory(0, "sent"); //sent
         break;
     }
+
+    setState(() {});
   }
 
   void _setActiveTabIndex() {
