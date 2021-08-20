@@ -17,7 +17,8 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
   late WalletStore walletStore;
   late TabController _tabController;
   int _activeTabIndex = 0;
@@ -25,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    
+
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
 
@@ -42,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 
   Future<void> _performAllRequests() async {
     await walletStore.getWallet();
-    
+
     switch (_activeTabIndex) {
       case 0:
         await walletStore.getWalletTransfersHistory(0); //all
@@ -54,9 +55,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         await walletStore.getWalletTransfersHistory(0, "sent"); //sent
         break;
     }
-
-    setState(() {
-    });
   }
 
   void _setActiveTabIndex() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -66,19 +67,25 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
           '${authStore!.currentUser!.fullname}',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Card(
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(AppLocalizations.of(context)!.personalGoal),
                 Text(
-                  '10m |',
+                  AppLocalizations.of(context)!.personalGoal,
+                  style: TextStyle(fontSize: 14),
+                ),
+                Text(
+                  ' 10m | ',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Icon(Icons.add),
-                Text('23')
+                Icon(FeatherIcons.trash2),
+                Text(
+                  '23',
+                  style: TextStyle(color: Color(0xff00A5FC)),
+                )
               ],
             ),
           ),
@@ -86,7 +93,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         Card(
           child: ListTile(
             title: Text('${AppLocalizations.of(context)!.inviteYourFriends}'),
-            subtitle: Text('${AppLocalizations.of(context)!.earnOzzSignup}'),
+            subtitle: Text(
+              '${AppLocalizations.of(context)!.earnOzzSignup}',
+              style: TextStyle(color: Colors.grey),
+            ),
             leading: SvgPicture.asset(
               'assets/icons/user-plus.svg',
               color: Colors.black,
@@ -98,11 +108,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
         Card(
           child: ListTile(
             title: Text('OOz ${AppLocalizations.of(context)!.wallet}'),
-            subtitle:
-                Text('${AppLocalizations.of(context)!.checkYourTransactions}'),
+            subtitle: Text(
+              '${AppLocalizations.of(context)!.checkYourTransactions}',
+              style: TextStyle(color: Colors.grey),
+            ),
             leading: Image.asset(
               'assets/icons/ooz-coin-small.png',
               color: Colors.black,
+              width: 40,
             ),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {},
@@ -112,8 +125,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
           child: ListTile(
             title: Text(
                 '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}'),
-            subtitle: Text('${AppLocalizations.of(context)!.sendYourFeedback}'),
-            leading: Icon(Icons.person_add),
+            subtitle: Text(
+              '${AppLocalizations.of(context)!.sendYourFeedback}',
+              style: TextStyle(color: Colors.grey),
+            ),
+            leading: Image.asset(
+              'assets/icons/chat-small.png',
+              width: 35,
+            ),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {},
           ),
@@ -136,26 +155,26 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        (authStore!.currentUser != null
-                            ? "${AppLocalizations.of(context)!.loggedInAs} ${authStore!.currentUser!.fullname!}"
-                            : ""),
+                        'devmagic.com.br \n ootopia.org',
                         textAlign: TextAlign.center,
-                      ),
+                      )
                     ],
                   )),
               Visibility(
-                visible: authStore != null && authStore!.currentUser != null,
-                child: ItemMenu(
-                  pathImage: 'assets/icons_profile/menu_left.png',
-                  title: AppLocalizations.of(context)!.exit,
-                  onTapFunction: (context) {
-                    clearAuth(context);
-                    if (widget.onTapLogoutItem != null) {
-                      widget.onTapLogoutItem!();
-                    }
-                  },
-                ),
-              ),
+                  visible: authStore != null && authStore!.currentUser != null,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: TextButton.icon(
+                        style: TextButton.styleFrom(primary: Colors.black),
+                        onPressed: () {
+                          clearAuth(context);
+                          if (widget.onTapLogoutItem != null) {
+                            widget.onTapLogoutItem!();
+                          }
+                        },
+                        icon: Icon(Icons.logout),
+                        label: Text(AppLocalizations.of(context)!.exit)),
+                  )),
             ],
           ),
         ),

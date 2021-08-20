@@ -100,7 +100,6 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       setState(() {
         if (placemarks.length > 0) {
           var placemark = placemarks[0];
-          print("Placemark: ${placemark.toJson()}");
           _geolocationInputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
@@ -183,7 +182,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
 
   void _sendPost() {
     if (_processingVideoInBackgroundError) {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!
               .thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
@@ -275,7 +274,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
         _processingVideoInBackground = false;
         _processingVideoInBackgroundError = true;
         if (_readyToSendPost && this.mounted) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(AppLocalizations.of(context)!
                   .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain),
@@ -380,7 +379,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
           listener: (context, state) {
             if (state is ErrorCreatePostState) {
               _isLoading = false;
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                 ),
