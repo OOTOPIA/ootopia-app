@@ -10,6 +10,7 @@ import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -64,6 +65,7 @@ class _TimelinePageState extends State<TimelinePage>
   List<TimelinePost> _allPosts = [];
   late FlickMultiManager flickMultiManager;
   late StreamSubscription _sub;
+  late AuthStore authStore;
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
   DailyGoalStatsModel? dailyGoalStats;
@@ -229,6 +231,7 @@ class _TimelinePageState extends State<TimelinePage>
       if (loggedIn) {
         await this.userRepositoryImpl.getMyAccountDetails();
         user = await getCurrentUser();
+        authStore.checkUserIsLogged();
         print("LOGGED USER: " + user!.fullname!);
       }
       return loggedIn;
@@ -273,6 +276,7 @@ class _TimelinePageState extends State<TimelinePage>
   @override
   Widget build(BuildContext context) {
     timelineStore = Provider.of<TimelineStore>(context);
+    authStore = Provider.of<AuthStore>(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Theme.of(context).scaffoldBackgroundColor,

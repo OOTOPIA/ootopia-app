@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:crisp/crisp.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/app_config.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
@@ -36,31 +38,33 @@ class _ChatWithUsersScreenState extends State<ChatWithUsersScreen> {
 
     await getAppInfo();
 
-    crispMain = CrispMain(
-      websiteId: appConfig.crispWebsiteId,
-      locale: 'pt-br',
-    );
-
-    if (authStore.currentUser != null) {
-      crispMain.register(
-        user: CrispUser(
-          email: authStore.currentUser!.email!,
-          avatar: authStore.currentUser!.photoUrl,
-          nickname: authStore.currentUser!.fullname,
-        ),
+    Future.delayed(Duration(milliseconds: 300), () {
+      crispMain = CrispMain(
+        websiteId: appConfig.crispWebsiteId,
+        locale: 'pt-br',
       );
-    }
 
-    Map<String, String> sessionData = {};
+      if (authStore.currentUser != null) {
+        crispMain.register(
+          user: CrispUser(
+            email: authStore.currentUser!.email!,
+            avatar: authStore.currentUser!.photoUrl,
+            nickname: authStore.currentUser!.fullname,
+          ),
+        );
+      }
 
-    if (appVersion != null) {
-      sessionData['app_version'] = appVersion!;
-    }
+      Map<String, String> sessionData = {};
 
-    crispMain.setSessionData(sessionData);
+      if (appVersion != null) {
+        sessionData['app_version'] = appVersion!;
+      }
 
-    setState(() {
-      crispIsInitialized = true;
+      crispMain.setSessionData(sessionData);
+
+      setState(() {
+        crispIsInitialized = true;
+      });
     });
   }
 
@@ -75,6 +79,7 @@ class _ChatWithUsersScreenState extends State<ChatWithUsersScreen> {
     appConfig = AppConfig.of(context);
     return SafeArea(
       child: Scaffold(
+        appBar: appBar,
         body: !crispIsInitialized
             ? Center(
                 child: CircularProgressIndicator(),
@@ -91,4 +96,31 @@ class _ChatWithUsersScreenState extends State<ChatWithUsersScreen> {
       ),
     );
   }
+
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+      );
 }

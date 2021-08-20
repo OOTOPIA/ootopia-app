@@ -106,12 +106,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return AlertDialog(
+                title: Text(
+                  AppLocalizations.of(context)!.dialogTitleBeforeExiting,
+                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                        color: Colors.black87,
+                      ),
+                ),
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: <Widget>[
                       Text(
                           AppLocalizations.of(context)!
-                              .dialogTitleBeforeExiting,
+                              .dialogDescriptionBeforeExiting,
                           style: Theme.of(context).textTheme.bodyText2),
                     ],
                   ),
@@ -291,6 +297,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       );
       return;
     }
+
     if (authStore.currentUser!.registerPhase == 2) {
       _goToPage(2);
     } else {

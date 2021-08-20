@@ -50,6 +50,8 @@ class TabHistoryState extends State<TabHistory> {
 
   @override
   Widget build(BuildContext context) {
+    int totalEntries = 0;
+    int index = 0;
     switch (widget.action) {
       case "all":
         groupedTransfersByDate = widget.store.allGroupedTransfersByDate;
@@ -61,6 +63,9 @@ class TabHistoryState extends State<TabHistory> {
         groupedTransfersByDate = widget.store.sentGroupedTransfersByDate;
         break;
     }
+    totalEntries = (groupedTransfersByDate == null
+        ? 0
+        : groupedTransfersByDate!.entries.length);
     return Observer(
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
@@ -114,6 +119,7 @@ class TabHistoryState extends State<TabHistory> {
                       int lengthItemMapSumOfDayTransfer = 0;
                       sumFormated =
                           f.format(widget.store.mapSumDaysTransfer[e.key]);
+                      index++;
                       return Padding(
                         padding: EdgeInsets.only(
                           left: 24,
@@ -136,9 +142,11 @@ class TabHistoryState extends State<TabHistory> {
                             ),
                             Column(
                               children: e.value.map((_e) {
+                                index++;
+                                totalEntries++;
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                    bottom: 16,
+                                    bottom: index == totalEntries ? 120 : 16,
                                   ),
                                   child: CardInformationBalance(
                                     balanceOfTransactions:
