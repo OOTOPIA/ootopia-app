@@ -51,135 +51,271 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
-    return Drawer(
-        child: Column(
-      children: [
-        DrawerHeader(
-          child: Avatar(
-            photoUrl: authStore!.currentUser == null
-                ? null
-                : authStore!.currentUser!.photoUrl,
-            badges: authStore!.currentUser!.badges,
-            modal: "profile",
-          ),
-        ),
-        Text(
-          '${authStore!.currentUser!.fullname}',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.personalGoal,
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  ' 10m | ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Icon(FeatherIcons.trash2),
-                Text(
-                  '23',
-                  style: TextStyle(color: Color(0xff00A5FC)),
-                )
-              ],
-            ),
-          ),
-        ),
-        Card(
-          child: ListTile(
-            title: Text('${AppLocalizations.of(context)!.inviteYourFriends}'),
-            subtitle: Text(
-              '${AppLocalizations.of(context)!.earnOzzSignup}',
-              style: TextStyle(color: Colors.grey),
-            ),
-            leading: SvgPicture.asset(
-              'assets/icons/user-plus.svg',
-              color: Colors.black,
-            ),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {},
-          ),
-        ),
-        Card(
-          child: ListTile(
-            title: Text('OOz ${AppLocalizations.of(context)!.wallet}'),
-            subtitle: Text(
-              '${AppLocalizations.of(context)!.checkYourTransactions}',
-              style: TextStyle(color: Colors.grey),
-            ),
-            leading: Image.asset(
-              'assets/icons/ooz-coin-small.png',
-              color: Colors.black,
-              width: 40,
-            ),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {},
-          ),
-        ),
-        Card(
-          child: ListTile(
-            title: Text(
-                '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}'),
-            subtitle: Text(
-              '${AppLocalizations.of(context)!.sendYourFeedback}',
-              style: TextStyle(color: Colors.grey),
-            ),
-            leading: Image.asset(
-              'assets/icons/chat-small.png',
-              width: 35,
-            ),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {},
-          ),
-        ),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+    return authStore!.currentUser == null
+        ? Drawer(
+            child: Column(
             children: [
-              Container(
-                  padding: EdgeInsets.all(32),
-                  child: Column(
-                    children: [
-                      Text(
-                        "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!
-                            .madeWithLoveOnThisWonderfulPlanet,
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        'devmagic.com.br \n ootopia.org',
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  )),
-              Visibility(
-                  visible: authStore != null && authStore!.currentUser != null,
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: TextButton.icon(
-                        style: TextButton.styleFrom(primary: Colors.black),
-                        onPressed: () {
-                          clearAuth(context);
-                          if (widget.onTapLogoutItem != null) {
-                            widget.onTapLogoutItem!();
-                          }
-                        },
-                        icon: Icon(Icons.logout),
-                        label: Text(AppLocalizations.of(context)!.exit)),
-                  )),
+              DrawerHeader(
+                  child: ListTile(
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.person),
+                ),
+                title: Text('${AppLocalizations.of(context)!.login}'),
+                subtitle:
+                    Text('${AppLocalizations.of(context)!.enterToOotopia}'),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 23,
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    PageRoute.Page.loginScreen.route,
+                  );
+                },
+              )),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!
+                          .madeWithLoveOnThisWonderfulPlanet,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    Text(
+                      'devmagic.com.br \n ootopia.org',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
+              )
             ],
-          ),
-        ),
-      ],
-    ));
+          ))
+        : Visibility(
+            visible: authStore!.currentUser != null && authStore != null,
+            child: Drawer(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Column(
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                    ),
+                    padding: EdgeInsets.all(0),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              size: 15,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Avatar(
+                              photoUrl: authStore!.currentUser == null
+                                  ? null
+                                  : authStore!.currentUser!.photoUrl,
+                              badges: authStore!.currentUser!.badges,
+                              modal: "profile",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    '${authStore!.currentUser!.fullname}',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  Card(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 15, right: 15),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            '${AppLocalizations.of(context)!.personalGoal}:',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            '  ${authStore!.currentUser!.dailyLearningGoalInMinutes}m | ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Icon(FeatherIcons.userPlus, color: Color(0xff00A5FC)),
+                          Text(
+                            '${authStore!.currentUser!.badges!.length}',
+                            style: TextStyle(color: Color(0xff00A5FC)),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ))),
+                    child: ListTile(
+                      title: Text(
+                        '${AppLocalizations.of(context)!.inviteYourFriends}',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      subtitle: Text(
+                        '${AppLocalizations.of(context)!.earnOzzSignup}',
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                      leading: Container(
+                        padding: EdgeInsets.only(top: 12),
+                        child: Icon(FeatherIcons.userPlus, color: Colors.black),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ))),
+                    child: ListTile(
+                      title: Text(
+                        'OOz ${AppLocalizations.of(context)!.wallet}',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      subtitle: Text(
+                        '${AppLocalizations.of(context)!.checkYourTransactions}',
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                      leading: Container(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Image.asset(
+                          'assets/icons/ooz-coin-small.png',
+                          color: Colors.black,
+                          width: 24,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ))),
+                    child: ListTile(
+                      title: Text(
+                        '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      subtitle: Text(
+                        '${AppLocalizations.of(context)!.sendYourFeedback}',
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
+                      leading: Container(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Image.asset(
+                          'assets/icons/chat-small.png',
+                          width: 24,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.all(32),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .madeWithLoveOnThisWonderfulPlanet,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                ),
+                                Text(
+                                  'devmagic.com.br \n ootopia.org',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                )
+                              ],
+                            )),
+                        Visibility(
+                            visible: authStore != null &&
+                                authStore!.currentUser != null,
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                      primary: Colors.black),
+                                  onPressed: () {
+                                    clearAuth(context);
+                                    if (widget.onTapLogoutItem != null) {
+                                      widget.onTapLogoutItem!();
+                                    }
+                                  },
+                                  icon: Icon(Icons.logout),
+                                  label:
+                                      Text(AppLocalizations.of(context)!.exit)),
+                            )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          );
   }
 }
 
