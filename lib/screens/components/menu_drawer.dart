@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -12,10 +13,8 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 class MenuDrawer extends StatefulWidget {
-  Function? onTapProfileItem;
-  Function? onTapLogoutItem;
-  MenuDrawer({Key? key, this.onTapProfileItem, this.onTapLogoutItem})
-      : super(key: key);
+  final PageViewController goToPage;
+  MenuDrawer(this.goToPage);
   @override
   _MenuDrawerState createState() => _MenuDrawerState();
 }
@@ -56,24 +55,38 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
             child: Column(
             children: [
               DrawerHeader(
-                  child: ListTile(
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.person),
-                ),
-                title: Text('${AppLocalizations.of(context)!.login}'),
-                subtitle:
-                    Text('${AppLocalizations.of(context)!.enterToOotopia}'),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 23,
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    PageRoute.Page.loginScreen.route,
-                  );
-                },
-              )),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                          bottom: BorderSide(color: Colors.white, width: 0))),
+                  padding:
+                      EdgeInsets.only(bottom: 70, top: 10, left: 15, right: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1.0,
+                    ))),
+                    child: ListTile(
+                      leading: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.person),
+                      ),
+                      title: Text('${AppLocalizations.of(context)!.login}'),
+                      subtitle: Text(
+                          '${AppLocalizations.of(context)!.enterToOotopia}'),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.loginScreen.route,
+                        );
+                      },
+                    ),
+                  )),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -102,37 +115,44 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
               )
             ],
           ))
-        : Visibility(
-            visible: authStore!.currentUser != null && authStore != null,
-            child: Drawer(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                    ),
-                    padding: EdgeInsets.all(0),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.close,
-                              size: 15,
-                            ),
-                            onPressed: () {
+        : Drawer(
+            child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                  ),
+                  padding: EdgeInsets.all(0),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            size: 15,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: InkWell(
+                            onTap: () {
+                              widget.goToPage.controller.animateToPage(
+                                4,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
                               Navigator.of(context).pop();
                             },
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
                             child: Avatar(
                               photoUrl: authStore!.currentUser == null
                                   ? null
@@ -142,180 +162,184 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    '${authStore!.currentUser!.fullname}',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Card(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 15, right: 15),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '${AppLocalizations.of(context)!.personalGoal}:',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          Text(
-                            '  ${authStore!.currentUser!.dailyLearningGoalInMinutes}m | ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Icon(FeatherIcons.userPlus, color: Color(0xff00A5FC)),
-                          Text(
-                            '23',
-                            style: TextStyle(color: Color(0xff00A5FC)),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ))),
-                    child: ListTile(
-                      title: Text(
-                        '${AppLocalizations.of(context)!.inviteYourFriends}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      subtitle: Text(
-                        '${AppLocalizations.of(context)!.earnOzzSignup}',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                      leading: Container(
-                        padding: EdgeInsets.only(top: 12),
-                        child: Icon(FeatherIcons.userPlus, color: Colors.black),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                      ),
-                      onTap: () {},
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ))),
-                    child: ListTile(
-                      title: Text(
-                        'OOz ${AppLocalizations.of(context)!.wallet}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      subtitle: Text(
-                        '${AppLocalizations.of(context)!.checkYourTransactions}',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                      leading: Container(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Image.asset(
-                          'assets/icons/ooz-coin-small.png',
-                          color: Colors.black,
-                          width: 24,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                      ),
-                      onTap: () {},
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ))),
-                    child: ListTile(
-                      title: Text(
-                        '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      subtitle: Text(
-                        '${AppLocalizations.of(context)!.sendYourFeedback}',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                      leading: Container(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Image.asset(
-                          'assets/icons/chat-small.png',
-                          width: 24,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                      ),
-                      onTap: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                ),
+                Text(
+                  '${authStore!.currentUser!.fullname}',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Card(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 15, right: 15),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
-                            padding: EdgeInsets.all(32),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .madeWithLoveOnThisWonderfulPlanet,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                ),
-                                Text(
-                                  'devmagic.com.br \n ootopia.org',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                )
-                              ],
-                            )),
-                        Visibility(
-                            visible: authStore != null &&
-                                authStore!.currentUser != null,
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: TextButton.icon(
-                                  style: TextButton.styleFrom(
-                                      primary: Colors.black),
-                                  onPressed: () {
-                                    clearAuth(context);
-                                    if (widget.onTapLogoutItem != null) {
-                                      widget.onTapLogoutItem!();
-                                    }
-                                  },
-                                  icon: Icon(Icons.logout),
-                                  label:
-                                      Text(AppLocalizations.of(context)!.exit)),
-                            )),
+                        Text(
+                          '${AppLocalizations.of(context)!.personalGoal}:',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          '  ${authStore!.currentUser!.dailyLearningGoalInMinutes}m | ',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/Icon-metro-trophy.svg',
+                          color: Color(0xff00A5FC),
+                        ),
+                        Text(
+                          '23',
+                          style: TextStyle(color: Color(0xff00A5FC)),
+                        )
                       ],
                     ),
                   ),
-                ],
-              ),
-            )),
-          );
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 1.0,
+                  ))),
+                  child: ListTile(
+                    title: Text(
+                      '${AppLocalizations.of(context)!.inviteYourFriends}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    subtitle: Text(
+                      '${AppLocalizations.of(context)!.earnOzzSignup}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                    leading: Container(
+                      padding: EdgeInsets.only(top: 12),
+                      child: Icon(FeatherIcons.userPlus, color: Colors.black),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 1.0,
+                  ))),
+                  child: ListTile(
+                    title: Text(
+                      'OOz ${AppLocalizations.of(context)!.wallet}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    subtitle: Text(
+                      '${AppLocalizations.of(context)!.checkYourTransactions}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                    leading: Container(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Image.asset(
+                        'assets/icons/ooz-coin-small.png',
+                        color: Colors.black,
+                        width: 24,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    subtitle: Text(
+                      '${AppLocalizations.of(context)!.sendYourFeedback}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                    leading: Container(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Image.asset(
+                        'assets/icons/chat-small.png',
+                        width: 24,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                    ),
+                    onTap: () {},
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.all(32),
+                          child: Column(
+                            children: [
+                              Text(
+                                "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
+                                textAlign: TextAlign.center,
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!
+                                    .madeWithLoveOnThisWonderfulPlanet,
+                                textAlign: TextAlign.center,
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                              Text(
+                                'devmagic.com.br \n ootopia.org',
+                                textAlign: TextAlign.center,
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
+                              )
+                            ],
+                          )),
+                      Visibility(
+                          visible: authStore != null &&
+                              authStore!.currentUser != null,
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: TextButton.icon(
+                                style:
+                                    TextButton.styleFrom(primary: Colors.black),
+                                onPressed: () {
+                                  setState(() {
+                                    clearAuth(context);
+                                  });
+                                },
+                                icon: Icon(Icons.logout),
+                                label:
+                                    Text(AppLocalizations.of(context)!.exit)),
+                          )),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ));
   }
 }
 

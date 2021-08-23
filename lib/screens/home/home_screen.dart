@@ -153,15 +153,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           builder: (_) => Scaffold(
             key: _key,
             appBar: appBar,
-            drawer: MenuDrawer(
-              onTapProfileItem: () {
-                _openProfile();
-              },
-              onTapLogoutItem: () {
-                homeStore?.stopDailyGoalTimer();
-                _goToPage(0);
-              },
-            ),
+            drawer: MenuDrawer(PageViewController.instance),
             body: Stack(
               children: [
                 PageView.builder(
@@ -276,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            _openProfile();
+            openProfile();
           }
           break;
         default:
@@ -284,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
-  _openProfile() {
+  openProfile() {
     if (authStore.currentUser == null) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.loginScreen.route,
