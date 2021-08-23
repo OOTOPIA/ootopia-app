@@ -42,7 +42,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   }
 
   clearAuth(context) async {
-    authStore!.logout();
+    await authStore!.logout();
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
     Navigator.of(context).pushNamedAndRemoveUntil(
