@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -30,6 +31,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
 
   clearAuth(context) async {
     authStore!.logout();
+    ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
     Navigator.of(context).pushNamedAndRemoveUntil(
       PageRoute.Page.homeScreen.route,
