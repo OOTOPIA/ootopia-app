@@ -153,7 +153,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           builder: (_) => Scaffold(
             key: _key,
             appBar: appBar,
-            drawer: MenuDrawer(PageViewController.instance),
+            drawer: MenuDrawer(
+                onTapProfileItem: () {
+                  openProfile();
+                },
+                onTapLogoutItem: () {
+                  homeStore?.stopDailyGoalTimer();
+                  _goToPage(0);
+                },
+                goToPage: PageViewController.instance),
             body: Stack(
               children: [
                 PageView.builder(
