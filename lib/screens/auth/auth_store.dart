@@ -17,7 +17,7 @@ abstract class AuthStoreBase with Store {
   ObservableFuture<User?>? _currentUser;
 
   @action
-  Future<User?> checkUserIsLogged() =>
+  Future<User?> checkUserIsLogged() async =>
       this._currentUser = ObservableFuture(storage.getCurrentUser());
 
   @computed

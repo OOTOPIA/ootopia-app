@@ -31,14 +31,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     this.getAppInfo();
   }
 
-  clearAuth(context) async {
-    authStore!.logout();
-    this.trackingEvents.trackingLoggedOut();
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      PageRoute.Page.homeScreen.route,
-      ModalRoute.withName('/'),
-    );
-  }
+  clearAuth(context) async {}
 
   Future<void> getAppInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
@@ -325,10 +318,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                             child: TextButton.icon(
                                 style:
                                     TextButton.styleFrom(primary: Colors.black),
-                                onPressed: () {
-                                  setState(() {
-                                    clearAuth(context);
-                                  });
+                                onPressed: () async {
+                                  await authStore!.logout();
+                                  this.trackingEvents.trackingLoggedOut();
+                                  Navigator.of(context).pop();
+                                  // Navigator.of(context).pushNamedAndRemoveUntil(
+                                  //   PageRoute.Page.homeScreen.route,
+                                  //   ModalRoute.withName('/'),
+                                  // );
                                 },
                                 icon: Icon(Icons.logout),
                                 label:
