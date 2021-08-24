@@ -17,7 +17,12 @@ class MenuDrawer extends StatefulWidget {
   final PageViewController? goToPage;
   final Function? onTapProfileItem;
   final Function? onTapLogoutItem;
-  MenuDrawer({this.onTapProfileItem, this.onTapLogoutItem, this.goToPage});
+  final Function? onTapWalletItem;
+  MenuDrawer(
+      {this.onTapProfileItem,
+      this.onTapLogoutItem,
+      this.goToPage,
+      this.onTapWalletItem});
   @override
   _MenuDrawerState createState() => _MenuDrawerState();
 }
@@ -64,7 +69,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
+                border: Border.all(color: Colors.white, width: 0),
+                color: Colors.white,
               ),
               padding: EdgeInsets.all(0),
               child: Stack(
@@ -88,12 +94,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       padding: const EdgeInsets.all(10.0),
                       child: InkWell(
                         onTap: () {
-                          widget.goToPage!.controller.animateToPage(
-                            4,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.linear,
-                          );
-                          Navigator.of(context).pop();
+                          if (widget.onTapProfileItem != null) {
+                            widget.onTapProfileItem!();
+                          }
                         },
                         child: Avatar(
                           photoUrl: authStore!.currentUser == null
@@ -113,6 +116,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
               child: Container(
                 margin: EdgeInsets.only(left: 15, right: 15),
                 padding:
@@ -195,7 +202,11 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   Icons.arrow_forward_ios,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () {
+                  if (widget.onTapWalletItem != null) {
+                    widget.onTapWalletItem!();
+                  }
+                },
               ),
             ),
             Container(
@@ -239,7 +250,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       child: Column(
                         children: [
                           Text(
-                            "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
+                            "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
@@ -250,7 +261,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                           Text(
-                            'devmagic.com.br \n ootopia.org',
+                            '\ndevmagic.com.br \n ootopia.org',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           )
@@ -332,7 +343,7 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
+                "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
@@ -342,7 +353,7 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               Text(
-                'devmagic.com.br \n ootopia.org',
+                '\ndevmagic.com.br \n ootopia.org',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),

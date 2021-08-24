@@ -161,6 +161,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 homeStore?.stopDailyGoalTimer();
                 _goToPage(0);
               },
+              onTapWalletItem: () {
+                _goToPage(1);
+              },
             ),
             body: Stack(
               children: [
