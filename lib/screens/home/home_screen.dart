@@ -155,11 +155,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             appBar: appBar,
             drawer: MenuDrawer(
               onTapProfileItem: () {
-                _openProfile();
+                openProfile();
               },
               onTapLogoutItem: () {
                 homeStore?.stopDailyGoalTimer();
                 _goToPage(0);
+              },
+              onTapWalletItem: () {
+                _goToPage(1);
               },
             ),
             body: Stack(
@@ -276,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            _openProfile();
+            openProfile();
           }
           break;
         default:
@@ -284,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
-  _openProfile() {
+  openProfile() {
     if (authStore.currentUser == null) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.loginScreen.route,
