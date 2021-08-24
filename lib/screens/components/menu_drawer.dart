@@ -171,7 +171,11 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   Icons.arrow_forward_ios,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    PageRoute.Page.invitationScreen.route,
+                  );
+                },
               ),
             ),
             Container(
