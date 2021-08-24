@@ -155,17 +155,23 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 width: 1.0,
               ))),
               child: ListTile(
-                title: Text(
-                  '${AppLocalizations.of(context)!.inviteYourFriends}',
-                  style: TextStyle(fontSize: 12),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${AppLocalizations.of(context)!.inviteYourFriends}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context)!.earnOzzSignup}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
                 ),
-                subtitle: Text(
-                  '${AppLocalizations.of(context)!.earnOzzSignup}',
-                  style: TextStyle(color: Colors.grey, fontSize: 10),
-                ),
-                leading: Container(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Icon(FeatherIcons.userPlus, color: Colors.black),
+                leading: Icon(
+                  FeatherIcons.userPlus,
+                  color: Colors.black,
+                  size: 24,
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
@@ -186,21 +192,23 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 width: 1.0,
               ))),
               child: ListTile(
-                title: Text(
-                  'OOz ${AppLocalizations.of(context)!.wallet}',
-                  style: TextStyle(fontSize: 12),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'OOz ${AppLocalizations.of(context)!.wallet}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context)!.checkYourTransactions}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
                 ),
-                subtitle: Text(
-                  '${AppLocalizations.of(context)!.checkYourTransactions}',
-                  style: TextStyle(color: Colors.grey, fontSize: 10),
-                ),
-                leading: Container(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Image.asset(
-                    'assets/icons/ooz-coin-small.png',
-                    color: Colors.black,
-                    width: 24,
-                  ),
+                leading: Image.asset(
+                  'assets/icons/ooz-coin-small.png',
+                  color: Colors.black,
+                  width: 24,
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
@@ -223,20 +231,22 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 ),
               ),
               child: ListTile(
-                title: Text(
-                  '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
-                  style: TextStyle(fontSize: 12),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context)!.sendYourFeedback}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
                 ),
-                subtitle: Text(
-                  '${AppLocalizations.of(context)!.sendYourFeedback}',
-                  style: TextStyle(color: Colors.grey, fontSize: 10),
-                ),
-                leading: Container(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Image.asset(
-                    'assets/icons/chat-small.png',
-                    width: 24,
-                  ),
+                leading: Image.asset(
+                  'assets/icons/chat-small.png',
+                  width: 24,
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
