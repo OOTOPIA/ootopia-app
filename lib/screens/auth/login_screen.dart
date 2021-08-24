@@ -98,12 +98,12 @@ class _LoginPageState extends State<LoginPage> {
         return LoadingOverlay(
           isLoading: isLoading,
           child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/login_bg.jpg"),
-                fit: BoxFit.cover,
-              ),
-            ),
+            // decoration: BoxDecoration(
+            //   image: DecorationImage(
+            //     image: AssetImage("assets/images/login_bg.jpg"),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             child: Center(
               child: SingleChildScrollView(
                 padding:
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
-                                  'assets/images/white_logo.png',
+                                  'assets/images/logo.png',
                                   height:
                                       GlobalConstants.of(context).logoHeight,
                                 ),
@@ -137,14 +137,18 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .helloWIfNotNowThenWhenorld,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(color: Colors.white),
+                                Stack(
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .liveInOotopiaNowMessage,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(color: Color(0xFF003694)),
+                                    )
+                                  ],
                                 ),
                               ],
                             ),
@@ -159,12 +163,12 @@ class _LoginPageState extends State<LoginPage> {
                                     keyboardType: TextInputType.emailAddress,
                                     autofocus: true,
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!
-                                                .email),
+                                                .email).copyWith(prefixIcon: Icon(Icons.email_outlined, color: Colors.grey,)),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return AppLocalizations.of(context)!
@@ -181,19 +185,20 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _passwordController,
                                     obscureText: !_showPassword,
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                     ),
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!
                                                 .password)
                                         .copyWith(
+                                          prefixIcon: Icon(Icons.lock),
                                           suffixIcon: GestureDetector(
                                             child: Icon(
                                               _showPassword == false
                                                   ? Icons.visibility_off
                                                   : Icons.visibility,
-                                              color: Colors.white,
+                                              color: Colors.black,
                                             ),
                                             onTap: () {
                                               setState(() {
@@ -215,12 +220,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingLarge,
+                                top: 8,
                                 bottom:
                                     GlobalConstants.of(context).spacingLarge,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -232,10 +237,10 @@ class _LoginPageState extends State<LoginPage> {
                                           .iForgotMyPassword,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.underline,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -260,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -269,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _submit();
                               }
                             },
-                            color: Colors.white,
+                            color: Color(0xFF003694),
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -283,6 +288,24 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
                           ),
+                          Container(
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            height: GlobalConstants.of(context).spacingNormal,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.dontHaveAnAccountYet,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(color: Color(0xFF003694)),
+                          ),
+                                                    SizedBox(
+                            height: GlobalConstants.of(context).spacingNormal,
+                          ),
                           FlatButton(
                             child: Padding(
                               padding: EdgeInsets.all(
@@ -293,7 +316,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Color(0xFF003694),
                                 ),
                               ),
                             ),
@@ -316,8 +339,8 @@ class _LoginPageState extends State<LoginPage> {
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Colors.white,
-                                width: 2,
+                                color: Color(0xFF003694),
+                                width: 1,
                                 style: BorderStyle.solid,
                               ),
                               borderRadius: BorderRadius.circular(50),

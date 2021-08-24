@@ -21,19 +21,19 @@ class GlobalConstants extends InheritedWidget {
     return InputDecoration(
       counterText: "",
       labelText: labelText,
-      labelStyle: TextStyle(color: Colors.white),
+      labelStyle: TextStyle(color: Colors.black54),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black54, width: 1.5),
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white, width: 1.5),
-        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: Colors.black54, width: 1.5),
+        borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white, width: 1.5),
-        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: Colors.black54, width: 1.5),
+        borderRadius: BorderRadius.circular(8),
       ),
     );
   }
