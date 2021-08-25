@@ -79,6 +79,7 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   json_annotation: ^4.0.1
   crisp: ^0.1.8
+  social_share: ^2.1.1
 
 dev_dependencies:
   flutter_test:

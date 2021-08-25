@@ -277,5 +277,6 @@
     "welcomeInvitationCode":"CÓDIGO DO CONVITE DE BEM-VINDO",
     "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos que criam um impacto positivo e ajudam a regenerar a Terra. Assim, eles podem se registrar como Semeadores.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba 25,00 OOz para cada recém-chegado. Seu amigo receberá 15,00 OOz.",
- "pictureBySeattleTilth":"Foto de Seattle Tilth"   
+    "pictureBySeattleTilth":"Foto de Seattle Tilth",
+    "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA Experimente o movimento que está regenerando o planeta Terra! Baixe o aplicativo e registre-se com este código: %USER_CODE% Você também receberá 15,00 OOz de crédito. AO VIVO OOTOPIA AGORA!"
 }

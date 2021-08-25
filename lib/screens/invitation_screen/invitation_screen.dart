@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
+import 'package:social_share/social_share.dart';
 
 class InvitationScreen extends StatefulWidget {
   const InvitationScreen({Key? key}) : super(key: key);
@@ -168,7 +169,13 @@ class _InvitationScreenState extends State<InvitationScreen> {
                       Column(
                         children: [
                           InkWell(
-                            onTap: () async {},
+                            onTap: () async {
+                              await SocialShare.shareOptions(
+                                AppLocalizations.of(context)!
+                                    .joinToOOTOPIA
+                                    .replaceAll('%USER_CODE%', 'teste'),
+                              );
+                            },
                             child: Chip(
                               label: Text(
                                 'ADCE963',
