@@ -129,28 +129,41 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: GlobalConstants.of(context)
-                                      .spacingNormal),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .liveInOotopiaNowMessage,
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1!
-                                          .copyWith(color: Color(0xFF003694)),
-                                    )
-                                  ],
-                                ),
-                              ],
+                            Center(
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    width: 225,
+                                    height: 45,
+                                  ),
+                                  Positioned(
+                                    bottom: 4,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 25),
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .liveInOotopiaNowMessage,
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1!
+                                            .copyWith(color: Color(0xFF003694)),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        child: Image(
+                                          image: AssetImage(
+                                              "assets/images/butterfly.png"),
+                                        ),
+                                      ))
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
@@ -167,8 +180,12 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
-                                            AppLocalizations.of(context)!
-                                                .email).copyWith(prefixIcon: Icon(Icons.email_outlined, color: Colors.grey,)),
+                                            AppLocalizations.of(context)!.email)
+                                        .copyWith(
+                                            prefixIcon: Icon(
+                                          Icons.email_outlined,
+                                          color: Colors.grey,
+                                        )),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return AppLocalizations.of(context)!
@@ -179,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .spacingMedium,
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
@@ -286,14 +303,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           SizedBox(
-                            height: GlobalConstants.of(context).spacingNormal,
+                            height: GlobalConstants.of(context).spacingMedium,
                           ),
                           Container(
                             height: 1,
                             color: Colors.grey,
                           ),
                           SizedBox(
-                            height: GlobalConstants.of(context).spacingNormal,
+                            height: GlobalConstants.of(context).spacingMedium,
                           ),
                           Text(
                             AppLocalizations.of(context)!.dontHaveAnAccountYet,
@@ -303,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
                                 .subtitle2!
                                 .copyWith(color: Color(0xFF003694)),
                           ),
-                                                    SizedBox(
+                          SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
                           ),
                           FlatButton(

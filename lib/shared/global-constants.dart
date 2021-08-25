@@ -24,15 +24,15 @@ class GlobalConstants extends InheritedWidget {
       labelStyle: TextStyle(color: Colors.black54),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black54, width: 1.5),
+        borderSide: BorderSide(color: Color(0xFF707070), width: 1.5),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black54, width: 1.5),
+        borderSide: BorderSide(color: Color(0xFF707070), width: 1.5),
         borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black54, width: 1.5),
+        borderSide: BorderSide(color: Color(0xFF707070), width: 1.5),
         borderRadius: BorderRadius.circular(8),
       ),
     );

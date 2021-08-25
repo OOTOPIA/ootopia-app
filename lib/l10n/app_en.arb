@@ -16,6 +16,8 @@
     "login": "Login",
     "createAccount": "Create account",
     "dontHaveAnAccountYet": "Don't have an account yet?",
+    "forgotMyPass": "Forgot password?",
+    "recoverPassItsAllRight": "It's all right",
 
 
     "regenerationGame": "Regeneration game",
@@ -136,7 +138,7 @@
     "ourPledgeForTransparencyAndHighEthicalStandards": "our pledge for transparency and high ethical standards.",
     
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Sent! \r\n\r\nIf this is your email, a link should be in your inbox so you can update your password.",
-    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recover password\r\n\r\nPlease enter your email to start the password recovery process",
+    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Just enter the email with which you created your \n account and then you will receive a message to \n create a new password.",
     "pleaseEnterYourEmail": "Please enter your email",
     "changePassword": "Change Password",
     "enterNewPassword": "Enter new password",
