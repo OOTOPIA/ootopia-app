@@ -121,119 +121,115 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Card(
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${AppLocalizations.of(context)!.personalGoal}:',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        '${authStore!.currentUser!.dailyLearningGoalInMinutes}m',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text('|'),
-                      Image.asset(
-                        'assets/icons/Icon-metro-trophy.png',
-                      ),
-                      Text(
-                        '23',
-                        style: TextStyle(
-                            color: Color(0xff00A5FC),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14),
-                      )
-                    ],
-                  ),
+            Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${AppLocalizations.of(context)!.personalGoal}:',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    Text(
+                      '${authStore!.currentUser!.dailyLearningGoalInMinutes}m',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text('|'),
+                    Image.asset(
+                      'assets/icons/Icon-metro-trophy.png',
+                    ),
+                    Text(
+                      '23',
+                      style: TextStyle(
+                          color: Color(0xff00A5FC),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
+                    )
+                  ],
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 1.0,
-                ))),
-                child: ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${AppLocalizations.of(context)!.inviteYourFriends}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Text(
-                        '${AppLocalizations.of(context)!.earnOzzSignup}',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                    ],
-                  ),
-                  leading: Icon(
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                color: Colors.grey.shade300,
+                width: 1.0,
+              ))),
+              child: ListTile(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${AppLocalizations.of(context)!.inviteYourFriends}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context)!.earnOzzSignup}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
+                ),
+                leading: Padding(
+                  padding: MediaQuery.of(context).size.width > 300
+                      ? const EdgeInsets.only(bottom: 3.0, left: 4)
+                      : EdgeInsets.all(0),
+                  child: Icon(
                     FeatherIcons.userPlus,
                     color: Colors.black,
                     size: 24,
                   ),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                  onTap: () {},
                 ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                ),
+                onTap: () {},
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 1.0,
-                ))),
-                child: ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'OOz ${AppLocalizations.of(context)!.wallet}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Text(
-                        '${AppLocalizations.of(context)!.checkYourTransactions}',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                    ],
-                  ),
-                  leading: Image.asset(
-                    'assets/icons/ooz-coin-small.png',
-                    color: Colors.black,
-                    width: 24,
-                  ),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                  onTap: () {
-                    if (widget.onTapWalletItem != null) {
-                      widget.onTapWalletItem!();
-                    }
-                    Navigator.of(context).pop();
-                  },
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                color: Colors.grey.shade300,
+                width: 1.0,
+              ))),
+              child: ListTile(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'OOz ${AppLocalizations.of(context)!.wallet}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context)!.checkYourTransactions}',
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
                 ),
+                leading: Image.asset(
+                  'assets/icons/ooz-coin-small.png',
+                  color: Colors.black,
+                  width: 24,
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                ),
+                onTap: () {
+                  if (widget.onTapWalletItem != null) {
+                    widget.onTapWalletItem!();
+                  }
+                  Navigator.of(context).pop();
+                },
               ),
             ),
             Container(
