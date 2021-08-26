@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
 import 'package:social_share/social_share.dart';
@@ -16,7 +17,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
   @override
   Widget build(BuildContext context) {
     AuthStore authStore = Provider.of<AuthStore>(context);
-
+    InvitationStore invitationStore = Provider.of<InvitationStore>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -133,6 +134,9 @@ class _InvitationScreenState extends State<InvitationScreen> {
                                   children: [
                                     InkWell(
                                       onTap: () async {
+                                        var teste =
+                                            await invitationStore.getPostById();
+                                        print(teste);
                                         await SocialShare.shareOptions(
                                           AppLocalizations.of(context)!
                                               .joinToOOTOPIA
