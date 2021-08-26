@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
+import 'package:ootopia_app/screens/invitation_screen/components/default_invatition_code.dart';
+import 'package:ootopia_app/screens/invitation_screen/components/sower_invitation_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
@@ -16,7 +18,6 @@ class InvitationScreen extends StatefulWidget {
 class _InvitationScreenState extends State<InvitationScreen> {
   @override
   Widget build(BuildContext context) {
-    AuthStore authStore = Provider.of<AuthStore>(context);
     InvitationStore invitationStore = Provider.of<InvitationStore>(context);
     return Scaffold(
       appBar: AppBar(
@@ -94,152 +95,28 @@ class _InvitationScreenState extends State<InvitationScreen> {
                 SizedBox(
                   height: 24,
                 ),
-                authStore.currentUser!.badges!.isNotEmpty
-                    ? Column(
-                        children: [
-                          Divider(
-                            thickness: 2,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 4,
-                                child: ListTile(
-                                  title: Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .sowerInvitationCode,
-                                      style: TextStyle(
-                                        color: Color(0xff018F9C),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    AppLocalizations.of(context)!
-                                        .sendSowerInvitationCode,
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                flex: 2,
-                                child: Column(
+                Container(
+                  height: 300,
+                  child: FutureBuilder<List<InvitationCodeModel>?>(
+                      future: invitationStore.getCodes(),
+                      builder: (context, snapshot) {
+                        return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              if (snapshot.data![index].type == 'sower') {
+                                return Column(
                                   children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        var teste =
-                                            await invitationStore.getPostById();
-                                        print(teste);
-                                        await SocialShare.shareOptions(
-                                          AppLocalizations.of(context)!
-                                              .joinToOOTOPIA
-                                              .replaceAll(
-                                                  '%USER_CODE%', 'ADCE963'),
-                                        );
-                                      },
-                                      child: Chip(
-                                        label: Text(
-                                          'ADCE963',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
-                                        ),
-                                        backgroundColor: Color(0xff018F9C),
-                                        padding: EdgeInsets.only(
-                                            left: 10, right: 10),
-                                      ),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .shareThisCode,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                          color: Color(0xff018F9C),
-                                          fontSize: 12),
-                                    )
+                                    SowerInvitationCode(sowerCode: ''),
+                                    DefaultInvitationCode(defaultCode: '1')
                                   ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    : Container(),
-                SizedBox(
-                  height: 24,
-                ),
-                Divider(
-                  thickness: 2,
-                  color: Colors.grey,
+                                );
+                              }
+                              return DefaultInvitationCode(defaultCode: '1');
+                            });
+                      }),
                 ),
                 SizedBox(
                   height: 24,
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      flex: 4,
-                      fit: FlexFit.tight,
-                      child: ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            AppLocalizations.of(context)!.welcomeInvitationCode,
-                            style: TextStyle(
-                              color: Color(0xff003694),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        subtitle: Text(
-                          AppLocalizations.of(context)!
-                              .sendWelcomeInvitationCode,
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              await SocialShare.shareOptions(
-                                AppLocalizations.of(context)!
-                                    .joinToOOTOPIA
-                                    .replaceAll('%USER_CODE%', 'ADCE963'),
-                              );
-                            },
-                            child: Chip(
-                              label: Text(
-                                'ADCE963',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
-                              ),
-                              backgroundColor: Color(0xff003694),
-                              padding: EdgeInsets.only(left: 10, right: 10),
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.shareThisCode,
-                            softWrap: true,
-                            style: TextStyle(
-                                color: Color(0xff003694), fontSize: 12),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
                 Align(
                   alignment: Alignment.bottomRight,

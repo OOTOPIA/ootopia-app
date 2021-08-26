@@ -17,7 +17,7 @@ abstract class UserRepository {
   Future<User> updateUser(User user, List<String> tagsIds);
   Future recordTimeUserUsedApp(int timeInMilliseconds);
   Future<DailyGoalStatsModel?> getDailyGoalStats();
-  Future<InvitationCodeModel?> getCode();
+  Future<List<InvitationCodeModel>?> getCodes();
 }
 
 const Map<String, String> API_HEADERS = {
@@ -183,7 +183,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   @override
-  Future<InvitationCodeModel?> getCode() async {
+  Future<List<InvitationCodeModel>?> getCodes() async {
     try {
       bool loggedIn = await getUserIsLoggedIn();
       if (!loggedIn) {
@@ -194,13 +194,12 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       Response res = await ApiClient.api().get(
         "users/${user.id}/invitation-code",
       );
-      print(user.id);
-      print(res.statusCode);
       if (res.statusCode != 200) {
         throw Exception(res.data);
       }
-      print(res.data);
-      var result = InvitationCodeModel.fromJson(res.data);
+      var result = (res.data as List)
+          .map((e) => InvitationCodeModel.fromJson(e))
+          .toList();
       return result;
     } catch (e) {
       throw Exception('Failed to get daily goal stats ' + e.toString());

@@ -10,7 +10,7 @@ abstract class InvitationStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
   @action
-  Future<InvitationCodeModel?> getPostById() async {
-    return await this.userRepositoryImpl.getCode();
+  Future<List<InvitationCodeModel>?> getCodes() async {
+    return await this.userRepositoryImpl.getCodes();
   }
 }
