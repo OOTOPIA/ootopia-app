@@ -53,10 +53,26 @@ class _InvitationScreenState extends State<InvitationScreen> {
           Stack(
             children: [
               Image.asset('assets/images/kids.png'),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0, right: 21),
+                  child: RotatedBox(
+                    quarterTurns: -1,
+                    child: RichText(
+                      text: TextSpan(
+                        text:
+                            AppLocalizations.of(context)!.pictureBySeattleTilth,
+                        style: TextStyle(color: Colors.black87, fontSize: 10),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             child: Column(
               children: [
                 Text(
@@ -90,7 +106,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
                           Row(
                             children: [
                               Flexible(
-                                flex: 3,
+                                flex: 4,
                                 child: ListTile(
                                   title: Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
@@ -104,39 +120,48 @@ class _InvitationScreenState extends State<InvitationScreen> {
                                       ),
                                     ),
                                   ),
-                                  subtitle: Text(AppLocalizations.of(context)!
-                                      .sendSowerInvitationCode),
+                                  subtitle: Text(
+                                    AppLocalizations.of(context)!
+                                        .sendSowerInvitationCode,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      await SocialShare.shareOptions(
-                                        AppLocalizations.of(context)!
-                                            .joinToOOTOPIA
-                                            .replaceAll(
-                                                '%USER_CODE%', 'ADCE963'),
-                                      );
-                                    },
-                                    child: Chip(
-                                      label: Text(
-                                        'ADCE963',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
+                              Flexible(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        await SocialShare.shareOptions(
+                                          AppLocalizations.of(context)!
+                                              .joinToOOTOPIA
+                                              .replaceAll(
+                                                  '%USER_CODE%', 'ADCE963'),
+                                        );
+                                      },
+                                      child: Chip(
+                                        label: Text(
+                                          'ADCE963',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                        backgroundColor: Color(0xff018F9C),
+                                        padding: EdgeInsets.only(
+                                            left: 10, right: 10),
                                       ),
-                                      backgroundColor: Color(0xff018F9C),
-                                      padding:
-                                          EdgeInsets.only(left: 25, right: 25),
                                     ),
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!.shareThisCode,
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Color(0xff018F9C), fontSize: 12),
-                                  )
-                                ],
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .shareThisCode,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                          color: Color(0xff018F9C),
+                                          fontSize: 12),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -157,6 +182,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
                   children: [
                     Flexible(
                       flex: 4,
+                      fit: FlexFit.tight,
                       child: ListTile(
                         title: Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
@@ -169,37 +195,45 @@ class _InvitationScreenState extends State<InvitationScreen> {
                             ),
                           ),
                         ),
-                        subtitle: Text(AppLocalizations.of(context)!
-                            .sendWelcomeInvitationCode),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            await SocialShare.shareOptions(
-                              AppLocalizations.of(context)!
-                                  .joinToOOTOPIA
-                                  .replaceAll('%USER_CODE%', 'ADCE963'),
-                            );
-                          },
-                          child: Chip(
-                            label: Text(
-                              'ADCE963',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                            backgroundColor: Color(0xff003694),
-                            padding: EdgeInsets.only(left: 25, right: 25),
+                        subtitle: Text(
+                          AppLocalizations.of(context)!
+                              .sendWelcomeInvitationCode,
+                          style: TextStyle(
+                            fontSize: 14,
                           ),
                         ),
-                        Text(
-                          AppLocalizations.of(context)!.shareThisCode,
-                          softWrap: true,
-                          style:
-                              TextStyle(color: Color(0xff003694), fontSize: 12),
-                        )
-                      ],
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              await SocialShare.shareOptions(
+                                AppLocalizations.of(context)!
+                                    .joinToOOTOPIA
+                                    .replaceAll('%USER_CODE%', 'ADCE963'),
+                              );
+                            },
+                            child: Chip(
+                              label: Text(
+                                'ADCE963',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                              backgroundColor: Color(0xff003694),
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.shareThisCode,
+                            softWrap: true,
+                            style: TextStyle(
+                                color: Color(0xff003694), fontSize: 12),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
