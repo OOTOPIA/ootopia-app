@@ -367,28 +367,32 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
               ),
             )),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                AppLocalizations.of(context)!.madeWithLoveOnThisWonderfulPlanet,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                '\ndevmagic.com.br \n ootopia.org',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              SizedBox(
-                height: 20,
-              )
-            ],
+          child: Container(
+            padding: EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  AppLocalizations.of(context)!
+                      .madeWithLoveOnThisWonderfulPlanet,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  '\ndevmagic.com.br \n ootopia.org',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ),
         )
       ],
