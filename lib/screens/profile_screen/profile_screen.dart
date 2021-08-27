@@ -977,8 +977,8 @@ class GridPosts extends StatelessWidget {
       required this.userId,
       required this.getPostCallback});
 
-  _goToTimelinePost(posts, postSelected) async {
-    await PageViewController.instance.addPage(TimelineScreenProfileScreen(
+  _goToTimelinePost(posts, postSelected) {
+    PageViewController.instance.addPage(TimelineScreenProfileScreen(
       {
         "userId": userId,
         "posts": posts,

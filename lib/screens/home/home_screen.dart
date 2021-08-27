@@ -50,14 +50,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
 
     PageViewController.instance.onClickBack = () {
-      print(
-          "index home screen ${PageViewController.instance.pageHistoryTabSelected[PageViewController.instance.pageHistoryTabSelected.length - 1]}");
-      print(
-          "index home list ${PageViewController.instance.pageHistoryTabSelected}");
-
       homeStore?.setCurrentPageWidget(PageViewController.instance.pages[
           PageViewController.instance.pageHistoryTabSelected[
               PageViewController.instance.pageHistoryTabSelected.length - 1]]);
+    };
+
+    PageViewController.instance.onAddPage = () {
+      setState(() {});
     };
 
     Future.delayed(Duration(milliseconds: 1000), () {
@@ -242,14 +241,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return;
     }
 
-    homeStore?.setCurrentPageWidget(PageViewController.instance.pages[index]);
-
     setState(() {
       switch (index) {
         case PageViewController.TAB_INDEX_TIMELINE:
           _goToPage(PageViewController.TAB_INDEX_TIMELINE);
-
           PageViewController.instance.resetPages();
+          homeStore
+              ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
           break;
 
         case PageViewController.TAB_INDEX_LEARNING_TRACKS:
@@ -258,6 +256,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           } else {
             _goToPage(PageViewController.TAB_INDEX_LEARNING_TRACKS);
           }
+          homeStore
+              ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
 
           break;
         case PageViewController.TAB_INDEX_CAMERA:
@@ -292,6 +292,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             } else {
               _goToPage(PageViewController.TAB_INDEX_WALLET);
             }
+            homeStore?.setCurrentPageWidget(
+                PageViewController.instance.pages[index]);
           }
           break;
         case PageViewController.TAB_INDEX_PROFILE:
@@ -334,6 +336,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       } else {
         _goToPage(PageViewController.TAB_INDEX_PROFILE);
       }
+      homeStore?.setCurrentPageWidget(PageViewController
+          .instance.pages[PageViewController.TAB_INDEX_PROFILE]);
     } else {
       Navigator.of(context).pushNamed(
         PageRoute.Page.registerPhase2Screen.route,

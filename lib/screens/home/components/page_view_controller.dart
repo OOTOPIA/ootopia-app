@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -12,6 +14,7 @@ class PageViewController {
   List<int> pageHistoryTabSelected = [0];
 
   Function? onClickBack;
+  Function? onAddPage;
 
   List<StatefulWidget> pages = [
     TimelinePage(null),
@@ -69,14 +72,14 @@ class PageViewController {
     controller.jumpToPage(index);
   }
 
-  Future addPage(StatefulWidget page) async {
+  addPage(StatefulWidget page) {
     pages.add(page);
     pageHistoryTabSelected
         .add(pageHistoryTabSelected[pageHistoryTabSelected.length - 1]);
-    await Future.delayed(
-      Duration(milliseconds: 500),
-      () => goToPage(pages.length - 1, true),
-    );
+    if (onAddPage != null) {
+      this.onAddPage!();
+    }
+    goToPage(pages.length - 1, true);
   }
 
   bool back() {
