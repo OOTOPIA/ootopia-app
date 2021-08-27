@@ -81,7 +81,8 @@
 
     "exit": "Exit",
     "appVersion": "App Version",
-    "madeWithLoveOnThisWonderfulPlanet": "Made with love for the good of all beings on this wonderful planet.",
+    "madeWithLoveOnThisWonderfulPlanet": "Made with love for the good of all beings on this wonderful planet",
+    "eachOneMakeADiference": "EACH ONE OF US MAKES A DIFFERENCE.",
     "loggedInAs": "Logged in as",
 
     "publications": "Publications",
@@ -268,7 +269,16 @@
     "dialogDescriptionBeforeExiting": "We are doing this testing environment and every feedback will help us make the world a better place.\n\nWe'd love to hear a little more from you, how was your experience today?",
     "notNow": "Not now",
     "shareMyExperience": "Share my experience",
+    "eachOneMakeADiference": "EACH ONE OF US MAKES A DIFFERENCE",
 
+    "inviteYourFriendsToJoinOOTOPIA":"Invite your friends to join OOTOPIA and live the movement that is regenerating planet Earth now!",
+    "sowerInvitationCode":"SOWER INVITATION CODE",
+    "shareThisCode":"share this code",
+    "welcomeInvitationCode":"WELCOME INVITATION CODE",
+    "sendSowerInvitationCode": "Send this code to invite people who are leading projects that create a positive impact and help regenerate Earth. Thus, they can register as a Sower.",
+    "sendWelcomeInvitationCode": "Send this code to invite your friends and receive 25,00 OOz for each newcomer.\nYour friend will receive 15,00 OOz.",
+    "pictureBySeattleTilth":"Foto de Seattle Tilth",
+    "joinToOOTOPIA":"Invitation to join me on OOTOPIA Experience the movement that is regenerating planet Earth! Download the app and register with this code: %USER_CODE% You'll also receive 15.00 OOz of credit. LIVE OOTOPIA NOW! ✨ 🌎 ❤️",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
