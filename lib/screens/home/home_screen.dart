@@ -14,6 +14,7 @@ import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
+import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
@@ -37,23 +38,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late AuthStore authStore;
   HomeStore? homeStore;
 
-  List<StatefulWidget> pages = [
-    TimelinePage(null),
-    ProfilePage(),
-    ProfileScreen(null),
-  ];
-
   Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
-  late PageController controller;
   double oozToRewardAfterSendPost = 0;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance!.addObserver(this);
-    controller = PageViewController.instance.newController();
+
+    PageViewController.instance.onClickBack = () {
+      homeStore?.setCurrentPageWidget(PageViewController.instance.pages[
+          PageViewController.instance.pageHistoryTabSelected[
+              PageViewController.instance.pageHistoryTabSelected.length - 1]]);
+    };
+
+    PageViewController.instance.onAddPage = () {
+      setState(() {});
+    };
 
     Future.delayed(Duration(milliseconds: 1000), () {
       _checkStores();
@@ -155,28 +159,35 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             appBar: appBar,
             drawer: MenuDrawer(
               onTapProfileItem: () {
-                _openProfile();
+                openProfile();
               },
               onTapLogoutItem: () {
                 homeStore?.stopDailyGoalTimer();
                 _goToPage(0);
+              },
+              onTapWalletItem: () {
+                _goToPage(1);
               },
             ),
             body: Stack(
               children: [
                 PageView.builder(
                   pageSnapping: false,
-                  controller: controller,
+                  controller: PageViewController.instance.controller,
                   scrollDirection: Axis.horizontal,
                   physics: NeverScrollableScrollPhysics(),
                   onPageChanged: (index) {
                     homeStore?.setCurrentPageIndex(index);
-                    homeStore?.setCurrentPageWidget(pages[index]);
+                    if (PageViewController.instance.pages.length <= 5) {
+                      homeStore?.setCurrentPageWidget(
+                          PageViewController.instance.pages[index]);
+                    }
                     setState(() {});
                   },
-                  itemCount: pages.length,
+                  itemCount: PageViewController.instance.pages.length,
                   itemBuilder: (context, index) {
-                    return KeepAlivePage(child: pages[index]);
+                    return KeepAlivePage(
+                        child: PageViewController.instance.pages[index]);
                   },
                 ),
                 Align(
@@ -229,12 +240,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (homeStore?.currentPageIndex == index) {
       return;
     }
+
     setState(() {
       switch (index) {
-        case 0:
-          _goToPage(0);
+        case PageViewController.TAB_INDEX_TIMELINE:
+          _goToPage(PageViewController.TAB_INDEX_TIMELINE);
+          PageViewController.instance.resetPages();
+          homeStore
+              ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
           break;
-        case 2:
+
+        case PageViewController.TAB_INDEX_LEARNING_TRACKS:
+          if (PageViewController.instance.pages.length > 5) {
+            PageViewController.instance.addPage(LearningTracksScreen());
+          } else {
+            _goToPage(PageViewController.TAB_INDEX_LEARNING_TRACKS);
+          }
+          homeStore
+              ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
+
+          break;
+        case PageViewController.TAB_INDEX_CAMERA:
           if (authStore.currentUser == null) {
             Navigator.of(context).pushNamed(
               PageRoute.Page.loginScreen.route,
@@ -249,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Navigator.of(context).pushNamed(PageRoute.Page.cameraScreen.route);
           }
           break;
-        case 3:
+        case PageViewController.TAB_INDEX_WALLET:
           if (authStore.currentUser == null) {
             Navigator.of(context).pushNamed(
               PageRoute.Page.loginScreen.route,
@@ -261,10 +287,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            _goToPage(1);
+            if (PageViewController.instance.pages.length > 5) {
+              PageViewController.instance.addPage(WalletPage());
+            } else {
+              _goToPage(PageViewController.TAB_INDEX_WALLET);
+            }
+            homeStore?.setCurrentPageWidget(
+                PageViewController.instance.pages[index]);
           }
           break;
-        case 4:
+        case PageViewController.TAB_INDEX_PROFILE:
           if (authStore.currentUser == null) {
             Navigator.of(context).pushNamed(
               PageRoute.Page.loginScreen.route,
@@ -276,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
             );
           } else {
-            _openProfile();
+            openProfile();
           }
           break;
         default:
@@ -284,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
-  _openProfile() {
+  openProfile() {
     if (authStore.currentUser == null) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.loginScreen.route,
@@ -299,7 +331,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
 
     if (authStore.currentUser!.registerPhase == 2) {
-      _goToPage(2);
+      if (PageViewController.instance.pages.length > 5) {
+        PageViewController.instance.addPage(ProfileScreen());
+      } else {
+        _goToPage(PageViewController.TAB_INDEX_PROFILE);
+      }
+      homeStore?.setCurrentPageWidget(PageViewController
+          .instance.pages[PageViewController.TAB_INDEX_PROFILE]);
     } else {
       Navigator.of(context).pushNamed(
         PageRoute.Page.registerPhase2Screen.route,
@@ -314,10 +352,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   _goToPage(int index) {
-    PageViewController.instance.controller.animateToPage(
+    PageViewController.instance.goToPage(
       index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.linear,
     );
   }
 
@@ -328,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       authStore.checkUserIsLogged();
     }
     if (homeStore?.currentPageWidget == null) {
-      homeStore?.setCurrentPageWidget(pages[0]);
+      homeStore?.setCurrentPageWidget(PageViewController.instance.pages[0]);
     }
   }
 
@@ -363,6 +399,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (widget.args != null &&
           widget.args!['createdPost'] != null &&
           widget.args!['createdPost'] == true) {
+        homeStore?.setCurrentPageWidget(PageViewController
+            .instance.pages[PageViewController.TAB_INDEX_TIMELINE]);
+        homeStore?.setCurrentPageIndex(PageViewController.TAB_INDEX_TIMELINE);
         homeStore?.setShowCreatedPostAlert(true);
         oozToRewardAfterSendPost = widget.args!['oozToReward'];
         Timer(Duration(seconds: 5), () {
@@ -397,13 +436,36 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           padding: EdgeInsets.only(
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
-          child: IconButton(
-            icon: Icon(
-              FeatherIcons.menu,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onPressed: () => _key.currentState!.openDrawer(),
-          ),
+          child: PageViewController.instance.pages.length <= 5
+              ? IconButton(
+                  icon: Icon(
+                    FeatherIcons.menu,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                  onPressed: () => _key.currentState!.openDrawer(),
+                )
+              : InkWell(
+                  onTap: () => PageViewController.instance.back(),
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 3.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            FeatherIcons.arrowLeft,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.back,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
+                      )),
+                ),
         ),
         actions: [
           remainingTime,

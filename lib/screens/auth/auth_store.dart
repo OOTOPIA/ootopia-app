@@ -17,7 +17,7 @@ abstract class AuthStoreBase with Store {
   ObservableFuture<User?>? _currentUser;
 
   @action
-  Future<User?> checkUserIsLogged() =>
+  Future<User?> checkUserIsLogged() async =>
       this._currentUser = ObservableFuture(storage.getCurrentUser());
 
   @computed
@@ -44,7 +44,7 @@ abstract class AuthStoreBase with Store {
     try {
       await AppUsageTime.instance.sendToApi();
     } catch (err) {}
-    Future.delayed(Duration(milliseconds: 500), () async {
+    await Future.delayed(Duration(milliseconds: 500), () async {
       AppUsageTime.instance.stopTimer();
       await storage.cleanAuthToken();
       this._currentUser = null;

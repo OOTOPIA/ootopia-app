@@ -85,7 +85,7 @@
 
     "exit": "Exit",
     "appVersion": "App Version",
-    "madeWithLoveOnThisWonderfulPlanet": "Made with love on this wonderful planet.",
+    "madeWithLoveOnThisWonderfulPlanet": "Made with love for the good of all beings on this wonderful planet.",
     "loggedInAs": "Logged in as",
 
     "publications": "Publications",
@@ -243,7 +243,7 @@
     "personalGoalAchieved": "Personal Goal Achieved",
     "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
-    "back":"back",
+    "back":"Back",
     "close": "Close",
     "personalLevel": "Personal level",
     "personalLevelText1": "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
@@ -259,6 +259,14 @@
     "planetaryLevelText2pt2": "Let's meet the planetary goal today!",
     
     "thereAreNoWalletRecords": "There are no OZZ records",
+    
+    "sendYourFeedback":"send your feedback",
+    "questions":"Questions",
+    "suggestions": "Suggestions",
+    "checkYourTransactions":"check your transactions",
+    "earnOzzSignup":"earn OOz when they signup",
+    "inviteYourFriends":"Invite your friends",
+    "enterToOotopia": "enter to ootopia",
 
     "dialogTitleBeforeExiting": "Thank you for participating in OOTOPIA!",
     "dialogDescriptionBeforeExiting": "We are doing this testing environment and every feedback will help us make the world a better place.\n\nWe'd love to hear a little more from you, how was your experience today?",

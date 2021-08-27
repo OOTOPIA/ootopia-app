@@ -44,4 +44,9 @@ class ChatDialogController {
           _lastChatOpenedDateKey, new DateTime.now().millisecondsSinceEpoch);
     }
   }
+
+  resetSavedData() {
+    _prefs!.remove(_chatOpenedKey);
+    _prefs!.remove(_lastChatOpenedDateKey);
+  }
 }
