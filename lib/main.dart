@@ -243,7 +243,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
-    PageRoute.Page.profile: (args) => ProfilePage(),
+    PageRoute.Page.profile: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
     PageRoute.Page.regenerarionGameLearningAlert: (args) =>
         RegenerarionGameLearningAlert(args),

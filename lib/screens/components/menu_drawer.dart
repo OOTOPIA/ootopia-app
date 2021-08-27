@@ -73,12 +73,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 color: Colors.white,
               ),
               padding: EdgeInsets.all(0),
+              margin: EdgeInsets.all(0),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
+                      padding: EdgeInsets.only(bottom: 16),
                       icon: Icon(
                         Icons.close,
                         size: 15,
@@ -91,12 +93,13 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   Align(
                     alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: InkWell(
                         onTap: () {
                           if (widget.onTapProfileItem != null) {
                             widget.onTapProfileItem!();
                           }
+                          Navigator.of(context).pop();
                         },
                         child: Avatar(
                           photoUrl: authStore!.currentUser == null
@@ -111,9 +114,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 ],
               ),
             ),
-            Text(
-              '${authStore!.currentUser!.fullname}',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                '${authStore!.currentUser!.fullname}',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
             Card(
               elevation: 1,
@@ -121,27 +127,30 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: Container(
-                margin: EdgeInsets.only(left: 15, right: 15),
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       '${AppLocalizations.of(context)!.personalGoal}:',
                       style: TextStyle(fontSize: 14),
                     ),
                     Text(
-                      '  ${authStore!.currentUser!.dailyLearningGoalInMinutes}m | ',
+                      '${authStore!.currentUser!.dailyLearningGoalInMinutes}m',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SvgPicture.asset(
-                      'assets/icons/Icon-metro-trophy.svg',
-                      color: Color(0xff00A5FC),
+                    Text('|'),
+                    Image.asset(
+                      'assets/icons/Icon-metro-trophy.png',
                     ),
                     Text(
                       '23',
-                      style: TextStyle(color: Color(0xff00A5FC)),
+                      style: TextStyle(
+                          color: Color(0xff00A5FC),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
                     )
                   ],
                 ),
@@ -168,10 +177,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     ),
                   ],
                 ),
-                leading: Icon(
-                  FeatherIcons.userPlus,
-                  color: Colors.black,
-                  size: 24,
+                leading: Padding(
+                  padding: MediaQuery.of(context).size.width > 300
+                      ? const EdgeInsets.only(bottom: 3.0, left: 4)
+                      : EdgeInsets.all(0),
+                  child: Icon(
+                    FeatherIcons.userPlus,
+                    color: Colors.black,
+                    size: 24,
+                  ),
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
@@ -218,6 +232,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   if (widget.onTapWalletItem != null) {
                     widget.onTapWalletItem!();
                   }
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -252,7 +267,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   Icons.arrow_forward_ios,
                   size: 20,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(PageRoute.Page.chatWithUsersScreen.route);
+                },
               ),
             ),
             Expanded(
@@ -353,28 +371,32 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
               ),
             )),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                AppLocalizations.of(context)!.madeWithLoveOnThisWonderfulPlanet,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                '\ndevmagic.com.br \n ootopia.org',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              SizedBox(
-                height: 20,
-              )
-            ],
+          child: Container(
+            padding: EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  AppLocalizations.of(context)!
+                      .madeWithLoveOnThisWonderfulPlanet,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  '\ndevmagic.com.br \n ootopia.org',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ),
         )
       ],
@@ -391,8 +413,9 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print((MediaQuery.of(context).size.width * .31) - 16);
     return Container(
-      width: (MediaQuery.of(context).size.width * .31) - 16,
+      width: 109,
       height: (MediaQuery.of(context).size.width * .32) - 16,
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
