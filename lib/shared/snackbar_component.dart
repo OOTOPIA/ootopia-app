@@ -80,13 +80,16 @@ class _SnackbarStates extends State<SnackBarWidget> {
                         }),
                 ),
               ])),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                widget.about.toUpperCase(),
-                style: TextStyle(
-                  color: Color(0xff03DAC5),
-                  fontSize: 16,
+            Visibility(
+              visible: widget.about.isNotEmpty,
+              child: TextButton(
+                onPressed: () {},
+                child: Text(
+                  widget.about.toUpperCase(),
+                  style: TextStyle(
+                    color: Color(0xff03DAC5),
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
