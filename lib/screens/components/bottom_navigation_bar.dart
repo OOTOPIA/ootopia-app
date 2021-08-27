@@ -3,6 +3,8 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -57,10 +59,12 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: IconButton(
-                      onPressed: () => this._onTap(0),
+                      onPressed: () =>
+                          this._onTap(PageViewController.TAB_INDEX_TIMELINE),
                       icon: SvgPicture.asset(
                         'assets/icons/home_icon.svg',
-                        color: _checkIsSelected(0)
+                        color: _checkIsSelected(
+                                PageViewController.TAB_INDEX_TIMELINE)
                             ? selectedIconColor
                             : unselectedIconColor,
                       ),
@@ -70,10 +74,14 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: IconButton(
-                      onPressed: () => this._onTap(1),
+                      onPressed: () => this
+                          ._onTap(PageViewController.TAB_INDEX_LEARNING_TRACKS),
                       icon: SvgPicture.asset(
                         'assets/icons/compass.svg',
-                        color: unselectedIconColor,
+                        color: _checkIsSelected(
+                                PageViewController.TAB_INDEX_LEARNING_TRACKS)
+                            ? selectedIconColor
+                            : unselectedIconColor,
                       ),
                       iconSize: 28,
                     ),
@@ -100,10 +108,12 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: IconButton(
-                      onPressed: () => this._onTap(3),
+                      onPressed: () =>
+                          this._onTap(PageViewController.TAB_INDEX_WALLET),
                       icon: SvgPicture.asset(
                         'assets/icons/ooz_circle_icon.svg',
-                        color: _checkIsSelected(3)
+                        color: _checkIsSelected(
+                                PageViewController.TAB_INDEX_WALLET)
                             ? selectedIconColor
                             : unselectedIconColor,
                       ),
@@ -113,10 +123,12 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: IconButton(
-                      onPressed: () => this._onTap(4),
+                      onPressed: () =>
+                          this._onTap(PageViewController.TAB_INDEX_PROFILE),
                       icon: SvgPicture.asset(
                         'assets/icons/profile_icon.svg',
-                        color: _checkIsSelected(4)
+                        color: _checkIsSelected(
+                                PageViewController.TAB_INDEX_PROFILE)
                             ? selectedIconColor
                             : unselectedIconColor,
                       ),
@@ -146,13 +158,19 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
   _checkIsSelected(int index) {
     bool selected = false;
     switch (index) {
-      case 0:
+      case PageViewController.TAB_INDEX_TIMELINE:
         selected = (homeStore.currentPageWidget is TimelinePage);
         break;
-      case 3:
-        selected = (homeStore.currentPageWidget is ProfilePage);
+      case PageViewController.TAB_INDEX_LEARNING_TRACKS:
+        selected = (homeStore.currentPageWidget is LearningTracksScreen);
         break;
-      case 4:
+      case PageViewController.TAB_INDEX_CAMERA:
+        selected = (homeStore.currentPageWidget is LearningTracksScreen);
+        break;
+      case PageViewController.TAB_INDEX_WALLET:
+        selected = (homeStore.currentPageWidget is WalletPage);
+        break;
+      case PageViewController.TAB_INDEX_PROFILE:
         selected = (homeStore.currentPageWidget is ProfileScreen);
         break;
     }
