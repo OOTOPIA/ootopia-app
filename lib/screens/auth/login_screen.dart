@@ -130,38 +130,33 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             Center(
-                              child: Stack(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 225,
-                                    height: 45,
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .liveInOotopiaNowMessage,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(color: Color(0xFF003694)),
                                   ),
-                                  Positioned(
-                                    bottom: 4,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 25),
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .liveInOotopiaNowMessage,
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(color: Color(0xFF003694)),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                      right: 0,
-                                      top: 0,
-                                      child: Container(
+                                  Column(
+                                    children: [
+                                      Container(
                                         height: 40,
                                         width: 40,
                                         child: Image(
                                           image: AssetImage(
                                               "assets/images/butterfly.png"),
                                         ),
-                                      ))
+                                      ),
+                                      Container(
+                                        height: 22,
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
                             ),

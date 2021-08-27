@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -37,17 +38,37 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
     });
   }
 
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onPressed: () {},
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: SizedBox(
-            height: 55,
-            child: Image(
-              image: AssetImage("assets/images/logo.png"),
-            )),
-      ),
+      appBar: appBar,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is ErrorRecoverPasswordState) {
@@ -205,47 +226,45 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    Visibility(
-                      visible: !emailIsSent,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          FlatButton(
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                GlobalConstants.of(context).spacingNormal,
-                              ),
-                              child: Text(
-                                AppLocalizations.of(context)!.send,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                        Visibility(
+                            visible: !emailIsSent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                FlatButton(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                      GlobalConstants.of(context).spacingNormal,
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.send,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      _submit();
+                                    }
+                                  },
+                                  color: Color(0xFF003694),
+                                  splashColor: Colors.black54,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                      width: 2,
+                                      style: BorderStyle.solid,
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _submit();
-                              }
-                            },
-                            color: Color(0xFF003694),
-                            splashColor: Colors.black54,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: Colors.white,
-                                width: 2,
-                                style: BorderStyle.solid,
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                        ],
-                      ),
+                              ],
+                            ),)
+                      ],
                     ),
                   ],
                 ),
