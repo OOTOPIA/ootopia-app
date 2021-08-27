@@ -163,10 +163,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
               onTapLogoutItem: () {
                 homeStore?.stopDailyGoalTimer();
-                _goToPage(0);
+                _goToPage(PageViewController.TAB_INDEX_TIMELINE);
               },
               onTapWalletItem: () {
-                _goToPage(1);
+                _goToPage(PageViewController.TAB_INDEX_WALLET);
               },
             ),
             body: Stack(

@@ -5,6 +5,7 @@ import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -192,9 +193,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   size: 20,
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    PageRoute.Page.invitationScreen.route,
+                  PageViewController.instance.addPage(
+                    InvitationScreen(),
                   );
+                  Navigator.of(context).pop();
                 },
               ),
             ),

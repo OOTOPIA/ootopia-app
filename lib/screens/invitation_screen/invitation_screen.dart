@@ -20,36 +20,6 @@ class _InvitationScreenState extends State<InvitationScreen> {
   Widget build(BuildContext context) {
     InvitationStore invitationStore = Provider.of<InvitationStore>(context);
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 3.0),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                  size: 17,
-                ),
-                Text(
-                  AppLocalizations.of(context)!.back,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        title: Image.asset(
-          'assets/images/logo.png',
-          height: 34,
-        ),
-      ),
       body: ListView(
         children: [
           Stack(
@@ -117,18 +87,6 @@ class _InvitationScreenState extends State<InvitationScreen> {
                 ),
                 SizedBox(
                   height: 24,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    iconSize: 40,
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.chatWithUsersScreen.route,
-                      );
-                    },
-                    icon: Image.asset('assets/icons/crisp_icon.png'),
-                  ),
                 ),
               ],
             ),
