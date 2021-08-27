@@ -12,6 +12,8 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_transfer_history.dart';
 import 'package:ootopia_app/screens/profile_screen/skeleton_profile_screen.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
@@ -975,15 +977,14 @@ class GridPosts extends StatelessWidget {
       required this.userId,
       required this.getPostCallback});
 
-  _goToTimelinePost(posts, postSelected) async {
-    await Navigator.of(context).pushNamed(
-      PageRoute.Page.timelineProfileScreen.route,
-      arguments: {
+  _goToTimelinePost(posts, postSelected) {
+    PageViewController.instance.addPage(TimelineScreenProfileScreen(
+      {
         "userId": userId,
         "posts": posts,
         "postSelected": postSelected,
       },
-    );
+    ));
 
     this.getPostCallback();
   }

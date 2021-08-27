@@ -14,6 +14,9 @@ import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -149,14 +152,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   void _goToProfile() async {
-    Navigator.of(context).pushNamed(
-      user != null && post.userId == user!.id
-          ? PageRoute.Page.myProfileScreen.route
-          : PageRoute.Page.profileScreen.route,
-      arguments: {
+    PageViewController.instance.addPage(ProfileScreen(
+      {
         "id": user != null && post.userId == user!.id ? null : post.userId,
       },
-    );
+    ));
   }
 
   _popupMenuReturn(String selectedOption) {
@@ -471,7 +471,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     ),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         padding:
@@ -641,12 +642,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed(
-                  PageRoute.Page.commentScreen.route,
-                  arguments: {
+                PageViewController.instance.addPage(CommentScreen(
+                  {
                     "post": this.post,
                   },
-                );
+                ));
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 8),
