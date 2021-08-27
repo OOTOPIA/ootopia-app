@@ -25,7 +25,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         Row(
           children: [
             Flexible(
-              flex: 4,
+              flex: 5,
               child: ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -56,19 +56,29 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                             .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
                       );
                     },
-                    child: Chip(
-                      label: Text(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xff018F9C),
+                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                        border: Border.all(
+                          color: Color(0xff018F9C),
+                        ),
+                      ),
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 3, bottom: 3),
+                      child: Text(
                         '${widget.sowerCode}',
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
-                      backgroundColor: Color(0xff018F9C),
-                      padding: EdgeInsets.only(left: 10, right: 10),
                     ),
                   ),
-                  Text(
-                    AppLocalizations.of(context)!.shareThisCode,
-                    softWrap: true,
-                    style: TextStyle(color: Color(0xff018F9C), fontSize: 12),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      AppLocalizations.of(context)!.shareThisCode,
+                      softWrap: true,
+                      style: TextStyle(color: Color(0xff018F9C), fontSize: 12),
+                    ),
                   )
                 ],
               ),

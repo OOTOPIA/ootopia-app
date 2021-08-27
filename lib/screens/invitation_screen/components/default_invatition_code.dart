@@ -15,6 +15,9 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(
+          height: 24,
+        ),
         Divider(
           thickness: 2,
           color: Colors.grey,
@@ -25,7 +28,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
         Row(
           children: [
             Flexible(
-              flex: 4,
+              flex: 5,
               fit: FlexFit.tight,
               child: ListTile(
                 title: Padding(
@@ -59,19 +62,29 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                             .replaceAll('%USER_CODE%', '${widget.defaultCode}'),
                       );
                     },
-                    child: Chip(
-                      label: Text(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xff003694),
+                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                        border: Border.all(
+                          color: Color(0xff018F9C),
+                        ),
+                      ),
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 3, bottom: 3),
+                      child: Text(
                         '${widget.defaultCode}',
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
-                      backgroundColor: Color(0xff003694),
-                      padding: EdgeInsets.only(left: 10, right: 10),
                     ),
                   ),
-                  Text(
-                    AppLocalizations.of(context)!.shareThisCode,
-                    softWrap: true,
-                    style: TextStyle(color: Color(0xff003694), fontSize: 12),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      AppLocalizations.of(context)!.shareThisCode,
+                      softWrap: true,
+                      style: TextStyle(color: Color(0xff003694), fontSize: 12),
+                    ),
                   )
                 ],
               ),

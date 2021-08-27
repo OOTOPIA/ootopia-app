@@ -96,22 +96,22 @@ class _InvitationScreenState extends State<InvitationScreen> {
                   height: 24,
                 ),
                 Container(
-                  height: 300,
+                  height: MediaQuery.of(context).size.height * 0.38,
                   child: FutureBuilder<List<InvitationCodeModel>?>(
                       future: invitationStore.getCodes(),
                       builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Container();
+                        }
                         return ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
-                              if (snapshot.data![index].type == 'sower') {
-                                return Column(
-                                  children: [
-                                    SowerInvitationCode(sowerCode: ''),
-                                    DefaultInvitationCode(defaultCode: '1')
-                                  ],
-                                );
+                              if (snapshot.data![index].type != 'sower') {
+                                return SowerInvitationCode(
+                                    sowerCode: '${snapshot.data![index].code}');
                               }
-                              return DefaultInvitationCode(defaultCode: '1');
+                              return DefaultInvitationCode(
+                                  defaultCode: '${snapshot.data![index].code}');
                             });
                       }),
                 ),
