@@ -58,7 +58,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
           child: InkWell(
-              onTap: () => PageViewController.instance.back(),
+              onTap: () => Navigator.of(context).pop(),
               child: Padding(
                   padding: const EdgeInsets.only(left: 3.0),
                   child: Row(
@@ -131,12 +131,6 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
             children: [
               Container(
                 height: MediaQuery.of(context).size.height,
-                // decoration: BoxDecoration(
-                //   // image: DecorationImage(
-                //   //   image: AssetImage("assets/images/login_bg.jpg"),
-                //   //   fit: BoxFit.cover,
-                //   // ),
-                // ),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingMedium),
@@ -269,43 +263,46 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Visibility(
-                  visible: !emailIsSent,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: FlatButton(
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                              GlobalConstants.of(context).spacingNormal,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.send,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(25, 0, 25, 12),
+                  child: Visibility(
+                    visible: !emailIsSent,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: FlatButton(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                GlobalConstants.of(context).spacingNormal,
+                              ),
+                              child: Text(
+                                AppLocalizations.of(context)!.send,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _submit();
-                            }
-                          },
-                          color: Color(0xFF003694),
-                          splashColor: Colors.black54,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                              style: BorderStyle.solid,
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _submit();
+                              }
+                            },
+                            color: Color(0xFF003694),
+                            splashColor: Colors.black54,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                            borderRadius: BorderRadius.circular(50),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

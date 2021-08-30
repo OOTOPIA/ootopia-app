@@ -115,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
           child: InkWell(
-              onTap: () => PageViewController.instance.back(),
+              onTap: () => Navigator.of(context).pop(),
               child: Padding(
                   padding: const EdgeInsets.only(left: 3.0),
                   child: Row(
