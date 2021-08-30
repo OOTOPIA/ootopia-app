@@ -9,6 +9,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoginPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -177,10 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!.email)
                                         .copyWith(
-                                            prefixIcon: Icon(
-                                          Icons.email_outlined,
-                                          color: Colors.grey,
-                                        )),
+                                            prefixIcon: Icon(Icons.mail_outline, color: Colors.grey,)),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return AppLocalizations.of(context)!

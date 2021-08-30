@@ -61,7 +61,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
               Icons.arrow_back,
               color: Theme.of(context).iconTheme.color,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
         ),
       );
