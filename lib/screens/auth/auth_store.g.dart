@@ -32,6 +32,14 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$checkUserIsLoggedAsyncAction =
+      AsyncAction('AuthStoreBase.checkUserIsLogged');
+
+  @override
+  Future<User?> checkUserIsLogged() {
+    return _$checkUserIsLoggedAsyncAction.run(() => super.checkUserIsLogged());
+  }
+
   final _$updateUserRegenerarionGameLearningAlertAsyncAction =
       AsyncAction('AuthStoreBase.updateUserRegenerarionGameLearningAlert');
 
@@ -50,17 +58,6 @@ mixin _$AuthStore on AuthStoreBase, Store {
 
   final _$AuthStoreBaseActionController =
       ActionController(name: 'AuthStoreBase');
-
-  @override
-  Future<User?> checkUserIsLogged() {
-    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
-        name: 'AuthStoreBase.checkUserIsLogged');
-    try {
-      return super.checkUserIsLogged();
-    } finally {
-      _$AuthStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   dynamic setUserIsLogged() {

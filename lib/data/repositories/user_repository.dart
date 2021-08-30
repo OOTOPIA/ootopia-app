@@ -4,6 +4,7 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
+import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
 
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -16,6 +17,7 @@ abstract class UserRepository {
   Future<User> updateUser(User user, List<String> tagsIds);
   Future recordTimeUserUsedApp(int timeInMilliseconds);
   Future<DailyGoalStatsModel?> getDailyGoalStats();
+  Future<List<InvitationCodeModel>?> getCodes();
 }
 
 const Map<String, String> API_HEADERS = {
@@ -174,6 +176,30 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         throw Exception(res.data);
       }
       var result = DailyGoalStatsModel.fromJson(res.data);
+      return result;
+    } catch (e) {
+      throw Exception('Failed to get daily goal stats ' + e.toString());
+    }
+  }
+
+  @override
+  Future<List<InvitationCodeModel>?> getCodes() async {
+    try {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        return null;
+      }
+      User user = await getCurrentUser();
+
+      Response res = await ApiClient.api().get(
+        "users/${user.id}/invitation-code",
+      );
+      if (res.statusCode != 200) {
+        throw Exception(res.data);
+      }
+      var result = (res.data as List)
+          .map((e) => InvitationCodeModel.fromJson(e))
+          .toList();
       return result;
     } catch (e) {
       throw Exception('Failed to get daily goal stats ' + e.toString());
