@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -56,15 +57,27 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
           padding: EdgeInsets.only(
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
-          child: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+          child: InkWell(
+              onTap: () => PageViewController.instance.back(),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        FeatherIcons.arrowLeft,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.back,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ))),
         ),
       );
 
