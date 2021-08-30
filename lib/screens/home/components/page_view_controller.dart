@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -43,16 +41,15 @@ class PageViewController {
   }
 
   resetPages() {
-    List<int> pagesIndexToRemove = [];
-    for (var i = 0; i < pages.length; i++) {
-      if (i > 4) {
-        pagesIndexToRemove.add(i);
-      }
-    }
+    pages.clear();
 
-    pagesIndexToRemove.forEach((index) {
-      pages.removeAt(index);
-    });
+    pages = [
+      TimelinePage(null),
+      LearningTracksScreen(),
+      LearningTracksScreen(),
+      WalletPage(),
+      ProfileScreen(null),
+    ];
 
     pageHistory = [0];
     pageHistoryTabSelected = [0];
@@ -74,8 +71,8 @@ class PageViewController {
 
   addPage(StatefulWidget page) {
     pages.add(page);
-    pageHistoryTabSelected
-        .add(pageHistoryTabSelected[pageHistoryTabSelected.length - 1]);
+
+    pageHistoryTabSelected.add(pageHistory[pageHistoryTabSelected.length - 1]);
     if (onAddPage != null) {
       this.onAddPage!();
     }
