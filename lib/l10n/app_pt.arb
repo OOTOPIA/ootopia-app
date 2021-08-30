@@ -1,6 +1,7 @@
 {
     "language": "Portuguese",
     "helloWIfNotNowThenWhenorld": "Se não agora, então quando?\r\nSe não nós, então quem?\r\n\r\nBem-vindo ao movimento para\r\ncurar o planeta Terra!",
+    "liveInOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
     "email": "E-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "Senha",
@@ -11,6 +12,16 @@
     "passwordDoesNotMatch": "Senha não corresponde",
     "login": "Conecte-se",
     "createAccount": "Criar Conta",
+    "dontHaveAnAccountYet": "Não tem uma conta ainda?",
+    "forgotMyPass": "Esqueceu a senha?",
+    "recoverPassItsAllRight": "Está tudo bem!",
+    "creatingANewAccountPassword": "Crie uma nova senha para acessar sua Conta OOtopia.",
+    "creatingANewPassword": "Criando uma nova senha",
+    "createNewPassword":"Criar nova senha",
+    "requestNewPassword": "Solicitar nova Senha",
+
+    "checkYourEmail": "Verifique seu E-mail",
+    "weSentYouALinkToCreateANewPassword": "Nós te enviamos um link referente a solcititação da nova senha para: ",
 
     "regenerationGame": "Jogo de regeneração",
     "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",

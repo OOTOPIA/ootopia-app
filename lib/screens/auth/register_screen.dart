@@ -2,8 +2,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
@@ -95,9 +98,51 @@ class _RegisterPageState extends State<RegisterPage> {
     this.trackingEvents.trackingSignupStartedSignup();
   }
 
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: InkWell(
+              onTap: () => Navigator.of(context).pop(),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        FeatherIcons.arrowLeft,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.back,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ))),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is ErrorState) {
@@ -145,12 +190,12 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: EdgeInsets.symmetric(
             horizontal: GlobalConstants.of(context).spacingMedium,
           ),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/login_bg.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage("assets/images/login_bg.jpg"),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           child: Form(
             key: _formKey,
             child: PageView(
@@ -161,20 +206,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/white_logo.png',
-                          height: GlobalConstants.of(context).logoHeight,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: GlobalConstants.of(context).spacingNormal,
-                      ),
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Image.asset(
+                    //       'assets/images/white_logo.png',
+                    //       height: GlobalConstants.of(context).logoHeight,
+                    //     ),
+                    //   ],
+                    // ),
                     Row(
                       children: [
                         Expanded(
@@ -187,11 +227,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                 children: [
                                   Text(
                                     AppLocalizations.of(context)!
-                                        .createYourAccountAndJoinTheMovementToHealPlanetEarth,
+                                        .liveInOotopiaNowMessage,
                                     textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                            color: LightColors.blue,
+                                            fontSize: 24),
                                   ),
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    child: Image(
+                                      image: AssetImage(
+                                          "assets/images/butterfly.png"),
+                                    ),
+                                  )
                                 ],
                               ),
                               Padding(
@@ -213,7 +265,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
                                               AppLocalizations.of(context)!
-                                                  .nameAndSurname),
+                                                  .nameAndSurname)
+                                          .copyWith(
+                                              prefixIcon: Icon(
+                                            Icons.person_outline,
+                                            color: Color(0xFF707070),
+                                          )),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return AppLocalizations.of(context)!
@@ -232,7 +289,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
                                               AppLocalizations.of(context)!
-                                                  .email),
+                                                  .email)
+                                          .copyWith(
+                                              prefixIcon: Icon(
+                                            Icons.mail_outline,
+                                            color: Color(0xFF707070),
+                                          )),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return AppLocalizations.of(context)!
@@ -258,12 +320,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 .password,
                                           )
                                           .copyWith(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline,
+                                              color: Color(0xFF707070),
+                                            ),
                                             suffixIcon: GestureDetector(
                                               child: Icon(
                                                 _showPassword == false
                                                     ? Icons.visibility_off
                                                     : Icons.visibility,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                               ),
                                               onTap: () {
                                                 setState(() {
@@ -294,12 +360,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 .repeatPassword,
                                           )
                                           .copyWith(
+                                            prefixIcon: Icon(
+                                              Icons.lock_outline,
+                                              color: Color(0xFF707070),
+                                            ),
                                             suffixIcon: GestureDetector(
                                               child: Icon(
                                                 _showRepeatPassword == false
                                                     ? Icons.visibility_off
                                                     : Icons.visibility,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                               ),
                                               onTap: () {
                                                 setState(() {
@@ -340,7 +410,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                               " ",
                                           style: TextStyle(
                                             fontSize: 16,
-                                            color: Colors.white,
+                                            color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                           ),
                                           children: [
@@ -350,7 +420,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                       .checkHere,
                                               style: TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 decoration:
                                                     TextDecoration.underline,
                                                 fontWeight: FontWeight.bold,
@@ -368,7 +438,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                       .ourPledgeForTransparencyAndHighEthicalStandards,
                                               style: TextStyle(
                                                 fontSize: 16,
-                                                color: Colors.white,
+                                                color: Colors.black,
                                               ),
                                             )
                                           ],
@@ -399,6 +469,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   InkWell(
                                     onTap: updateTermsCheck,
                                     child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          border: Border.all(
+                                              width: 2, color: Colors.black)),
                                       child: _termsCheckbox
                                           ? CustomPaint(
                                               painter: CirclePainter(),
@@ -408,7 +483,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 child: Icon(
                                                   Icons.check,
                                                   size: 14.0,
-                                                  color: Colors.white,
+                                                  color: Colors.black,
                                                 ),
                                               ),
                                             )
@@ -420,7 +495,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 child: Icon(
                                                   null,
                                                   size: 14.0,
-                                                  color: Colors.white,
+                                                  color: Colors.black,
                                                 ),
                                               ),
                                             ),
@@ -437,7 +512,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .iAcceptThe,
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),
                                         children: [
                                           new TextSpan(
@@ -445,7 +520,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 .useTerms,
                                             style: TextStyle(
                                               fontSize: 16,
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               decoration:
                                                   TextDecoration.underline,
                                               fontWeight: FontWeight.bold,
@@ -501,7 +576,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -510,11 +585,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _submit();
                                 }
                               },
-                              color: Colors.white,
+                              color: LightColors.blue,
                               splashColor: Colors.black54,
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color: Colors.white,
+                                  color: LightColors.blue,
                                   width: 2,
                                   style: BorderStyle.solid,
                                 ),
@@ -568,7 +643,7 @@ class TermsWidget extends StatelessWidget {
                   left: -10,
                   child: BackButton(
                     onPressed: backToPage,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 Center(
@@ -577,7 +652,7 @@ class TermsWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/images/white_logo.png',
+                        'assets/images/logo.png',
                         height: GlobalConstants.of(context).logoHeight,
                       ),
                     ],
@@ -615,7 +690,7 @@ class TermsWidget extends StatelessWidget {
                           style: new TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Colors.black,
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: new TapGestureRecognizer()
@@ -629,7 +704,7 @@ class TermsWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         new TextSpan(
@@ -637,7 +712,7 @@ class TermsWidget extends StatelessWidget {
                           style: new TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Colors.black,
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: new TapGestureRecognizer()
@@ -651,7 +726,7 @@ class TermsWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -668,7 +743,7 @@ class TermsWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         new TextSpan(
@@ -676,7 +751,7 @@ class TermsWidget extends StatelessWidget {
                           style: new TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Colors.black,
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: new TapGestureRecognizer()
@@ -690,7 +765,7 @@ class TermsWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -715,7 +790,7 @@ class TermsWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         new TextSpan(
@@ -724,7 +799,7 @@ class TermsWidget extends StatelessWidget {
                           style: new TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Colors.black,
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: new TapGestureRecognizer()
@@ -739,7 +814,7 @@ class TermsWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         new TextSpan(
@@ -748,7 +823,7 @@ class TermsWidget extends StatelessWidget {
                           style: new TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: Colors.black,
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: new TapGestureRecognizer()
