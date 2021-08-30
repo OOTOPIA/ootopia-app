@@ -244,10 +244,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     setState(() {
       switch (index) {
         case PageViewController.TAB_INDEX_TIMELINE:
-          _goToPage(PageViewController.TAB_INDEX_TIMELINE);
           PageViewController.instance.resetPages();
-          homeStore
-              ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
+
+          _goToPage(PageViewController.TAB_INDEX_TIMELINE);
+
+          homeStore?.setCurrentPageWidget(PageViewController
+              .instance.pages[PageViewController.TAB_INDEX_TIMELINE]);
+          homeStore?.setCurrentPageIndex(PageViewController.TAB_INDEX_TIMELINE);
+          setState(() {});
           break;
 
         case PageViewController.TAB_INDEX_LEARNING_TRACKS:
