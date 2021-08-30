@@ -20,6 +20,11 @@
     "recoverPassItsAllRight": "It's all right",
     "creatingANewAccountPassword": "Create a new account password in order to access your Ootopia account.",
     "creatingANewPassword": "Creating a new password",
+    "createNewPassword":"Create new password",
+    "requestNewPassword": "Request new password",
+
+    "checkYourEmail": "Check Your E-Mail",
+    "weSentYouALinkToCreateANewPassword": "We sent you a link to create a new password for: ",
 
 
     "regenerationGame": "Regeneration game",

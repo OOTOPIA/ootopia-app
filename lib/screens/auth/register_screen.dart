@@ -6,6 +6,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
@@ -232,7 +233,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         .textTheme
                                         .subtitle1!
                                         .copyWith(
-                                            color: Color(0xFF003694),
+                                            color: LightColors.blue,
                                             fontSize: 24),
                                   ),
                                   Container(
@@ -584,11 +585,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _submit();
                                 }
                               },
-                              color: Color(0xFF003694),
+                              color: LightColors.blue,
                               splashColor: Colors.black54,
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color: Color(0xFF003694),
+                                  color: LightColors.blue,
                                   width: 2,
                                   style: BorderStyle.solid,
                                 ),

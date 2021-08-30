@@ -8,6 +8,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class RecoverPasswordPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -102,9 +103,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
               backgroundColor: Colors.black.withAlpha(1),
               builder: (BuildContext context) {
                 return SnackBarWidget(
-                  menu: "Check Your E-mail",
+                  menu: AppLocalizations.of(context)!.checkYourEmail,
                   text:
-                      "We sent you a link to create a new password for: ${_emailController.text}",
+                     AppLocalizations.of(context)!.weSentYouALinkToCreateANewPassword+_emailController.text,
                   about: "",
                 );
               },
@@ -153,7 +154,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                   .textTheme
                                   .subtitle1!
                                   .copyWith(
-                                      fontSize: 22, color: Color(0xFF03145C)),
+                                      fontSize: 22, color: LightColors.darkBlue),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
@@ -168,7 +169,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                     .subtitle1!
                                     .copyWith(
                                         fontSize: 18,
-                                        color: Color(0xFF03145C))),
+                                        color: LightColors.darkBlue)),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: GlobalConstants.of(context)
@@ -240,7 +241,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                           .copyWith(
                                               prefixIcon: Icon(
                                             Icons.mail,
-                                            color: Color(0xFF707070),
+                                            color: LightColors.grey,
                                           )),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -276,7 +277,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                AppLocalizations.of(context)!.send,
+                                AppLocalizations.of(context)!.requestNewPassword,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -289,7 +290,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 _submit();
                               }
                             },
-                            color: Color(0xFF003694),
+                            color: LightColors.blue,
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(

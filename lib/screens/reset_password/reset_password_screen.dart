@@ -6,6 +6,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -154,7 +155,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           .textTheme
                                           .subtitle1!
                                           .copyWith(
-                                              color: Color(0xFF003694),
+                                              color: LightColors.blue,
                                               fontSize: 24),
                                     ),
                                     Column(
@@ -187,7 +188,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           .textTheme
                                           .subtitle1!
                                           .copyWith(
-                                              color: Color(0xFF03145C),
+                                              color: LightColors.darkBlue,
                                               fontSize: 22),
                                     ),
                                   ),
@@ -328,7 +329,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             GlobalConstants.of(context).spacingNormal,
                           ),
                           child: Text(
-                            AppLocalizations.of(context)!.send,
+                            AppLocalizations.of(context)!.createNewPassword,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -341,11 +342,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             _submit();
                           }
                         },
-                        color: Color(0xFF003694),
+                        color: LightColors.blue,
                         splashColor: Colors.black54,
                         shape: RoundedRectangleBorder(
                           side: BorderSide(
-                            color: Color(0xFF003694),
+                            color: LightColors.blue,
                             width: 2,
                             style: BorderStyle.solid,
                           ),

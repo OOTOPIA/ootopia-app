@@ -8,6 +8,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -99,12 +100,6 @@ class _LoginPageState extends State<LoginPage> {
         return LoadingOverlay(
           isLoading: isLoading,
           child: Container(
-            // decoration: BoxDecoration(
-            //   image: DecorationImage(
-            //     image: AssetImage("assets/images/login_bg.jpg"),
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
             child: Center(
               child: SingleChildScrollView(
                 padding:
@@ -141,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1!
-                                        .copyWith(color: Color(0xFF003694)),
+                                        .copyWith(color: LightColors.blue),
                                   ),
                                   Column(
                                     children: [
@@ -284,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _submit();
                               }
                             },
-                            color: Color(0xFF003694),
+                            color: LightColors.blue,
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -311,7 +306,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle2!
-                                .copyWith(color: Color(0xFF003694)),
+                                .copyWith(color: LightColors.blue),
                           ),
                           SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
@@ -326,7 +321,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF003694),
+                                  color: LightColors.blue,
                                 ),
                               ),
                             ),
@@ -349,7 +344,7 @@ class _LoginPageState extends State<LoginPage> {
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Color(0xFF003694),
+                                color: LightColors.blue,
                                 width: 1,
                                 style: BorderStyle.solid,
                               ),
