@@ -30,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool mailIsValid = true;
+  bool passIsValid = true;
+
   @override
   void initState() {
     super.initState();
@@ -173,12 +176,24 @@ class _LoginPageState extends State<LoginPage> {
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!.email)
                                         .copyWith(
-                                            prefixIcon: Icon(Icons.mail_outline, color: Colors.grey,)),
+                                          prefixIcon: ImageIcon(
+                                            AssetImage("assets/icons/mail.png"),
+                                            color: mailIsValid
+                                                ? LightColors.grey
+                                                : Colors.red,
+                                          ),
+                                        ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
+                                        setState(() {
+                                          mailIsValid = false;
+                                        });
                                         return AppLocalizations.of(context)!
                                             .pleaseEnterYourEmail;
                                       }
+                                      setState(() {
+                                        mailIsValid = true;
+                                      });
                                       return null;
                                     },
                                   ),
@@ -197,13 +212,19 @@ class _LoginPageState extends State<LoginPage> {
                                             AppLocalizations.of(context)!
                                                 .password)
                                         .copyWith(
-                                          prefixIcon: Icon(Icons.lock),
+                                          prefixIcon: ImageIcon(
+                                            AssetImage("assets/icons/lock.png"),
+                                            color: passIsValid
+                                                ? LightColors.grey
+                                                : Colors.red,
+                                          ),
                                           suffixIcon: GestureDetector(
                                             child: Icon(
                                               _showPassword == false
-                                                  ? Icons.visibility_off
-                                                  : Icons.visibility,
-                                              color: Colors.black,
+                                                  ? Icons
+                                                      .visibility_off_outlined
+                                                  : Icons.visibility_outlined,
+                                              color: LightColors.grey,
                                             ),
                                             onTap: () {
                                               setState(() {
@@ -214,9 +235,16 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
+                                        setState(() {
+                                          passIsValid = false;
+                                        });
                                         return AppLocalizations.of(context)!
                                             .pleaseEnterYourPassword;
                                       }
+                                      setState(() {
+                                        passIsValid = true;
+                                      });
+
                                       return null;
                                     },
                                   )

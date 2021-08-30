@@ -25,6 +25,8 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
   bool isLoading = false;
   bool emailIsSent = false;
 
+  bool mailIsValid = true;
+
   final TextEditingController _emailController = TextEditingController();
 
   @override
@@ -104,8 +106,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
               builder: (BuildContext context) {
                 return SnackBarWidget(
                   menu: AppLocalizations.of(context)!.checkYourEmail,
-                  text:
-                     AppLocalizations.of(context)!.weSentYouALinkToCreateANewPassword+_emailController.text,
+                  text: AppLocalizations.of(context)!
+                          .weSentYouALinkToCreateANewPassword +
+                      _emailController.text,
                   about: "",
                 );
               },
@@ -154,7 +157,8 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                   .textTheme
                                   .subtitle1!
                                   .copyWith(
-                                      fontSize: 22, color: LightColors.darkBlue),
+                                      fontSize: 22,
+                                      color: LightColors.darkBlue),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
@@ -199,7 +203,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                               child: Icon(
                                 Icons.check,
                                 size: 120,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                             Visibility(
@@ -239,15 +243,23 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                               AppLocalizations.of(context)!
                                                   .email)
                                           .copyWith(
-                                              prefixIcon: Icon(
-                                            Icons.mail,
-                                            color: LightColors.grey,
+                                              prefixIcon: ImageIcon(
+                                            AssetImage("assets/icons/mail.png"),
+                                            color: mailIsValid
+                                                ? LightColors.grey
+                                                : Colors.red,
                                           )),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            mailIsValid = false;
+                                          });
                                           return AppLocalizations.of(context)!
                                               .pleaseEnterYourEmail;
                                         }
+                                        setState(() {
+                                          mailIsValid = true;
+                                        });
                                         return null;
                                       },
                                     ),
@@ -277,7 +289,8 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 GlobalConstants.of(context).spacingNormal,
                               ),
                               child: Text(
-                                AppLocalizations.of(context)!.requestNewPassword,
+                                AppLocalizations.of(context)!
+                                    .requestNewPassword,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

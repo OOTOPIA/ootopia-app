@@ -24,6 +24,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool _showPassword = false;
   bool _showRepeatPassword = false;
 
+  bool passIsValid = true;
+  bool pass2IsValid = true;
+
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
@@ -232,7 +235,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                             prefixIcon: ImageIcon(
                                               AssetImage(
                                                   "assets/icons/lock.png"),
-                                              color: Colors.black,
+                                              color: passIsValid
+                                                  ? LightColors.grey
+                                                  : Colors.red,
                                             ),
                                             suffixIcon: GestureDetector(
                                               child: Icon(
@@ -240,7 +245,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                                     ? Icons
                                                         .visibility_off_outlined
                                                     : Icons.visibility_outlined,
-                                                color: Colors.black,
+                                                color: LightColors.grey,
                                               ),
                                               onTap: () {
                                                 setState(() {
@@ -252,9 +257,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            passIsValid = false;
+                                          });
                                           return AppLocalizations.of(context)!
                                               .enterNewPassword;
                                         }
+                                        setState(() {
+                                          passIsValid = true;
+                                        });
                                         return null;
                                       },
                                     ),
@@ -273,7 +284,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                             prefixIcon: ImageIcon(
                                               AssetImage(
                                                   "assets/icons/lock.png"),
-                                              color: Colors.black,
+                                              color: pass2IsValid
+                                                  ? LightColors.grey
+                                                  : Colors.red,
                                             ),
                                             suffixIcon: GestureDetector(
                                               child: Icon(
@@ -281,7 +294,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                                     ? Icons
                                                         .visibility_off_outlined
                                                     : Icons.visibility_outlined,
-                                                color: Colors.black,
+                                                color: LightColors.grey,
                                               ),
                                               onTap: () {
                                                 setState(() {
@@ -293,13 +306,22 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            passIsValid = false;
+                                          });
                                           return AppLocalizations.of(context)!
                                               .pleaseEnterYourPassword;
                                         }
                                         if (value != _passwordController.text) {
+                                          setState(() {
+                                            passIsValid = false;
+                                          });
                                           return AppLocalizations.of(context)!
                                               .passwordsDontMatch;
                                         }
+                                        setState(() {
+                                          passIsValid = true;
+                                        });
                                         return null;
                                       },
                                     )

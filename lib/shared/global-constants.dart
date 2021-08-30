@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class GlobalConstants extends InheritedWidget {
   static GlobalConstants of(BuildContext context) =>
@@ -24,15 +25,15 @@ class GlobalConstants extends InheritedWidget {
       labelStyle: TextStyle(color: Colors.black54),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF707070), width: 1.5),
+        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF707070), width: 1.5),
+        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
         borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF707070), width: 1.5),
+        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
         borderRadius: BorderRadius.circular(8),
       ),
     );
