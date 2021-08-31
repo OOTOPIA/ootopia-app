@@ -290,6 +290,11 @@
     "sendWelcomeInvitationCode": "Send this code to invite your friends and receive 25,00 OOz for each newcomer.\nYour friend will receive 15,00 OOz.",
     "pictureBySeattleTilth":"Foto de Seattle Tilth",
     "joinToOOTOPIA":"Invitation to join me on OOTOPIA Experience the movement that is regenerating planet Earth! Download the app and register with this code: %USER_CODE% You'll also receive 15.00 OOz of credit. LIVE OOTOPIA NOW! ✨ 🌎 ❤️",
+    "continueAccess":"continue",
+    "enterYourInvitationCode":"Enter your invitation code",
+    "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is flourishing thanks to people like you!",
+    "skip":"skip",
+    "access":"access",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

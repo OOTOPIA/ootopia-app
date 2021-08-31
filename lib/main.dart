@@ -28,6 +28,7 @@ import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
+import 'package:ootopia_app/screens/insert_invitation_code/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
@@ -249,6 +250,7 @@ class MainPage extends HookWidget {
         RegenerarionGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
+    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(),
   };
 
   @override

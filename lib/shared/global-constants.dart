@@ -15,7 +15,7 @@ class GlobalConstants extends InheritedWidget {
   final double spacingLarge = 48;
   final double spacingXL = 64;
   final double screenHorizontalSpace = 22;
-
+  final double spacingSemiLarge = 40;
   final double logoHeight = 82;
 
   InputDecoration loginInputTheme(String labelText) {
