@@ -8,6 +8,8 @@ import 'package:ootopia_app/data/models/comments/comment_create_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -82,7 +84,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         appBar: CustomAppBar(
           selectedCommentsIds.length > 0
               ? selectedCommentsIds.length.toString() +
-                  " "+AppLocalizations.of(context)!.selected +
+                  " " +
+                  AppLocalizations.of(context)!.selected +
                   (selectedCommentsIds.length > 1 ? 's' : '')
               : AppLocalizations.of(context)!.comments,
           selectedCommentsIds.length > 0
@@ -117,13 +120,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               child: BlocBuilder<CommentBloc, CommentState>(
                 builder: (context, state) {
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0).copyWith(right: 80),
                     child: TextField(
                       focusNode: _focus,
                       style: TextStyle(color: Colors.black),
                       controller: _inputController,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.writeYourComment,
+                        labelText:
+                            AppLocalizations.of(context)!.writeYourComment,
                         hintStyle: TextStyle(color: Colors.black),
                         suffixIcon: newCommentLoading
                             ? Row(
@@ -392,7 +396,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(AppLocalizations.of(context)!.commentsWillBePermanentlyRemoved,
+                Text(
+                    AppLocalizations.of(context)!
+                        .commentsWillBePermanentlyRemoved,
                     style: Theme.of(context).textTheme.bodyText2),
               ],
             ),
@@ -463,7 +469,13 @@ class CommentItem extends StatelessWidget {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    PageViewController.instance.addPage(ProfileScreen(
+                      {
+                        "id": this.comment.userId,
+                      },
+                    ));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: CircleAvatar(
@@ -555,11 +567,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       ),
       // backgroundColor:
       //     hasSelectedCommentsIds ? Theme.of(context).accentColor : Colors.white,
-      leading: IconButton(
-        icon: this.icon,
-        onPressed: () => this.onLeadingClick(context),
-        color: Colors.black,
-      ),
+      leading: null,
       actions: [
         Visibility(
           visible: hasSelectedCommentsIds,

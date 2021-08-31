@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_history.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,15 +11,16 @@ import 'package:flutter/gestures.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class WalletPage extends StatefulWidget {
+  const WalletPage({Key? key}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _WalletPageState createState() => _WalletPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with TickerProviderStateMixin {
+class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
+  late HomeStore homeStore;
+
   late WalletStore walletStore;
   late TabController _tabController;
   int _activeTabIndex = 0;
@@ -35,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage>
     });
 
     PageViewController.instance.addListener(() {
-      if (PageViewController.instance.controller.page == 1) {
+      if (homeStore.currentPageWidget is WalletPage) {
         _performAllRequests();
       }
     });
@@ -67,6 +69,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    homeStore = Provider.of<HomeStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     return DefaultTabController(
       length: 3,

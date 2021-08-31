@@ -5,6 +5,7 @@ import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -73,12 +74,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 color: Colors.white,
               ),
               padding: EdgeInsets.all(0),
+              margin: EdgeInsets.all(0),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
+                      padding: EdgeInsets.only(bottom: 16),
                       icon: Icon(
                         Icons.close,
                         size: 15,
@@ -91,7 +94,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   Align(
                     alignment: Alignment.center,
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.only(top: 16.0),
                       child: InkWell(
                         onTap: () {
                           if (widget.onTapProfileItem != null) {
@@ -112,9 +115,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                 ],
               ),
             ),
-            Text(
-              '${authStore!.currentUser!.fullname}',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                '${authStore!.currentUser!.fullname}',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
             Card(
               elevation: 1,
@@ -172,19 +178,25 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     ),
                   ],
                 ),
-                leading: Icon(
-                  FeatherIcons.userPlus,
-                  color: Colors.black,
-                  size: 24,
+                leading: Padding(
+                  padding: MediaQuery.of(context).size.width > 300
+                      ? const EdgeInsets.only(bottom: 3.0, left: 4)
+                      : EdgeInsets.all(0),
+                  child: Icon(
+                    FeatherIcons.userPlus,
+                    color: Colors.black,
+                    size: 24,
+                  ),
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
                   size: 20,
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    PageRoute.Page.invitationScreen.route,
+                  PageViewController.instance.addPage(
+                    InvitationScreen(),
                   );
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -361,28 +373,32 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
               ),
             )),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                AppLocalizations.of(context)!.madeWithLoveOnThisWonderfulPlanet,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              Text(
-                '\ndevmagic.com.br \n ootopia.org',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              SizedBox(
-                height: 20,
-              )
-            ],
+          child: Container(
+            padding: EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  AppLocalizations.of(context)!
+                      .madeWithLoveOnThisWonderfulPlanet,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                Text(
+                  '\ndevmagic.com.br \n ootopia.org',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ),
         )
       ],

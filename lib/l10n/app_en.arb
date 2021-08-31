@@ -4,6 +4,7 @@
         "description": "The current language"
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
+    "liveInOotopiaNowMessage": "LIVE IN OOTOPIA NOW!",
     "email": "E-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "Password",
@@ -14,6 +15,16 @@
     "passwordDoesNotMatch": "Password does not match",
     "login": "Login",
     "createAccount": "Create account",
+    "dontHaveAnAccountYet": "Don't have an account yet?",
+    "forgotMyPass": "Forgot password?",
+    "recoverPassItsAllRight": "It's all right",
+    "creatingANewAccountPassword": "Create a new account password in order to access your Ootopia account.",
+    "creatingANewPassword": "Creating a new password",
+    "createNewPassword":"Create new password",
+    "requestNewPassword": "Request new password",
+
+    "checkYourEmail": "Check Your E-Mail",
+    "weSentYouALinkToCreateANewPassword": "We sent you a link to create a new password for: ",
 
 
     "regenerationGame": "Regeneration game",
@@ -135,7 +146,7 @@
     "ourPledgeForTransparencyAndHighEthicalStandards": "our pledge for transparency and high ethical standards.",
     
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Sent! \r\n\r\nIf this is your email, a link should be in your inbox so you can update your password.",
-    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recover password\r\n\r\nPlease enter your email to start the password recovery process",
+    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Just enter the email with which you created your \n account and then you will receive a message to \n create a new password.",
     "pleaseEnterYourEmail": "Please enter your email",
     "changePassword": "Change Password",
     "enterNewPassword": "Enter new password",
@@ -240,7 +251,7 @@
     "personalGoalAchieved": "Personal Goal Achieved",
     "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
-    "back":"back",
+    "back":"Back",
     "close": "Close",
     "personalLevel": "Personal level",
     "personalLevelText1": "Every person and every action counts! In the regen game you receive credits in OOz currency as a reward for your engagement in the with the app.",
@@ -258,12 +269,12 @@
     "thereAreNoWalletRecords": "There are no OZZ records",
     
     "sendYourFeedback":"send your feedback",
-    "questions":"questions",
+    "questions":"Questions",
     "suggestions": "Suggestions",
     "checkYourTransactions":"check your transactions",
     "earnOzzSignup":"earn OOz when they signup",
     "inviteYourFriends":"Invite your friends",
-    "enterToOotopia": " enter to ootopia",
+    "enterToOotopia": "enter to ootopia",
 
     "dialogTitleBeforeExiting": "Thank you for participating in OOTOPIA!",
     "dialogDescriptionBeforeExiting": "We are doing this testing environment and every feedback will help us make the world a better place.\n\nWe'd love to hear a little more from you, how was your experience today?",
@@ -276,7 +287,7 @@
     "shareThisCode":"share this code",
     "welcomeInvitationCode":"WELCOME INVITATION CODE",
     "sendSowerInvitationCode": "Send this code to invite people who are leading projects that create a positive impact and help regenerate Earth. Thus, they can register as a Sower.",
-    "sendWelcomeInvitationCode": "Send this code to invite your friends and receive 25,00 OOz for each newcomer. Your friend will receive 15,00 OOz.",
+    "sendWelcomeInvitationCode": "Send this code to invite your friends and receive 25,00 OOz for each newcomer.\nYour friend will receive 15,00 OOz.",
     "pictureBySeattleTilth":"Foto de Seattle Tilth",
     "joinToOOTOPIA":"Invitation to join me on OOTOPIA Experience the movement that is regenerating planet Earth! Download the app and register with this code: %USER_CODE% You'll also receive 15.00 OOz of credit. LIVE OOTOPIA NOW! ✨ 🌎 ❤️",
     "@helloWorld": {

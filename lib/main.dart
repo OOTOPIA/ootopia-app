@@ -29,6 +29,7 @@ import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
@@ -197,6 +198,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           Provider<PostPreviewScreenStore>(
             create: (_) => PostPreviewScreenStore(),
           ),
+          Provider<InvitationStore>(
+            create: (_) => InvitationStore(),
+          )
         ],
         child: MaterialApp(
           supportedLocales: L10n.all,
@@ -239,7 +243,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
-    PageRoute.Page.profile: (args) => ProfilePage(),
+    PageRoute.Page.profile: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
     PageRoute.Page.regenerarionGameLearningAlert: (args) =>
         RegenerarionGameLearningAlert(args),

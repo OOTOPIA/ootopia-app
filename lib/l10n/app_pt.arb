@@ -1,6 +1,7 @@
 {
     "language": "Portuguese",
     "helloWIfNotNowThenWhenorld": "Se não agora, então quando?\r\nSe não nós, então quem?\r\n\r\nBem-vindo ao movimento para\r\ncurar o planeta Terra!",
+    "liveInOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
     "email": "E-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "Senha",
@@ -11,6 +12,16 @@
     "passwordDoesNotMatch": "Senha não corresponde",
     "login": "Conecte-se",
     "createAccount": "Criar Conta",
+    "dontHaveAnAccountYet": "Não tem uma conta ainda?",
+    "forgotMyPass": "Esqueceu a senha?",
+    "recoverPassItsAllRight": "Está tudo bem!",
+    "creatingANewAccountPassword": "Crie uma nova senha para acessar sua Conta OOtopia.",
+    "creatingANewPassword": "Criando uma nova senha",
+    "createNewPassword":"Criar nova senha",
+    "requestNewPassword": "Solicitar nova Senha",
+
+    "checkYourEmail": "Verifique seu E-mail",
+    "weSentYouALinkToCreateANewPassword": "Nós te enviamos um link referente a solcititação da nova senha para: ",
 
     "regenerationGame": "Jogo de regeneração",
     "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",
@@ -272,11 +283,11 @@
     "eachOneMakeADiference": "CADA UM DE NÓS FAZ A DIFERENÇA",
 
     "inviteYourFriendsToJoinOOTOPIA": "Convide seus amigos para se juntar ao OOTOPIA e viver o movimento que está regenerando o planeta Terra agora!",
-    "sowerInvitationCode":"CÓDIGO DE CONVITE SUAVE",
+    "sowerInvitationCode":"CÓDIGO DE CONVITE SEMEADOR",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO DO CONVITE DE BEM-VINDO",
     "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos que criam um impacto positivo e ajudam a regenerar a Terra. Assim, eles podem se registrar como Semeadores.",
-    "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba 25,00 OOz para cada recém-chegado. Seu amigo receberá 15,00 OOz.",
+    "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba 25,00 OOz para cada recém-chegado.\nSeu amigo receberá 15,00 OOz.",
     "pictureBySeattleTilth":"Foto de Seattle Tilth",
     "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA Experimente o movimento que está regenerando o planeta Terra! Baixe o aplicativo e registre-se com este código: %USER_CODE% Você também receberá 15,00 OOz de crédito. AO VIVO OOTOPIA AGORA! ✨ 🌎 ❤️"
 }

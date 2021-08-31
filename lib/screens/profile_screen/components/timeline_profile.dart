@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -30,54 +31,40 @@ class _TimelineScreenProfileScreenState
     extends State<TimelineScreenProfileScreen> {
   List<TimelinePost> posts = [];
 
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
     if (widget.args['posts'] != null) {
       this.posts = widget.args['posts'];
     }
+    loadingPost();
+  }
+
+  loadingPost() {
+    Future.delayed(
+        Duration(milliseconds: 500),
+        () => {
+              setState(() => {isLoading = false})
+            });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 3.0),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                  size: 17,
-                ),
-                Text(
-                  AppLocalizations.of(context)!.back,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
+      body: LoadingOverlay(
+        isLoading: isLoading,
+        child: Visibility(
+          visible: !isLoading,
+          child: ListPostProfileComponent(
+            posts: this.posts,
+            postSelected: this.widget.args["postSelected"],
+            userId: this.widget.args["userId"],
+            postId: this.widget.args["postId"],
           ),
         ),
-        title: Image.asset(
-          'assets/images/logo.png',
-          height: 34,
-        ),
       ),
-      body: ListPostProfileComponent(
-        posts: this.posts,
-        postSelected: this.widget.args["postSelected"],
-        userId: this.widget.args["userId"],
-        postId: this.widget.args["postId"],
-      ),
-      bottomNavigationBar: NavigatorBar(),
     );
   }
 }
