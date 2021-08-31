@@ -56,7 +56,7 @@ abstract class _ProfileScreenStoreBase with Store {
           await postsRepository.getPosts(limit, offset, userId);
       postsList.addAll(posts);
       loadingPosts = false;
-      return posts;
+      return this.postsList;
     } catch (err) {
       loadingPosts = false;
       loadingPostsError = true;
