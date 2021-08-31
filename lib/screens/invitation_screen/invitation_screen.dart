@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
@@ -22,7 +24,17 @@ class _InvitationScreenState extends State<InvitationScreen> {
         children: [
           Stack(
             children: [
-              Image.asset('assets/images/kids.png'),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.50,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'assets/images/kids.png',
+                      ),
+                      fit: BoxFit.cover),
+                ),
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
@@ -52,6 +64,9 @@ class _InvitationScreenState extends State<InvitationScreen> {
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
+                ),
+                SizedBox(
+                  height: 8,
                 ),
                 Text(
                   AppLocalizations.of(context)!.inviteYourFriendsToJoinOOTOPIA,

@@ -64,11 +64,12 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                           color: Color(0xff018F9C),
                         ),
                       ),
-                      padding: EdgeInsets.only(
-                          left: 15, right: 15, top: 3, bottom: 3),
-                      child: Text(
-                        '${widget.sowerCode}',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Text(
+                          '${widget.sowerCode}',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
                       ),
                     ),
                   ),
@@ -76,6 +77,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
                       AppLocalizations.of(context)!.shareThisCode,
+                      textAlign: TextAlign.center,
                       softWrap: true,
                       style: TextStyle(color: Color(0xff018F9C), fontSize: 12),
                     ),
