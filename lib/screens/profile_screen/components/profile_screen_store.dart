@@ -34,9 +34,9 @@ abstract class _ProfileScreenStoreBase with Store {
     loadingProfile = true;
     loadingProfileError = false;
     try {
-      Profile result = await repository.getProfile(userId);
+      this.profile = await repository.getProfile(userId);
       loadingProfile = false;
-      return result;
+      return this.profile;
     } catch (err) {
       loadingProfile = false;
       loadingProfileError = true;
@@ -49,8 +49,12 @@ abstract class _ProfileScreenStoreBase with Store {
     loadingPosts = true;
     loadingPostsError = false;
     try {
+      if (limit == null && offset == null) {
+        postsList.clear();
+      }
       List<TimelinePost> posts =
           await postsRepository.getPosts(limit, offset, userId);
+      postsList.addAll(posts);
       loadingPosts = false;
       return posts;
     } catch (err) {
