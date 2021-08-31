@@ -15,9 +15,6 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 24,
-        ),
         Divider(
           thickness: 2,
           color: Colors.grey,

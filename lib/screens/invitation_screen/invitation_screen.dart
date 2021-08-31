@@ -4,9 +4,7 @@ import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
 import 'package:ootopia_app/screens/invitation_screen/components/default_invatition_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/components/sower_invitation_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
-import 'package:social_share/social_share.dart';
 
 class InvitationScreen extends StatefulWidget {
   const InvitationScreen({Key? key}) : super(key: key);
@@ -66,17 +64,20 @@ class _InvitationScreenState extends State<InvitationScreen> {
                   height: 24,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.38,
+                  height: MediaQuery.of(context).size.height * 0.50,
                   child: FutureBuilder<List<InvitationCodeModel>?>(
                       future: invitationStore.getCodes(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Container();
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
                         }
+
                         return ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
-                              if (snapshot.data![index].type != 'sower') {
+                              if (snapshot.data![index].type == 'sower') {
                                 return SowerInvitationCode(
                                     sowerCode: '${snapshot.data![index].code}');
                               }
@@ -84,9 +85,6 @@ class _InvitationScreenState extends State<InvitationScreen> {
                                   defaultCode: '${snapshot.data![index].code}');
                             });
                       }),
-                ),
-                SizedBox(
-                  height: 24,
                 ),
               ],
             ),
