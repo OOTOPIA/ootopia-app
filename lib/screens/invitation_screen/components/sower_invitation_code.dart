@@ -85,6 +85,9 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
             ),
           ],
         ),
+        SizedBox(
+          height: 24,
+        ),
       ],
     );
   }
