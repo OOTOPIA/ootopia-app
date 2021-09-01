@@ -216,7 +216,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       if (res.statusCode != 200) {
         throw Exception(res.data);
       }
-      return res.data;
+      return res.data['status'];
     } catch (e) {
       throw Exception('Code invalid ' + e.toString());
     }

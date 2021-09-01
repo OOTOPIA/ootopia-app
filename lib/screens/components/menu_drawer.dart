@@ -66,7 +66,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
       return Drawer(
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Column(
+        child: ListView(
           children: [
             DrawerHeader(
               decoration: BoxDecoration(

@@ -19,6 +19,8 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
+import 'package:ootopia_app/screens/auth/insert_invitation_code_store.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
@@ -28,7 +30,6 @@ import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
-import 'package:ootopia_app/screens/insert_invitation_code/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
@@ -53,7 +54,6 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'screens/components/menu_drawer.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
 import 'data/repositories/comment_repository.dart';
@@ -201,6 +201,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
           Provider<InvitationStore>(
             create: (_) => InvitationStore(),
+          ),
+          Provider<InsertInvitationCodeStore>(
+            create: (_) => InsertInvitationCodeStore(),
           )
         ],
         child: MaterialApp(
@@ -250,7 +253,7 @@ class MainPage extends HookWidget {
         RegenerarionGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
-    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(),
+    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
   };
 
   @override

@@ -295,6 +295,7 @@
     "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is flourishing thanks to people like you!",
     "skip":"skip",
     "access":"access",
+    "enterTheValidInvitationCode":"Please enter the valid invitation code",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
