@@ -287,7 +287,10 @@
     "shareThisCode":"share this code",
     "welcomeInvitationCode":"WELCOME INVITATION CODE",
     "sendSowerInvitationCode": "Send this code to invite people who are leading projects that create a positive impact and help regenerate Earth. Thus, they can register as a Sower.",
-    "sendWelcomeInvitationCode": "Send this code to invite your friends and receive 25,00 OOz for each newcomer.\nYour friend will receive 15,00 OOz.",
+    "sendWelcomeInvitationCode": "Send this code to invite your friends and receive",
+    "forEachNewcomer":"for each newcomer.\nYour friend will receive",
+    "ooz15":" 15,00 OOz.",
+    "ooz25":" 25,00 OOz ",
     "pictureBySeattleTilth":"Foto de Seattle Tilth",
     "joinToOOTOPIA":"Invitation to join me on OOTOPIA Experience the movement that is regenerating planet Earth! Download the app and register with this code: %USER_CODE% You'll also receive 15.00 OOz of credit. LIVE OOTOPIA NOW! ✨ 🌎 ❤️",
     "@helloWorld": {

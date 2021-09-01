@@ -39,10 +39,27 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                     ),
                   ),
                 ),
-                subtitle: Text(
-                  AppLocalizations.of(context)!.sendWelcomeInvitationCode,
-                  style: TextStyle(
-                    fontSize: 14,
+                subtitle: RichText(
+                  text: TextSpan(
+                    text:
+                        AppLocalizations.of(context)!.sendWelcomeInvitationCode,
+                    style: TextStyle(color: Colors.black),
+                    children: [
+                      TextSpan(
+                        text: AppLocalizations.of(context)!.ooz25,
+                        style: TextStyle(
+                            color: Color(0Xff003694),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                          text: AppLocalizations.of(context)!.forEachNewcomer),
+                      TextSpan(
+                        text: "${AppLocalizations.of(context)!.ooz15}",
+                        style: TextStyle(
+                            color: Color(0Xff003694),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -67,18 +84,23 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                           color: Color(0xff018F9C),
                         ),
                       ),
-                      padding: EdgeInsets.only(
-                          left: 15, right: 15, top: 3, bottom: 3),
-                      child: Text(
-                        '${widget.defaultCode}',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      padding: EdgeInsets.all(5),
+                      child: Center(
+                        child: Text(
+                          '${widget.defaultCode}',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
-                  Padding(
+                  Container(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
                       AppLocalizations.of(context)!.shareThisCode,
+                      textAlign: TextAlign.center,
                       softWrap: true,
                       style: TextStyle(color: Color(0xff003694), fontSize: 12),
                     ),
