@@ -22,70 +22,68 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         SizedBox(
           height: 24,
         ),
-        Row(
-          children: [
-            Expanded(
-              flex: 5,
-              child: ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.sowerInvitationCode,
-                    style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.sowerInvitationCode,
+          style: TextStyle(
+            color: Color(0xff018F9C),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          AppLocalizations.of(context)!.sendSowerInvitationCode,
+          softWrap: true,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () async {
+                  await SocialShare.shareOptions(
+                    AppLocalizations.of(context)!
+                        .joinToOOTOPIA
+                        .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
+                  );
+                },
+                child: Container(
+                  width: 228,
+                  decoration: BoxDecoration(
+                    color: Color(0xff018F9C),
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
+                    border: Border.all(
                       color: Color(0xff018F9C),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                subtitle: Text(
-                  AppLocalizations.of(context)!.sendSowerInvitationCode,
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      await SocialShare.shareOptions(
-                        AppLocalizations.of(context)!
-                            .joinToOOTOPIA
-                            .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xff018F9C),
-                        borderRadius: BorderRadius.all(Radius.circular(40)),
-                        border: Border.all(
-                          color: Color(0xff018F9C),
-                        ),
-                      ),
-                      padding: EdgeInsets.all(5),
-                      child: Center(
-                        child: Text(
-                          '${widget.sowerCode}',
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
+                  padding: EdgeInsets.all(9),
+                  child: Center(
                     child: Text(
-                      AppLocalizations.of(context)!.shareThisCode,
-                      textAlign: TextAlign.center,
-                      softWrap: true,
-                      style: TextStyle(color: Color(0xff018F9C), fontSize: 12),
+                      '${widget.sowerCode}',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  AppLocalizations.of(context)!.shareThisCode,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: TextStyle(
+                      color: Color(0xff018F9C),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
         ),
         SizedBox(
           height: 24,

@@ -75,7 +75,7 @@ class _InvitationScreenState extends State<InvitationScreen> {
                     height: 24,
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.50,
+                    height: MediaQuery.of(context).size.height * 0.60,
                     child: FutureBuilder<List<InvitationCodeModel>?>(
                         future: invitationStore.getCodes(),
                         builder: (context, snapshot) {
