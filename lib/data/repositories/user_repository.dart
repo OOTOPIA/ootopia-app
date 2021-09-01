@@ -18,6 +18,7 @@ abstract class UserRepository {
   Future recordTimeUserUsedApp(int timeInMilliseconds);
   Future<DailyGoalStatsModel?> getDailyGoalStats();
   Future<List<InvitationCodeModel>?> getCodes();
+  Future<String> verifyCodes(String code);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -203,6 +204,21 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       return result;
     } catch (e) {
       throw Exception('Failed to get daily goal stats ' + e.toString());
+    }
+  }
+
+  @override
+  Future<String> verifyCodes(String code) async {
+    try {
+      Response res = await ApiClient.api().get(
+        "users/invitation-code/$code",
+      );
+      if (res.statusCode != 200) {
+        throw Exception(res.data);
+      }
+      return res.data;
+    } catch (e) {
+      throw Exception('Code invalid ' + e.toString());
     }
   }
 }

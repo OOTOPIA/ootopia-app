@@ -90,6 +90,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                       }
                       return null;
                     },
+                    onChanged: (value) async {},
                   ),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.4,
