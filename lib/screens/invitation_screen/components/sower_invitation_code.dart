@@ -24,7 +24,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         ),
         Row(
           children: [
-            Flexible(
+            Expanded(
               flex: 5,
               child: ListTile(
                 title: Padding(
@@ -44,7 +44,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                 ),
               ),
             ),
-            Flexible(
+            Expanded(
               flex: 2,
               child: Column(
                 children: [

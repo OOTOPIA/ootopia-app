@@ -24,9 +24,8 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
         ),
         Row(
           children: [
-            Flexible(
+            Expanded(
               flex: 5,
-              fit: FlexFit.tight,
               child: ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
@@ -64,7 +63,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                 ),
               ),
             ),
-            Flexible(
+            Expanded(
               flex: 2,
               child: Column(
                 children: [
