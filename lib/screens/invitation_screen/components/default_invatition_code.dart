@@ -22,71 +22,83 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
         SizedBox(
           height: 24,
         ),
-        Row(
-          children: [
-            Flexible(
-              flex: 5,
-              fit: FlexFit.tight,
-              child: ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.welcomeInvitationCode,
-                    style: TextStyle(
-                      color: Color(0xff003694),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                subtitle: Text(
-                  AppLocalizations.of(context)!.sendWelcomeInvitationCode,
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
+        Text(
+          AppLocalizations.of(context)!.welcomeInvitationCode,
+          style: TextStyle(
+            color: Color(0xff003694),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        RichText(
+          text: TextSpan(
+            text: AppLocalizations.of(context)!.sendWelcomeInvitationCode,
+            style: TextStyle(color: Colors.black),
+            children: [
+              TextSpan(
+                text: AppLocalizations.of(context)!.ooz25,
+                style: TextStyle(
+                    color: Color(0Xff003694), fontWeight: FontWeight.bold),
               ),
-            ),
-            Flexible(
-              flex: 2,
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      await SocialShare.shareOptions(
-                        AppLocalizations.of(context)!
-                            .joinToOOTOPIA
-                            .replaceAll('%USER_CODE%', '${widget.defaultCode}'),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xff003694),
-                        borderRadius: BorderRadius.all(Radius.circular(40)),
-                        border: Border.all(
-                          color: Color(0xff018F9C),
-                        ),
-                      ),
-                      padding: EdgeInsets.only(
-                          left: 15, right: 15, top: 3, bottom: 3),
-                      child: Text(
-                        '${widget.defaultCode}',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
+              TextSpan(text: AppLocalizations.of(context)!.forEachNewcomer),
+              TextSpan(
+                text: "${AppLocalizations.of(context)!.ooz15}",
+                style: TextStyle(
+                    color: Color(0Xff003694), fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () async {
+                  await SocialShare.shareOptions(
+                    AppLocalizations.of(context)!
+                        .joinToOOTOPIA
+                        .replaceAll('%USER_CODE%', '${widget.defaultCode}'),
+                  );
+                },
+                child: Container(
+                  width: 228,
+                  decoration: BoxDecoration(
+                    color: Color(0xff003694),
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
+                    border: Border.all(
+                      color: Color(0xff018F9C),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
+                  padding: EdgeInsets.all(9),
+                  child: Center(
                     child: Text(
-                      AppLocalizations.of(context)!.shareThisCode,
-                      softWrap: true,
-                      style: TextStyle(color: Color(0xff003694), fontSize: 12),
+                      '${widget.defaultCode}',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
                     ),
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  AppLocalizations.of(context)!.shareThisCode,
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: TextStyle(
+                      color: Color(0xff003694),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
         ),
       ],
     );
