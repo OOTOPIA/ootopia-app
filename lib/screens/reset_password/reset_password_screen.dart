@@ -224,106 +224,110 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 ),
                                 child: Column(
                                   children: [
-                                    TextFormField(
-                                      controller: _passwordController,
-                                      obscureText: !_showPassword,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme(
-                                              AppLocalizations.of(context)!
-                                                  .password)
-                                          .copyWith(
-                                            prefixIcon: ImageIcon(
-                                              AssetImage(
-                                                  "assets/icons/lock.png"),
-                                              color: passIsValid
-                                                  ? LightColors.grey
-                                                  : Colors.red,
-                                            ),
-                                            suffixIcon: GestureDetector(
-                                              child: Icon(
-                                                _showPassword == false
-                                                    ? Icons
-                                                        .visibility_off_outlined
-                                                    : Icons.visibility_outlined,
-                                                color: LightColors.grey,
+                                    Container(
+                                      height: 72,
+                                      child: TextFormField(
+                                        controller: _passwordController,
+                                        obscureText: !_showPassword,
+                                        decoration: GlobalConstants.of(context)
+                                            .loginInputTheme(
+                                                AppLocalizations.of(context)!
+                                                    .password)
+                                            .copyWith(
+                                              prefixIcon: ImageIcon(
+                                                AssetImage(
+                                                    "assets/icons/lock.png"),
+                                                color: passIsValid
+                                                    ? LightColors.grey
+                                                    : Colors.red,
                                               ),
-                                              onTap: () {
-                                                setState(() {
-                                                  _showPassword =
-                                                      !_showPassword;
-                                                });
-                                              },
+                                              suffixIcon: GestureDetector(
+                                                child: Icon(
+                                                  _showPassword == false
+                                                      ? FeatherIcons.eyeOff
+                                                      : FeatherIcons.eye,
+                                                  color: LightColors.grey,
+                                                ),
+                                                onTap: () {
+                                                  setState(() {
+                                                    _showPassword =
+                                                        !_showPassword;
+                                                  });
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            setState(() {
+                                              passIsValid = false;
+                                            });
+                                            return AppLocalizations.of(context)!
+                                                .enterNewPassword;
+                                          }
                                           setState(() {
-                                            passIsValid = false;
+                                            passIsValid = true;
                                           });
-                                          return AppLocalizations.of(context)!
-                                              .enterNewPassword;
-                                        }
-                                        setState(() {
-                                          passIsValid = true;
-                                        });
-                                        return null;
-                                      },
+                                          return null;
+                                        },
+                                      ),
                                     ),
                                     SizedBox(
                                       height: GlobalConstants.of(context)
-                                          .spacingNormal,
+                                          .spacingSmall,
                                     ),
-                                    TextFormField(
-                                      controller: _repeatPasswordController,
-                                      obscureText: !_showRepeatPassword,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme(
-                                              AppLocalizations.of(context)!
-                                                  .repeatPassword)
-                                          .copyWith(
-                                            prefixIcon: ImageIcon(
-                                              AssetImage(
-                                                  "assets/icons/lock.png"),
-                                              color: pass2IsValid
-                                                  ? LightColors.grey
-                                                  : Colors.red,
-                                            ),
-                                            suffixIcon: GestureDetector(
-                                              child: Icon(
-                                                _showRepeatPassword == false
-                                                    ? Icons
-                                                        .visibility_off_outlined
-                                                    : Icons.visibility_outlined,
-                                                color: LightColors.grey,
+                                    Container(
+                                      height: 72,
+                                      child: TextFormField(
+                                        controller: _repeatPasswordController,
+                                        obscureText: !_showRepeatPassword,
+                                        decoration: GlobalConstants.of(context)
+                                            .loginInputTheme(
+                                                AppLocalizations.of(context)!
+                                                    .repeatPassword)
+                                            .copyWith(
+                                              prefixIcon: ImageIcon(
+                                                AssetImage(
+                                                    "assets/icons/lock.png"),
+                                                color: pass2IsValid
+                                                    ? LightColors.grey
+                                                    : Colors.red,
                                               ),
-                                              onTap: () {
-                                                setState(() {
-                                                  _showRepeatPassword =
-                                                      !_showRepeatPassword;
-                                                });
-                                              },
+                                              suffixIcon: GestureDetector(
+                                                child: Icon(
+                                                  _showRepeatPassword == false
+                                                      ? FeatherIcons.eyeOff
+                                                      : FeatherIcons.eye,
+                                                  color: LightColors.grey,
+                                                ),
+                                                onTap: () {
+                                                  setState(() {
+                                                    _showRepeatPassword =
+                                                        !_showRepeatPassword;
+                                                  });
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            setState(() {
+                                              pass2IsValid = false;
+                                            });
+                                            return AppLocalizations.of(context)!
+                                                .pleaseEnterYourPassword;
+                                          }
+                                          if (value != _passwordController.text) {
+                                            setState(() {
+                                              pass2IsValid = false;
+                                            });
+                                            return AppLocalizations.of(context)!
+                                                .pleaseEnterTheSamePassword;
+                                          }
                                           setState(() {
-                                            passIsValid = false;
+                                            pass2IsValid = true;
                                           });
-                                          return AppLocalizations.of(context)!
-                                              .pleaseEnterYourPassword;
-                                        }
-                                        if (value != _passwordController.text) {
-                                          setState(() {
-                                            passIsValid = false;
-                                          });
-                                          return AppLocalizations.of(context)!
-                                              .passwordsDontMatch;
-                                        }
-                                        setState(() {
-                                          passIsValid = true;
-                                        });
-                                        return null;
-                                      },
+                                          return null;
+                                        },
+                                      ),
                                     )
                                   ],
                                 ),

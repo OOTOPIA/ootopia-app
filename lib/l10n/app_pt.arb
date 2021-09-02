@@ -52,6 +52,8 @@
     "pleaseEnterYourNameAndSurname": "Por favor, insira seu nome e sobrenome",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
+    "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
+    "pleaseEnterTheSamePassword": "Por favor, insira a mesma senha",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 

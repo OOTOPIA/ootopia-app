@@ -308,7 +308,7 @@ class _RegenerarionGameLearningAlertState
                         ],
                       ),
                       SizedBox(
-                        height: 32,
+                        height: 25,
                       )
                     ],
                   )
