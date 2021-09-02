@@ -164,21 +164,21 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             );
           } else if (state is LoadedSucessState) {
-            if (widget.args != null &&
-                widget.args!['returnToPageWithArgs'] != null) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.homeScreen.route,
-                ModalRoute.withName('/'),
-                arguments: {
-                  "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
-                },
-              );
-            } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.homeScreen.route,
-                ModalRoute.withName('/'),
-              );
-            }
+            // if (widget.args != null &&
+            //     widget.args!['returnToPageWithArgs'] != null) {
+            //   Navigator.of(context).pushNamedAndRemoveUntil(
+            //     PageRoute.Page.homeScreen.route,
+            //     ModalRoute.withName('/'),
+            //     arguments: {
+            //       "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
+            //     },
+            //   );
+            // } else {
+            //   Navigator.of(context).pushNamedAndRemoveUntil(
+            //     PageRoute.Page.homeScreen.route,
+            //     ModalRoute.withName('/'),
+            //   );
+            // }
           }
         },
         child: WillPopScope(

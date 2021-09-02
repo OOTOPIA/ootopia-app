@@ -296,6 +296,8 @@
     "skip":"skip",
     "access":"access",
     "enterTheValidInvitationCode":"Please enter the valid invitation code",
+    "invitationCodeAccepted":"invitation code accepted",
+    "invitationCodeSent":"invitation code sent",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

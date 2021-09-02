@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
+import 'package:ootopia_app/data/repositories/auth_repository.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -12,6 +15,8 @@ abstract class AuthStoreBase with Store {
   SecureStoreMixin storage = SecureStoreMixin();
 
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
+  final AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   @observable
   ObservableFuture<User?>? _currentUser;
@@ -49,5 +54,38 @@ abstract class AuthStoreBase with Store {
       await storage.cleanAuthToken();
       this._currentUser = null;
     });
+  }
+
+  @action
+  registerUser(
+      {required String name,
+      required String password,
+      required String email,
+      String? invitationCode,
+      required BuildContext context}) async {
+    try {
+      var result =
+          await authRepository.register(name, email, password, invitationCode);
+      this
+          .trackingEvents
+          .trackingSignupCompletedSignup(result.id!, result.fullname!);
+    } catch (e) {
+      String errorMessage = e.toString();
+      switch (errorMessage) {
+        case "EMAIL_ALREADY_EXISTS":
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    'There is already a registered user with that email address')),
+          );
+          break;
+        case "Invitation Code invalid":
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Invitation Code invalid')),
+          );
+          break;
+        default:
+      }
+    }
   }
 }

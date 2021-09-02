@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -17,50 +15,52 @@ class InsertInvitationCode extends StatefulWidget {
 }
 
 class _InsertInvitationCodeState extends State<InsertInvitationCode> {
-  bool visibleValidStatusCode = true;
+  bool visibleValidStatusCode = false;
+  bool exibleText = false;
+  TextEditingController _codeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var insertInvitationCodeStore =
         Provider.of<InsertInvitationCodeStore>(context);
-    var authBloc = BlocProvider.of<AuthBloc>(context);
-    String? code;
+    var auth = Provider.of<AuthStore>(context);
+
     void submit() {
-      setState(() {
-        if (visibleValidStatusCode) {
-          authBloc.add(EmptyEvent());
-          authBloc.add(RegisterEvent(
+      if (visibleValidStatusCode) {
+        auth.registerUser(
+          name: widget.args['FULLNAME'],
+          email: widget.args['EMAIL'],
+          password: widget.args['PASSWORD'],
+          invitationCode: _codeController.text,
+          context: context,
+        );
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          PageRoute.Page.celebration.route,
+          ModalRoute.withName('/'),
+          arguments: {
+            "returnToPageWithArgs": widget.args['returnToPageWithArgs'],
+            "name": widget.args['FULLNAME'],
+            "goal": "personal",
+            "balance": "15,00OOz",
+            "homepage": true
+          },
+        );
+      } else {
+        setState(() {
+          auth.registerUser(
             name: widget.args['FULLNAME'],
             email: widget.args['EMAIL'],
             password: widget.args['PASSWORD'],
-            invitationCode: code,
-          ));
-        } else {
-          authBloc.add(EmptyEvent());
-          authBloc.add(RegisterEvent(
-            name: widget.args['FULLNAME'],
-            email: widget.args['EMAIL'],
-            password: widget.args['PASSWORD'],
-          ));
-        }
-        // if (widget.args['returnToPageWithArgs'] != null) {
-        //   Navigator.of(context).pushNamedAndRemoveUntil(
-        //     PageRoute.Page.homeScreen.route,
-        //     ModalRoute.withName('/'),
-        //     arguments: {
-        //       "returnToPageWithArgs": widget.args['returnToPageWithArgs']
-        //     },
-        //   );
-        // } else {
-        //   Navigator.of(context).pushNamedAndRemoveUntil(
-        //     PageRoute.Page.homeScreen.route,
-        //     ModalRoute.withName('/'),
-        //   );
-        // }
-      });
+            context: context,
+          );
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            PageRoute.Page.homeScreen.route,
+            ModalRoute.withName('/'),
+          );
+        });
+      }
     }
 
-    print(visibleValidStatusCode);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -116,30 +116,57 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                   autocorrect: false,
                   textCapitalization: TextCapitalization.words,
                   autofocus: true,
-                  decoration: GlobalConstants.of(context)
-                      .loginInputTheme(
-                          AppLocalizations.of(context)!.invitationCode)
-                      .copyWith(
-                          hoverColor: Colors.white,
-                          fillColor: Colors.white,
-                          hintText:
-                              AppLocalizations.of(context)!.invitationCode,
-                          hintStyle: TextStyle(color: Colors.grey)),
+                  controller: _codeController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 0.30),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: exibleText
+                        ? OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 0.30),
+                            borderRadius: BorderRadius.circular(8),
+                          )
+                        : OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.30),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                    enabledBorder: exibleText
+                        ? OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 0.30),
+                            borderRadius: BorderRadius.circular(8),
+                          )
+                        : OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.30),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                    hoverColor: Colors.white,
+                    fillColor: Colors.white,
+                    hintText: AppLocalizations.of(context)!.invitationCode,
+                    hintStyle: TextStyle(color: Colors.grey),
+                  ),
+                  style: exibleText
+                      ? TextStyle(color: Colors.red)
+                      : TextStyle(color: Colors.black),
                   onChanged: (value) {
                     print(value);
-                    Future.delayed(Duration(seconds: 6), () async {
-                      var statusCode = await insertInvitationCodeStore
-                          .verifyCodes('wLYDvO9SjC');
+                    Future.delayed(Duration(seconds: 4), () async {
+                      var statusCode =
+                          await insertInvitationCodeStore.verifyCodes(value);
+
                       setState(() {
-                        if (statusCode == 'invalid') {
-                          visibleValidStatusCode = false;
-                        } else {
-                          code = value;
+                        if (statusCode == 'valid') {
                           visibleValidStatusCode = true;
-                          submit();
+                          exibleText = false;
+                        } else {
+                          visibleValidStatusCode = false;
+                          exibleText = true;
                         }
                       });
-                      print(visibleValidStatusCode);
                     });
                   },
                 ),
@@ -147,7 +174,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                   height: 8,
                 ),
                 Visibility(
-                  visible: !visibleValidStatusCode,
+                  visible: exibleText,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -182,13 +209,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                             padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(15)),
                           ),
-                          onPressed: () {
-                            authBloc.add(EmptyEvent());
-                            authBloc.add(RegisterEvent(
-                                name: widget.args['FULLNAME'],
-                                email: widget.args['EMAIL'],
-                                password: widget.args['PASSWORD']));
-                          },
+                          onPressed: submit,
                           child: Text(
                             AppLocalizations.of(context)!.skip,
                             style: TextStyle(
@@ -211,7 +232,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                             padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(15)),
                           ),
-                          onPressed: visibleValidStatusCode ? null : submit,
+                          onPressed: !visibleValidStatusCode ? null : submit,
                           child: Text(
                             AppLocalizations.of(context)!.access,
                             style: TextStyle(fontSize: 16),
