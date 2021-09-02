@@ -52,10 +52,22 @@ class _RegisterPageState extends State<RegisterPage> {
         showCheckBoxError = true;
         return;
       }
-      isLoading = true;
-      authBloc!.add(EmptyEvent());
-      authBloc!.add(RegisterEvent(_nameController.text, _emailController.text,
-          _passwordController.text));
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.insertInvitationCode.route,
+        arguments: {
+          "returnToPageWithArgs":
+              widget.args != null ? widget.args!['returnToPageWithArgs'] : null,
+          "EMAIL": _emailController.text,
+          "PASSWORD": _passwordController.text,
+          "FULLNAME": _nameController.text
+        },
+      );
+      //isLoading = true;
+      //   authBloc!.add(EmptyEvent());
+      //   authBloc!.add(RegisterEvent(
+      //       name: _nameController.text,
+      //       email: _emailController.text,
+      //       password: _passwordController.text));
     });
   }
 
@@ -163,7 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
               );
             } else {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.timelineScreen.route,
+                PageRoute.Page.homeScreen.route,
                 ModalRoute.withName('/'),
               );
             }
@@ -572,7 +584,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   GlobalConstants.of(context).spacingNormal,
                                 ),
                                 child: Text(
-                                  AppLocalizations.of(context)!.createAccount,
+                                  AppLocalizations.of(context)!.continueAccess,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
