@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -165,88 +166,97 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: Column(
                                 children: [
-                                  TextFormField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    autofocus: true,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(
-                                            AppLocalizations.of(context)!.email)
-                                        .copyWith(
-                                          prefixIcon: ImageIcon(
-                                            AssetImage("assets/icons/mail.png"),
-                                            color: mailIsValid
-                                                ? LightColors.grey
-                                                : Colors.red,
+                                  Container(
+                                    height: 72,
+                                    child: TextFormField(
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      autofocus: true,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme(
+                                              AppLocalizations.of(context)!
+                                                  .email)
+                                          .copyWith(
+                                            prefixIcon: ImageIcon(
+                                              AssetImage(
+                                                  "assets/icons/mail.png"),
+                                              color: mailIsValid
+                                                  ? LightColors.grey
+                                                  : Colors.red,
+                                            ),
                                           ),
-                                        ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            mailIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterYourValidEmailAddress;
+                                        }
                                         setState(() {
-                                          mailIsValid = false;
+                                          mailIsValid = true;
                                         });
-                                        return AppLocalizations.of(context)!
-                                            .pleaseEnterYourEmail;
-                                      }
-                                      setState(() {
-                                        mailIsValid = true;
-                                      });
-                                      return null;
-                                    },
+                                        return null;
+                                      },
+                                    ),
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingMedium,
+                                        .spacingSmall,
                                   ),
-                                  TextFormField(
-                                    controller: _passwordController,
-                                    obscureText: !_showPassword,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(
-                                            AppLocalizations.of(context)!
-                                                .password)
-                                        .copyWith(
-                                          prefixIcon: ImageIcon(
-                                            AssetImage("assets/icons/lock.png"),
-                                            color: passIsValid
-                                                ? LightColors.grey
-                                                : Colors.red,
-                                          ),
-                                          suffixIcon: GestureDetector(
-                                            child: Icon(
-                                              _showPassword == false
-                                                  ? Icons
-                                                      .visibility_off_outlined
-                                                  : Icons.visibility_outlined,
-                                              color: LightColors.grey,
+                                  Container(
+                                    height: 72,
+                                    child: TextFormField(
+                                      controller: _passwordController,
+                                      obscureText: !_showPassword,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme(
+                                              AppLocalizations.of(context)!
+                                                  .password)
+                                          .copyWith(
+                                            prefixIcon: ImageIcon(
+                                              AssetImage(
+                                                  "assets/icons/lock.png"),
+                                              color: passIsValid
+                                                  ? LightColors.grey
+                                                  : Colors.red,
                                             ),
-                                            onTap: () {
-                                              setState(() {
-                                                _showPassword = !_showPassword;
-                                              });
-                                            },
+                                            suffixIcon: GestureDetector(
+                                              child: Icon(
+                                                _showPassword == false
+                                                    ? FeatherIcons.eyeOff
+                                                    : FeatherIcons.eye,
+                                                color: LightColors.grey,
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  _showPassword =
+                                                      !_showPassword;
+                                                });
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            passIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterYourPassword;
+                                        }
                                         setState(() {
-                                          passIsValid = false;
+                                          passIsValid = true;
                                         });
-                                        return AppLocalizations.of(context)!
-                                            .pleaseEnterYourPassword;
-                                      }
-                                      setState(() {
-                                        passIsValid = true;
-                                      });
 
-                                      return null;
-                                    },
+                                        return null;
+                                      },
+                                    ),
                                   )
                                 ],
                               ),

@@ -56,6 +56,8 @@
     "pleaseEnterYourNameAndSurname": "Please enter your name and surname",
     "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
+    "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
+    "pleaseEnterTheSamePassword": "Please enter the same password",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
@@ -150,7 +152,7 @@
     "pleaseEnterYourEmail": "Please enter your email",
     "changePassword": "Change Password",
     "enterNewPassword": "Enter new password",
-    "pleaseEnterYourPassword": "Please enter your password",
+    "pleaseEnterYourPassword": "Please enter your valid password",
     "passwordsDontMatch": "Passwords don't match",
 
     "locationServicesAreDisabled": "Location services are disabled.",
