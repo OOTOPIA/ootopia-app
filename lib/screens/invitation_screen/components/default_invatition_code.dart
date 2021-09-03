@@ -34,6 +34,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
           height: 8,
         ),
         RichText(
+          textAlign: TextAlign.center,
           text: TextSpan(
             text: AppLocalizations.of(context)!.sendWelcomeInvitationCode,
             style: TextStyle(color: Colors.black),
@@ -70,7 +71,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                     color: Color(0xff003694),
                     borderRadius: BorderRadius.all(Radius.circular(40)),
                     border: Border.all(
-                      color: Color(0xff018F9C),
+                      color: Color(0xff003694),
                     ),
                   ),
                   padding: EdgeInsets.all(9),
