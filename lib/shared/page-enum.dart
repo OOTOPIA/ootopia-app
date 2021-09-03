@@ -24,7 +24,8 @@ enum Page {
   profile,
   regenerarionGameLearningAlert,
   chatWithUsersScreen,
-  invitationScreen
+  invitationScreen,
+  insertInvitationCode,
 }
 
 extension PageRoute on Page {

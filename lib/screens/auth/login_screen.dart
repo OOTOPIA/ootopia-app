@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoginPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -27,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool mailIsValid = true;
+  bool passIsValid = true;
 
   @override
   void initState() {
@@ -98,12 +104,6 @@ class _LoginPageState extends State<LoginPage> {
         return LoadingOverlay(
           isLoading: isLoading,
           child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/login_bg.jpg"),
-                fit: BoxFit.cover,
-              ),
-            ),
             child: Center(
               child: SingleChildScrollView(
                 padding:
@@ -123,30 +123,42 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
-                                  'assets/images/white_logo.png',
+                                  'assets/images/logo.png',
                                   height:
                                       GlobalConstants.of(context).logoHeight,
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: GlobalConstants.of(context)
-                                      .spacingNormal),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .helloWIfNotNowThenWhenorld,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(color: Colors.white),
-                                ),
-                              ],
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .liveInOotopiaNowMessage,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(color: LightColors.blue),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        child: Image(
+                                          image: AssetImage(
+                                              "assets/images/butterfly.png"),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 22,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
@@ -154,73 +166,109 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: Column(
                                 children: [
-                                  TextFormField(
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    autofocus: true,
-                                    style: TextStyle(
-                                      color: Colors.white,
+                                  Container(
+                                    height: 72,
+                                    child: TextFormField(
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      autofocus: true,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme(
+                                              AppLocalizations.of(context)!
+                                                  .email)
+                                          .copyWith(
+                                            prefixIcon: ImageIcon(
+                                              AssetImage(
+                                                  "assets/icons/mail.png"),
+                                              color: mailIsValid
+                                                  ? LightColors.grey
+                                                  : Colors.red,
+                                            ),
+                                          ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            mailIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterYourValidEmailAddress;
+                                        }
+                                        setState(() {
+                                          mailIsValid = true;
+                                        });
+                                        return null;
+                                      },
                                     ),
-                                    decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(
-                                            AppLocalizations.of(context)!
-                                                .email),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return AppLocalizations.of(context)!
-                                            .pleaseEnterYourEmail;
-                                      }
-                                      return null;
-                                    },
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .spacingSmall,
                                   ),
-                                  TextFormField(
-                                    controller: _passwordController,
-                                    obscureText: !_showPassword,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                    decoration: GlobalConstants.of(context)
-                                        .loginInputTheme(
-                                            AppLocalizations.of(context)!
-                                                .password)
-                                        .copyWith(
-                                          suffixIcon: GestureDetector(
-                                            child: Icon(
-                                              _showPassword == false
-                                                  ? Icons.visibility_off
-                                                  : Icons.visibility,
-                                              color: Colors.white,
+                                  Container(
+                                    height: 72,
+                                    child: TextFormField(
+                                      controller: _passwordController,
+                                      obscureText: !_showPassword,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme(
+                                              AppLocalizations.of(context)!
+                                                  .password)
+                                          .copyWith(
+                                            prefixIcon: ImageIcon(
+                                              AssetImage(
+                                                  "assets/icons/lock.png"),
+                                              color: passIsValid
+                                                  ? LightColors.grey
+                                                  : Colors.red,
                                             ),
-                                            onTap: () {
-                                              setState(() {
-                                                _showPassword = !_showPassword;
-                                              });
-                                            },
+                                            suffixIcon: GestureDetector(
+                                              child: Icon(
+                                                _showPassword == false
+                                                    ? FeatherIcons.eyeOff
+                                                    : FeatherIcons.eye,
+                                                color: LightColors.grey,
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  _showPassword =
+                                                      !_showPassword;
+                                                });
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return AppLocalizations.of(context)!
-                                            .pleaseEnterYourPassword;
-                                      }
-                                      return null;
-                                    },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            passIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterYourPassword;
+                                        }
+                                        setState(() {
+                                          passIsValid = true;
+                                        });
+
+                                        return null;
+                                      },
+                                    ),
                                   )
                                 ],
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingLarge,
+                                top: 8,
                                 bottom:
                                     GlobalConstants.of(context).spacingLarge,
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -232,10 +280,10 @@ class _LoginPageState extends State<LoginPage> {
                                           .iForgotMyPassword,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.underline,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -260,7 +308,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -269,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _submit();
                               }
                             },
-                            color: Colors.white,
+                            color: LightColors.blue,
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -279,6 +327,24 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               borderRadius: BorderRadius.circular(50),
                             ),
+                          ),
+                          SizedBox(
+                            height: GlobalConstants.of(context).spacingMedium,
+                          ),
+                          Container(
+                            height: 1,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            height: GlobalConstants.of(context).spacingMedium,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.dontHaveAnAccountYet,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle2!
+                                .copyWith(color: LightColors.blue),
                           ),
                           SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
@@ -293,7 +359,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: LightColors.blue,
                                 ),
                               ),
                             ),
@@ -316,8 +382,8 @@ class _LoginPageState extends State<LoginPage> {
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Colors.white,
-                                width: 2,
+                                color: LightColors.blue,
+                                width: 1,
                                 style: BorderStyle.solid,
                               ),
                               borderRadius: BorderRadius.circular(50),

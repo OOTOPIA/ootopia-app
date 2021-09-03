@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class GlobalConstants extends InheritedWidget {
   static GlobalConstants of(BuildContext context) =>
@@ -14,26 +15,26 @@ class GlobalConstants extends InheritedWidget {
   final double spacingLarge = 48;
   final double spacingXL = 64;
   final double screenHorizontalSpace = 22;
-
+  final double spacingSemiLarge = 40;
   final double logoHeight = 82;
 
   InputDecoration loginInputTheme(String labelText) {
     return InputDecoration(
       counterText: "",
       labelText: labelText,
-      labelStyle: TextStyle(color: Colors.white),
+      labelStyle: TextStyle(color: Colors.black54),
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black54, width: 1.5),
-        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
+        borderRadius: BorderRadius.circular(4),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white, width: 1.5),
-        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
+        borderRadius: BorderRadius.circular(4),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white, width: 1.5),
-        borderRadius: BorderRadius.circular(100),
+        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
+        borderRadius: BorderRadius.circular(4),
       ),
     );
   }

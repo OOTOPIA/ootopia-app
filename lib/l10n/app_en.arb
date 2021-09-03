@@ -4,6 +4,7 @@
         "description": "The current language"
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
+    "liveInOotopiaNowMessage": "LIVE IN OOTOPIA NOW!",
     "email": "E-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "Password",
@@ -14,6 +15,16 @@
     "passwordDoesNotMatch": "Password does not match",
     "login": "Login",
     "createAccount": "Create account",
+    "dontHaveAnAccountYet": "Don't have an account yet?",
+    "forgotMyPass": "Forgot password?",
+    "recoverPassItsAllRight": "It's all right",
+    "creatingANewAccountPassword": "Create a new account password in order to access your Ootopia account.",
+    "creatingANewPassword": "Creating a new password",
+    "createNewPassword":"Create new password",
+    "requestNewPassword": "Request new password",
+
+    "checkYourEmail": "Check Your E-Mail",
+    "weSentYouALinkToCreateANewPassword": "We sent you a link to create a new password for: ",
 
 
     "regenerationGame": "Regeneration game",
@@ -45,6 +56,8 @@
     "pleaseEnterYourNameAndSurname": "Please enter your name and surname",
     "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
+    "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
+    "pleaseEnterTheSamePassword": "Please enter the same password",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
@@ -135,11 +148,11 @@
     "ourPledgeForTransparencyAndHighEthicalStandards": "our pledge for transparency and high ethical standards.",
     
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Sent! \r\n\r\nIf this is your email, a link should be in your inbox so you can update your password.",
-    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recover password\r\n\r\nPlease enter your email to start the password recovery process",
+    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Just enter the email with which you created your \n account and then you will receive a message to \n create a new password.",
     "pleaseEnterYourEmail": "Please enter your email",
     "changePassword": "Change Password",
     "enterNewPassword": "Enter new password",
-    "pleaseEnterYourPassword": "Please enter your password",
+    "pleaseEnterYourPassword": "Please enter your valid password",
     "passwordsDontMatch": "Passwords don't match",
 
     "locationServicesAreDisabled": "Location services are disabled.",
@@ -282,6 +295,14 @@
     "ooz25":" 25,00 OOz ",  
     "pictureByRommelDiaz":"Picture by Rommel Diaz",
     "joinToOOTOPIA":"Invitation to join me on OOTOPIA Experience the movement that is regenerating planet Earth! Download the app and register with this code: %USER_CODE% You'll also receive 15.00 OOz of credit. LIVE OOTOPIA NOW! ✨ 🌎 ❤️",
+    "continueAccess":"continue",
+    "enterYourInvitationCode":"Enter your invitation code",
+    "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is flourishing thanks to people like you!",
+    "skip":"skip",
+    "access":"access",
+    "enterTheValidInvitationCode":"Please enter the valid invitation code",
+    "invitationCodeAccepted":"invitation code accepted",
+    "invitationCodeSent":"invitation code sent",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

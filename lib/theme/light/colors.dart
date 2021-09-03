@@ -11,5 +11,6 @@ class LightColors {
   static const Color blue = Color(0xff003694);
   static const Color accentBlue = Color(0xff00A5FC);
   static const Color highlightText = Color(0xff003694);
+  static const Color darkBlue = Color(0xFF03145C);
   static Color blackText = Colors.black;
 }
