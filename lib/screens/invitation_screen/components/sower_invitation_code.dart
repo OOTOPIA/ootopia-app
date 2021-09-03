@@ -23,7 +23,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
           height: 24,
         ),
         Text(
-          AppLocalizations.of(context)!.sowerInvitationCode,
+          AppLocalizations.of(context)!.changeMakerProInvitationCode,
           style: TextStyle(
             color: Color(0xff018F9C),
             fontSize: 16,
@@ -36,6 +36,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         Text(
           AppLocalizations.of(context)!.sendSowerInvitationCode,
           softWrap: true,
+          textAlign: TextAlign.center,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0),

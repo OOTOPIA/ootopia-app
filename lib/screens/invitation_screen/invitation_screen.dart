@@ -20,62 +20,60 @@ class _InvitationScreenState extends State<InvitationScreen> {
   Widget build(BuildContext context) {
     InvitationStore invitationStore = Provider.of<InvitationStore>(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  'assets/images/kids.png',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0, right: 21),
-                    child: RotatedBox(
-                      quarterTurns: -1,
-                      child: RichText(
-                        text: TextSpan(
-                          text: AppLocalizations.of(context)!
-                              .pictureBySeattleTilth,
-                          style: TextStyle(color: Colors.black87, fontSize: 10),
-                        ),
+      body: ListView(
+        children: [
+          Stack(
+            children: [
+              Image.asset(
+                'assets/images/plating.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0, right: 21),
+                  child: RotatedBox(
+                    quarterTurns: -1,
+                    child: RichText(
+                      text: TextSpan(
+                        text: AppLocalizations.of(context)!.pictureByRommelDiaz,
+                        style: TextStyle(color: Colors.white, fontSize: 10),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.eachOneMakeADiference,
-                    style: TextStyle(
-                      color: Color(0xff003694),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+              ),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            child: Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.eachOneMakeADiference,
+                  style: TextStyle(
+                    color: Color(0xff003694),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                  SizedBox(
-                    height: 8,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.inviteYourFriendsToJoinOOTOPIA,
+                  style: TextStyle(
+                    fontSize: 14,
                   ),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .inviteYourFriendsToJoinOOTOPIA,
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.60,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Scrollbar(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.50,
                     child: FutureBuilder<List<InvitationCodeModel>?>(
                         future: invitationStore.getCodes(),
                         builder: (context, snapshot) {
@@ -85,7 +83,14 @@ class _InvitationScreenState extends State<InvitationScreen> {
                             );
                           }
 
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(snapshot.error.toString()),
+                            );
+                          }
+
                           return ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
                                 if (snapshot.data![index].type == 'sower') {
@@ -99,11 +104,11 @@ class _InvitationScreenState extends State<InvitationScreen> {
                               });
                         }),
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
