@@ -59,7 +59,7 @@ mixin _$AuthStore on AuthStoreBase, Store {
   final _$registerUserAsyncAction = AsyncAction('AuthStoreBase.registerUser');
 
   @override
-  Future registerUser(
+  Future<bool> registerUser(
       {required String name,
       required String password,
       required String email,

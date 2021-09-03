@@ -57,7 +57,7 @@ abstract class AuthStoreBase with Store {
   }
 
   @action
-  registerUser(
+  Future<bool> registerUser(
       {required String name,
       required String password,
       required String email,
@@ -69,23 +69,9 @@ abstract class AuthStoreBase with Store {
       this
           .trackingEvents
           .trackingSignupCompletedSignup(result.id!, result.fullname!);
+      return true;
     } catch (e) {
-      String errorMessage = e.toString();
-      switch (errorMessage) {
-        case "EMAIL_ALREADY_EXISTS":
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'There is already a registered user with that email address')),
-          );
-          break;
-        case "Invitation Code invalid":
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Invitation Code invalid')),
-          );
-          break;
-        default:
-      }
+      return Future.error(e);
     }
   }
 }
