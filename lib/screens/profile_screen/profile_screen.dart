@@ -1,28 +1,304 @@
 //Packages
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
+import 'package:provider/provider.dart';
 
 //Files
-import 'package:ootopia_app/screens/components/menu_drawer.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
+import 'components/album_profile_widget.dart';
+import 'components/avatar_photo_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   Map<String, dynamic>? args;
 
-  ProfileScreen(this.args, {Key? key}) : super(key: key);
+  ProfileScreen([this.args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  ProfileScreenStore store = ProfileScreenStore();
+  late AuthStore authStore;
+  bool isVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await store.getProfileDetails(authStore.currentUser!.id!);
+      await store.getUserPosts(authStore.currentUser!.id!);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            child: Avatar(),
-          )
-        ],
+    authStore = Provider.of<AuthStore>(context);
+
+    return Scaffold(
+      body: Observer(
+        builder: (_) => LoadingOverlay(
+          isLoading: store.loadingProfile,
+          child: store.profile == null
+              ? Container()
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      AvatarPhotoWidget(
+                        photoUrl: store.profile!.photoUrl,
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingMedium,
+                      ),
+                      Text(
+                        store.profile!.fullname,
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                          height: GlobalConstants.of(context).spacingNormal),
+                      Container(
+                        height: 44,
+                        width: MediaQuery.of(context).size.width * .8,
+                        decoration: BoxDecoration(
+                            border: Border.fromBorderSide(
+                                BorderSide(width: 1, color: Color(0xff707070))),
+                            borderRadius: BorderRadius.circular(45)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: "Personal Goal: ",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black87),
+                                ),
+                                TextSpan(
+                                  text: "10m",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ]),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text("|",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (isVisible) {
+                                    isVisible = false;
+                                  } else {
+                                    isVisible = true;
+                                  }
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/icons_profile/teste.svg",
+                                    width: 19,
+                                    height: 16,
+                                    color: Color(0xff00A5FC),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 2),
+                                    child: Text("23",
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff00A5FC),
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  RotationTransition(
+                                    turns: isVisible
+                                        ? AlwaysStoppedAnimation(270 / 360)
+                                        : AlwaysStoppedAnimation(90 / 360),
+                                    child: Icon(
+                                      Icons.arrow_back_ios_rounded,
+                                      color: Color(0xff03145C),
+                                      size: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: isVisible
+                            ? Container(
+                                width: double.maxFinite,
+                                height: 54,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: GlobalConstants.of(context)
+                                        .screenHorizontalSpace),
+                                decoration: BoxDecoration(
+                                    color: Color(0xff707070).withOpacity(.2)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                        text: TextSpan(children: [
+                                      TextSpan(text: "10"),
+                                      TextSpan(text: "Personal"),
+                                    ]))
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer finibus congue quam. Sed vel tellus facilisis, varius turpis rhoncus, cursus ante.",
+                          style: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      Container(
+                        width: double.maxFinite,
+                        height: 60,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        decoration: BoxDecoration(
+                            color: Color(0xff707070).withOpacity(.2)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Wallet",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff000000),
+                                    fontWeight: FontWeight.w500)),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Current OOz Balance",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xff707070),
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Text(
+                                  "1.201,00",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xff003694),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        width: double.maxFinite,
+                        height: 1,
+                        color: Color(0xff707070).withOpacity(.1),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        child: Row(
+                          children: [
+                            AlbumProfileWidget(
+                              onTap: () {},
+                              albumName: "Passeio",
+                              photoAlbumUrl: "hello",
+                            ),
+                            AlbumProfileWidget(
+                              onTap: () {},
+                              albumName: "Album",
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        width: double.maxFinite,
+                        height: 1,
+                        color: Color(0xff707070).withOpacity(.1),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        width: double.infinity,
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          children: store.postsList
+                              .map((post) => GridCustomWidget(
+                                  thumbnailUrl: post.thumbnailUrl,
+                                  columnsCount: 4,
+                                  onTap: () => {}))
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
       ),
     );
   }
