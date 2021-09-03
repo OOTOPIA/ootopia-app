@@ -24,6 +24,10 @@ class User extends Equatable {
   bool? personalDialogOpened = false;
   bool? cityDialogOpened = false;
   bool? globalDialogOpened = false;
+  int? personalTrophyQuantity;
+  int? cityTrophyQuantity;
+  int? globalTrophyQuantity;
+  int? totalTrophyQuantity;
 
   User({
     this.id,
@@ -47,6 +51,10 @@ class User extends Equatable {
     this.personalDialogOpened,
     this.cityDialogOpened,
     this.globalDialogOpened,
+    this.personalTrophyQuantity,
+    this.cityTrophyQuantity,
+    this.globalTrophyQuantity,
+    this.totalTrophyQuantity,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -98,6 +106,18 @@ class User extends Equatable {
       globalDialogOpened: json['globalDialogOpened'] == null
           ? false
           : json['globalDialogOpened'],
+      personalTrophyQuantity: (json['personalTrophyQuantity'] is int
+          ? json['personalTrophyQuantity']
+          : int.parse(json['personalTrophyQuantity'])),
+      cityTrophyQuantity: (json['cityTrophyQuantity'] is int
+          ? json['cityTrophyQuantity']
+          : int.parse(json['cityTrophyQuantity'])),
+      globalTrophyQuantity: (json['globalTrophyQuantity'] is int
+          ? json['globalTrophyQuantity']
+          : int.parse(json['globalTrophyQuantity'])),
+      totalTrophyQuantity: (json['totalTrophyQuantity'] is int
+          ? json['totalTrophyQuantity']
+          : int.parse(json['totalTrophyQuantity'])),
     );
   }
 
@@ -120,6 +140,10 @@ class User extends Equatable {
         'personalDialogOpened': personalDialogOpened,
         'cityDialogOpened': cityDialogOpened,
         'globalDialogOpened': globalDialogOpened,
+        "personalTrophyQuantity": personalTrophyQuantity,
+        "cityTrophyQuantity": cityTrophyQuantity,
+        "globalTrophyQuantity": globalTrophyQuantity,
+        "totalTrophyQuantity": totalTrophyQuantity,
       };
 
   @override
@@ -145,5 +169,9 @@ class User extends Equatable {
         personalDialogOpened,
         cityDialogOpened,
         globalDialogOpened,
+        personalTrophyQuantity,
+        cityTrophyQuantity,
+        globalTrophyQuantity,
+        totalTrophyQuantity,
       ];
 }
