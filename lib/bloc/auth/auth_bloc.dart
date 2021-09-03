@@ -61,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       var result = (await this
           .repository
-          .register(event.name, event.email, event.password));
+          .register(event.name, event.email, event.password, event.password));
       if (result != null) {
         yield EmptyState();
         yield LoadedSucessState(result);

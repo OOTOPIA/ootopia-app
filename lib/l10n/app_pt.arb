@@ -300,5 +300,7 @@
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que floresce graças a pessoas como você!",
     "skip":"pular",
     "access":"acessar",
-    "enterTheValidInvitationCod":"Por favor insira o código de convite válido"
+    "enterTheValidInvitationCod":"Por favor insira o código de convite válido",
+    "invitationCodeAccepted":"Código de convite aceito",
+    "invitationCodeSent":"Código de convite enviado"
 }

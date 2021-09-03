@@ -44,6 +44,12 @@ class CardInformationBalance extends StatelessWidget {
       case 'invitation_code':
         origin = AppLocalizations.of(context)!.invitationCode;
         break;
+      case 'invitation_code_sent':
+        origin = AppLocalizations.of(context)!.invitationCodeSent;
+        break;
+      case 'invitation_code_accepted':
+        origin = AppLocalizations.of(context)!.invitationCodeAccepted;
+        break;
     }
 
     return origin;
@@ -64,6 +70,12 @@ class CardInformationBalance extends StatelessWidget {
         break;
       case 'invitation_code':
         origin = AppLocalizations.of(context)!.invitationCode;
+        break;
+      case 'invitation_code_sent':
+        origin = AppLocalizations.of(context)!.invitationCodeSent;
+        break;
+      case 'invitation_code_accepted':
+        origin = AppLocalizations.of(context)!.invitationCodeAccepted;
         break;
     }
 

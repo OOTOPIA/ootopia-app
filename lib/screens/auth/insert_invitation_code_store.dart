@@ -9,16 +9,10 @@ class InsertInvitationCodeStore = InsertInvitationCodeStoreBase
 abstract class InsertInvitationCodeStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
-  @observable
-  bool visibleInvalidStatusCode = false;
   @action
   Future<String> verifyCodes(String code) async {
-    var statusCode = await userRepositoryImpl.verifyCodes('wLYDvO9SjC');
-    if (statusCode == 'invalid') {
-      visibleInvalidStatusCode = true;
-    } else {
-      visibleInvalidStatusCode = false;
-    }
+    var statusCode = await userRepositoryImpl.verifyCodes(code);
+
     return statusCode;
   }
 }

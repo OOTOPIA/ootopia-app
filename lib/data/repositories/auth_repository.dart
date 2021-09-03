@@ -10,7 +10,8 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class AuthRepository {
   Future<User> login(String email, String password);
-  Future<User> register(String name, String email, String password);
+  Future<User> register(
+      String name, String email, String password, String invitationCode);
   Future recoverPassword(String email);
   Future resetPassword(String newPassword);
 }
@@ -55,7 +56,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   }
 
   @override
-  Future<User> register(String name, String email, String password) async {
+  Future<User> register(String name, String email, String password,
+      String? invitationCode) async {
     final response = await http.post(
       Uri.parse(dotenv.env['API_URL']! + "users"),
       headers: API_HEADERS,
@@ -63,7 +65,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "fullname": name,
         "email": email,
         "password": password,
-        "acceptedTerms": true
+        "acceptedTerms": true,
+        "invitationCode": invitationCode
       }),
     );
 
@@ -75,11 +78,13 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
       return user;
     } else {
       Map<String, dynamic> decode = json.decode(response.body);
-
-      if (decode['error'] == "EMAIL_ALREADY_EXISTS") {
-        throw FetchDataException(decode['error']);
-      } else {
-        throw FetchDataException('Failed to register');
+      switch (decode['error']) {
+        case 'Invitation Code invalid':
+          throw FetchDataException(decode['error']);
+        case 'EMAIL_ALREADY_EXISTS':
+          throw FetchDataException(decode['error']);
+        default:
+          throw FetchDataException('Failed to register');
       }
     }
   }
