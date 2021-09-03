@@ -58,7 +58,6 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   @override
   Future<User> register(String name, String email, String password,
       String? invitationCode) async {
-    print('invitationcode $invitationCode');
     final response = await http.post(
       Uri.parse(dotenv.env['API_URL']! + "users"),
       headers: API_HEADERS,

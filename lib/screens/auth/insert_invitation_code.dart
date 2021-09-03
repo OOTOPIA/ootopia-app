@@ -187,7 +187,6 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                         ? TextStyle(color: Colors.red)
                         : TextStyle(color: Colors.black),
                     onChanged: (value) {
-                      print(value);
                       Future.delayed(Duration(seconds: 4), () async {
                         var statusCode =
                             await insertInvitationCodeStore.verifyCodes(value);
