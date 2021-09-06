@@ -492,23 +492,29 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                               ),
                                       ),
                                       this.post.oozToTransfer > 0
-                                          ? Text(
-                                              "+ " +
-                                                  currencyFormatter.format(
-                                                      this.post.oozToTransfer),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Color(0xFF003694),
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          : Text(
-                                              currencyFormatter.format(
-                                                  this.post.oozTotalCollected),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold),
-                                            )
+                                          ? Padding(
+                                            padding: EdgeInsets.only(right: 4),
+                                            child: Text(
+                                                "+ " +
+                                                    currencyFormatter.format(
+                                                        this.post.oozToTransfer),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Color(0xFF003694),
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                          )
+                                          : Padding(
+                                            padding: EdgeInsets.only(right: 4),
+                                            child: Text(
+                                                currencyFormatter.format(
+                                                    this.post.oozTotalCollected),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                          )
                                     ],
                                   )),
                             ),

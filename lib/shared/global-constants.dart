@@ -15,7 +15,7 @@ class GlobalConstants extends InheritedWidget {
   final double spacingLarge = 48;
   final double spacingXL = 64;
   final double screenHorizontalSpace = 22;
-
+  final double spacingSemiLarge = 40;
   final double logoHeight = 82;
 
   InputDecoration loginInputTheme(String labelText) {
@@ -26,15 +26,15 @@ class GlobalConstants extends InheritedWidget {
       floatingLabelBehavior: FloatingLabelBehavior.never,
       border: OutlineInputBorder(
         borderSide: BorderSide(color: LightColors.grey, width: 0.30),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: LightColors.grey, width: 0.30),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: LightColors.grey, width: 0.30),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
       ),
     );
   }
