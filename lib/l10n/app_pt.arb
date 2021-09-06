@@ -293,9 +293,11 @@
     "continueAccess":"continue",
     "enterYourInvitationCode":"Digite seu código de acesso",
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que floresce graças a pessoas como você!",
-    "skip":"pular",
-    "access":"acessar",
-    "enterTheValidInvitationCod":"Por favor insira o código de convite válido",
+    "skip":"Pular",
+    "access":"Acessar",
+    "enterTheValidInvitationCode":"Por favor insira o código de convite válido",
     "invitationCodeAccepted":"Código de convite aceito",
-    "invitationCodeSent":"Código de convite enviado"
+    "invitationCodeSent":"Código de convite enviado",
+    "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
+    "pictureByFredericWlllburger":"Foto de Frederic Wlllburger"
 }

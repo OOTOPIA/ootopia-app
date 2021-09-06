@@ -93,28 +93,45 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
     return Scaffold(
       body: LoadingOverlay(
         isLoading: isLoading,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                'assets/images/background_insert_invitation_code.png',
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/background_insert_invitation_code.png',
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
-              fit: BoxFit.cover,
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16, right: 16),
+                child: RotatedBox(
+                  quarterTurns: -1,
+                  child: RichText(
+                    text: TextSpan(
+                      text: AppLocalizations.of(context)!
+                          .pictureByFredericWlllburger,
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 26.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: ListView(
                 children: [
                   SizedBox(
                     height: GlobalConstants.of(context).spacingLarge,
                   ),
                   Text(
-                    AppLocalizations.of(context)!.termsOfUsePrimary,
+                    AppLocalizations.of(context)!.invitationCodeWelcome,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 22),
                   ),
@@ -122,8 +139,10 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                     height: GlobalConstants.of(context).screenHorizontalSpace,
                   ),
                   Center(
-                      child:
-                          Image.asset('assets/icons_profile/woow_active.png')),
+                      child: Image.asset(
+                    'assets/icons/invitation_code_icon.png',
+                    height: 166,
+                  )),
                   SizedBox(
                       height:
                           GlobalConstants.of(context).screenHorizontalSpace),
@@ -158,8 +177,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                       ),
                       focusedBorder: exibleText
                           ? OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 0.30),
+                              borderSide: BorderSide(
+                                  color: Color(0xff8E1816), width: 1),
                               borderRadius: BorderRadius.circular(8),
                             )
                           : OutlineInputBorder(
@@ -169,8 +188,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                             ),
                       enabledBorder: exibleText
                           ? OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 0.30),
+                              borderSide: BorderSide(
+                                  color: Color(0xff8E1816), width: 1),
                               borderRadius: BorderRadius.circular(8),
                             )
                           : OutlineInputBorder(
@@ -184,22 +203,21 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                     style: exibleText
-                        ? TextStyle(color: Colors.red)
-                        : TextStyle(color: Colors.black),
-                    onChanged: (value) {
-                      Future.delayed(Duration(seconds: 4), () async {
-                        var statusCode =
-                            await insertInvitationCodeStore.verifyCodes(value);
+                        ? TextStyle(color: Color(0xff8E1816))
+                        : TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w400),
+                    onChanged: (value) async {
+                      var statusCode =
+                          await insertInvitationCodeStore.verifyCodes(value);
 
-                        setState(() {
-                          if (statusCode == 'valid') {
-                            visibleValidStatusCode = true;
-                            exibleText = false;
-                          } else {
-                            visibleValidStatusCode = false;
-                            exibleText = true;
-                          }
-                        });
+                      setState(() {
+                        if (statusCode == 'valid') {
+                          visibleValidStatusCode = true;
+                          exibleText = false;
+                        } else {
+                          visibleValidStatusCode = false;
+                          exibleText = true;
+                        }
                       });
                     },
                   ),
@@ -221,67 +239,75 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.2),
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                            style: ButtonStyle(
-                              fixedSize:
-                                  MaterialStateProperty.all<Size>(Size(88, 53)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide.none),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.all(15)),
-                            ),
-                            onPressed: submit,
-                            child: Text(
-                              AppLocalizations.of(context)!.skip,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            )),
-                        ElevatedButton(
-                            style: ButtonStyle(
-                              fixedSize: MaterialStateProperty.all<Size>(
-                                  Size(212, 53)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide.none),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                !visibleValidStatusCode
-                                    ? Color(0xffb8c6e1)
-                                    : Color(0xff003694),
-                              ),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.all(15)),
-                            ),
-                            onPressed: !visibleValidStatusCode ? null : submit,
-                            child: Text(
-                              AppLocalizations.of(context)!.access,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            )),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
-          ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 26.0, right: 26, bottom: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          fixedSize:
+                              MaterialStateProperty.all<Size>(Size(88, 53)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                side: BorderSide.none),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.all(15)),
+                        ),
+                        onPressed: submit,
+                        child: Text(
+                          AppLocalizations.of(context)!.skip,
+                          style: TextStyle(
+                            color: Color(0xff666666),
+                            fontSize: 16,
+                          ),
+                        )),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          fixedSize:
+                              MaterialStateProperty.all<Size>(Size(212, 53)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                                side: BorderSide.none),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            !visibleValidStatusCode
+                                ? Color(0xff5d7fbb)
+                                : Color(0xff003694),
+                          ),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.all(15)),
+                        ),
+                        onPressed: !visibleValidStatusCode ? null : submit,
+                        child: Text(
+                          AppLocalizations.of(context)!.access,
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: !visibleValidStatusCode
+                                  ? Color(0xffb8c6e1)
+                                  : Colors.white),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            )
+          ],
         ),
       ),
     );

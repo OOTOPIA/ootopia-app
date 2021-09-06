@@ -293,11 +293,13 @@
     "continueAccess":"continue",
     "enterYourInvitationCode":"Enter your invitation code",
     "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is flourishing thanks to people like you!",
-    "skip":"skip",
-    "access":"access",
+    "skip":"Skip",
+    "access":"Access",
     "enterTheValidInvitationCode":"Please enter the valid invitation code",
     "invitationCodeAccepted":"invitation code accepted",
     "invitationCodeSent":"invitation code sent",
+    "invitationCodeWelcome":"WELCOME TO OOTOPIA",
+    "pictureByFredericWlllburger":"Picture by Frederic Wlllburger",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
