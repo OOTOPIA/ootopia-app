@@ -27,12 +27,12 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
         Provider.of<InsertInvitationCodeStore>(context);
     var auth = Provider.of<AuthStore>(context);
 
-    void submit() async {
+    void submit(bool selectAccess) async {
       setState(() {
         isLoading = true;
       });
       try {
-        if (visibleValidStatusCode) {
+        if (selectAccess) {
           var user = await auth.registerUser(
             name: widget.args['FULLNAME'],
             email: widget.args['EMAIL'],
@@ -265,7 +265,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                           padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.all(15)),
                         ),
-                        onPressed: submit,
+                        onPressed: () => submit(false),
                         child: Text(
                           AppLocalizations.of(context)!.skip,
                           style: TextStyle(
@@ -291,7 +291,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                           padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.all(15)),
                         ),
-                        onPressed: !visibleValidStatusCode ? null : submit,
+                        onPressed:
+                            !visibleValidStatusCode ? null : () => submit(true),
                         child: Text(
                           AppLocalizations.of(context)!.access,
                           style: TextStyle(
