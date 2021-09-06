@@ -47,7 +47,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                   await SocialShare.shareOptions(
                     AppLocalizations.of(context)!
                         .joinToOOTOPIA
-                        .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
+                        .replaceAll('%USER_CODE%', '*${widget.sowerCode}*'),
                   );
                 },
                 child: Container(
