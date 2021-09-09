@@ -93,14 +93,7 @@
 				</array>
 			</dict>
 		</array>
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>instagram-stories</string>
-			<string>instagram</string>
-			<string>twitter</string>
-			<string>whatsapp</string>
-			<string>tg</string>
-		</array>
+
 
 	</dict>
 </plist>
