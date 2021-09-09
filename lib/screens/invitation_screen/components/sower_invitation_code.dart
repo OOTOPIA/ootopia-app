@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:share_extend/share_extend.dart';
 
 class SowerInvitationCode extends StatefulWidget {
   final String sowerCode;
@@ -44,9 +44,11 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
             children: [
               InkWell(
                 onTap: () async {
-                  Share.share(AppLocalizations.of(context)!
-                      .joinToOOTOPIA
-                      .replaceAll('%USER_CODE%', '${widget.sowerCode}'));
+                  ShareExtend.share(
+                      AppLocalizations.of(context)!
+                          .joinToOOTOPIA
+                          .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
+                      'text');
                 },
                 child: Container(
                   width: 228,
