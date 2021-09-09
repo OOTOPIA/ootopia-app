@@ -101,7 +101,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    'assets/images/background_insert_invitation_code.png',
+                    'assets/images/flower_degrade.png',
                   ),
                   fit: BoxFit.cover,
                 ),
