@@ -115,8 +115,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                   quarterTurns: -1,
                   child: RichText(
                     text: TextSpan(
-                      text: AppLocalizations.of(context)!
-                          .pictureByFredericWlllburger,
+                      text: AppLocalizations.of(context)!.pictureByLinaTrochez,
                       style: TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ),
