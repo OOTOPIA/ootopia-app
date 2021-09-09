@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_share/social_share.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DefaultInvitationCode extends StatefulWidget {
   final String defaultCode;
@@ -59,11 +59,9 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
             children: [
               InkWell(
                 onTap: () async {
-                  await SocialShare.shareOptions(
-                    AppLocalizations.of(context)!
-                        .joinToOOTOPIA
-                        .replaceAll('%USER_CODE%', '${widget.defaultCode}'),
-                  );
+                  Share.share(AppLocalizations.of(context)!
+                      .joinToOOTOPIA
+                      .replaceAll('%USER_CODE%', '${widget.defaultCode}'));
                 },
                 child: Container(
                   width: 228,
