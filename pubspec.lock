@@ -856,6 +856,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.0"
+  share_extend:
+    dependency: "direct main"
+    description:
+      name: share_extend
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -924,13 +931,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  social_share:
-    dependency: "direct main"
-    description:
-      name: social_share
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   source_gen:
     dependency: transitive
     description:

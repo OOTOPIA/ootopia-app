@@ -285,14 +285,24 @@
     "eachOneMakeADiference": "CADA UM DE NÓS FAZ A DIFERENÇA",
 
     "inviteYourFriendsToJoinOOTOPIA": "Convide seus amigos para se juntar ao OOTOPIA e viver o movimento que está regenerando o planeta Terra agora!",
-    "sowerInvitationCode":"CÓDIGO DE CONVITE SEMEADOR",
+    "changeMakerProInvitationCode":"CÓDIGO DE CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO DO CONVITE DE BEM-VINDO",
-    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos que criam um impacto positivo e ajudam a regenerar a Terra. Assim, eles podem se registrar como Semeadores.",
+    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos que criam um impacto positivo e ajudam a regenerar a Terra. Assim, eles podem se registrar como Change Maker Pro.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba",
     "forEachNewcomer": "para cada recém-chegado.\nSeu amigo receberá",
    "ooz15":" 15,00 OOz.",
     "ooz25":" 25,00 OOz ",
-    "pictureBySeattleTilth":"Foto de Seattle Tilth",
-    "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA Experimente o movimento que está regenerando o planeta Terra! Baixe o aplicativo e registre-se com este código: %USER_CODE% Você também receberá 15,00 OOz de crédito. AO VIVO OOTOPIA AGORA! ✨ 🌎 ❤️"
+    "pictureByRommelDiaz":"Foto de Rommel Diaz",
+    "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA\nExperimente o movimento que está regenerando o planeta Terra! \nBaixe o aplicativo e registre-se com este código: %USER_CODE%\nVocê também receberá 15,00 OOz de crédito.\nVIVA A OOTOPIA AGORA! ✨ 🌎 ❤️",
+    "continueAccess":"continue",
+    "enterYourInvitationCode":"Digite seu código de acesso",
+    "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que floresce graças a pessoas como você!",
+    "skip":"Pular",
+    "access":"Acessar",
+    "enterTheValidInvitationCode":"Por favor insira o código de convite válido",
+    "invitationCodeAccepted":"Código de convite aceito",
+    "invitationCodeSent":"Código de convite enviado",
+    "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
+    "pictureByLinaTrochez":"Foto de Lina Trochez"
 }

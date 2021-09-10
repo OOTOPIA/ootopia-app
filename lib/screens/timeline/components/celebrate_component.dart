@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class Celebration extends StatefulWidget {
   Map<String, dynamic> args;
@@ -19,7 +20,14 @@ class CelebrationStates extends State<Celebration> {
 
   void _backButton(BuildContext context) {
     videoIsFinished = false;
-    Navigator.pop(context);
+    if (widget.args['homepage']) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+      );
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override

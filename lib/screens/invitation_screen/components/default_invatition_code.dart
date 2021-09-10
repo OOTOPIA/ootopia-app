@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_share/social_share.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:share_extend/share_extend.dart';
 
 class DefaultInvitationCode extends StatefulWidget {
   final String defaultCode;
@@ -34,6 +34,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
           height: 8,
         ),
         RichText(
+          textAlign: TextAlign.center,
           text: TextSpan(
             text: AppLocalizations.of(context)!.sendWelcomeInvitationCode,
             style: TextStyle(color: Colors.black),
@@ -58,11 +59,11 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
             children: [
               InkWell(
                 onTap: () async {
-                  await SocialShare.shareOptions(
-                    AppLocalizations.of(context)!
-                        .joinToOOTOPIA
-                        .replaceAll('%USER_CODE%', '${widget.defaultCode}'),
-                  );
+                  ShareExtend.share(
+                      AppLocalizations.of(context)!
+                          .joinToOOTOPIA
+                          .replaceAll('%USER_CODE%', '${widget.defaultCode}'),
+                      'text');
                 },
                 child: Container(
                   width: 228,
@@ -70,7 +71,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                     color: Color(0xff003694),
                     borderRadius: BorderRadius.all(Radius.circular(40)),
                     border: Border.all(
-                      color: Color(0xff018F9C),
+                      color: Color(0xff003694),
                     ),
                   ),
                   padding: EdgeInsets.all(9),

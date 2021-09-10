@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_share/social_share.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:share_extend/share_extend.dart';
 
 class SowerInvitationCode extends StatefulWidget {
   final String sowerCode;
@@ -23,7 +23,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
           height: 24,
         ),
         Text(
-          AppLocalizations.of(context)!.sowerInvitationCode,
+          AppLocalizations.of(context)!.changeMakerProInvitationCode,
           style: TextStyle(
             color: Color(0xff018F9C),
             fontSize: 16,
@@ -36,6 +36,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         Text(
           AppLocalizations.of(context)!.sendSowerInvitationCode,
           softWrap: true,
+          textAlign: TextAlign.center,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
@@ -43,11 +44,11 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
             children: [
               InkWell(
                 onTap: () async {
-                  await SocialShare.shareOptions(
-                    AppLocalizations.of(context)!
-                        .joinToOOTOPIA
-                        .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
-                  );
+                  ShareExtend.share(
+                      AppLocalizations.of(context)!
+                          .joinToOOTOPIA
+                          .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
+                      'text');
                 },
                 child: Container(
                   width: 228,
