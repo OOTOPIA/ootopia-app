@@ -189,7 +189,7 @@ packages:
       name: crisp
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.8"
+    version: "0.2.0"
   cross_file:
     dependency: transitive
     description:
@@ -306,7 +306,7 @@ packages:
       name: flutter_ffmpeg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.2"
   flutter_hooks:
     dependency: "direct main"
     description:
@@ -1049,7 +1049,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.8"
+    version: "6.0.10"
   url_launcher_linux:
     dependency: transitive
     description:
