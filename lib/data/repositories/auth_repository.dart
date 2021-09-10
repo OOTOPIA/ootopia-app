@@ -11,7 +11,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class AuthRepository {
   Future<User> login(String email, String password);
   Future<User> register(String name, String email, String password);
-  Future recoverPassword(String email);
+  Future recoverPassword(String email, String lang);
   Future resetPassword(String newPassword);
 }
 
@@ -85,12 +85,13 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   }
 
   @override
-  Future recoverPassword(String email) async {
+  Future recoverPassword(String email, String lang) async {
     final response = await http.post(
       Uri.parse(dotenv.env['API_URL']! + "users/recover-password"),
       headers: API_HEADERS,
       body: jsonEncode(<String, dynamic>{
         "email": email,
+        "language": lang
       }),
     );
 

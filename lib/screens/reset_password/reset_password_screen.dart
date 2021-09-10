@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -229,24 +230,41 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       child: TextFormField(
                                         controller: _passwordController,
                                         obscureText: !_showPassword,
+                                        style: GoogleFonts.roboto(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black),
                                         decoration: GlobalConstants.of(context)
                                             .loginInputTheme(
                                                 AppLocalizations.of(context)!
                                                     .password)
                                             .copyWith(
+                                              labelStyle: passIsValid
+                                                  ? GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.lightGrey,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                  : GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.errorRed,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                               prefixIcon: ImageIcon(
                                                 AssetImage(
                                                     "assets/icons/lock.png"),
                                                 color: passIsValid
                                                     ? LightColors.grey
-                                                    : Colors.red,
+                                                    : LightColors.errorRed,
                                               ),
                                               suffixIcon: GestureDetector(
-                                                child: Icon(
+                                                child: ImageIcon(
                                                   _showPassword == false
-                                                      ? FeatherIcons.eyeOff
-                                                      : FeatherIcons.eye,
+                                                      ? AssetImage(
+                                                          "assets/icons/eye-off.png")
+                                                      : AssetImage(
+                                                          "assets/icons/eye.png"),
                                                   color: LightColors.grey,
+                                                  size: 2,
                                                 ),
                                                 onTap: () {
                                                   setState(() {
@@ -280,24 +298,41 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       child: TextFormField(
                                         controller: _repeatPasswordController,
                                         obscureText: !_showRepeatPassword,
+                                        style: GoogleFonts.roboto(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black),
                                         decoration: GlobalConstants.of(context)
                                             .loginInputTheme(
                                                 AppLocalizations.of(context)!
                                                     .repeatPassword)
                                             .copyWith(
+                                              labelStyle: pass2IsValid
+                                                  ? GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.lightGrey,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                  : GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.errorRed,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                               prefixIcon: ImageIcon(
                                                 AssetImage(
                                                     "assets/icons/lock.png"),
                                                 color: pass2IsValid
                                                     ? LightColors.grey
-                                                    : Colors.red,
+                                                    : LightColors.errorRed,
                                               ),
                                               suffixIcon: GestureDetector(
-                                                child: Icon(
-                                                  _showRepeatPassword == false
-                                                      ? FeatherIcons.eyeOff
-                                                      : FeatherIcons.eye,
+                                                child: ImageIcon(
+                                                  _showPassword == false
+                                                      ? AssetImage(
+                                                          "assets/icons/eye-off.png")
+                                                      : AssetImage(
+                                                          "assets/icons/eye.png"),
                                                   color: LightColors.grey,
+                                                  size: 2,
                                                 ),
                                                 onTap: () {
                                                   setState(() {
@@ -315,7 +350,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                             return AppLocalizations.of(context)!
                                                 .pleaseEnterYourPassword;
                                           }
-                                          if (value != _passwordController.text) {
+                                          if (value !=
+                                              _passwordController.text) {
                                             setState(() {
                                               pass2IsValid = false;
                                             });

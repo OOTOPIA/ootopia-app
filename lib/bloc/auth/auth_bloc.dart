@@ -84,7 +84,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> _mapRecoverPasswordToState(
       RecoverPasswordEvent event) async* {
     try {
-      await this.repository.recoverPassword(event.email);
+      await this.repository.recoverPassword(event.email, event.lang);
       yield EmptyState();
       yield LoadedSucessRecoverPasswordState();
       this.trackingEvents.userRecoverPassword();
