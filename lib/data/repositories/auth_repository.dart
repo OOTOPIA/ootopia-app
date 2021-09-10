@@ -47,6 +47,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
       await setAuthToken(user.token!);
       await setCurrentUser(response.body);
 
+      print("return");
+
       return user;
     } else if (response.statusCode == 403) {
       throw FetchDataException("INVALID_PASSWORD");
