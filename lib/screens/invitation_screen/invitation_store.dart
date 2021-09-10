@@ -8,13 +8,23 @@ class InvitationStore = InvitationStoreBase with _$InvitationStore;
 
 abstract class InvitationStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
-  List<InvitationCodeModel> listInvitationCode = [];
+
+  @observable
+  ObservableList<InvitationCodeModel> listInvitationCode = ObservableList();
+
+  @observable
+  bool isLoading = false;
+
   @action
   Future<List<InvitationCodeModel>?> getCodes() async {
-    var response = await this.userRepositoryImpl.getCodes();
-    response!.forEach((element) {
-      listInvitationCode.add(element);
-    });
-    return response;
+    isLoading = true;
+    listInvitationCode.clear();
+    List<InvitationCodeModel>? response =
+        await this.userRepositoryImpl.getCodes();
+    if (response != null) {
+      listInvitationCode.addAll(response);
+    }
+    isLoading = false;
+    return listInvitationCode;
   }
 }
