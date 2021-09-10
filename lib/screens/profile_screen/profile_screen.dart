@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:provider/provider.dart';
 
 //Files
@@ -30,6 +32,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   ProfileScreenStore store = ProfileScreenStore();
   late AuthStore authStore;
+  late WalletStore walletStore;
+
   bool isVisible = false;
 
   @override
@@ -39,6 +43,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await store.getProfileDetails(_getUserId());
 
       await store.getUserPosts(_getUserId());
+      Future.delayed(Duration.zero, () {
+        walletStore.getWallet();
+      });
     });
   }
 
@@ -72,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
+    walletStore = Provider.of<WalletStore>(context);
 
     return Scaffold(
       body: Observer(
@@ -298,7 +306,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             width: 4,
                                           ),
                                           Text(
-                                            "1.201,00",
+                                            walletStore.wallet != null
+                                                ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                                : '0,00',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Color(0xff003694),
