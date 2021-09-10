@@ -110,12 +110,12 @@ class _ChatWithUsersScreenState extends State<ChatWithUsersScreen> {
                 child: CircularProgressIndicator(),
               )
             : CrispView(
-                appBar: AppBar(
-                  title: const Text('OOTOPIA'),
-                ),
-                loadingWidget: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                // appBar: AppBar(
+                //   title: const Text('OOTOPIA'),
+                // ),
+                // loadingWidget: Center(
+                //   child: CircularProgressIndicator(),
+                // ),
                 crispMain: crispMain,
               ),
       ),
