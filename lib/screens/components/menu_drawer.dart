@@ -66,7 +66,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
       return Drawer(
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: ListView(
+        child: Column(
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
@@ -117,9 +117,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                '${authStore!.currentUser!.fullname}',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  '${authStore!.currentUser!.fullname}',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Card(
@@ -270,12 +273,17 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   size: 20,
                 ),
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(PageRoute.Page.chatWithUsersScreen.route);
+                  setState(() {
+                    Navigator.of(context)
+                        .pushNamed(PageRoute.Page.chatWithUsersScreen.route);
+                  });
                 },
               ),
             ),
-            Expanded(
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.17),
+              alignment: Alignment.bottomLeft,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -415,7 +423,6 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print((MediaQuery.of(context).size.width * .31) - 16);
     return Container(
       width: 109,
       height: (MediaQuery.of(context).size.width * .32) - 16,

@@ -203,7 +203,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           .toList();
       return result;
     } catch (e) {
-      throw Exception('Failed to get daily goal stats ' + e.toString());
+      throw Exception('Failed to get codes ' + e.toString());
     }
   }
 

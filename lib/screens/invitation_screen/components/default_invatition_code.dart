@@ -59,7 +59,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
             children: [
               InkWell(
                 onTap: () async {
-                  ShareExtend.share(
+                  await ShareExtend.share(
                       AppLocalizations.of(context)!
                           .joinToOOTOPIA
                           .replaceAll('%USER_CODE%', '${widget.defaultCode}'),

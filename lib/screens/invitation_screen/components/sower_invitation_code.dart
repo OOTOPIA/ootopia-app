@@ -44,7 +44,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
             children: [
               InkWell(
                 onTap: () async {
-                  ShareExtend.share(
+                  await ShareExtend.share(
                       AppLocalizations.of(context)!
                           .joinToOOTOPIA
                           .replaceAll('%USER_CODE%', '${widget.sowerCode}'),

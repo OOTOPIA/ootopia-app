@@ -8,9 +8,13 @@ class InvitationStore = InvitationStoreBase with _$InvitationStore;
 
 abstract class InvitationStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
-
+  List<InvitationCodeModel> listInvitationCode = [];
   @action
   Future<List<InvitationCodeModel>?> getCodes() async {
-    return await this.userRepositoryImpl.getCodes();
+    var response = await this.userRepositoryImpl.getCodes();
+    response!.forEach((element) {
+      listInvitationCode.add(element);
+    });
+    return response;
   }
 }

@@ -17,6 +17,11 @@ class InvitationScreen extends StatefulWidget {
 
 class _InvitationScreenState extends State<InvitationScreen> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     InvitationStore invitationStore = Provider.of<InvitationStore>(context);
     return Scaffold(
@@ -71,24 +76,12 @@ class _InvitationScreenState extends State<InvitationScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                Scrollbar(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.50,
-                    child: FutureBuilder<List<InvitationCodeModel>?>(
-                        future: invitationStore.getCodes(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          if (snapshot.hasError) {
-                            return Center(
-                              child: Text(snapshot.error.toString()),
-                            );
-                          }
-
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.50,
+                  child: FutureBuilder<List<InvitationCodeModel>?>(
+                      future: invitationStore.getCodes(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data != null) {
                           return ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data!.length,
@@ -102,8 +95,12 @@ class _InvitationScreenState extends State<InvitationScreen> {
                                     defaultCode:
                                         '${snapshot.data![index].code}');
                               });
-                        }),
-                  ),
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }),
                 ),
               ],
             ),
