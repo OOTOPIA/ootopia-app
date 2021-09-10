@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class AlbumProfileWidget extends StatelessWidget {
   VoidCallback onTap;
@@ -17,23 +18,24 @@ class AlbumProfileWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 52,
-          height: 52,
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-              color: Color(0xffDEDCDC),
-              border: photoAlbumUrl != null
-                  ? Border.fromBorderSide(
-                      BorderSide(width: 3, color: Color(0xff003694)))
-                  : null,
-              borderRadius: BorderRadius.circular(100)),
-          child: photoAlbumUrl == null
-              ? Icon(Icons.add, color: Colors.white)
-              : ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.asset("assets/icons_profile/profile.png"),
-                ),
-        ),
+            width: 52,
+            height: 52,
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+                color: photoAlbumUrl == null
+                    ? Color(0xffDEDCDC)
+                    : Colors.transparent,
+                border: photoAlbumUrl != null
+                    ? Border.fromBorderSide(
+                        BorderSide(width: 3, color: Color(0xff003694)))
+                    : null,
+                borderRadius: BorderRadius.circular(100)),
+            child: photoAlbumUrl == null
+                ? Icon(Icons.add, color: Colors.white)
+                : Icon(
+                    FeatherIcons.image,
+                    color: Color(0xff003694),
+                  )),
         SizedBox(
           height: 8,
         ),

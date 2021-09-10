@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class AvatarPhotoWidget extends StatefulWidget {
   String? photoUrl;
+  bool isBadges;
 
   AvatarPhotoWidget({
     Key? key,
     this.photoUrl,
+    required this.isBadges,
   }) : super(key: key);
 
   @override
@@ -22,8 +24,9 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
         margin: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          border: Border.fromBorderSide(
-              BorderSide(color: Color(0xff39A7B2), width: 3)),
+          border: Border.fromBorderSide(BorderSide(
+              color: widget.isBadges ? Color(0xff39A7B2) : Color(0xff000000),
+              width: 3)),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
@@ -39,16 +42,18 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
                 ),
         ),
       ),
-      Positioned(
-        top: 8,
-        right: 4,
-        child: Image.asset(
-          //TODO verificar nome do icone
-          "assets/icons_profile/newIcon.png",
-          width: 33,
-          height: 33,
-        ),
-      ),
+      widget.isBadges
+          ? Positioned(
+              top: 8,
+              right: 4,
+              child: Image.asset(
+                //TODO verificar nome do icone
+                "assets/icons_profile/badges_icon.png",
+                width: 33,
+                height: 33,
+              ),
+            )
+          : Container(),
     ]);
   }
 }

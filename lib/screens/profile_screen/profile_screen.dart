@@ -4,16 +4,17 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
-import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:provider/provider.dart';
 
 //Files
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'components/album_profile_widget.dart';
 import 'components/avatar_photo_widget.dart';
+import 'components/empty_posts_widget.dart';
 import 'components/gaming_data_widget.dart';
 import 'components/timeline_profile.dart';
 
@@ -82,8 +83,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AvatarPhotoWidget(
-                        photoUrl: store.profile!.photoUrl,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AvatarPhotoWidget(
+                            photoUrl: store.profile!.photoUrl,
+                            isBadges: store.profile!.badges!.length > 0,
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingMedium,
@@ -251,11 +258,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Wallet",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xff000000),
-                                          fontWeight: FontWeight.w500)),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        "assets/icons/ooz-coin-black.png",
+                                        width: 22,
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text("Wallet",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Color(0xff000000),
+                                              fontWeight: FontWeight.w500)),
+                                    ],
+                                  ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -267,13 +285,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             color: Color(0xff707070),
                                             fontWeight: FontWeight.w400),
                                       ),
-                                      Text(
-                                        "1.201,00",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Color(0xff003694),
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            "assets/icons/ooz_only_active.png",
+                                            width: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            "1.201,00",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xff003694),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   )
                                 ],
@@ -283,13 +312,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(
+                      Padding(
+                        padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
                                 .screenHorizontalSpace),
-                        width: double.maxFinite,
-                        height: 1,
-                        color: Color(0xff707070).withOpacity(.1),
+                        child: Divider(
+                          height: 1,
+                          color: Color(0xff707070).withOpacity(.1),
+                        ),
                       ),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
@@ -315,44 +345,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(
+                      Padding(
+                        padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
                                 .screenHorizontalSpace),
-                        width: double.maxFinite,
-                        height: 1,
-                        color: Color(0xff707070).withOpacity(.1),
+                        child: Divider(
+                          height: 1,
+                          color: Color(0xff707070).withOpacity(.1),
+                        ),
                       ),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
-                        width: double.infinity,
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          children: store.postsList
-                              .asMap()
-                              .map(
-                                (index, post) => MapEntry(
-                                  index,
-                                  GridCustomWidget(
-                                    thumbnailUrl: post.thumbnailUrl,
-                                    columnsCount: 4,
-                                    onTap: () {
-                                      print("executei");
-                                      _goToTimelinePost(store.postsList, index);
-                                    },
-                                  ),
-                                ),
-                              )
-                              .values
-                              .toList(),
-                        ),
-                      ),
+                      store.postsList.length > 0
+                          ? Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: GlobalConstants.of(context)
+                                          .screenHorizontalSpace -
+                                      5), // compensating for the internal spacing of each item
+                              width: double.infinity,
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: store.postsList
+                                    .asMap()
+                                    .map(
+                                      (index, post) => MapEntry(
+                                        index,
+                                        GridCustomWidget(
+                                          thumbnailUrl: post.thumbnailUrl,
+                                          columnsCount: 4,
+                                          onTap: () {
+                                            _goToTimelinePost(
+                                                store.postsList, index);
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                    .values
+                                    .toList(),
+                              ),
+                            )
+                          : EmptyPostsWidget(),
                     ],
                   ),
                 ),
