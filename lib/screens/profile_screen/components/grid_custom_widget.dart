@@ -17,18 +17,21 @@ class GridCustomWidget extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraint) {
         var itemWidth = (constraint.maxWidth / columnsCount);
-        return Container(
-          padding: EdgeInsets.all(5),
-          width: itemWidth,
-          child: Center(
-            child: SizedBox(
-              width: itemWidth,
-              height: itemWidth * .90,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  thumbnailUrl,
-                  fit: BoxFit.cover,
+        return InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(5),
+            width: itemWidth,
+            child: Center(
+              child: SizedBox(
+                width: itemWidth,
+                height: itemWidth * .90,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    thumbnailUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

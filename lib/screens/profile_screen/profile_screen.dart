@@ -1,8 +1,10 @@
 //Packages
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,8 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'components/album_profile_widget.dart';
 import 'components/avatar_photo_widget.dart';
+import 'components/gaming_data_widget.dart';
+import 'components/timeline_profile.dart';
 
 class ProfileScreen extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -31,9 +35,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      await store.getProfileDetails(authStore.currentUser!.id!);
-      await store.getUserPosts(authStore.currentUser!.id!);
+      await store.getProfileDetails(_getUserId());
+
+      await store.getUserPosts(_getUserId());
     });
+  }
+
+  String _getUserId() {
+    if (widget.args == null || widget.args!["id"] == null) {
+      return authStore.currentUser!.id!;
+    } else {
+      return widget.args!["id"];
+    }
+  }
+
+  _goToTimelinePost(posts, postSelected) {
+    print("Meu log aqui $posts, $postSelected");
+    PageViewController.instance.addPage(TimelineScreenProfileScreen(
+      {
+        "userId": _getUserId(),
+        "posts": posts,
+        "postSelected": postSelected,
+      },
+    ));
+  }
+
+  bool get isLoggedInUserProfile {
+    return authStore.currentUser == null
+        ? false
+        : ((widget.args == null || widget.args!["id"] == null)
+            ? true
+            : widget.args!["id"] == authStore.currentUser!.id);
   }
 
   @override
@@ -134,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: 8,
                                   ),
                                   RotationTransition(
-                                    turns: isVisible
+                                    turns: !isVisible
                                         ? AlwaysStoppedAnimation(270 / 360)
                                         : AlwaysStoppedAnimation(90 / 360),
                                     child: Icon(
@@ -167,14 +199,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(text: "10"),
-                                      TextSpan(text: "Personal"),
-                                    ]))
+                                    GamingDataWidget(
+                                      title: "Personal",
+                                      icon: FeatherIcons.user,
+                                      amount: "10",
+                                      colorIcon: Color(0xff00A5FC),
+                                    ),
+                                    GamingDataWidget(
+                                      title: "Personal",
+                                      icon: FeatherIcons.mapPin,
+                                      amount: "10",
+                                      colorIcon: Color(0xff0072C5),
+                                    ),
+                                    GamingDataWidget(
+                                      title: "Personal",
+                                      icon: FeatherIcons.globe,
+                                      amount: "10",
+                                      colorIcon: Color(0xff012588),
+                                    ),
                                   ],
-                                ),
-                              )
+                                ))
                             : SizedBox(),
                       ),
                       SizedBox(
@@ -194,45 +238,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Container(
-                        width: double.maxFinite,
-                        height: 60,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
-                        decoration: BoxDecoration(
-                            color: Color(0xff707070).withOpacity(.2)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Wallet",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff000000),
-                                    fontWeight: FontWeight.w500)),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "Current OOz Balance",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff707070),
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  "1.201,00",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff003694),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                      isLoggedInUserProfile
+                          ? Container(
+                              width: double.maxFinite,
+                              height: 60,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: GlobalConstants.of(context)
+                                      .screenHorizontalSpace),
+                              decoration: BoxDecoration(
+                                  color: Color(0xff707070).withOpacity(.2)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Wallet",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff000000),
+                                          fontWeight: FontWeight.w500)),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Current OOz Balance",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xff707070),
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      Text(
+                                        "1.201,00",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xff003694),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             )
-                          ],
-                        ),
-                      ),
+                          : Container(),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
@@ -288,10 +335,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           alignment: WrapAlignment.start,
                           crossAxisAlignment: WrapCrossAlignment.start,
                           children: store.postsList
-                              .map((post) => GridCustomWidget(
-                                  thumbnailUrl: post.thumbnailUrl,
-                                  columnsCount: 4,
-                                  onTap: () => {}))
+                              .asMap()
+                              .map(
+                                (index, post) => MapEntry(
+                                  index,
+                                  GridCustomWidget(
+                                    thumbnailUrl: post.thumbnailUrl,
+                                    columnsCount: 4,
+                                    onTap: () {
+                                      print("executei");
+                                      _goToTimelinePost(store.postsList, index);
+                                    },
+                                  ),
+                                ),
+                              )
+                              .values
                               .toList(),
                         ),
                       ),

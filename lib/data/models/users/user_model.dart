@@ -106,18 +106,26 @@ class User extends Equatable {
       globalDialogOpened: json['globalDialogOpened'] == null
           ? false
           : json['globalDialogOpened'],
-      personalTrophyQuantity: (json['personalTrophyQuantity'] is int
-          ? json['personalTrophyQuantity']
-          : int.parse(json['personalTrophyQuantity'])),
-      cityTrophyQuantity: (json['cityTrophyQuantity'] is int
-          ? json['cityTrophyQuantity']
-          : int.parse(json['cityTrophyQuantity'])),
-      globalTrophyQuantity: (json['globalTrophyQuantity'] is int
-          ? json['globalTrophyQuantity']
-          : int.parse(json['globalTrophyQuantity'])),
-      totalTrophyQuantity: (json['totalTrophyQuantity'] is int
-          ? json['totalTrophyQuantity']
-          : int.parse(json['totalTrophyQuantity'])),
+      personalTrophyQuantity: json['personalTrophyQuantity'] == null
+          ? 0
+          : (json['personalTrophyQuantity'] is int
+              ? json['personalTrophyQuantity']
+              : int.parse(json['personalTrophyQuantity'])),
+      cityTrophyQuantity: json['cityTrophyQuantity'] == null
+          ? 0
+          : (json['cityTrophyQuantity'] is int
+              ? json['cityTrophyQuantity']
+              : int.parse(json['cityTrophyQuantity'])),
+      globalTrophyQuantity: json['globalTrophyQuantity'] == null
+          ? 0
+          : (json['globalTrophyQuantity'] is int
+              ? json['globalTrophyQuantity']
+              : int.parse(json['globalTrophyQuantity'])),
+      totalTrophyQuantity: json['totalTrophyQuantity'] == null
+          ? 0
+          : (json['totalTrophyQuantity'] is int
+              ? json['totalTrophyQuantity']
+              : int.parse(json['totalTrophyQuantity'])),
     );
   }
 
