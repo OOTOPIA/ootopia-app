@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 class GamingDataWidget extends StatefulWidget {
   String title;
-  String amount;
+  int amount;
   IconData icon;
   Color colorIcon;
   GamingDataWidget({
@@ -36,7 +36,7 @@ class _GamingDataWidgetState extends State<GamingDataWidget> {
             RichText(
                 text: TextSpan(children: [
               TextSpan(
-                  text: widget.amount + " ",
+                  text: widget.amount.toString() + " ",
                   style: TextStyle(
                       fontSize: 16,
                       color: Color(0xff000000),

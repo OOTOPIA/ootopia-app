@@ -209,19 +209,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     GamingDataWidget(
                                       title: "Personal",
                                       icon: FeatherIcons.user,
-                                      amount: "10",
+                                      amount: store
+                                          .profile!.personalTrophyQuantity!,
                                       colorIcon: Color(0xff00A5FC),
                                     ),
                                     GamingDataWidget(
                                       title: "Personal",
                                       icon: FeatherIcons.mapPin,
-                                      amount: "10",
+                                      amount:
+                                          store.profile!.cityTrophyQuantity!,
                                       colorIcon: Color(0xff0072C5),
                                     ),
                                     GamingDataWidget(
                                       title: "Personal",
                                       icon: FeatherIcons.globe,
-                                      amount: "10",
+                                      amount:
+                                          store.profile!.globalTrophyQuantity!,
                                       colorIcon: Color(0xff012588),
                                     ),
                                   ],
