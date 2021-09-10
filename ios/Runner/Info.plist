@@ -53,11 +53,14 @@
 			<string>processing</string>
 			<string>remote-notification</string>
 		</array>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>describe why your app needs access to write photo library</string>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>UISupportedInterfaceOrientations</key>
+
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
 			<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -93,16 +96,7 @@
 				</array>
 			</dict>
 		</array>
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>instagram-stories</string>
-			<string>facebook-stories</string>
-			<string>facebook</string>
-			<string>instagram</string>
-			<string>twitter</string>
-			<string>whatsapp</string>
-			<string>tg</string>
-		</array>
+
 
 	</dict>
 </plist>

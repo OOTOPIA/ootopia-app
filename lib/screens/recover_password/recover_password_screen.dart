@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -39,7 +42,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
     setState(() {
       isLoading = true;
       authBloc.add(EmptyEvent());
-      authBloc.add(RecoverPasswordEvent(_emailController.text));
+      String lang = "en";
+      if (Platform.localeName == "pt_BR") lang = 'ptbr';
+      authBloc.add(RecoverPasswordEvent(_emailController.text, lang));
     });
   }
 
@@ -107,8 +112,8 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                 return SnackBarWidget(
                   menu: AppLocalizations.of(context)!.checkYourEmail,
                   text: AppLocalizations.of(context)!
-                          .weSentYouALinkToCreateANewPassword +
-                      _emailController.text,
+                      .weSentYouALinkToCreateANewPassword,
+                  emailToConcatenate: _emailController.text,
                   about: "",
                 );
               },
@@ -237,18 +242,32 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                     TextFormField(
                                       controller: _emailController,
                                       keyboardType: TextInputType.emailAddress,
-                                      autofocus: true,
+                                      style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
                                               AppLocalizations.of(context)!
                                                   .email)
                                           .copyWith(
+                                              labelStyle: mailIsValid
+                                                  ? GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.lightGrey,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                  : GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.errorRed,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                               prefixIcon: ImageIcon(
-                                            AssetImage("assets/icons/mail.png"),
-                                            color: mailIsValid
-                                                ? LightColors.grey
-                                                : Colors.red,
-                                          )),
+                                                AssetImage(
+                                                    "assets/icons/mail.png"),
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           setState(() {
@@ -256,6 +275,14 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                           });
                                           return AppLocalizations.of(context)!
                                               .pleaseEnterYourValidEmailAddress;
+                                        }
+                                        if (!value.contains("@") ||
+                                            !value.contains(".")) {
+                                          setState(() {
+                                            mailIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterAValidEmail;
                                         }
                                         setState(() {
                                           mailIsValid = true;

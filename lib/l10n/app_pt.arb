@@ -2,9 +2,9 @@
     "language": "Portuguese",
     "helloWIfNotNowThenWhenorld": "Se não agora, então quando?\r\nSe não nós, então quem?\r\n\r\nBem-vindo ao movimento para\r\ncurar o planeta Terra!",
     "liveInOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
-    "email": "E-mail",
+    "email": "e-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
-    "password": "Senha",
+    "password": "senha",
     "repeatPassword": "Repita a Senha",
     "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
@@ -288,7 +288,7 @@
     "changeMakerProInvitationCode":"CÓDIGO DE CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO DO CONVITE DE BEM-VINDO",
-    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos que criam um impacto positivo e ajudam a regenerar a Terra. Assim, eles podem se registrar como Change Maker.",
+    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos que criam um impacto positivo e ajudam a regenerar a Terra. Assim, eles podem se registrar como Change Maker Pro.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba",
     "forEachNewcomer": "para cada recém-chegado.\nSeu amigo receberá",
    "ooz15":" 15,00 OOz.",
@@ -304,5 +304,5 @@
     "invitationCodeAccepted":"Código de convite aceito",
     "invitationCodeSent":"Código de convite enviado",
     "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
-    "pictureByFredericWlllburger":"Foto de Frederic Wlllburger"
+    "pictureByLinaTrochez":"Foto de Lina Trochez"
 }

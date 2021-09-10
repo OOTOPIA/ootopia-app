@@ -5,12 +5,12 @@
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
     "liveInOotopiaNowMessage": "LIVE IN OOTOPIA NOW!",
-    "email": "E-mail",
+    "email": "e-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
-    "password": "Password",
+    "password": "password",
     "pleaseEnterYourPassword": "Please Enter Your Password",
     "repeatPassword": "Repeat password",
-    "iForgotMyPassword": "I Forgot My Password",
+    "iForgotMyPassword": "I forgot my password",
     "pleaseRepeatYourPassword": "Please repeat your password",
     "passwordDoesNotMatch": "Password does not match",
     "login": "Login",
@@ -288,7 +288,7 @@
     "changeMakerProInvitationCode":"CHANGE MAKER PRO INVITATION CODE",
     "shareThisCode":"share this code",
     "welcomeInvitationCode":"WELCOME INVITATION CODE",
-    "sendSowerInvitationCode": "Send this code to invite people who are leading projects that create a positive impact and help regenerate Earth. \nThus, they can register as a Change Maker.",
+    "sendSowerInvitationCode": "Send this code to invite people who are leading projects that create a positive impact and help regenerate Earth. \nThus, they can register as a Change Maker Pro.",
     "sendWelcomeInvitationCode": "Send this code to invite your friends and receive",
     "forEachNewcomer":"for each newcomer.\nYour friend will receive",
     "ooz15":" 15,00 OOz.",
@@ -304,7 +304,7 @@
     "invitationCodeAccepted":"invitation code accepted",
     "invitationCodeSent":"invitation code sent",
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
-    "pictureByFredericWlllburger":"Picture by Frederic Wlllburger",
+    "pictureByLinaTrochez":"Picture by Lina Trochez",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
