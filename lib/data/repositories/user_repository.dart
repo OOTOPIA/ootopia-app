@@ -198,12 +198,13 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       if (res.statusCode != 200) {
         throw Exception(res.data);
       }
+      print("res data?? ${res.data}");
       var result = (res.data as List)
           .map((e) => InvitationCodeModel.fromJson(e))
           .toList();
       return result;
     } catch (e) {
-      throw Exception('Failed to get daily goal stats ' + e.toString());
+      throw Exception('Failed to get codes ' + e.toString());
     }
   }
 
