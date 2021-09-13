@@ -265,7 +265,7 @@ class CardInformationBalance extends StatelessWidget {
                 color: Color(colorOfBalance),
               ),
               Text(
-                '${this.action == "sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
+                '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
                 style: TextStyle(
                     fontWeight: FontWeight.w500, color: Color(colorOfBalance)),
               ),

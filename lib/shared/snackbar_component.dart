@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SnackBarWidget extends StatefulWidget {
   String menu;
   String text;
+  String? emailToConcatenate;
   Map<String, dynamic>? contact;
   String about;
   bool? marginBottom = false;
@@ -14,7 +15,8 @@ class SnackBarWidget extends StatefulWidget {
       required this.text,
       this.contact,
       required this.about,
-      this.marginBottom});
+      this.marginBottom,
+      this.emailToConcatenate});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -55,10 +57,25 @@ class _SnackbarStates extends State<SnackBarWidget> {
                     ))
               ],
             ),
-            Text(
-              widget.text,
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
+            widget.emailToConcatenate != null
+                ? RichText(
+                    text: new TextSpan(
+                      style: new TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                      children: <TextSpan>[
+                        new TextSpan(text: widget.text),
+                        new TextSpan(
+                            text: widget.emailToConcatenate,
+                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  )
+                : Text(
+                    widget.text,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
             if (widget.contact != null &&
                 widget.contact!["text"] != null &&
                 widget.contact!["textLink"] != null)

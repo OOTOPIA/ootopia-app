@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class GlobalConstants extends InheritedWidget {
@@ -20,23 +21,35 @@ class GlobalConstants extends InheritedWidget {
 
   InputDecoration loginInputTheme(String labelText) {
     return InputDecoration(
-      counterText: "",
-      labelText: labelText,
-      labelStyle: TextStyle(color: Colors.black54),
-      floatingLabelBehavior: FloatingLabelBehavior.never,
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: LightColors.grey, width: 0.30),
-        borderRadius: BorderRadius.circular(4),
-      ),
-    );
+        counterText: "",
+        labelText: labelText,
+        labelStyle: GoogleFonts.roboto(
+            color: LightColors.lightGrey, fontWeight: FontWeight.w500),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: LightColors.grey, width: 0.30),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: LightColors.grey, width: 0.30),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: LightColors.grey, width: 0.30),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: LightColors.errorRed, width: 1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: LightColors.errorRed, width: 1),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        errorStyle: GoogleFonts.roboto(
+            color: LightColors.errorRed,
+            fontWeight: FontWeight.w400,
+            fontSize: 12));
   }
 
   @override

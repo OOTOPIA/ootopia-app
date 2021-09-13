@@ -79,48 +79,46 @@ class _ChatWithUsersScreenState extends State<ChatWithUsersScreen> {
     appConfig = AppConfig.of(context);
     return SafeArea(
       child: Scaffold(
-        appBar: appBar,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Padding(
+            padding: EdgeInsets.all(3),
+            child: Image.asset(
+              'assets/images/logo.png',
+              height: 34,
+            ),
+          ),
+          toolbarHeight: 45,
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          brightness: Brightness.light,
+          leading: Padding(
+            padding: EdgeInsets.only(
+              left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+            ),
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
         body: !crispIsInitialized
             ? Center(
                 child: CircularProgressIndicator(),
               )
             : CrispView(
-                appBar: AppBar(
-                  title: const Text('OOTOPIA'),
-                ),
-                loadingWidget: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                // appBar: AppBar(
+                //   title: const Text('OOTOPIA'),
+                // ),
+                // loadingWidget: Center(
+                //   child: CircularProgressIndicator(),
+                // ),
                 crispMain: crispMain,
               ),
       ),
     );
   }
-
-  get appBar => AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
-          ),
-        ),
-        toolbarHeight: 45,
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        brightness: Brightness.light,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
-          ),
-          child: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-      );
 }

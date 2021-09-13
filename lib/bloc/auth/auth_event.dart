@@ -46,10 +46,11 @@ class EmptyEvent extends AuthEvent {
 
 class RecoverPasswordEvent extends AuthEvent {
   final String email;
-  const RecoverPasswordEvent(this.email);
+  final String lang;
+  const RecoverPasswordEvent(this.email, this.lang);
 
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [email, lang];
 }
 
 class ResetPasswordEvent extends AuthEvent {

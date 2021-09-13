@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
+    print("Login Page");
     setState(() {
       isLoading = true;
       authBloc!.add(EmptyEvent());
@@ -96,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is LoadedSucessState) {
+          print("Ja foi ");
           isLoading = false;
         }
         if (state is ErrorState) {
@@ -123,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
-                                  'assets/images/logo.png',
-                                  height:
-                                      GlobalConstants.of(context).logoHeight,
+                                  'assets/images/newlogo.png',
+                                  // height:
+                                  //     GlobalConstants.of(context).logoHeight,
                                 ),
                               ],
                             ),
@@ -134,26 +137,25 @@ class _LoginPageState extends State<LoginPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    AppLocalizations.of(context)!
-                                        .liveInOotopiaNowMessage,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(color: LightColors.blue),
-                                  ),
+                                      AppLocalizations.of(context)!
+                                          .liveInOotopiaNowMessage,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.roboto(
+                                          color: LightColors.blue,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w900)),
                                   Column(
                                     children: [
                                       Container(
-                                        height: 40,
-                                        width: 40,
+                                        height: 50,
+                                        width: 50,
                                         child: Image(
                                           image: AssetImage(
                                               "assets/images/butterfly.png"),
                                         ),
                                       ),
                                       Container(
-                                        height: 22,
+                                        height: 32,
                                       )
                                     ],
                                   )
@@ -171,23 +173,33 @@ class _LoginPageState extends State<LoginPage> {
                                     child: TextFormField(
                                       controller: _emailController,
                                       keyboardType: TextInputType.emailAddress,
-                                      autofocus: true,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
+                                      style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
                                               AppLocalizations.of(context)!
                                                   .email)
                                           .copyWith(
-                                            prefixIcon: ImageIcon(
-                                              AssetImage(
-                                                  "assets/icons/mail.png"),
-                                              color: mailIsValid
-                                                  ? LightColors.grey
-                                                  : Colors.red,
-                                            ),
-                                          ),
+                                              prefixIcon: ImageIcon(
+                                                AssetImage(
+                                                    "assets/icons/mail.png"),
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                                size: 20,
+                                              ),
+                                              labelStyle: mailIsValid
+                                                  ? GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.lightGrey,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                  : GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.errorRed,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           setState(() {
@@ -196,6 +208,15 @@ class _LoginPageState extends State<LoginPage> {
                                           return AppLocalizations.of(context)!
                                               .pleaseEnterYourValidEmailAddress;
                                         }
+                                        if (!value.contains("@") ||
+                                            !value.contains(".")) {
+                                          setState(() {
+                                            mailIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterAValidEmail;
+                                        }
+
                                         setState(() {
                                           mailIsValid = true;
                                         });
@@ -208,85 +229,131 @@ class _LoginPageState extends State<LoginPage> {
                                         .spacingSmall,
                                   ),
                                   Container(
-                                    height: 72,
-                                    child: TextFormField(
-                                      controller: _passwordController,
-                                      obscureText: !_showPassword,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme(
-                                              AppLocalizations.of(context)!
-                                                  .password)
-                                          .copyWith(
-                                            prefixIcon: ImageIcon(
-                                              AssetImage(
-                                                  "assets/icons/lock.png"),
-                                              color: passIsValid
-                                                  ? LightColors.grey
-                                                  : Colors.red,
-                                            ),
-                                            suffixIcon: GestureDetector(
-                                              child: Icon(
-                                                _showPassword == false
-                                                    ? FeatherIcons.eyeOff
-                                                    : FeatherIcons.eye,
-                                                color: LightColors.grey,
-                                              ),
-                                              onTap: () {
+                                      height: 72,
+                                      child: Stack(
+                                        children: [
+                                          TextFormField(
+                                            controller: _passwordController,
+                                            obscureText: !_showPassword,
+                                            style: GoogleFonts.roboto(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black),
+                                            decoration: GlobalConstants.of(
+                                                    context)
+                                                .loginInputTheme(
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .password)
+                                                .copyWith(
+                                                   labelStyle: passIsValid
+                                                  ? GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.lightGrey,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                  : GoogleFonts.roboto(
+                                                      color:
+                                                          LightColors.errorRed,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                  prefixIcon: ImageIcon(
+                                                    AssetImage(
+                                                        "assets/icons/lock.png"),
+                                                    color: passIsValid
+                                                        ? LightColors.grey
+                                                        : LightColors.errorRed,
+                                                  ),
+                                                  suffixIcon: GestureDetector(
+                                                    child: ImageIcon(
+                                                      _showPassword == false
+                                                          ? AssetImage(
+                                                              "assets/icons/eye-off.png")
+                                                          : AssetImage(
+                                                              "assets/icons/eye.png"),
+                                                      color: LightColors.grey,
+                                                      size: 2,
+                                                    ),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _showPassword =
+                                                            !_showPassword;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
                                                 setState(() {
-                                                  _showPassword =
-                                                      !_showPassword;
+                                                  passIsValid = false;
                                                 });
-                                              },
-                                            ),
-                                          ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          setState(() {
-                                            passIsValid = false;
-                                          });
-                                          return AppLocalizations.of(context)!
-                                              .pleaseEnterYourPassword;
-                                        }
-                                        setState(() {
-                                          passIsValid = true;
-                                        });
+                                                return AppLocalizations.of(
+                                                        context)!
+                                                    .pleaseEnterYourPassword;
+                                              }
+                                              setState(() {
+                                                passIsValid = true;
+                                              });
 
-                                        return null;
-                                      },
-                                    ),
+                                              return null;
+                                            },
+                                          ),
+                                          Positioned(
+                                            bottom: -45,
+                                            right: 0,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                top: 0,
+                                                bottom:
+                                                    GlobalConstants.of(context)
+                                                        .spacingLarge,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pushNamed(PageRoute
+                                                              .Page
+                                                              .recoverPasswordScreen
+                                                              .route);
+                                                    },
+                                                    child: Text(
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .iForgotMyPassword,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style:
+                                                            GoogleFonts.roboto(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          color: Colors.black,
+                                                        )
+
+                                                        // TextStyle(
+                                                        //     fontSize: 12,
+                                                        //     fontWeight: FontWeight.bold,
+                                                        //     decoration: TextDecoration.underline,
+                                                        //     color: Colors.black,
+                                                        //     fontFamily: 'RobotoRegular'),
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                  Container(
+                                    height: 24,
                                   )
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: 8,
-                                bottom:
-                                    GlobalConstants.of(context).spacingLarge,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(PageRoute
-                                          .Page.recoverPasswordScreen.route);
-                                    },
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .iForgotMyPassword,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -321,7 +388,7 @@ class _LoginPageState extends State<LoginPage> {
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Colors.white,
+                                color: LightColors.blue,
                                 width: 2,
                                 style: BorderStyle.solid,
                               ),
@@ -329,14 +396,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           SizedBox(
-                            height: GlobalConstants.of(context).spacingMedium,
+                            height: 40,
                           ),
                           Container(
                             height: 1,
                             color: Colors.grey,
                           ),
                           SizedBox(
-                            height: GlobalConstants.of(context).spacingMedium,
+                            height: 28,
                           ),
                           Text(
                             AppLocalizations.of(context)!.dontHaveAnAccountYet,

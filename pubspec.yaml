@@ -62,7 +62,7 @@ dependencies:
   permission_handler: ^6.0.1
   photo_manager: ^1.2.2
   receive_sharing_intent: ^1.4.5
-  flutter_ffmpeg: ^0.4.0
+  flutter_ffmpeg: ^0.4.2
   amplitude_flutter: ^3.0.0
   sentry_flutter: ^5.1.0
   sqflite: ^2.0.0+3
@@ -78,9 +78,9 @@ dependencies:
   image_crop: ^0.4.0
   flutter_feather_icons: ^2.0.0+1
   json_annotation: ^4.0.1
-  crisp: ^0.1.8
-  share_extend: ^2.0.0
-  
+  crisp: ^0.2.0
+  share_extend: "^2.0.0"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -126,7 +126,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

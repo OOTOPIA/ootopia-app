@@ -2,9 +2,9 @@
     "language": "Portuguese",
     "helloWIfNotNowThenWhenorld": "Se não agora, então quando?\r\nSe não nós, então quem?\r\n\r\nBem-vindo ao movimento para\r\ncurar o planeta Terra!",
     "liveInOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
-    "email": "E-mail",
+    "email": "e-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
-    "password": "Senha",
+    "password": "senha",
     "repeatPassword": "Repita a Senha",
     "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
@@ -264,7 +264,7 @@
     "gratitudeReward": "Recompensa de gratidão",
     "personalGoalAchieved": "Meta pessoal atingida",
     "totalGameCompleted": "Jogo total completado",
-    "back":"voltar",
+    "back":"Voltar",
 
     "thereAreNoWalletRecords": "Não há registros de OZZ",
 

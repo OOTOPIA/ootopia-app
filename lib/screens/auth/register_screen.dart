@@ -257,7 +257,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       autocorrect: false,
                                       textCapitalization:
                                           TextCapitalization.words,
-                                      autofocus: true,
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
                                               AppLocalizations.of(context)!
