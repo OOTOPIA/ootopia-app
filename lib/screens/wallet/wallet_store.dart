@@ -45,7 +45,8 @@ abstract class _WalletStoreBase with Store {
     map.entries.forEach((element) {
       double soma = 0.00;
       element.value.forEach((element) {
-        if (element.action == 'sent') {
+        if (element.action == 'sent' &&
+            element.origin != "invitation_code_sent") {
           soma -= element.balance;
         } else {
           soma += element.balance;
