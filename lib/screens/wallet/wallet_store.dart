@@ -42,6 +42,7 @@ abstract class _WalletStoreBase with Store {
           .format(DateTime.parse(obj.createdAt))
           .toString(),
     );
+
     map.entries.forEach((element) {
       double soma = 0.00;
       element.value.forEach((element) {
