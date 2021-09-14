@@ -29,14 +29,16 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
+          textAlign: TextAlign.center,
         ),
         SizedBox(
           height: 8,
         ),
-        Text(
-          AppLocalizations.of(context)!.sendSowerInvitationCode,
-          softWrap: true,
-          textAlign: TextAlign.center,
+        Center(
+          child: Text(
+            AppLocalizations.of(context)!.sendSowerInvitationCode,
+            textAlign: TextAlign.center,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
