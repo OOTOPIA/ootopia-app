@@ -93,7 +93,11 @@ class CardInformationBalance extends StatelessWidget {
         typeActionFromOrTo = AppLocalizations.of(context)!.from;
         break;
       case 'sent':
-        colorOfBalance = 0xff000000;
+        if (this.originTransaction != "invitation_code_sent") {
+          colorOfBalance = 0xff000000;
+        } else {
+          colorOfBalance = 0xff018F9C;
+        }
         typeActionFromOrTo = AppLocalizations.of(context)!.to;
         break;
       default:
