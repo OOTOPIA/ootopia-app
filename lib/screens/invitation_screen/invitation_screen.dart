@@ -33,17 +33,17 @@ class _InvitationScreenState extends State<InvitationScreen> {
             Stack(
               children: [
                 Image.asset(
-                  'assets/images/plating.png',
-                  fit: BoxFit.cover,
+                  'assets/images/plating.jpg',
                   width: double.infinity,
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0, right: 21),
+                    padding: const EdgeInsets.only(top: 16.0, right: 16),
                     child: RotatedBox(
                       quarterTurns: -1,
                       child: RichText(
+                        textAlign: TextAlign.center,
                         text: TextSpan(
                           text:
                               AppLocalizations.of(context)!.pictureByRommelDiaz,
@@ -62,24 +62,29 @@ class _InvitationScreenState extends State<InvitationScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    AppLocalizations.of(context)!.eachOneMakeADiference,
-                    style: TextStyle(
-                      color: Color(0xff003694),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.eachOneMakeADiference,
+                      style: TextStyle(
+                        color: Color(0xff003694),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(
                     height: 8,
                   ),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .inviteYourFriendsToJoinOOTOPIA,
-                    style: TextStyle(
-                      fontSize: 14,
+                  Center(
+                    child: Text(
+                      AppLocalizations.of(context)!
+                          .inviteYourFriendsToJoinOOTOPIA,
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   SizedBox(
                     height: 20,
