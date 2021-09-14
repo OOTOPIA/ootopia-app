@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -19,7 +20,7 @@ class PageViewController {
     LearningTracksScreen(),
     LearningTracksScreen(),
     WalletPage(),
-    ProfileScreen(null),
+    EditProfileScreen(),
   ];
 
   static const int TAB_INDEX_TIMELINE = 0;

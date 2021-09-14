@@ -114,7 +114,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
                   PageRoute.Page.loginScreen.route,
                   arguments: {
                     "returnToPageWithArgs": {
-                      "pageRoute": PageRoute.Page.myProfileScreen.route,
+                      "pageRoute": PageRoute.Page.editProfileScreen.route,
                       "arguments": null
                     }
                   },

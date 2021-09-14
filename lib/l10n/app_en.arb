@@ -305,6 +305,9 @@
     "invitationCodeSent":"invitation code sent",
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
     "pictureByLinaTrochez":"Picture by Lina Trochez",
+    "bio":"Bio",
+    "fullName" : "Full Name",
+    "mobilePhone":"Mobile Phone",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

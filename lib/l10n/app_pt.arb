@@ -304,5 +304,8 @@
     "invitationCodeAccepted":"Código de convite aceito",
     "invitationCodeSent":"Código convite enviado",
     "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
-    "pictureByLinaTrochez":"Foto de Lina Trochez"
+    "pictureByLinaTrochez":"Foto de Lina Trochez",
+     "bio":"Biografia",
+    "fullName" : "Nome Completo",
+    "mobilePhone":"Celular"
 }

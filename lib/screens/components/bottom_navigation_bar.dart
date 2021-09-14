@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
@@ -171,7 +172,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
         selected = (homeStore.currentPageWidget is WalletPage);
         break;
       case PageViewController.TAB_INDEX_PROFILE:
-        selected = (homeStore.currentPageWidget is ProfileScreen);
+        selected = (homeStore.currentPageWidget is EditProfileScreen);
         break;
     }
     if (selected) {
