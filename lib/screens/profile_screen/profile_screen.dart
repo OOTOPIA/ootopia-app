@@ -263,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     horizontal: GlobalConstants.of(context)
                                         .screenHorizontalSpace),
                                 decoration: BoxDecoration(
-                                    color: Color(0xff707070).withOpacity(.2)),
+                                    color: Color(0xff707070).withOpacity(.05)),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -344,7 +344,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         SizedBox(
                                           width: 4,
                                         ),
-                                        Text("Wallet",
+                                        Text(
+                                            AppLocalizations.of(context)!
+                                                .wallet,
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 color: Color(0xff000000),
