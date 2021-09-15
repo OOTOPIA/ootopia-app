@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -10,104 +16,262 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController controller = TextEditingController();
   String initialCountry = 'US';
   PhoneNumber number = PhoneNumber(isoCode: 'US');
-  double _currentSliderValue = 0;
+  EditProfileStore editProfileStore = EditProfileStore();
+  File? filePath;
+  @override
+  void initState() {
+    super.initState();
+    editProfileStore.getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 18,
-            ),
-            CircleAvatar(
-              radius: 114,
-            ),
-            SizedBox(
-              height: 14,
-            ),
-            Text(
-              AppLocalizations.of(context)!.fullName,
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextFormField(
-              decoration: GlobalConstants.of(context).loginInputTheme(''),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Text(
-              AppLocalizations.of(context)!.bio,
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            TextFormField(
-                maxLines: 5,
-                decoration: GlobalConstants.of(context).loginInputTheme('')),
-            SizedBox(
-              height: 16,
-            ),
-            Text(
-              AppLocalizations.of(context)!.mobilePhone,
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 11,
-            ),
-            InternationalPhoneNumberInput(
-              onInputChanged: (PhoneNumber number) {
-                print(number.phoneNumber);
-              },
-              onInputValidated: (bool value) {
-                print(value);
-              },
-              selectorConfig: SelectorConfig(
-                selectorType: PhoneInputSelectorType.DIALOG,
+      body: Observer(builder: (_) {
+        if (editProfileStore.isloading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: ListView(
+            children: [
+              SizedBox(
+                height: 18,
               ),
-              initialValue: number,
-              textFieldController: controller,
-              keyboardType:
-                  TextInputType.numberWithOptions(signed: true, decimal: true),
-            ),
-            SizedBox(
-              height: 11,
-            ),
-            Text(
-              AppLocalizations.of(context)!.personalGoal,
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 11,
-            ),
-            Center(
-              child: Text(AppLocalizations.of(context)!.minutesPerDay),
-            ),
-            SfSlider(
-              min: 0.0,
-              max: 60,
-              value: _currentSliderValue,
-              interval: 10,
-              showLabels: true,
-              showDividers: true,
-              minorTicksPerInterval: 0,
-              onChanged: (dynamic value) {
-                setState(() {
-                  _currentSliderValue = value;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
+              Center(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30.0),
+                      child: Container(
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: new Border.all(
+                            color: Colors.white,
+                            width: 4.0,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: editProfileStore.photoUrl == null
+                            ? filePath == null
+                                ? CircleAvatar(
+                                    radius: 114,
+                                    backgroundImage: AssetImage(
+                                        'assets/icons_profile/profile.png'),
+                                  )
+                                : CircleAvatar(
+                                    radius: 114,
+                                    backgroundImage: Image.file(
+                                      filePath!,
+                                      fit: BoxFit.cover,
+                                    ).image,
+                                    //child: Image.file(filePath!),
+                                  )
+                            : CircleAvatar(
+                                radius: 114,
+                                backgroundImage: NetworkImage(
+                                    editProfileStore.photoUrl.toString()),
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 80,
+                        child: InkWell(
+                          onTap: () async {
+                            final ImagePicker _picker = ImagePicker();
+                            // Pick an image
+                            final image = await _picker.getImage(
+                                source: ImageSource.gallery);
+
+                            final File file = File(image!.path);
+                            setState(() {
+                              filePath = file;
+                            });
+                          },
+                          child: Container(
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: new Border.all(
+                                color: Colors.white,
+                                width: 4.0,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: CircleAvatar(
+                                backgroundColor: Color(0xff03DAC5),
+                                radius: 30,
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 45,
+                                  color: Colors.white,
+                                )),
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 14,
+              ),
+              Text(
+                AppLocalizations.of(context)!.fullName,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                decoration: GlobalConstants.of(context).loginInputTheme(''),
+                controller: editProfileStore.fullNameController,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                AppLocalizations.of(context)!.bio,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                  controller: editProfileStore.bioController,
+                  maxLines: 5,
+                  decoration: GlobalConstants.of(context).loginInputTheme('')),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                AppLocalizations.of(context)!.mobilePhone,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                height: 11,
+              ),
+              Container(
+                width: double.infinity,
+                child: InternationalPhoneNumberInput(
+                  onInputChanged: (PhoneNumber number) {
+                    print(number.phoneNumber);
+                  },
+                  onInputValidated: (bool value) {
+                    print(value);
+                  },
+                  selectorConfig: SelectorConfig(
+                    selectorType: PhoneInputSelectorType.DIALOG,
+                  ),
+                  initialValue: number,
+                  textFieldController: editProfileStore.cellPhoneController,
+                  formatInput: true,
+                  scrollPadding: EdgeInsets.all(0),
+                  inputDecoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderSide: BorderSide(width: 0.75),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                AppLocalizations.of(context)!.personalGoal,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(AppLocalizations.of(context)!.chooseTimeForRegenerationGame,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  )),
+              SizedBox(
+                height: 32,
+              ),
+              Text(AppLocalizations.of(context)!.noteAboutChooseZero,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  )),
+              SizedBox(
+                height: 16,
+              ),
+              Center(
+                child: Text(
+                  AppLocalizations.of(context)!.minutesPerDay,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                ),
+              ),
+              SfSliderTheme(
+                data: SfSliderThemeData(
+                    activeTrackColor: Color(0xff03DAC5).withOpacity(0.1),
+                    inactiveTrackColor: Color(0xff03DAC5),
+                    inactiveDividerRadius: 5,
+                    minorTickSize: Size(20, 20),
+                    tickSize: Size(20, 20),
+                    thumbColor: Colors.white,
+                    activeDividerColor: Color(0xff03DAC5).withOpacity(0.1),
+                    activeTickColor: Color(0xff03DAC5).withOpacity(0.1),
+                    overlayColor: Color(0xff03DAC5),
+                    activeDividerStrokeColor: Color(0xff03DAC5),
+                    disabledActiveDividerColor: Color(0xff03DAC5),
+                    thumbStrokeColor: Color(0xff03DAC5),
+                    inactiveTickColor: Color(0xff03DAC5),
+                    disabledThumbColor: Color(0xff03DAC5),
+                    activeMinorTickColor: Color(0xff03DAC5),
+                    inactiveDividerColor: Color(0xff03DAC5),
+                    overlayRadius: 20,
+                    tickOffset: Offset(10, 10)),
+                child: SfSlider(
+                  min: 0.0,
+                  max: 60,
+                  value: editProfileStore.currentSliderValue,
+                  interval: 10,
+                  stepSize: 10,
+                  showLabels: true,
+                  showDividers: true,
+                  enableTooltip: true,
+                  inactiveColor: Color(0xff03DAC5).withOpacity(0.3),
+                  onChanged: (dynamic value) {
+                    setState(() {
+                      editProfileStore.currentSliderValue = value;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

@@ -202,9 +202,11 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                     style: exibleText
-                        ? TextStyle(color: Color(0xff8E1816))
+                        ? TextStyle(
+                            color: Color(0xff8E1816),
+                            fontWeight: FontWeight.w500)
                         : TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w400),
+                            color: Colors.black, fontWeight: FontWeight.w500),
                     onChanged: (value) async {
                       var statusCode =
                           await insertInvitationCodeStore.verifyCodes(value);

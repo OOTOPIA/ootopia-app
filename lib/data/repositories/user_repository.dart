@@ -94,6 +94,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "addressCity": (user.addressCity == null ? "" : user.addressCity!),
         "addressLatitude": user.addressLatitude.toString(),
         "addressLongitude": user.addressLongitude.toString(),
+        "bio": user.bio.toString(),
+        "phone": user.phone.toString(),
         "tagsIds": tagsIds.join(",")
       };
 

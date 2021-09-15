@@ -309,6 +309,8 @@
     "fullName" : "Full Name",
     "mobilePhone":"Mobile Phone",
     "minutesPerDay":"Minutes per day",
+    "chooseTimeForRegenerationGame":"choose your time goal for daily participation in the regeneration game.",
+    "noteAboutChooseZero":"if you choose zero, you will not participate in the regeneration game.",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

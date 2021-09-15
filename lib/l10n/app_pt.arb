@@ -308,5 +308,7 @@
      "bio":"Biografia",
     "fullName" : "Nome Completo",
     "mobilePhone":"Celular",
-    "minutesPerDay":"Minutos por dia"
+    "minutesPerDay":"Minutos por dia",
+    "chooseTimeForRegenerationGame":"escolha sua meta de tempo para a participação diária no jogo de regeneração.",
+    "noteAboutChooseZero":"se você escolher zero, não participará do jogo de regeneração."
 }
