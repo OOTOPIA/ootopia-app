@@ -89,10 +89,10 @@
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
 				<key>CFBundleURLName</key>
-				<string>https://recover-password.ootopia.org</string>
+				<string>recover-password.ootopia.org</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>https://recover-password.ootopia.org</string>
+					<string>https</string>
 				</array>
 			</dict>
 		</array>
