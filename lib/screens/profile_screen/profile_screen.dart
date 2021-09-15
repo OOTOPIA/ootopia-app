@@ -432,15 +432,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(
                           height: GlobalConstants.of(context).spacingNormal,
                         ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
-                        child: Divider(
-                          height: 1,
-                          color: Color(0xff707070).withOpacity(.5),
+                      if (store.postsList.length > 0)
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: GlobalConstants.of(context)
+                                  .screenHorizontalSpace),
+                          child: Divider(
+                            height: 1,
+                            color: Color(0xff707070).withOpacity(.5),
+                          ),
                         ),
-                      ),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
