@@ -89,31 +89,34 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar,
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is ErrorResetPasswordState) {
-            isLoading = false;
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
-          } else if (state is LoadedSucessResetPasswordState) {
-            isLoading = false;
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              PageRoute.Page.loginScreen.route,
-              ModalRoute.withName('/'),
-              arguments: {
-                "returnToPageWithArgs": {
-                  "newPassword": _passwordController.text,
-                }
-              },
-            );
-          }
-        },
-        child: _blocBuilder(),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: appBar,
+        body: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is ErrorResetPasswordState) {
+              isLoading = false;
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is LoadedSucessResetPasswordState) {
+              isLoading = false;
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                PageRoute.Page.loginScreen.route,
+                ModalRoute.withName('/'),
+                arguments: {
+                  "returnToPageWithArgs": {
+                    "newPassword": _passwordController.text,
+                  }
+                },
+              );
+            }
+          },
+          child: _blocBuilder(),
+        ),
       ),
     );
   }
@@ -211,7 +214,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           .creatingANewAccountPassword,
                                       textAlign: TextAlign.center,
                                       style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                          Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600)
                                     ),
                                   ),
                                 ],
@@ -364,6 +367,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           return null;
                                         },
                                       ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
                                     )
                                   ],
                                 ),

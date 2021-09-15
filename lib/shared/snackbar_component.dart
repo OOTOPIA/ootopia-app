@@ -9,6 +9,7 @@ class SnackBarWidget extends StatefulWidget {
   Map<String, dynamic>? contact;
   String about;
   bool? marginBottom = false;
+  Function? onClose;
 
   SnackBarWidget(
       {required this.menu,
@@ -16,7 +17,8 @@ class SnackBarWidget extends StatefulWidget {
       this.contact,
       required this.about,
       this.marginBottom,
-      this.emailToConcatenate});
+      this.emailToConcatenate,
+      this.onClose});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -49,6 +51,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
                 ),
                 IconButton(
                     onPressed: () {
+                      if(widget.onClose != null) widget.onClose!();
                       Navigator.of(context).pop();
                     },
                     icon: Icon(
