@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-import 'package:ootopia_app/shared/analytics.server.dart';
+// import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ProfileScreenStore store = ProfileScreenStore();
   late AuthStore authStore;
   late WalletStore walletStore;
-  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  // AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   bool isVisible = false;
 
@@ -52,12 +52,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     });
 
-    this.trackingEvents.profileViewedAProfile(
-      widget.args == null || (widget.args != null && widget.args!["id"] == null)
-          ? AppLocalizations.of(context)!.profileOwnProfile
-          : AppLocalizations.of(context)!.profileViewedAProfile,
-      {"profileId": store.profile!.id},
-    );
+    // this.trackingEvents.profileViewedAProfile(
+    //   widget.args == null || (widget.args != null && widget.args!["id"] == null)
+    //       ? AppLocalizations.of(context)!.profileOwnProfile
+    //       : AppLocalizations.of(context)!.profileViewedAProfile,
+    //   {"profileId": store.profile!.id},
+    // );
   }
 
   String _getUserId() {
