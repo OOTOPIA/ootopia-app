@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                                             mailIsValid = false;
                                           });
                                           return AppLocalizations.of(context)!
-                                              .pleaseEnterAValidEmail;
+                                              .pleaseEnterYourValidEmailAddress;
                                         }
 
                                         setState(() {

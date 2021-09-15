@@ -304,7 +304,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                             mailIsValid = false;
                                           });
                                           return AppLocalizations.of(context)!
-                                              .pleaseEnterAValidEmail;
+                                              .pleaseEnterYourValidEmailAddress;
                                         }
                                         setState(() {
                                           mailIsValid = true;
