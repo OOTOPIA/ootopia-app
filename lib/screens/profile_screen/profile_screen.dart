@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           AvatarPhotoWidget(
                             photoUrl: store.profile!.photoUrl,
-                            isBadges: store.profile!.badges!.length == 0,
+                            isBadges: store.profile!.badges!.length > 0,
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
@@ -401,7 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .screenHorizontalSpace),
                         child: Divider(
                           height: 1,
-                          color: Color(0xff707070).withOpacity(.1),
+                          color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
                       SizedBox(
@@ -410,7 +410,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
+                                    .screenHorizontalSpace -
+                                6),
                         child: Row(
                           children: [
                             AlbumProfileWidget(
@@ -434,7 +435,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .screenHorizontalSpace),
                         child: Divider(
                           height: 1,
-                          color: Color(0xff707070).withOpacity(.1),
+                          color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
                       SizedBox(
@@ -458,6 +459,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         GridCustomWidget(
                                           thumbnailUrl: post.thumbnailUrl,
                                           columnsCount: 4,
+                                          type: post.type,
                                           onTap: () {
                                             _goToTimelinePost(
                                                 store.postsList, index);
