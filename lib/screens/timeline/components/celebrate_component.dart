@@ -137,9 +137,11 @@ class CelebrationStates extends State<Celebration> {
                                   AppLocalizations.of(context)!
                                       .whyYouReceivdOOz,
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15,
-                                      color: Color(0xFF000000)),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: Color(0xFF000000),
+                                  ),
+                                  textAlign: TextAlign.center,
                                 )),
                           if (widget.args["goal"] == "user")
                             Padding(
@@ -178,7 +180,10 @@ class CelebrationStates extends State<Celebration> {
                                       "${widget.args["goal"] == "inivitationCode" ? AppLocalizations.of(context)!.welcomeCredit : "OOz" + AppLocalizations.of(context)!.totalBalance}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 24,
+                                          fontSize: widget.args["goal"] ==
+                                                  "inivitationCode"
+                                              ? 20
+                                              : 24,
                                           color: Color(0xFF003694)),
                                     ),
                                     Container(
@@ -234,14 +239,27 @@ class CelebrationStates extends State<Celebration> {
                                             fontSize: 16,
                                             color: Color(0xFF000000)),
                                       ),
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .keepMakingOOTOPIAAlive,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Color(0xFF000000)),
-                                    )
+                                    widget.args["goal"] == "inivitationCode"
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(''))),
+                                            child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .keepMakingOOTOPIAAlive,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Color(0xFF000000)),
+                                            ))
+                                        : Text(
+                                            AppLocalizations.of(context)!
+                                                .keepMakingOOTOPIAAlive,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Color(0xFF000000)),
+                                          )
                                   ],
                                 ),
                               ),

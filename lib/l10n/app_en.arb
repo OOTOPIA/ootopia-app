@@ -306,7 +306,7 @@
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
     "pictureByLinaTrochez":"Picture by Lina Trochez",
     "welcomeCredit":"Welcome Credit",
-    "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here. That's why you just received your first OOz credits.",
+    "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here.\nThat's why you just received your first OOz credits.",
     "welcome":"welcome",
     "@helloWorld": {
         "description": "A programmer greeting"

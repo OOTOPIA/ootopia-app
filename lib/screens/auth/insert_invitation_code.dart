@@ -49,7 +49,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                 "returnToPageWithArgs": widget.args['returnToPageWithArgs'],
                 "name": widget.args['FULLNAME'],
                 "goal": "inivitationCode",
-                "balance": "15,00OOz",
+                "balance": "15,00",
                 "homepage": true
               },
             );
