@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
 //Files
@@ -19,6 +20,7 @@ import 'components/avatar_photo_widget.dart';
 import 'components/empty_posts_widget.dart';
 import 'components/gaming_data_widget.dart';
 import 'components/timeline_profile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -96,7 +98,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           AvatarPhotoWidget(
                             photoUrl: store.profile!.photoUrl,
-                            isBadges: store.profile!.badges!.length > 0,
+                            isBadges: store.profile!.badges!.length == 0,
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                barrierColor: Colors.black.withAlpha(1),
+                                backgroundColor: Colors.black.withAlpha(1),
+                                builder: (BuildContext context) {
+                                  return SnackBarWidget(
+                                    menu: AppLocalizations.of(context)!
+                                        .changeMakerPro,
+                                    text: AppLocalizations.of(context)!
+                                        .theChangeMakerPro,
+                                    about:
+                                        AppLocalizations.of(context)!.learnMore,
+                                    marginBottom: true,
+                                    contact: {
+                                      "text": AppLocalizations.of(context)!
+                                          .areYouASowerToo,
+                                      "textLink": AppLocalizations.of(context)!
+                                          .getInContact,
+                                    },
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -120,21 +146,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                  text: "Personal Goal: ",
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black87),
-                                ),
-                                TextSpan(
-                                  text: "10m",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ]),
+                            InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  barrierColor: Colors.black.withAlpha(1),
+                                  backgroundColor: Colors.black.withAlpha(1),
+                                  builder: (BuildContext context) {
+                                    return SnackBarWidget(
+                                      menu: AppLocalizations.of(context)!
+                                          .badgeSower,
+                                      text: AppLocalizations.of(context)!
+                                          .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                      about: AppLocalizations.of(context)!
+                                          .learnMore,
+                                      marginBottom: true,
+                                    );
+                                  },
+                                );
+                              },
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: AppLocalizations.of(context)!
+                                            .personalGoal +
+                                        ": ",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.black87),
+                                  ),
+                                  TextSpan(
+                                    text: "10m",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ]),
+                              ),
                             ),
                             SizedBox(
                               width: 8,
@@ -215,7 +263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     GamingDataWidget(
-                                      title: "Personal",
+                                      title: AppLocalizations.of(context)!
+                                          .personalGoal,
                                       icon: FeatherIcons.user,
                                       amount: store
                                           .profile!.personalTrophyQuantity!,

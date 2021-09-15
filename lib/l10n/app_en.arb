@@ -305,6 +305,15 @@
     "invitationCodeSent":"invitation code sent",
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
     "pictureByLinaTrochez":"Picture by Lina Trochez",
+
+    "changeMakerPro": "Badge: Change Maker Pro",
+    "theChangeMakerPro": "TheChange Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
+    "theRegenerationGame": "The regeneration game is a way to contribute to regenerative movement through the OOTOPIA app. The number of minutes represents the daily goal that the person has set for their participation in the game.",
+
+    "personal": "Personal",
+    "city": "City",
+    "planetary": "Planetary",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }

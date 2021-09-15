@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class AvatarPhotoWidget extends StatefulWidget {
   String? photoUrl;
   bool isBadges;
+  VoidCallback onTap;
 
   AvatarPhotoWidget({
     Key? key,
     this.photoUrl,
     required this.isBadges,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -46,11 +48,14 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
           ? Positioned(
               top: 8,
               right: 4,
-              child: Image.asset(
-                //TODO verificar nome do icone
-                "assets/icons_profile/badges_icon.png",
-                width: 33,
-                height: 33,
+              child: InkWell(
+                onTap: widget.onTap,
+                child: Image.asset(
+                  //TODO verificar nome do icone
+                  "assets/icons_profile/badges_icon.png",
+                  width: 33,
+                  height: 33,
+                ),
               ),
             )
           : Container(),
