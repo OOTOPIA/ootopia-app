@@ -239,27 +239,14 @@ class CelebrationStates extends State<Celebration> {
                                             fontSize: 16,
                                             color: Color(0xFF000000)),
                                       ),
-                                    widget.args["goal"] == "inivitationCode"
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(''))),
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .keepMakingOOTOPIAAlive,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: Color(0xFF000000)),
-                                            ))
-                                        : Text(
-                                            AppLocalizations.of(context)!
-                                                .keepMakingOOTOPIAAlive,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Color(0xFF000000)),
-                                          )
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .keepMakingOOTOPIAAlive,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Color(0xFF000000)),
+                                    )
                                   ],
                                 ),
                               ),
