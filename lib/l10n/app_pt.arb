@@ -307,5 +307,6 @@
     "pictureByLinaTrochez":"Foto de Lina Trochez",
      "bio":"Biografia",
     "fullName" : "Nome Completo",
-    "mobilePhone":"Celular"
+    "mobilePhone":"Celular",
+    "minutesPerDay":"Minutos por dia"
 }

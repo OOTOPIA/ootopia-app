@@ -308,6 +308,7 @@
     "bio":"Bio",
     "fullName" : "Full Name",
     "mobilePhone":"Mobile Phone",
+    "minutesPerDay":"Minutes per day",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
