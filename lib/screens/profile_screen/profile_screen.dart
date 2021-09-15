@@ -404,31 +404,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
-                      SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                    .screenHorizontalSpace -
-                                6),
-                        child: Row(
-                          children: [
-                            AlbumProfileWidget(
-                              onTap: () {},
-                              albumName: "Passeio",
-                              photoAlbumUrl: "hello",
-                            ),
-                            AlbumProfileWidget(
-                              onTap: () {},
-                              albumName: "Album",
-                            )
-                          ],
+                      if (store.postsList.length > 0)
+                        SizedBox(
+                          height: GlobalConstants.of(context).spacingNormal,
                         ),
-                      ),
-                      SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
+                      if (store.postsList.length > 0)
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: GlobalConstants.of(context)
+                                      .screenHorizontalSpace -
+                                  6),
+                          child: Row(
+                            children: [
+                              AlbumProfileWidget(
+                                onTap: () {},
+                                albumName: "Passeio",
+                                photoAlbumUrl: "hello",
+                              ),
+                              AlbumProfileWidget(
+                                onTap: () {},
+                                albumName: "Album",
+                              )
+                            ],
+                          ),
+                        ),
+                      if (store.postsList.length > 0)
+                        SizedBox(
+                          height: GlobalConstants.of(context).spacingNormal,
+                        ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
