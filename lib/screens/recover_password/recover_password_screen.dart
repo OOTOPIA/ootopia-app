@@ -27,6 +27,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool emailIsSent = false;
+  bool snackBarActive = false;
 
   bool mailIsValid = true;
 
@@ -40,6 +41,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
 
   void _submit() {
     setState(() {
+      snackBarActive = true;
       isLoading = true;
       authBloc.add(EmptyEvent());
       String lang = "en";
@@ -89,38 +91,50 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
         ),
       );
 
+  void onCloseSnackbar() {
+    setState(() {
+      snackBarActive = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar,
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is ErrorRecoverPasswordState) {
-            isLoading = false;
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
-          } else if (state is LoadedSucessRecoverPasswordState) {
-            isLoading = false;
-            showModalBottomSheet(
-              context: context,
-              barrierColor: Colors.black.withAlpha(1),
-              backgroundColor: Colors.black.withAlpha(1),
-              builder: (BuildContext context) {
-                return SnackBarWidget(
-                  menu: AppLocalizations.of(context)!.checkYourEmail,
-                  text: AppLocalizations.of(context)!
-                      .weSentYouALinkToCreateANewPassword,
-                  emailToConcatenate: _emailController.text,
-                  about: "",
-                );
-              },
-            );
-          }
-        },
-        child: _blocBuilder(),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        appBar: appBar,
+        body: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is ErrorRecoverPasswordState) {
+              isLoading = false;
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
+              );
+            } else if (state is LoadedSucessRecoverPasswordState) {
+              isLoading = false;
+              showModalBottomSheet(
+                context: context,
+                barrierColor: Colors.black.withAlpha(1),
+                backgroundColor: Colors.black.withAlpha(1),
+                builder: (BuildContext context) {
+                  return SnackBarWidget(
+                    menu: AppLocalizations.of(context)!.checkYourEmail,
+                    text: AppLocalizations.of(context)!
+                        .weSentYouALinkToCreateANewPassword,
+                    emailToConcatenate: _emailController.text,
+                    about: "",
+                    onClose: () => onCloseSnackbar(),
+                  );
+                },
+              );
+            }
+          },
+          child: _blocBuilder(),
+        ),
       ),
     );
   }
@@ -140,6 +154,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
             children: [
               Container(
                 height: MediaQuery.of(context).size.height,
+                color: snackBarActive
+                    ? Color.fromRGBO(0, 0, 0, 0.3)
+                    : Color.fromRGBO(0, 0, 0, 0),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingMedium),
@@ -197,7 +214,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle1!
-                                          .copyWith(fontSize: 15),
+                                          .copyWith(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400),
                                     ),
                                   ),
                                 ],
@@ -240,6 +259,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 child: Column(
                                   children: [
                                     TextFormField(
+                                      onTap: () => onCloseSnackbar(),
+                                      autocorrect: false,
+                                      enableSuggestions: false,
                                       controller: _emailController,
                                       keyboardType: TextInputType.emailAddress,
                                       style: GoogleFonts.roboto(
@@ -334,7 +356,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: Colors.white,
+                                color: LightColors.blue,
                                 width: 2,
                                 style: BorderStyle.solid,
                               ),
