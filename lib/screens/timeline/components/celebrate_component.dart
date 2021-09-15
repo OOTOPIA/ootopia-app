@@ -97,19 +97,29 @@ class CelebrationStates extends State<Celebration> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            widget.args["goal"] != "global"
-                                ? AppLocalizations.of(context)!
-                                    .congratulations
-                                    .toUpperCase()
-                                : AppLocalizations.of(context)!
-                                    .letIsCelebrate
-                                    .toUpperCase(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: Color(0xFF003694)),
-                          ),
+                          widget.args["goal"] == "inivitationCode"
+                              ? Text(
+                                  AppLocalizations.of(context)!
+                                      .welcome
+                                      .toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 32,
+                                      color: Color(0xFF003694)),
+                                )
+                              : Text(
+                                  widget.args["goal"] != "global"
+                                      ? AppLocalizations.of(context)!
+                                          .congratulations
+                                          .toUpperCase()
+                                      : AppLocalizations.of(context)!
+                                          .letIsCelebrate
+                                          .toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 32,
+                                      color: Color(0xFF003694)),
+                                ),
                           if (widget.args["goal"] != "global")
                             Padding(
                                 padding: EdgeInsets.only(top: 8),
@@ -118,6 +128,17 @@ class CelebrationStates extends State<Celebration> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24,
+                                      color: Color(0xFF000000)),
+                                )),
+                          if (widget.args["goal"] == "inivitationCode")
+                            Padding(
+                                padding: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .whyYouReceivdOOz,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
                                       color: Color(0xFF000000)),
                                 )),
                           if (widget.args["goal"] == "user")
@@ -154,7 +175,7 @@ class CelebrationStates extends State<Celebration> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "OOz ${AppLocalizations.of(context)!.totalBalance}",
+                                      "${widget.args["goal"] == "inivitationCode" ? AppLocalizations.of(context)!.welcomeCredit : "OOz" + AppLocalizations.of(context)!.totalBalance}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 24,
@@ -199,7 +220,8 @@ class CelebrationStates extends State<Celebration> {
                                 padding: EdgeInsets.only(top: 10),
                                 child: Column(
                                   children: [
-                                    if (widget.args["goal"] != "global")
+                                    if (widget.args["goal"] !=
+                                        "inivitationCode")
                                       Text(
                                         widget.args["goal"] == "user"
                                             ? AppLocalizations.of(context)!
