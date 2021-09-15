@@ -313,7 +313,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   horizontal: GlobalConstants.of(context)
                                       .screenHorizontalSpace),
                               decoration: BoxDecoration(
-                                  color: Color(0xff707070).withOpacity(.2)),
+                                  color: Color(0xff707070).withOpacity(.05)),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -380,13 +380,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .screenHorizontalSpace),
                         child: Divider(
                           height: 1,
-                          color: Color(0xff707070).withOpacity(.1),
+                          color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
-                      SizedBox(
+                      if(store.postsList.length > 0) SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Container(
+                      if(store.postsList.length > 0) Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
                                 .screenHorizontalSpace),
@@ -404,7 +404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      if(store.postsList.length > 0) SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
                       Padding(
@@ -413,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .screenHorizontalSpace),
                         child: Divider(
                           height: 1,
-                          color: Color(0xff707070).withOpacity(.1),
+                          color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
                       SizedBox(
