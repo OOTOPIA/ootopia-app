@@ -300,11 +300,14 @@
     "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is flourishing thanks to people like you!",
     "skip":"Skip",
     "access":"Access",
-    "enterTheValidInvitationCode":"Please enter the valid invitation code",
+    "enterTheValidInvitationCode":"Please, enter the valid invitation code",
     "invitationCodeAccepted":"invitation code accepted",
     "invitationCodeSent":"invitation code sent",
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
     "pictureByLinaTrochez":"Picture by Lina Trochez",
+    "welcomeCredit":"Welcome Credit",
+    "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here.\nThat's why you just received your first OOz credits.",
+    "welcome":"welcome",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

@@ -300,9 +300,12 @@
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que floresce graças a pessoas como você!",
     "skip":"Pular",
     "access":"Acessar",
-    "enterTheValidInvitationCode":"Por favor insira o código de convite válido",
-    "invitationCodeAccepted":"Código de convite aceito",
+    "enterTheValidInvitationCode":"Por favor, insira o código de convite válido",
+    "invitationCodeAccepted":"Código convite aceito",
     "invitationCodeSent":"Código convite enviado",
     "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
-    "pictureByLinaTrochez":"Foto de Lina Trochez"
+    "pictureByLinaTrochez":"Foto de Lina Trochez",
+    "welcomeCredit":"Crédito de Boas-Vindas",
+    "whyYouReceivdOOz":"OOTOPIA é mais abundante agora que estamos aqui.\nÉ por isso que você acabou de receber seus primeiros créditos OOz.",
+"welcome":"Bem-Vindo"
 }
