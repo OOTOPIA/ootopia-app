@@ -50,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    print("Login Page");
     setState(() {
       isLoading = true;
       authBloc!.add(EmptyEvent());
@@ -103,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is LoadedSucessState) {
-          print("Ja foi ");
           isLoading = false;
         }
         if (state is ErrorState) {
