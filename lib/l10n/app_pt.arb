@@ -311,7 +311,11 @@
     "theRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. O número de minutos representa a meta diária que a pessoa definiu para sua participação no jogo.",
 
 
-    "personal": "Personal",
-    "city": "City",
-    "planetary": "Planetary"
+    "personal": "Pessoal",
+    "city": "Cidade",
+    "planetary": "Planetário",
+
+    "currentOOZBalance": "Saldo OOz Atual",
+
+    "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações"
 }

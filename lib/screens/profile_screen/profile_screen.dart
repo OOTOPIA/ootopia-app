@@ -78,6 +78,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : widget.args!["id"] == authStore.currentUser!.id);
   }
 
+  _goToPage(int index) {
+    PageViewController.instance.goToPage(
+      index,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
@@ -98,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           AvatarPhotoWidget(
                             photoUrl: store.profile!.photoUrl,
-                            isBadges: store.profile!.badges!.length == 0,
+                            isBadges: store.profile!.badges!.length > 0,
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
@@ -264,21 +270,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     GamingDataWidget(
                                       title: AppLocalizations.of(context)!
-                                          .personalGoal,
+                                          .personal,
                                       icon: FeatherIcons.user,
                                       amount: store
                                           .profile!.personalTrophyQuantity!,
                                       colorIcon: Color(0xff00A5FC),
                                     ),
                                     GamingDataWidget(
-                                      title: "Personal",
+                                      title: AppLocalizations.of(context)!.city,
                                       icon: FeatherIcons.mapPin,
                                       amount:
                                           store.profile!.cityTrophyQuantity!,
                                       colorIcon: Color(0xff0072C5),
                                     ),
                                     GamingDataWidget(
-                                      title: "Personal",
+                                      title: AppLocalizations.of(context)!
+                                          .planetary,
                                       icon: FeatherIcons.globe,
                                       amount:
                                           store.profile!.globalTrophyQuantity!,
@@ -291,83 +298,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer finibus congue quam. Sed vel tellus facilisis, varius turpis rhoncus, cursus ante.",
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w400),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
-                      isLoggedInUserProfile
-                          ? Container(
-                              width: double.maxFinite,
-                              height: 60,
+                      store.profile!.bio != null
+                          ? Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
                                       .screenHorizontalSpace),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff707070).withOpacity(.05)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        "assets/icons/ooz-coin-black.png",
-                                        width: 22,
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text("Wallet",
+                              child: Text(
+                                store.profile!.bio != null
+                                    ? store.profile!.bio!
+                                    : "",
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : SizedBox(),
+                      store.profile!.bio != null
+                          ? SizedBox(
+                              height: GlobalConstants.of(context).spacingNormal,
+                            )
+                          : SizedBox(),
+                      isLoggedInUserProfile
+                          ? InkWell(
+                              onTap: () {
+                                _goToPage(PageViewController.TAB_INDEX_WALLET);
+                              },
+                              child: Container(
+                                width: double.maxFinite,
+                                height: 60,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: GlobalConstants.of(context)
+                                        .screenHorizontalSpace),
+                                decoration: BoxDecoration(
+                                    color: Color(0xff707070).withOpacity(.05)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          "assets/icons/ooz-coin-black.png",
+                                          width: 22,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text("Wallet",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff000000),
+                                                fontWeight: FontWeight.w500)),
+                                      ],
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          AppLocalizations.of(context)!
+                                              .currentOOZBalance,
                                           style: TextStyle(
                                               fontSize: 16,
-                                              color: Color(0xff000000),
-                                              fontWeight: FontWeight.w500)),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "Current OOz Balance",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Color(0xff707070),
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            "assets/icons/ooz_only_active.png",
-                                            width: 20,
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                            walletStore.wallet != null
-                                                ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
-                                                : '0,00',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xff003694),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
+                                              color: Color(0xff707070),
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              "assets/icons/ooz_only_active.png",
+                                              width: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text(
+                                              walletStore.wallet != null
+                                                  ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                                  : '0,00',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xff003694),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                           : Container(),
@@ -383,30 +404,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
-                      if(store.postsList.length > 0) SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
-                      if(store.postsList.length > 0) Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
-                        child: Row(
-                          children: [
-                            AlbumProfileWidget(
-                              onTap: () {},
-                              albumName: "Passeio",
-                              photoAlbumUrl: "hello",
-                            ),
-                            AlbumProfileWidget(
-                              onTap: () {},
-                              albumName: "Album",
-                            )
-                          ],
+                      if (store.postsList.length > 0)
+                        SizedBox(
+                          height: GlobalConstants.of(context).spacingNormal,
                         ),
-                      ),
-                      if(store.postsList.length > 0) SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
+                      if (store.postsList.length > 0)
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: GlobalConstants.of(context)
+                                      .screenHorizontalSpace -
+                                  6),
+                          child: Row(
+                            children: [
+                              AlbumProfileWidget(
+                                onTap: () {},
+                                albumName: "Passeio",
+                                photoAlbumUrl: "hello",
+                              ),
+                              AlbumProfileWidget(
+                                onTap: () {},
+                                albumName: "Album",
+                              )
+                            ],
+                          ),
+                        ),
+                      if (store.postsList.length > 0)
+                        SizedBox(
+                          height: GlobalConstants.of(context).spacingNormal,
+                        ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
@@ -437,6 +462,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         GridCustomWidget(
                                           thumbnailUrl: post.thumbnailUrl,
                                           columnsCount: 4,
+                                          type: post.type,
                                           onTap: () {
                                             _goToTimelinePost(
                                                 store.postsList, index);
