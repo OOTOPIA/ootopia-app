@@ -5,22 +5,22 @@
     "email": "e-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "senha",
-    "repeatPassword": "Repita a Senha",
+    "repeatPassword": "Repita a senha",
     "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
     "pleaseRepeatYourPassword": "Por favor repita sua senha",
     "passwordDoesNotMatch": "Senha não corresponde",
     "login": "Conecte-se",
-    "createAccount": "Criar Conta",
+    "createAccount": "Criar conta",
     "dontHaveAnAccountYet": "Não tem uma conta ainda?",
     "forgotMyPass": "Esqueceu a senha?",
     "recoverPassItsAllRight": "Está tudo bem!",
     "creatingANewAccountPassword": "Crie uma nova senha para acessar sua Conta OOtopia.",
     "creatingANewPassword": "Criando uma nova senha",
     "createNewPassword":"Criar nova senha",
-    "requestNewPassword": "Solicitar nova Senha",
+    "requestNewPassword": "Solicitar nova senha",
 
-    "checkYourEmail": "Verifique seu E-mail",
+    "checkYourEmail": "Verifique seu e-mail",
     "weSentYouALinkToCreateANewPassword": "Nós te enviamos um link referente a solcititação da nova senha para: ",
 
     "regenerationGame": "Jogo de regeneração",
@@ -143,7 +143,7 @@
     "ourPledgeForTransparencyAndHighEthicalStandards": "nossa promessa de transparência e elevados padrões éticos.",
 
     "sentIfThisIsYourEmailALinkShouldBeInYourInboxSoYouCanUpdateYourPassword": "Enviado! \r\n\r\nSe este for seu e-mail, um link deve estar na sua caixa de entrada para que você possa atualizar sua senha.",
-    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Recuperar senha\r\n\r\nInforme seu e-mail para iniciar o processo de recuperação de senha",
+    "recoverPasswordPleaseEnterYourEmailToStartThePasswordRecoveryProcess": "Basta inserir o e-mail com o qual você criou sua conta e então receberá uma mensagem para criar uma nova senha.",
     "pleaseEnterYourEmail": "Por favor, informe seu e-mail",
     "changePassword": "Alterar senha",
     "enterNewPassword": "Informe a nova senha",
@@ -300,9 +300,9 @@
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que floresce graças a pessoas como você!",
     "skip":"Pular",
     "access":"Acessar",
-    "enterTheValidInvitationCode":"Por favor insira o código de convite válido",
-    "invitationCodeAccepted":"Código de convite aceito",
-    "invitationCodeSent":"Código de convite enviado",
+    "enterTheValidInvitationCode":"Por favor, insira o código de convite válido",
+    "invitationCodeAccepted":"Código convite aceito",
+    "invitationCodeSent":"Código convite enviado",
     "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
     "pictureByLinaTrochez":"Foto de Lina Trochez",
 
@@ -317,5 +317,8 @@
 
     "currentOOZBalance": "Saldo OOz Atual",
 
-    "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações"
+    "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações",
+    "welcomeCredit":"Crédito de Boas-Vindas",
+    "whyYouReceivdOOz":"OOTOPIA é mais abundante agora que estamos aqui.\nÉ por isso que você acabou de receber seus primeiros créditos OOz.",
+    "welcome":"Bem-Vindo"
 }

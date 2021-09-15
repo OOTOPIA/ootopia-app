@@ -92,7 +92,7 @@
 				<string>recover-password.ootopia.org</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>customscheme</string>
+					<string>https</string>
 				</array>
 			</dict>
 		</array>

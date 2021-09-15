@@ -20,6 +20,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   bool exibleText = false;
   bool isLoading = false;
   TextEditingController _codeController = TextEditingController();
+  FocusNode focus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +48,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
               arguments: {
                 "returnToPageWithArgs": widget.args['returnToPageWithArgs'],
                 "name": widget.args['FULLNAME'],
-                "goal": "personal",
-                "balance": "15,00OOz",
+                "goal": "inivitationCode",
+                "balance": "15,00",
                 "homepage": true
               },
             );
@@ -91,161 +92,172 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: LoadingOverlay(
         isLoading: isLoading,
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/flower_degrade.png',
-                  ),
-                  fit: BoxFit.cover,
-                ),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/images/flower_degrade.jpg',
               ),
+              fit: BoxFit.cover,
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16, right: 16),
-                child: RotatedBox(
-                  quarterTurns: -1,
-                  child: RichText(
-                    text: TextSpan(
-                      text: AppLocalizations.of(context)!.pictureByLinaTrochez,
-                      style: TextStyle(color: Colors.white, fontSize: 10),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 26.0),
-              child: ListView(
+          ),
+          child: Stack(
+            children: [
+              Column(
                 children: [
-                  SizedBox(
-                    height: GlobalConstants.of(context).spacingLarge,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.invitationCodeWelcome,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 22),
-                  ),
-                  SizedBox(
-                    height: GlobalConstants.of(context).screenHorizontalSpace,
-                  ),
-                  Center(
-                      child: Image.asset(
-                    'assets/icons/invitation_code_icon.png',
-                    height: 166,
-                  )),
-                  SizedBox(
-                      height:
-                          GlobalConstants.of(context).screenHorizontalSpace),
-                  Text(
-                    AppLocalizations.of(context)!.yourAccessChannel,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                      height: GlobalConstants.of(context).spacingSemiLarge),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      AppLocalizations.of(context)!.enterYourInvitationCode,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  SizedBox(
-                    height: GlobalConstants.of(context).spacingSmall,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    autocorrect: false,
-                    textCapitalization: TextCapitalization.words,
-                    autofocus: true,
-                    controller: _codeController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 0.30),
-                        borderRadius: BorderRadius.circular(8),
+                  Stack(
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: GlobalConstants.of(context).spacingLarge,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.invitationCodeWelcome,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                          SizedBox(
+                            height: GlobalConstants.of(context)
+                                .screenHorizontalSpace,
+                          ),
+                          Center(
+                              child: Image.asset(
+                            'assets/icons/invitation_code_icon.png',
+                            height: 166,
+                          )),
+                        ],
                       ),
-                      focusedBorder: exibleText
-                          ? OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xff8E1816), width: 1),
-                              borderRadius: BorderRadius.circular(8),
-                            )
-                          : OutlineInputBorder(
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16, right: 16),
+                          child: RotatedBox(
+                            quarterTurns: -1,
+                            child: RichText(
+                              text: TextSpan(
+                                text: AppLocalizations.of(context)!
+                                    .pictureByLinaTrochez,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 35),
+                        Text(
+                          AppLocalizations.of(context)!.yourAccessChannel,
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 35),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .enterYourInvitationCode,
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        SizedBox(
+                          height: GlobalConstants.of(context).spacingSmall,
+                        ),
+                        TextFormField(
+                          autocorrect: false,
+                          autofocus: false,
+                          controller: _codeController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.grey, width: 0.30),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                      enabledBorder: exibleText
-                          ? OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xff8E1816), width: 1),
-                              borderRadius: BorderRadius.circular(8),
-                            )
-                          : OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.30),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                      hoverColor: Colors.white,
-                      fillColor: Colors.white,
-                      hintText: AppLocalizations.of(context)!.invitationCode,
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                    style: exibleText
-                        ? TextStyle(color: Color(0xff8E1816))
-                        : TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w400),
-                    onChanged: (value) async {
-                      var statusCode =
-                          await insertInvitationCodeStore.verifyCodes(value);
+                            focusedBorder: exibleText
+                                ? OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff8E1816), width: 1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  )
+                                : OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 0.30),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                            enabledBorder: exibleText
+                                ? OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff8E1816), width: 1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  )
+                                : OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 0.30),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                            hoverColor: Colors.white,
+                            fillColor: Colors.white,
+                            hintText:
+                                AppLocalizations.of(context)!.invitationCode,
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          style: exibleText
+                              ? TextStyle(color: Color(0xff8E1816))
+                              : TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                          onChanged: (value) async {
+                            var statusCode = await insertInvitationCodeStore
+                                .verifyCodes(value);
 
-                      setState(() {
-                        if (statusCode == 'valid') {
-                          visibleValidStatusCode = true;
-                          exibleText = false;
-                        } else {
-                          visibleValidStatusCode = false;
-                          exibleText = true;
-                        }
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Visibility(
-                    visible: exibleText,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context)!
-                            .enterTheValidInvitationCode,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.left,
-                      ),
+                            setState(() {
+                              if (statusCode == 'valid') {
+                                visibleValidStatusCode = true;
+                                exibleText = false;
+                              } else {
+                                visibleValidStatusCode = false;
+                                exibleText = true;
+                              }
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Visibility(
+                          visible: exibleText,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .enterTheValidInvitationCode,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
+              Container(
                 padding:
-                    const EdgeInsets.only(left: 26.0, right: 26, bottom: 24),
+                    const EdgeInsets.only(bottom: 24.0, left: 26, right: 26),
+                alignment: Alignment.bottomCenter,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -303,11 +315,11 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                   ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 24,
-            )
-          ],
+              SizedBox(
+                height: 24,
+              )
+            ],
+          ),
         ),
       ),
     );

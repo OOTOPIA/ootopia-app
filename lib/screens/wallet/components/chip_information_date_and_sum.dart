@@ -19,11 +19,11 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
   @override
   Widget build(BuildContext context) {
     String today = DateFormat('MMM d, y').format(DateTime.now());
-    return 
-    Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(// day
+        Text(
+          // day
           '${today == widget.date ? 'Today' : widget.date}',
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -32,26 +32,25 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox( // total by day
+        SizedBox(
+          // total by day
           width: 80,
-          child:
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/ooz-coin-blue-small.svg',
-                  color: Color(0xff003694),
-                ),
-                Text(
-                  ' ${double.parse(this.widget.sumFormated).isNegative ? '-' : ''} ${widget.sumFormated.length > 6 ? NumberFormat.compact().format(double.parse(widget.sumFormated.replaceAll('-', ''))).replaceAll('.', ',') : this.widget.sumFormated.replaceAll('-', '').replaceAll('.', ',')}',
-                  style: TextStyle(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SvgPicture.asset(
+                'assets/icons/ooz-coin-blue-small.svg',
+                color: Color(0xff003694),
+              ),
+              Text(
+                ' ${double.parse(this.widget.sumFormated).isNegative ? '-' : ''} ${widget.sumFormated.length > 6 ? NumberFormat.compact().format(double.parse(widget.sumFormated.replaceAll('-', ''))).replaceAll('.', ',') : this.widget.sumFormated.replaceAll('-', '').replaceAll('.', ',')}',
+                style: TextStyle(
                     fontSize: 14,
                     color: Color(0xff003694),
-                    fontWeight: FontWeight.w500
-                  ),
-                )
-              ],
-            ),
+                    fontWeight: FontWeight.w500),
+              )
+            ],
+          ),
         ),
       ],
     );
