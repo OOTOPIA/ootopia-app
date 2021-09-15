@@ -50,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    print("Login Page");
     setState(() {
       isLoading = true;
       authBloc!.add(EmptyEvent());
@@ -98,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is LoadedSucessState) {
-          print("Ja foi ");
           isLoading = false;
         }
         if (state is ErrorState) {
@@ -245,17 +243,17 @@ class _LoginPageState extends State<LoginPage> {
                                                             context)!
                                                         .password)
                                                 .copyWith(
-                                                   labelStyle: passIsValid
-                                                  ? GoogleFonts.roboto(
-                                                      color:
-                                                          LightColors.lightGrey,
-                                                      fontWeight:
-                                                          FontWeight.w500)
-                                                  : GoogleFonts.roboto(
-                                                      color:
-                                                          LightColors.errorRed,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                  labelStyle: passIsValid
+                                                      ? GoogleFonts.roboto(
+                                                          color: LightColors
+                                                              .lightGrey,
+                                                          fontWeight:
+                                                              FontWeight.w500)
+                                                      : GoogleFonts.roboto(
+                                                          color: LightColors
+                                                              .errorRed,
+                                                          fontWeight:
+                                                              FontWeight.w500),
                                                   prefixIcon: ImageIcon(
                                                     AssetImage(
                                                         "assets/icons/lock.png"),
