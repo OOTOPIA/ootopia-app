@@ -315,6 +315,7 @@
     "planetary": "Planetary",
 
     "currentOOZBalance": "Current OOz Balance",
+    "thisUserHasNoPublicationsYet": "This user has no publications yet",
 
     "@helloWorld": {
         "description": "A programmer greeting"

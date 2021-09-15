@@ -315,5 +315,7 @@
     "city": "Cidade",
     "planetary": "Planetário",
 
-    "currentOOZBalance": "Saldo OOz Atual"
+    "currentOOZBalance": "Saldo OOz Atual",
+
+    "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações"
 }
