@@ -310,7 +310,9 @@
     "mobilePhone":"Mobile Phone",
     "minutesPerDay":"Minutes per day",
     "chooseTimeForRegenerationGame":"choose your time goal for daily participation in the regeneration game.",
-    "noteAboutChooseZero":"if you choose zero, you will not participate in the regeneration game.",
+    "aboutChooseZero":"if you choose zero, you will not participate in the regeneration game.",
+    "note":"Note: ",
+    "settingGoalToZero":"By setting your goal to “zero”, you will not participate in the regeneration game. Your activities will not generate Ooz.",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

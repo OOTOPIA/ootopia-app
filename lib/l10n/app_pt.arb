@@ -310,5 +310,7 @@
     "mobilePhone":"Celular",
     "minutesPerDay":"Minutos por dia",
     "chooseTimeForRegenerationGame":"escolha sua meta de tempo para a participação diária no jogo de regeneração.",
-    "noteAboutChooseZero":"se você escolher zero, não participará do jogo de regeneração."
+    "aboutChooseZero":"se você escolher zero, não participará do jogo de regeneração.",
+    "note":"Nota: ",
+    "settingGoalToZero":"Ao definir sua meta como “zero”, você não participará do jogo de regeneração. Suas atividades não gerarão Ooz."
 }

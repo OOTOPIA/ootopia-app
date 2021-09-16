@@ -39,6 +39,15 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     return _$getUserAsyncAction.run(() => super.getUser());
   }
 
+  final _$getPhoneNumberAsyncAction =
+      AsyncAction('EditProfileStoreBase.getPhoneNumber');
+
+  @override
+  Future<void> getPhoneNumber(String phoneNumber, String codeCountry) {
+    return _$getPhoneNumberAsyncAction
+        .run(() => super.getPhoneNumber(phoneNumber, codeCountry));
+  }
+
   @override
   String toString() {
     return '''
