@@ -313,6 +313,7 @@
     "aboutChooseZero":"if you choose zero, you will not participate in the regeneration game.",
     "note":"Note: ",
     "settingGoalToZero":"By setting your goal to “zero”, you will not participate in the regeneration game. Your activities will not generate Ooz.",
+    "mobilephoneToExperience":"Please enter your mobile phone to experience the movement that is regenerating the planet right now!",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

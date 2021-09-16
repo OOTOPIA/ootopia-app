@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mobx/mobx.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 
 part 'edit_profile_store.g.dart';
@@ -10,7 +9,7 @@ class EditProfileStore = EditProfileStoreBase with _$EditProfileStore;
 
 abstract class EditProfileStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
-
+  final formKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
@@ -22,7 +21,13 @@ abstract class EditProfileStoreBase with Store {
 
   @action
   Future<void> updateUser() async {
-    var user = await userRepositoryImpl.updateUser(User(), []);
+    var currentUser = await userRepositoryImpl.getCurrentUser();
+    currentUser.bio = bioController.text;
+    currentUser.fullname = fullNameController.text;
+    currentUser.phone = cellPhoneController.text;
+    currentUser.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+    currentUser.photoUrl = photoUrl;
+    var user = await userRepositoryImpl.updateUser(currentUser, []);
   }
 
   @action
@@ -51,8 +56,6 @@ abstract class EditProfileStoreBase with Store {
 
   @action
   Future<void> getPhoneNumber(String phoneNumber, String codeCountry) async {
-    PhoneNumber number = await PhoneNumber.getRegionInfoFromPhoneNumber(
-        phoneNumber, codeCountry);
-    print(cellPhoneController.text);
+    await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
   }
 }
