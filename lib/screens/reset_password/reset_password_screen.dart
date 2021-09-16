@@ -239,7 +239,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                         decoration: GlobalConstants.of(context)
                                             .loginInputTheme(
                                                 AppLocalizations.of(context)!
-                                                    .password)
+                                                    .newPassword)
                                             .copyWith(
                                               labelStyle: passIsValid
                                                   ? GoogleFonts.roboto(
@@ -283,7 +283,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                               passIsValid = false;
                                             });
                                             return AppLocalizations.of(context)!
-                                                .enterNewPassword;
+                                                .pleaseEnterANewPassword;
                                           }
                                           setState(() {
                                             passIsValid = true;
@@ -307,7 +307,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                         decoration: GlobalConstants.of(context)
                                             .loginInputTheme(
                                                 AppLocalizations.of(context)!
-                                                    .repeatPassword)
+                                                    .confirmPassword)
                                             .copyWith(
                                               labelStyle: pass2IsValid
                                                   ? GoogleFonts.roboto(
@@ -351,7 +351,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                               pass2IsValid = false;
                                             });
                                             return AppLocalizations.of(context)!
-                                                .pleaseEnterYourPassword;
+                                                .pleaseEnterTheSamePassword;
                                           }
                                           if (value !=
                                               _passwordController.text) {
