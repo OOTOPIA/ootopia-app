@@ -20,7 +20,14 @@ class CelebrationStates extends State<Celebration> {
 
   void _backButton(BuildContext context) {
     videoIsFinished = false;
-    Navigator.pop(context);
+    if (widget.args['goal'] == 'inivitationCode') {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+      );
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
