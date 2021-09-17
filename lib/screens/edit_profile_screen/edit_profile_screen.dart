@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -22,7 +23,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    editProfileStore.getUser();
+    Future.delayed(Duration.zero, () async {
+      await editProfileStore.getUser();
+    });
   }
 
   @override
@@ -30,33 +33,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 150),
-        child: Card(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: Colors.black,
+        child: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.0,
+            ))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton.icon(
+                  onPressed: () {
+                    PageViewController.instance.back();
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_rounded,
+                    color: Colors.black,
+                  ),
+                  label: Text(
+                    AppLocalizations.of(context)!.editProfile,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-                label: Text(
-                  'Edit Profile',
-                  style: TextStyle(color: Colors.black),
+                TextButton.icon(
+                  onPressed: () async {
+                    await editProfileStore.updateUser();
+                  },
+                  icon: Icon(
+                    Icons.check,
+                    color: Color(0xff03DAC5),
+                  ),
+                  label: Text(
+                    AppLocalizations.of(context)!.save,
+                    style: TextStyle(color: Color(0xff03DAC5)),
+                  ),
                 ),
-              ),
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.check,
-                  color: Color(0xff03DAC5),
-                ),
-                label: Text(
-                  'save',
-                  style: TextStyle(color: Color(0xff03DAC5)),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -107,7 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             'assets/icons_profile/profile.png'),
                                       )
                                     : CircleAvatar(
-                                        radius: 114,
+                                        radius: 57,
                                         backgroundImage: Image.file(
                                           filePath!,
                                           fit: BoxFit.cover,
@@ -115,7 +131,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         //child: Image.file(filePath!),
                                       )
                                 : CircleAvatar(
-                                    radius: 114,
+                                    radius: 57,
                                     backgroundImage: NetworkImage(
                                         editProfileStore.photoUrl.toString()),
                                   ),
@@ -134,6 +150,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 final File file = File(image!.path);
                                 setState(() {
                                   filePath = file;
+                                  editProfileStore.photoFilePathLocal =
+                                      image.path;
                                 });
                               },
                               child: Container(
@@ -218,7 +236,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           number.toString(), number.isoCode.toString());
                     },
                     onInputValidated: (bool value) {
-                      print(value);
+                      setState(() {
+                        editProfileStore.validCellPhone = !value;
+                      });
                     },
                     selectorConfig: SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
@@ -227,11 +247,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)!
                             .mobilephoneToExperience;
+                      } else if (editProfileStore.validCellPhone) {
+                        return AppLocalizations.of(context)!
+                            .insertValidCellPhone;
                       }
                       return null;
                     },
                     textFieldController: editProfileStore.cellPhoneController,
                     formatInput: true,
+                    errorMessage:
+                        AppLocalizations.of(context)!.mobilephoneToExperience,
+                    inputBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderSide: BorderSide(width: 0.25),
+                    ),
                     scrollPadding: EdgeInsets.all(0),
                     autoValidateMode: AutovalidateMode.onUserInteraction,
                     keyboardType: TextInputType.numberWithOptions(
@@ -246,6 +275,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderSide: BorderSide(width: 0.25),
                       ),
                       errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderSide:
+                            BorderSide(width: 0.25, color: Color(0xff8E1816)),
+                      ),
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         borderSide:
                             BorderSide(width: 0.25, color: Color(0xff8E1816)),

@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ProfileScreenStore store = ProfileScreenStore();
   late AuthStore authStore;
   late WalletStore walletStore;
+  late HomeStore homeStore;
 
   bool isVisible = false;
 
@@ -41,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await store.getProfileDetails(_getUserId());
-
+      await homeStore.getCurrentUser(_getUserId());
       await store.getUserPosts(_getUserId());
       Future.delayed(Duration.zero, () {
         walletStore.getWallet();
@@ -80,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
-
+    homeStore = Provider.of<HomeStore>(context);
     return Scaffold(
       body: Observer(
         builder: (_) => LoadingOverlay(

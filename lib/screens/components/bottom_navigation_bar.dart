@@ -172,7 +172,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
         selected = (homeStore.currentPageWidget is WalletPage);
         break;
       case PageViewController.TAB_INDEX_PROFILE:
-        selected = (homeStore.currentPageWidget is EditProfileScreen);
+        selected = (homeStore.currentPageWidget is ProfileScreen);
         break;
     }
     if (selected) {

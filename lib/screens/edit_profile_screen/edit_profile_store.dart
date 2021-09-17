@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 
 part 'edit_profile_store.g.dart';
 
@@ -16,18 +17,28 @@ abstract class EditProfileStoreBase with Store {
   double currentSliderValue = 0;
 
   String? photoUrl;
+  String? photoFilePathLocal;
   @observable
   bool isloading = false;
+  @observable
+  bool validCellPhone = false;
 
   @action
   Future<void> updateUser() async {
-    var currentUser = await userRepositoryImpl.getCurrentUser();
-    currentUser.bio = bioController.text;
-    currentUser.fullname = fullNameController.text;
-    currentUser.phone = cellPhoneController.text;
-    currentUser.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-    currentUser.photoUrl = photoUrl;
-    var user = await userRepositoryImpl.updateUser(currentUser, []);
+    isloading = true;
+    if (formKey.currentState!.validate()) {
+      var currentUser = await userRepositoryImpl.getCurrentUser();
+      currentUser.bio = bioController.text;
+      currentUser.fullname = fullNameController.text;
+      currentUser.phone = cellPhoneController.text;
+      currentUser.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+      if (photoFilePathLocal != null) {
+        currentUser.photoFilePath = photoFilePathLocal;
+      }
+      await userRepositoryImpl.updateUser(currentUser, []);
+      PageViewController.instance.back();
+    }
+    isloading = false;
   }
 
   @action
@@ -35,10 +46,10 @@ abstract class EditProfileStoreBase with Store {
     isloading = true;
     var user = await userRepositoryImpl.getCurrentUser();
     fullNameController.text = user.fullname.toString();
-    if (user.addressCity == null) {
+    if (user.bio == null) {
       bioController.text = '';
     } else {
-      bioController.text = user.addressCity.toString();
+      bioController.text = user.bio.toString();
     }
     if (user.phone == null) {
       bioController.text = '';

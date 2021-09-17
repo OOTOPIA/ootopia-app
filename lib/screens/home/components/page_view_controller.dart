@@ -20,7 +20,7 @@ class PageViewController {
     LearningTracksScreen(),
     LearningTracksScreen(),
     WalletPage(),
-    EditProfileScreen(),
+    ProfileScreen(null),
   ];
 
   static const int TAB_INDEX_TIMELINE = 0;
@@ -77,6 +77,8 @@ class PageViewController {
     if (onAddPage != null) {
       this.onAddPage!();
     }
+
+    pages.map((e) => print('PAGES $e')).toList();
     goToPage(pages.length - 1, true);
   }
 
