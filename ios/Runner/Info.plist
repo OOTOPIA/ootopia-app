@@ -89,7 +89,7 @@
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
 				<key>CFBundleURLName</key>
-				<string>recover-password.ootopia.org</string>
+				<string>ootopia.page.link/recovery-password</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>https</string>
