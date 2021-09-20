@@ -76,7 +76,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       onPressed: () async {
                         await editProfileStore.updateUser();
                         await profileStore.getProfileDetails(
-                            editProfileStore.currentUser.id!);
+                            editProfileStore.currentUser!.id!);
                         authStore.setUserIsLogged();
                       },
                       icon: Icon(

@@ -24,6 +24,52 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     });
   }
 
+  final _$validCellPhoneAtom =
+      Atom(name: 'EditProfileStoreBase.validCellPhone');
+
+  @override
+  bool get validCellPhone {
+    _$validCellPhoneAtom.reportRead();
+    return super.validCellPhone;
+  }
+
+  @override
+  set validCellPhone(bool value) {
+    _$validCellPhoneAtom.reportWrite(value, super.validCellPhone, () {
+      super.validCellPhone = value;
+    });
+  }
+
+  final _$countryCodeAtom = Atom(name: 'EditProfileStoreBase.countryCode');
+
+  @override
+  String? get countryCode {
+    _$countryCodeAtom.reportRead();
+    return super.countryCode;
+  }
+
+  @override
+  set countryCode(String? value) {
+    _$countryCodeAtom.reportWrite(value, super.countryCode, () {
+      super.countryCode = value;
+    });
+  }
+
+  final _$currentUserAtom = Atom(name: 'EditProfileStoreBase.currentUser');
+
+  @override
+  User? get currentUser {
+    _$currentUserAtom.reportRead();
+    return super.currentUser;
+  }
+
+  @override
+  set currentUser(User? value) {
+    _$currentUserAtom.reportWrite(value, super.currentUser, () {
+      super.currentUser = value;
+    });
+  }
+
   final _$updateUserAsyncAction =
       AsyncAction('EditProfileStoreBase.updateUser');
 
@@ -51,7 +97,10 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
   @override
   String toString() {
     return '''
-isloading: ${isloading}
+isloading: ${isloading},
+validCellPhone: ${validCellPhone},
+countryCode: ${countryCode},
+currentUser: ${currentUser}
     ''';
   }
 }

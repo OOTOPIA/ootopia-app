@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -32,52 +36,91 @@ abstract class EditProfileStoreBase with Store {
   String? countryCode;
 
   @observable
-  late User currentUser;
+  User? currentUser;
 
   @action
   Future<void> updateUser() async {
     if (formKey.currentState!.validate()) {
       isloading = true;
 
-      currentUser.bio = bioController.text;
-      currentUser.fullname = fullNameController.text;
-      currentUser.phone = cellPhoneController.text;
-      currentUser.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-      currentUser.countryCode = countryCode;
+      currentUser?.bio = bioController.text;
+      currentUser?.fullname = fullNameController.text;
+      currentUser?.phone = cellPhoneController.text;
+      currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+      currentUser?.countryCode = countryCode;
 
       if (photoFilePathLocal != null) {
-        currentUser.photoFilePath = photoFilePathLocal;
+        currentUser?.photoFilePath = photoFilePathLocal;
       }
 
-      await userRepositoryImpl.updateUser(currentUser, []);
-      isloading = false;
-
-      PageViewController.instance.back();
+      try {
+        if (currentUser?.photoFilePath != null) {
+          await _updateUserWithPhoto(currentUser!, []);
+        } else if (currentUser != null) {
+          await this
+              .userRepositoryImpl
+              .updateUserProfile(currentUser!, [], null);
+        }
+        await this.userRepositoryImpl.getMyAccountDetails();
+        isloading = false;
+        PageViewController.instance.back();
+      } catch (err) {
+        print("error when upload photo: ${err.toString()}");
+        isloading = false;
+      }
     }
+  }
+
+  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
+    var taskId = await this
+        .userRepositoryImpl
+        .updateUserProfile(currentUser!, [], uploader);
+    uploader.result.listen(
+        (result) {
+          if (result.statusCode == 200 && result.taskId == taskId) {
+            completer.complete(user.id);
+          }
+        },
+        onDone: () {},
+        onError: (error) {
+          completer.completeError(error);
+        });
+    return completer.future;
   }
 
   @action
   Future<void> getUser() async {
     isloading = true;
-    currentUser = await userRepositoryImpl.getCurrentUser();
-    fullNameController.text = currentUser.fullname.toString();
-    if (currentUser.bio == null) {
-      bioController.text = '';
-    } else {
-      bioController.text = currentUser.bio.toString();
+    print("PEGAR USUARIO");
+    try {
+      currentUser = await userRepositoryImpl.getCurrentUser();
+    } catch (err) {
+      print('pqp $err');
     }
-    if (currentUser.phone == null) {
-      bioController.text = '';
-    } else {
-      cellPhoneController.text = currentUser.phone.toString();
+    if (currentUser != null) {
+      fullNameController.text = currentUser!.fullname.toString();
+      if (currentUser!.bio == null) {
+        bioController.text = '';
+      } else {
+        bioController.text = currentUser!.bio.toString();
+      }
+      if (currentUser!.phone == null) {
+        cellPhoneController.text = '';
+      } else {
+        cellPhoneController.text = currentUser!.phone.toString();
+      }
+      if (currentUser!.dailyLearningGoalInMinutes == 0) {
+        currentSliderValue = 0;
+      } else {
+        currentSliderValue =
+            currentUser!.dailyLearningGoalInMinutes!.toDouble();
+      }
+      print('PEGOU USUARIO?');
+      countryCode = currentUser!.countryCode;
+      photoUrl = currentUser!.photoUrl;
     }
-    if (currentUser.dailyLearningGoalInMinutes == 0) {
-      currentSliderValue = 0;
-    } else {
-      currentSliderValue = currentUser.dailyLearningGoalInMinutes!.toDouble();
-    }
-    countryCode = currentUser.countryCode;
-    photoUrl = currentUser.photoUrl;
     isloading = false;
   }
 
