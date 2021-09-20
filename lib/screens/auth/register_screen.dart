@@ -184,12 +184,6 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: EdgeInsets.symmetric(
             horizontal: GlobalConstants.of(context).spacingMedium,
           ),
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //     image: AssetImage("assets/images/login_bg.jpg"),
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
           child: Form(
             key: _formKey,
             child: PageView(
@@ -200,15 +194,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Image.asset(
-                    //       'assets/images/white_logo.png',
-                    //       height: GlobalConstants.of(context).logoHeight,
-                    //     ),
-                    //   ],
-                    // ),
                     Row(
                       children: [
                         Expanded(
