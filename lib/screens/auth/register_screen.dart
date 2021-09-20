@@ -78,7 +78,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   goToPageView() async {
-    print("Page aqui " + controller.page.toString());
     if (controller.page == 0.0) {
       await controller.nextPage(
         duration: Duration(milliseconds: 400),
@@ -90,7 +89,6 @@ class _RegisterPageState extends State<RegisterPage> {
         curve: Curves.easeIn,
       );
     }
-    print("Page aqui " + controller.page.toString());
   }
 
   backButtonPage() async {

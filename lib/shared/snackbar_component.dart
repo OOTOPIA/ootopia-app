@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'dart:async';
+
 class SnackBarWidget extends StatefulWidget {
   String menu;
   String text;
@@ -9,6 +11,7 @@ class SnackBarWidget extends StatefulWidget {
   Map<String, dynamic>? contact;
   String about;
   bool? marginBottom = false;
+  Function? onClose;
 
   SnackBarWidget(
       {required this.menu,
@@ -16,7 +19,8 @@ class SnackBarWidget extends StatefulWidget {
       this.contact,
       required this.about,
       this.marginBottom,
-      this.emailToConcatenate});
+      this.emailToConcatenate,
+      this.onClose});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -25,6 +29,15 @@ class SnackBarWidget extends StatefulWidget {
 class _SnackbarStates extends State<SnackBarWidget> {
   Future<void> _openEmail(String url) async {
     await launch(url);
+  }
+
+  @override
+  void initState() {
+    Timer(Duration(milliseconds: 5000),() {
+      setState(() {
+        Navigator.of(context).pop();
+      });
+    });
   }
 
   @override
@@ -49,6 +62,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
                 ),
                 IconButton(
                     onPressed: () {
+                      if(widget.onClose != null) widget.onClose!();
                       Navigator.of(context).pop();
                     },
                     icon: Icon(

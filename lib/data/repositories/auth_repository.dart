@@ -47,8 +47,6 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
       await setAuthToken(user.token!);
       await setCurrentUser(response.body);
 
-      print("return");
-
       return user;
     } else if (response.statusCode == 403) {
       throw FetchDataException("INVALID_PASSWORD");
@@ -94,12 +92,9 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   @override
   Future recoverPassword(String email, String lang) async {
     final response = await http.post(
-      Uri.parse(dotenv.env['API_URL']! + "users/recover-password"),
+      Uri.parse(dotenv.env['API_URL']! + "ootopia.page.link/recovery-password"),
       headers: API_HEADERS,
-      body: jsonEncode(<String, dynamic>{
-        "email": email,
-        "language": lang
-      }),
+      body: jsonEncode(<String, dynamic>{"email": email, "language": lang}),
     );
 
     print("RECOVER PASSWORD RESPONSE ${response.body}");

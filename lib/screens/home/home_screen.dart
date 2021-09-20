@@ -362,8 +362,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  _checkStores() {
-    homeStore?.getDailyGoalStats();
+  _checkStores() async {
+    await homeStore?.getDailyGoalStats();
     homeStore?.startDailyGoalTimer();
     if (authStore.currentUser == null) {
       authStore.checkUserIsLogged();

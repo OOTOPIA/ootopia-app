@@ -50,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    print("Login Page");
     setState(() {
       isLoading = true;
       authBloc!.add(EmptyEvent());
@@ -62,34 +61,39 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var authStore = Provider.of<AuthStore>(context);
-    return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is ErrorState) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
-          } else if (state is LoadedSucessState) {
-            print("LOGGED!!!!!");
-            authStore.setUserIsLogged();
-            if (widget.args != null &&
-                widget.args!['returnToPageWithArgs'] != null) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                PageRoute.Page.homeScreen.route,
-                ModalRoute.withName('/'),
-                arguments: {
-                  "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
-                },
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        body: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is ErrorState) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                ),
               );
-            } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  PageRoute.Page.homeScreen.route, ModalRoute.withName('/'));
+            } else if (state is LoadedSucessState) {
+              print("LOGGED!!!!!");
+              authStore.setUserIsLogged();
+              if (widget.args != null &&
+                  widget.args!['returnToPageWithArgs'] != null) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  PageRoute.Page.homeScreen.route,
+                  ModalRoute.withName('/'),
+                  arguments: {
+                    "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
+                  },
+                );
+              } else {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    PageRoute.Page.homeScreen.route, ModalRoute.withName('/'));
+              }
             }
-          }
-        },
-        child: _blocBuilder(),
+          },
+          child: _blocBuilder(),
+        ),
       ),
     );
   }
@@ -98,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is LoadedSucessState) {
-          print("Ja foi ");
           isLoading = false;
         }
         if (state is ErrorState) {
@@ -171,6 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Container(
                                     height: 72,
                                     child: TextFormField(
+                                      autocorrect: false,
+                                      enableSuggestions: false,
                                       controller: _emailController,
                                       keyboardType: TextInputType.emailAddress,
                                       style: GoogleFonts.roboto(
@@ -214,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                                             mailIsValid = false;
                                           });
                                           return AppLocalizations.of(context)!
-                                              .pleaseEnterAValidEmail;
+                                              .pleaseEnterYourValidEmailAddress;
                                         }
 
                                         setState(() {
@@ -245,17 +250,17 @@ class _LoginPageState extends State<LoginPage> {
                                                             context)!
                                                         .password)
                                                 .copyWith(
-                                                   labelStyle: passIsValid
-                                                  ? GoogleFonts.roboto(
-                                                      color:
-                                                          LightColors.lightGrey,
-                                                      fontWeight:
-                                                          FontWeight.w500)
-                                                  : GoogleFonts.roboto(
-                                                      color:
-                                                          LightColors.errorRed,
-                                                      fontWeight:
-                                                          FontWeight.w500),
+                                                  labelStyle: passIsValid
+                                                      ? GoogleFonts.roboto(
+                                                          color: LightColors
+                                                              .lightGrey,
+                                                          fontWeight:
+                                                              FontWeight.w500)
+                                                      : GoogleFonts.roboto(
+                                                          color: LightColors
+                                                              .errorRed,
+                                                          fontWeight:
+                                                              FontWeight.w500),
                                                   prefixIcon: ImageIcon(
                                                     AssetImage(
                                                         "assets/icons/lock.png"),

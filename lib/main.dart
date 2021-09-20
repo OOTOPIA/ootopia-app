@@ -77,23 +77,23 @@ Future main() async {
     crispWebsiteId: dotenv.env['CRISP_WEBSITE_ID']!,
     child: new ExpensesApp(),
   );
-  runApp(
-    GlobalConstants(
-      child: configuredApp,
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+      options.debug = false;
+      options.environment = "staging";
+      options.attachStacktrace = true;
+      options.diagnosticLevel = SentryLevel.error;
+      options.enableAutoSessionTracking = true;
+    },
+    appRunner: () => runApp(
+      GlobalConstants(
+        child: configuredApp,
+      ),
     ),
   );
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn =
-  //         'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
-  //     options.debug = false;
-  //   },
-  //   appRunner: () => runApp(
-  //     GlobalConstants(
-  //       child: configuredApp,
-  //     ),
-  //   ),
-  // );
 }
 
 class ExpensesApp extends StatefulWidget {

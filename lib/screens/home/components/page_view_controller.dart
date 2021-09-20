@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -78,7 +77,6 @@ class PageViewController {
       this.onAddPage!();
     }
 
-    pages.map((e) => print('PAGES $e')).toList();
     goToPage(pages.length - 1, true);
   }
 

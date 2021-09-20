@@ -205,7 +205,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   @override
   Future recordTimeUserUsedApp(int timeInMilliseconds) async {
     bool loggedIn = await getUserIsLoggedIn();
-    if (!loggedIn) {
+    if (!loggedIn || timeInMilliseconds <= 0) {
       return;
     }
 
