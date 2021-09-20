@@ -20,7 +20,14 @@ class CelebrationStates extends State<Celebration> {
 
   void _backButton(BuildContext context) {
     videoIsFinished = false;
-    Navigator.pop(context);
+    if (widget.args['goal'] == 'invitationCode') {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+      );
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -90,7 +97,7 @@ class CelebrationStates extends State<Celebration> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          widget.args["goal"] == "inivitationCode"
+                          widget.args["goal"] == "invitationCode"
                               ? Text(
                                   AppLocalizations.of(context)!
                                       .welcome
@@ -123,7 +130,7 @@ class CelebrationStates extends State<Celebration> {
                                       fontSize: 24,
                                       color: Color(0xFF000000)),
                                 )),
-                          if (widget.args["goal"] == "inivitationCode")
+                          if (widget.args["goal"] == "invitationCode")
                             Padding(
                                 padding: EdgeInsets.only(top: 8),
                                 child: Text(
@@ -170,11 +177,11 @@ class CelebrationStates extends State<Celebration> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "${widget.args["goal"] == "inivitationCode" ? AppLocalizations.of(context)!.welcomeCredit : "OOz" + AppLocalizations.of(context)!.totalBalance}",
+                                      "${widget.args["goal"] == "invitationCode" ? AppLocalizations.of(context)!.welcomeCredit : "OOz" + AppLocalizations.of(context)!.totalBalance}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: widget.args["goal"] ==
-                                                  "inivitationCode"
+                                                  "invitationCode"
                                               ? 20
                                               : 24,
                                           color: Color(0xFF003694)),
@@ -218,8 +225,7 @@ class CelebrationStates extends State<Celebration> {
                                 padding: EdgeInsets.only(top: 10),
                                 child: Column(
                                   children: [
-                                    if (widget.args["goal"] !=
-                                        "inivitationCode")
+                                    if (widget.args["goal"] != "invitationCode")
                                       Text(
                                         widget.args["goal"] == "user"
                                             ? AppLocalizations.of(context)!
