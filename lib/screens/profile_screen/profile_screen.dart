@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: MediaQuery.of(context).size.width * .8,
                         decoration: BoxDecoration(
                             border: Border.fromBorderSide(
-                                BorderSide(width: 1, color: Color(0xff707070))),
+                                BorderSide(width: 1, color: Color(0xff101010).withOpacity(.1))),
                             borderRadius: BorderRadius.circular(45)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -189,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontSize: 16, color: Colors.black87),
                                   ),
                                   TextSpan(
-                                    text: "10m",
+                                    text: "${authStore.currentUser!.dailyLearningGoalInMinutes}m",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
@@ -232,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(top: 2),
-                                    child: Text("23",
+                                    child: Text( "${store.profile!.totalTrophyQuantity!}",
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,
@@ -361,40 +361,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontWeight: FontWeight.w500)),
                                       ],
                                     ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                    Row(
                                       children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .currentOOZBalance,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Color(0xff707070),
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Row(
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: [
-                                            Image.asset(
-                                              "assets/icons/ooz_only_active.png",
-                                              width: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
                                             Text(
-                                              walletStore.wallet != null
-                                                  ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
-                                                  : '0,00',
+                                              AppLocalizations.of(context)!
+                                                  .currentOOZBalance,
                                               style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xff003694),
-                                                  fontWeight: FontWeight.bold),
+                                                  fontSize: 16,
+                                                  color: Color(0xff707070),
+                                                  fontWeight: FontWeight.w400),
                                             ),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  "assets/icons/ooz_only_active.png",
+                                                  width: 20,
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  walletStore.wallet != null
+                                                      ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                                      : '0,00',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Color(0xff003694),
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              ],
+                                            )
                                           ],
-                                        )
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8),
+                                          child: Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                              color: Color(0xff03145C),
+                                              size: 12,
+                                          ),
+                                        ),
                                       ],
                                     )
                                   ],
