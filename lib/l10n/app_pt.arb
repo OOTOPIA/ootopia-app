@@ -8,7 +8,7 @@
     "newPassword": "nova senha",
     "confirmPassword": "confirme a senha",
     "pleaseEnterANewPassword": "Por favor, digite uma nova senha",
-    "pleaseEnterTheSamePassword": "Por favor, digite uma nova senha",
+    "pleaseEnterTheSamePassword": "Por favor, digite a mesma senha",
     "repeatPassword": "Repita a senha",
     "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
@@ -57,7 +57,7 @@
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
     "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
-    "pleaseEnterTheSamePassword": "Por favor, insira a mesma senha",
+    "pleaseInsertTheSamePassword": "Por favor, insira a mesma senha",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 
