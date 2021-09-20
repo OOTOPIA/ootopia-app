@@ -7,8 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -19,6 +21,8 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   EditProfileStore editProfileStore = EditProfileStore();
+  late ProfileScreenStore profileStore;
+
   File? filePath;
   @override
   void initState() {
@@ -30,6 +34,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    PhoneNumber codeCountryPhoneNnumber = PhoneNumber(
+        dialCode: editProfileStore.countryCode,
+        phoneNumber: editProfileStore.cellPhoneController.text);
+    profileStore = Provider.of<ProfileScreenStore>(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 150),
@@ -61,6 +69,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 TextButton.icon(
                   onPressed: () async {
                     await editProfileStore.updateUser();
+                    await profileStore
+                        .getProfileDetails(editProfileStore.currentUser.id!);
                   },
                   icon: Icon(
                     Icons.check,
@@ -232,6 +242,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   InternationalPhoneNumberInput(
                     onInputChanged: (PhoneNumber number) {
+                      setState(() {
+                        editProfileStore.countryCode =
+                            number.dialCode.toString();
+                      });
                       editProfileStore.getPhoneNumber(
                           number.toString(), number.isoCode.toString());
                     },
@@ -255,6 +269,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     },
                     textFieldController: editProfileStore.cellPhoneController,
                     formatInput: true,
+                    initialValue: codeCountryPhoneNnumber,
                     errorMessage:
                         AppLocalizations.of(context)!.mobilephoneToExperience,
                     inputBorder: OutlineInputBorder(

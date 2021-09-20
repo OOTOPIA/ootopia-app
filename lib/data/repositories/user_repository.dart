@@ -96,7 +96,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "addressLongitude": user.addressLongitude.toString(),
         "bio": user.bio.toString(),
         "phone": user.phone.toString(),
-        "fullname ": user.fullname.toString(),
+        "fullname": user.fullname.toString(),
+        "countryCode": user.countryCode.toString(),
         "tagsIds": tagsIds.join(",")
       };
 
@@ -124,7 +125,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           headers: await this.getHeaders(),
           body: jsonEncode(data),
         );
-
+        print(response.body);
         if (response.statusCode == 200) {
           await setCurrentUser(response.body);
           return User.fromJson(json.decode(response.body));
@@ -133,6 +134,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         }
       }
     } catch (error) {
+      print('$error');
       throw Exception('Failed to update user ' + error.toString());
     }
   }

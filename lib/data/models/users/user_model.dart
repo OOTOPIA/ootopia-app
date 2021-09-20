@@ -30,6 +30,7 @@ class User extends Equatable {
   int? cityTrophyQuantity;
   int? globalTrophyQuantity;
   int? totalTrophyQuantity;
+  String? countryCode;
 
   User({
     this.id,
@@ -59,6 +60,7 @@ class User extends Equatable {
     this.totalTrophyQuantity,
     this.bio,
     this.phone,
+    this.countryCode,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -131,7 +133,8 @@ class User extends Equatable {
                 ? json['totalTrophyQuantity']
                 : int.parse(json['totalTrophyQuantity'])),
         bio: json['bio'],
-        phone: json['phone']);
+        phone: json['phone'],
+        countryCode: json['countryCode']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -159,6 +162,7 @@ class User extends Equatable {
         "totalTrophyQuantity": totalTrophyQuantity,
         'bio': bio,
         'phone': phone,
+        'countryCode': countryCode,
       };
 
   @override

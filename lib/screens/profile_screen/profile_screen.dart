@@ -31,7 +31,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  ProfileScreenStore store = ProfileScreenStore();
+  late ProfileScreenStore store;
   late AuthStore authStore;
   late WalletStore walletStore;
   late HomeStore homeStore;
@@ -83,6 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
+    store = Provider.of<ProfileScreenStore>(context);
     return Scaffold(
       body: Observer(
         builder: (_) => LoadingOverlay(
