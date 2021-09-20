@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
@@ -113,6 +116,8 @@ class _TimelinePageState extends State<TimelinePage>
     OOzDistributionSystem.getInstance().startTimelineView();
 
     _handleIncomingLinks();
+    //TODO firebase dynamic link
+    // initDynamicLinks();
     _handleInitialUri();
 
     Future.delayed(Duration.zero, () {
@@ -144,6 +149,50 @@ class _TimelinePageState extends State<TimelinePage>
     });
   }
 
+  // void initDynamicLinks() async {
+  //   print("Token first");
+
+  //   FirebaseDynamicLinks.instance.onLink(
+  //       onSuccess: (PendingDynamicLinkData? dynamicLink) async {
+  //     final Uri? deepLink = dynamicLink?.link;
+  //     print("Token second");
+
+  //     // final uri = await getInitialUri();
+  //     // var linkSplit = uri.toString().split("resetPasswordToken=");
+  //     // var token = linkSplit[linkSplit.length - 1];
+
+  //     // print("Token $uri");
+  //     // print("Token $linkSplit");
+  //     // print("Token $token");
+
+  //     if (deepLink != null) {
+  //       void _goToProfile() async {
+  //         PageViewController.instance.addPage(ProfileScreen(
+  //           {
+  //             "id": user != null && _allPosts[0].userId == user!.id
+  //                 ? null
+  //                 : _allPosts[0].userId,
+  //           },
+  //         ));
+  //       }
+  //       // setRecoverPasswordToken(token);
+  //       // goToResetPassword();
+  //       // Navigator.pushNamed(context, deepLink.path);
+  //     }
+  //   }, onError: (OnLinkErrorException e) async {
+  //     print('onLinkError');
+  //     print(e.message);
+  //   });
+
+  //   final PendingDynamicLinkData? data =
+  //       await FirebaseDynamicLinks.instance.getInitialLink();
+  //   final Uri? deepLink = data?.link;
+
+  //   if (deepLink != null) {
+  //     Navigator.pushNamed(context, deepLink.path);
+  //   }
+  // }
+
   Future<void> _handleInitialUri() async {
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
@@ -159,7 +208,8 @@ class _TimelinePageState extends State<TimelinePage>
             goToResetPassword();
           }
         });
-      } on PlatformException {} on FormatException catch (err) {
+      } on PlatformException {
+      } on FormatException catch (err) {
         if (!mounted) return;
       }
     }
