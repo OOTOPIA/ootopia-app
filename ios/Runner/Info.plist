@@ -26,7 +26,7 @@
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
 				<key>CFBundleURLName</key>
-				<string>ootopia.page.link/recovery-password</string>
+				<string>recover-password.ootopia.org</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>https</string>
