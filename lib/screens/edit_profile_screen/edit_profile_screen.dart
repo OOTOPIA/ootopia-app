@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -22,79 +23,77 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   EditProfileStore editProfileStore = EditProfileStore();
   late ProfileScreenStore profileStore;
-
+  late AuthStore authStore;
+  PhoneNumber? codeCountryPhoneNnumber;
   File? filePath;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await editProfileStore.getUser();
+      codeCountryPhoneNnumber = PhoneNumber(
+          isoCode: editProfileStore.countryCode,
+          phoneNumber: editProfileStore.cellPhoneController.text);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    PhoneNumber codeCountryPhoneNnumber = PhoneNumber(
-        dialCode: editProfileStore.countryCode,
-        phoneNumber: editProfileStore.cellPhoneController.text);
     profileStore = Provider.of<ProfileScreenStore>(context);
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 150),
-        child: SafeArea(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-              color: Colors.grey.shade300,
-              width: 1.0,
-            ))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton.icon(
-                  onPressed: () {
-                    PageViewController.instance.back();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_rounded,
-                    color: Colors.black,
-                  ),
-                  label: Text(
-                    AppLocalizations.of(context)!.editProfile,
-                    style: TextStyle(color: Colors.black),
-                  ),
+    authStore = Provider.of<AuthStore>(context);
+    return Observer(builder: (context) {
+      return LoadingOverlay(
+        isLoading: editProfileStore.isloading,
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size(double.infinity, 150),
+            child: SafeArea(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1.0,
+                ))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        PageViewController.instance.back();
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.black,
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.editProfile,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () async {
+                        await editProfileStore.updateUser();
+                        await profileStore.getProfileDetails(
+                            editProfileStore.currentUser.id!);
+                        print('teste ${authStore.currentUser}');
+                      },
+                      icon: Icon(
+                        Icons.check,
+                        color: Color(0xff03DAC5),
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.save,
+                        style: TextStyle(color: Color(0xff03DAC5)),
+                      ),
+                    ),
+                  ],
                 ),
-                TextButton.icon(
-                  onPressed: () async {
-                    await editProfileStore.updateUser();
-                    await profileStore
-                        .getProfileDetails(editProfileStore.currentUser.id!);
-                  },
-                  icon: Icon(
-                    Icons.check,
-                    color: Color(0xff03DAC5),
-                  ),
-                  label: Text(
-                    AppLocalizations.of(context)!.save,
-                    style: TextStyle(color: Color(0xff03DAC5)),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      body: Observer(builder: (_) {
-        if (editProfileStore.isloading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return LoadingOverlay(
-          isLoading: editProfileStore.isloading,
-          child: Container(
+          body: Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Form(
               key: editProfileStore.formKey,
@@ -244,7 +243,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     onInputChanged: (PhoneNumber number) {
                       setState(() {
                         editProfileStore.countryCode =
-                            number.dialCode.toString();
+                            number.isoCode.toString();
                       });
                       editProfileStore.getPhoneNumber(
                           number.toString(), number.isoCode.toString());
@@ -412,8 +411,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }

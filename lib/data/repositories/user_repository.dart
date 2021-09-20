@@ -125,7 +125,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           headers: await this.getHeaders(),
           body: jsonEncode(data),
         );
-        print(response.body);
         if (response.statusCode == 200) {
           await setCurrentUser(response.body);
           return User.fromJson(json.decode(response.body));

@@ -43,9 +43,11 @@ abstract class EditProfileStoreBase with Store {
       currentUser.phone = cellPhoneController.text;
       currentUser.dailyLearningGoalInMinutes = currentSliderValue.toInt();
       currentUser.countryCode = countryCode;
+
       if (photoFilePathLocal != null) {
         currentUser.photoFilePath = photoFilePathLocal;
       }
+
       await userRepositoryImpl.updateUser(currentUser, []);
       PageViewController.instance.back();
     }
