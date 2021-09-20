@@ -37,11 +37,8 @@ class AppUsageTime {
   _updateUsageTime(Timer timer) {
     if (_watch.isRunning) {
       usageTimeSoFarInMilliseconds += 1000;
-      if ((usageTimeSoFarInMilliseconds / 1000) % 1 == 0) {
-        //A cada segundo armazenamos no storage o tempo cronometrado
-        print("boa $usageTimeSoFarInMilliseconds");
-        prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
-      }
+      //A cada segundo armazenamos no storage o tempo cronometrado
+      prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
     }
   }
 
