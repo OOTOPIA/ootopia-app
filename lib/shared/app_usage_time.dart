@@ -36,9 +36,10 @@ class AppUsageTime {
 
   _updateUsageTime(Timer timer) {
     if (_watch.isRunning) {
-      usageTimeSoFarInMilliseconds++;
+      usageTimeSoFarInMilliseconds += 1000;
       if ((usageTimeSoFarInMilliseconds / 1000) % 1 == 0) {
         //A cada segundo armazenamos no storage o tempo cronometrado
+        print("boa $usageTimeSoFarInMilliseconds");
         prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
       }
     }
@@ -49,7 +50,7 @@ class AppUsageTime {
       _watch.start();
     }
     if (_timer == null) {
-      _timer = Timer.periodic(Duration(milliseconds: 1), _updateUsageTime);
+      _timer = Timer.periodic(Duration(seconds: 1), _updateUsageTime);
     }
   }
 
@@ -68,14 +69,16 @@ class AppUsageTime {
     }
   }
 
-  sendToApi() async {
-    if (usageTimeSoFarInMilliseconds > 0) {
+  sendToApi([int? ms]) async {
+    if (ms == null) {
+      ms = usageTimeSoFarInMilliseconds;
+    }
+    if (ms > 0) {
       //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
       //Sendo assim o registro será enviado quando o app for aberto novamente
-      Future.delayed(Duration.zero, () async {
+      await Future.delayed(Duration.zero, () async {
         var _usersRepository = UserRepositoryImpl();
-        await _usersRepository
-            .recordTimeUserUsedApp(usageTimeSoFarInMilliseconds);
+        await _usersRepository.recordTimeUserUsedApp(ms!);
         usageTimeSoFarInMilliseconds = 0;
         prefs!.setInt(_prefsKey, 0);
         prefs!.setInt(_prefsPendingTimeKey, 0);
