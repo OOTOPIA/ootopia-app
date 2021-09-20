@@ -77,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         await editProfileStore.updateUser();
                         await profileStore.getProfileDetails(
                             editProfileStore.currentUser.id!);
-                        print('teste ${authStore.currentUser}');
+                        authStore.setUserIsLogged();
                       },
                       icon: Icon(
                         Icons.check,
@@ -137,7 +137,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           filePath!,
                                           fit: BoxFit.cover,
                                         ).image,
-                                        //child: Image.file(filePath!),
                                       )
                                 : CircleAvatar(
                                     radius: 57,
