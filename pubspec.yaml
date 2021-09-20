@@ -80,6 +80,7 @@ dependencies:
   json_annotation: ^4.0.1
   crisp: ^0.2.0
   share_extend: "^2.0.0"
+  firebase_dynamic_links: ^2.0.9
 
 dev_dependencies:
   flutter_test:

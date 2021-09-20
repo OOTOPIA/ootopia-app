@@ -25,19 +25,36 @@
 			<dict>
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>ootopia.page.link/recovery-password</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>ShareMedia</string>
+					<string>https</string>
 				</array>
 			</dict>
-			<dict />
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>Bundle ID</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>org.ootopia</string>
+				</array>
+			</dict>
 		</array>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>FUMaximumConnectionsPerHost</key>
+		<integer>3</integer>
+		<key>FUMaximumUploadOperation</key>
+		<integer>3</integer>
+		<key>FlutterDeepLinkingEnabled</key>
+		<true/>
 		<key>LSRequiresIPhoneOS</key>
-		<true />
+		<true/>
 		<key>NSAllowsArbitraryLoads</key>
-		<true />
+		<true/>
 		<key>NSCameraUsageDescription</key>
 		<string>Can I use the camera please?</string>
 		<key>NSLocationAlwaysUsageDescription</key>
@@ -46,6 +63,8 @@
 		<string>This app needs access to location when open.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Can I use the mic please?</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>describe why your app needs access to write photo library</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Can I access your gallery?</string>
 		<key>UIBackgroundModes</key>
@@ -53,14 +72,11 @@
 			<string>processing</string>
 			<string>remote-notification</string>
 		</array>
-		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>describe why your app needs access to write photo library</string>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>UISupportedInterfaceOrientations</key>
-
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
 			<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -74,29 +90,8 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false />
+		<false/>
 		<key>io.flutter.embedded_views_preview</key>
-		<true />
-		<key>FUMaximumConnectionsPerHost</key>
-		<integer>3</integer>
-		<key>FUMaximumUploadOperation</key>
-		<integer>3</integer>
-		<key>FlutterDeepLinkingEnabled</key>
-		<true />
-		<key>CFBundleURLTypes</key>
-		<array>
-			<dict>
-				<key>CFBundleTypeRole</key>
-				<string>Editor</string>
-				<key>CFBundleURLName</key>
-				<string>ootopia.page.link/recovery-password</string>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>https</string>
-				</array>
-			</dict>
-		</array>
-
-
+		<true/>
 	</dict>
 </plist>
