@@ -93,7 +93,6 @@ abstract class EditProfileStoreBase with Store {
   @action
   Future<void> getUser() async {
     isloading = true;
-    print("PEGAR USUARIO");
     try {
       currentUser = await userRepositoryImpl.getCurrentUser();
     } catch (err) {
@@ -117,7 +116,6 @@ abstract class EditProfileStoreBase with Store {
         currentSliderValue =
             currentUser!.dailyLearningGoalInMinutes!.toDouble();
       }
-      print('PEGOU USUARIO?');
       countryCode = currentUser!.countryCode;
       photoUrl = currentUser!.photoUrl;
     }
