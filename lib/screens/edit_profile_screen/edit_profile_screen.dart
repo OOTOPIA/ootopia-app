@@ -124,8 +124,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 ),
                               ],
                             ),
-                            child: editProfileStore.photoUrl == null
-                                ? filePath == null
+                            child: filePath == null
+                                ? editProfileStore.photoUrl == null
                                     ? CircleAvatar(
                                         radius: 57,
                                         backgroundImage: AssetImage(
@@ -133,15 +133,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       )
                                     : CircleAvatar(
                                         radius: 57,
-                                        backgroundImage: Image.file(
-                                          filePath!,
-                                          fit: BoxFit.cover,
-                                        ).image,
+                                        backgroundImage: NetworkImage(
+                                            editProfileStore.photoUrl
+                                                .toString()),
                                       )
                                 : CircleAvatar(
                                     radius: 57,
-                                    backgroundImage: NetworkImage(
-                                        editProfileStore.photoUrl.toString()),
+                                    backgroundImage: Image.file(
+                                      filePath!,
+                                      fit: BoxFit.cover,
+                                    ).image,
                                   ),
                           ),
                         ),

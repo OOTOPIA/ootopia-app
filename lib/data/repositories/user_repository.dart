@@ -102,7 +102,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       };
 
       if (user.photoFilePath != null) {
-        await FlutterUploader().enqueue(
+        var response = await FlutterUploader().enqueue(
           MultipartFormDataUpload(
             url: dotenv.env['API_URL']! + "users/${user.id}",
             files: [
@@ -117,7 +117,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
             tag: "Uploading user photo",
           ),
         );
-        await setCurrentUser(user.toJson().toString());
+        print('responseFullname ${jsonEncode(user.toJson())}');
+        await setCurrentUser(jsonEncode(user.toJson()));
         return user;
       } else {
         final response = await http.put(

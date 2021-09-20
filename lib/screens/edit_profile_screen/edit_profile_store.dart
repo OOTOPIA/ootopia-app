@@ -36,8 +36,9 @@ abstract class EditProfileStoreBase with Store {
 
   @action
   Future<void> updateUser() async {
-    isloading = true;
     if (formKey.currentState!.validate()) {
+      isloading = true;
+
       currentUser.bio = bioController.text;
       currentUser.fullname = fullNameController.text;
       currentUser.phone = cellPhoneController.text;
@@ -49,9 +50,10 @@ abstract class EditProfileStoreBase with Store {
       }
 
       await userRepositoryImpl.updateUser(currentUser, []);
+      isloading = false;
+
       PageViewController.instance.back();
     }
-    isloading = false;
   }
 
   @action
