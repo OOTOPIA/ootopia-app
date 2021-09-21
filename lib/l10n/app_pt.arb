@@ -337,5 +337,8 @@
     "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações",
     "welcomeCredit":"Crédito de Boas-Vindas",
     "whyYouReceivdOOz":"OOTOPIA é mais abundante agora que estamos aqui.\nÉ por isso que você acabou de receber seus primeiros créditos OOz.",
-    "welcome":"Bem-Vindo"
+    "welcome":"Bem-Vindo",
+
+    "medals": "Medalhas",
+    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!"
 }
