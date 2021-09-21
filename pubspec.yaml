@@ -84,6 +84,7 @@ dependencies:
   syncfusion_flutter_sliders: ^19.2.62
   
   firebase_dynamic_links: ^2.0.9
+  webview_flutter: ^2.0.14
 
 dev_dependencies:
   flutter_test:
@@ -116,6 +117,7 @@ flutter:
     - assets/icons/
     - assets/icons_profile/
     - assets/videos/
+    - assets/docs/
     - .env
   # To add assets to your application, add an assets section, like this:
   # assets:
