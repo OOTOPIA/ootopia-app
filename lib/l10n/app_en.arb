@@ -10,7 +10,7 @@
     "password": "password",
     "newPassword": "new password",
     "confirmPassword": "confirm password",
-    "pleaseEnterANewPassword": "Please, enter a new password",
+    "pleaseEnterANewPassword": "Please enter a new password",
     "pleaseEnterTheSamePassword": "Please enter the same password",
     "pleaseEnterYourPassword": "Please Enter Your Password",
     "repeatPassword": "Repeat password",
@@ -61,7 +61,7 @@
     "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
     "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
-    "pleaseEnterTheSamePassword": "Please enter the same password",
+    "pleaseInsertTheSamePassword": "Please enter the same password",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
