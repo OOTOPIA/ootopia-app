@@ -26,6 +26,7 @@ enum Page {
   chatWithUsersScreen,
   invitationScreen,
   insertInvitationCode,
+  editProfileScreen,
 }
 
 extension PageRoute on Page {
