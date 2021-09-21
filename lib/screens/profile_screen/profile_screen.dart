@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-// import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late AuthStore authStore;
   late WalletStore walletStore;
   late HomeStore homeStore;
-  // AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   bool isVisible = false;
 
@@ -52,14 +52,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Future.delayed(Duration.zero, () {
         walletStore.getWallet();
       });
+
+      this.trackingEvents.profileViewedAProfile(
+        widget.args == null || (widget.args != null && widget.args!["id"] == null)
+            ? AppLocalizations.of(context)!.profileOwnProfile
+            : AppLocalizations.of(context)!.profileViewedAProfile,
+        {"profileId": store.profile!.id},
+      );
+      
     });
 
-    // this.trackingEvents.profileViewedAProfile(
-    //   widget.args == null || (widget.args != null && widget.args!["id"] == null)
-    //       ? AppLocalizations.of(context)!.profileOwnProfile
-    //       : AppLocalizations.of(context)!.profileViewedAProfile,
-    //   {"profileId": store.profile!.id},
-    // );
   }
 
   String _getUserId() {
@@ -110,6 +112,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -149,10 +154,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         store.profile!.fullname,
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingNormal),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .regenerationGame
+                            .toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                          height: GlobalConstants.of(context).spacingSmall),
                       Container(
                         height: 44,
                         width: MediaQuery.of(context).size.width * .8,
@@ -173,9 +187,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   builder: (BuildContext context) {
                                     return SnackBarWidget(
                                       menu: AppLocalizations.of(context)!
-                                          .badgeSower,
+                                          .regenerationGame,
                                       text: AppLocalizations.of(context)!
-                                          .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                          .theRegenerationGame,
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
                                       marginBottom: true,
@@ -282,28 +296,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    GamingDataWidget(
-                                      title: AppLocalizations.of(context)!
-                                          .personal,
-                                      icon: FeatherIcons.user,
-                                      amount: store
-                                          .profile!.personalTrophyQuantity!,
-                                      colorIcon: Color(0xff00A5FC),
+                                    GestureDetector(
+                                      child: GamingDataWidget(
+                                        title: AppLocalizations.of(context)!
+                                            .personal,
+                                        icon: FeatherIcons.user,
+                                        amount: store
+                                            .profile!.personalTrophyQuantity!,
+                                        colorIcon: Color(0xff00A5FC),
+                                      ),
+                                      onTap: () => showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .medals,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      ),
                                     ),
-                                    GamingDataWidget(
-                                      title: AppLocalizations.of(context)!.city,
-                                      icon: FeatherIcons.mapPin,
-                                      amount:
-                                          store.profile!.cityTrophyQuantity!,
-                                      colorIcon: Color(0xff0072C5),
+                                    GestureDetector(
+                                      child: GamingDataWidget(
+                                        title:
+                                            AppLocalizations.of(context)!.city,
+                                        icon: FeatherIcons.mapPin,
+                                        amount:
+                                            store.profile!.cityTrophyQuantity!,
+                                        colorIcon: Color(0xff0072C5),
+                                      ),
+                                      onTap: () => showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .medals,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      ),
                                     ),
-                                    GamingDataWidget(
-                                      title: AppLocalizations.of(context)!
-                                          .planetary,
-                                      icon: FeatherIcons.globe,
-                                      amount:
-                                          store.profile!.globalTrophyQuantity!,
-                                      colorIcon: Color(0xff012588),
+                                    GestureDetector(
+                                      child: GamingDataWidget(
+                                        title: AppLocalizations.of(context)!
+                                            .planetary,
+                                        icon: FeatherIcons.globe,
+                                        amount: store
+                                            .profile!.globalTrophyQuantity!,
+                                        colorIcon: Color(0xff012588),
+                                      ),
+                                      onTap: () => showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .medals,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ))

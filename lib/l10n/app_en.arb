@@ -337,6 +337,10 @@
     "welcomeCredit":"Welcome Credit",
     "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here.\nThat's why you just received your first OOz credits.",
     "welcome":"welcome",
+
+    "medals": "Medals",
+    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }
