@@ -64,7 +64,7 @@ dependencies:
   receive_sharing_intent: ^1.4.5
   flutter_ffmpeg: ^0.4.0
   amplitude_flutter: ^3.0.0
-  sentry_flutter: ^5.1.0
+  sentry_flutter: ^6.0.0
   sqflite: ^2.0.0+3
   shared_preferences: ^2.0.6
   uni_links: ^0.5.1
@@ -80,6 +80,10 @@ dependencies:
   json_annotation: ^4.0.1
   crisp: ^0.2.0
   share_extend: "^2.0.0"
+  intl_phone_number_input: ^0.7.0+2
+  syncfusion_flutter_sliders: ^19.2.62
+  
+  firebase_dynamic_links: ^2.0.9
 
 dev_dependencies:
   flutter_test:

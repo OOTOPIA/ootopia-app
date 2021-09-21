@@ -10,7 +10,7 @@
     "password": "password",
     "newPassword": "new password",
     "confirmPassword": "confirm password",
-    "pleaseEnterANewPassword": "Please, enter a new password",
+    "pleaseEnterANewPassword": "Please enter a new password",
     "pleaseEnterTheSamePassword": "Please enter the same password",
     "pleaseEnterYourPassword": "Please Enter Your Password",
     "repeatPassword": "Repeat password",
@@ -61,7 +61,7 @@
     "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
     "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
-    "pleaseEnterTheSamePassword": "Please enter the same password",
+    "pleaseInsertTheSamePassword": "Please enter the same password",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
@@ -309,6 +309,19 @@
     "invitationCodeSent":"invitation code sent",
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
     "pictureByLinaTrochez":"Picture by Lina Trochez",
+    "bio":"Bio",
+    "fullName" : "Full Name",
+    "mobilePhone":"Mobile Phone",
+    "minutesPerDay":"Minutes per day",
+    "chooseTimeForRegenerationGame":"choose your time goal for daily participation in the regeneration game.",
+    "aboutChooseZero":"if you choose zero, you will not participate in the regeneration game.",
+    "note":"Note: ",
+    "settingGoalToZero":"By setting your goal to “zero”, you will not participate in the regeneration game. Your activities will not generate Ooz.",
+    "mobilephoneToExperience":"Please enter your mobile phone to experience the movement that is regenerating the planet right now!",
+    "save":"Save",
+    "editProfile": "Edit Profile",
+    "edit": "Edit",
+    "insertValidCellPhone":"Insert a valid cell phone for country selected",
 
     "changeMakerPro": "Badge: Change Maker Pro",
     "theChangeMakerPro": "TheChange Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
@@ -324,6 +337,10 @@
     "welcomeCredit":"Welcome Credit",
     "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here.\nThat's why you just received your first OOz credits.",
     "welcome":"welcome",
+
+    "medals": "Medals",
+    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }

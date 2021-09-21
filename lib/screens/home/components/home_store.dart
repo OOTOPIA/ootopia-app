@@ -44,6 +44,7 @@ abstract class HomeStoreBase with Store {
   int _remainingTimeInMs = 0;
   int _totalAppUsageTimeSoFarInMs = 0;
   bool _timerIsStarted = false;
+  bool _getDailyGoalStats = false;
 
   @observable
   String remainingTime = "";
@@ -56,6 +57,9 @@ abstract class HomeStoreBase with Store {
 
   @observable
   bool createdPostAlertAlreadyShowed = false;
+
+  @observable
+  bool userLogged = false;
 
   @action
   startDailyGoalTimer() async {
@@ -71,11 +75,18 @@ abstract class HomeStoreBase with Store {
       percentageOfDailyGoalAchieved =
           dailyGoalStats!.percentageOfDailyGoalAchieved;
       _totalAppUsageTimeSoFarInMs = dailyGoalStats!.totalAppUsageTimeSoFarInMs;
+      _getDailyGoalStats = true;
     }
     if (_dailyGoalTimer == null ||
         (_dailyGoalTimer != null && !_dailyGoalTimer!.isActive)) {
-      _dailyGoalTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      _dailyGoalTimer =
+          Timer.periodic(Duration(seconds: 1), (Timer timer) async {
         if (_watch.isRunning && dailyGoalStats != null) {
+          if (!_getDailyGoalStats) {
+            _totalAppUsageTimeSoFarInMs = _totalAppUsageTimeSoFarInMs +
+                dailyGoalStats!.totalAppUsageTimeSoFarInMs;
+            _getDailyGoalStats = true;
+          }
           if (!_timerIsStarted) {
             _remainingTimeInMs =
                 dailyGoalStats!.remainingTimeUntilEndOfGameInMs;
@@ -101,7 +112,8 @@ abstract class HomeStoreBase with Store {
           if (percentageOfDailyGoalAchieved >= 100) {
             prefs!.setBool(_personalCelebratePageEnabled, true);
             if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == false) {
-              AppUsageTime.instance.sendToApi();
+              await AppUsageTime.instance
+                  .sendToApi(_totalAppUsageTimeSoFarInMs);
               AppUsageTime.instance.resetUsageTime();
             }
           } else {
@@ -190,6 +202,16 @@ abstract class HomeStoreBase with Store {
           (showSeconds == true ? strSeconds + "s" : "");
     } catch (err) {
       return "error";
+    }
+  }
+
+  @action
+  Future<void> getCurrentUser(String id) async {
+    var user = await userRepository.getCurrentUser();
+    if (user.id == id) {
+      userLogged = true;
+    } else {
+      userLogged = false;
     }
   }
 }

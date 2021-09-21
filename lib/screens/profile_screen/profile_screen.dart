@@ -5,8 +5,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-// import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
@@ -33,10 +34,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  ProfileScreenStore store = ProfileScreenStore();
+  late ProfileScreenStore store;
   late AuthStore authStore;
   late WalletStore walletStore;
-  // AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  late HomeStore homeStore;
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   bool isVisible = false;
 
@@ -45,19 +47,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await store.getProfileDetails(_getUserId());
-
+      await homeStore.getCurrentUser(_getUserId());
       await store.getUserPosts(_getUserId());
       Future.delayed(Duration.zero, () {
         walletStore.getWallet();
       });
+
+      this.trackingEvents.profileViewedAProfile(
+        widget.args == null || (widget.args != null && widget.args!["id"] == null)
+            ? AppLocalizations.of(context)!.profileOwnProfile
+            : AppLocalizations.of(context)!.profileViewedAProfile,
+        {"profileId": store.profile!.id},
+      );
+      
     });
 
-    // this.trackingEvents.profileViewedAProfile(
-    //   widget.args == null || (widget.args != null && widget.args!["id"] == null)
-    //       ? AppLocalizations.of(context)!.profileOwnProfile
-    //       : AppLocalizations.of(context)!.profileViewedAProfile,
-    //   {"profileId": store.profile!.id},
-    // );
   }
 
   String _getUserId() {
@@ -96,7 +100,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
-
+    homeStore = Provider.of<HomeStore>(context);
+    store = Provider.of<ProfileScreenStore>(context);
     return Scaffold(
       body: Observer(
         builder: (_) => LoadingOverlay(
@@ -107,6 +112,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -146,16 +154,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         store.profile!.fullname,
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingNormal),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .regenerationGame
+                            .toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                          height: GlobalConstants.of(context).spacingSmall),
                       Container(
                         height: 44,
                         width: MediaQuery.of(context).size.width * .8,
                         decoration: BoxDecoration(
-                            border: Border.fromBorderSide(
-                                BorderSide(width: 1, color: Color(0xff101010).withOpacity(.1))),
+                            border: Border.fromBorderSide(BorderSide(
+                                width: 1,
+                                color: Color(0xff101010).withOpacity(.1))),
                             borderRadius: BorderRadius.circular(45)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -169,9 +187,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   builder: (BuildContext context) {
                                     return SnackBarWidget(
                                       menu: AppLocalizations.of(context)!
-                                          .badgeSower,
+                                          .regenerationGame,
                                       text: AppLocalizations.of(context)!
-                                          .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                          .theRegenerationGame,
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
                                       marginBottom: true,
@@ -189,7 +207,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontSize: 16, color: Colors.black87),
                                   ),
                                   TextSpan(
-                                    text: "${authStore.currentUser!.dailyLearningGoalInMinutes}m",
+                                    text:
+                                        "${authStore.currentUser!.dailyLearningGoalInMinutes}m",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
@@ -232,7 +251,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(top: 2),
-                                    child: Text( "${store.profile!.totalTrophyQuantity!}",
+                                    child: Text(
+                                        "${store.profile!.totalTrophyQuantity!}",
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,
@@ -276,28 +296,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    GamingDataWidget(
-                                      title: AppLocalizations.of(context)!
-                                          .personal,
-                                      icon: FeatherIcons.user,
-                                      amount: store
-                                          .profile!.personalTrophyQuantity!,
-                                      colorIcon: Color(0xff00A5FC),
+                                    GestureDetector(
+                                      child: GamingDataWidget(
+                                        title: AppLocalizations.of(context)!
+                                            .personal,
+                                        icon: FeatherIcons.user,
+                                        amount: store
+                                            .profile!.personalTrophyQuantity!,
+                                        colorIcon: Color(0xff00A5FC),
+                                      ),
+                                      onTap: () => showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .medals,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      ),
                                     ),
-                                    GamingDataWidget(
-                                      title: AppLocalizations.of(context)!.city,
-                                      icon: FeatherIcons.mapPin,
-                                      amount:
-                                          store.profile!.cityTrophyQuantity!,
-                                      colorIcon: Color(0xff0072C5),
+                                    GestureDetector(
+                                      child: GamingDataWidget(
+                                        title:
+                                            AppLocalizations.of(context)!.city,
+                                        icon: FeatherIcons.mapPin,
+                                        amount:
+                                            store.profile!.cityTrophyQuantity!,
+                                        colorIcon: Color(0xff0072C5),
+                                      ),
+                                      onTap: () => showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .medals,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      ),
                                     ),
-                                    GamingDataWidget(
-                                      title: AppLocalizations.of(context)!
-                                          .planetary,
-                                      icon: FeatherIcons.globe,
-                                      amount:
-                                          store.profile!.globalTrophyQuantity!,
-                                      colorIcon: Color(0xff012588),
+                                    GestureDetector(
+                                      child: GamingDataWidget(
+                                        title: AppLocalizations.of(context)!
+                                            .planetary,
+                                        icon: FeatherIcons.globe,
+                                        amount: store
+                                            .profile!.globalTrophyQuantity!,
+                                        colorIcon: Color(0xff012588),
+                                      ),
+                                      onTap: () => showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .medals,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ))
@@ -393,18 +477,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Color(0xff003694),
-                                                      fontWeight: FontWeight.bold),
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ],
                                             )
                                           ],
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 8),
+                                          padding:
+                                              const EdgeInsets.only(left: 8),
                                           child: Icon(
                                             Icons.arrow_forward_ios_rounded,
-                                              color: Color(0xff03145C),
-                                              size: 12,
+                                            color: Color(0xff03145C),
+                                            size: 12,
                                           ),
                                         ),
                                       ],

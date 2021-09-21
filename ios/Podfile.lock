@@ -6,6 +6,29 @@ PODS:
     - Flutter
   - camera (0.0.1):
     - Flutter
+  - Firebase/CoreOnly (8.6.0):
+    - FirebaseCore (= 8.6.0)
+  - Firebase/DynamicLinks (8.6.0):
+    - Firebase/CoreOnly
+    - FirebaseDynamicLinks (~> 8.6.0)
+  - firebase_core (1.6.0):
+    - Firebase/CoreOnly (= 8.6.0)
+    - Flutter
+  - firebase_dynamic_links (2.0.9):
+    - Firebase/DynamicLinks (= 8.6.0)
+    - firebase_core
+    - Flutter
+  - FirebaseCore (8.6.0):
+    - FirebaseCoreDiagnostics (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+  - FirebaseCoreDiagnostics (8.7.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+    - nanopb (~> 2.30908.0)
+  - FirebaseDynamicLinks (8.6.0):
+    - FirebaseCore (~> 8.0)
   - Flutter (1.0.0)
   - flutter_ffmpeg/https-lts (0.4.2):
     - Flutter
@@ -29,13 +52,34 @@ PODS:
     - Flutter
   - geocoding (1.0.5):
     - Flutter
-  - geolocator (6.2.0):
+  - geolocator_apple (1.2.0):
     - Flutter
+  - GoogleDataTransport (9.1.0):
+    - GoogleUtilities/Environment (~> 7.2)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Environment (7.5.2):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.5.2):
+    - GoogleUtilities/Environment
   - image_crop (0.0.1):
     - Flutter
   - image_picker (0.0.1):
     - Flutter
+  - libphonenumber (0.0.1):
+    - Flutter
+    - libPhoneNumber-iOS
+  - libPhoneNumber-iOS (0.9.15)
+  - libphonenumber_plugin (0.0.1):
+    - Flutter
+    - libphonenumber
+    - libPhoneNumber-iOS
   - mobile-ffmpeg-https (4.4.LTS)
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
   - OrderedSet (5.0.0)
   - package_info (0.0.1):
     - Flutter
@@ -45,18 +89,19 @@ PODS:
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
-  - photo_manager (0.0.1):
+  - photo_manager (1.0.0):
     - Flutter
     - FlutterMacOS
+  - PromisesObjC (2.0.0)
   - receive_sharing_intent (0.0.1):
     - Flutter
-  - Sentry (7.1.3):
-    - Sentry/Core (= 7.1.3)
-  - Sentry/Core (7.1.3)
+  - Sentry (7.3.0):
+    - Sentry/Core (= 7.3.0)
+  - Sentry/Core (7.3.0)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry (~> 7.1.3)
+    - Sentry (~> 7.3.0)
   - share_extend (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -76,6 +121,8 @@ PODS:
 DEPENDENCIES:
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - Flutter (from `Flutter`)
   - flutter_ffmpeg/https-lts (from `.symlinks/plugins/flutter_ffmpeg/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
@@ -83,9 +130,11 @@ DEPENDENCIES:
   - flutter_uploader (from `.symlinks/plugins/flutter_uploader/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - geocoding (from `.symlinks/plugins/geocoding/ios`)
-  - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - image_crop (from `.symlinks/plugins/image_crop/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - libphonenumber (from `.symlinks/plugins/libphonenumber/ios`)
+  - libphonenumber_plugin (from `.symlinks/plugins/libphonenumber_plugin/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -105,9 +154,18 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Amplitude
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseDynamicLinks
     - FMDB
+    - GoogleDataTransport
+    - GoogleUtilities
+    - libPhoneNumber-iOS
     - mobile-ffmpeg-https
+    - nanopb
     - OrderedSet
+    - PromisesObjC
     - Sentry
 
 EXTERNAL SOURCES:
@@ -115,6 +173,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
+  firebase_core:
+    :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_dynamic_links:
+    :path: ".symlinks/plugins/firebase_dynamic_links/ios"
   Flutter:
     :path: Flutter
   flutter_ffmpeg:
@@ -129,12 +191,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/gallery_saver/ios"
   geocoding:
     :path: ".symlinks/plugins/geocoding/ios"
-  geolocator:
-    :path: ".symlinks/plugins/geolocator/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
   image_crop:
     :path: ".symlinks/plugins/image_crop/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  libphonenumber:
+    :path: ".symlinks/plugins/libphonenumber/ios"
+  libphonenumber_plugin:
+    :path: ".symlinks/plugins/libphonenumber_plugin/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
@@ -169,6 +235,12 @@ SPEC CHECKSUMS:
   Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
   amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
   camera: 3164201dc344383e62282964016528c4f5a9ad50
+  Firebase: 21ac9f28b09a8bdfc005f34c984fca84e7e8786d
+  firebase_core: c21ac09a8d23afd3594b56ed786bad12e5266bba
+  firebase_dynamic_links: ef0989cdc7e7d2aaed5814a81f7ca0ec7a6028ee
+  FirebaseCore: 620b677f70f5470a8e59cb77f3ddc666f6f09785
+  FirebaseCoreDiagnostics: b63732f581a1c6a453ec7241f9ab60b3a5bd3450
+  FirebaseDynamicLinks: 406d67290fd123e133641f93a333b4957af22c09
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_ffmpeg: 3ec3912c74649851e6c3b1885511eef78142ac4f
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
@@ -177,19 +249,26 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
-  geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
+  geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
+  GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
+  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
   image_crop: e0a67085d3ebf3cf46ca46d61c53a082507b0bc3
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
+  libphonenumber: bd14d5abfc5939ab0b0767234e2d8e2593af258e
+  libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
+  libphonenumber_plugin: 7cf755ad1656145935d6c208173a476bd3f12898
   mobile-ffmpeg-https: 7ec3461d626f2d86be1e904bcfb29ed0be8cad7a
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  photo_manager: 61cdd6835af271b9ad1bb533fccf71d5db02fff3
+  photo_manager: 84fa94fbeb82e607333ea9a13c43b58e0903a463
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
-  Sentry: 6d963d64804dd06d96e778be729613f481394312
-  sentry_flutter: f20d4f199442900fbdab2b8496f1d2091d8b94d9
+  Sentry: 9a4e621430e2dae4477d791f2f7e905720b6efbf
+  sentry_flutter: 08fadaed464f44e1233d3fbb0c72b10cebd79487
   share_extend: b6748dc53695587891126a89533b862b92548c7b
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904

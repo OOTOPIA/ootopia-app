@@ -15,6 +15,8 @@ abstract class UserRepository {
   Future<Profile> getProfile(String id);
   Future<User> getMyAccountDetails();
   Future<User> updateUser(User user, List<String> tagsIds);
+  Future updateUserProfile(
+      User user, List<String> tagsIds, FlutterUploader? uploader);
   Future recordTimeUserUsedApp(int timeInMilliseconds);
   Future<DailyGoalStatsModel?> getDailyGoalStats();
   Future<List<InvitationCodeModel>?> getCodes();
@@ -94,11 +96,15 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "addressCity": (user.addressCity == null ? "" : user.addressCity!),
         "addressLatitude": user.addressLatitude.toString(),
         "addressLongitude": user.addressLongitude.toString(),
+        "bio": user.bio.toString(),
+        "phone": user.phone.toString(),
+        "fullname": user.fullname.toString(),
+        "countryCode": user.countryCode.toString(),
         "tagsIds": tagsIds.join(",")
       };
 
       if (user.photoFilePath != null) {
-        await FlutterUploader().enqueue(
+        var response = await FlutterUploader().enqueue(
           MultipartFormDataUpload(
             url: dotenv.env['API_URL']! + "users/${user.id}",
             files: [
@@ -113,6 +119,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
             tag: "Uploading user photo",
           ),
         );
+        await setCurrentUser(jsonEncode(user.toJson()));
         return user;
       } else {
         final response = await http.put(
@@ -120,14 +127,76 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           headers: await this.getHeaders(),
           body: jsonEncode(data),
         );
-
         if (response.statusCode == 200) {
+          await setCurrentUser(response.body);
           return User.fromJson(json.decode(response.body));
         } else {
           throw Exception('Failed to update user');
         }
       }
     } catch (error) {
+      print('$error');
+      throw Exception('Failed to update user ' + error.toString());
+    }
+  }
+
+  //Este método foi criado pois o risco de alterar o método updateUser é maior devido ao seu uso atual
+  //Dessa forma, preferi criar outro para resolver o problema de atualizar o perfil
+  @override
+  Future updateUserProfile(
+      User user, List<String> tagsIds, FlutterUploader? uploader) async {
+    try {
+      Map<String, String> data = {
+        "birthdate": (user.birthdate == null ? "" : user.birthdate!),
+        "dailyLearningGoalInMinutes":
+            user.dailyLearningGoalInMinutes.toString(),
+        "addressCountryCode":
+            (user.addressCountryCode == null ? "" : user.addressCountryCode!),
+        "addressState": (user.addressState == null ? "" : user.addressState!),
+        "addressCity": (user.addressCity == null ? "" : user.addressCity!),
+        "addressLatitude": user.addressLatitude.toString(),
+        "addressLongitude": user.addressLongitude.toString(),
+        "bio": user.bio.toString(),
+        "phone": user.phone.toString(),
+        "fullname": user.fullname.toString(),
+        "countryCode": user.countryCode.toString(),
+        "tagsIds": tagsIds.join(",")
+      };
+
+      if (user.photoFilePath != null && uploader != null) {
+        var result = await uploader.enqueue(
+          MultipartFormDataUpload(
+            url: dotenv.env['API_URL']! + "users/${user.id}",
+            files: [
+              FileItem(
+                path: user.photoFilePath!,
+                field: "file",
+              )
+            ], // required: list of files that you want to upload
+            method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
+            headers: await this.getHeaders("multipart/form-data"),
+            data: data, // any data you want to send in upload request
+            tag: "Uploading user photo",
+          ),
+        );
+
+        await setCurrentUser(user.toJson().toString());
+        return result;
+      } else {
+        final response = await http.put(
+          Uri.parse(dotenv.env['API_URL']! + "users/${user.id}"),
+          headers: await this.getHeaders(),
+          body: jsonEncode(data),
+        );
+        if (response.statusCode == 200) {
+          await setCurrentUser(response.body);
+          return User.fromJson(json.decode(response.body));
+        } else {
+          throw Exception('Failed to update user');
+        }
+      }
+    } catch (error) {
+      print('$error');
       throw Exception('Failed to update user ' + error.toString());
     }
   }
@@ -135,7 +204,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   @override
   Future recordTimeUserUsedApp(int timeInMilliseconds) async {
     bool loggedIn = await getUserIsLoggedIn();
-    if (!loggedIn) {
+    if (!loggedIn || timeInMilliseconds <= 0) {
       return;
     }
 
