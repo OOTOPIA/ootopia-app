@@ -25,8 +25,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
 
   @override
   Widget build(BuildContext context) {
-    var insertInvitationCodeStore =
-        Provider.of<InsertInvitationCodeStore>(context);
+    var insertInvitationCodeStore = InsertInvitationCodeStore();
     var auth = Provider.of<AuthStore>(context);
 
     void submit(bool selectAccess) async {
