@@ -83,7 +83,9 @@ class _RegisterPageState extends State<RegisterPage> {
       arguments: {
         'filename': 'terms_of_use',
         'onAccept': () {
-          //aceitou os termos de uso
+          setState(() {
+            _termsCheckbox = true;
+          });
         }
       },
     );
