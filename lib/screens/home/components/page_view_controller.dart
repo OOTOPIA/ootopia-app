@@ -76,6 +76,7 @@ class PageViewController {
     if (onAddPage != null) {
       this.onAddPage!();
     }
+
     goToPage(pages.length - 1, true);
   }
 

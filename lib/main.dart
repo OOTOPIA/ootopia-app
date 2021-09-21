@@ -30,9 +30,11 @@ import 'package:ootopia_app/screens/auth/register_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -206,8 +208,8 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           Provider<InvitationStore>(
             create: (_) => InvitationStore(),
           ),
-          Provider<InsertInvitationCodeStore>(
-            create: (_) => InsertInvitationCodeStore(),
+          Provider<ProfileScreenStore>(
+            create: (_) => ProfileScreenStore(),
           )
         ],
         child: MaterialApp(
@@ -258,6 +260,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
+    PageRoute.Page.editProfileScreen: (args) => EditProfileScreen()
   };
 
   @override

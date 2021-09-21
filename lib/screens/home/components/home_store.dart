@@ -58,6 +58,9 @@ abstract class HomeStoreBase with Store {
   @observable
   bool createdPostAlertAlreadyShowed = false;
 
+  @observable
+  bool userLogged = false;
+
   @action
   startDailyGoalTimer() async {
     _timerIsStarted = false;
@@ -199,6 +202,16 @@ abstract class HomeStoreBase with Store {
           (showSeconds == true ? strSeconds + "s" : "");
     } catch (err) {
       return "error";
+    }
+  }
+
+  @action
+  Future<void> getCurrentUser(String id) async {
+    var user = await userRepository.getCurrentUser();
+    if (user.id == id) {
+      userLogged = true;
+    } else {
+      userLogged = false;
     }
   }
 }
