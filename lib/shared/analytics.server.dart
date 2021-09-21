@@ -99,6 +99,10 @@ class AnalyticsTracking {
     this.trackingEvent("Reset Password - Password changed", null);
   }
 
+  profileCreateAlbum() {
+    this.trackingEvent("Profile - Create album", null);
+  }
+
   timelineCreatedAPost(String type) {
     final Identify identify = Identify()..add('Content posted', 1);
     this.trackingDataUser(identify);

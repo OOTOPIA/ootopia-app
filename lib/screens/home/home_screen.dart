@@ -157,19 +157,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             key: _key,
             appBar: homeStore?.currentPageWidget is EditProfileScreen
                 ? null
-                : appBar,
-            drawer: MenuDrawer(
-              onTapProfileItem: () {
-                openProfile();
-              },
-              onTapLogoutItem: () {
-                homeStore?.stopDailyGoalTimer();
-                _goToPage(PageViewController.TAB_INDEX_TIMELINE);
-              },
-              onTapWalletItem: () {
-                _goToPage(PageViewController.TAB_INDEX_WALLET);
-              },
-            ),
+                : homeStore?.currentPageWidget is ProfileScreen
+                    ? appBarProfile
+                    : appBar,
+            drawer: homeStore?.currentPageWidget is ProfileScreen
+                ? null
+                : MenuDrawer(
+                    onTapProfileItem: () {
+                      openProfile();
+                    },
+                    onTapLogoutItem: () {
+                      homeStore?.stopDailyGoalTimer();
+                      _goToPage(PageViewController.TAB_INDEX_TIMELINE);
+                    },
+                    onTapWalletItem: () {
+                      _goToPage(PageViewController.TAB_INDEX_WALLET);
+                    },
+                  ),
             body: Stack(
               children: [
                 PageView.builder(
@@ -417,6 +421,61 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       }
     });
   }
+
+  get appBarProfile => PreferredSize(
+        preferredSize: Size(double.infinity, 45),
+        child: SafeArea(
+          child: Container(
+            height: 45,
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.0,
+            ))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 85,
+                  child: Text(
+                    AppLocalizations.of(context)!.profile,
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 34,
+                ),
+                Container(
+                  width: 85,
+                  child: TextButton.icon(
+                      onPressed: () {
+                        PageViewController.instance.addPage(
+                          EditProfileScreen(),
+                        );
+                        homeStore?.setCurrentPageWidget(EditProfileScreen());
+                      },
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: Color(0xff03145C),
+                        size: 18,
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.edit,
+                        style: TextStyle(
+                          color: Color(0xff03145C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
 
   get appBar => AppBar(
         centerTitle: true,
