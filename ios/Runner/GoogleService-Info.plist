@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>986493600408-ofks88dk98lvp3q40o7q6vr9orgh646i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.986493600408-ofks88dk98lvp3q40o7q6vr9orgh646i</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>986493600408-19kp10qkp3pd470pv9jl9c9nl7kfj4md.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBENbAIdejX2pqOVh7XjMUPfScS2lX_EpY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>986493600408</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.ootopia</string>
+	<key>PROJECT_ID</key>
+	<string>ootopia-e8c63</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ootopia-e8c63.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:986493600408:ios:3b1991dc7949d768ec06ed</string>
+</dict>
+</plist>

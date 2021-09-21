@@ -10,7 +10,7 @@
     "password": "password",
     "newPassword": "new password",
     "confirmPassword": "confirm password",
-    "pleaseEnterANewPassword": "Please, enter a new password",
+    "pleaseEnterANewPassword": "Please enter a new password",
     "pleaseEnterTheSamePassword": "Please enter the same password",
     "pleaseEnterYourPassword": "Please Enter Your Password",
     "repeatPassword": "Repeat password",
@@ -61,7 +61,7 @@
     "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
     "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
-    "pleaseEnterTheSamePassword": "Please enter the same password",
+    "pleaseInsertTheSamePassword": "Please enter the same password",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
@@ -341,6 +341,10 @@
     "createYourOwnCategories":"create you own categories",
     "pictureByEttyFidele":"picture By Etty Fidele",
     "textForNextFeatureCategories":"In the next app update, you will have access to albums and will be able to organize your content into different publishing categories.\n\nIn addition to organizing your profile, you will also be able to view other Ootopians' albums.",
+
+    "medals": "Medals",
+    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }

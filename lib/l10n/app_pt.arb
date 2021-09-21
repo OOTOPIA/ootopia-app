@@ -8,7 +8,7 @@
     "newPassword": "nova senha",
     "confirmPassword": "confirme a senha",
     "pleaseEnterANewPassword": "Por favor, digite uma nova senha",
-    "pleaseEnterTheSamePassword": "Por favor, digite uma nova senha",
+    "pleaseEnterTheSamePassword": "Por favor, digite a mesma senha",
     "repeatPassword": "Repita a senha",
     "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
@@ -57,7 +57,7 @@
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
     "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
-    "pleaseEnterTheSamePassword": "Por favor, insira a mesma senha",
+    "pleaseInsertTheSamePassword": "Por favor, insira a mesma senha",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 
@@ -341,5 +341,8 @@
     "albuns":"albúns",
     "pictureByEttyFidele":"Foto de Etty Fidele",
     "createYourOwnCategories":"crie suas próprias categorias",
-    "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopians."
+    "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopians.",
+
+    "medals": "Medalhas",
+    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!"
 }
