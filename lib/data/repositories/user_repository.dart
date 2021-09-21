@@ -119,7 +119,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
             tag: "Uploading user photo",
           ),
         );
-        print('responseFullname ${jsonEncode(user.toJson())}');
         await setCurrentUser(jsonEncode(user.toJson()));
         return user;
       } else {

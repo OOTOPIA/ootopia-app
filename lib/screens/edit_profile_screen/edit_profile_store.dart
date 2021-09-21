@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
@@ -65,7 +64,6 @@ abstract class EditProfileStoreBase with Store {
         isloading = false;
         PageViewController.instance.back();
       } catch (err) {
-        print("error when upload photo: ${err.toString()}");
         isloading = false;
       }
     }
@@ -95,9 +93,7 @@ abstract class EditProfileStoreBase with Store {
     isloading = true;
     try {
       currentUser = await userRepositoryImpl.getCurrentUser();
-    } catch (err) {
-      print('pqp $err');
-    }
+    } catch (err) {}
     if (currentUser != null) {
       fullNameController.text = currentUser!.fullname.toString();
       if (currentUser!.bio == null) {
