@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/page-enum.dart';
+// import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,7 @@ import 'components/empty_posts_widget.dart';
 import 'components/gaming_data_widget.dart';
 import 'components/timeline_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProfileScreen extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -54,14 +57,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
 
       this.trackingEvents.profileViewedAProfile(
-        widget.args == null || (widget.args != null && widget.args!["id"] == null)
+        widget.args == null ||
+                (widget.args != null && widget.args!["id"] == null)
             ? AppLocalizations.of(context)!.profileOwnProfile
             : AppLocalizations.of(context)!.profileViewedAProfile,
         {"profileId": store.profile!.id},
       );
-      
     });
-
   }
 
   String _getUserId() {
@@ -529,9 +531,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 albumName: "Passeio",
                                 photoAlbumUrl: "hello",
                               ),
-                              AlbumProfileWidget(
-                                onTap: () {},
-                                albumName: "Album",
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                      PageRoute.Page.newFutureCategories.route);
+                                },
+                                child: AlbumProfileWidget(
+                                  onTap: () {},
+                                  albumName: "Album",
+                                ),
                               )
                             ],
                           ),

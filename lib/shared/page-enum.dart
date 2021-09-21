@@ -27,6 +27,7 @@ enum Page {
   invitationScreen,
   insertInvitationCode,
   editProfileScreen,
+  newFutureCategories,
 }
 
 extension PageRoute on Page {
