@@ -27,6 +27,7 @@ enum Page {
   invitationScreen,
   insertInvitationCode,
   termsOfUseScreen,
+  privacyPolicyScreen,
 }
 
 extension PageRoute on Page {

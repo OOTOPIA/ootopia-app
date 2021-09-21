@@ -80,18 +80,27 @@ class _RegisterPageState extends State<RegisterPage> {
   goToPageView() async {
     Navigator.of(context).pushNamed(
       PageRoute.Page.termsOfUseScreen.route,
+      arguments: {
+        'filename': 'terms_of_use',
+        'onAccept': () {
+          //aceitou os termos de uso
+        }
+      },
     );
-    /*if (controller.page == 0.0) {
-      await controller.nextPage(
-        duration: Duration(milliseconds: 400),
-        curve: Curves.easeIn,
-      );
-    } else {
-      await controller.previousPage(
-        duration: Duration(milliseconds: 400),
-        curve: Curves.easeIn,
-      );
-    }*/
+
+    /*
+
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.termsOfUseScreen.route,
+      arguments: {
+        'filename' : 'privacy_policy',
+        'onAccept': () {
+          //aceitou as políticas de privacidade
+        }
+      }
+    );
+
+    */
   }
 
   backButtonPage() async {
