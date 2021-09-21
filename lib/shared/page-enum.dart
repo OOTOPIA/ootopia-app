@@ -28,6 +28,8 @@ enum Page {
   insertInvitationCode,
   termsOfUseScreen,
   privacyPolicyScreen,
+  editProfileScreen,
+  newFutureCategories,
 }
 
 extension PageRoute on Page {
