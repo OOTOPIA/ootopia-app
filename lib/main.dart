@@ -27,6 +27,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
+import 'package:ootopia_app/screens/auth/terms_of_use_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
@@ -76,22 +77,28 @@ Future main() async {
     child: new ExpensesApp(),
   );
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn =
-          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
-      options.debug = false;
-      options.environment = "staging";
-      options.attachStacktrace = true;
-      options.diagnosticLevel = SentryLevel.error;
-      options.enableAutoSessionTracking = true;
-    },
-    appRunner: () => runApp(
-      GlobalConstants(
-        child: configuredApp,
-      ),
+  runApp(
+    GlobalConstants(
+      child: configuredApp,
     ),
   );
+
+  // await SentryFlutter.init(
+  //   (options) {
+  //     options.dsn =
+  //         'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+  //     options.debug = false;
+  //     options.environment = "staging";
+  //     options.attachStacktrace = true;
+  //     options.diagnosticLevel = SentryLevel.error;
+  //     options.enableAutoSessionTracking = true;
+  //   },
+  //   appRunner: () => runApp(
+  //     GlobalConstants(
+  //       child: configuredApp,
+  //     ),
+  //   ),
+  // );
 }
 
 class ExpensesApp extends StatefulWidget {
@@ -258,6 +265,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
+    PageRoute.Page.termsOfUseScreen: (args) => TermsOfUseScreen(),
   };
 
   @override

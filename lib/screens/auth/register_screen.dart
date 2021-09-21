@@ -78,7 +78,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   goToPageView() async {
-    if (controller.page == 0.0) {
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.termsOfUseScreen.route,
+    );
+    /*if (controller.page == 0.0) {
       await controller.nextPage(
         duration: Duration(milliseconds: 400),
         curve: Curves.easeIn,
@@ -88,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
         duration: Duration(milliseconds: 400),
         curve: Curves.easeIn,
       );
-    }
+    }*/
   }
 
   backButtonPage() async {
