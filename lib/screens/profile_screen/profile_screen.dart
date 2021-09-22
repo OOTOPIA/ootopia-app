@@ -42,6 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late WalletStore walletStore;
   late HomeStore homeStore;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  bool profileUserIsLoggedUser = false;
+  String profileUserId = '';
 
   bool isVisible = false;
 
@@ -49,9 +51,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      await store.getProfileDetails(_getUserId());
-      await homeStore.getCurrentUser(_getUserId());
-      await store.getUserPosts(_getUserId());
+      profileUserId = _getUserId();
+
+      if (profileUserIsLoggedUser) {
+        store = ProfileScreenStore();
+      }
+
+      await store.getProfileDetails(profileUserId);
+      await homeStore.getCurrentUser(profileUserId);
+      await store.getUserPosts(profileUserId);
+
       Future.delayed(Duration.zero, () {
         walletStore.getWallet();
       });
@@ -68,8 +77,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String _getUserId() {
     if (widget.args == null || widget.args!["id"] == null) {
+      profileUserIsLoggedUser = true;
       return authStore.currentUser!.id!;
     } else {
+      profileUserIsLoggedUser = authStore.currentUser?.id == widget.args!["id"];
       return widget.args!["id"];
     }
   }
@@ -103,7 +114,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    store = Provider.of<ProfileScreenStore>(context);
+    if (!profileUserIsLoggedUser) {
+      store = Provider.of<ProfileScreenStore>(context);
+    }
     return Scaffold(
       body: Observer(
         builder: (_) => LoadingOverlay(
