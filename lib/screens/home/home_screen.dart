@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.da
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
-
+  late ProfileScreenStore profileStore;
   Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
   double oozToRewardAfterSendPost = 0;
@@ -95,6 +96,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
+    profileStore = Provider.of<ProfileScreenStore>(context);
+
     if (homeStore == null) {
       homeStore = Provider.of<HomeStore>(context);
     }
@@ -242,7 +245,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   _bottomOnTapButtonHandler(int index) {
-    if (homeStore?.currentPageIndex == index) {
+    if (homeStore?.currentPageIndex == index &&
+        index != PageViewController.TAB_INDEX_PROFILE) {
       return;
     }
 
@@ -343,6 +347,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (PageViewController.instance.pages.length > 5) {
         PageViewController.instance.addPage(ProfileScreen());
       } else {
+        profileStore.getProfileDetails(authStore.currentUser!.id!);
         _goToPage(PageViewController.TAB_INDEX_PROFILE);
       }
       homeStore?.setCurrentPageWidget(PageViewController
@@ -532,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
         ),
         actions: [
-          remainingTime,
+          if(PageViewController.instance.pages.length <= 5) remainingTime ,
         ],
       );
 

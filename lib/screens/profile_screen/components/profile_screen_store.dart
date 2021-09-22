@@ -33,6 +33,7 @@ abstract class _ProfileScreenStoreBase with Store {
   Future<Profile?> getProfileDetails(String userId) async {
     loadingProfile = true;
     loadingProfileError = false;
+    profile = null;
     try {
       this.profile = await repository.getProfile(userId);
       loadingProfile = false;
