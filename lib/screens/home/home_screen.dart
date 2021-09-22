@@ -537,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
         ),
         actions: [
-          remainingTime,
+          if(PageViewController.instance.pages.length <= 5) remainingTime ,
         ],
       );
 
