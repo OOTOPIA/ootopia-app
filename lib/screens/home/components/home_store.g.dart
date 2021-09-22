@@ -169,6 +169,21 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  final _$userLoggedAtom = Atom(name: 'HomeStoreBase.userLogged');
+
+  @override
+  bool get userLogged {
+    _$userLoggedAtom.reportRead();
+    return super.userLogged;
+  }
+
+  @override
+  set userLogged(bool value) {
+    _$userLoggedAtom.reportWrite(value, super.userLogged, () {
+      super.userLogged = value;
+    });
+  }
+
   final _$startDailyGoalTimerAsyncAction =
       AsyncAction('HomeStoreBase.startDailyGoalTimer');
 
@@ -193,6 +208,14 @@ mixin _$HomeStore on HomeStoreBase, Store {
   Future<bool> readyToShowCelebratePage() {
     return _$readyToShowCelebratePageAsyncAction
         .run(() => super.readyToShowCelebratePage());
+  }
+
+  final _$getCurrentUserAsyncAction =
+      AsyncAction('HomeStoreBase.getCurrentUser');
+
+  @override
+  Future<void> getCurrentUser(String id) {
+    return _$getCurrentUserAsyncAction.run(() => super.getCurrentUser(id));
   }
 
   final _$HomeStoreBaseActionController =
@@ -276,7 +299,8 @@ percentageOfDailyGoalAchieved: ${percentageOfDailyGoalAchieved},
 remainingTime: ${remainingTime},
 totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar},
 showCreatedPostAlert: ${showCreatedPostAlert},
-createdPostAlertAlreadyShowed: ${createdPostAlertAlreadyShowed}
+createdPostAlertAlreadyShowed: ${createdPostAlertAlreadyShowed},
+userLogged: ${userLogged}
     ''';
   }
 }

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
 import 'package:ootopia_app/screens/components/keep_alive_page.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
@@ -18,14 +18,13 @@ import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class HomeScreen extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
   HomeScreen({Key? key, this.args}) : super(key: key);
 
@@ -153,22 +152,28 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           statusBarColor: Theme.of(context).scaffoldBackgroundColor,
           statusBarBrightness: Brightness.dark,
         ),
-        child: Observer(
-          builder: (_) => Scaffold(
+        child: Observer(builder: (_) {
+          return Scaffold(
             key: _key,
-            appBar: appBar,
-            drawer: MenuDrawer(
-              onTapProfileItem: () {
-                openProfile();
-              },
-              onTapLogoutItem: () {
-                homeStore?.stopDailyGoalTimer();
-                _goToPage(PageViewController.TAB_INDEX_TIMELINE);
-              },
-              onTapWalletItem: () {
-                _goToPage(PageViewController.TAB_INDEX_WALLET);
-              },
-            ),
+            appBar: homeStore?.currentPageWidget is EditProfileScreen
+                ? null
+                : homeStore?.currentPageWidget is ProfileScreen
+                    ? appBarProfile
+                    : appBar,
+            drawer: homeStore?.currentPageWidget is ProfileScreen
+                ? null
+                : MenuDrawer(
+                    onTapProfileItem: () {
+                      openProfile();
+                    },
+                    onTapLogoutItem: () {
+                      homeStore?.stopDailyGoalTimer();
+                      _goToPage(PageViewController.TAB_INDEX_TIMELINE);
+                    },
+                    onTapWalletItem: () {
+                      _goToPage(PageViewController.TAB_INDEX_WALLET);
+                    },
+                  ),
             body: Stack(
               children: [
                 PageView.builder(
@@ -230,8 +235,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             bottomNavigationBar: AppBottomNavigationBar(
               onTap: _bottomOnTapButtonHandler,
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
@@ -417,6 +422,61 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
+  get appBarProfile => PreferredSize(
+        preferredSize: Size(double.infinity, 45),
+        child: SafeArea(
+          child: Container(
+            height: 45,
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+              color: Colors.grey.shade300,
+              width: 1.0,
+            ))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 85,
+                  child: Text(
+                    AppLocalizations.of(context)!.profile,
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 34,
+                ),
+                Container(
+                  width: 85,
+                  child: TextButton.icon(
+                      onPressed: () {
+                        PageViewController.instance.addPage(
+                          EditProfileScreen(),
+                        );
+                        homeStore?.setCurrentPageWidget(EditProfileScreen());
+                      },
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: Color(0xff03145C),
+                        size: 18,
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.edit,
+                        style: TextStyle(
+                          color: Color(0xff03145C),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+
   get appBar => AppBar(
         centerTitle: true,
         title: Padding(
@@ -497,10 +557,33 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       right: homeStore != null && homeStore!.showRemainingTime
                           ? 4
                           : 11),
-                  child: Icon(
-                    FeatherIcons.clock,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
+                  child: homeStore!.currentPageWidget is ProfileScreen &&
+                          homeStore!.userLogged
+                      ? TextButton.icon(
+                          onPressed: () {
+                            PageViewController.instance.addPage(
+                              EditProfileScreen(),
+                            );
+                            homeStore
+                                ?.setCurrentPageWidget(EditProfileScreen());
+                          },
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            color: Color(0xff03145C),
+                            size: 18,
+                          ),
+                          label: Text(
+                            AppLocalizations.of(context)!.edit,
+                            style: TextStyle(
+                              color: Color(0xff03145C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ))
+                      : Icon(
+                          FeatherIcons.clock,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                 ),
                 AnimatedOpacity(
                   opacity:

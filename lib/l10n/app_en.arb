@@ -66,8 +66,12 @@
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
     "iAcceptThe": "I accept the ",
-    "useTerms": "use terms.",
+    "useTerms": "terms of use",
+    "and": " and ",
+    "privacy": "privacy.",
     "youNeedToAcceptTheTermsOfUseToContinue": "You need to accept the Terms of Use to continue",
+
+    "weRespectAndProtectThePrivacyofYourData":"We respect and protect the privacy of your data. \nCheck out our ethical and transparency precepts here.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "You need to enable some \npermissions to allow full \nuse of the camera.",
 
@@ -301,7 +305,7 @@
     "joinToOOTOPIA":"Invitation to join me on OOTOPIA\nExperience the movement that is regenerating planet Earth!\nDownload the app and register with this code: %USER_CODE%\nYou'll also receive 15.00 OOz of credit.\nLIVE OOTOPIA NOW! ✨ 🌎 ❤️",
     "continueAccess":"continue",
     "enterYourInvitationCode":"Enter your invitation code",
-    "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is flourishing thanks to people like you!",
+    "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is emerging thanks to people like you!",
     "skip":"Skip",
     "access":"Access",
     "enterTheValidInvitationCode":"Please, enter the valid invitation code",
@@ -309,6 +313,19 @@
     "invitationCodeSent":"invitation code sent",
     "invitationCodeWelcome":"WELCOME TO OOTOPIA",
     "pictureByLinaTrochez":"Picture by Lina Trochez",
+    "bio":"Bio",
+    "fullName" : "Full Name",
+    "mobilePhone":"Mobile Phone",
+    "minutesPerDay":"Minutes per day",
+    "chooseTimeForRegenerationGame":"choose your time goal for daily participation in the regeneration game.",
+    "aboutChooseZero":"if you choose zero, you will not participate in the regeneration game.",
+    "note":"Note: ",
+    "settingGoalToZero":"By setting your goal to “zero”, you will not participate in the regeneration game. Your activities will not generate Ooz.",
+    "mobilephoneToExperience":"Please enter your mobile phone to experience the movement that is regenerating the planet right now!",
+    "save":"Save",
+    "editProfile": "Edit Profile",
+    "edit": "Edit",
+    "insertValidCellPhone":"Insert a valid cell phone for country selected",
 
     "changeMakerPro": "Badge: Change Maker Pro",
     "theChangeMakerPro": "TheChange Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
@@ -324,6 +341,15 @@
     "welcomeCredit":"Welcome Credit",
     "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here.\nThat's why you just received your first OOz credits.",
     "welcome":"welcome",
+    "albuns":"albums",
+    "createYourOwnCategories":"create you own categories",
+    "pictureByEttyFidele":"picture By Etty Fidele",
+    "textForNextFeatureCategories":"In the next app update, you will have access to albums and will be able to organize your content into different publishing categories.\n\nIn addition to organizing your profile, you will also be able to view other Ootopians' albums.",
+
+    "medals": "Medals",
+    "iAccept": "I accept",
+    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    
     "@helloWorld": {
         "description": "A programmer greeting"
     }
