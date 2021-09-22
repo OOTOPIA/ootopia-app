@@ -244,9 +244,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       setState(() {
                         editProfileStore.countryCode =
                             number.isoCode.toString();
+                        editProfileStore.getPhoneNumber(
+                            number.toString(), number.isoCode.toString());
                       });
-                      editProfileStore.getPhoneNumber(
-                          number.toString(), number.isoCode.toString());
                     },
                     onInputValidated: (bool value) {
                       setState(() {
@@ -255,9 +255,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     },
                     selectorConfig: SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                      showFlags: true,
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.contains('+')) {
                         return AppLocalizations.of(context)!
                             .mobilephoneToExperience;
                       } else if (editProfileStore.validCellPhone) {
