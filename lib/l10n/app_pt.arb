@@ -8,7 +8,7 @@
     "newPassword": "nova senha",
     "confirmPassword": "confirme a senha",
     "pleaseEnterANewPassword": "Por favor, digite uma nova senha",
-    "pleaseEnterTheSamePassword": "Por favor, digite uma nova senha",
+    "pleaseEnterTheSamePassword": "Por favor, digite a mesma senha",
     "repeatPassword": "Repita a senha",
     "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
@@ -57,7 +57,7 @@
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
     "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
-    "pleaseEnterTheSamePassword": "Por favor, insira a mesma senha",
+    "pleaseInsertTheSamePassword": "Por favor, insira a mesma senha",
 
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 
@@ -301,7 +301,7 @@
     "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA\nExperimente o movimento que está regenerando o planeta Terra! \nBaixe o aplicativo e registre-se com este código: %USER_CODE%\nVocê também receberá 15,00 OOz de crédito.\nVIVA A OOTOPIA AGORA! ✨ 🌎 ❤️",
     "continueAccess":"continue",
     "enterYourInvitationCode":"Digite seu código de acesso",
-    "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que floresce graças a pessoas como você!",
+    "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que está emergindo graças a pessoas como você!",
     "skip":"Pular",
     "access":"Acessar",
     "enterTheValidInvitationCode":"Por favor, insira o código de convite válido",
@@ -338,6 +338,10 @@
     "welcomeCredit":"Crédito de Boas-Vindas",
     "whyYouReceivdOOz":"OOTOPIA é mais abundante agora que estamos aqui.\nÉ por isso que você acabou de receber seus primeiros créditos OOz.",
     "welcome":"Bem-Vindo",
+    "albuns":"albúns",
+    "pictureByEttyFidele":"Foto de Etty Fidele",
+    "createYourOwnCategories":"crie suas próprias categorias",
+    "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopians.",
 
     "medals": "Medalhas",
     "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!"
