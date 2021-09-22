@@ -37,21 +37,37 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late ProfileScreenStore store;
+  ProfileScreenStore? store;
   late AuthStore authStore;
   late WalletStore walletStore;
   late HomeStore homeStore;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  bool profileUserIsLoggedUser = true;
+  String profileUserId = '';
 
   bool isVisible = false;
 
   @override
   void initState() {
     super.initState();
+    if (store != null && profileUserIsLoggedUser) {
+      store!.profile = null;
+    }
     Future.delayed(Duration.zero, () async {
-      await store.getProfileDetails(_getUserId());
-      await homeStore.getCurrentUser(_getUserId());
-      await store.getUserPosts(_getUserId());
+      profileUserId = _getUserId();
+
+      if (store != null && profileUserIsLoggedUser) {
+        store!.profile = null;
+      }
+
+      if (!profileUserIsLoggedUser) {
+        store = ProfileScreenStore();
+      }
+
+      await store?.getProfileDetails(profileUserId);
+      await homeStore.getCurrentUser(profileUserId);
+      await store?.getUserPosts(profileUserId);
+
       Future.delayed(Duration.zero, () {
         walletStore.getWallet();
       });
@@ -61,15 +77,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 (widget.args != null && widget.args!["id"] == null)
             ? AppLocalizations.of(context)!.profileOwnProfile
             : AppLocalizations.of(context)!.profileViewedAProfile,
-        {"profileId": store.profile!.id},
+        {
+          "profileId": store?.profile!.id,
+        },
       );
     });
   }
 
   String _getUserId() {
     if (widget.args == null || widget.args!["id"] == null) {
+      setState(() {
+        profileUserIsLoggedUser = true;
+      });
       return authStore.currentUser!.id!;
     } else {
+      setState(() {
+        profileUserIsLoggedUser =
+            authStore.currentUser?.id == widget.args!["id"];
+      });
       return widget.args!["id"];
     }
   }
@@ -103,13 +128,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    store = Provider.of<ProfileScreenStore>(context);
+    if (profileUserIsLoggedUser) {
+      store = Provider.of<ProfileScreenStore>(context);
+    }
     return Scaffold(
       body: Observer(
         builder: (_) => LoadingOverlay(
-          isLoading: store.loadingProfile,
-          child: store.profile == null
-              ? Container()
+          isLoading: store?.loadingProfile == true,
+          child: store?.profile == null
+              ? Container(
+                  height: MediaQuery.of(context).size.height,
+                )
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,8 +150,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           AvatarPhotoWidget(
-                            photoUrl: store.profile!.photoUrl,
-                            isBadges: store.profile!.badges!.length > 0,
+                            photoUrl: store?.profile!.photoUrl,
+                            isBadges: store == null
+                                ? false
+                                : store!.profile!.badges!.length > 0,
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
@@ -154,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: GlobalConstants.of(context).spacingMedium,
                       ),
                       Text(
-                        store.profile!.fullname,
+                        store == null ? "" : store!.profile!.fullname,
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.w500),
                       ),
@@ -254,7 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Padding(
                                     padding: EdgeInsets.only(top: 2),
                                     child: Text(
-                                        "${store.profile!.totalTrophyQuantity!}",
+                                        "${store?.profile!.totalTrophyQuantity!}",
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,
@@ -303,8 +334,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         title: AppLocalizations.of(context)!
                                             .personal,
                                         icon: FeatherIcons.user,
-                                        amount: store
-                                            .profile!.personalTrophyQuantity!,
+                                        amount: store == null
+                                            ? 0
+                                            : store!.profile!
+                                                .personalTrophyQuantity!,
                                         colorIcon: Color(0xff00A5FC),
                                       ),
                                       onTap: () => showModalBottomSheet(
@@ -332,8 +365,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         title:
                                             AppLocalizations.of(context)!.city,
                                         icon: FeatherIcons.mapPin,
-                                        amount:
-                                            store.profile!.cityTrophyQuantity!,
+                                        amount: store == null
+                                            ? 0
+                                            : store!
+                                                .profile!.cityTrophyQuantity!,
                                         colorIcon: Color(0xff0072C5),
                                       ),
                                       onTap: () => showModalBottomSheet(
@@ -361,8 +396,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         title: AppLocalizations.of(context)!
                                             .planetary,
                                         icon: FeatherIcons.globe,
-                                        amount: store
-                                            .profile!.globalTrophyQuantity!,
+                                        amount: store == null
+                                            ? 0
+                                            : store!
+                                                .profile!.globalTrophyQuantity!,
                                         colorIcon: Color(0xff012588),
                                       ),
                                       onTap: () => showModalBottomSheet(
@@ -392,14 +429,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      store.profile!.bio != null
+                      store?.profile!.bio != null
                           ? Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
                                       .screenHorizontalSpace),
                               child: Text(
-                                store.profile!.bio != null
-                                    ? store.profile!.bio!
+                                store?.profile!.bio != null
+                                    ? store!.profile!.bio!
                                     : "",
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w400),
@@ -407,7 +444,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             )
                           : SizedBox(),
-                      store.profile!.bio != null
+                      store?.profile!.bio != null
                           ? SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             )
@@ -514,11 +551,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Color(0xff707070).withOpacity(.5),
                         ),
                       ),
-                      if (store.postsList.length > 0)
+                      if (store != null && store!.postsList.length > 0)
                         SizedBox(
                           height: GlobalConstants.of(context).spacingNormal,
                         ),
-                      if (store.postsList.length > 0)
+                      if (store != null && store!.postsList.length > 0)
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: GlobalConstants.of(context)
@@ -544,11 +581,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                      if (store.postsList.length > 0)
+                      if (store != null && store!.postsList.length > 0)
                         SizedBox(
                           height: GlobalConstants.of(context).spacingNormal,
                         ),
-                      if (store.postsList.length > 0)
+                      if (store != null && store!.postsList.length > 0)
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: GlobalConstants.of(context)
@@ -561,7 +598,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      store.postsList.length > 0
+                      store != null && store!.postsList.length > 0
                           ? Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
@@ -571,7 +608,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Wrap(
                                 alignment: WrapAlignment.start,
                                 crossAxisAlignment: WrapCrossAlignment.start,
-                                children: store.postsList
+                                children: store!.postsList
                                     .asMap()
                                     .map(
                                       (index, post) => MapEntry(
@@ -582,7 +619,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           type: post.type,
                                           onTap: () {
                                             _goToTimelinePost(
-                                                store.postsList, index);
+                                                store!.postsList, index);
                                           },
                                         ),
                                       ),
