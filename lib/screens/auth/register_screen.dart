@@ -40,6 +40,11 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final PageController controller = PageController(initialPage: 0);
 
+  bool nameIsValid = true;
+  bool mailIsValid = true;
+  bool passIsValid = true;
+  bool pass2IsValid = true;
+
   void _toggleTerms() {
     setState(() {
       termsOpened = !termsOpened;
@@ -210,7 +215,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _submit();
+                                }
+                              },
                             ).defaultButton(
                               context,
                               style: ButtonStyle(
@@ -239,209 +248,333 @@ class _RegisterPageState extends State<RegisterPage> {
       }
       return LoadingOverlay(
         isLoading: isLoading,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: GlobalConstants.of(context).spacingMedium,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!
-                                    .liveInOotopiaNowMessage,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: LightColors.blue, fontSize: 24),
-                              ),
-                              Container(
-                                height: 40,
-                                width: 40,
-                                child: Image(
-                                  image:
-                                      AssetImage("assets/images/butterfly.png"),
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: GlobalConstants.of(context).spacingMedium,
-                              bottom: GlobalConstants.of(context).spacingMedium,
-                            ),
-                            child: Column(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: GlobalConstants.of(context).spacingMedium,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                TextFormField(
-                                  controller: _nameController,
-                                  keyboardType: TextInputType.name,
-                                  autocorrect: false,
-                                  textCapitalization: TextCapitalization.words,
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
-                                          AppLocalizations.of(context)!
-                                              .nameAndSurname)
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .liveInOotopiaNowMessage,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
                                       .copyWith(
-                                          prefixIcon: Icon(
-                                        Icons.person_outline,
-                                        color: Color(0xFF707070),
-                                      )),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return AppLocalizations.of(context)!
-                                          .pleaseEnterYourNameAndSurname;
-                                    }
-                                    return null;
-                                  },
+                                          color: LightColors.blue,
+                                          fontSize: 24),
                                 ),
-                                SizedBox(
-                                  height:
-                                      GlobalConstants.of(context).spacingNormal,
-                                ),
-                                TextFormField(
-                                  controller: _emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
-                                          AppLocalizations.of(context)!.email)
-                                      .copyWith(
-                                          prefixIcon: Icon(
-                                        Icons.mail_outline,
-                                        color: Color(0xFF707070),
-                                      )),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return AppLocalizations.of(context)!
-                                          .pleaseEnterYourEmail;
-                                    } else if (!EmailValidator.validate(
-                                        value)) {
-                                      return AppLocalizations.of(context)!
-                                          .pleaseEnterAValidEmail;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height:
-                                      GlobalConstants.of(context).spacingNormal,
-                                ),
-                                TextFormField(
-                                  controller: _passwordController,
-                                  obscureText: !_showPassword,
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
-                                        AppLocalizations.of(context)!.password,
-                                      )
-                                      .copyWith(
-                                        prefixIcon: Icon(
-                                          Icons.lock_outline,
-                                          color: Color(0xFF707070),
-                                        ),
-                                        suffixIcon: GestureDetector(
-                                          child: Icon(
-                                            _showPassword == false
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: Colors.black,
-                                          ),
-                                          onTap: () {
-                                            setState(() {
-                                              _showPassword = !_showPassword;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return AppLocalizations.of(context)!
-                                          .pleaseEnterYourPassword;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height:
-                                      GlobalConstants.of(context).spacingNormal,
-                                ),
-                                TextFormField(
-                                  controller: _repeatPasswordController,
-                                  obscureText: !_showRepeatPassword,
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
-                                        AppLocalizations.of(context)!
-                                            .repeatPassword,
-                                      )
-                                      .copyWith(
-                                        prefixIcon: Icon(
-                                          Icons.lock_outline,
-                                          color: Color(0xFF707070),
-                                        ),
-                                        suffixIcon: GestureDetector(
-                                          child: Icon(
-                                            _showRepeatPassword == false
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: Colors.black,
-                                          ),
-                                          onTap: () {
-                                            setState(() {
-                                              _showRepeatPassword =
-                                                  !_showRepeatPassword;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return AppLocalizations.of(context)!
-                                          .pleaseRepeatYourPassword;
-                                    }
-                                    if (value != _passwordController.text) {
-                                      return AppLocalizations.of(context)!
-                                          .passwordDoesNotMatch;
-                                    }
-                                    return null;
-                                  },
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: Image(
+                                    image: AssetImage(
+                                        "assets/images/butterfly.png"),
+                                  ),
                                 )
                               ],
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: GlobalConstants.of(context).spacingMedium,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: GlobalConstants.of(context).spacingMedium,
+                                bottom:
+                                    GlobalConstants.of(context).spacingMedium,
+                              ),
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    controller: _nameController,
+                                    keyboardType: TextInputType.name,
+                                    autocorrect: false,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme(
+                                            AppLocalizations.of(context)!
+                                                .nameAndSurname)
+                                        .copyWith(
+                                          prefixIcon: ImageIcon(
+                                            AssetImage(
+                                                "assets/icons/personicon.png"),
+                                            color: nameIsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                            size: 20,
+                                          ),
+                                        ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        setState(() {
+                                          nameIsValid = false;
+                                        });
+                                        return AppLocalizations.of(context)!
+                                            .pleaseEnterYourNameAndSurname;
+                                      }
+                                      setState(() {
+                                        nameIsValid = true;
+                                      });
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context)
+                                        .spacingNormal,
+                                  ),
+                                  TextFormField(
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme(
+                                            AppLocalizations.of(context)!.email)
+                                        .copyWith(
+                                            prefixIcon: ImageIcon(
+                                          AssetImage("assets/icons/mail.png"),
+                                          color: mailIsValid
+                                              ? LightColors.grey
+                                              : LightColors.errorRed,
+                                          size: 20,
+                                        )),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        setState(() {
+                                          mailIsValid = false;
+                                        });
+                                        return AppLocalizations.of(context)!
+                                            .pleaseEnterYourEmail;
+                                      } else if (!EmailValidator.validate(
+                                          value)) {
+                                        setState(() {
+                                          mailIsValid = false;
+                                        });
+                                        return AppLocalizations.of(context)!
+                                            .pleaseEnterAValidEmail;
+                                      }
+                                      setState(() {
+                                        mailIsValid = true;
+                                      });
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context)
+                                        .spacingNormal,
+                                  ),
+                                  TextFormField(
+                                    controller: _passwordController,
+                                    obscureText: !_showPassword,
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme(
+                                          AppLocalizations.of(context)!
+                                              .password,
+                                        )
+                                        .copyWith(
+                                          prefixIcon: ImageIcon(
+                                            AssetImage("assets/icons/lock.png"),
+                                            color: passIsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                            size: 20,
+                                          ),
+                                          suffixIcon: GestureDetector(
+                                            child: ImageIcon(
+                                              _showPassword == false
+                                                  ? AssetImage(
+                                                      "assets/icons/eye-off.png")
+                                                  : AssetImage(
+                                                      "assets/icons/eye.png"),
+                                              color: LightColors.grey,
+                                              size: 2,
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _showPassword = !_showPassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        setState(() {
+                                          passIsValid = false;
+                                        });
+                                        return AppLocalizations.of(context)!
+                                            .pleaseEnterYourPassword;
+                                      }
+                                      setState(() {
+                                        passIsValid = true;
+                                      });
+                                      return null;
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context)
+                                        .spacingNormal,
+                                  ),
+                                  TextFormField(
+                                    controller: _repeatPasswordController,
+                                    obscureText: !_showRepeatPassword,
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme(
+                                          AppLocalizations.of(context)!
+                                              .confirmPassword,
+                                        )
+                                        .copyWith(
+                                          prefixIcon: ImageIcon(
+                                            AssetImage("assets/icons/lock.png"),
+                                            color: pass2IsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                            size: 20,
+                                          ),
+                                          suffixIcon: GestureDetector(
+                                            child: ImageIcon(
+                                              _showRepeatPassword == false
+                                                  ? AssetImage(
+                                                      "assets/icons/eye-off.png")
+                                                  : AssetImage(
+                                                      "assets/icons/eye.png"),
+                                              color: LightColors.grey,
+                                              size: 2,
+                                            ),
+                                            onTap: () {
+                                              setState(() {
+                                                _showRepeatPassword =
+                                                    !_showRepeatPassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        setState(() {
+                                          pass2IsValid = false;
+                                        });
+                                        return AppLocalizations.of(context)!
+                                            .pleaseRepeatYourPassword;
+                                      }
+                                      if (value != _passwordController.text) {
+                                        setState(() {
+                                          pass2IsValid = false;
+                                        });
+                                        return AppLocalizations.of(context)!
+                                            .passwordDoesNotMatch;
+                                      }
+                                      setState(() {
+                                        pass2IsValid = true;
+                                      });
+                                      return null;
+                                    },
+                                  )
+                                ],
+                              ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    GlobalConstants.of(context).spacingMedium,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                      child: Text(
+                                    AppLocalizations.of(context)!
+                                        .weRespectAndProtectThePrivacyofYourData,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: GlobalConstants.of(context).spacingMedium,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
                               children: [
-                                Flexible(
+                                InkWell(
+                                  onTap: updateTermsCheck,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        border: Border.all(
+                                            width: 2, color: Colors.black)),
+                                    child: _termsCheckbox
+                                        ? CustomPaint(
+                                            painter: CirclePainter(),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Icon(
+                                                Icons.check,
+                                                size: 14.0,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          )
+                                        : CustomPaint(
+                                            painter: CirclePainter(),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Icon(
+                                                null,
+                                                size: 14.0,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: GlobalConstants.of(context)
+                                        .spacingSmall,
+                                  ),
                                   child: RichText(
                                     text: new TextSpan(
                                       text: AppLocalizations.of(context)!
-                                              .weRespectAndProtectYourPersonalData +
-                                          " ",
+                                          .iAcceptThe,
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
-                                        fontWeight: FontWeight.bold,
                                       ),
                                       children: [
                                         new TextSpan(
                                           text: AppLocalizations.of(context)!
-                                              .checkHere,
+                                              .useTerms,
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.black,
@@ -450,174 +583,101 @@ class _RegisterPageState extends State<RegisterPage> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                           recognizer: new TapGestureRecognizer()
-                                            ..onTap = () {
-                                              launch(
-                                                  'https://www.ootopia.org/pledge');
-                                            },
+                                            ..onTap = () => openTermsOfUse(),
                                         ),
                                         new TextSpan(
-                                          text: ' ' +
-                                              AppLocalizations.of(context)!
-                                                  .ourPledgeForTransparencyAndHighEthicalStandards,
+                                          text:
+                                              AppLocalizations.of(context)!.and,
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.black,
                                           ),
-                                        )
+                                        ),
+                                        new TextSpan(
+                                          text: AppLocalizations.of(context)!
+                                              .privacy,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          recognizer: new TapGestureRecognizer()
+                                            ..onTap = () => openPrivacyPolicy(),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: GlobalConstants.of(context).spacingMedium,
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: updateTermsCheck,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      border: Border.all(
-                                          width: 2, color: Colors.black)),
-                                  child: _termsCheckbox
-                                      ? CustomPaint(
-                                          painter: CirclePainter(),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Icon(
-                                              Icons.check,
-                                              size: 14.0,
-                                              color: Colors.black,
-                                            ),
+                            Row(
+                              children: [
+                                showCheckBoxError
+                                    ? Flexible(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            top: GlobalConstants.of(
+                                              context,
+                                            ).spacingNormal,
                                           ),
-                                        )
-                                      : CustomPaint(
-                                          painter: CirclePainter(),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Icon(
-                                              null,
-                                              size: 14.0,
-                                              color: Colors.black,
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .youNeedToAcceptTheTermsOfUseToContinue,
+                                            style: TextStyle(
+                                              color: Colors.redAccent,
                                             ),
                                           ),
                                         ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      GlobalConstants.of(context).spacingSmall,
-                                ),
-                                child: RichText(
-                                  text: new TextSpan(
-                                    text: AppLocalizations.of(context)!
-                                        .iAcceptThe,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                    children: [
-                                      new TextSpan(
-                                        text: AppLocalizations.of(context)!
-                                            .useTerms,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          decoration: TextDecoration.underline,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        recognizer: new TapGestureRecognizer()
-                                          ..onTap = () => openTermsOfUse(),
                                       )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              showCheckBoxError
-                                  ? Flexible(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          top: GlobalConstants.of(
-                                            context,
-                                          ).spacingNormal,
-                                        ),
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .youNeedToAcceptTheTermsOfUseToContinue,
-                                          style: TextStyle(
-                                            color: Colors.redAccent,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container()
-                            ],
-                          )
-                        ],
+                                    : Container()
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //   mainAxisSize: MainAxisSize.max,
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     FlatButton(
-                    //       child: Padding(
-                    //         padding: EdgeInsets.all(
-                    //           GlobalConstants.of(context).spacingNormal,
-                    //         ),
-                    //         child: Text(
-                    //           AppLocalizations.of(context)!.continueAccess,
-                    //           style: TextStyle(
-                    //             fontSize: 16,
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       onPressed: () {
-                    //         if (_formKey.currentState!.validate()) {
-                    //           _submit();
-                    //         }
-                    //       },
-                    //       color: LightColors.blue,
-                    //       splashColor: Colors.black54,
-                    //       shape: RoundedRectangleBorder(
-                    //         side: BorderSide(
-                    //           color: LightColors.blue,
-                    //           width: 2,
-                    //           style: BorderStyle.solid,
-                    //         ),
-                    //         borderRadius: BorderRadius.circular(50),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
-                ),
-              ],
+                      // Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //   mainAxisSize: MainAxisSize.max,
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: [
+                      //     FlatButton(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.all(
+                      //           GlobalConstants.of(context).spacingNormal,
+                      //         ),
+                      //         child: Text(
+                      //           AppLocalizations.of(context)!.continueAccess,
+                      //           style: TextStyle(
+                      //             fontSize: 16,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       onPressed: () {
+                      //         if (_formKey.currentState!.validate()) {
+                      //           _submit();
+                      //         }
+                      //       },
+                      //       color: LightColors.blue,
+                      //       splashColor: Colors.black54,
+                      //       shape: RoundedRectangleBorder(
+                      //         side: BorderSide(
+                      //           color: LightColors.blue,
+                      //           width: 2,
+                      //           style: BorderStyle.solid,
+                      //         ),
+                      //         borderRadius: BorderRadius.circular(50),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

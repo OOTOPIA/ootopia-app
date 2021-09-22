@@ -62,8 +62,12 @@
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 
     "iAcceptThe": "Eu aceito o ",
-    "useTerms": "termos de uso.",
+    "useTerms": "termos de uso",
+    "and": " e ",
+    "privacy": "privacidade.",
     "youNeedToAcceptTheTermsOfUseToContinue": "Você precisa aceitar os Termos de Uso para continuar",
+
+    "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados. \nConfira aqui nossos preceitos éticos e de transparência.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "Você precisa habilitar algumas \npermissões para permitir o uso completo \n da câmera.",
     

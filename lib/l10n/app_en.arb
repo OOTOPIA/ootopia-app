@@ -66,8 +66,12 @@
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
     "iAcceptThe": "I accept the ",
-    "useTerms": "use terms.",
+    "useTerms": "terms of use",
+    "and": " and ",
+    "privacy": "privacy.",
     "youNeedToAcceptTheTermsOfUseToContinue": "You need to accept the Terms of Use to continue",
+
+    "weRespectAndProtectThePrivacyofYourData":"We respect and protect the privacy of your data. \nCheck out our ethical and transparency precepts here.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "You need to enable some \npermissions to allow full \nuse of the camera.",
 
