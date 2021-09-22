@@ -245,7 +245,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   _bottomOnTapButtonHandler(int index) {
-    if (homeStore?.currentPageIndex == index && index != PageViewController.TAB_INDEX_PROFILE) {
+    if (homeStore?.currentPageIndex == index &&
+        index != PageViewController.TAB_INDEX_PROFILE) {
       return;
     }
 
