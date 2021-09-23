@@ -43,9 +43,9 @@
     "getCurrentLocation": "Obtenha a localização atual",
 
     "dateOfBirth": "Data de nascimento",
-    "day": "dia",
-    "month": "mês",
-    "year": "ano",
+    "day": "DD",
+    "month": "MM",
+    "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Insira uma data de nascimento válida no formato DD/MM/AAAA",
     "pleaseEnterAValidBirthdate": "Por favor digite uma data de nascimento válida",
 

@@ -47,9 +47,9 @@
     "getCurrentLocation": "Get current location",
 
     "dateOfBirth": "Date of Birth",
-    "day": "day",
-    "month": "month",
-    "year": "year",
+    "day": "DD",
+    "month": "MM",
+    "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Please enter a valid birthdate in format DD/MM/YYYY",
     "pleaseEnterAValidBirthdate": "Please enter a valid birthdate",
 
