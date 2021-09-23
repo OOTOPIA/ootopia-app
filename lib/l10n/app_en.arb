@@ -349,7 +349,9 @@
     "medals": "Medals",
     "iAccept": "I accept",
     "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
-    
+    "optional":"Optional",
+    "chooseYourDailyGoal":"Choose your daily goal for game participation.",
+    "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
