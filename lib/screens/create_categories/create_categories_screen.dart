@@ -27,13 +27,13 @@ class _CreateCategoriesScreenState extends State<CreateCategoriesScreen> {
             right: 26.0,
             left: 26,
           ),
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
                 'assets/images/seed.jpg',
               ),
               fit: BoxFit.cover,
-              alignment: Alignment.center,
             ),
           ),
           child: Stack(
