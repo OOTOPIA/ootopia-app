@@ -80,34 +80,42 @@ class _RegisterPhase2DailyLearningGoalPageState
                     top: GlobalConstants.of(context).spacingNormal,
                     bottom: GlobalConstants.of(context).spacingLarge,
                   ),
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _videoPlayerController.value.isPlaying
-                              ? _videoPlayerController.pause()
-                              : _videoPlayerController.play();
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _videoPlayerController.value.isPlaying
+                            ? _videoPlayerController.pause()
+                            : _videoPlayerController.play();
 
-                          timerOpacity?.cancel();
-                          timerOpacity = Timer(Duration(seconds: 1),
-                              () => setState(() => timerOpacity = null));
-                        });
-                      },
-                      child: Container(
-                          height: _videoPlayerController.value.size.height,
-                          width: _videoPlayerController.value.size.width,
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: VideoPlayer(_videoPlayerController),
-                              ),
-                              AnimatedOpacity(
-                                opacity: timerOpacity != null ? 1 : 0.0,
-                                duration: Duration(milliseconds: 200),
-                                child: timerOpacity != null
-                                    ? Center(
+                        timerOpacity?.cancel();
+                        timerOpacity = Timer(Duration(seconds: 1),
+                            () => setState(() => timerOpacity = null));
+                      });
+                    },
+                    child: Container(
+                        height: _videoPlayerController.value.size.height,
+                        width: _videoPlayerController.value.size.width,
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: VideoPlayer(_videoPlayerController),
+                            ),
+                            AnimatedOpacity(
+                              opacity: timerOpacity != null ? 1 : 0.0,
+                              duration: Duration(milliseconds: 200),
+                              child: timerOpacity != null
+                                  ? Center(
+                                      child: Icon(
+                                        (_videoPlayerController.value.isPlaying
+                                            ? Icons.pause_circle_outline
+                                            : Icons.play_circle_outline),
+                                        size: 64,
+                                        color: Colors.black87,
+                                      ),
+                                    )
+                                  : IgnorePointer(
+                                      child: Center(
                                         child: Icon(
                                           (_videoPlayerController
                                                   .value.isPlaying
@@ -116,23 +124,11 @@ class _RegisterPhase2DailyLearningGoalPageState
                                           size: 64,
                                           color: Colors.black87,
                                         ),
-                                      )
-                                    : IgnorePointer(
-                                        child: Center(
-                                          child: Icon(
-                                            (_videoPlayerController
-                                                    .value.isPlaying
-                                                ? Icons.pause_circle_outline
-                                                : Icons.play_circle_outline),
-                                            size: 64,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
                                       ),
-                              )
-                            ],
-                          )),
-                    ),
+                                    ),
+                            )
+                          ],
+                        )),
                   ),
                 ),
                 Text(
@@ -149,6 +145,9 @@ class _RegisterPhase2DailyLearningGoalPageState
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: Colors.grey),
+                ),
+                SizedBox(
+                  height: GlobalConstants.of(context).spacingSmall,
                 ),
                 SfSliderTheme(
                   data: SfSliderThemeData(
@@ -222,7 +221,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   onPressed: () {

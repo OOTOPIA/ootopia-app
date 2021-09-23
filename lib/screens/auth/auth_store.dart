@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -18,6 +22,25 @@ abstract class AuthStoreBase with Store {
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
   final AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
+  final formKey = GlobalKey<FormState>();
+
+  final TextEditingController dayController = TextEditingController();
+  final TextEditingController monthController = TextEditingController();
+  final TextEditingController yearController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController cellPhoneController = TextEditingController();
+
+  double currentSliderValue = 0;
+
+  @observable
+  bool validCellPhone = false;
+
+  @observable
+  String? countryCode;
+
+  @observable
+  String? birthdateValidationErrorMessage;
+
   @observable
   ObservableFuture<User?>? _currentUser;
 
@@ -32,6 +55,58 @@ abstract class AuthStoreBase with Store {
   setUserIsLogged() {
     this._currentUser = ObservableFuture(storage.getCurrentUser());
     AppUsageTime.instance.startTimer();
+  }
+
+  @action
+  bool birthdateIsValid() {
+    try {
+      DateTime now = DateTime.now();
+      int day = int.parse(dayController.text);
+      int month = int.parse(monthController.text);
+      int year = int.parse(yearController.text);
+      return yearController.text.length == 4 &&
+          day <= 31 &&
+          month <= 12 &&
+          year >= 1900 &&
+          year < now.year;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  @action
+  Future<void> getPhoneNumber(String phoneNumber, String codeCountry) async {
+    await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
+  }
+
+  @action
+  Future<void> updateUser() async {
+    try {
+      if (currentUser?.photoFilePath != null) {
+        await _updateUserWithPhoto(currentUser!, []);
+      } else if (currentUser != null) {
+        await this.userRepository.updateUserProfile(currentUser!, [], null);
+      }
+      await this.userRepository.getMyAccountDetails();
+    } catch (err) {}
+  }
+
+  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
+    var taskId =
+        await this.userRepository.updateUserProfile(currentUser!, [], uploader);
+    uploader.result.listen(
+        (result) {
+          if (result.statusCode == 200 && result.taskId == taskId) {
+            completer.complete(user.id);
+          }
+        },
+        onDone: () {},
+        onError: (error) {
+          completer.completeError(error);
+        });
+    return completer.future;
   }
 
   @action
