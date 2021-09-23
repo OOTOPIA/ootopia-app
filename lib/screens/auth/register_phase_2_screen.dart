@@ -9,6 +9,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_sc
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -82,323 +83,310 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
     final node = FocusScope.of(context);
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 33,
-            ),
-            Center(
-              child: Stack(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: GlobalConstants.of(context).screenHorizontalSpace),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30.0),
-                    child: Container(
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: new Border.all(
-                          color: Colors.white,
-                          width: 4.0,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: filePath == null
-                          ? CircleAvatar(
-                              radius: 57,
-                              backgroundImage: AssetImage(
-                                  'assets/icons_profile/profile.png'),
-                            )
-                          : CircleAvatar(
-                              radius: 57,
-                              backgroundImage: Image.file(
-                                filePath!,
-                                fit: BoxFit.cover,
-                              ).image,
+                  SizedBox(
+                    height: 33,
+                  ),
+                  Center(
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 30.0),
+                          child: Container(
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
                             ),
+                            child: filePath == null
+                                ? CircleAvatar(
+                                    radius: 57,
+                                    backgroundImage: AssetImage(
+                                        'assets/images/empty_photo_profile.png'),
+                                  )
+                                : CircleAvatar(
+                                    radius: 57,
+                                    backgroundImage: Image.file(
+                                      filePath!,
+                                      fit: BoxFit.cover,
+                                    ).image,
+                                  ),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 7,
+                            right: 37,
+                            child: InkWell(
+                              onTap: () async {
+                                final ImagePicker _picker = ImagePicker();
+                                // Pick an image
+                                final image = await _picker.getImage(
+                                    source: ImageSource.gallery);
+
+                                final File file = File(image!.path);
+                                setState(() {
+                                  filePath = file;
+                                });
+                              },
+                              child: Container(
+                                decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: new Border.all(
+                                    color: Colors.white,
+                                    width: 2.0,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      spreadRadius: 1,
+                                      blurRadius: 6,
+                                      offset: Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: CircleAvatar(
+                                    backgroundColor: Color(0xff03DAC5),
+                                    radius: 20,
+                                    child: Icon(
+                                      Icons.camera_alt_outlined,
+                                      size: 22,
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ))
+                      ],
                     ),
                   ),
-                  Positioned(
-                      bottom: 7,
-                      right: 37,
-                      child: InkWell(
-                        onTap: () async {
-                          final ImagePicker _picker = ImagePicker();
-                          // Pick an image
-                          final image = await _picker.getImage(
-                              source: ImageSource.gallery);
-
-                          final File file = File(image!.path);
-                          setState(() {
-                            filePath = file;
-                          });
-                        },
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: new Border.all(
-                              color: Colors.white,
-                              width: 2.0,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset:
-                                    Offset(0, 3), // changes position of shadow
-                              ),
-                            ],
+                  SizedBox(
+                    height: 22,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(AppLocalizations.of(context)!.bio,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Color(0xff7F7F7F),
+                            fontWeight: FontWeight.w500)),
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  TextFormField(
+                      maxLines: 5,
+                      decoration: GlobalConstants.of(context)
+                          .loginInputTheme(AppLocalizations.of(context)!.bio)
+                          .copyWith(alignLabelWithHint: true)),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(AppLocalizations.of(context)!.mobilePhone,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Color(0xff7F7F7F),
+                              fontWeight: FontWeight.w500))),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {},
+                    onInputValidated: (bool value) {
+                      setState(() {});
+                    },
+                    selectorConfig: SelectorConfig(
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.of(context)!
+                            .mobilephoneToExperience;
+                      }
+                      return null;
+                    },
+                    formatInput: true,
+                    errorMessage:
+                        AppLocalizations.of(context)!.mobilephoneToExperience,
+                    inputBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderSide: BorderSide(width: 0.25),
+                    ),
+                    scrollPadding: EdgeInsets.all(0),
+                    autoValidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    inputDecoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: LightColors.grey, width: 0.30),
+                          borderRadius: BorderRadius.circular(4)),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        borderSide:
+                            BorderSide(color: LightColors.grey, width: 0.30),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        borderSide:
+                            BorderSide(width: 0.25, color: Color(0xff8E1816)),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        borderSide:
+                            BorderSide(width: 0.25, color: Color(0xff8E1816)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 22,
+                  ),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(AppLocalizations.of(context)!.dateOfBirth,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Color(0xff7F7F7F),
+                              fontWeight: FontWeight.w500))),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _dayController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 2,
+                          autofocus: false,
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
-                          child: CircleAvatar(
-                              backgroundColor: Color(0xff03DAC5),
-                              radius: 20,
-                              child: Icon(
-                                Icons.camera_alt_outlined,
-                                size: 22,
-                                color: Colors.white,
-                              )),
+                          decoration: GlobalConstants.of(context)
+                              .loginInputTheme(
+                                  AppLocalizations.of(context)!.day),
+                          onChanged: (String text) {
+                            if (text.length == 2 && int.parse(text) <= 31) {
+                              node.nextFocus();
+                            }
+                          },
+                          onEditingComplete: () => node.nextFocus(),
                         ),
-                      ))
+                      ),
+                      SizedBox(
+                        width:
+                            GlobalConstants.of(context).screenHorizontalSpace,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _monthController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 2,
+                          autofocus: false,
+                          decoration: GlobalConstants.of(context)
+                              .loginInputTheme(
+                                  AppLocalizations.of(context)!.month),
+                          onChanged: (String text) {
+                            if (text.length == 2 && int.parse(text) <= 12) {
+                              node.nextFocus();
+                            }
+                          },
+                          onEditingComplete: () => node.nextFocus(),
+                        ),
+                      ),
+                      SizedBox(
+                        width:
+                            GlobalConstants.of(context).screenHorizontalSpace,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _yearController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 4,
+                          autofocus: false,
+                          onChanged: (String text) {
+                            if (text.length == 4 && int.parse(text) >= 1900) {
+                              node.nextFocus();
+                            }
+                          },
+                          decoration: GlobalConstants.of(context)
+                              .loginInputTheme(
+                                  AppLocalizations.of(context)!.year),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Visibility(
+                    visible: birthdateValidationErrorMessage.isNotEmpty,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: GlobalConstants.of(context).spacingNormal,
+                        bottom: GlobalConstants.of(context).spacingSmall,
+                      ),
+                      child: Text(
+                        birthdateValidationErrorMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: GlobalConstants.of(context).spacingLarge,
+                  ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 22,
-            ),
-            Text(
-              AppLocalizations.of(context)!.bio,
-              style: TextStyle(fontSize: 18, color: Color(0xff7F7F7F)),
-            ),
-            SizedBox(
-              height: 7,
-            ),
-            TextFormField(
-                maxLines: 5,
-                decoration: GlobalConstants.of(context)
-                    .loginInputTheme(AppLocalizations.of(context)!.optional)),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              AppLocalizations.of(context)!.mobilePhone,
-              style: TextStyle(fontSize: 18, color: Color(0xff7F7F7F)),
-            ),
-            SizedBox(
-              height: 7,
-            ),
-            InternationalPhoneNumberInput(
-              onInputChanged: (PhoneNumber number) {},
-              onInputValidated: (bool value) {
-                setState(() {});
-              },
-              selectorConfig: SelectorConfig(
-                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+              ElevatedButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                            side: BorderSide.none)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Color(0xff003694)),
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.all(
+                            GlobalConstants.of(context).spacingNormal))),
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                        child:
+                            Text(AppLocalizations.of(context)!.continueAccess,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                )))),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                      PageRoute
+                          .Page.registerPhase2DailyLearningGoalScreen.route,
+                      arguments: {
+                        "user": user,
+                        "returnToPageWithArgs":
+                            widget.args!["returnToPageWithArgs"]
+                      });
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.mobilephoneToExperience;
-                }
-                return null;
-              },
-              formatInput: true,
-              errorMessage:
-                  AppLocalizations.of(context)!.mobilephoneToExperience,
-              inputBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                borderSide: BorderSide(width: 0.25),
+              SizedBox(
+                height: 24,
               ),
-              scrollPadding: EdgeInsets.all(0),
-              autoValidateMode: AutovalidateMode.onUserInteraction,
-              keyboardType:
-                  TextInputType.numberWithOptions(signed: true, decimal: true),
-              inputDecoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  borderSide: BorderSide(width: 0.25),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  borderSide: BorderSide(width: 0.25),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  borderSide: BorderSide(width: 0.25, color: Color(0xff8E1816)),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  borderSide: BorderSide(width: 0.25, color: Color(0xff8E1816)),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 22,
-            ),
-            Text(
-              AppLocalizations.of(context)!.dateOfBirth,
-              style: TextStyle(fontSize: 18, color: Color(0xff7F7F7F)),
-            ),
-            SizedBox(
-              height: 7,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: GlobalConstants.of(context).spacingSmall,
-                    ),
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: _dayController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      autofocus: false,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      decoration: GlobalConstants.of(context)
-                          .loginInputTheme(AppLocalizations.of(context)!.day),
-                      onChanged: (String text) {
-                        if (text.length == 2 && int.parse(text) <= 31) {
-                          node.nextFocus();
-                        }
-                      },
-                      onEditingComplete: () => node.nextFocus(),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: GlobalConstants.of(context).spacingSmall,
-                    ),
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: _monthController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      autofocus: false,
-                      decoration: GlobalConstants.of(context)
-                          .loginInputTheme(AppLocalizations.of(context)!.month),
-                      onChanged: (String text) {
-                        if (text.length == 2 && int.parse(text) <= 12) {
-                          node.nextFocus();
-                        }
-                      },
-                      onEditingComplete: () => node.nextFocus(),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: GlobalConstants.of(context).spacingSmall,
-                    ),
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: _yearController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 4,
-                      autofocus: false,
-                      onChanged: (String text) {
-                        if (text.length == 4 && int.parse(text) >= 1900) {
-                          node.nextFocus();
-                        }
-                      },
-                      decoration: GlobalConstants.of(context)
-                          .loginInputTheme(AppLocalizations.of(context)!.year),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Visibility(
-              visible: birthdateValidationErrorMessage.isNotEmpty,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: GlobalConstants.of(context).spacingNormal,
-                  bottom: GlobalConstants.of(context).spacingSmall,
-                ),
-                child: Text(
-                  birthdateValidationErrorMessage,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: GlobalConstants.of(context).spacingLarge,
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide.none),
-                ),
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color(0xff003694)),
-                padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.all(GlobalConstants.of(context).spacingNormal)),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.continueAccess,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pushNamed(
-                  PageRoute.Page.registerPhase2DailyLearningGoalScreen.route,
-                  arguments: {
-                    "user": user,
-                    "returnToPageWithArgs":
-                        widget.args!["returnToPageWithArgs"],
-                  },
-                );
-                // if (_birthdateIsValid()) {
-                //   setState(() {
-                //     birthdateValidationErrorMessage = "";
-                //   });
-                //   this.trackingEvents.signupCompletedStepIOfSignupII(
-                //       {"havePhoto": _image != null ? true : false});
-
-                //   user!.birthdate =
-                //       "${_yearController.text}-${_monthController.text}-${_dayController.text}";
-
-                // } else {
-                //   setState(() {
-                //     String year = _yearController.text;
-                //     if (year.length < 4) {
-                //       birthdateValidationErrorMessage =
-                //           AppLocalizations.of(context)!
-                //               .pleaseEnterAValidBirthdateInFormat;
-                //     } else {
-                //       birthdateValidationErrorMessage =
-                //           AppLocalizations.of(context)!
-                //               .pleaseEnterAValidBirthdate;
-                //     }
-                //   });
-                // }
-              },
-            ),
-            SizedBox(
-              height: 24,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
