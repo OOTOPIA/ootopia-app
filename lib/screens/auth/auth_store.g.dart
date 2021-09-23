@@ -17,6 +17,53 @@ mixin _$AuthStore on AuthStoreBase, Store {
               name: 'AuthStoreBase.currentUser'))
           .value;
 
+  final _$validCellPhoneAtom = Atom(name: 'AuthStoreBase.validCellPhone');
+
+  @override
+  bool get validCellPhone {
+    _$validCellPhoneAtom.reportRead();
+    return super.validCellPhone;
+  }
+
+  @override
+  set validCellPhone(bool value) {
+    _$validCellPhoneAtom.reportWrite(value, super.validCellPhone, () {
+      super.validCellPhone = value;
+    });
+  }
+
+  final _$countryCodeAtom = Atom(name: 'AuthStoreBase.countryCode');
+
+  @override
+  String? get countryCode {
+    _$countryCodeAtom.reportRead();
+    return super.countryCode;
+  }
+
+  @override
+  set countryCode(String? value) {
+    _$countryCodeAtom.reportWrite(value, super.countryCode, () {
+      super.countryCode = value;
+    });
+  }
+
+  final _$birthdateValidationErrorMessageAtom =
+      Atom(name: 'AuthStoreBase.birthdateValidationErrorMessage');
+
+  @override
+  String? get birthdateValidationErrorMessage {
+    _$birthdateValidationErrorMessageAtom.reportRead();
+    return super.birthdateValidationErrorMessage;
+  }
+
+  @override
+  set birthdateValidationErrorMessage(String? value) {
+    _$birthdateValidationErrorMessageAtom
+        .reportWrite(value, super.birthdateValidationErrorMessage, () {
+      super.birthdateValidationErrorMessage = value;
+    });
+  }
+
   final _$_currentUserAtom = Atom(name: 'AuthStoreBase._currentUser');
 
   @override
@@ -38,6 +85,22 @@ mixin _$AuthStore on AuthStoreBase, Store {
   @override
   Future<User?> checkUserIsLogged() {
     return _$checkUserIsLoggedAsyncAction.run(() => super.checkUserIsLogged());
+  }
+
+  final _$getPhoneNumberAsyncAction =
+      AsyncAction('AuthStoreBase.getPhoneNumber');
+
+  @override
+  Future<void> getPhoneNumber(String phoneNumber, String codeCountry) {
+    return _$getPhoneNumberAsyncAction
+        .run(() => super.getPhoneNumber(phoneNumber, codeCountry));
+  }
+
+  final _$updateUserAsyncAction = AsyncAction('AuthStoreBase.updateUser');
+
+  @override
+  Future<void> updateUser() {
+    return _$updateUserAsyncAction.run(() => super.updateUser());
   }
 
   final _$updateUserRegenerarionGameLearningAlertAsyncAction =
@@ -88,8 +151,22 @@ mixin _$AuthStore on AuthStoreBase, Store {
   }
 
   @override
+  bool birthdateIsValid() {
+    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
+        name: 'AuthStoreBase.birthdateIsValid');
+    try {
+      return super.birthdateIsValid();
+    } finally {
+      _$AuthStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+validCellPhone: ${validCellPhone},
+countryCode: ${countryCode},
+birthdateValidationErrorMessage: ${birthdateValidationErrorMessage},
 currentUser: ${currentUser}
     ''';
   }
