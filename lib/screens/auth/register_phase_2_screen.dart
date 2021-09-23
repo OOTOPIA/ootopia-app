@@ -317,7 +317,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                       ],
                     ),
                     Visibility(
-                      visible: authStore.birthdateIsValid(),
+                      visible: !authStore.birthdateIsValid(),
                       child: Padding(
                         padding: EdgeInsets.only(
                           top: GlobalConstants.of(context).spacingNormal,
@@ -359,32 +359,34 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                     color: Colors.white,
                                   )))),
                   onPressed: () {
-                    print(authStore.birthdateIsValid());
-                    if (authStore.birthdateIsValid()) {
-                      if (authStore.formKey.currentState!.validate()) {
-                        Navigator.of(context).pushNamed(
-                            PageRoute.Page.registerPhase2DailyLearningGoalScreen
-                                .route,
-                            arguments: {
-                              "user": user,
-                              "returnToPageWithArgs":
-                                  widget.args!["returnToPageWithArgs"]
-                            });
-                      }
-                    } else {
-                      setState(() {
-                        String year = authStore.yearController.text;
-                        if (year.length < 4) {
-                          authStore.birthdateValidationErrorMessage =
-                              AppLocalizations.of(context)!
-                                  .pleaseEnterAValidBirthdateInFormat;
-                        } else {
-                          authStore.birthdateValidationErrorMessage =
-                              AppLocalizations.of(context)!
-                                  .pleaseEnterAValidBirthdate;
-                        }
-                      });
-                    }
+                    Navigator.of(context).pushNamed(
+                        PageRoute
+                            .Page.registerPhase2DailyLearningGoalScreen.route,
+                        arguments: {
+                          "user": user,
+                          "returnToPageWithArgs":
+                              widget.args!["returnToPageWithArgs"]
+                        });
+                    // if (authStore.formKey.currentState!.validate()) {
+
+                    // }
+                    // print(authStore.birthdateIsValid());
+                    // if (authStore.birthdateIsValid()) {
+
+                    // } else {
+                    //   setState(() {
+                    //     String year = authStore.yearController.text;
+                    //     if (year.length < 4) {
+                    //       authStore.birthdateValidationErrorMessage =
+                    //           AppLocalizations.of(context)!
+                    //               .pleaseEnterAValidBirthdateInFormat;
+                    //     } else {
+                    //       authStore.birthdateValidationErrorMessage =
+                    //           AppLocalizations.of(context)!
+                    //               .pleaseEnterAValidBirthdate;
+                    //     }
+                    //   });
+                    // }
                   },
                 ),
                 SizedBox(
