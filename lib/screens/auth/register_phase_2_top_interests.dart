@@ -1,21 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootopia_app/data/utils/string-utils.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,54 +29,55 @@ class RegisterPhase2TopInterestsPage extends StatefulWidget {
 class _RegisterPhase2TopInterestsPageState
     extends State<RegisterPhase2TopInterestsPage> with SecureStoreMixin {
   UserBloc? userBloc;
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController _inputController = TextEditingController();
-  final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
   InterestsTagsRepositoryImpl repository = InterestsTagsRepositoryImpl();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   bool _isLoading = true;
   bool errorOnGetTags = false;
 
-  List<MultiSelectItem<InterestsTags>> _items = [];
-
   List<InterestsTags> _selectedTags = [];
 
   List<InterestsTags> _allTags = [];
 
   List<Item> _topTags = [];
-  List<Item> _secondaryTags = [];
   List<String> _selectedTagsIds = [];
   List<Item> _secondaryTagsCopy = [];
 
   late AuthStore authStore;
 
   void _submit() {
-    userBloc!.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
     this
         .trackingEvents
         .signupCompletedStepIVOfSignupII({"tags": _selectedTagsIds});
+    _isLoading = false;
+    widget.args['user'].registerPhase = state.user.registerPhase;
+    widget.args['user'].photoUrl = state.user.photoUrl;
+    setCurrentUser(jsonEncode(widget.args['user'].toJson()))
+        .then((value) => authStore.setUserIsLogged());
+    if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+        arguments: {
+          "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+        },
+      );
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+      );
+    }
   }
 
   Future<void> getTags() async {
-    this.repository.getTags().then((tags) {
-      setState(() {
-        _isLoading = false;
-        _allTags = tags;
-        _allTags.forEach((tag) {
-          if (tag.type == "top") {
-            _topTags.add(Item(title: tag.name, active: false, customData: tag));
-          } else {
-            _secondaryTags
-                .add(Item(title: tag.name, active: false, customData: tag));
-          }
-        });
-      });
-    }).onError((error, stackTrace) {
-      setState(() {
-        errorOnGetTags = true;
-      });
+    var getAllTags = await this.repository.getTags();
+    _isLoading = false;
+    setState(() {
+      _allTags.addAll(getAllTags);
     });
+    errorOnGetTags = true;
   }
 
   @override
@@ -156,100 +152,85 @@ class _RegisterPhase2TopInterestsPageState
                         showDialog(
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                content: MultiSelectDialogField<InterestsTags?>(
-                                  listType: MultiSelectListType.CHIP,
-                                  selectedColor: Color(0xff03145C),
-                                  selectedItemsTextStyle: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.white),
-                                  searchable: true,
-                                  checkColor: Colors.blueAccent,
-                                  searchTextStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  unselectedColor:
-                                      Colors.black.withOpacity(.05),
-                                  barrierColor: Colors.black.withOpacity(.5),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    border: Border.all(
-                                      color: Colors.transparent,
-                                      width: 0,
-                                    ),
-                                  ),
-                                  buttonIcon: Icon(
-                                    Icons.add,
-                                    size: 30,
-                                    color: Colors.black54,
-                                  ),
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                return AlertDialog(
                                   title: Text(
                                     AppLocalizations.of(context)!
-                                        .selectAtLeast1Tag,
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
+                                        .pleaseSelectAtLeast1Tag,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                  buttonText: Text(
-                                    AppLocalizations.of(context)!.selectTags,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w500,
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextFormField(
+                                          decoration:
+                                              GlobalConstants.of(context)
+                                                  .loginInputTheme(''),
                                         ),
-                                  ),
-                                  confirmText: Text(
-                                    AppLocalizations.of(context)!.confirm,
-                                    style: TextStyle(
-                                      color: Color(0xff018F9C),
+                                        Divider(),
+                                        Wrap(
+                                          direction: Axis.horizontal,
+                                          spacing: 1,
+                                          children: _allTags.map((e) {
+                                            return FilterChip(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(45)),
+                                                  side: BorderSide(
+                                                      width: 1,
+                                                      color:
+                                                          Color(0xffE0E1E2))),
+                                              label: Text(
+                                                '${e.name}',
+                                                style: TextStyle(
+                                                    color: e.active
+                                                        ? Colors.white
+                                                        : Colors.grey),
+                                              ),
+                                              selectedColor: Color(0xff03145C),
+                                              backgroundColor: Colors.white,
+                                              selected: e.active,
+                                              onSelected: (bool selected) {
+                                                setState(() {
+                                                  _selectedTags.add(e);
+                                                  e.active = selected;
+                                                });
+                                              },
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  cancelText: Text(
-                                    AppLocalizations.of(context)!.cancel,
-                                    style: TextStyle(
-                                      color: Color(0xff018F9C),
-                                    ),
-                                  ),
-                                  itemsTextStyle: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                  items: _items,
-                                  onConfirm: (values) {
-                                    _selectedTags = [];
-                                    FocusScope.of(context)
-                                        .requestFocus(new FocusNode());
-                                    setState(() {
-                                      values.forEach((v) {
-                                        _selectedTags.add(v!);
-                                      });
-                                      if (_selectedTags.length >= 1) {}
-                                    });
-                                  },
-                                  chipDisplay: MultiSelectChipDisplay(
-                                    chipColor: Color(0xff03145C),
-                                    textStyle: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: (value) {
-                                      setState(() {
-                                        _selectedTags.remove(value);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {}, child: Text('Cancel')),
-                                  TextButton(
-                                      onPressed: () {}, child: Text('Confirm')),
-                                ],
-                              );
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                              color: Color(0xff018F9C),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        )),
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          'Confirm',
+                                          style: TextStyle(
+                                              color: Color(0xff018F9C),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        )),
+                                  ],
+                                );
+                              });
                             });
                       },
                       child: Card(
@@ -270,7 +251,37 @@ class _RegisterPhase2TopInterestsPageState
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    Visibility(
+                      visible: _selectedTags.isEmpty,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 1,
+                        children: _selectedTags.map((e) {
+                          return FilterChip(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45)),
+                                side: BorderSide(
+                                    width: 1, color: Color(0xffE0E1E2))),
+                            label: Text(
+                              '${e.name}',
+                              style: TextStyle(
+                                  color: e.active ? Colors.white : Colors.grey),
+                            ),
+                            selectedColor: Color(0xff03145C),
+                            backgroundColor: Colors.white,
+                            selected: e.active,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                _selectedTags.add(e);
+                                e.active = selected;
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ],
                 ),
         ),
