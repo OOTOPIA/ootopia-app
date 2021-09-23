@@ -66,7 +66,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
         queryParams['action'] = action.toString();
       }
 
-      User user = await getCurrentUser();
+      User user = (await getCurrentUser())!;
       String queryString = Uri(queryParameters: queryParams).query;
 
       Response response = await ApiClient.api().get(

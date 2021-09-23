@@ -53,18 +53,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.addObserver(this);
 
-    // PageViewController.instance.onClickBack = () {
-    //   homeStore?.setCurrentPageWidget(PageViewController.instance.pages[
-    //       PageViewController.instance.pageHistoryTabSelected[
-    //           PageViewController.instance.pageHistoryTabSelected.length - 1]]);
-    // };
-
-    // PageViewController.instance.onAddPage = () {
-    //   setState(() {});
-    // };
-
     Future.delayed(Duration.zero, () {
       controller.resetPageController();
+      controller.addOnInsertPageListener((index) => setState(() {}));
       controller.addOnPageChangedListener((index) => setState(() {}));
     });
 
@@ -98,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     homeStore?.stopDailyGoalTimer();
-    controller.getPageViewController()?.dispose();
     controller.resetPageController();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
@@ -195,8 +185,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     onTapLogoutItem: () {
                       controller
                           .goToPage(PageViewController.TAB_INDEX_TIMELINE);
-                      // homeStore?.stopDailyGoalTimer();
-                      // _goToPage(PageViewController.TAB_INDEX_TIMELINE);
                     },
                     onTapWalletItem: () {
                       controller.goToPage(PageViewController.TAB_INDEX_WALLET);
@@ -207,25 +195,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 SmartPageNavigation(
                   controller: controller,
                 ),
-                // PageView.builder(
-                //   pageSnapping: false,
-                //   controller: PageViewController.instance.controller,
-                //   scrollDirection: Axis.horizontal,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   onPageChanged: (index) {
-                //     homeStore?.setCurrentPageIndex(index);
-                //     if (PageViewController.instance.pages.length <= 5) {
-                //       homeStore?.setCurrentPageWidget(
-                //           PageViewController.instance.pages[index]);
-                //     }
-                //     setState(() {});
-                //   },
-                //   itemCount: PageViewController.instance.pages.length,
-                //   itemBuilder: (context, index) {
-                //     return KeepAlivePage(
-                //         child: PageViewController.instance.pages[index]);
-                //   },
-                // ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(
@@ -363,26 +332,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     switch (index) {
       case PageViewController.TAB_INDEX_TIMELINE:
         controller.resetNavigation();
-        //PageViewController.instance.resetPages();
-
-        // _goToPage(PageViewController.TAB_INDEX_TIMELINE);
-
-        // homeStore?.setCurrentPageWidget(PageViewController
-        //     .instance.pages[PageViewController.TAB_INDEX_TIMELINE]);
-        // homeStore?.setCurrentPageIndex(PageViewController.TAB_INDEX_TIMELINE);
-        // setState(() {});
         break;
-
-      // case PageViewController.TAB_INDEX_LEARNING_TRACKS:
-      //   if (PageViewController.instance.pages.length > 5) {
-      //     PageViewController.instance.addPage(LearningTracksScreen());
-      //   } else {
-      //     _goToPage(PageViewController.TAB_INDEX_LEARNING_TRACKS);
-      //   }
-      //   homeStore
-      //       ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
-
-      //   break;
       case PageViewController.TAB_INDEX_CAMERA:
         if (authStore.currentUser == null) {
           Navigator.of(context).pushNamed(
@@ -450,15 +400,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
 
     if (authStore.currentUser!.registerPhase != 2) {
-      // if (PageViewController.instance.pages.length > 5) {
-      //   PageViewController.instance.addPage(ProfileScreen());
-      // } else {
-      //   profileStore.getProfileDetails(authStore.currentUser!.id!);
-      //   _goToPage(PageViewController.TAB_INDEX_PROFILE);
-      // }
-      // homeStore?.setCurrentPageWidget(PageViewController
-      //     .instance.pages[PageViewController.TAB_INDEX_PROFILE]);
-      // } else {
       Navigator.of(context).pushNamed(
         PageRoute.Page.registerPhase2Screen.route,
         arguments: {

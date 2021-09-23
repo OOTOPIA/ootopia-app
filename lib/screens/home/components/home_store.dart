@@ -208,7 +208,7 @@ abstract class HomeStoreBase with Store {
   @action
   Future<void> getCurrentUser(String id) async {
     var user = await userRepository.getCurrentUser();
-    if (user.id == id) {
+    if (user?.id == id) {
       userLogged = true;
     } else {
       userLogged = false;

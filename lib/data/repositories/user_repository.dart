@@ -218,12 +218,12 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
 
   @override
   Future updateUserRegenerarionGameLearningAlert(String type) async {
-    User user = await getCurrentUser();
-
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return;
     }
+
+    User user = (await getCurrentUser())!;
 
     await ApiClient.api().put(
       "users/${user.id}/dialog-opened/$type",
@@ -237,7 +237,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       if (!loggedIn) {
         return null;
       }
-      User user = await getCurrentUser();
+      User user = (await getCurrentUser())!;
 
       Response res = await ApiClient.api().get(
         "users/${user.id}/daily-goal-stats",
@@ -259,7 +259,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       if (!loggedIn) {
         return null;
       }
-      User user = await getCurrentUser();
+      User user = (await getCurrentUser())!;
 
       Response res = await ApiClient.api().get(
         "users/${user.id}/invitation-code",

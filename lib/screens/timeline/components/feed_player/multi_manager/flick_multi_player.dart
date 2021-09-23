@@ -35,7 +35,7 @@ class FlickMultiPlayer extends StatefulWidget {
 class _FlickMultiPlayerState extends State<FlickMultiPlayer>
     with SecureStoreMixin {
   late FlickManager flickManager;
-  late VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
     videoPlayerController = VideoPlayerController.network(widget.url);
 
     flickManager = FlickManager(
-      videoPlayerController: videoPlayerController..setLooping(true),
+      videoPlayerController: videoPlayerController!..setLooping(true),
       autoPlay: false,
     );
 
@@ -58,9 +58,10 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
 
   @override
   void dispose() {
-    widget.flickMultiManager.remove(flickManager);
     flickManager.dispose();
-    videoPlayerController.dispose();
+    widget.flickMultiManager.remove(flickManager);
+    videoPlayerController?.dispose();
+    videoPlayerController = null;
     super.dispose();
   }
 
