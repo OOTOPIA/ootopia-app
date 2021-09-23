@@ -50,14 +50,14 @@ abstract class TimelineStoreBase with Store {
     if (_timelineViewTimer == null) {
       _timelineViewTimer =
           Timer.periodic(Duration(milliseconds: 1), (Timer timer) {
-        if (_watch.isRunning &&
-            PageViewController.instance.controller.page == 0) {
-          _timelineViewtimeSoFarInMs++;
-          if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
-            //A cada 5 segundos armazenamos no storage o tempo cronometrado
-            prefs!.setInt(_prefsKey, _timelineViewtimeSoFarInMs);
-          }
-        }
+        // if (_watch.isRunning &&
+        //     PageViewController.instance.controller.page == 0) {
+        //   _timelineViewtimeSoFarInMs++;
+        //   if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
+        //     //A cada 5 segundos armazenamos no storage o tempo cronometrado
+        //     prefs!.setInt(_prefsKey, _timelineViewtimeSoFarInMs);
+        //   }
+        // }
       });
     }
   }

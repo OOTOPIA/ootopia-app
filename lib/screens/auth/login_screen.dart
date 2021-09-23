@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -34,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool mailIsValid = true;
   bool passIsValid = true;
+
+  late SmartPageController controller;
 
   @override
   void initState() {
@@ -61,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var authStore = Provider.of<AuthStore>(context);
+    controller = SmartPageController.of(context);
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -77,6 +81,8 @@ class _LoginPageState extends State<LoginPage> {
             } else if (state is LoadedSucessState) {
               print("LOGGED!!!!!");
               authStore.setUserIsLogged();
+              controller.resetNavigation();
+              controller.resetPageController();
               if (widget.args != null &&
                   widget.args!['returnToPageWithArgs'] != null) {
                 Navigator.of(context).pushNamedAndRemoveUntil(

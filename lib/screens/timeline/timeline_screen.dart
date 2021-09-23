@@ -14,6 +14,7 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -340,12 +341,13 @@ class _TimelinePageState extends State<TimelinePage>
             },
             body: Column(
               children: [
+                RegenerationGame(),
                 Expanded(
                   child: Center(
                     child: BlocListener<TimelinePostBloc, TimelinePostState>(
                       listener: (context, state) {
                         if (state is ErrorState) {
-                          Scaffold.of(context).showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(state.message),
                             ),

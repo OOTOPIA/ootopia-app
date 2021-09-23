@@ -1008,6 +1008,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smart_page_navigation:
+    dependency: "direct main"
+    description:
+      name: smart_page_navigation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.8"
   source_gen:
     dependency: transitive
     description:
