@@ -64,334 +64,352 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
     var authStore = Provider.of<AuthStore>(context);
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: GlobalConstants.of(context).screenHorizontalSpace),
-          child: Form(
-            key: authStore.formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: GlobalConstants.of(context).screenHorizontalSpace),
+        child: Form(
+          key: authStore.formKey,
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: 33,
-                    ),
-                    Center(
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 30.0),
-                            child: Container(
-                              decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: _image == null
-                                  ? CircleAvatar(
-                                      radius: 57,
-                                      backgroundImage: AssetImage(
-                                          'assets/images/empty_photo_profile.png'),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 57,
-                                      backgroundImage: Image.file(
-                                        _image!,
-                                        fit: BoxFit.cover,
-                                      ).image,
-                                    ),
-                            ),
-                          ),
-                          Positioned(
-                              bottom: 7,
-                              right: 37,
-                              child: InkWell(
-                                onTap: getImage,
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 33,
+                        ),
+                        Center(
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 30.0),
                                 child: Container(
                                   decoration: new BoxDecoration(
                                     shape: BoxShape.circle,
-                                    border: new Border.all(
-                                      color: Colors.white,
-                                      width: 2.0,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        spreadRadius: 1,
-                                        blurRadius: 6,
-                                        offset: Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
                                   ),
-                                  child: CircleAvatar(
-                                      backgroundColor: Color(0xff03DAC5),
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: 22,
-                                        color: Colors.white,
-                                      )),
+                                  child: _image == null
+                                      ? CircleAvatar(
+                                          radius: 57,
+                                          backgroundImage: AssetImage(
+                                              'assets/images/empty_photo_profile.png'),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 57,
+                                          backgroundImage: Image.file(
+                                            _image!,
+                                            fit: BoxFit.cover,
+                                          ).image,
+                                        ),
                                 ),
-                              ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 22,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(AppLocalizations.of(context)!.bio,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Color(0xff7F7F7F),
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    TextFormField(
-                        controller: authStore.bioController,
-                        maxLines: 5,
-                        decoration: GlobalConstants.of(context)
-                            .loginInputTheme(AppLocalizations.of(context)!.bio)
-                            .copyWith(alignLabelWithHint: true)),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(AppLocalizations.of(context)!.mobilePhone,
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Color(0xff7F7F7F),
-                                fontWeight: FontWeight.w500))),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    InternationalPhoneNumberInput(
-                      onInputChanged: (PhoneNumber number) {
-                        setState(() {
-                          authStore.countryCode = number.isoCode.toString();
-                        });
-                        authStore.getPhoneNumber(
-                            number.toString(), number.isoCode.toString());
-                      },
-                      onInputValidated: (bool value) {
-                        setState(() {
-                          authStore.validCellPhone = !value;
-                        });
-                      },
-                      selectorConfig: SelectorConfig(
-                        selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                      ),
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.contains('+')) {
-                          return AppLocalizations.of(context)!
-                              .mobilephoneToExperience;
-                        } else if (authStore.validCellPhone) {
-                          return AppLocalizations.of(context)!
-                              .insertValidCellPhone;
-                        }
-                        return null;
-                      },
-                      textFieldController: authStore.cellPhoneController,
-                      formatInput: true,
-                      errorMessage:
-                          AppLocalizations.of(context)!.mobilephoneToExperience,
-                      inputBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        borderSide: BorderSide(width: 0.25),
-                      ),
-                      scrollPadding: EdgeInsets.all(0),
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      keyboardType: TextInputType.numberWithOptions(
-                          signed: true, decimal: true),
-                      inputDecoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(width: 0.25),
+                              ),
+                              Positioned(
+                                  bottom: 7,
+                                  right: 37,
+                                  child: InkWell(
+                                    onTap: getImage,
+                                    child: Container(
+                                      decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: new Border.all(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.4),
+                                            spreadRadius: 1,
+                                            blurRadius: 6,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: CircleAvatar(
+                                          backgroundColor: Color(0xff03DAC5),
+                                          radius: 20,
+                                          child: Icon(
+                                            Icons.camera_alt_outlined,
+                                            size: 22,
+                                            color: Colors.white,
+                                          )),
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(width: 0.25),
+                        SizedBox(
+                          height: 22,
                         ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide:
-                              BorderSide(width: 0.25, color: Color(0xff8E1816)),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(AppLocalizations.of(context)!.bio,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xff7F7F7F),
+                                  fontWeight: FontWeight.w500)),
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide:
-                              BorderSide(width: 0.25, color: Color(0xff8E1816)),
+                        SizedBox(
+                          height: 7,
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 22,
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(AppLocalizations.of(context)!.dateOfBirth,
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Color(0xff7F7F7F),
-                                fontWeight: FontWeight.w500))),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: authStore.dayController,
-                            keyboardType: TextInputType.number,
-                            maxLength: 2,
-                            autofocus: false,
-                            style: TextStyle(
-                              color: Colors.white,
+                        TextFormField(
+                            controller: authStore.bioController,
+                            maxLines: 5,
+                            decoration: GlobalConstants.of(context)
+                                .loginInputTheme(
+                                    AppLocalizations.of(context)!.bio)
+                                .copyWith(alignLabelWithHint: true)),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                AppLocalizations.of(context)!.mobilePhone,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color(0xff7F7F7F),
+                                    fontWeight: FontWeight.w500))),
+                        SizedBox(
+                          height: 7,
+                        ),
+                        InternationalPhoneNumberInput(
+                          onInputChanged: (PhoneNumber number) {
+                            setState(() {
+                              authStore.countryCode = number.isoCode.toString();
+                            });
+                            authStore.getPhoneNumber(
+                                number.toString(), number.isoCode.toString());
+                          },
+                          onInputValidated: (bool value) {
+                            setState(() {
+                              authStore.validCellPhone = !value;
+                            });
+                          },
+                          selectorConfig: SelectorConfig(
+                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                          ),
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.contains('+')) {
+                              return AppLocalizations.of(context)!
+                                  .mobilephoneToExperience;
+                            } else if (authStore.validCellPhone) {
+                              return AppLocalizations.of(context)!
+                                  .insertValidCellPhone;
+                            }
+                            return null;
+                          },
+                          textFieldController: authStore.cellPhoneController,
+                          formatInput: true,
+                          errorMessage: AppLocalizations.of(context)!
+                              .mobilephoneToExperience,
+                          inputBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 0.25),
+                          ),
+                          scrollPadding: EdgeInsets.all(0),
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: true, decimal: true),
+                          inputDecoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(width: 0.25),
                             ),
-                            decoration: GlobalConstants.of(context)
-                                .loginInputTheme(
-                                    AppLocalizations.of(context)!.day),
-                            onChanged: (String text) {
-                              if (text.length == 2 && int.parse(text) <= 31) {
-                                node.nextFocus();
-                              }
-                            },
-                            onEditingComplete: () => node.nextFocus(),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(width: 0.25),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.25, color: Color(0xff8E1816)),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.25, color: Color(0xff8E1816)),
+                            ),
                           ),
                         ),
                         SizedBox(
-                          width:
-                              GlobalConstants.of(context).screenHorizontalSpace,
+                          height: 22,
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: authStore.monthController,
-                            keyboardType: TextInputType.number,
-                            maxLength: 2,
-                            autofocus: false,
-                            decoration: GlobalConstants.of(context)
-                                .loginInputTheme(
-                                    AppLocalizations.of(context)!.month),
-                            onChanged: (String text) {
-                              if (text.length == 2 && int.parse(text) <= 12) {
-                                node.nextFocus();
-                              }
-                            },
-                            onEditingComplete: () => node.nextFocus(),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                AppLocalizations.of(context)!.dateOfBirth,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color(0xff7F7F7F),
+                                    fontWeight: FontWeight.w500))),
+                        SizedBox(
+                          height: 7,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: authStore.dayController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 2,
+                                autofocus: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                        AppLocalizations.of(context)!.day),
+                                onChanged: (String text) {
+                                  if (text.length == 2 &&
+                                      int.parse(text) <= 31) {
+                                    node.nextFocus();
+                                  }
+                                },
+                                onEditingComplete: () => node.nextFocus(),
+                              ),
+                            ),
+                            SizedBox(
+                              width: GlobalConstants.of(context)
+                                  .screenHorizontalSpace,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: authStore.monthController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 2,
+                                autofocus: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                        AppLocalizations.of(context)!.month),
+                                onChanged: (String text) {
+                                  if (text.length == 2 &&
+                                      int.parse(text) <= 12) {
+                                    node.nextFocus();
+                                  }
+                                },
+                                onEditingComplete: () => node.nextFocus(),
+                              ),
+                            ),
+                            SizedBox(
+                              width: GlobalConstants.of(context)
+                                  .screenHorizontalSpace,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: authStore.yearController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 4,
+                                autofocus: false,
+                                onChanged: (String text) {
+                                  if (text.length == 4 &&
+                                      int.parse(text) >= 1900) {
+                                    node.nextFocus();
+                                  }
+                                },
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                        AppLocalizations.of(context)!.year),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Visibility(
+                          visible: authStore.birthdateIsValid(),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: GlobalConstants.of(context).spacingNormal,
+                              bottom: GlobalConstants.of(context).spacingSmall,
+                            ),
+                            child: Text(
+                              authStore.birthdateValidationErrorMessage
+                                  .toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.redAccent,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
-                          width:
-                              GlobalConstants.of(context).screenHorizontalSpace,
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: authStore.yearController,
-                            keyboardType: TextInputType.number,
-                            maxLength: 4,
-                            autofocus: false,
-                            onChanged: (String text) {
-                              if (text.length == 4 && int.parse(text) >= 1900) {
-                                node.nextFocus();
-                              }
-                            },
-                            decoration: GlobalConstants.of(context)
-                                .loginInputTheme(
-                                    AppLocalizations.of(context)!.year),
-                          ),
+                          height: GlobalConstants.of(context).spacingLarge,
                         ),
                       ],
                     ),
-                    Visibility(
-                      visible: authStore.birthdateIsValid(),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: GlobalConstants.of(context).spacingNormal,
-                          bottom: GlobalConstants.of(context).spacingSmall,
-                        ),
-                        child: Text(
-                          authStore.birthdateValidationErrorMessage.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.redAccent,
-                          ),
-                        ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: GlobalConstants.of(context).spacingLarge,
                       ),
-                    ),
-                    SizedBox(
-                      height: GlobalConstants.of(context).spacingLarge,
-                    ),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    side: BorderSide.none)),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xff003694)),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(GlobalConstants.of(context)
+                                    .spacingNormal))),
+                        child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(
+                                child: Text(
+                                    AppLocalizations.of(context)!
+                                        .continueAccess,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    )))),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              PageRoute.Page
+                                  .registerPhase2DailyLearningGoalScreen.route,
+                              arguments: {
+                                "user": user,
+                                "returnToPageWithArgs":
+                                    widget.args!["returnToPageWithArgs"]
+                              });
+                          // print(authStore.birthdateIsValid());
+                          // if (authStore.birthdateIsValid()) {
+                          //   if (authStore.formKey.currentState!.validate()) {
+
+                          //   }
+                          // } else {
+                          //   setState(() {
+                          //     String year = authStore.yearController.text;
+                          //     if (year.length < 4) {
+                          //       authStore.birthdateValidationErrorMessage =
+                          //           AppLocalizations.of(context)!
+                          //               .pleaseEnterAValidBirthdateInFormat;
+                          //     } else {
+                          //       authStore.birthdateValidationErrorMessage =
+                          //           AppLocalizations.of(context)!
+                          //               .pleaseEnterAValidBirthdate;
+                          //     }
+                          //   });
+                          // }
+                        },
+                      ),
+                    )
                   ],
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25.0),
-                              side: BorderSide.none)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xff003694)),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(
-                              GlobalConstants.of(context).spacingNormal))),
-                  child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Center(
-                          child:
-                              Text(AppLocalizations.of(context)!.continueAccess,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  )))),
-                  onPressed: () {
-                    print(authStore.birthdateIsValid());
-                    if (authStore.birthdateIsValid()) {
-                      if (authStore.formKey.currentState!.validate()) {
-                        Navigator.of(context).pushNamed(
-                            PageRoute.Page.registerPhase2DailyLearningGoalScreen
-                                .route,
-                            arguments: {
-                              "user": user,
-                              "returnToPageWithArgs":
-                                  widget.args!["returnToPageWithArgs"]
-                            });
-                      }
-                    } else {
-                      setState(() {
-                        String year = authStore.yearController.text;
-                        if (year.length < 4) {
-                          authStore.birthdateValidationErrorMessage =
-                              AppLocalizations.of(context)!
-                                  .pleaseEnterAValidBirthdateInFormat;
-                        } else {
-                          authStore.birthdateValidationErrorMessage =
-                              AppLocalizations.of(context)!
-                                  .pleaseEnterAValidBirthdate;
-                        }
-                      });
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

@@ -1,14 +1,15 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class InterestsTags extends Equatable {
-  String id;
-  String name;
-  String type;
-  bool active = true;
-  int tagOrder;
-  String language;
-  String createdAt;
-  String updatedAt;
+  late String id;
+  late String name;
+  late String type;
+  late bool active;
+  late int tagOrder;
+  late String language;
+  late String createdAt;
+  late String updatedAt;
 
   InterestsTags({
     required this.id,

@@ -1,24 +1,23 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:ootopia_app/data/utils/string-utils.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  final Map<String, dynamic> args;
 
   RegisterPhase2TopInterestsPage(this.args);
 
@@ -30,56 +29,60 @@ class RegisterPhase2TopInterestsPage extends StatefulWidget {
 class _RegisterPhase2TopInterestsPageState
     extends State<RegisterPhase2TopInterestsPage> with SecureStoreMixin {
   UserBloc? userBloc;
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController _inputController = TextEditingController();
-  final GlobalKey<TagsState> _tagStateKey = GlobalKey<TagsState>();
   InterestsTagsRepositoryImpl repository = InterestsTagsRepositoryImpl();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   bool _isLoading = true;
   bool errorOnGetTags = false;
 
+  List<InterestsTags> _selectedTags = [];
+
   List<InterestsTags> _allTags = [];
 
   List<Item> _topTags = [];
-  List<Item> _secondaryTags = [];
   List<String> _selectedTagsIds = [];
   List<Item> _secondaryTagsCopy = [];
 
   late AuthStore authStore;
 
   void _submit() {
-    userBloc!.add(UpdateUserEvent(widget.args['user'], _selectedTagsIds));
     this
         .trackingEvents
         .signupCompletedStepIVOfSignupII({"tags": _selectedTagsIds});
+    _isLoading = false;
+    widget.args['user'].registerPhase = state.user.registerPhase;
+    widget.args['user'].photoUrl = state.user.photoUrl;
+    setCurrentUser(jsonEncode(widget.args['user'].toJson()))
+        .then((value) => authStore.setUserIsLogged());
+    if (widget.args != null && widget.args['returnToPageWithArgs'] != null) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+        arguments: {
+          "returnToPageWithArgs": widget.args['returnToPageWithArgs']
+        },
+      );
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+      );
+    }
   }
 
   Future<void> getTags() async {
-    this.repository.getTags().then((tags) {
-      setState(() {
-        _isLoading = false;
-        _allTags = tags;
-        _allTags.forEach((tag) {
-          if (tag.type == "top") {
-            _topTags.add(Item(title: tag.name, active: false, customData: tag));
-          } else {
-            _secondaryTags
-                .add(Item(title: tag.name, active: false, customData: tag));
-          }
-        });
-      });
-    }).onError((error, stackTrace) {
-      setState(() {
-        errorOnGetTags = true;
-      });
+    var getAllTags = await this.repository.getTags();
+    _isLoading = false;
+    setState(() {
+      _allTags.addAll(getAllTags);
     });
+    errorOnGetTags = true;
   }
 
   @override
   void initState() {
     super.initState();
-    userBloc = BlocProvider.of<UserBloc>(context);
     getTags();
     setState(() {
       _topTags.sort((a, b) => a.customData.tagOrder - b.customData.tagOrder);
@@ -90,188 +93,200 @@ class _RegisterPhase2TopInterestsPageState
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     return Scaffold(
+      appBar: AppBar(),
       body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: BlocListener<UserBloc, UserState>(
-          listener: (context, state) {
-            if (state is UpdateUserErrorState) {
-              _isLoading = false;
-              Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                ),
-              );
-            } else if (state is LoadingState) {
-              _isLoading = true;
-            } else if (state is UpdateUserSuccessState) {
-              _isLoading = false;
-              widget.args['user'].registerPhase = state.user.registerPhase;
-              widget.args['user'].photoUrl = state.user.photoUrl;
-              setCurrentUser(jsonEncode(widget.args['user'].toJson()))
-                  .then((value) => authStore.setUserIsLogged());
-              if (widget.args != null &&
-                  widget.args['returnToPageWithArgs'] != null) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  PageRoute.Page.homeScreen.route,
-                  ModalRoute.withName('/'),
-                  arguments: {
-                    "returnToPageWithArgs": widget.args['returnToPageWithArgs']
-                  },
-                );
-              } else {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  PageRoute.Page.homeScreen.route,
-                  ModalRoute.withName('/'),
-                );
-              }
-            }
-          },
-          child: _blocBuilder(),
-        ),
-      ),
-    );
-  }
-
-  void _tryAgain() {
-    setState(() {
-      errorOnGetTags = false;
-      _isLoading = true;
-      getTags();
-    });
-  }
-
-  _blocBuilder() {
-    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-      if (errorOnGetTags) {
-        return TryAgain(
-          this._tryAgain,
-          buttonBackgroundColor: Colors.white,
-          messageTextColor: Colors.white,
-          buttonTextColor: Colors.black,
-        );
-      }
-      return LoadingOverlay(
-        isLoading: _isLoading,
-        child: _isLoading
-            ? Container()
-            : Center(
-                child: Row(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        child: LoadingOverlay(
+          isLoading: _isLoading,
+          child: _isLoading
+              ? Container()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: Form(
-                        key: _formKey,
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.all(
-                            GlobalConstants.of(context).spacingMedium,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/white_logo.png',
-                                    height:
-                                        GlobalConstants.of(context).logoHeight,
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top:
-                                      GlobalConstants.of(context).spacingNormal,
-                                ),
-                              ),
-                              Container(child: tags(_topTags)),
-                              SizedBox(
-                                height:
-                                    GlobalConstants.of(context).spacingNormal,
-                              ),
-                              TextFormField(
-                                textAlign: TextAlign.center,
-                                controller: _inputController,
-                                autofocus: false,
-                                decoration: GlobalConstants.of(context)
-                                    .loginInputTheme(
-                                        AppLocalizations.of(context)!.others),
-                                onChanged: (String val) {
-                                  if (val.isEmpty) {
-                                    setState(() {
-                                      _secondaryTagsCopy = [];
-                                    });
-                                    return;
-                                  }
-                                  val = StringUtils.removeDiacritics(
-                                      val.toLowerCase());
-                                  setState(() {
-                                    _secondaryTagsCopy =
-                                        _secondaryTags.where((tag) {
-                                      return StringUtils.removeDiacritics(
-                                              tag.title!.toLowerCase())
-                                          .startsWith(val);
-                                    }).toList();
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                height:
-                                    GlobalConstants.of(context).spacingSmall,
-                              ),
-                              Container(
-                                child: tags(_secondaryTagsCopy, this._addTag),
-                              ),
-                              SizedBox(
-                                height:
-                                    GlobalConstants.of(context).spacingLarge,
-                              ),
-                              FlatButton(
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                    GlobalConstants.of(context).spacingNormal,
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.confirm,
+                    SizedBox(
+                      height: 33,
+                    ),
+                    Text(
+                      'Favorite Themes',
+                      style: TextStyle(
+                        color: Color(0xff03145C),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      'Select the hashtags that correspond to the themes you want to explore and learn.',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      'Select at least 1 hashtag',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                return AlertDialog(
+                                  title: Text(
+                                    AppLocalizations.of(context)!
+                                        .pleaseSelectAtLeast1Tag,
                                     style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500,
                                       color: Colors.black,
                                     ),
                                   ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _submit();
-                                  });
-                                },
-                                color: Colors.white,
-                                splashColor: Colors.black54,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Colors.white,
-                                    width: 2,
-                                    style: BorderStyle.solid,
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextFormField(
+                                          decoration:
+                                              GlobalConstants.of(context)
+                                                  .loginInputTheme(''),
+                                        ),
+                                        Divider(),
+                                        Wrap(
+                                          direction: Axis.horizontal,
+                                          spacing: 1,
+                                          children: _allTags.map((e) {
+                                            return FilterChip(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(45)),
+                                                  side: BorderSide(
+                                                      width: 1,
+                                                      color:
+                                                          Color(0xffE0E1E2))),
+                                              label: Text(
+                                                '${e.name}',
+                                                style: TextStyle(
+                                                    color: e.active
+                                                        ? Colors.white
+                                                        : Colors.grey),
+                                              ),
+                                              selectedColor: Color(0xff03145C),
+                                              backgroundColor: Colors.white,
+                                              selected: e.active,
+                                              onSelected: (bool selected) {
+                                                setState(() {
+                                                  _selectedTags.add(e);
+                                                  e.active = selected;
+                                                });
+                                              },
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  borderRadius: BorderRadius.circular(50),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                              color: Color(0xff018F9C),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        )),
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          'Confirm',
+                                          style: TextStyle(
+                                              color: Color(0xff018F9C),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        )),
+                                  ],
+                                );
+                              });
+                            });
+                      },
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.add),
+                              Text(
+                                'Select hashtags',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    Visibility(
+                      visible: _selectedTags.isEmpty,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 1,
+                        children: _selectedTags.map((e) {
+                          return FilterChip(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45)),
+                                side: BorderSide(
+                                    width: 1, color: Color(0xffE0E1E2))),
+                            label: Text(
+                              '${e.name}',
+                              style: TextStyle(
+                                  color: e.active ? Colors.white : Colors.grey),
+                            ),
+                            selectedColor: Color(0xff03145C),
+                            backgroundColor: Colors.white,
+                            selected: e.active,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                _selectedTags.add(e);
+                                e.active = selected;
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-      );
-    });
+        ),
+      ),
+    );
   }
 
   void _addTag(Item item, [bool active = false]) {
