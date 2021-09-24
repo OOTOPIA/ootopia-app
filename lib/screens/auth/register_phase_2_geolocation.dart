@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -9,6 +10,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class RegisterPhase2GeolocationPage extends StatefulWidget {
   Map<String, dynamic> args;
@@ -36,6 +38,47 @@ class _RegisterPhase2GeolocationPageState
     });
     super.initState();
   }
+
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: InkWell(
+              onTap: () => Navigator.of(context).pop(),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        FeatherIcons.arrowLeft,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.back,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ))),
+        ),
+      );
 
   void _getLocation(BuildContext context) {
     setState(() {
@@ -76,14 +119,15 @@ class _RegisterPhase2GeolocationPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
       body: Container(
         height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("assets/images/login_bg.jpg"),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: Center(
           child: Row(
             children: [
@@ -98,15 +142,25 @@ class _RegisterPhase2GeolocationPageState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/white_logo.png',
-                              height: GlobalConstants.of(context).logoHeight,
-                            ),
-                          ],
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Image.asset(
+                        //       'assets/images/white_logo.png',
+                        //       height: GlobalConstants.of(context).logoHeight,
+                        //     ),
+                        //   ],
+                        // ),
+                        Text(
+                          AppLocalizations.of(context)!
+                              .thisIsWhereYourPositiveImpactMattersMost,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                              color: LightColors.grey),
                         ),
+
                         Padding(
                           padding: EdgeInsets.only(
                             top: GlobalConstants.of(context).spacingSmall,
@@ -114,30 +168,34 @@ class _RegisterPhase2GeolocationPageState
                         ),
                         Image.asset(
                           'assets/images/earth.png',
-                          height: 230,
+                          height: 351,
+                          width: 351,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingMedium,
-                            bottom: GlobalConstants.of(context).spacingMedium,
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context)!
-                                .thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //     top: GlobalConstants.of(context).spacingMedium,
+                        //     bottom: GlobalConstants.of(context).spacingMedium,
+                        //   ),
+                        //   child: Text(
+                        //     AppLocalizations.of(context)!
+                        //         .thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts,
+                        //     textAlign: TextAlign.center,
+                        //     style: Theme.of(context).textTheme.subtitle1,
+                        //   ),
+                        // ),
                         Container(
                           child: TextFormField(
                             enabled: false,
+                            style: TextStyle(color: LightColors.blue),
                             focusNode: inputFocusNode,
                             textAlign: TextAlign.center,
                             controller: _inputController,
                             keyboardType: TextInputType.number,
                             autofocus: false,
                             decoration: GlobalConstants.of(context)
-                                .loginInputTheme(geolocationMessage),
+                                .loginInputTheme(geolocationMessage)
+                                .copyWith(
+                                    prefixIcon: Icon(Icons.arrow_downward)),
                             onEditingComplete: () =>
                                 Geolocation.determinePosition(context),
                           ),
@@ -178,7 +236,7 @@ class _RegisterPhase2GeolocationPageState
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -212,7 +270,7 @@ class _RegisterPhase2GeolocationPageState
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -231,11 +289,11 @@ class _RegisterPhase2GeolocationPageState
                               arguments: widget.args,
                             );
                           },
-                          color: Colors.white,
+                          color: LightColors.blue,
                           splashColor: Colors.black54,
                           shape: RoundedRectangleBorder(
                             side: BorderSide(
-                              color: Colors.white,
+                              color: LightColors.blue,
                               width: 2,
                               style: BorderStyle.solid,
                             ),

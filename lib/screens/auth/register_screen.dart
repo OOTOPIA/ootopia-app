@@ -197,7 +197,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     Padding(
                       padding: EdgeInsets.all(
-                        GlobalConstants.of(context).spacingMedium,
+                        GlobalConstants.of(context).spacingMedium
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -252,7 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.only(top: 32),
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: GlobalConstants.of(context).spacingMedium,
+              horizontal: 24,
             ),
             child: Form(
               key: _formKey,
@@ -357,14 +357,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                           mailIsValid = false;
                                         });
                                         return AppLocalizations.of(context)!
-                                            .pleaseEnterYourEmail;
+                                            .pleaseEnterYourValidEmailAddress;
                                       } else if (!EmailValidator.validate(
                                           value)) {
                                         setState(() {
                                           mailIsValid = false;
                                         });
                                         return AppLocalizations.of(context)!
-                                            .pleaseEnterAValidEmail;
+                                            .pleaseEnterYourValidEmailAddress;
                                       }
                                       setState(() {
                                         mailIsValid = true;
@@ -467,14 +467,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                           pass2IsValid = false;
                                         });
                                         return AppLocalizations.of(context)!
-                                            .pleaseRepeatYourPassword;
+                                            .pleaseEnterTheSamePassword;
                                       }
                                       if (value != _passwordController.text) {
                                         setState(() {
                                           pass2IsValid = false;
                                         });
                                         return AppLocalizations.of(context)!
-                                            .passwordDoesNotMatch;
+                                            .pleaseEnterTheSamePassword;
                                       }
                                       setState(() {
                                         pass2IsValid = true;
@@ -536,11 +536,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                             painter: CirclePainter(),
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.all(3.0),
+                                                  const EdgeInsets.all(1.5),
                                               child: Icon(
-                                                Icons.check,
-                                                size: 14.0,
-                                                color: Colors.black,
+                                                Icons.circle,
+                                                size: 16.0,
+                                                color: LightColors.blue,
                                               ),
                                             ),
                                           )
@@ -548,10 +548,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                             painter: CirclePainter(),
                                             child: Padding(
                                               padding:
-                                                  const EdgeInsets.all(3.0),
+                                                  const EdgeInsets.all(1.5),
                                               child: Icon(
                                                 null,
-                                                size: 14.0,
+                                                size: 16.0,
                                                 color: Colors.black,
                                               ),
                                             ),
@@ -568,7 +568,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       text: AppLocalizations.of(context)!
                                           .iAcceptThe,
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         color: Colors.black,
                                       ),
                                       children: [
@@ -576,7 +576,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           text: AppLocalizations.of(context)!
                                               .useTerms,
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             color: Colors.black,
                                             decoration:
                                                 TextDecoration.underline,
@@ -589,7 +589,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           text:
                                               AppLocalizations.of(context)!.and,
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -597,7 +597,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           text: AppLocalizations.of(context)!
                                               .privacy,
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             color: Colors.black,
                                             decoration:
                                                 TextDecoration.underline,
