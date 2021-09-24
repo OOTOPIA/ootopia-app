@@ -8,8 +8,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
-import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
-import 'package:ootopia_app/screens/components/keep_alive_page.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
@@ -20,7 +18,6 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
-import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +34,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
   late ProfileScreenStore profileStore;
@@ -54,9 +51,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
 
     Future.delayed(Duration.zero, () {
-      controller.resetPageController();
-      controller.addOnInsertPageListener((index) => setState(() {}));
-      controller.addOnPageChangedListener((index) => setState(() {}));
+      //controller.resetNavigation();
+      controller.addOnInsertPageListener((index) {
+        print("addOnInsertPageListener >> ${controller.pages}");
+        if (mounted) setState(() {});
+      });
+      controller.addOnPageChangedListener((index) {
+        print("addOnPageChangedListener >> ${controller.pages}");
+        if (mounted) setState(() {});
+      });
+      controller.addOnBackPageListener(() {
+        print("addOnBackPageListener >> ${controller.pages}");
+        if (mounted) setState(() {});
+      });
+      controller.addOnResetNavigation(() {
+        print("addOnResetNavigation >> ${controller.pages}");
+        if (mounted) setState(() {});
+      });
+      // controller.addOnBottomNavigationBarChanged((index) {
+      //   print("addOnBottomNavigationBarChanged >> ${controller.pages}");
+      //   if (index == PageViewController.TAB_INDEX_PROFILE) {
+      //     print("ABRIU MEU PERFIL");
+      //   }
+      //   if (mounted) setState(() {});
+      // });
     });
 
     Future.delayed(Duration(milliseconds: 1000), () {
@@ -89,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     homeStore?.stopDailyGoalTimer();
-    controller.resetPageController();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
@@ -170,13 +187,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         child: Observer(builder: (_) {
           return Scaffold(
-            key: _key,
-            appBar: homeStore?.currentPageWidget is EditProfileScreen
-                ? null
-                : homeStore?.currentPageWidget is ProfileScreen
-                    ? appBarProfile
-                    : appBar,
-            drawer: homeStore?.currentPageWidget is ProfileScreen
+            key: _scaffoldKey,
+            appBar: currentAppBar(),
+            drawer: controller.currentBottomIndex ==
+                    PageViewController.TAB_INDEX_PROFILE
                 ? null
                 : MenuDrawer(
                     onTapProfileItem: () {
@@ -185,6 +199,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     onTapLogoutItem: () {
                       controller
                           .goToPage(PageViewController.TAB_INDEX_TIMELINE);
+                      controller.resetNavigation();
+                      setState(() {});
                     },
                     onTapWalletItem: () {
                       controller.goToPage(PageViewController.TAB_INDEX_WALLET);
@@ -232,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ],
             ),
-            bottomNavigationBar: SmartPageBottomNavigationBar(
+            bottomNavigationBar: new SmartPageBottomNavigationBar(
               controller: controller,
               options: SmartPageBottomNavigationOptions(
                 height: 50,
@@ -318,70 +334,71 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ),
                 ),
               ],
-              onTap: (int index) => _bottomOnTapButtonHandler(index),
+              onTap: (int index, BuildContext context) {
+                var result = true;
+                switch (index) {
+                  case PageViewController.TAB_INDEX_TIMELINE:
+                    controller.resetNavigation();
+                    break;
+                  case PageViewController.TAB_INDEX_CAMERA:
+                    if (authStore.currentUser == null) {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "pageRoute": PageRoute.Page.cameraScreen.route,
+                            "arguments": null
+                          }
+                        },
+                      );
+                    } else {
+                      Navigator.of(context)
+                          .pushNamed(PageRoute.Page.cameraScreen.route);
+                    }
+                    result = false;
+                    break;
+                  case PageViewController.TAB_INDEX_WALLET:
+                    print("caiu 1");
+                    if (authStore.currentUser == null) {
+                      print("caiu 2");
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "wallet",
+                            "arguments": null
+                          }
+                        },
+                      );
+                      result = false;
+                    }
+                    break;
+                  case PageViewController.TAB_INDEX_PROFILE:
+                    if (authStore.currentUser == null) {
+                      result = false;
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "my_profile",
+                            "arguments": null
+                          }
+                        },
+                      );
+                    } else {
+                      result = openProfile();
+                    }
+                    break;
+                  default:
+                }
+                print("caiu 3");
+                return result;
+              },
             ),
           );
         }),
       ),
     );
-  }
-
-  bool _bottomOnTapButtonHandler(int index) {
-    var result = true;
-
-    switch (index) {
-      case PageViewController.TAB_INDEX_TIMELINE:
-        controller.resetNavigation();
-        break;
-      case PageViewController.TAB_INDEX_CAMERA:
-        if (authStore.currentUser == null) {
-          Navigator.of(context).pushNamed(
-            PageRoute.Page.loginScreen.route,
-            arguments: {
-              "returnToPageWithArgs": {
-                "pageRoute": PageRoute.Page.cameraScreen.route,
-                "arguments": null
-              }
-            },
-          );
-        } else {
-          Navigator.of(context).pushNamed(PageRoute.Page.cameraScreen.route);
-        }
-        result = false;
-        break;
-      case PageViewController.TAB_INDEX_WALLET:
-        if (authStore.currentUser == null) {
-          Navigator.of(context).pushNamed(
-            PageRoute.Page.loginScreen.route,
-            arguments: {
-              "returnToPageWithArgs": {
-                "currentPageName": "wallet",
-                "arguments": null
-              }
-            },
-          );
-          result = false;
-        }
-        break;
-      case PageViewController.TAB_INDEX_PROFILE:
-        if (authStore.currentUser == null) {
-          result = false;
-          Navigator.of(context).pushNamed(
-            PageRoute.Page.loginScreen.route,
-            arguments: {
-              "returnToPageWithArgs": {
-                "currentPageName": "my_profile",
-                "arguments": null
-              }
-            },
-          );
-        } else {
-          result = openProfile();
-        }
-        break;
-      default:
-    }
-    return result;
   }
 
   bool openProfile() {
@@ -414,21 +431,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     return result;
   }
 
-  _goToPage(int index) {
-    PageViewController.instance.goToPage(
-      index,
-    );
-  }
-
   _checkStores() async {
     await homeStore?.getDailyGoalStats();
     homeStore?.startDailyGoalTimer();
     if (authStore.currentUser == null) {
       authStore.checkUserIsLogged();
     }
-    if (homeStore?.currentPageWidget == null) {
-      homeStore?.setCurrentPageWidget(PageViewController.instance.pages[0]);
-    }
+    setState(() {});
   }
 
   _checkPageParams() {
@@ -439,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             authStore.currentUser != null) {
           if (authStore.currentUser!.registerPhase == 2) {
             setState(() {
-              _goToPage(1);
+              controller.selectBottomTab(4, context);
             });
           } else if (authStore.currentUser!.registerPhase == 1) {
             Navigator.of(context).pushNamed(
@@ -462,9 +471,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (widget.args != null &&
           widget.args!['createdPost'] != null &&
           widget.args!['createdPost'] == true) {
-        homeStore?.setCurrentPageWidget(PageViewController
-            .instance.pages[PageViewController.TAB_INDEX_TIMELINE]);
-        homeStore?.setCurrentPageIndex(PageViewController.TAB_INDEX_TIMELINE);
         homeStore?.setShowCreatedPostAlert(true);
         oozToRewardAfterSendPost = widget.args!['oozToReward'];
         Timer(Duration(seconds: 5), () {
@@ -474,6 +480,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         });
       }
     });
+  }
+
+  PreferredSizeWidget? currentAppBar() {
+    return (controller.pages[controller.currentPageIndex]
+                is EditProfileScreen &&
+            controller.pages.length > controller.initialPages.length)
+        ? null
+        : controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE
+            ? appBarProfile
+            : appBar;
   }
 
   get appBarProfile => PreferredSize(
@@ -506,10 +522,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   width: 85,
                   child: TextButton.icon(
                       onPressed: () {
-                        PageViewController.instance.addPage(
+                        controller.insertPage(
                           EditProfileScreen(),
                         );
-                        homeStore?.setCurrentPageWidget(EditProfileScreen());
                       },
                       icon: Icon(
                         Icons.edit_outlined,
@@ -548,16 +563,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           padding: EdgeInsets.only(
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
-          child: PageViewController.instance.pages.length <= 5
+          child: controller.pages.length <= 5
               ? IconButton(
                   icon: Icon(
                     FeatherIcons.menu,
                     color: Theme.of(context).iconTheme.color,
                   ),
-                  onPressed: () => _key.currentState!.openDrawer(),
+                  onPressed: () => _scaffoldKey.currentState!.openDrawer(),
                 )
               : InkWell(
-                  onTap: () => PageViewController.instance.back(),
+                  onTap: () => controller.back(),
                   child: Padding(
                       padding: const EdgeInsets.only(left: 3.0),
                       child: Row(
@@ -580,90 +595,73 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
         ),
         actions: [
-          if (PageViewController.instance.pages.length <= 5) remainingTime,
+          if (controller.pages.length <= 5) remainingTime,
         ],
       );
 
-  Widget get remainingTime => Visibility(
-        visible: authStore.currentUser != null,
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: 19,
-          ),
-          child: GestureDetector(
-            onTap: () => setState(() {
-              if (homeStore != null && homeStore!.dailyGoalStats != null) {
-                homeStore?.showRemainingTime = !homeStore!.showRemainingTime;
-                homeStore?.showRemainingTimeEnd = !homeStore!.showRemainingTime;
-              }
-            }),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
+  Widget get remainingTime => Observer(
+        builder: (_) => Visibility(
+          visible: authStore.currentUser != null,
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: 19,
+            ),
+            child: GestureDetector(
+              onTap: () => setState(() {
+                if (homeStore != null && homeStore!.dailyGoalStats != null) {
+                  homeStore?.showRemainingTime = !homeStore!.showRemainingTime;
+                  homeStore?.showRemainingTimeEnd =
+                      !homeStore!.showRemainingTime;
+                }
+              }),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
                       right: homeStore != null && homeStore!.showRemainingTime
                           ? 4
-                          : 11),
-                  child: homeStore!.currentPageWidget is ProfileScreen &&
-                          homeStore!.userLogged
-                      ? TextButton.icon(
-                          onPressed: () {
-                            PageViewController.instance.addPage(
-                              EditProfileScreen(),
-                            );
-                            homeStore
-                                ?.setCurrentPageWidget(EditProfileScreen());
-                          },
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: Color(0xff03145C),
-                            size: 18,
-                          ),
-                          label: Text(
-                            AppLocalizations.of(context)!.edit,
-                            style: TextStyle(
-                              color: Color(0xff03145C),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ))
-                      : Icon(
-                          FeatherIcons.clock,
-                          color: Theme.of(context).iconTheme.color,
-                        ),
-                ),
-                AnimatedOpacity(
-                  opacity:
-                      homeStore != null && homeStore!.showRemainingTime ? 1 : 0,
-                  duration: Duration(milliseconds: 500),
-                  onEnd: () {},
-                  child: Visibility(
-                    visible: homeStore != null && homeStore!.showRemainingTime,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          homeStore != null ? homeStore!.remainingTime : "",
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff707070),
-                                  ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.remaining,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    fontSize: 12,
-                                    color: Color(0xff707070),
-                                  ),
-                        ),
-                      ],
+                          : 11,
+                    ),
+                    child: Icon(
+                      FeatherIcons.clock,
+                      color: Theme.of(context).iconTheme.color,
                     ),
                   ),
-                )
-              ],
+                  AnimatedOpacity(
+                    opacity: homeStore != null && homeStore!.showRemainingTime
+                        ? 1
+                        : 0,
+                    duration: Duration(milliseconds: 500),
+                    onEnd: () {},
+                    child: Visibility(
+                      visible:
+                          homeStore != null && homeStore!.showRemainingTime,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            homeStore != null ? homeStore!.remainingTime : "",
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff707070),
+                                    ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.remaining,
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontSize: 12,
+                                      color: Color(0xff707070),
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

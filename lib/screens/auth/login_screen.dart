@@ -82,19 +82,22 @@ class _LoginPageState extends State<LoginPage> {
               print("LOGGED!!!!!");
               authStore.setUserIsLogged();
               controller.resetNavigation();
-              controller.resetPageController();
               if (widget.args != null &&
                   widget.args!['returnToPageWithArgs'] != null) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   PageRoute.Page.homeScreen.route,
-                  ModalRoute.withName('/'),
+                  (Route<dynamic> route) => false,
                   arguments: {
                     "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
                   },
                 );
               } else {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    PageRoute.Page.homeScreen.route, ModalRoute.withName('/'));
+                print('logout');
+                Navigator.of(context).popUntil(
+                    ModalRoute.withName(PageRoute.Page.homeScreen.route));
+                // Navigator.of(context).pushNamedAndRemoveUntil(
+                //     PageRoute.Page.homeScreen.route,
+                //     (Route<dynamic> route) => false);
               }
             }
           },

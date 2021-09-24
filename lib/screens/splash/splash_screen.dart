@@ -42,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _videoPlayerController =
         VideoPlayerController.asset('assets/videos/ootopia_splash.mp4')
           ..initialize()
+          ..setLooping(false)
           ..addListener(() {
             Timer(Duration(milliseconds: 300),
                 () => _videoPlayerController?.play());

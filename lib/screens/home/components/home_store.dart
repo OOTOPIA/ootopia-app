@@ -83,7 +83,7 @@ abstract class HomeStoreBase with Store {
           Timer.periodic(Duration(seconds: 1), (Timer timer) async {
         if (_watch.isRunning && dailyGoalStats != null) {
           if (!_getDailyGoalStats) {
-            _totalAppUsageTimeSoFarInMs = _totalAppUsageTimeSoFarInMs +
+            _totalAppUsageTimeSoFarInMs =
                 dailyGoalStats!.totalAppUsageTimeSoFarInMs;
             _getDailyGoalStats = true;
           }
@@ -145,11 +145,6 @@ abstract class HomeStoreBase with Store {
   }
 
   @action
-  setCurrentPageIndex(int index) {
-    currentPageIndex = index;
-  }
-
-  @action
   setShowCreatedPostAlert(bool value) {
     showCreatedPostAlert = value;
   }
@@ -161,7 +156,12 @@ abstract class HomeStoreBase with Store {
 
   @action
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
-    this.dailyGoalStats = await userRepository.getDailyGoalStats();
+    try {
+      this.dailyGoalStats = await userRepository.getDailyGoalStats();
+      print("DAILY GOAL TEST ${this.dailyGoalStats}");
+    } catch (err) {
+      print("DEU RUIM ${err}");
+    }
     return this.dailyGoalStats;
   }
 

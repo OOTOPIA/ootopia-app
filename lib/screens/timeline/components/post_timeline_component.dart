@@ -159,11 +159,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         "id": user != null && post.userId == user!.id ? null : post.userId,
       },
     ));
-    // PageViewController.instance.addPage(ProfileScreen(
-    //   {
-    //     "id": user != null && post.userId == user!.id ? null : post.userId,
-    //   },
-    // ));
   }
 
   _popupMenuReturn(String selectedOption) {
@@ -663,11 +658,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
             GestureDetector(
               onTap: () {
-                PageViewController.instance.addPage(CommentScreen(
-                  {
+                controller.insertPage(
+                  CommentScreen({
                     "post": this.post,
-                  },
-                ));
+                  }),
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 8),

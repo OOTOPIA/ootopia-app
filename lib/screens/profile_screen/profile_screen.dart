@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await store?.getUserPosts(profileUserId);
 
       Future.delayed(Duration.zero, () {
-        walletStore.getWallet();
+        if (profileUserIsLoggedUser) walletStore.getWallet();
       });
 
       this.trackingEvents.profileViewedAProfile(
@@ -102,17 +102,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _goToTimelinePost(posts, postSelected) {
-    PageViewController.instance.addPage(TimelineScreenProfileScreen(
-      {
-        "userId": _getUserId(),
-        "posts": posts,
-        "postSelected": postSelected,
-      },
-    ));
+    controller.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": _getUserId(),
+          "posts": posts,
+          "postSelected": postSelected,
+        },
+      ),
+    );
   }
 
   _goToWalletPage() {
-    controller.goToPage(3);
+    controller.selectBottomTab(3, context);
   }
 
   bool get isLoggedInUserProfile {
@@ -121,12 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : ((widget.args == null || widget.args!["id"] == null)
             ? true
             : widget.args!["id"] == authStore.currentUser!.id);
-  }
-
-  _goToPage(int index) {
-    PageViewController.instance.goToPage(
-      index,
-    );
   }
 
   @override

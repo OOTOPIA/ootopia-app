@@ -72,7 +72,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
-        print("PROFILE LOADED ${response.body}");
         Profile profile = Profile.fromJson(json.decode(response.body));
         return Future.value(profile);
       } else {

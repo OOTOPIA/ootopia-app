@@ -23,6 +23,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -73,6 +74,7 @@ class _TimelinePageState extends State<TimelinePage>
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
   DailyGoalStatsModel? dailyGoalStats;
+  late SmartPageController controller;
 
   @override
   void initState() {
@@ -122,6 +124,7 @@ class _TimelinePageState extends State<TimelinePage>
     _handleInitialUri();
 
     Future.delayed(Duration.zero, () {
+      timelineStore.init(controller);
       timelineStore.startTimelineViewTimer();
     });
   }
@@ -326,6 +329,7 @@ class _TimelinePageState extends State<TimelinePage>
 
   @override
   Widget build(BuildContext context) {
+    controller = SmartPageController.of(context);
     timelineStore = Provider.of<TimelineStore>(context);
     authStore = Provider.of<AuthStore>(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(

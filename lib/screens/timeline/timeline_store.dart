@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 part "timeline_store.g.dart";
 
@@ -21,8 +22,13 @@ abstract class TimelineStoreBase with Store {
   Timer? _timelineViewTimer;
   String _prefsKey = "timeline_view_time";
   SharedPreferences? prefs;
+  SmartPageController? _smartPageController;
 
   int _timelineViewtimeSoFarInMs = 0;
+
+  init(SmartPageController controller) {
+    _smartPageController = controller;
+  }
 
   @action
   startTimelineViewTimer() async {
@@ -50,14 +56,13 @@ abstract class TimelineStoreBase with Store {
     if (_timelineViewTimer == null) {
       _timelineViewTimer =
           Timer.periodic(Duration(milliseconds: 1), (Timer timer) {
-        // if (_watch.isRunning &&
-        //     PageViewController.instance.controller.page == 0) {
-        //   _timelineViewtimeSoFarInMs++;
-        //   if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
-        //     //A cada 5 segundos armazenamos no storage o tempo cronometrado
-        //     prefs!.setInt(_prefsKey, _timelineViewtimeSoFarInMs);
-        //   }
-        // }
+        if (_watch.isRunning && _smartPageController?.currentPageIndex == 0) {
+          _timelineViewtimeSoFarInMs++;
+          if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
+            //A cada 5 segundos armazenamos no storage o tempo cronometrado
+            prefs!.setInt(_prefsKey, _timelineViewtimeSoFarInMs);
+          }
+        }
       });
     }
   }
