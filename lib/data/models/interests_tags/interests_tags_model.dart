@@ -6,6 +6,7 @@ class InterestsTags extends Equatable {
   late String name;
   late String type;
   late bool active;
+  bool seletedTag = false;
   late int tagOrder;
   late String language;
   late String createdAt;

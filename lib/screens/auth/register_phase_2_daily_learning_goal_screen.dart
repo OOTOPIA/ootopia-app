@@ -225,6 +225,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                     ),
                   ),
                   onPressed: () {
+                    _videoPlayerController.dispose();
                     widget.args['user'].dailyLearningGoalInMinutes =
                         _learningGoalRating.round();
 
