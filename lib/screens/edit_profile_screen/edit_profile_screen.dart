@@ -14,6 +14,7 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -28,6 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late AuthStore authStore;
   PhoneNumber? codeCountryPhoneNnumber;
   File? filePath;
+  late SmartPageController controller;
   @override
   void initState() {
     super.initState();
@@ -41,6 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    controller = SmartPageController.of(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {
@@ -63,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     TextButton.icon(
                       onPressed: () {
-                        PageViewController.instance.back();
+                        controller.back();
                       },
                       icon: Icon(
                         Icons.arrow_back_rounded,
@@ -82,6 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         await profileStore.getProfileDetails(
                             editProfileStore.currentUser!.id!);
                         authStore.setUserIsLogged();
+                        controller.back();
                       },
                       icon: SvgPicture.asset('assets/icons/Icon-feather-check.svg',width: 11.33, height: 7.79,),
                       label: Text(

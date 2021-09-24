@@ -52,20 +52,13 @@ abstract class EditProfileStoreBase with Store {
         currentUser?.photoFilePath = photoFilePathLocal;
       }
 
-      try {
-        if (currentUser?.photoFilePath != null) {
-          await _updateUserWithPhoto(currentUser!, []);
-        } else if (currentUser != null) {
-          await this
-              .userRepositoryImpl
-              .updateUserProfile(currentUser!, [], null);
-        }
-        await this.userRepositoryImpl.getMyAccountDetails();
-        isloading = false;
-        PageViewController.instance.back();
-      } catch (err) {
-        isloading = false;
+      if (currentUser?.photoFilePath != null) {
+        await _updateUserWithPhoto(currentUser!, []);
+      } else if (currentUser != null) {
+        await this.userRepositoryImpl.updateUserProfile(currentUser!, [], null);
       }
+      await this.userRepositoryImpl.getMyAccountDetails();
+      isloading = false;
     }
   }
 

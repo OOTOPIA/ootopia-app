@@ -28,32 +28,35 @@ class SecureStoreMixin {
   }
 
   void updateUserDontAskToConfirmGratitudeReward(bool value) async {
-    User user = await getCurrentUser();
-    user.dontAskAgainToConfirmGratitudeReward = value;
-    setCurrentUser(json.encode(user.toJson()));
+    User? user = await getCurrentUser();
+    user?.dontAskAgainToConfirmGratitudeReward = value;
+    if (user != null) {
+      setCurrentUser(json.encode(user.toJson()));
+    }
   }
 
   updateUserRegenerarionGameLearningAlert(String type) async {
-    User user = await getCurrentUser();
+    User? user = await getCurrentUser();
 
     switch (type) {
       case "personal":
-        user.personalDialogOpened = true;
+        user?.personalDialogOpened = true;
 
         break;
 
       case "city":
-        user.cityDialogOpened = true;
+        user?.cityDialogOpened = true;
 
         break;
 
       case "global":
-        user.globalDialogOpened = true;
+        user?.globalDialogOpened = true;
 
         break;
     }
-
-    await setCurrentUser(json.encode(user.toJson()));
+    if (user != null) {
+      await setCurrentUser(json.encode(user.toJson()));
+    }
   }
 
   void setRecoverPasswordToken(String value) async {
@@ -82,8 +85,11 @@ class SecureStoreMixin {
     return await this.getSecureStore("auth_token");
   }
 
-  Future<User> getCurrentUser() async {
+  Future<User?> getCurrentUser() async {
     var userStorage = await this.getSecureStore("user");
+    if (userStorage == null) {
+      return null;
+    }
     return User.fromJson(json.decode(userStorage));
   }
 

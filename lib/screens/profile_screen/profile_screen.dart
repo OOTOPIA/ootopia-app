@@ -19,6 +19,7 @@ import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'components/album_profile_widget.dart';
 import 'components/avatar_photo_widget.dart';
 import 'components/empty_posts_widget.dart';
@@ -46,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String profileUserId = '';
 
   bool isVisible = false;
+  late SmartPageController controller;
 
   @override
   void initState() {
@@ -69,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await store?.getUserPosts(profileUserId);
 
       Future.delayed(Duration.zero, () {
-        walletStore.getWallet();
+        if (profileUserIsLoggedUser) walletStore.getWallet();
       });
 
       this.trackingEvents.profileViewedAProfile(
@@ -100,13 +102,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _goToTimelinePost(posts, postSelected) {
-    PageViewController.instance.addPage(TimelineScreenProfileScreen(
-      {
-        "userId": _getUserId(),
-        "posts": posts,
-        "postSelected": postSelected,
-      },
-    ));
+    controller.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": _getUserId(),
+          "posts": posts,
+          "postSelected": postSelected,
+        },
+      ),
+    );
+  }
+
+  _goToWalletPage() {
+    controller.selectBottomTab(3, context);
   }
 
   bool get isLoggedInUserProfile {
@@ -117,14 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : widget.args!["id"] == authStore.currentUser!.id);
   }
 
-  _goToPage(int index) {
-    PageViewController.instance.goToPage(
-      index,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    controller = SmartPageController.of(context);
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
@@ -240,8 +243,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontSize: 16, color: Colors.black87),
                                   ),
                                   TextSpan(
-                                    text:
-                                        "${authStore.currentUser!.dailyLearningGoalInMinutes}m",
+                                    //text:
+                                    //"${authStore.currentUser!.dailyLearningGoalInMinutes}m",
+                                    text: "10m",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
@@ -452,7 +456,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       isLoggedInUserProfile
                           ? InkWell(
                               onTap: () {
-                                _goToPage(PageViewController.TAB_INDEX_WALLET);
+                                _goToWalletPage();
                               },
                               child: Container(
                                 width: double.maxFinite,

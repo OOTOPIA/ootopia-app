@@ -45,7 +45,7 @@ class FlickMultiManager {
     if (_activeManager == flickManager) {
       _activeManager = null;
     }
-    flickManager.dispose();
+    //flickManager.dispose();
     _flickManagers.remove(flickManager);
   }
 
