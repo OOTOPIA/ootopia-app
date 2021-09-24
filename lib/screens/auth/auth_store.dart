@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import "package:mobx/mobx.dart";
+import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
+import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -20,6 +23,9 @@ abstract class AuthStoreBase with Store {
 
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
+  final InterestsTagsRepositoryImpl interestsTagsrepository =
+      InterestsTagsRepositoryImpl();
+
   final AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   final formKey = GlobalKey<FormState>();
@@ -43,6 +49,18 @@ abstract class AuthStoreBase with Store {
 
   @observable
   ObservableFuture<User?>? _currentUser;
+
+  @observable
+  bool isLoading = true;
+
+  @observable
+  bool errorOnGetTags = false;
+
+  @observable
+  List<InterestsTags> selectedTags = [];
+
+  @observable
+  List<InterestsTags> allTags = [];
 
   @action
   Future<User?> checkUserIsLogged() async =>
@@ -72,6 +90,11 @@ abstract class AuthStoreBase with Store {
     } catch (error) {
       return false;
     }
+  }
+
+  @action
+  Future<void> searchTags(String nameTag) async {
+    allTags.contains(nameTag);
   }
 
   @action
