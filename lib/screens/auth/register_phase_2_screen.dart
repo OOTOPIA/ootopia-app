@@ -1,16 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
