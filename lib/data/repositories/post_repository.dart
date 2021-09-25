@@ -66,7 +66,6 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
-        print("POSTS RESPONSE ${response.body}");
         return (json.decode(response.body) as List)
             .map((i) => TimelinePost.fromJson(i))
             .toList();

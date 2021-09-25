@@ -14,6 +14,7 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -28,6 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late AuthStore authStore;
   PhoneNumber? codeCountryPhoneNnumber;
   File? filePath;
+  late SmartPageController controller;
   @override
   void initState() {
     super.initState();
@@ -41,6 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    controller = SmartPageController.of(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {
@@ -82,6 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         await profileStore.getProfileDetails(
                             editProfileStore.currentUser!.id!);
                         authStore.setUserIsLogged();
+                        controller.back();
                       },
                       icon: SvgPicture.asset(
                         'assets/icons/Icon-feather-check.svg',
@@ -119,9 +123,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ? editProfileStore.photoUrl == null
                                   ? CircleAvatar(
                                       radius: 57,
-                                      backgroundImage: AssetImage(
-                                          'assets/icons_profile/profile.png'),
-                                    )
+                                      child: SvgPicture.asset(
+                                        'assets/icons_profile/user.svg',
+                                        color: Colors.white,
+                                      ))
                                   : Container(
                                       decoration: new BoxDecoration(
                                         shape: BoxShape.circle,
@@ -207,13 +212,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ],
                                 ),
                                 child: CircleAvatar(
-                                    backgroundColor: Color(0xff03DAC5),
-                                    radius: 20,
-                                    child: Icon(
-                                      Icons.camera_alt_outlined,
-                                      size: 22,
-                                      color: Colors.white,
-                                    )),
+                                  backgroundColor: Color(0xff03DAC5),
+                                  radius: 22.5,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/camera.svg',
+                                    width: 20.78,
+                                    height: 17,
+                                    alignment: Alignment.center,
+                                  ),
+                                ),
                               ),
                             ))
                       ],

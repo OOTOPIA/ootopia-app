@@ -13,17 +13,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class MenuDrawer extends StatefulWidget {
-  final PageViewController? goToPage;
   final Function? onTapProfileItem;
   final Function? onTapLogoutItem;
   final Function? onTapWalletItem;
   MenuDrawer(
-      {this.onTapProfileItem,
-      this.onTapLogoutItem,
-      this.goToPage,
-      this.onTapWalletItem});
+      {this.onTapProfileItem, this.onTapLogoutItem, this.onTapWalletItem});
   @override
   _MenuDrawerState createState() => _MenuDrawerState();
 }
@@ -33,6 +30,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   AuthStore? authStore;
+  late SmartPageController controller;
 
   @override
   void initState() {
@@ -51,14 +49,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     await authStore!.logout();
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      PageRoute.Page.homeScreen.route,
-      ModalRoute.withName('/'),
-    );
+    controller.resetNavigation();
+    Navigator.of(context)
+        .popUntil(ModalRoute.withName(PageRoute.Page.homeScreen.route));
   }
 
   @override
   Widget build(BuildContext context) {
+    controller = SmartPageController.of(context);
     authStore = Provider.of<AuthStore>(context);
     if (authStore!.currentUser == null) {
       return DrawerWithNoCurrentUser(appVersion: appVersion);
@@ -201,9 +199,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       size: 20,
                     ),
                     onTap: () {
-                      PageViewController.instance.addPage(
-                        InvitationScreen(),
-                      );
+                      controller.insertPage(InvitationScreen());
                       Navigator.of(context).pop();
                     },
                   ),
@@ -320,10 +316,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     child: TextButton.icon(
                       style: TextButton.styleFrom(primary: Colors.black),
                       onPressed: () async {
+                        // if (widget.onTapLogoutItem != null) {
+                        //   widget.onTapLogoutItem!();
+                        // }
                         clearAuth(context);
-                        if (widget.onTapLogoutItem != null) {
-                          widget.onTapLogoutItem!();
-                        }
                       },
                       icon: Icon(Icons.logout),
                       label: Text(AppLocalizations.of(context)!.exit),

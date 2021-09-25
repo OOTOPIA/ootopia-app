@@ -75,6 +75,10 @@ class WatchVideoProvider with SecureStoreMixin {
     }
     String? userId = (user != null ? user.id : null);
 
+    if (userId == null) {
+      return [];
+    }
+
     final maps = await db.query(WatchVideoModel().tableName(),
         columns: WatchVideoFields.values,
         where:
