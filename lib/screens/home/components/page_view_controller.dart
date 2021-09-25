@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
