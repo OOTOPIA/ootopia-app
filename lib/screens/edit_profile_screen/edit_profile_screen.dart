@@ -287,7 +287,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 16,
                       ),
                       TextFormField(
-                          textCapitalization: TextCapitalization.words,
+                          textCapitalization: TextCapitalization.sentences,
                           style: GoogleFonts.roboto(
                               fontSize: 16, fontWeight: FontWeight.w500),
                           controller: editProfileStore.bioController,
