@@ -89,11 +89,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     InkWell(
                       onTap: () async {
-                        await editProfileStore.updateUser();
+                        await editProfileStore.updateUser(controller);
                         await profileStore.getProfileDetails(
                             editProfileStore.currentUser!.id!);
                         authStore.setUserIsLogged();
-                        controller.back();
                       },
                       child: Row(
                         children: [
@@ -371,9 +370,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                         inputDecoration: InputDecoration(
-                          labelText:
+                          hintText:
                               AppLocalizations.of(context)!.enterYourNumber,
-                          labelStyle:
+                          hintStyle:
                               TextStyle(color: Colors.black.withOpacity(0.2)),
                           errorMaxLines: 4,
                           enabledBorder: OutlineInputBorder(
