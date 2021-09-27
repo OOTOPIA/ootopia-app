@@ -82,9 +82,7 @@ Future main() async {
 
   runApp(
     GlobalConstants(
-      child: SmartPageController(
-        child: configuredApp,
-      ),
+      child: configuredApp,
     ),
   );
 

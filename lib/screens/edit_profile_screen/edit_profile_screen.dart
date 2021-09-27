@@ -27,7 +27,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late AuthStore authStore;
   PhoneNumber? codeCountryPhoneNnumber;
   File? filePath;
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
   @override
   void initState() {
     super.initState();
@@ -41,7 +41,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {

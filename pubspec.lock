@@ -1011,10 +1011,10 @@ packages:
   smart_page_navigation:
     dependency: "direct main"
     description:
-      name: smart_page_navigation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.13"
+      path: "C:/Users/Claudio/Documents/projects/my/smart_page_navigation"
+      relative: false
+    source: path
+    version: "1.1.0"
   source_gen:
     dependency: transitive
     description:

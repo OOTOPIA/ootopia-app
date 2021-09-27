@@ -50,6 +50,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.addObserver(this);
 
+    controller = SmartPageController.newInstance(
+      context: context,
+      initialPages: [
+        TimelinePage(null),
+        LearningTracksScreen(),
+        LearningTracksScreen(),
+        WalletPage(),
+        ProfileScreen(null),
+      ],
+    );
+
     Future.delayed(Duration.zero, () {
       //controller.resetNavigation();
       controller.addOnInsertPageListener((index) {
@@ -113,15 +124,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context).init(
-      initialPages: [
-        TimelinePage(null),
-        LearningTracksScreen(),
-        LearningTracksScreen(),
-        WalletPage(),
-        ProfileScreen(null),
-      ],
-    );
     Color selectedIconColor = Theme.of(context).accentColor;
     Color unselectedIconColor =
         Theme.of(context).iconTheme.color!.withOpacity(0.7);
