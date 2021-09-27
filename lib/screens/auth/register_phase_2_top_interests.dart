@@ -42,6 +42,7 @@ class _RegisterPhase2TopInterestsPageState
 
   @override
   Widget build(BuildContext context) {
+    bool teste = false;
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -114,115 +115,7 @@ class _RegisterPhase2TopInterestsPageState
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return Observer(builder: (_) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          AppLocalizations.of(context)!
-                                              .pleaseSelectAtLeast1Tag,
-                                          style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              TextFormField(
-                                                onChanged: (value) {
-                                                  authStore.searchTags(value);
-                                                },
-                                                decoration:
-                                                    GlobalConstants.of(context)
-                                                        .loginInputTheme(''),
-                                              ),
-                                              Divider(),
-                                              Wrap(
-                                                direction: Axis.horizontal,
-                                                spacing: 1,
-                                                children:
-                                                    authStore.allTags.map((e) {
-                                                  return Observer(
-                                                      builder:
-                                                          (_) => ChoiceChip(
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(Radius.circular(
-                                                                            45)),
-                                                                    side: BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Color(
-                                                                            0xffE0E1E2))),
-                                                                label: Text(
-                                                                  '${e.name}',
-                                                                  style: TextStyle(
-                                                                      color: e.seletedTag
-                                                                          ? Colors
-                                                                              .white
-                                                                          : Colors
-                                                                              .grey),
-                                                                ),
-                                                                selectedColor:
-                                                                    Color(
-                                                                        0xff03145C),
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                selected: e
-                                                                    .seletedTag,
-                                                                onSelected: (bool
-                                                                    selected) {
-                                                                  e.seletedTag =
-                                                                      selected;
-
-                                                                  if (selected) {
-                                                                    authStore
-                                                                        .selectedTags
-                                                                        .add(e);
-                                                                  } else {
-                                                                    authStore
-                                                                        .selectedTags
-                                                                        .remove(
-                                                                            e);
-                                                                  }
-                                                                },
-                                                              ));
-                                                }).toList(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                authStore.selectedTags.clear();
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                'Cancel',
-                                                style: TextStyle(
-                                                    color: Color(0xff018F9C),
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16),
-                                              )),
-                                          TextButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  Navigator.of(context).pop();
-                                                });
-                                              },
-                                              child: Text(
-                                                'Confirm',
-                                                style: TextStyle(
-                                                    color: Color(0xff018F9C),
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16),
-                                              )),
-                                        ],
-                                      );
-                                    });
+                                    return MyDialog(authStore, teste);
                                   });
                             },
                             child: Card(
@@ -246,9 +139,9 @@ class _RegisterPhase2TopInterestsPageState
                                       ],
                                     ),
                                     Observer(builder: (context) {
+                                      print(teste);
                                       return Visibility(
-                                        visible:
-                                            authStore.selectedTags.isNotEmpty,
+                                        visible: teste,
                                         child: Text(
                                           '${authStore.selectedTags.length} Tags Selected',
                                           style: TextStyle(
@@ -266,7 +159,7 @@ class _RegisterPhase2TopInterestsPageState
                           ),
                           Observer(builder: (context) {
                             return Visibility(
-                              visible: authStore.selectedTags.isNotEmpty,
+                              visible: authStore.selectedTags.length != 0,
                               child: Wrap(
                                 direction: Axis.horizontal,
                                 spacing: 1,
@@ -288,9 +181,9 @@ class _RegisterPhase2TopInterestsPageState
                                     onSelected: (bool selected) {
                                       setState(() {
                                         if (selected) {
+                                          e.active = selected;
                                           authStore.selectedTags.remove(e);
                                         }
-                                        e.active = selected;
                                       });
                                     },
                                   );
@@ -342,6 +235,101 @@ class _RegisterPhase2TopInterestsPageState
                 ),
         ),
       ),
+    );
+  }
+}
+
+class MyDialog extends StatefulWidget {
+  final AuthStore authStore;
+  late bool teste;
+  MyDialog(this.authStore, this.teste);
+  @override
+  _MyDialogState createState() => _MyDialogState();
+}
+
+class _MyDialogState extends State<MyDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      titleTextStyle: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
+      title: Text(
+        AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              onChanged: (value) {
+                widget.authStore.searchTags(value);
+              },
+              decoration: GlobalConstants.of(context).loginInputTheme(''),
+            ),
+            Divider(),
+            Wrap(
+              direction: Axis.horizontal,
+              spacing: 1,
+              children: widget.authStore.allTags.map((e) {
+                return ChoiceChip(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(45)),
+                      side: BorderSide(width: 1, color: Color(0xffE0E1E2))),
+                  label: Text(
+                    '${e.name}',
+                    style: TextStyle(
+                        color: e.seletedTag ? Colors.white : Colors.grey),
+                  ),
+                  selectedColor: Color(0xff03145C),
+                  backgroundColor: Colors.white,
+                  selected: e.seletedTag,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      e.seletedTag = selected;
+                    });
+                    if (selected) {
+                      widget.authStore.addTags(e);
+                    } else {
+                      widget.authStore.removeTags(e);
+                    }
+                  },
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              widget.authStore.selectedTags.clear();
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                  color: Color(0xff018F9C),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16),
+            )),
+        TextButton(
+            onPressed: () {
+              setState(() {
+                widget.teste = true;
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Confirm',
+              style: TextStyle(
+                  color: Color(0xff018F9C),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16),
+            )),
+      ],
     );
   }
 }

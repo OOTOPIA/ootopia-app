@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import "package:mobx/mobx.dart";
@@ -95,6 +94,16 @@ abstract class AuthStoreBase with Store {
   @action
   Future<void> searchTags(String nameTag) async {
     allTags.contains(nameTag);
+  }
+
+  @action
+  void addTags(e) {
+    selectedTags.add(e);
+  }
+
+  @action
+  void removeTags(e) {
+    selectedTags.remove(e);
   }
 
   @action
