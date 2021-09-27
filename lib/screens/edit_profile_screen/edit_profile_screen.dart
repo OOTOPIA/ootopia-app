@@ -25,6 +25,8 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   EditProfileStore editProfileStore = EditProfileStore();
+  final formKey = GlobalKey<FormState>();
+
   late ProfileScreenStore profileStore;
   late AuthStore authStore;
   PhoneNumber? codeCountryPhoneNnumber;
@@ -48,10 +50,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Observer(builder: (context) {
       return LoadingOverlay(
         isLoading: editProfileStore.isloading,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size(double.infinity, 45),
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size(double.infinity, 45),
+            child: SafeArea(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
@@ -89,11 +91,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     InkWell(
                       onTap: () async {
-                        await editProfileStore.updateUser();
-                        await profileStore.getProfileDetails(
-                            editProfileStore.currentUser!.id!);
-                        authStore.setUserIsLogged();
-                        controller.back();
+                        if (formKey.currentState!.validate()) {
+                          await editProfileStore.updateUser();
+                          await profileStore.getProfileDetails(
+                              editProfileStore.currentUser!.id!);
+                          authStore.setUserIsLogged();
+                          controller.back();
+                        }
                       },
                       child: Row(
                         children: [
@@ -119,14 +123,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-            body: GestureDetector(
+          ),
+          body: SafeArea(
+            child: GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Form(
-                  key: editProfileStore.formKey,
+                  key: formKey,
                   child: ListView(
                     children: [
                       SizedBox(
@@ -258,6 +264,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 16,
                       ),
                       TextFormField(
+                        textCapitalization: TextCapitalization.words,
                         style: GoogleFonts.roboto(
                             fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: GlobalConstants.of(context)
@@ -284,6 +291,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 16,
                       ),
                       TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           style: GoogleFonts.roboto(
                               fontSize: 16, fontWeight: FontWeight.w500),
                           controller: editProfileStore.bioController,
@@ -367,6 +375,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                         inputDecoration: InputDecoration(
+                          hintText:
+                              AppLocalizations.of(context)!.enterYourNumber,
+                          hintStyle:
+                              TextStyle(color: Colors.black.withOpacity(0.2)),
                           errorMaxLines: 4,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
