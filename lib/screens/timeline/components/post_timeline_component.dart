@@ -109,7 +109,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   late PostTimelineController postTimelineController;
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -194,7 +194,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context);
     return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if (state is SuccessDeletePostState) {

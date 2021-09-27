@@ -1014,7 +1014,7 @@ packages:
       name: smart_page_navigation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.13"
+    version: "1.1.0"
   source_gen:
     dependency: transitive
     description:

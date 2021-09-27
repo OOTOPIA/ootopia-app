@@ -30,7 +30,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   AuthStore? authStore;
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -50,13 +50,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
     controller.resetNavigation();
-    Navigator.of(context)
-        .popUntil(ModalRoute.withName(PageRoute.Page.homeScreen.route));
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      PageRoute.Page.homeScreen.route,
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context);
     authStore = Provider.of<AuthStore>(context);
     if (authStore!.currentUser == null) {
       return DrawerWithNoCurrentUser(appVersion: appVersion);
