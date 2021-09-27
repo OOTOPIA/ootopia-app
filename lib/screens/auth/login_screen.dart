@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   bool mailIsValid = true;
   bool passIsValid = true;
 
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -64,7 +64,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var authStore = Provider.of<AuthStore>(context);
-    controller = SmartPageController.of(context);
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -92,12 +91,12 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 );
               } else {
-                print('logout');
-                Navigator.of(context).popUntil(
-                    ModalRoute.withName(PageRoute.Page.homeScreen.route));
-                // Navigator.of(context).pushNamedAndRemoveUntil(
-                //     PageRoute.Page.homeScreen.route,
-                //     (Route<dynamic> route) => false);
+                // Navigator.of(context).popUntil(
+                //     ModalRoute.withName(PageRoute.Page.homeScreen.route));
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  PageRoute.Page.homeScreen.route,
+                  (Route<dynamic> route) => false,
+                );
               }
             }
           },

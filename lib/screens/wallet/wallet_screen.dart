@@ -25,7 +25,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
   late WalletStore walletStore;
   late TabController _tabController;
   int _activeTabIndex = 0;
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -73,7 +73,6 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context);
     homeStore = Provider.of<HomeStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     return DefaultTabController(
