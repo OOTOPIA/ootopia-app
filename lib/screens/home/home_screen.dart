@@ -50,31 +50,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.addObserver(this);
 
-    Future.delayed(Duration.zero, () {
-      //controller.resetNavigation();
-      controller.addOnInsertPageListener((index) {
-        print("addOnInsertPageListener >> ${controller.pages}");
-        if (mounted) setState(() {});
-      });
-      controller.addOnPageChangedListener((index) {
-        print("addOnPageChangedListener >> ${controller.pages}");
-        if (mounted) setState(() {});
-      });
-      controller.addOnBackPageListener(() {
-        print("addOnBackPageListener >> ${controller.pages}");
-        if (mounted) setState(() {});
-      });
-      controller.addOnResetNavigation(() {
-        print("addOnResetNavigation >> ${controller.pages}");
-        if (mounted) setState(() {});
-      });
-      // controller.addOnBottomNavigationBarChanged((index) {
-      //   print("addOnBottomNavigationBarChanged >> ${controller.pages}");
-      //   if (index == PageViewController.TAB_INDEX_PROFILE) {
-      //     print("ABRIU MEU PERFIL");
-      //   }
-      //   if (mounted) setState(() {});
-      // });
+    controller = SmartPageController.newInstance(
+      context: context,
+      initialPages: [
+        TimelinePage(null),
+        LearningTracksScreen(),
+        LearningTracksScreen(),
+        WalletPage(),
+        ProfileScreen(null),
+      ],
+    );
+
+    controller.addListener(() {
+      if (mounted) setState(() {});
     });
 
     Future.delayed(Duration(milliseconds: 1000), () {
@@ -113,15 +101,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context).init(
-      initialPages: [
-        TimelinePage(null),
-        LearningTracksScreen(),
-        LearningTracksScreen(),
-        WalletPage(),
-        ProfileScreen(null),
-      ],
-    );
     Color selectedIconColor = Theme.of(context).accentColor;
     Color unselectedIconColor =
         Theme.of(context).iconTheme.color!.withOpacity(0.7);
@@ -334,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ),
                 ),
               ],
-              onTap: (int index, BuildContext context) {
+              onTap: (int index) {
                 var result = true;
                 switch (index) {
                   case PageViewController.TAB_INDEX_TIMELINE:
@@ -441,14 +420,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   _checkPageParams() {
-    Timer(Duration(milliseconds: 1000), () {
+    Timer(Duration(milliseconds: 300), () {
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
                 "my_profile" &&
             authStore.currentUser != null) {
           if (authStore.currentUser!.registerPhase == 2) {
             setState(() {
-              controller.selectBottomTab(4, context);
+              controller.selectBottomTab(4);
             });
           } else if (authStore.currentUser!.registerPhase == 1) {
             Navigator.of(context).pushNamed(

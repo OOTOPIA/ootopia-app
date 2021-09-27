@@ -124,8 +124,10 @@ class _RegisterPhase2TopInterestsPageState
                   },
                 );
               } else {
-                Navigator.of(context).popUntil(
-                    ModalRoute.withName(PageRoute.Page.homeScreen.route));
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  PageRoute.Page.homeScreen.route,
+                  (Route<dynamic> route) => false,
+                );
               }
             }
           },

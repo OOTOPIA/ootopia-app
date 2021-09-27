@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String profileUserId = '';
 
   bool isVisible = false;
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _goToWalletPage() {
-    controller.selectBottomTab(3, context);
+    controller.selectBottomTab(3);
   }
 
   bool get isLoggedInUserProfile {
@@ -127,7 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context);
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);

@@ -450,7 +450,7 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SmartPageController controller = SmartPageController.of(context);
+    SmartPageController controller = SmartPageController.getInstance();
     return Opacity(
       opacity:
           (_enabledToDeleteOtherComments() ? 1.0 : (selectMode ? 0.5 : 1.0)),

@@ -74,7 +74,7 @@ class _TimelinePageState extends State<TimelinePage>
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
   DailyGoalStatsModel? dailyGoalStats;
-  late SmartPageController controller;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -329,7 +329,6 @@ class _TimelinePageState extends State<TimelinePage>
 
   @override
   Widget build(BuildContext context) {
-    controller = SmartPageController.of(context);
     timelineStore = Provider.of<TimelineStore>(context);
     authStore = Provider.of<AuthStore>(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(

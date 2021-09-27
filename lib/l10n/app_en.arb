@@ -321,7 +321,8 @@
     "save":"Save",
     "editProfile": "Edit Profile",
     "edit": "Edit",
-    "insertValidCellPhone":"Insert a valid cell phone for country selected",
+    "insertValidCellPhone":"Please enter your mobile number.",
+    "optional":"Optional",
 
     "changeMakerPro": "Badge: Change Maker Pro",
     "theChangeMakerPro": "TheChange Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",

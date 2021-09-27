@@ -309,7 +309,7 @@
     "invitationCodeSent":"Código convite enviado",
     "invitationCodeWelcome":"BEM VINDO A OOTOPIA",
     "pictureByLinaTrochez":"Foto de Lina Trochez",
-     "bio":"Biografia",
+     "bio":"Bio",
     "fullName" : "Nome Completo",
     "mobilePhone":"Celular",
     "minutesPerDay":"Minutos por dia",
@@ -321,7 +321,8 @@
     "save":"Salvar",
     "editProfile": "Editar Perfil",
     "edit": "Editar",
-    "insertValidCellPhone":"Insira um telefone celular válido para o país selecionado",
+    "insertValidCellPhone":"Por favor, insira seu número de celular.",
+    "optional":"Opcional",
 
     "changeMakerPro": "Distintivo: Change Maker Pro",
     "theChangeMakerPro": "O emblema Change Maker Pro é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
