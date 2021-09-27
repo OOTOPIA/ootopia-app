@@ -48,10 +48,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Observer(builder: (context) {
       return LoadingOverlay(
         isLoading: editProfileStore.isloading,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size(double.infinity, 45),
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size(double.infinity, 45),
+            child: SafeArea(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
@@ -119,7 +119,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-            body: GestureDetector(
+          ),
+          body: SafeArea(
+            child: GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
               },
@@ -258,6 +260,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 16,
                       ),
                       TextFormField(
+                        textCapitalization: TextCapitalization.words,
                         style: GoogleFonts.roboto(
                             fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: GlobalConstants.of(context)
@@ -284,6 +287,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 16,
                       ),
                       TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           style: GoogleFonts.roboto(
                               fontSize: 16, fontWeight: FontWeight.w500),
                           controller: editProfileStore.bioController,
@@ -367,6 +371,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                         inputDecoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.enterYourNumber,
+                          labelStyle:
+                              TextStyle(color: Colors.black.withOpacity(0.2)),
                           errorMaxLines: 4,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
