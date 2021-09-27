@@ -13,7 +13,6 @@ class EditProfileStore = EditProfileStoreBase with _$EditProfileStore;
 
 abstract class EditProfileStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
-  final formKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
@@ -37,30 +36,27 @@ abstract class EditProfileStoreBase with Store {
   User? currentUser;
 
   @action
-  Future<void> updateUser(controller) async {
-    if (formKey.currentState!.validate()) {
-      isloading = true;
+  Future<void> updateUser() async {
+    isloading = true;
 
-      currentUser?.bio = bioController.text;
-      currentUser?.fullname = fullNameController.text;
-      currentUser?.phone = cellPhoneController.text;
-      currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-      currentUser?.countryCode = countryCode;
+    currentUser?.bio = bioController.text;
+    currentUser?.fullname = fullNameController.text;
+    currentUser?.phone = cellPhoneController.text;
+    currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+    currentUser?.countryCode = countryCode;
 
-      if (photoFilePathLocal != null) {
-        currentUser?.photoFilePath = photoFilePathLocal;
-      }
-
-      if (currentUser?.photoFilePath != null) {
-        await _updateUserWithPhoto(currentUser!, []);
-      } else if (currentUser != null) {
-        await this.userRepositoryImpl.updateUserProfile(currentUser!, [], null);
-      }
-      await this.userRepositoryImpl.getMyAccountDetails();
-      controller.back();
-
-      isloading = false;
+    if (photoFilePathLocal != null) {
+      currentUser?.photoFilePath = photoFilePathLocal;
     }
+
+    if (currentUser?.photoFilePath != null) {
+      await _updateUserWithPhoto(currentUser!, []);
+    } else if (currentUser != null) {
+      await this.userRepositoryImpl.updateUserProfile(currentUser!, [], null);
+    }
+    await this.userRepositoryImpl.getMyAccountDetails();
+
+    isloading = false;
   }
 
   Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {

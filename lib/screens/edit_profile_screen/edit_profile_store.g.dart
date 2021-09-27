@@ -74,8 +74,8 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
       AsyncAction('EditProfileStoreBase.updateUser');
 
   @override
-  Future<void> updateUser(dynamic controller) {
-    return _$updateUserAsyncAction.run(() => super.updateUser(controller));
+  Future<void> updateUser() {
+    return _$updateUserAsyncAction.run(() => super.updateUser());
   }
 
   final _$getUserAsyncAction = AsyncAction('EditProfileStoreBase.getUser');

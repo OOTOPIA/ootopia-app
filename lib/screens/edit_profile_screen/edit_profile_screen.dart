@@ -25,6 +25,8 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   EditProfileStore editProfileStore = EditProfileStore();
+  final formKey = GlobalKey<FormState>();
+
   late ProfileScreenStore profileStore;
   late AuthStore authStore;
   PhoneNumber? codeCountryPhoneNnumber;
@@ -89,10 +91,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     InkWell(
                       onTap: () async {
-                        await editProfileStore.updateUser(controller);
-                        await profileStore.getProfileDetails(
-                            editProfileStore.currentUser!.id!);
-                        authStore.setUserIsLogged();
+                        if (formKey.currentState!.validate()) {
+                          await editProfileStore.updateUser();
+                          await profileStore.getProfileDetails(
+                              editProfileStore.currentUser!.id!);
+                          authStore.setUserIsLogged();
+                          controller.back();
+                        }
                       },
                       child: Row(
                         children: [
@@ -127,7 +132,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Form(
-                  key: editProfileStore.formKey,
+                  key: formKey,
                   child: ListView(
                     children: [
                       SizedBox(
