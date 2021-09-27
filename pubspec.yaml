@@ -83,8 +83,7 @@ dependencies:
   intl_phone_number_input: ^0.7.0+2
   syncfusion_flutter_sliders: ^19.2.62
   firebase_dynamic_links: ^2.0.9
-  smart_page_navigation: 
-    path: "C:/Users/Claudio/Documents/projects/my/smart_page_navigation"
+  smart_page_navigation: ^1.1.0
 
 dev_dependencies:
   flutter_test:

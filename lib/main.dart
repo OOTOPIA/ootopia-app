@@ -57,7 +57,6 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
 import 'data/repositories/comment_repository.dart';
@@ -80,30 +79,22 @@ Future main() async {
     child: new ExpensesApp(),
   );
 
-  runApp(
-    GlobalConstants(
-      child: configuredApp,
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+      options.debug = false;
+      options.environment = "staging";
+      options.attachStacktrace = true;
+      options.diagnosticLevel = SentryLevel.error;
+      options.enableAutoSessionTracking = true;
+    },
+    appRunner: () => runApp(
+      GlobalConstants(
+        child: configuredApp,
+      ),
     ),
   );
-
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn =
-  //         'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
-  //     options.debug = false;
-  //     options.environment = "staging";
-  //     options.attachStacktrace = true;
-  //     options.diagnosticLevel = SentryLevel.error;
-  //     options.enableAutoSessionTracking = true;
-  //   },
-  //   appRunner: () => runApp(
-  //     GlobalConstants(
-  //       child: SmartPageController(
-  //         child: configuredApp,
-  //       ),
-  //     ),
-  //   ),
-  // );
 }
 
 class ExpensesApp extends StatefulWidget {

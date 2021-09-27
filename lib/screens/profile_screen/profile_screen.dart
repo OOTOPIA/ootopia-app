@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _goToWalletPage() {
-    controller.selectBottomTab(3, context);
+    controller.selectBottomTab(3);
   }
 
   bool get isLoggedInUserProfile {
