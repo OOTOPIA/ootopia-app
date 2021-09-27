@@ -13,7 +13,6 @@ class EditProfileStore = EditProfileStoreBase with _$EditProfileStore;
 
 abstract class EditProfileStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
-  final formKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
@@ -38,27 +37,26 @@ abstract class EditProfileStoreBase with Store {
 
   @action
   Future<void> updateUser() async {
-    if (formKey.currentState!.validate()) {
-      isloading = true;
+    isloading = true;
 
-      currentUser?.bio = bioController.text;
-      currentUser?.fullname = fullNameController.text;
-      currentUser?.phone = cellPhoneController.text;
-      currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-      currentUser?.countryCode = countryCode;
+    currentUser?.bio = bioController.text;
+    currentUser?.fullname = fullNameController.text;
+    currentUser?.phone = cellPhoneController.text;
+    currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+    currentUser?.countryCode = countryCode;
 
-      if (photoFilePathLocal != null) {
-        currentUser?.photoFilePath = photoFilePathLocal;
-      }
-
-      if (currentUser?.photoFilePath != null) {
-        await _updateUserWithPhoto(currentUser!, []);
-      } else if (currentUser != null) {
-        await this.userRepositoryImpl.updateUserProfile(currentUser!, [], null);
-      }
-      await this.userRepositoryImpl.getMyAccountDetails();
-      isloading = false;
+    if (photoFilePathLocal != null) {
+      currentUser?.photoFilePath = photoFilePathLocal;
     }
+
+    if (currentUser?.photoFilePath != null) {
+      await _updateUserWithPhoto(currentUser!, []);
+    } else if (currentUser != null) {
+      await this.userRepositoryImpl.updateUserProfile(currentUser!, [], null);
+    }
+    await this.userRepositoryImpl.getMyAccountDetails();
+
+    isloading = false;
   }
 
   Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
