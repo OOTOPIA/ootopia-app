@@ -3,18 +3,17 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class LearningTracksScreen extends StatefulWidget {
-  LearningTracksScreen({Key? key}) : super(key: key);
-
   @override
   _LearningTracksScreenState createState() => _LearningTracksScreenState();
 }
 
 class _LearningTracksScreenState extends State<LearningTracksScreen> {
   LearningTracksStore learningTracksStore = LearningTracksStore();
-
+  SmartPageController controller = SmartPageController.getInstance();
   @override
   void initState() {
     super.initState();
@@ -73,12 +72,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            Navigator.of(context).pushNamed(
-                                PageRoute.Page.viewLearningTracksScreen.route,
-                                arguments: {
-                                  'list_chapters': learningTracksStore
-                                      .listOfLearningTracks[index].chapters,
-                                });
+                            controller.insertPage(ViewLearningTracksScreen({
+                              'list_chapters': learningTracksStore
+                                  .listOfLearningTracks[index].chapters,
+                            }));
                           },
                           child: Column(
                             children: [
@@ -171,6 +168,13 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                       SizedBox(
                                         width: 8,
                                       ),
+                                      CircleAvatar(
+                                        radius: 1,
+                                        backgroundColor: Colors.grey,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
                                       SvgPicture.asset(
                                         'assets/icons/ooz_mini_blue.svg',
                                         height: 10,
@@ -198,11 +202,19 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                               Text(
                                 learningTracksStore
                                     .listOfLearningTracks[index].description,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w400),
                               ),
+                              SizedBox(
+                                height: 16,
+                              ),
                               Divider(
                                 color: Colors.grey,
+                              ),
+                              SizedBox(
+                                height: 24,
                               ),
                             ],
                           ),

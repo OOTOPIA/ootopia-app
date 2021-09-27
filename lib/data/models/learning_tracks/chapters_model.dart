@@ -12,14 +12,15 @@ class ChaptersModel {
   String createdAt;
   String updatedAt;
 
-  ChaptersModel(
-      {required this.id,
-      required this.title,
-      required this.videoUrl,
-      required this.videoThumbUrl,
-      required this.ooz,
-      required this.createdAt,
-      required this.updatedAt});
+  ChaptersModel({
+    required this.id,
+    required this.title,
+    required this.videoUrl,
+    required this.videoThumbUrl,
+    required this.ooz,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
   factory ChaptersModel.fromJson(Map<String, dynamic> json) =>
       _$ChaptersModelFromJson(json);
