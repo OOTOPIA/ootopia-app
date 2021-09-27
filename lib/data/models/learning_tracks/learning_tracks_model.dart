@@ -13,16 +13,25 @@ class LearningTracksModel {
   List<ChaptersModel> chapters;
   String createdAt;
   String updatedAt;
+  int totalTimeInMinutes;
+  String imageUrl;
+  double ooz;
+  String location;
 
-  LearningTracksModel(
-      {required this.id,
-      required this.userPhotoUrl,
-      required this.userName,
-      required this.title,
-      required this.description,
-      required this.chapters,
-      required this.createdAt,
-      required this.updatedAt});
+  LearningTracksModel({
+    required this.id,
+    required this.userPhotoUrl,
+    required this.userName,
+    required this.title,
+    required this.description,
+    required this.chapters,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.imageUrl,
+    required this.ooz,
+    required this.totalTimeInMinutes,
+    required this.location,
+  });
 
   factory LearningTracksModel.fromJson(Map<String, dynamic> json) =>
       _$LearningTracksModelFromJson(json);

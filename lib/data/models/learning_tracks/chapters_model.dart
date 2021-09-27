@@ -8,7 +8,7 @@ class ChaptersModel {
   String title;
   String videoUrl;
   String videoThumbUrl;
-  int ooz;
+  double ooz;
   String createdAt;
   String updatedAt;
 

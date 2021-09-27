@@ -12,7 +12,7 @@ ChaptersModel _$ChaptersModelFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     videoUrl: json['videoUrl'] as String,
     videoThumbUrl: json['videoThumbUrl'] as String,
-    ooz: json['ooz'] as int,
+    ooz: (json['ooz'] as num).toDouble(),
     createdAt: json['createdAt'] as String,
     updatedAt: json['updatedAt'] as String,
   );

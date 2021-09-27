@@ -38,6 +38,7 @@ import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
+import 'package:ootopia_app/screens/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -263,6 +264,8 @@ class MainPage extends HookWidget {
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
     PageRoute.Page.editProfileScreen: (args) => EditProfileScreen(),
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
+    PageRoute.Page.viewLearningTracksScreen: (args) =>
+        ViewLearningTracksScreen(),
   };
 
   @override

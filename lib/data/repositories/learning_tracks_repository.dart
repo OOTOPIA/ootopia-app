@@ -46,9 +46,8 @@ class LearningTracksRepositoryImpl
         'limit': limit,
         'offset': offset,
       });
-
       if (response.statusCode == 200) {
-        return (json.decode(response.data) as List)
+        return (response.data as List)
             .map((i) => LearningTracksModel.fromJson(i))
             .toList();
       }

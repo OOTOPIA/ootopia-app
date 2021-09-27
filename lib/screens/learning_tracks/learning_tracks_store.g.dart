@@ -13,13 +13,13 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
       Atom(name: 'LearningTracksStoreBase.listOfLearningTracks');
 
   @override
-  List<dynamic> get listOfLearningTracks {
+  List<LearningTracksModel> get listOfLearningTracks {
     _$listOfLearningTracksAtom.reportRead();
     return super.listOfLearningTracks;
   }
 
   @override
-  set listOfLearningTracks(List<dynamic> value) {
+  set listOfLearningTracks(List<LearningTracksModel> value) {
     _$listOfLearningTracksAtom.reportWrite(value, super.listOfLearningTracks,
         () {
       super.listOfLearningTracks = value;
