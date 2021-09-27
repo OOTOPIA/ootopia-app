@@ -88,12 +88,12 @@ abstract class EditProfileStoreBase with Store {
     } catch (err) {}
     if (currentUser != null) {
       fullNameController.text = currentUser!.fullname.toString();
-      if (currentUser!.bio == null) {
+      if (currentUser!.bio == null || currentUser!.bio == 'null') {
         bioController.text = '';
       } else {
         bioController.text = currentUser!.bio.toString();
       }
-      if (currentUser!.phone == null) {
+      if (currentUser!.phone == null || currentUser!.phone == 'null') {
         cellPhoneController.text = '';
       } else {
         cellPhoneController.text = currentUser!.phone.toString();
