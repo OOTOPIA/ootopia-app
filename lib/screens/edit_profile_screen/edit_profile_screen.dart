@@ -52,70 +52,70 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Scaffold(
             appBar: PreferredSize(
               preferredSize: Size(double.infinity, 45),
-              child: SafeArea(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 1.0,
-                  ))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            Icon(
-                              FeatherIcons.arrowLeft,
-                              color: Colors.black,
-                              size: 17,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.editProfile,
-                              style: GoogleFonts.roboto(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1.0,
+                ))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        controller.back();
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            FeatherIcons.arrowLeft,
+                            color: Color(0xff03145C),
+                            size: 17,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.editProfile,
+                            style: GoogleFonts.roboto(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
-                      InkWell(
-                        onTap: () async {
-                          await editProfileStore.updateUser();
-                          await profileStore.getProfileDetails(
-                              editProfileStore.currentUser!.id!);
-                          authStore.setUserIsLogged();
-                          controller.back();
-                        },
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/Icon-feather-check.svg',
-                              width: 10,
-                              height: 12,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.save,
-                              style: GoogleFonts.roboto(
-                                  color: Color(0xff018f9c),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        await editProfileStore.updateUser();
+                        await profileStore.getProfileDetails(
+                            editProfileStore.currentUser!.id!);
+                        authStore.setUserIsLogged();
+                        controller.back();
+                      },
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/Icon-feather-check.svg',
+                            width: 10,
+                            height: 12,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.save,
+                            style: GoogleFonts.roboto(
+                                color: Color(0xff018f9c),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -149,7 +149,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             shape: BoxShape.circle,
                                             border: new Border.all(
                                               color: Colors.white,
-                                              width: 4.0,
+                                              width: 3.0,
                                             ),
                                             boxShadow: [
                                               BoxShadow(
@@ -174,7 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         shape: BoxShape.circle,
                                         border: new Border.all(
                                           color: Colors.white,
-                                          width: 4.0,
+                                          width: 3.0,
                                         ),
                                         boxShadow: [
                                           BoxShadow(
@@ -197,7 +197,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             Positioned(
                                 bottom: 5,
-                                right: 30,
+                                right: filePath == null
+                                    ? editProfileStore.photoUrl == null
+                                        ? 29
+                                        : 33
+                                    : 33,
                                 child: InkWell(
                                   onTap: () async {
                                     final ImagePicker _picker = ImagePicker();
@@ -285,8 +289,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           controller: editProfileStore.bioController,
                           maxLines: 5,
                           decoration: GlobalConstants.of(context)
-                              .loginInputTheme('')
+                              .loginInputTheme(
+                                  AppLocalizations.of(context)!.optional)
                               .copyWith(
+                                  labelStyle: TextStyle(
+                                      color: Colors.black.withOpacity(0.2)),
+                                  alignLabelWithHint: true,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 16))),
                       SizedBox(
@@ -359,7 +367,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                         inputDecoration: InputDecoration(
-                          errorMaxLines: 3,
+                          errorMaxLines: 4,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             borderSide:
@@ -451,10 +459,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       SfSliderTheme(
                         data: SfSliderThemeData(
                             activeTrackColor:
-                                Color(0xff03DAC5).withOpacity(0.15),
+                                Color(0xff03DAC5).withOpacity(0.08),
                             inactiveTrackColor:
                                 Color(0xff03DAC5).withOpacity(0.3),
-                            inactiveDividerRadius: 5,
+                            inactiveDividerRadius: 4.8,
                             minorTickSize: Size(10, 10),
                             tickSize: Size(20, 20),
                             thumbColor: Colors.white,
@@ -467,17 +475,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             disabledThumbColor: Color(0xff03DAC5),
                             activeMinorTickColor: Color(0xff03DAC5),
                             inactiveDividerColor: Color(0xff03DAC5),
-                            overlayRadius: 10,
-                            inactiveTrackHeight: 9,
+                            overlayRadius: 9,
+                            inactiveTrackHeight: 9.5,
                             trackCornerRadius: 9,
                             tickOffset: Offset(10, 10),
-                            thumbRadius: 10,
-                            activeTrackHeight: 10,
+                            thumbRadius: 9.3,
+                            activeTrackHeight: 9.5,
                             activeLabelStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14),
                             inactiveLabelStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14),
-                            activeDividerRadius: 5),
+                            activeDividerRadius: 4.8),
                         child: SfSlider(
                           min: 0.0,
                           max: 60,
