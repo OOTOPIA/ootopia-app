@@ -4,13 +4,15 @@ class AvatarPhotoWidget extends StatefulWidget {
   String? photoUrl;
   bool isBadges;
   VoidCallback onTap;
+  double? sizePhotoUrl;
 
-  AvatarPhotoWidget({
-    Key? key,
-    this.photoUrl,
-    required this.isBadges,
-    required this.onTap,
-  }) : super(key: key);
+  AvatarPhotoWidget(
+      {Key? key,
+      this.photoUrl,
+      required this.isBadges,
+      required this.onTap,
+      this.sizePhotoUrl})
+      : super(key: key);
 
   @override
   _AvatarPhotoWidgetState createState() => _AvatarPhotoWidgetState();
@@ -21,8 +23,8 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
-        width: 124,
-        height: 124,
+        width: widget.sizePhotoUrl != null ? widget.sizePhotoUrl : 124,
+        height: widget.sizePhotoUrl != null ? widget.sizePhotoUrl : 124,
         margin: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),

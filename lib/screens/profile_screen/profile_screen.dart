@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -153,6 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           AvatarPhotoWidget(
                             photoUrl: store?.profile!.photoUrl,
+                            sizePhotoUrl: 114,
                             isBadges: store == null
                                 ? false
                                 : store!.profile!.badges!.length > 0,
@@ -188,8 +190,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       Text(
                         store == null ? "" : store!.profile!.fullname,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w500),
+                        style: GoogleFonts.roboto(
+                            color: Theme.of(context).textTheme.subtitle1!.color,
+                            fontSize: 24,
+                            fontWeight: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .fontWeight),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingNormal),
@@ -197,14 +204,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         AppLocalizations.of(context)!
                             .regenerationGame
                             .toUpperCase(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.roboto(
+                            color: Theme.of(context).textTheme.subtitle1!.color,
+                            fontSize:
+                                Theme.of(context).textTheme.subtitle1!.fontSize,
+                            fontWeight: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .fontWeight),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingSmall),
                       Container(
-                        height: 44,
-                        width: MediaQuery.of(context).size.width * .8,
+                        height: 46,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
                             border: Border.fromBorderSide(BorderSide(
                                 width: 1,
@@ -514,7 +527,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                                 Text(
                                                   walletStore.wallet != null
-                                                      ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                                      ? '${walletStore.wallet!.totalBalance.toString().length > 7 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
                                                       : '0,00',
                                                   style: TextStyle(
                                                       fontSize: 14,
@@ -568,8 +581,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               AlbumProfileWidget(
                                 onTap: () {},
-                                albumName: "Passeio",
-                                photoAlbumUrl: "hello",
+                                albumName: AppLocalizations.of(context)!.all,
+                                photoAlbumUrl: "",
                               ),
                               InkWell(
                                 onTap: () {
@@ -578,7 +591,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 },
                                 child: AlbumProfileWidget(
                                   onTap: () {},
-                                  albumName: "Album",
+                                  albumName:
+                                      AppLocalizations.of(context)!.album,
                                 ),
                               )
                             ],
@@ -611,12 +625,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Wrap(
                                 alignment: WrapAlignment.start,
                                 crossAxisAlignment: WrapCrossAlignment.start,
+                                spacing: 10, // gap between adjacent chips
+                                runSpacing: 20, // gap between lines
                                 children: store!.postsList
                                     .asMap()
                                     .map(
                                       (index, post) => MapEntry(
                                         index,
                                         GridCustomWidget(
+                                          discountSpacing: 10 * 3,
+                                          amountPadding: 0,
                                           thumbnailUrl: post.thumbnailUrl,
                                           columnsCount: 4,
                                           type: post.type,
