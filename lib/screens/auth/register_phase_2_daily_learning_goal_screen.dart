@@ -107,6 +107,7 @@ class _RegisterPhase2DailyLearningGoalPageState
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.of(context)!.regenerationGame,

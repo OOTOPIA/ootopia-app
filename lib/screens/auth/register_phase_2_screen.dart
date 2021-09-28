@@ -117,6 +117,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                 hasScrollBody: false,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       children: [
