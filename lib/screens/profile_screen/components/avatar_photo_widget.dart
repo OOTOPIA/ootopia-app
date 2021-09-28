@@ -37,7 +37,7 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
           child: widget.photoUrl == null ||
                   (widget.photoUrl != null && widget.photoUrl!.isEmpty)
               ? Image.asset(
-                  "assets/icons_profile/profile.png",
+                  'assets/icons/user.png',
                   fit: BoxFit.cover,
                 )
               : Image.network(

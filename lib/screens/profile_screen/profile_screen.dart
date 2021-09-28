@@ -208,10 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Theme.of(context).textTheme.subtitle1!.color,
                             fontSize:
                                 Theme.of(context).textTheme.subtitle1!.fontSize,
-                            fontWeight: Theme.of(context)
-                                .textTheme
-                                .subtitle1!
-                                .fontWeight),
+                            fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingSmall),
@@ -527,7 +524,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                                 Text(
                                                   walletStore.wallet != null
-                                                      ? '${walletStore.wallet!.totalBalance.toString().length > 7 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                                      ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
                                                       : '0,00',
                                                   style: TextStyle(
                                                       fontSize: 14,
@@ -581,7 +578,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               AlbumProfileWidget(
                                 onTap: () {},
-                                albumName: AppLocalizations.of(context)!.all,
+                                albumName: AppLocalizations.of(context)!.all2,
                                 photoAlbumUrl: "",
                               ),
                               InkWell(

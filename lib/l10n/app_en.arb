@@ -123,6 +123,7 @@
     "balanceIn": "Balance in",
 
     "all": "All",
+    "all2": "All",
     "received": "Received",
     "sent": "Sent",
     "send": "Send",
@@ -340,7 +341,7 @@
     "whyYouReceivdOOz":"OOTOPIA is more abundant now that we are here.\nThat's why you just received your first OOz credits.",
     "welcome":"welcome",
     "albuns":"albums",
-    "album":"Álbum",
+    "album":"Album",
     "createYourOwnCategories":"create you own categories",
     "pictureByEttyFidele":"picture By Etty Fidele",
     "textForNextFeatureCategories":"In the next app update, you will have access to albums and will be able to organize your content into different publishing categories.\n\nIn addition to organizing your profile, you will also be able to view other Ootopians' albums.",

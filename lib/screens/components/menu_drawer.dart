@@ -449,8 +449,7 @@ class Avatar extends StatelessWidget {
                     backgroundImage: NetworkImage("${this.photoUrl}"),
                   )
                 : CircleAvatar(
-                    backgroundImage:
-                        AssetImage("assets/icons_profile/profile.png"),
+                    backgroundImage: AssetImage("assets/icons/user.png"),
                   )),
           ),
           if (this.badges!.length > 0)

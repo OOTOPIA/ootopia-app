@@ -467,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 is EditProfileScreen &&
             controller.pages.length > controller.initialPages.length)
         ? null
-        : controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE
+        : controller.currentPageIndex == PageViewController.TAB_INDEX_PROFILE
             ? appBarProfile
             : appBar;
   }
@@ -495,8 +495,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         color: Theme.of(context).textTheme.subtitle1!.color,
                         fontSize:
                             Theme.of(context).textTheme.subtitle1!.fontSize,
-                        fontWeight:
-                            Theme.of(context).textTheme.subtitle1!.fontWeight),
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
                 Image.asset(
@@ -511,21 +510,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         EditProfileScreen(),
                       );
                     },
-                    icon: Icon(
-                      Icons.edit_outlined,
-                      color: Color(0xff03145C),
-                      size: 18,
+                    icon: Image.asset(
+                      'assets/icons_profile/feather-edit-2.png',
+                      width: 16,
                     ),
                     label: Text(
                       AppLocalizations.of(context)!.edit,
                       style: GoogleFonts.roboto(
-                          color: Theme.of(context).textTheme.subtitle1!.color,
-                          fontSize:
-                              Theme.of(context).textTheme.subtitle1!.fontSize,
-                          fontWeight: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .fontWeight),
+                        color: Theme.of(context).textTheme.subtitle1!.color,
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1!.fontSize,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),

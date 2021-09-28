@@ -36,7 +36,7 @@ class GridCustomWidget extends StatelessWidget {
                 children: [
                   Container(
                     width: itemWidth,
-                    height: itemWidth * .90,
+                    height: itemWidth,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Image.network(

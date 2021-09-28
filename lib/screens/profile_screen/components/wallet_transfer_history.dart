@@ -92,7 +92,7 @@ class TransactionItemWidget extends StatelessWidget {
                             backgroundImage: AssetImage(
                                 walletTransfer.fromPlatform
                                     ? "assets/icons/icon_launcher.png"
-                                    : "assets/icons_profile/profile.png"),
+                                    : "assets/icons/user.png"),
                             radius: 19,
                           ),
                         ),
