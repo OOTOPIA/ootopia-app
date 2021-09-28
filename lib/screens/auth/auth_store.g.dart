@@ -218,17 +218,6 @@ mixin _$AuthStore on AuthStoreBase, Store {
   }
 
   @override
-  bool birthdateIsValid() {
-    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
-        name: 'AuthStoreBase.birthdateIsValid');
-    try {
-      return super.birthdateIsValid();
-    } finally {
-      _$AuthStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void addTags(dynamic e) {
     final _$actionInfo = _$AuthStoreBaseActionController.startAction(
         name: 'AuthStoreBase.addTags');
