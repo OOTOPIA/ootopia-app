@@ -253,7 +253,7 @@ class _RegisterPhase2GeolocationPageState
                               GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Text(
-                              AppLocalizations.of(context)!.confirm,
+                              AppLocalizations.of(context)!.continueAccess,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
