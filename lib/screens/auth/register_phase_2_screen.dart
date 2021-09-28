@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -36,6 +37,47 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
     });
   }
 
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: InkWell(
+              onTap: () => Navigator.of(context).pop(),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        FeatherIcons.arrowLeft,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.back,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ))),
+        ),
+      );
+
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -59,7 +101,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
     final node = FocusScope.of(context);
     var authStore = Provider.of<AuthStore>(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: appBar,
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: GlobalConstants.of(context).screenHorizontalSpace),

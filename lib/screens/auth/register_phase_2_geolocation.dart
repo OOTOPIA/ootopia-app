@@ -142,15 +142,6 @@ class _RegisterPhase2GeolocationPageState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Image.asset(
-                        //       'assets/images/white_logo.png',
-                        //       height: GlobalConstants.of(context).logoHeight,
-                        //     ),
-                        //   ],
-                        // ),
                         Text(
                           AppLocalizations.of(context)!
                               .thisIsWhereYourPositiveImpactMattersMost,
@@ -160,29 +151,20 @@ class _RegisterPhase2GeolocationPageState
                               fontSize: 18,
                               color: LightColors.grey),
                         ),
-
                         Padding(
                           padding: EdgeInsets.only(
                             top: GlobalConstants.of(context).spacingSmall,
                           ),
                         ),
-                        Image.asset(
-                          'assets/images/earth.png',
+                        Container(
                           height: 351,
                           width: 351,
+                          child: Image.asset(
+                            'assets/images/earth.png',
+                            height: 351,
+                            width: 351,
+                          ),
                         ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(
-                        //     top: GlobalConstants.of(context).spacingMedium,
-                        //     bottom: GlobalConstants.of(context).spacingMedium,
-                        //   ),
-                        //   child: Text(
-                        //     AppLocalizations.of(context)!
-                        //         .thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts,
-                        //     textAlign: TextAlign.center,
-                        //     style: Theme.of(context).textTheme.subtitle1,
-                        //   ),
-                        // ),
                         Container(
                           child: TextFormField(
                             enabled: false,
@@ -195,7 +177,12 @@ class _RegisterPhase2GeolocationPageState
                             decoration: GlobalConstants.of(context)
                                 .loginInputTheme(geolocationMessage)
                                 .copyWith(
-                                    prefixIcon: Icon(Icons.arrow_downward)),
+                                    prefixIcon: Icon(
+                                  FeatherIcons.mapPin,
+                                  color: _inputController.text != null
+                                      ? LightColors.blue
+                                      : Colors.black,
+                                )),
                             onEditingComplete: () =>
                                 Geolocation.determinePosition(context),
                           ),

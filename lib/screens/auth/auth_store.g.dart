@@ -229,6 +229,28 @@ mixin _$AuthStore on AuthStoreBase, Store {
   }
 
   @override
+  void addTags(dynamic e) {
+    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
+        name: 'AuthStoreBase.addTags');
+    try {
+      return super.addTags(e);
+    } finally {
+      _$AuthStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeTags(dynamic e) {
+    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
+        name: 'AuthStoreBase.removeTags');
+    try {
+      return super.removeTags(e);
+    } finally {
+      _$AuthStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 validCellPhone: ${validCellPhone},
