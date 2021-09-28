@@ -6,7 +6,6 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 
 part 'edit_profile_store.g.dart';
 
@@ -14,7 +13,6 @@ class EditProfileStore = EditProfileStoreBase with _$EditProfileStore;
 
 abstract class EditProfileStoreBase with Store {
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
-  final formKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
@@ -39,34 +37,26 @@ abstract class EditProfileStoreBase with Store {
 
   @action
   Future<void> updateUser() async {
-    if (formKey.currentState!.validate()) {
-      isloading = true;
+    isloading = true;
 
-      currentUser?.bio = bioController.text;
-      currentUser?.fullname = fullNameController.text;
-      currentUser?.phone = cellPhoneController.text;
-      currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-      currentUser?.countryCode = countryCode;
+    currentUser?.bio = bioController.text;
+    currentUser?.fullname = fullNameController.text;
+    currentUser?.phone = cellPhoneController.text;
+    currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+    currentUser?.countryCode = countryCode;
 
-      if (photoFilePathLocal != null) {
-        currentUser?.photoFilePath = photoFilePathLocal;
-      }
-
-      try {
-        if (currentUser?.photoFilePath != null) {
-          await _updateUserWithPhoto(currentUser!, []);
-        } else if (currentUser != null) {
-          await this
-              .userRepositoryImpl
-              .updateUserProfile(currentUser!, [], null);
-        }
-        await this.userRepositoryImpl.getMyAccountDetails();
-        isloading = false;
-        PageViewController.instance.back();
-      } catch (err) {
-        isloading = false;
-      }
+    if (photoFilePathLocal != null) {
+      currentUser?.photoFilePath = photoFilePathLocal;
     }
+
+    if (currentUser?.photoFilePath != null) {
+      await _updateUserWithPhoto(currentUser!, []);
+    } else if (currentUser != null) {
+      await this.userRepositoryImpl.updateUserProfile(currentUser!, [], null);
+    }
+    await this.userRepositoryImpl.getMyAccountDetails();
+
+    isloading = false;
   }
 
   Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
@@ -96,12 +86,12 @@ abstract class EditProfileStoreBase with Store {
     } catch (err) {}
     if (currentUser != null) {
       fullNameController.text = currentUser!.fullname.toString();
-      if (currentUser!.bio == null) {
+      if (currentUser!.bio == null || currentUser!.bio == 'null') {
         bioController.text = '';
       } else {
         bioController.text = currentUser!.bio.toString();
       }
-      if (currentUser!.phone == null) {
+      if (currentUser!.phone == null || currentUser!.phone == 'null') {
         cellPhoneController.text = '';
       } else {
         cellPhoneController.text = currentUser!.phone.toString();

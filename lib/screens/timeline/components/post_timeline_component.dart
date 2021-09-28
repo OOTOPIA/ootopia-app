@@ -22,6 +22,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'image_post_timeline_component.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
@@ -108,6 +109,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   late PostTimelineController postTimelineController;
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -152,7 +154,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   void _goToProfile() async {
-    PageViewController.instance.addPage(ProfileScreen(
+    controller.insertPage(ProfileScreen(
       {
         "id": user != null && post.userId == user!.id ? null : post.userId,
       },
@@ -493,28 +495,35 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       ),
                                       this.post.oozToTransfer > 0
                                           ? Padding(
-                                            padding: EdgeInsets.only(right: 4),
-                                            child: Text(
+                                              padding:
+                                                  EdgeInsets.only(right: 4),
+                                              child: Text(
                                                 "+ " +
                                                     currencyFormatter.format(
-                                                        this.post.oozToTransfer),
+                                                        this
+                                                            .post
+                                                            .oozToTransfer),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Color(0xFF003694),
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                          )
+                                            )
                                           : Padding(
-                                            padding: EdgeInsets.only(right: 4),
-                                            child: Text(
-                                                currencyFormatter.format(
-                                                    this.post.oozTotalCollected),
+                                              padding:
+                                                  EdgeInsets.only(right: 4),
+                                              child: Text(
+                                                currencyFormatter.format(this
+                                                    .post
+                                                    .oozTotalCollected),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                          )
+                                            )
                                     ],
                                   )),
                             ),
@@ -648,11 +657,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
             GestureDetector(
               onTap: () {
-                PageViewController.instance.addPage(CommentScreen(
-                  {
+                controller.insertPage(
+                  CommentScreen({
                     "post": this.post,
-                  },
-                ));
+                  }),
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 8),

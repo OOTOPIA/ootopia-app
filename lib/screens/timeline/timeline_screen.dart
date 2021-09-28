@@ -14,6 +14,7 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -22,6 +23,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -72,6 +74,7 @@ class _TimelinePageState extends State<TimelinePage>
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
   DailyGoalStatsModel? dailyGoalStats;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -121,6 +124,7 @@ class _TimelinePageState extends State<TimelinePage>
     _handleInitialUri();
 
     Future.delayed(Duration.zero, () {
+      timelineStore.init(controller);
       timelineStore.startTimelineViewTimer();
     });
   }
@@ -340,12 +344,13 @@ class _TimelinePageState extends State<TimelinePage>
             },
             body: Column(
               children: [
+                RegenerationGame(),
                 Expanded(
                   child: Center(
                     child: BlocListener<TimelinePostBloc, TimelinePostState>(
                       listener: (context, state) {
                         if (state is ErrorState) {
-                          Scaffold.of(context).showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(state.message),
                             ),

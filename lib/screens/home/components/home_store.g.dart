@@ -244,17 +244,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
-  dynamic setCurrentPageIndex(int index) {
-    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
-        name: 'HomeStoreBase.setCurrentPageIndex');
-    try {
-      return super.setCurrentPageIndex(index);
-    } finally {
-      _$HomeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setShowCreatedPostAlert(bool value) {
     final _$actionInfo = _$HomeStoreBaseActionController.startAction(
         name: 'HomeStoreBase.setShowCreatedPostAlert');

@@ -17,38 +17,58 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late VideoPlayerController _videoPlayerController;
+  late VideoPlayerController? _videoPlayerController;
   bool videoIsFinished = false;
 
   @override
   void initState() {
     super.initState();
-    _videoPlayerController = VideoPlayerController.asset(
-        'assets/videos/ootopia_splash.mp4')
-      ..initialize()
-      ..addListener(() {
-        Timer(Duration(milliseconds: 300), () => _videoPlayerController.play());
+    _initController();
 
-        if (mounted) {
-          setState(() {
-            if (!_videoPlayerController.value.isPlaying &&
-                _videoPlayerController.value.isInitialized &&
-                (_videoPlayerController.value.duration ==
-                    _videoPlayerController.value.position) &&
-                !videoIsFinished) {
-              videoIsFinished = true;
-              Navigator.of(context).pushReplacementNamed(
-                PageRoute.Page.homeScreen.route,
-              );
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      await _videoPlayerController?.dispose();
+
+      // Initing new controller
+      _initController();
+    });
+
+    // Making sure that controller is not used by setting it to null
+    setState(() {
+      _videoPlayerController = null;
+    });
+  }
+
+  _initController() {
+    _videoPlayerController =
+        VideoPlayerController.asset('assets/videos/ootopia_splash.mp4')
+          ..initialize()
+          ..setLooping(false)
+          ..addListener(() {
+            Timer(Duration(milliseconds: 300),
+                () => _videoPlayerController?.play());
+
+            if (mounted) {
+              setState(() {
+                if (_videoPlayerController?.value.isPlaying == false &&
+                    _videoPlayerController?.value.isInitialized == true &&
+                    (_videoPlayerController?.value.duration ==
+                        _videoPlayerController?.value.position) &&
+                    !videoIsFinished) {
+                  videoIsFinished = true;
+                  _videoPlayerController = null;
+                  Navigator.of(context).pushReplacementNamed(
+                    PageRoute.Page.homeScreen.route,
+                  );
+                }
+              });
             }
           });
-        }
-      });
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
+    _videoPlayerController?.dispose();
+    _videoPlayerController = null;
     super.dispose();
   }
 
@@ -59,9 +79,11 @@ class _SplashScreenState extends State<SplashScreen> {
         child: FittedBox(
           fit: BoxFit.cover,
           child: SizedBox(
-            height: _videoPlayerController.value.size.height,
-            width: _videoPlayerController.value.size.width,
-            child: VideoPlayer(_videoPlayerController),
+            height: _videoPlayerController?.value.size.height,
+            width: _videoPlayerController?.value.size.width,
+            child: _videoPlayerController == null
+                ? Container()
+                : VideoPlayer(_videoPlayerController!),
           ),
         ),
       ),

@@ -115,8 +115,7 @@ class _RegisterPhase2TopInterestsPageState
               widget.args['user'].photoUrl = state.user.photoUrl;
               setCurrentUser(jsonEncode(widget.args['user'].toJson()))
                   .then((value) => authStore.setUserIsLogged());
-              if (widget.args != null &&
-                  widget.args['returnToPageWithArgs'] != null) {
+              if (widget.args['returnToPageWithArgs'] != null) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   PageRoute.Page.homeScreen.route,
                   ModalRoute.withName('/'),
@@ -127,7 +126,7 @@ class _RegisterPhase2TopInterestsPageState
               } else {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   PageRoute.Page.homeScreen.route,
-                  ModalRoute.withName('/'),
+                  (Route<dynamic> route) => false,
                 );
               }
             }
