@@ -467,7 +467,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 is EditProfileScreen &&
             controller.pages.length > controller.initialPages.length)
         ? null
-        : controller.currentPageIndex == PageViewController.TAB_INDEX_PROFILE
+        : controller.currentBottomIndex ==
+                    PageViewController.TAB_INDEX_PROFILE &&
+                controller.pages[controller.currentPageIndex] is ProfileScreen
             ? appBarProfile
             : appBar;
   }

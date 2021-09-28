@@ -7,7 +7,7 @@ class GridCustomWidget extends StatelessWidget {
   VoidCallback onTap;
   String? type;
   int? discountSpacing = 0;
-  double? amountPadding = 5;
+  double? amountPadding;
 
   GridCustomWidget(
       {Key? key,
@@ -16,7 +16,7 @@ class GridCustomWidget extends StatelessWidget {
       required this.onTap,
       this.type,
       this.discountSpacing = 0,
-      this.amountPadding = 5})
+      this.amountPadding})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class GridCustomWidget extends StatelessWidget {
         return InkWell(
           onTap: onTap,
           child: Container(
-            padding: EdgeInsets.all(amountPadding as double),
+            padding: EdgeInsets.all(amountPadding != null ? amountPadding! : 5),
             width: itemWidth,
             child: Center(
               child: Stack(
