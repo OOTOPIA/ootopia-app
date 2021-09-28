@@ -92,7 +92,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   @override
   Future recoverPassword(String email, String lang) async {
     final response = await http.post(
-      Uri.parse(dotenv.env['API_URL']! + "ootopia.page.link/recovery-password"),
+      Uri.parse(dotenv.env['API_URL']! + "users/recover-password"),
       headers: API_HEADERS,
       body: jsonEncode(<String, dynamic>{"email": email, "language": lang}),
     );
