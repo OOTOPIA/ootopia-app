@@ -5,6 +5,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LearningTracksScreen extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Learning Tracks',
+                        AppLocalizations.of(context)!.learningTracks,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -50,7 +51,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         height: 8,
                       ),
                       Text(
-                        'Here you will find learning tracks that will bring you a deeper understanding of the main regenerative practices. Watch, answer the quizzes, and earn even more OOz.',
+                        AppLocalizations.of(context)!.aboutLearningTracks,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -59,8 +60,14 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 16,
+                ),
                 Divider(
                   color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 24,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24),
@@ -71,10 +78,16 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                           learningTracksStore.listOfLearningTracks.length,
                       itemBuilder: (context, index) {
                         return InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
                           onTap: () {
                             controller.insertPage(ViewLearningTracksScreen({
                               'list_chapters': learningTracksStore
                                   .listOfLearningTracks[index].chapters,
+                              'description': learningTracksStore
+                                  .listOfLearningTracks[index].description,
+                              'title': learningTracksStore
+                                  .listOfLearningTracks[index].title,
                             }));
                           },
                           child: Column(

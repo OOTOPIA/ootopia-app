@@ -45,13 +45,13 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
       Atom(name: 'LearningTracksStoreBase.getLastLearningTracks');
 
   @override
-  dynamic get getLastLearningTracks {
+  List<LearningTracksModel> get getLastLearningTracks {
     _$getLastLearningTracksAtom.reportRead();
     return super.getLastLearningTracks;
   }
 
   @override
-  set getLastLearningTracks(dynamic value) {
+  set getLastLearningTracks(List<LearningTracksModel> value) {
     _$getLastLearningTracksAtom.reportWrite(value, super.getLastLearningTracks,
         () {
       super.getLastLearningTracks = value;

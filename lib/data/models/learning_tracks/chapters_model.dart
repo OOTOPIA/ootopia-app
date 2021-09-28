@@ -11,6 +11,7 @@ class ChaptersModel {
   double ooz;
   String createdAt;
   String updatedAt;
+  int timeInMinutes;
 
   ChaptersModel({
     required this.id,
@@ -20,6 +21,7 @@ class ChaptersModel {
     required this.ooz,
     required this.createdAt,
     required this.updatedAt,
+    required this.timeInMinutes,
   });
 
   factory ChaptersModel.fromJson(Map<String, dynamic> json) =>

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -46,6 +44,7 @@ class LearningTracksRepositoryImpl
         'limit': limit,
         'offset': offset,
       });
+      print(response.data[0]['chapters']);
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((i) => LearningTracksModel.fromJson(i))

@@ -15,6 +15,7 @@ ChaptersModel _$ChaptersModelFromJson(Map<String, dynamic> json) {
     ooz: (json['ooz'] as num).toDouble(),
     createdAt: json['createdAt'] as String,
     updatedAt: json['updatedAt'] as String,
+    timeInMinutes: json['timeInMinutes'] as int,
   );
 }
 
@@ -27,4 +28,5 @@ Map<String, dynamic> _$ChaptersModelToJson(ChaptersModel instance) =>
       'ooz': instance.ooz,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
+      'timeInMinutes': instance.timeInMinutes,
     };

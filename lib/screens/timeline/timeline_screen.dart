@@ -12,6 +12,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/last_learning_track_component.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
@@ -398,6 +399,7 @@ class _TimelinePageState extends State<TimelinePage>
             ),
             child: Column(
               children: <Widget>[
+                LastLearningTrackComponents(),
                 Expanded(
                   child: VisibilityDetector(
                     key: ObjectKey(flickMultiManager),
