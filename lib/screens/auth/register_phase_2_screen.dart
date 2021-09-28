@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,8 +21,6 @@ class RegisterPhase2Page extends StatefulWidget {
 }
 
 class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
-  File? _image;
-  User? user;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   RegisterSecondPhaseController controller = RegisterSecondPhaseController();
 
@@ -110,7 +104,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   decoration: new BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: _image == null
+                                  child: controller.image == null
                                       ? CircleAvatar(
                                           radius: 57,
                                           backgroundImage: AssetImage(
@@ -119,7 +113,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                       : CircleAvatar(
                                           radius: 57,
                                           backgroundImage: Image.file(
-                                            _image!,
+                                            controller.image!,
                                             fit: BoxFit.cover,
                                           ).image,
                                         ),
@@ -198,14 +192,15 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                         InternationalPhoneNumberInput(
                           onInputChanged: (PhoneNumber number) {
                             setState(() {
-                              authStore.countryCode = number.isoCode.toString();
+                              controller.countryCode =
+                                  number.isoCode.toString();
                             });
-                            authStore.getPhoneNumber(
+                            controller.getPhoneNumber(
                                 number.toString(), number.isoCode.toString());
                           },
                           onInputValidated: (bool value) {
                             setState(() {
-                              authStore.validCellPhone = !value;
+                              controller.validCellPhone = !value;
                             });
                           },
                           selectorConfig: SelectorConfig(
@@ -217,7 +212,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 value.contains('+')) {
                               return AppLocalizations.of(context)!
                                   .mobilephoneToExperience;
-                            } else if (authStore.validCellPhone) {
+                            } else if (controller.validCellPhone) {
                               return AppLocalizations.of(context)!
                                   .insertValidCellPhone;
                             }
@@ -354,7 +349,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               bottom: GlobalConstants.of(context).spacingSmall,
                             ),
                             child: Text(
-                              authStore.birthdateValidationErrorMessage
+                              controller.birthdateValidationErrorMessage
                                   .toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -373,58 +368,33 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                         bottom: GlobalConstants.of(context).spacingLarge,
                       ),
                       child: ElevatedButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                    side: BorderSide.none)),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xff003694)),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(GlobalConstants.of(context)
-                                    .spacingNormal))),
-                        child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Center(
-                                child: Text(
-                                    AppLocalizations.of(context)!
-                                        .continueAccess,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    )))),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              PageRoute.Page
-                                  .registerPhase2DailyLearningGoalScreen.route,
-                              arguments: {
-                                "user": user,
-                                "returnToPageWithArgs":
-                                    widget.args!["returnToPageWithArgs"]
-                              });
-                          // print(authStore.birthdateIsValid());
-                          // if (authStore.birthdateIsValid()) {
-                          //   if (authStore.formKey.currentState!.validate()) {
-
-                          //   }
-                          // } else {
-                          //   setState(() {
-                          //     String year = authStore.yearController.text;
-                          //     if (year.length < 4) {
-                          //       authStore.birthdateValidationErrorMessage =
-                          //           AppLocalizations.of(context)!
-                          //               .pleaseEnterAValidBirthdateInFormat;
-                          //     } else {
-                          //       authStore.birthdateValidationErrorMessage =
-                          //           AppLocalizations.of(context)!
-                          //               .pleaseEnterAValidBirthdate;
-                          //     }
-                          //   });
-                          // }
-                        },
-                      ),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      side: BorderSide.none)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xff003694)),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(GlobalConstants.of(context)
+                                      .spacingNormal))),
+                          child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(
+                                  child: Text(
+                                      AppLocalizations.of(context)!.continueAccess,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      )))),
+                          onPressed: () => controller.firstStepIsValid(context)
+                              ? Navigator.of(context).pushNamed(PageRoute.Page.registerPhase2DailyLearningGoalScreen.route, arguments: {
+                                  "user": controller.user,
+                                  "returnToPageWithArgs":
+                                      widget.args!["returnToPageWithArgs"]
+                                })
+                              : null),
                     )
                   ],
                 ),

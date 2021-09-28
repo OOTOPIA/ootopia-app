@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
@@ -28,15 +27,6 @@ abstract class AuthStoreBase with Store {
   final AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   double currentSliderValue = 0;
-
-  @observable
-  bool validCellPhone = false;
-
-  @observable
-  String? countryCode;
-
-  @observable
-  String? birthdateValidationErrorMessage;
 
   @observable
   ObservableFuture<User?>? _currentUser;
@@ -79,11 +69,6 @@ abstract class AuthStoreBase with Store {
   @action
   void removeTags(e) {
     selectedTags.remove(e);
-  }
-
-  @action
-  Future<void> getPhoneNumber(String phoneNumber, String codeCountry) async {
-    await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
   }
 
   @action
