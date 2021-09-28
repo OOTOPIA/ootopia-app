@@ -6,24 +6,29 @@ class GridCustomWidget extends StatelessWidget {
   String thumbnailUrl;
   VoidCallback onTap;
   String? type;
+  int? discountSpacing = 0;
+  double? amountPadding;
 
-  GridCustomWidget({
-    Key? key,
-    required this.columnsCount,
-    required this.thumbnailUrl,
-    required this.onTap,
-    this.type,
-  }) : super(key: key);
+  GridCustomWidget(
+      {Key? key,
+      required this.columnsCount,
+      required this.thumbnailUrl,
+      required this.onTap,
+      this.type,
+      this.discountSpacing = 0,
+      this.amountPadding})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraint) {
-        var itemWidth = (constraint.maxWidth / columnsCount);
+        var itemWidth =
+            ((constraint.maxWidth - (discountSpacing as num)) / columnsCount);
         return InkWell(
           onTap: onTap,
           child: Container(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(amountPadding != null ? amountPadding! : 5),
             width: itemWidth,
             child: Center(
               child: Stack(
@@ -31,7 +36,7 @@ class GridCustomWidget extends StatelessWidget {
                 children: [
                   Container(
                     width: itemWidth,
-                    height: itemWidth * .90,
+                    height: itemWidth,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Image.network(

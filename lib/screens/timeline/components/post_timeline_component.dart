@@ -232,8 +232,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 radius: 16,
                               )
                             : CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    "assets/icons_profile/profile.png"),
+                                backgroundImage:
+                                    AssetImage("assets/icons/user.png"),
                                 radius: 16,
                               ),
                       ),
@@ -698,8 +698,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                   radius: 16,
                                   backgroundColor: Colors.white,
                                   child: CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                        "assets/icons_profile/profile.png"),
+                                    backgroundImage:
+                                        AssetImage("assets/icons/user.png"),
                                     radius: 14,
                                   ),
                                 ),
