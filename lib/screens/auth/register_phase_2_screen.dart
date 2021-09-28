@@ -14,6 +14,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
+import 'register_second_phase/register_second_phase_controller.dart';
+
 class RegisterPhase2Page extends StatefulWidget {
   final Map<String, dynamic>? args;
 
@@ -22,19 +24,17 @@ class RegisterPhase2Page extends StatefulWidget {
   _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
 }
 
-class _RegisterPhase2PageState extends State<RegisterPhase2Page>
-    with SecureStoreMixin {
+class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   File? _image;
-  final picker = ImagePicker();
   User? user;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  RegisterSecondPhaseController controller = RegisterSecondPhaseController();
 
-  Future getLoggedUser() async {
-    setState(() {
-      getCurrentUser().then((value) {
-        user = value;
-      });
-    });
+  @override
+  void initState() {
+    super.initState();
+    controller.getLoggedUser();
+    this.trackingEvents.signupStartedSignupPartII();
   }
 
   get appBar => AppBar(
@@ -78,24 +78,6 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
         ),
       );
 
-  Future getImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (user != null && pickedFile != null) {
-        _image = File(pickedFile.path);
-        user!.photoFilePath = pickedFile.path;
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getLoggedUser();
-    this.trackingEvents.signupStartedSignupPartII();
-  }
-
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -106,7 +88,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
         padding: EdgeInsets.symmetric(
             horizontal: GlobalConstants.of(context).screenHorizontalSpace),
         child: Form(
-          key: authStore.formKey,
+          key: controller.formKey,
           child: CustomScrollView(
             slivers: [
               SliverFillRemaining(
@@ -147,7 +129,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                                   bottom: 7,
                                   right: 37,
                                   child: InkWell(
-                                    onTap: getImage,
+                                    onTap: controller.getImage,
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         shape: BoxShape.circle,
@@ -193,7 +175,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                           height: 7,
                         ),
                         TextFormField(
-                            controller: authStore.bioController,
+                            controller: controller.bioController,
                             maxLines: 5,
                             decoration: GlobalConstants.of(context)
                                 .loginInputTheme(
@@ -241,7 +223,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                             }
                             return null;
                           },
-                          textFieldController: authStore.cellPhoneController,
+                          textFieldController: controller.cellPhoneController,
                           formatInput: true,
                           errorMessage: AppLocalizations.of(context)!
                               .mobilephoneToExperience,
@@ -299,7 +281,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               flex: 1,
                               child: TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: authStore.dayController,
+                                controller: controller.dayController,
                                 keyboardType: TextInputType.number,
                                 maxLength: 2,
                                 autofocus: false,
@@ -323,7 +305,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               flex: 1,
                               child: TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: authStore.monthController,
+                                controller: controller.monthController,
                                 keyboardType: TextInputType.number,
                                 maxLength: 2,
                                 autofocus: false,
@@ -347,7 +329,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                               flex: 1,
                               child: TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: authStore.yearController,
+                                controller: controller.yearController,
                                 keyboardType: TextInputType.number,
                                 maxLength: 4,
                                 autofocus: false,
@@ -365,7 +347,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                           ],
                         ),
                         Visibility(
-                          visible: authStore.birthdateIsValid(),
+                          visible: controller.birthdateIsValid(),
                           child: Padding(
                             padding: EdgeInsets.only(
                               top: GlobalConstants.of(context).spacingNormal,

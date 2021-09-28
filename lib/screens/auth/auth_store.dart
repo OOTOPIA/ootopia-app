@@ -27,14 +27,6 @@ abstract class AuthStoreBase with Store {
 
   final AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
-  final formKey = GlobalKey<FormState>();
-
-  final TextEditingController dayController = TextEditingController();
-  final TextEditingController monthController = TextEditingController();
-  final TextEditingController yearController = TextEditingController();
-  final TextEditingController bioController = TextEditingController();
-  final TextEditingController cellPhoneController = TextEditingController();
-
   double currentSliderValue = 0;
 
   @observable
@@ -72,23 +64,6 @@ abstract class AuthStoreBase with Store {
   setUserIsLogged() {
     this._currentUser = ObservableFuture(storage.getCurrentUser());
     AppUsageTime.instance.startTimer();
-  }
-
-  @action
-  bool birthdateIsValid() {
-    try {
-      DateTime now = DateTime.now();
-      int day = int.parse(dayController.text);
-      int month = int.parse(monthController.text);
-      int year = int.parse(yearController.text);
-      return yearController.text.length == 4 &&
-          day <= 31 &&
-          month <= 12 &&
-          year >= 1900 &&
-          year < now.year;
-    } catch (error) {
-      return false;
-    }
   }
 
   @action
@@ -163,6 +138,7 @@ abstract class AuthStoreBase with Store {
     });
   }
 
+  //TODO colocar criar controller para a register_first_phase
   @action
   Future<bool> registerUser(
       {required String name,
