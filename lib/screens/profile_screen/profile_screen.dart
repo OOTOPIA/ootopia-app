@@ -443,7 +443,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : SizedBox(),
                       ),
                       Visibility(
-                        visible: store?.profile!.bio != null,
+                        visible: store?.profile?.bio != null,
                         child: Column(
                           children: [
                             Padding(
