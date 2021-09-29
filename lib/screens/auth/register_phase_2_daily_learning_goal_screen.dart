@@ -268,7 +268,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                     ),
                   ),
                   onPressed: () {
-                    _videoPlayerController.dispose();
+                    _videoPlayerController.pause();
                     widget.args['user'].dailyLearningGoalInMinutes =
                         _learningGoalRating.round();
 
