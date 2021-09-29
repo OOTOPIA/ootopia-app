@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -27,6 +28,7 @@ class _RegisterPhase2DailyLearningGoalPageState
   late VideoPlayerController _videoPlayerController;
   bool _isNotLearningGoalRating = false;
   Timer? timerOpacity;
+  RegisterSecondPhaseController controller = RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
@@ -37,7 +39,6 @@ class _RegisterPhase2DailyLearningGoalPageState
             _videoPlayerController.play();
             setState(() {});
           });
-
     setState(() {
       if (widget.args['user'].dailyLearningGoalInMinutes != null &&
           widget.args['user'].dailyLearningGoalInMinutes >= 10) {
@@ -192,45 +193,51 @@ class _RegisterPhase2DailyLearningGoalPageState
                 SizedBox(
                   height: GlobalConstants.of(context).spacingSmall,
                 ),
-                SfSliderTheme(
-                  data: SfSliderThemeData(
-                      activeTrackColor: Color(0xff03DAC5).withOpacity(0.1),
-                      inactiveTrackColor: Color(0xff03DAC5),
-                      inactiveDividerRadius: 5,
-                      minorTickSize: Size(20, 20),
-                      tickSize: Size(12, 20),
-                      thumbColor: Colors.white,
-                      activeDividerColor: Color(0xff03DAC5).withOpacity(0.1),
-                      activeTickColor: Color(0xff03DAC5).withOpacity(0.1),
-                      overlayColor: Color(0xff03DAC5),
-                      activeDividerStrokeColor: Color(0xff03DAC5),
-                      disabledActiveDividerColor: Color(0xff03DAC5),
-                      thumbStrokeColor: Color(0xff03DAC5),
-                      inactiveTickColor: Color(0xff03DAC5),
-                      disabledThumbColor: Color(0xff03DAC5),
-                      activeMinorTickColor: Color(0xff03DAC5),
-                      inactiveDividerColor: Color(0xff03DAC5),
-                      overlayRadius: 20,
-                      activeDividerStrokeWidth: 20,
-                      inactiveDividerStrokeWidth: 20,
-                      inactiveTrackHeight: 9,
-                      trackCornerRadius: 9,
-                      tickOffset: Offset(20, 20)),
-                  child: SfSlider(
-                    min: 0.0,
-                    max: 60,
-                    interval: 10,
-                    stepSize: 10,
-                    showLabels: true,
-                    showDividers: true,
-                    enableTooltip: true,
-                    inactiveColor: Color(0xff03DAC5).withOpacity(0.3),
-                    onChanged: (dynamic value) {
-                      setState(() {});
-                    },
-                    value: 20,
-                  ),
-                ),
+               SfSliderTheme(
+                        data: SfSliderThemeData(
+                            activeTrackColor:
+                                Color(0xff03DAC5).withOpacity(0.08),
+                            inactiveTrackColor:
+                                Color(0xff03DAC5).withOpacity(0.3),
+                            inactiveDividerRadius: 4.8,
+                            minorTickSize: Size(10, 10),
+                            tickSize: Size(20, 20),
+                            thumbColor: Colors.white,
+                            activeDividerColor: Color(0xff03DAC5),
+                            overlayColor: Color(0xff03DAC5),
+                            activeDividerStrokeColor: Color(0xff03DAC5),
+                            disabledActiveDividerColor: Color(0xff03DAC5),
+                            thumbStrokeColor: Color(0xff03DAC5),
+                            inactiveTickColor: Color(0xff03DAC5),
+                            disabledThumbColor: Color(0xff03DAC5),
+                            activeMinorTickColor: Color(0xff03DAC5),
+                            inactiveDividerColor: Color(0xff03DAC5),
+                            overlayRadius: 9,
+                            inactiveTrackHeight: 9.5,
+                            trackCornerRadius: 9,
+                            tickOffset: Offset(10, 10),
+                            thumbRadius: 9.3,
+                            activeTrackHeight: 9.5,
+                            activeLabelStyle:
+                                TextStyle(color: Colors.grey, fontSize: 14),
+                            inactiveLabelStyle:
+                                TextStyle(color: Colors.grey, fontSize: 14),
+                            activeDividerRadius: 4.8),
+                        child: SfSlider(
+                          min: 0.0,
+                          max: 60,
+                          value: controller.currentSliderValue,
+                          interval: 10,
+                          stepSize: 10,
+                          showLabels: true,
+                          showDividers: true,
+                          onChanged: (dynamic value) {
+                            setState(() {
+                              controller.currentSliderValue = value;
+                            });
+                          },
+                        ),
+                      ),
                 _isNotLearningGoalRating
                     ? SizedBox(
                         height: GlobalConstants.of(context).spacingLarge,

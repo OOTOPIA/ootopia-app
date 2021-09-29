@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,11 +19,23 @@ class RegisterSecondPhaseController {
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
 
+  static RegisterSecondPhaseController? _instance;
+
+  static RegisterSecondPhaseController getInstance(){
+    if(_instance == null){
+      _instance = new RegisterSecondPhaseController();
+    }
+
+    return _instance!;
+  }
+
   final picker = ImagePicker();
 
   String? countryCode;
   bool validCellPhone = false;
   String? birthdateValidationErrorMessage = '';
+
+  double currentSliderValue = 10.0;
 
   late AuthStore authStore;
 
