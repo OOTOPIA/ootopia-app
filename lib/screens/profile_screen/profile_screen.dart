@@ -443,7 +443,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : SizedBox(),
                       ),
                       Visibility(
-                        visible: store?.profile?.bio != null,
+                        visible: store?.profile?.bio != null &&
+                            store?.profile?.bio != '',
                         child: Column(
                           children: [
                             Padding(
@@ -650,6 +651,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             )
                           : EmptyPostsWidget(),
+                      SizedBox(
+                        height: GlobalConstants.of(context).intermediateSpacing,
+                      ),
                     ],
                   ),
                 ),

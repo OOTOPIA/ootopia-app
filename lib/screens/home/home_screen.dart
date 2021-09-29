@@ -479,7 +479,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         child: SafeArea(
           child: Container(
             height: 45,
-            padding: EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(
+                horizontal: GlobalConstants.of(context).intermediateSpacing),
             decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
