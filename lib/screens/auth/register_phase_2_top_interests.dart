@@ -89,16 +89,16 @@ class _RegisterPhase2TopInterestsPageState
     bool teste = false;
     return Scaffold(
       appBar: appBar,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        child: LoadingOverlay(
-          isLoading: authStore.isLoading,
-          child: authStore.isLoading
-              ? Container()
-              : CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
+      body: LoadingOverlay(
+        isLoading: authStore.isLoading,
+        child: authStore.isLoading
+            ? Container()
+            : CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -298,9 +298,9 @@ class _RegisterPhase2TopInterestsPageState
                         ],
                       ),
                     ),
-                  ],
-                ),
-        ),
+                  ),
+                ],
+              ),
       ),
     );
   }
