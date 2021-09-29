@@ -29,7 +29,7 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           border: Border.fromBorderSide(BorderSide(
-              color: widget.isBadges ? Color(0xff39A7B2) : Color(0xff000000),
+              color: widget.isBadges ? Color(0xff39A7B2) : Color(0xff707070),
               width: 3)),
         ),
         child: ClipRRect(

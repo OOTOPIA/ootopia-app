@@ -186,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: GlobalConstants.of(context).spacingMedium,
+                        height: GlobalConstants.of(context).intermediateSpacing,
                       ),
                       Text(
                         store == null ? "" : store!.profile!.fullname,
@@ -333,6 +333,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ? Container(
                                 width: double.maxFinite,
                                 height: 54,
+                                margin: EdgeInsets.only(
+                                    bottom: GlobalConstants.of(context)
+                                        .spacingNormal),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: GlobalConstants.of(context)
                                         .screenHorizontalSpace),
@@ -439,11 +442,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ))
                             : SizedBox(),
                       ),
-                      SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
-                      store?.profile!.bio != null
-                          ? Padding(
+                      Visibility(
+                        visible: store?.profile!.bio != null,
+                        child: Column(
+                          children: [
+                            Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
                                       .screenHorizontalSpace),
@@ -455,13 +458,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     fontSize: 13, fontWeight: FontWeight.w400),
                                 textAlign: TextAlign.center,
                               ),
-                            )
-                          : SizedBox(),
-                      store?.profile!.bio != null
-                          ? SizedBox(
+                            ),
+                            SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             )
-                          : SizedBox(),
+                          ],
+                        ),
+                      ),
                       isLoggedInUserProfile
                           ? InkWell(
                               onTap: () {
@@ -472,7 +475,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 60,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: GlobalConstants.of(context)
-                                        .screenHorizontalSpace),
+                                        .intermediateSpacing),
                                 decoration: BoxDecoration(
                                     color: Color(0xff707070).withOpacity(.05)),
                                 child: Row(
