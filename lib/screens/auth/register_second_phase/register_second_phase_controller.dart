@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class RegisterSecondPhaseController with SecureStoreMixin {
+class RegisterSecondPhaseController {
   User? user;
   File? image;
 
@@ -22,12 +22,14 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   String? countryCode;
   bool validCellPhone = false;
-  String? birthdateValidationErrorMessage = 'Error';
+  String? birthdateValidationErrorMessage = '';
+
+  late AuthStore authStore;
+
+  RegisterSecondPhaseController();
 
   Future getLoggedUser() async {
-    getCurrentUser().then((value) {
-      user = value;
-    });
+    user = authStore.currentUser;
   }
 
   Future<void> getPhoneNumber(String phoneNumber, String codeCountry) async {
@@ -40,6 +42,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       int day = int.parse(dayController.text);
       int month = int.parse(monthController.text);
       int year = int.parse(yearController.text);
+
       return yearController.text.length == 4 &&
           day <= 31 &&
           month <= 12 &&
@@ -72,9 +75,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
             AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
       }
     }
-    print('birth date ${birthdateIsValid()}');
-    print('cell phone $validCellPhone');
 
-    return birthdateIsValid() && validCellPhone;
+    return birthdateIsValid() && !validCellPhone;
   }
 }
