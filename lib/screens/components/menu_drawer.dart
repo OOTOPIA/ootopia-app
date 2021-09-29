@@ -6,7 +6,9 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -94,23 +96,59 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           },
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: InkWell(
-                            onTap: () {
-                              if (widget.onTapProfileItem != null) {
-                                widget.onTapProfileItem!();
-                              }
-                              Navigator.of(context).pop();
-                            },
-                            child: Avatar(
-                              photoUrl: authStore!.currentUser == null
-                                  ? null
-                                  : authStore!.currentUser!.photoUrl,
-                              badges: authStore!.currentUser!.badges,
-                              modal: "profile",
+                      Container(
+                        child: InkWell(
+                          onTap: () {
+                            if (widget.onTapProfileItem != null) {
+                              widget.onTapProfileItem!();
+                            }
+                            Navigator.of(context).pop();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: GlobalConstants.of(context).spacingNormal),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: GlobalConstants.of(context)
+                                          .spacingNormal),
+                                ),
+                                AvatarPhotoWidget(
+                                  sizePhotoUrl: 114,
+                                  photoUrl: authStore!.currentUser!.photoUrl,
+                                  isBadges:
+                                      authStore!.currentUser!.badges!.length >
+                                          0,
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      barrierColor: Colors.black.withAlpha(1),
+                                      backgroundColor:
+                                          Colors.black.withAlpha(1),
+                                      builder: (BuildContext context) {
+                                        return SnackBarWidget(
+                                          menu: AppLocalizations.of(context)!
+                                              .badgeSower,
+                                          text: AppLocalizations.of(context)!
+                                              .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                          about: AppLocalizations.of(context)!
+                                              .learnMore,
+                                          contact: {
+                                            "text":
+                                                AppLocalizations.of(context)!
+                                                    .areYouASowerToo,
+                                            "textLink":
+                                                AppLocalizations.of(context)!
+                                                    .getInContact,
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -412,87 +450,5 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
         )
       ],
     ));
-  }
-}
-
-class Avatar extends StatelessWidget {
-  final String? photoUrl;
-  final List<Badge>? badges;
-  final String? modal;
-
-  Avatar({this.photoUrl, this.badges, this.modal});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 109,
-      height: (MediaQuery.of(context).size.width * .32) - 16,
-      margin: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: this.modal == "profile" ? 3.0 : 0,
-          color: this.modal == "profile"
-              ? (this.badges!.length > 0)
-                  ? Color(0Xff39A7B2)
-                  : Colors.black
-              : Colors.white,
-        ),
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            width: (MediaQuery.of(context).size.width * .40) - 16,
-            height: (MediaQuery.of(context).size.width * .40) - 16,
-            child: (this.photoUrl != null
-                ? CircleAvatar(
-                    backgroundImage: NetworkImage("${this.photoUrl}"),
-                  )
-                : CircleAvatar(
-                    backgroundImage: AssetImage("assets/icons/user.png"),
-                  )),
-          ),
-          if (this.badges!.length > 0)
-            Padding(
-              padding: EdgeInsets.only(
-                  top: (MediaQuery.of(context).size.width * .01)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        barrierColor: Colors.black.withAlpha(1),
-                        backgroundColor: Colors.black.withAlpha(1),
-                        builder: (BuildContext context) {
-                          return SnackBarWidget(
-                            menu: AppLocalizations.of(context)!.badgeSower,
-                            text: AppLocalizations.of(context)!
-                                .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                            about: AppLocalizations.of(context)!.learnMore,
-                            contact: {
-                              "text":
-                                  AppLocalizations.of(context)!.areYouASowerToo,
-                              "textLink":
-                                  AppLocalizations.of(context)!.getInContact,
-                            },
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      width: 25,
-                      height: 25,
-                      child: Image.network(this.badges?[0].icon as String),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
   }
 }

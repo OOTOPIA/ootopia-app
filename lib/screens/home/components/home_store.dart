@@ -23,6 +23,8 @@ abstract class HomeStoreBase with Store {
   @observable
   int currentPageIndex = 0;
 
+  bool totalIsSentToApi = false;
+
   @observable
   StatefulWidget? currentPageWidget;
 
@@ -111,7 +113,9 @@ abstract class HomeStoreBase with Store {
           }
           if (percentageOfDailyGoalAchieved >= 100) {
             prefs!.setBool(_personalCelebratePageEnabled, true);
-            if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == false) {
+            if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == false &&
+                !totalIsSentToApi) {
+              totalIsSentToApi = true;
               await AppUsageTime.instance
                   .sendToApi(_totalAppUsageTimeSoFarInMs);
               AppUsageTime.instance.resetUsageTime();
