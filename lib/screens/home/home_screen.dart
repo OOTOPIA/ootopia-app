@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
@@ -466,7 +467,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 is EditProfileScreen &&
             controller.pages.length > controller.initialPages.length)
         ? null
-        : controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE
+        : controller.currentBottomIndex ==
+                    PageViewController.TAB_INDEX_PROFILE &&
+                controller.pages[controller.currentPageIndex] is ProfileScreen
             ? appBarProfile
             : appBar;
   }
@@ -490,7 +493,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   width: 85,
                   child: Text(
                     AppLocalizations.of(context)!.profile,
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: GoogleFonts.roboto(
+                        color: Theme.of(context).textTheme.subtitle1!.color,
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1!.fontSize,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
                 Image.asset(
@@ -500,25 +507,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 Container(
                   width: 85,
                   child: TextButton.icon(
-                      onPressed: () {
-                        controller.insertPage(
-                          EditProfileScreen(),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.edit_outlined,
-                        color: Color(0xff03145C),
-                        size: 18,
+                    onPressed: () {
+                      controller.insertPage(
+                        EditProfileScreen(),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/icons_profile/feather-edit-2.png',
+                      width: 16,
+                    ),
+                    label: Text(
+                      AppLocalizations.of(context)!.edit,
+                      style: GoogleFonts.roboto(
+                        color: Theme.of(context).textTheme.subtitle1!.color,
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1!.fontSize,
+                        fontWeight: FontWeight.w500,
                       ),
-                      label: Text(
-                        AppLocalizations.of(context)!.edit,
-                        style: TextStyle(
-                          color: Color(0xff03145C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                )
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
