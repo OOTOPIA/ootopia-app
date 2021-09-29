@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,8 +24,9 @@ class _LastLearningTrackComponentsState
 
   @override
   void initState() {
-    super.initState();
     performRequest();
+
+    super.initState();
   }
 
   void performRequest() async {
@@ -37,6 +38,7 @@ class _LastLearningTrackComponentsState
 
   @override
   Widget build(BuildContext context) {
+    haveSvg = lastLearningTracks!.imageUrl.contains('.svg');
     return lastLearningTracks == null
         ? Container()
         : Container(
@@ -106,11 +108,11 @@ class _LastLearningTrackComponentsState
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       onTap: () {
-                        // controller.insertPage(ViewLearningTracksScreen({
-                        //   'list_chapters': teste.chapters,
-                        //   'description': teste.description,
-                        //   'title': teste.title,
-                        // }));
+                        controller.insertPage(ViewLearningTracksScreen({
+                          'list_chapters': lastLearningTracks!.chapters,
+                          'description': lastLearningTracks!.description,
+                          'title': lastLearningTracks!.title,
+                        }));
                       },
                       child: Row(
                         children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -15,20 +16,42 @@ class LearningTracksScreen extends StatefulWidget {
 class _LearningTracksScreenState extends State<LearningTracksScreen> {
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
+  List<LearningTracksModel> _allLearningTracks = [];
   @override
   void initState() {
     super.initState();
     learningTracksStore.listLearningTracks(50, 0);
+    _hasMoreItems = _allLearningTracks.length == _itemsPerPageCount;
+  }
+
+  int currentPage = 1;
+
+  final int _itemsPerPageCount = 3;
+
+  int _nextPageThreshold = 5;
+
+  bool _hasMoreItems = true;
+  Future<void> _getData() async {
+    //_allPosts.addAll(learningTracksStore.listOfLearningTracks);
+    learningTracksStore.listLearningTracks(
+        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount);
   }
 
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
+      _allLearningTracks.addAll(learningTracksStore.listOfLearningTracks);
       return LoadingOverlay(
         isLoading: learningTracksStore.isloading,
         child: RefreshIndicator(
+          edgeOffset: 10,
           onRefresh: () async {
-            await learningTracksStore.listLearningTracks(50, 0);
+            //await learningTracksStore.listLearningTracks(5, _itemsPerPageCount);
+            setState(() {
+              _allLearningTracks = [];
+              currentPage = 1;
+            });
+            _getData();
           },
           child: Container(
             child: ListView(
@@ -76,8 +99,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                   child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount:
-                          learningTracksStore.listOfLearningTracks.length,
+                      itemCount: _allLearningTracks.length,
                       itemBuilder: (context, index) {
                         return InkWell(
                           highlightColor: Colors.transparent,
@@ -98,9 +120,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 children: [
                                   CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                        learningTracksStore
-                                            .listOfLearningTracks[index]
-                                            .userPhotoUrl),
+                                        _allLearningTracks[index].userPhotoUrl),
                                   ),
                                   SizedBox(
                                     width: 16,
@@ -111,15 +131,12 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                        learningTracksStore
-                                            .listOfLearningTracks[index]
-                                            .userName,
+                                        _allLearningTracks[index].userName,
                                       ),
                                       SizedBox(
                                         height: 6,
                                       ),
-                                      Text(learningTracksStore
-                                          .listOfLearningTracks[index].location)
+                                      Text(_allLearningTracks[index].location)
                                     ],
                                   )
                                 ],
@@ -133,8 +150,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12)),
                                     child: Image.network(
-                                      learningTracksStore
-                                          .listOfLearningTracks[index].imageUrl,
+                                      _allLearningTracks[index].imageUrl,
                                       width: 370,
                                       height: 210,
                                       fit: BoxFit.cover,
@@ -146,8 +162,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                       padding: const EdgeInsets.only(
                                           bottom: 16.0, left: 16),
                                       child: Text(
-                                        learningTracksStore
-                                            .listOfLearningTracks[index].title,
+                                        _allLearningTracks[index].title,
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 20),
                                       ),
@@ -163,7 +178,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${learningTracksStore.listOfLearningTracks[index].chapters.length.toString()} lessons',
+                                    '${_allLearningTracks[index].chapters.length.toString()} lessons',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -173,7 +188,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        '${learningTracksStore.listOfLearningTracks[index].totalTimeInMinutes} min',
+                                        '${_allLearningTracks[index].totalTimeInMinutes} min',
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
@@ -200,7 +215,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                         width: 8,
                                       ),
                                       Text(
-                                        '${learningTracksStore.listOfLearningTracks[index].ooz.toString().replaceAll('.', ',')}',
+                                        '${_allLearningTracks[index].ooz.toString().replaceAll('.', ',')}',
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
@@ -215,8 +230,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 height: 8,
                               ),
                               Text(
-                                learningTracksStore
-                                    .listOfLearningTracks[index].description,
+                                _allLearningTracks[index].description,
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(

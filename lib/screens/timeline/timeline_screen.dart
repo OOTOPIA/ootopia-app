@@ -208,7 +208,6 @@ class _TimelinePageState extends State<TimelinePage>
           var linkSplit = uri.toString().split("resetPasswordToken=");
           var token = linkSplit[linkSplit.length - 1];
           if (token.isNotEmpty && token != null) {
-            print("EITA ESSE É O TOKEN ENTAO BRABO $token");
             setRecoverPasswordToken(token);
             goToResetPassword();
           }
