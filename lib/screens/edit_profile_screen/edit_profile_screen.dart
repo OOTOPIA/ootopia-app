@@ -55,7 +55,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             preferredSize: Size(double.infinity, 45),
             child: SafeArea(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                padding: EdgeInsets.symmetric(
+                    horizontal: GlobalConstants.of(context).intermediateSpacing,
+                    vertical: 14),
                 decoration: BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
@@ -136,7 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: ListView(
                     children: [
                       SizedBox(
-                        height: 18,
+                        height: GlobalConstants.of(context).spacingNormal,
                       ),
                       Center(
                         child: Stack(
