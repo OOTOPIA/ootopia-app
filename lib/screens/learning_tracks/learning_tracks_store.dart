@@ -11,7 +11,7 @@ abstract class LearningTracksStoreBase with Store {
       LearningTracksRepositoryImpl();
 
   @observable
-  var listOfLearningTracks = <LearningTracksModel>[];
+  var allLearningTracks = <LearningTracksModel>[];
 
   @observable
   var isloading = false;
@@ -23,7 +23,7 @@ abstract class LearningTracksStoreBase with Store {
     isloading = true;
     var response = await learningTracksRepositoryImpl.listLearningTracks(
         limit: limit, offset: offset);
-    listOfLearningTracks.addAll(response);
+    allLearningTracks.addAll(response);
     isloading = false;
   }
 

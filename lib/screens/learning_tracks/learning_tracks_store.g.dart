@@ -9,20 +9,19 @@ part of 'learning_tracks_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
-  final _$listOfLearningTracksAtom =
-      Atom(name: 'LearningTracksStoreBase.listOfLearningTracks');
+  final _$allLearningTracksAtom =
+      Atom(name: 'LearningTracksStoreBase.allLearningTracks');
 
   @override
-  List<LearningTracksModel> get listOfLearningTracks {
-    _$listOfLearningTracksAtom.reportRead();
-    return super.listOfLearningTracks;
+  List<LearningTracksModel> get allLearningTracks {
+    _$allLearningTracksAtom.reportRead();
+    return super.allLearningTracks;
   }
 
   @override
-  set listOfLearningTracks(List<LearningTracksModel> value) {
-    _$listOfLearningTracksAtom.reportWrite(value, super.listOfLearningTracks,
-        () {
-      super.listOfLearningTracks = value;
+  set allLearningTracks(List<LearningTracksModel> value) {
+    _$allLearningTracksAtom.reportWrite(value, super.allLearningTracks, () {
+      super.allLearningTracks = value;
     });
   }
 
@@ -79,7 +78,7 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
   @override
   String toString() {
     return '''
-listOfLearningTracks: ${listOfLearningTracks},
+allLearningTracks: ${allLearningTracks},
 isloading: ${isloading},
 getLastLearningTracks: ${getLastLearningTracks}
     ''';

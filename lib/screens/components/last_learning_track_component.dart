@@ -20,16 +20,16 @@ class _LastLearningTrackComponentsState
 
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
-  bool haveSvg = false;
 
   @override
   void initState() {
-    performRequest();
-
+    Future.delayed(Duration.zero, () async {
+      await performRequest();
+    });
     super.initState();
   }
 
-  void performRequest() async {
+  Future<void> performRequest() async {
     await learningTracksStore.lastLearningTracks();
     setState(() {
       lastLearningTracks = learningTracksStore.getLastLearningTracks;
@@ -38,7 +38,6 @@ class _LastLearningTrackComponentsState
 
   @override
   Widget build(BuildContext context) {
-    haveSvg = lastLearningTracks!.imageUrl.contains('.svg');
     return lastLearningTracks == null
         ? Container()
         : Container(
@@ -122,19 +121,20 @@ class _LastLearningTrackComponentsState
                             child: ClipRRect(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
-                              child: haveSvg
-                                  ? SvgPicture.network(
-                                      lastLearningTracks!.imageUrl,
-                                      width: 52,
-                                      height: 52,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.network(
-                                      lastLearningTracks!.imageUrl,
-                                      width: 52,
-                                      height: 52,
-                                      fit: BoxFit.cover,
-                                    ),
+                              child:
+                                  lastLearningTracks!.imageUrl.contains('.svg')
+                                      ? SvgPicture.network(
+                                          lastLearningTracks!.imageUrl,
+                                          width: 52,
+                                          height: 52,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          lastLearningTracks!.imageUrl,
+                                          width: 52,
+                                          height: 52,
+                                          fit: BoxFit.cover,
+                                        ),
                             ),
                           ),
                           SizedBox(
