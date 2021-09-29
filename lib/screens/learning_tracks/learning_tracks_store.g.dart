@@ -45,17 +45,35 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
       Atom(name: 'LearningTracksStoreBase.getLastLearningTracks');
 
   @override
-  List<LearningTracksModel> get getLastLearningTracks {
+  LearningTracksModel? get getLastLearningTracks {
     _$getLastLearningTracksAtom.reportRead();
     return super.getLastLearningTracks;
   }
 
   @override
-  set getLastLearningTracks(List<LearningTracksModel> value) {
+  set getLastLearningTracks(LearningTracksModel? value) {
     _$getLastLearningTracksAtom.reportWrite(value, super.getLastLearningTracks,
         () {
       super.getLastLearningTracks = value;
     });
+  }
+
+  final _$listLearningTracksAsyncAction =
+      AsyncAction('LearningTracksStoreBase.listLearningTracks');
+
+  @override
+  Future<void> listLearningTracks([int? limit, int? offset]) {
+    return _$listLearningTracksAsyncAction
+        .run(() => super.listLearningTracks(limit, offset));
+  }
+
+  final _$lastLearningTracksAsyncAction =
+      AsyncAction('LearningTracksStoreBase.lastLearningTracks');
+
+  @override
+  Future<void> lastLearningTracks() {
+    return _$lastLearningTracksAsyncAction
+        .run(() => super.lastLearningTracks());
   }
 
   @override

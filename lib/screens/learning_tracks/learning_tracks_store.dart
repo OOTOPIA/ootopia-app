@@ -17,8 +17,8 @@ abstract class LearningTracksStoreBase with Store {
   var isloading = false;
 
   @observable
-  var getLastLearningTracks = <LearningTracksModel>[];
-
+  LearningTracksModel? getLastLearningTracks;
+  @action
   Future<void> listLearningTracks([int? limit, int? offset]) async {
     isloading = true;
     var response = await learningTracksRepositoryImpl.listLearningTracks(
@@ -27,10 +27,9 @@ abstract class LearningTracksStoreBase with Store {
     isloading = false;
   }
 
+  @action
   Future<void> lastLearningTracks() async {
-    getLastLearningTracks.clear();
     var response = await learningTracksRepositoryImpl.lasLearningTracks();
-
-    getLastLearningTracks.add(response);
+    getLastLearningTracks = response;
   }
 }

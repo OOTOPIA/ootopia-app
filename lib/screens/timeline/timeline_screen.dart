@@ -399,7 +399,6 @@ class _TimelinePageState extends State<TimelinePage>
             ),
             child: Column(
               children: <Widget>[
-                LastLearningTrackComponents(),
                 Expanded(
                   child: VisibilityDetector(
                     key: ObjectKey(flickMultiManager),
@@ -442,15 +441,20 @@ class _TimelinePageState extends State<TimelinePage>
                               ),
                             );
                           }
-                          return PhotoTimeline(
-                            key: ObjectKey(_allPosts[index]),
-                            index: index,
-                            post: _allPosts[index],
-                            timelineBloc: this.timelineBloc,
-                            loggedIn: this.loggedIn,
-                            user: user,
-                            flickMultiManager: flickMultiManager,
-                            isProfile: false,
+                          return Column(
+                            children: [
+                              if (index == 0) LastLearningTrackComponents(),
+                              PhotoTimeline(
+                                key: ObjectKey(_allPosts[index]),
+                                index: index,
+                                post: _allPosts[index],
+                                timelineBloc: this.timelineBloc,
+                                loggedIn: this.loggedIn,
+                                user: user,
+                                flickMultiManager: flickMultiManager,
+                                isProfile: false,
+                              ),
+                            ],
                           );
                         },
                       ),

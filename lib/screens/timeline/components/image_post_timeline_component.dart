@@ -7,7 +7,7 @@ class ImagePostTimeline extends StatefulWidget {
   const ImagePostTimeline({
     Key? key,
     required this.image,
-   //this.onDoubleTapVideo,
+    //this.onDoubleTapVideo,
   }) : super(key: key);
 
   final String image;
@@ -32,7 +32,6 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
         imageSize =
             Size(image.image.width.toDouble(), image.image.height.toDouble());
         completer.complete(image.image);
-        setState(() {});
       },
     ));
 

@@ -27,7 +27,9 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
       return LoadingOverlay(
         isLoading: learningTracksStore.isloading,
         child: RefreshIndicator(
-          onRefresh: () async {},
+          onRefresh: () async {
+            await learningTracksStore.listLearningTracks(50, 0);
+          },
           child: Container(
             child: ListView(
               children: [
