@@ -10,6 +10,7 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:flutter/gestures.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
   late WalletStore walletStore;
   late TabController _tabController;
   int _activeTabIndex = 0;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -34,12 +36,14 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
 
     Future.delayed(Duration.zero, () {
       walletStore.getWallet();
-    });
-
-    PageViewController.instance.addListener(() {
-      if (homeStore.currentPageWidget is WalletPage) {
-        _performAllRequests();
-      }
+      controller.addOnBottomNavigationBarChanged((index) {
+        if (mounted) {
+          if (index == PageViewController.TAB_INDEX_WALLET) {
+            _performAllRequests();
+          }
+          setState(() {});
+        }
+      });
     });
   }
 

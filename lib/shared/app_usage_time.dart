@@ -34,9 +34,12 @@ class AppUsageTime {
   static AppUsageTime get instance =>
       _instance == null ? _instance = AppUsageTime() : _instance!;
 
-  _updateUsageTime(Timer timer) {
+  _updateUsageTime(Timer timer) async {
     if (_watch.isRunning) {
       usageTimeSoFarInMilliseconds += 1000;
+      if (prefs == null) {
+        prefs = await SharedPreferences.getInstance();
+      }
       //A cada segundo armazenamos no storage o tempo cronometrado
       prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
     }

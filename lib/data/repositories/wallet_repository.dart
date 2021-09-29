@@ -42,7 +42,6 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
         headers: await this.getHeaders(),
       );
       if (response.statusCode == 200) {
-        print("WALLET RESPONSE ${response.body}");
         return Future.value(Wallet.fromJson(json.decode(response.body)));
       } else {
         throw Future.error('Failed to load wallet');
@@ -66,7 +65,7 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
         queryParams['action'] = action.toString();
       }
 
-      User user = await getCurrentUser();
+      User user = (await getCurrentUser())!;
       String queryString = Uri(queryParameters: queryParams).query;
 
       Response response = await ApiClient.api().get(
@@ -74,7 +73,6 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
       );
 
       if (response.statusCode == 200) {
-        print("WALLET RESPONSE HISTORY --> ${response.data}");
 
         return (response.data as List)
             .map((i) => WalletTransfer.fromJson(i))

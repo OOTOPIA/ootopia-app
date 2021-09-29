@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -19,6 +20,7 @@ import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'components/album_profile_widget.dart';
 import 'components/avatar_photo_widget.dart';
 import 'components/empty_posts_widget.dart';
@@ -46,6 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String profileUserId = '';
 
   bool isVisible = false;
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -69,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await store?.getUserPosts(profileUserId);
 
       Future.delayed(Duration.zero, () {
-        walletStore.getWallet();
+        if (profileUserIsLoggedUser) walletStore.getWallet();
       });
 
       this.trackingEvents.profileViewedAProfile(
@@ -100,13 +103,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   _goToTimelinePost(posts, postSelected) {
-    PageViewController.instance.addPage(TimelineScreenProfileScreen(
-      {
-        "userId": _getUserId(),
-        "posts": posts,
-        "postSelected": postSelected,
-      },
-    ));
+    controller.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": _getUserId(),
+          "posts": posts,
+          "postSelected": postSelected,
+        },
+      ),
+    );
+  }
+
+  _goToWalletPage() {
+    controller.selectBottomTab(3);
   }
 
   bool get isLoggedInUserProfile {
@@ -115,12 +124,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : ((widget.args == null || widget.args!["id"] == null)
             ? true
             : widget.args!["id"] == authStore.currentUser!.id);
-  }
-
-  _goToPage(int index) {
-    PageViewController.instance.goToPage(
-      index,
-    );
   }
 
   @override
@@ -151,6 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           AvatarPhotoWidget(
                             photoUrl: store?.profile!.photoUrl,
+                            sizePhotoUrl: 114,
                             isBadges: store == null
                                 ? false
                                 : store!.profile!.badges!.length > 0,
@@ -186,8 +190,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       Text(
                         store == null ? "" : store!.profile!.fullname,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w500),
+                        style: GoogleFonts.roboto(
+                            color: Theme.of(context).textTheme.subtitle1!.color,
+                            fontSize: 24,
+                            fontWeight: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .fontWeight),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingNormal),
@@ -195,14 +204,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         AppLocalizations.of(context)!
                             .regenerationGame
                             .toUpperCase(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.roboto(
+                            color: Theme.of(context).textTheme.subtitle1!.color,
+                            fontSize:
+                                Theme.of(context).textTheme.subtitle1!.fontSize,
+                            fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingSmall),
                       Container(
-                        height: 44,
-                        width: MediaQuery.of(context).size.width * .8,
+                        height: 46,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         decoration: BoxDecoration(
                             border: Border.fromBorderSide(BorderSide(
                                 width: 1,
@@ -240,8 +252,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontSize: 16, color: Colors.black87),
                                   ),
                                   TextSpan(
-                                    text:
-                                        "${authStore.currentUser!.dailyLearningGoalInMinutes}m",
+                                    //text:
+                                    //"${authStore.currentUser!.dailyLearningGoalInMinutes}m",
+                                    text: "10m",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
@@ -452,7 +465,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       isLoggedInUserProfile
                           ? InkWell(
                               onTap: () {
-                                _goToPage(PageViewController.TAB_INDEX_WALLET);
+                                _goToWalletPage();
                               },
                               child: Container(
                                 width: double.maxFinite,
@@ -565,8 +578,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               AlbumProfileWidget(
                                 onTap: () {},
-                                albumName: "Passeio",
-                                photoAlbumUrl: "hello",
+                                albumName: AppLocalizations.of(context)!.all2,
+                                photoAlbumUrl: "",
                               ),
                               InkWell(
                                 onTap: () {
@@ -575,7 +588,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 },
                                 child: AlbumProfileWidget(
                                   onTap: () {},
-                                  albumName: "Album",
+                                  albumName:
+                                      AppLocalizations.of(context)!.album,
                                 ),
                               )
                             ],
@@ -608,12 +622,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Wrap(
                                 alignment: WrapAlignment.start,
                                 crossAxisAlignment: WrapCrossAlignment.start,
+                                spacing: 10, // gap between adjacent chips
+                                runSpacing: 20, // gap between lines
                                 children: store!.postsList
                                     .asMap()
                                     .map(
                                       (index, post) => MapEntry(
                                         index,
                                         GridCustomWidget(
+                                          discountSpacing: 10 * 3,
+                                          amountPadding: 0,
                                           thumbnailUrl: post.thumbnailUrl,
                                           columnsCount: 4,
                                           type: post.type,

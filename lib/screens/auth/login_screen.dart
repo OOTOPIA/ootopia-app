@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   Map<String, dynamic>? args;
@@ -34,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool mailIsValid = true;
   bool passIsValid = true;
+
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   void initState() {
@@ -77,18 +80,23 @@ class _LoginPageState extends State<LoginPage> {
             } else if (state is LoadedSucessState) {
               print("LOGGED!!!!!");
               authStore.setUserIsLogged();
+              controller.resetNavigation();
               if (widget.args != null &&
                   widget.args!['returnToPageWithArgs'] != null) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   PageRoute.Page.homeScreen.route,
-                  ModalRoute.withName('/'),
+                  (Route<dynamic> route) => false,
                   arguments: {
                     "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
                   },
                 );
               } else {
+                // Navigator.of(context).popUntil(
+                //     ModalRoute.withName(PageRoute.Page.homeScreen.route));
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                    PageRoute.Page.homeScreen.route, ModalRoute.withName('/'));
+                  PageRoute.Page.homeScreen.route,
+                  (Route<dynamic> route) => false,
+                );
               }
             }
           },

@@ -15,6 +15,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class CommentScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -449,6 +450,7 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SmartPageController controller = SmartPageController.getInstance();
     return Opacity(
       opacity:
           (_enabledToDeleteOtherComments() ? 1.0 : (selectMode ? 0.5 : 1.0)),
@@ -470,11 +472,11 @@ class CommentItem extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    PageViewController.instance.addPage(ProfileScreen(
-                      {
+                    controller.insertPage(
+                      ProfileScreen({
                         "id": this.comment.userId,
-                      },
-                    ));
+                      }),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
-import 'package:ootopia_app/screens/components/bottom_navigation_bar.dart';
-import 'package:ootopia_app/screens/components/keep_alive_page.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
@@ -16,13 +16,14 @@ import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/learning/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
+import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
-import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -34,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
   late ProfileScreenStore profileStore;
@@ -42,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   bool createdPostAlertAlreadyShowed = false;
   double oozToRewardAfterSendPost = 0;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+  late SmartPageController controller;
 
   @override
   void initState() {
@@ -49,15 +51,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.addObserver(this);
 
-    PageViewController.instance.onClickBack = () {
-      homeStore?.setCurrentPageWidget(PageViewController.instance.pages[
-          PageViewController.instance.pageHistoryTabSelected[
-              PageViewController.instance.pageHistoryTabSelected.length - 1]]);
-    };
+    controller = SmartPageController.newInstance(
+      context: context,
+      initialPages: [
+        TimelinePage(null),
+        LearningTracksScreen(),
+        LearningTracksScreen(),
+        WalletPage(),
+        ProfileScreen(null),
+      ],
+    );
 
-    PageViewController.instance.onAddPage = () {
-      setState(() {});
-    };
+    controller.addListener(() {
+      if (mounted) setState(() {});
+    });
 
     Future.delayed(Duration(milliseconds: 1000), () {
       _checkStores();
@@ -95,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    Color selectedIconColor = Theme.of(context).accentColor;
+    Color unselectedIconColor =
+        Theme.of(context).iconTheme.color!.withOpacity(0.7);
     authStore = Provider.of<AuthStore>(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
 
@@ -103,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
     return WillPopScope(
       onWillPop: () async {
-        var result = PageViewController.instance.back();
+        var result = await controller.back();
         if (result &&
             !(await ChatDialogController.instance
                 .getChatHasAlreadyBeenOpenedToday())) {
@@ -157,46 +167,29 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         child: Observer(builder: (_) {
           return Scaffold(
-            key: _key,
-            appBar: homeStore?.currentPageWidget is EditProfileScreen
-                ? null
-                : homeStore?.currentPageWidget is ProfileScreen
-                    ? appBarProfile
-                    : appBar,
-            drawer: homeStore?.currentPageWidget is ProfileScreen
+            key: _scaffoldKey,
+            appBar: currentAppBar(),
+            drawer: controller.currentBottomIndex ==
+                    PageViewController.TAB_INDEX_PROFILE
                 ? null
                 : MenuDrawer(
                     onTapProfileItem: () {
                       openProfile();
                     },
                     onTapLogoutItem: () {
-                      homeStore?.stopDailyGoalTimer();
-                      _goToPage(PageViewController.TAB_INDEX_TIMELINE);
+                      controller
+                          .goToPage(PageViewController.TAB_INDEX_TIMELINE);
+                      controller.resetNavigation();
+                      setState(() {});
                     },
                     onTapWalletItem: () {
-                      _goToPage(PageViewController.TAB_INDEX_WALLET);
+                      controller.goToPage(PageViewController.TAB_INDEX_WALLET);
                     },
                   ),
             body: Stack(
               children: [
-                PageView.builder(
-                  pageSnapping: false,
-                  controller: PageViewController.instance.controller,
-                  scrollDirection: Axis.horizontal,
-                  physics: NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) {
-                    homeStore?.setCurrentPageIndex(index);
-                    if (PageViewController.instance.pages.length <= 5) {
-                      homeStore?.setCurrentPageWidget(
-                          PageViewController.instance.pages[index]);
-                    }
-                    setState(() {});
-                  },
-                  itemCount: PageViewController.instance.pages.length,
-                  itemBuilder: (context, index) {
-                    return KeepAlivePage(
-                        child: PageViewController.instance.pages[index]);
-                  },
+                SmartPageNavigation(
+                  controller: controller,
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
@@ -235,8 +228,152 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ],
             ),
-            bottomNavigationBar: AppBottomNavigationBar(
-              onTap: _bottomOnTapButtonHandler,
+            bottomNavigationBar: new SmartPageBottomNavigationBar(
+              controller: controller,
+              options: SmartPageBottomNavigationOptions(
+                height: 50,
+                indicatorColor: Theme.of(context).accentColor,
+                backgroundColor: Colors.white,
+                showBorder: false,
+                showIndicator: true,
+                borderColor: Color(0xff707070).withOpacity(0.20),
+                selectedColor: selectedIconColor,
+                unselectedColor: unselectedIconColor,
+              ),
+              children: [
+                BottomIcon(
+                  selectedWidget: SvgPicture.asset(
+                    'assets/icons/home_icon.svg',
+                    color: selectedIconColor,
+                  ),
+                  unselectedWidget: SvgPicture.asset(
+                    'assets/icons/home_icon.svg',
+                    color: unselectedIconColor,
+                  ),
+                ),
+                BottomIcon(
+                  selectedWidget: SvgPicture.asset(
+                    'assets/icons/compass.svg',
+                    color: selectedIconColor,
+                  ),
+                  unselectedWidget: SvgPicture.asset(
+                    'assets/icons/compass.svg',
+                    color: unselectedIconColor,
+                  ),
+                ),
+                BottomIcon(
+                  selectedWidget: Center(
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Theme.of(context).accentColor,
+                      ),
+                      child: Icon(
+                        FeatherIcons.plus,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                  unselectedWidget: Center(
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Theme.of(context).accentColor,
+                      ),
+                      child: Icon(
+                        FeatherIcons.plus,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                ),
+                BottomIcon(
+                  selectedWidget: SvgPicture.asset(
+                    'assets/icons/ooz_circle_icon.svg',
+                    color: selectedIconColor,
+                  ),
+                  unselectedWidget: SvgPicture.asset(
+                    'assets/icons/ooz_circle_icon.svg',
+                    color: unselectedIconColor,
+                  ),
+                ),
+                BottomIcon(
+                  selectedWidget: SvgPicture.asset(
+                    'assets/icons/profile_icon.svg',
+                    color: selectedIconColor,
+                  ),
+                  unselectedWidget: SvgPicture.asset(
+                    'assets/icons/profile_icon.svg',
+                    color: unselectedIconColor,
+                  ),
+                ),
+              ],
+              onTap: (int index) {
+                var result = true;
+                switch (index) {
+                  case PageViewController.TAB_INDEX_TIMELINE:
+                    controller.resetNavigation();
+                    break;
+                  case PageViewController.TAB_INDEX_CAMERA:
+                    if (authStore.currentUser == null) {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "pageRoute": PageRoute.Page.cameraScreen.route,
+                            "arguments": null
+                          }
+                        },
+                      );
+                    } else {
+                      Navigator.of(context)
+                          .pushNamed(PageRoute.Page.cameraScreen.route);
+                    }
+                    result = false;
+                    break;
+                  case PageViewController.TAB_INDEX_WALLET:
+                    print("caiu 1");
+                    if (authStore.currentUser == null) {
+                      print("caiu 2");
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "wallet",
+                            "arguments": null
+                          }
+                        },
+                      );
+                      result = false;
+                    }
+                    break;
+                  case PageViewController.TAB_INDEX_PROFILE:
+                    if (authStore.currentUser == null) {
+                      result = false;
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "my_profile",
+                            "arguments": null
+                          }
+                        },
+                      );
+                    } else {
+                      result = openProfile();
+                    }
+                    break;
+                  default:
+                }
+                print("caiu 3");
+                return result;
+              },
             ),
           );
         }),
@@ -244,92 +381,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  _bottomOnTapButtonHandler(int index) {
-    if (homeStore?.currentPageIndex == index &&
-        index != PageViewController.TAB_INDEX_PROFILE) {
-      return;
-    }
-
-    setState(() {
-      switch (index) {
-        case PageViewController.TAB_INDEX_TIMELINE:
-          PageViewController.instance.resetPages();
-
-          _goToPage(PageViewController.TAB_INDEX_TIMELINE);
-
-          homeStore?.setCurrentPageWidget(PageViewController
-              .instance.pages[PageViewController.TAB_INDEX_TIMELINE]);
-          homeStore?.setCurrentPageIndex(PageViewController.TAB_INDEX_TIMELINE);
-          setState(() {});
-          break;
-
-        case PageViewController.TAB_INDEX_LEARNING_TRACKS:
-          if (PageViewController.instance.pages.length > 5) {
-            PageViewController.instance.addPage(LearningTracksScreen());
-          } else {
-            _goToPage(PageViewController.TAB_INDEX_LEARNING_TRACKS);
-          }
-          homeStore
-              ?.setCurrentPageWidget(PageViewController.instance.pages[index]);
-
-          break;
-        case PageViewController.TAB_INDEX_CAMERA:
-          if (authStore.currentUser == null) {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.loginScreen.route,
-              arguments: {
-                "returnToPageWithArgs": {
-                  "pageRoute": PageRoute.Page.cameraScreen.route,
-                  "arguments": null
-                }
-              },
-            );
-          } else {
-            Navigator.of(context).pushNamed(PageRoute.Page.cameraScreen.route);
-          }
-          break;
-        case PageViewController.TAB_INDEX_WALLET:
-          if (authStore.currentUser == null) {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.loginScreen.route,
-              arguments: {
-                "returnToPageWithArgs": {
-                  "currentPageName": "wallet",
-                  "arguments": null
-                }
-              },
-            );
-          } else {
-            if (PageViewController.instance.pages.length > 5) {
-              PageViewController.instance.addPage(WalletPage());
-            } else {
-              _goToPage(PageViewController.TAB_INDEX_WALLET);
-            }
-            homeStore?.setCurrentPageWidget(
-                PageViewController.instance.pages[index]);
-          }
-          break;
-        case PageViewController.TAB_INDEX_PROFILE:
-          if (authStore.currentUser == null) {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.loginScreen.route,
-              arguments: {
-                "returnToPageWithArgs": {
-                  "currentPageName": "my_profile",
-                  "arguments": null
-                }
-              },
-            );
-          } else {
-            openProfile();
-          }
-          break;
-        default:
-      }
-    });
-  }
-
-  openProfile() {
+  bool openProfile() {
+    var result = true;
     if (authStore.currentUser == null) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.loginScreen.route,
@@ -340,19 +393,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           }
         },
       );
-      return;
+      result = false;
     }
 
-    if (authStore.currentUser!.registerPhase == 2) {
-      if (PageViewController.instance.pages.length > 5) {
-        PageViewController.instance.addPage(ProfileScreen());
-      } else {
-        profileStore.getProfileDetails(authStore.currentUser!.id!);
-        _goToPage(PageViewController.TAB_INDEX_PROFILE);
-      }
-      homeStore?.setCurrentPageWidget(PageViewController
-          .instance.pages[PageViewController.TAB_INDEX_PROFILE]);
-    } else {
+    if (authStore.currentUser!.registerPhase != 2) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.registerPhase2Screen.route,
         arguments: {
@@ -362,13 +406,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           }
         },
       );
+      result = false;
     }
-  }
-
-  _goToPage(int index) {
-    PageViewController.instance.goToPage(
-      index,
-    );
+    return result;
   }
 
   _checkStores() async {
@@ -377,20 +417,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (authStore.currentUser == null) {
       authStore.checkUserIsLogged();
     }
-    if (homeStore?.currentPageWidget == null) {
-      homeStore?.setCurrentPageWidget(PageViewController.instance.pages[0]);
-    }
+    setState(() {});
   }
 
   _checkPageParams() {
-    Timer(Duration(milliseconds: 1000), () {
+    Timer(Duration(milliseconds: 300), () {
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
                 "my_profile" &&
             authStore.currentUser != null) {
           if (authStore.currentUser!.registerPhase == 2) {
             setState(() {
-              _goToPage(1);
+              controller.selectBottomTab(4);
             });
           } else if (authStore.currentUser!.registerPhase == 1) {
             Navigator.of(context).pushNamed(
@@ -413,9 +451,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (widget.args != null &&
           widget.args!['createdPost'] != null &&
           widget.args!['createdPost'] == true) {
-        homeStore?.setCurrentPageWidget(PageViewController
-            .instance.pages[PageViewController.TAB_INDEX_TIMELINE]);
-        homeStore?.setCurrentPageIndex(PageViewController.TAB_INDEX_TIMELINE);
         homeStore?.setShowCreatedPostAlert(true);
         oozToRewardAfterSendPost = widget.args!['oozToReward'];
         Timer(Duration(seconds: 5), () {
@@ -425,6 +460,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         });
       }
     });
+  }
+
+  PreferredSizeWidget? currentAppBar() {
+    return (controller.pages[controller.currentPageIndex]
+                is EditProfileScreen &&
+            controller.pages.length > controller.initialPages.length)
+        ? null
+        : controller.currentBottomIndex ==
+                    PageViewController.TAB_INDEX_PROFILE &&
+                controller.pages[controller.currentPageIndex] is ProfileScreen
+            ? appBarProfile
+            : appBar;
   }
 
   get appBarProfile => PreferredSize(
@@ -446,7 +493,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   width: 85,
                   child: Text(
                     AppLocalizations.of(context)!.profile,
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: GoogleFonts.roboto(
+                        color: Theme.of(context).textTheme.subtitle1!.color,
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1!.fontSize,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
                 Image.asset(
@@ -456,26 +507,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 Container(
                   width: 85,
                   child: TextButton.icon(
-                      onPressed: () {
-                        PageViewController.instance.addPage(
-                          EditProfileScreen(),
-                        );
-                        homeStore?.setCurrentPageWidget(EditProfileScreen());
-                      },
-                      icon: Icon(
-                        Icons.edit_outlined,
-                        color: Color(0xff03145C),
-                        size: 18,
+                    onPressed: () {
+                      controller.insertPage(
+                        EditProfileScreen(),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/icons_profile/feather-edit-2.png',
+                      width: 16,
+                    ),
+                    label: Text(
+                      AppLocalizations.of(context)!.edit,
+                      style: GoogleFonts.roboto(
+                        color: Theme.of(context).textTheme.subtitle1!.color,
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1!.fontSize,
+                        fontWeight: FontWeight.w500,
                       ),
-                      label: Text(
-                        AppLocalizations.of(context)!.edit,
-                        style: TextStyle(
-                          color: Color(0xff03145C),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                )
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -491,30 +542,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             height: 34,
           ),
         ),
-        toolbarHeight: homeStore?.currentPageIndex == 0 ? 104 : 45,
+        toolbarHeight: 45,
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         brightness: Brightness.light,
-        bottom: homeStore?.currentPageIndex == 0
-            ? PreferredSize(
-                child: RegenerationGame(),
-                preferredSize: const Size.fromHeight(0.0),
-              )
-            : null,
         leading: Padding(
           padding: EdgeInsets.only(
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
-          child: PageViewController.instance.pages.length <= 5
+          child: controller.pages.length <= 5
               ? IconButton(
                   icon: Icon(
                     FeatherIcons.menu,
                     color: Theme.of(context).iconTheme.color,
                   ),
-                  onPressed: () => _key.currentState!.openDrawer(),
+                  onPressed: () => _scaffoldKey.currentState!.openDrawer(),
                 )
               : InkWell(
-                  onTap: () => PageViewController.instance.back(),
+                  onTap: () => controller.back(),
                   child: Padding(
                       padding: const EdgeInsets.only(left: 3.0),
                       child: Row(
@@ -537,90 +582,73 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
         ),
         actions: [
-          if(PageViewController.instance.pages.length <= 5) remainingTime ,
+          if (controller.pages.length <= 5) remainingTime,
         ],
       );
 
-  Widget get remainingTime => Visibility(
-        visible: authStore.currentUser != null,
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: 19,
-          ),
-          child: GestureDetector(
-            onTap: () => setState(() {
-              if (homeStore != null && homeStore!.dailyGoalStats != null) {
-                homeStore?.showRemainingTime = !homeStore!.showRemainingTime;
-                homeStore?.showRemainingTimeEnd = !homeStore!.showRemainingTime;
-              }
-            }),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
+  Widget get remainingTime => Observer(
+        builder: (_) => Visibility(
+          visible: authStore.currentUser != null,
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: 19,
+            ),
+            child: GestureDetector(
+              onTap: () => setState(() {
+                if (homeStore != null && homeStore!.dailyGoalStats != null) {
+                  homeStore?.showRemainingTime = !homeStore!.showRemainingTime;
+                  homeStore?.showRemainingTimeEnd =
+                      !homeStore!.showRemainingTime;
+                }
+              }),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
                       right: homeStore != null && homeStore!.showRemainingTime
                           ? 4
-                          : 11),
-                  child: homeStore!.currentPageWidget is ProfileScreen &&
-                          homeStore!.userLogged
-                      ? TextButton.icon(
-                          onPressed: () {
-                            PageViewController.instance.addPage(
-                              EditProfileScreen(),
-                            );
-                            homeStore
-                                ?.setCurrentPageWidget(EditProfileScreen());
-                          },
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: Color(0xff03145C),
-                            size: 18,
-                          ),
-                          label: Text(
-                            AppLocalizations.of(context)!.edit,
-                            style: TextStyle(
-                              color: Color(0xff03145C),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ))
-                      : Icon(
-                          FeatherIcons.clock,
-                          color: Theme.of(context).iconTheme.color,
-                        ),
-                ),
-                AnimatedOpacity(
-                  opacity:
-                      homeStore != null && homeStore!.showRemainingTime ? 1 : 0,
-                  duration: Duration(milliseconds: 500),
-                  onEnd: () {},
-                  child: Visibility(
-                    visible: homeStore != null && homeStore!.showRemainingTime,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          homeStore != null ? homeStore!.remainingTime : "",
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff707070),
-                                  ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.remaining,
-                          style:
-                              Theme.of(context).textTheme.bodyText2!.copyWith(
-                                    fontSize: 12,
-                                    color: Color(0xff707070),
-                                  ),
-                        ),
-                      ],
+                          : 11,
+                    ),
+                    child: Icon(
+                      FeatherIcons.clock,
+                      color: Theme.of(context).iconTheme.color,
                     ),
                   ),
-                )
-              ],
+                  AnimatedOpacity(
+                    opacity: homeStore != null && homeStore!.showRemainingTime
+                        ? 1
+                        : 0,
+                    duration: Duration(milliseconds: 500),
+                    onEnd: () {},
+                    child: Visibility(
+                      visible:
+                          homeStore != null && homeStore!.showRemainingTime,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            homeStore != null ? homeStore!.remainingTime : "",
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff707070),
+                                    ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.remaining,
+                            style:
+                                Theme.of(context).textTheme.bodyText2!.copyWith(
+                                      fontSize: 12,
+                                      color: Color(0xff707070),
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

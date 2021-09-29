@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="14.25" height="14.871" viewBox="0 0 14.25 14.871">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #03145c;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </defs>
+  <g id="Grupo_2891" data-name="Grupo 2891" transform="translate(-25.25 -11.939)">
+    <path id="Caminho_438" data-name="Caminho 438" class="cls-1" d="M20.25,18H7.5" transform="translate(18.5 1.375)"/>
+    <path id="Caminho_439" data-name="Caminho 439" class="cls-1" d="M13.875,20.25,7.5,13.875,13.875,7.5" transform="translate(18.5 5.5)"/>
+  </g>
+</svg>
