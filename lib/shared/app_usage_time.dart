@@ -80,8 +80,8 @@ class AppUsageTime {
         var _usersRepository = UserRepositoryImpl();
         await _usersRepository.recordTimeUserUsedApp(ms!);
         usageTimeSoFarInMilliseconds = 0;
-        prefs!.setInt(_prefsKey, 0);
-        prefs!.setInt(_prefsPendingTimeKey, 0);
+        prefs?.setInt(_prefsKey, 0);
+        prefs?.setInt(_prefsPendingTimeKey, 0);
       });
     }
   }
