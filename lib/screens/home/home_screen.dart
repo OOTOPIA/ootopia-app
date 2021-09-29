@@ -490,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 85,
+                  width: 70,
                   child: Text(
                     AppLocalizations.of(context)!.profile,
                     style: GoogleFonts.roboto(
@@ -504,26 +504,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   'assets/images/logo.png',
                   height: 34,
                 ),
-                Container(
-                  width: 85,
-                  child: TextButton.icon(
-                    onPressed: () {
-                      controller.insertPage(
-                        EditProfileScreen(),
-                      );
-                    },
-                    icon: Image.asset(
-                      'assets/icons_profile/feather-edit-2.png',
-                      width: 16,
-                    ),
-                    label: Text(
-                      AppLocalizations.of(context)!.edit,
-                      style: GoogleFonts.roboto(
-                        color: Theme.of(context).textTheme.subtitle1!.color,
-                        fontSize:
-                            Theme.of(context).textTheme.subtitle1!.fontSize,
-                        fontWeight: FontWeight.w500,
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    controller.insertPage(
+                      EditProfileScreen(),
+                    );
+                  },
+                  child: Container(
+                    width: 70,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Image.asset(
+                            'assets/icons_profile/feather-edit-2.png',
+                            width: 16,
+                          ),
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.edit,
+                          style: GoogleFonts.roboto(
+                            color: Theme.of(context).textTheme.subtitle1!.color,
+                            fontSize:
+                                Theme.of(context).textTheme.subtitle1!.fontSize,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
