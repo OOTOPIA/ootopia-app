@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -15,11 +16,19 @@ class LearningTracksScreen extends StatefulWidget {
 class _LearningTracksScreenState extends State<LearningTracksScreen> {
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
+  bool hasError = false;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      await learningTracksStore.listLearningTracks(_itemsPerPageCount, 0);
+      await learningTracksStore
+          .listLearningTracks(_itemsPerPageCount, 0)
+          .onError((error, stackTrace) {
+        setState(() {
+          hasError = true;
+        });
+      });
+
       setState(() {});
     });
   }
@@ -32,10 +41,17 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
 
   bool _hasMoreItems = true;
   Future<void> _getData() async {
-    await learningTracksStore.listLearningTracks(
+    hasError = false;
+    await learningTracksStore
+        .listLearningTracks(
       _itemsPerPageCount,
       (currentPage - 1) * _itemsPerPageCount,
-    );
+    )
+        .onError((error, stackTrace) {
+      setState(() {
+        hasError = true;
+      });
+    });
     setState(() {
       _hasMoreItems =
           learningTracksStore.allLearningTracks.length == _itemsPerPageCount;
@@ -44,6 +60,14 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (hasError) {
+      return TryAgain(
+        _getData,
+        buttonBackgroundColor: Colors.white,
+        messageTextColor: Colors.white,
+        buttonTextColor: Colors.black,
+      );
+    }
     return RefreshIndicator(
       onRefresh: () async {
         setState(() {
@@ -101,7 +125,6 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                   itemCount: learningTracksStore.allLearningTracks.length +
                       (_hasMoreItems ? 1 : 0),
                   itemBuilder: (context, index) {
-                    print('$index');
                     if (index ==
                             learningTracksStore.allLearningTracks.length -
                                 _nextPageThreshold &&

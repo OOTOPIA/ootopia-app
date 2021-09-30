@@ -22,11 +22,9 @@ class LearningTracksRepositoryImpl
       if (response.statusCode == 200) {
         return LearningTracksModel.fromJson(response.data);
       }
-      return Future.error('error');
+      return throw Exception('Something went wrong');
     } catch (e) {
-      print('Error get learning tracks: $e');
-
-      return Future.error('error $e');
+      return throw Exception('failed to get learning track $e');
     }
   }
 
@@ -49,11 +47,9 @@ class LearningTracksRepositoryImpl
             .map((i) => LearningTracksModel.fromJson(i))
             .toList();
       }
-      return Future.error('error');
+      return throw Exception('Something went wrong');
     } catch (e) {
-      print('Error get learning tracks: $e');
-
-      return Future.error('error $e');
+      return throw Exception('failed to get learning track $e');
     }
   }
 }
