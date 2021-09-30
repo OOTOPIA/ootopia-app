@@ -28,6 +28,7 @@ enum Page {
   insertInvitationCode,
   editProfileScreen,
   newFutureCategories,
+  viewLearningTracksScreen,
 }
 
 extension PageRoute on Page {
