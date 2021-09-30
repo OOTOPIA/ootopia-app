@@ -23,10 +23,10 @@ class _LastLearningTrackComponentsState
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(Duration.zero, () async {
       await performRequest();
     });
-    super.initState();
   }
 
   Future<void> performRequest() async {

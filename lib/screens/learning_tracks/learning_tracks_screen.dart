@@ -46,8 +46,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        learningTracksStore.allLearningTracks = [];
-        currentPage = 1;
+        setState(() {
+          learningTracksStore.allLearningTracks = [];
+          currentPage = 1;
+        });
         await _getData();
       },
       child: Container(

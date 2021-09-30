@@ -25,21 +25,6 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
     });
   }
 
-  final _$isloadingAtom = Atom(name: 'LearningTracksStoreBase.isloading');
-
-  @override
-  bool get isloading {
-    _$isloadingAtom.reportRead();
-    return super.isloading;
-  }
-
-  @override
-  set isloading(bool value) {
-    _$isloadingAtom.reportWrite(value, super.isloading, () {
-      super.isloading = value;
-    });
-  }
-
   final _$getLastLearningTracksAtom =
       Atom(name: 'LearningTracksStoreBase.getLastLearningTracks');
 
@@ -79,7 +64,6 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
   String toString() {
     return '''
 allLearningTracks: ${allLearningTracks},
-isloading: ${isloading},
 getLastLearningTracks: ${getLastLearningTracks}
     ''';
   }
