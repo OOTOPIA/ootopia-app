@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
-import 'package:flutter_tags/flutter_tags.dart';
-import 'package:ootopia_app/data/utils/string-utils.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -27,20 +22,15 @@ class RegisterPhase2TopInterestsPage extends StatefulWidget {
 class _RegisterPhase2TopInterestsPageState
     extends State<RegisterPhase2TopInterestsPage> with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  List<InterestsTags> selectedTags = [];
-  List<InterestsTags> allTags = [];
+  RegisterSecondPhaseController controller =
+      RegisterSecondPhaseController.getInstance();
 
   AuthStore authStore = AuthStore();
-  Future<void> getTags() async {
-    this.allTags = await this.authStore.interestsTagsrepository.getTags();
-    authStore.isLoading = false;
-    setState(() {});
-  }
 
   @override
   void initState() {
     super.initState();
-    getTags();
+    controller.getTags();
   }
 
   get appBar => AppBar(
@@ -98,7 +88,7 @@ class _RegisterPhase2TopInterestsPageState
                   SliverFillRemaining(
                     hasScrollBody: false,
                     child: Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 24),
+                      padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -121,7 +111,8 @@ class _RegisterPhase2TopInterestsPageState
                                   height: 8,
                                 ),
                                 Visibility(
-                                    visible: selectedTags.length == 0,
+                                    visible:
+                                        controller.selectedTags.length == 0,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -164,8 +155,7 @@ class _RegisterPhase2TopInterestsPageState
                                     await showDialog(
                                         context: context,
                                         builder: (context) {
-                                          return MyDialog(
-                                              allTags, selectedTags);
+                                          return MyDialog();
                                         });
 
                                     setState(() {});
@@ -193,7 +183,7 @@ class _RegisterPhase2TopInterestsPageState
                                           Visibility(
                                             visible: existTagsSelected,
                                             child: Text(
-                                              '${selectedTags.length} Tags Selected',
+                                              '${controller.selectedTags.length} Tags Selected',
                                               style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 16,
@@ -207,11 +197,12 @@ class _RegisterPhase2TopInterestsPageState
                                   ),
                                 ),
                                 Visibility(
-                                  visible: selectedTags.length != 0,
+                                  visible: controller.selectedTags.length != 0,
                                   child: Wrap(
                                     direction: Axis.horizontal,
                                     spacing: 1,
-                                    children: selectedTags.map((tag) {
+                                    children:
+                                        controller.selectedTags.map((tag) {
                                       return Container(
                                         height: 40,
                                         margin: EdgeInsets.all(5),
@@ -247,7 +238,8 @@ class _RegisterPhase2TopInterestsPageState
                                                 setState(() {
                                                   if (tag.seletedTag) {
                                                     tag.seletedTag = false;
-                                                    selectedTags.remove(tag);
+                                                    controller.selectedTags
+                                                        .remove(tag);
                                                   }
                                                 });
                                               },
@@ -263,8 +255,7 @@ class _RegisterPhase2TopInterestsPageState
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              bottom:
-                                  GlobalConstants.of(context).spacingNormal,
+                              bottom: GlobalConstants.of(context).spacingNormal,
                             ),
                             child: ElevatedButton(
                               style: ButtonStyle(
@@ -277,10 +268,11 @@ class _RegisterPhase2TopInterestsPageState
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
                                           Color(0xff003694)),
-                                  padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.all(
-                                          GlobalConstants.of(context)
-                                              .spacingNormal))),
+                                  padding:
+                                      MaterialStateProperty.all<EdgeInsets>(
+                                          EdgeInsets.all(
+                                              GlobalConstants.of(context)
+                                                  .spacingNormal))),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: Center(
@@ -307,10 +299,7 @@ class _RegisterPhase2TopInterestsPageState
 }
 
 class MyDialog extends StatefulWidget {
-  List<InterestsTags> allTags;
-  List<InterestsTags> selectedTags;
-
-  MyDialog(this.allTags, this.selectedTags);
+  MyDialog();
 
   @override
   _MyDialogState createState() => _MyDialogState();
@@ -318,18 +307,13 @@ class MyDialog extends StatefulWidget {
 
 class _MyDialogState extends State<MyDialog> {
   List<InterestsTags> filterTags = [];
+  RegisterSecondPhaseController controller =
+      RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    this.filterTags = widget.allTags;
-  }
-
-  filterTagsByText(String text) {
-    this.filterTags = widget.allTags
-        .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
-        .toList();
-    setState(() {});
+    this.filterTags = controller.allTags;
   }
 
   @override
@@ -354,7 +338,7 @@ class _MyDialogState extends State<MyDialog> {
           children: [
             TextFormField(
               onChanged: (value) {
-                filterTagsByText(value);
+                controller.filterTagsByText(value);
               },
               decoration: GlobalConstants.of(context).loginInputTheme(''),
             ),
@@ -380,9 +364,9 @@ class _MyDialogState extends State<MyDialog> {
                       tag.seletedTag = selected;
                     });
                     if (selected) {
-                      widget.selectedTags.add(tag);
+                      controller.selectedTags.add(tag);
                     } else {
-                      widget.selectedTags.remove(tag);
+                      controller.selectedTags.remove(tag);
                     }
                   },
                 );
@@ -397,7 +381,7 @@ class _MyDialogState extends State<MyDialog> {
               Navigator.of(context).pop();
             },
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.cancel,
               style: TextStyle(
                   color: Color(0xff018F9C),
                   fontWeight: FontWeight.w500,
@@ -409,7 +393,7 @@ class _MyDialogState extends State<MyDialog> {
               Navigator.of(context).pop();
             },
             child: Text(
-              'Confirm',
+              AppLocalizations.of(context)!.confirm,
               style: TextStyle(
                   color: Color(0xff018F9C),
                   fontWeight: FontWeight.w500,

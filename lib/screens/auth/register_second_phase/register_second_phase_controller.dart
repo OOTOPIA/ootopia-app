@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -30,6 +31,10 @@ class RegisterSecondPhaseController {
   FocusNode inputFocusNode = new FocusNode();
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
+
+  //Step 04
+  List<InterestsTags> selectedTags = [];
+  List<InterestsTags> allTags = [];
 
   static RegisterSecondPhaseController? _instance;
 
@@ -142,5 +147,16 @@ class RegisterSecondPhaseController {
       geolocationErrorMessage = error.toString();
       // });
     });
+  }
+
+  Future<void> getTags() async {
+    allTags = await this.authStore.interestsTagsrepository.getTags();
+    authStore.isLoading = false;
+  }
+
+  List<InterestsTags> filterTagsByText(String text) {
+    return allTags
+        .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
+        .toList();
   }
 }
