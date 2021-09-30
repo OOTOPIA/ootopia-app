@@ -25,8 +25,6 @@ class _RegisterPhase2TopInterestsPageState
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
 
-  AuthStore authStore = AuthStore();
-
   @override
   void initState() {
     super.initState();
@@ -80,8 +78,8 @@ class _RegisterPhase2TopInterestsPageState
     return Scaffold(
       appBar: appBar,
       body: LoadingOverlay(
-        isLoading: authStore.isLoading,
-        child: authStore.isLoading
+        isLoading: controller.authStore.isLoading,
+        child: controller.authStore.isLoading
             ? Container()
             : CustomScrollView(
                 slivers: [
@@ -306,14 +304,14 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  List<InterestsTags> filterTags = [];
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    this.filterTags = controller.allTags;
+    controller.filterTags = controller.allTags;
+    setState(() {});
   }
 
   @override
@@ -338,7 +336,8 @@ class _MyDialogState extends State<MyDialog> {
           children: [
             TextFormField(
               onChanged: (value) {
-                controller.filterTagsByText(value);
+                controller.filterTagsByText(
+                    text: value, update: () => setState(() {}));
               },
               decoration: GlobalConstants.of(context).loginInputTheme(''),
             ),
@@ -346,7 +345,7 @@ class _MyDialogState extends State<MyDialog> {
             Wrap(
               direction: Axis.horizontal,
               spacing: 1,
-              children: filterTags.map((tag) {
+              children: controller.filterTags.map((tag) {
                 return ChoiceChip(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(45)),

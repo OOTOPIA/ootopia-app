@@ -28,10 +28,17 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   void initState() {
     super.initState();
     this.trackingEvents.signupStartedSignupPartII();
-    Future.delayed(Duration.zero, () {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+print("current user 01${authStore}");
       controller.authStore = authStore;
+      await controller.authStore.checkUserIsLogged();
+
+      print("current user 02${controller.authStore}");
+      await controller.authStore.setUserIsLogged();
+      print("current user 03${controller.authStore.currentUser}");
       controller.getLoggedUser();
     });
+
   }
 
   get appBar => AppBar(
@@ -79,6 +86,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     authStore = Provider.of<AuthStore>(context);
+    print("current user build 01${authStore.currentUser}");
+
     return Scaffold(
       appBar: appBar,
       body: Padding(

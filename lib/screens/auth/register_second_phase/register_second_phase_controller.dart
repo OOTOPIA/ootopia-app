@@ -35,6 +35,7 @@ class RegisterSecondPhaseController {
   //Step 04
   List<InterestsTags> selectedTags = [];
   List<InterestsTags> allTags = [];
+  List<InterestsTags> filterTags = [];
 
   static RegisterSecondPhaseController? _instance;
 
@@ -150,12 +151,13 @@ class RegisterSecondPhaseController {
   }
 
   Future<void> getTags() async {
-    allTags = await this.authStore.interestsTagsrepository.getTags();
+    allTags = await authStore.interestsTagsrepository.getTags();
+
     authStore.isLoading = false;
   }
 
-  List<InterestsTags> filterTagsByText(String text) {
-    return allTags
+  void filterTagsByText({required String text, required VoidCallback update}) {
+    filterTags = allTags
         .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
         .toList();
   }
