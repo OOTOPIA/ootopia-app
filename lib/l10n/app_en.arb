@@ -57,6 +57,12 @@
 
     "others": "Others",
 
+    "favoriteThemes": "Favorite Themes",
+    "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Select the hashtags that correspond to the themes you want to explore and learn.",
+    "selectAtLeastOneHashtag": "Select at least 1 hashtag",
+    "selectHashtags": "Select hashtags",
+    "tagsSelected": "Tags Selected",
+
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
     "nameAndSurname": "Name and surname",
     "pleaseEnterYourNameAndSurname": "Please enter your name and surname",

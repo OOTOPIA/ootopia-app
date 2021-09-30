@@ -51,6 +51,12 @@
     "pleaseEnterAValidBirthdateInFormat": "Insira uma data de nascimento válida no formato DD/MM/AAAA",
     "pleaseEnterAValidBirthdate": "Por favor digite uma data de nascimento válida",
 
+    "favoriteThemes": "Temas Favoritos",
+    "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
+    "selectAtLeastOneHashtag": "Selecione ao menos 1 hashtag",
+    "selectHashtags": "Selecione hashtags",
+    "tagsSelected": "Tags selecionadas",
+
     "others": "Outras(os)",
 
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Crie sua conta e junte-se ao \nmovimento para curar o planeta Terra!",

@@ -34,8 +34,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
 
   setAuthStoreToController() {
     if (controller.user == null) {
-        controller.authStore = authStore;
-        controller.user = authStore.currentUser;
+      controller.authStore = authStore;
+      controller.user = authStore.currentUser;
     }
   }
 
@@ -243,6 +243,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                           keyboardType: TextInputType.numberWithOptions(
                               signed: true, decimal: true),
                           inputDecoration: InputDecoration(
+                            errorMaxLines: 4,
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
@@ -381,16 +382,16 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                       ),
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape:
-                                  MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25.0),
-                                          side: BorderSide.none)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      side: BorderSide.none)),
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Color(0xff003694)),
-                              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(
-                                  GlobalConstants.of(context).spacingNormal))),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(GlobalConstants.of(context)
+                                      .spacingNormal))),
                           child: Observer(
                             builder: (_) => SizedBox(
                               width: MediaQuery.of(context).size.width,
@@ -406,18 +407,22 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               ),
                             ),
                           ),
-                          onPressed: () => controller.firstStepIsValid(context)
-                              ? Navigator.of(context).pushNamed(
+                          onPressed: () {
+                            if (!controller.formKey.currentState!.validate())
+                              return;
+
+                            if (controller.firstStepIsValid(context))
+                              Navigator.of(context).pushNamed(
                                   PageRoute
                                       .Page
                                       .registerPhase2DailyLearningGoalScreen
                                       .route,
                                   arguments: {
-                                      "user": authStore.currentUser,
-                                      "returnToPageWithArgs":
-                                          widget.args!["returnToPageWithArgs"]
-                                    })
-                              : null),
+                                    "user": authStore.currentUser,
+                                    "returnToPageWithArgs":
+                                        widget.args!["returnToPageWithArgs"]
+                                  });
+                          }),
                     )
                   ],
                 ),
