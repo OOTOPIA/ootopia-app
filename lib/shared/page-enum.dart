@@ -26,6 +26,8 @@ enum Page {
   chatWithUsersScreen,
   invitationScreen,
   insertInvitationCode,
+  termsOfUseScreen,
+  privacyPolicyScreen,
   editProfileScreen,
   newFutureCategories,
 }

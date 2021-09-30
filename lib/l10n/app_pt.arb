@@ -34,6 +34,8 @@
 
     "confirm": "Confirmar",
 
+    "thisIsWhereYourPositiveImpactMattersMost":"É aqui que o seu impacto positivo é mais importante!",
+
     "pleaseWait": "Por favor, aguarde...",
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
     "weCouldntGetYourLocation2": "Não foi possível obter sua localização.",
@@ -43,9 +45,9 @@
     "getCurrentLocation": "Obtenha a localização atual",
 
     "dateOfBirth": "Data de nascimento",
-    "day": "dia",
-    "month": "mês",
-    "year": "ano",
+    "day": "DD",
+    "month": "MM",
+    "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Insira uma data de nascimento válida no formato DD/MM/AAAA",
     "pleaseEnterAValidBirthdate": "Por favor digite uma data de nascimento válida",
 
@@ -62,8 +64,12 @@
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 
     "iAcceptThe": "Eu aceito o ",
-    "useTerms": "termos de uso.",
+    "useTerms": "termos de uso",
+    "and": " e ",
+    "privacy": "privacidade.",
     "youNeedToAcceptTheTermsOfUseToContinue": "Você precisa aceitar os Termos de Uso para continuar",
+
+    "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados. \nConfira aqui nossos preceitos éticos e de transparência.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "Você precisa habilitar algumas \npermissões para permitir o uso completo \n da câmera.",
     
@@ -299,7 +305,8 @@
     "ooz25":" 25,00 OOz ",
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
     "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA\nExperimente o movimento que está regenerando o planeta Terra! \nBaixe o aplicativo e registre-se com este código: %USER_CODE%\nVocê também receberá 15,00 OOz de crédito.\nVIVA A OOTOPIA AGORA! ✨ 🌎 ❤️",
-    "continueAccess":"continue",
+    "continueAccess":"Continue",
+    "conclude":"Concluir",
     "enterYourInvitationCode":"Digite seu código de acesso",
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que está emergindo graças a pessoas como você!",
     "skip":"Pular",
@@ -346,5 +353,8 @@
     "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopíacos.",
     "enterYourNumber":"Insira seu número",
     "medals": "Medalhas",
+    "iAccept": "Eu aceito",
+    "chooseYourDailyGoal":"Escolha sua meta diária de participação no jogo.",
+    "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
     "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!"
 }
