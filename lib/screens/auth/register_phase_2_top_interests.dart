@@ -86,7 +86,7 @@ class _RegisterPhase2TopInterestsPageState
 
   @override
   Widget build(BuildContext context) {
-    bool teste = false;
+    bool existTagsSelected = false;
     return Scaffold(
       appBar: appBar,
       body: LoadingOverlay(
@@ -191,7 +191,7 @@ class _RegisterPhase2TopInterestsPageState
                                             ],
                                           ),
                                           Visibility(
-                                            visible: teste,
+                                            visible: existTagsSelected,
                                             child: Text(
                                               '${selectedTags.length} Tags Selected',
                                               style: TextStyle(
