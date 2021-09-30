@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -22,16 +23,20 @@ class RegisterPhase2Page extends StatefulWidget {
 class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   late AuthStore authStore;
-  RegisterSecondPhaseController controller = RegisterSecondPhaseController();
+  RegisterSecondPhaseController controller =
+      RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
     super.initState();
     this.trackingEvents.signupStartedSignupPartII();
-    Future.delayed(Duration.zero, () {
+  }
+
+  setAuthStoreToController() {
+    if (controller.user == null) {
       controller.authStore = authStore;
-      controller.getLoggedUser();
-    });
+      controller.user = authStore.currentUser;
+    }
   }
 
   get appBar => AppBar(
@@ -79,6 +84,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     authStore = Provider.of<AuthStore>(context);
+    setAuthStoreToController();
+    print("current user build 01${authStore.currentUser}");
+
     return Scaffold(
       appBar: appBar,
       body: Padding(
@@ -235,6 +243,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                           keyboardType: TextInputType.numberWithOptions(
                               signed: true, decimal: true),
                           inputDecoration: InputDecoration(
+                            errorMaxLines: 4,
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5)),
@@ -373,7 +382,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                       ),
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25.0),
                                       side: BorderSide.none)),
@@ -382,23 +392,37 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               padding: MaterialStateProperty.all<EdgeInsets>(
                                   EdgeInsets.all(GlobalConstants.of(context)
                                       .spacingNormal))),
-                          child: SizedBox(
+                          child: Observer(
+                            builder: (_) => SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Center(
-                                  child: Text(
-                                      AppLocalizations.of(context)!.continueAccess,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      )))),
-                          onPressed: () => controller.firstStepIsValid(context)
-                              ? Navigator.of(context).pushNamed(PageRoute.Page.registerPhase2DailyLearningGoalScreen.route, arguments: {
-                                  "user": controller.user,
-                                  "returnToPageWithArgs":
-                                      widget.args!["returnToPageWithArgs"]
-                                })
-                              : null),
+                                child: Text(
+                                  AppLocalizations.of(context)!.continueAccess,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (!controller.formKey.currentState!.validate())
+                              return;
+
+                            if (controller.firstStepIsValid(context))
+                              Navigator.of(context).pushNamed(
+                                  PageRoute
+                                      .Page
+                                      .registerPhase2DailyLearningGoalScreen
+                                      .route,
+                                  arguments: {
+                                    "user": authStore.currentUser,
+                                    "returnToPageWithArgs":
+                                        widget.args!["returnToPageWithArgs"]
+                                  });
+                          }),
                     )
                   ],
                 ),

@@ -25,8 +25,6 @@ class _RegisterPhase2TopInterestsPageState
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
 
-  AuthStore authStore = AuthStore();
-
   @override
   void initState() {
     super.initState();
@@ -80,8 +78,8 @@ class _RegisterPhase2TopInterestsPageState
     return Scaffold(
       appBar: appBar,
       body: LoadingOverlay(
-        isLoading: authStore.isLoading,
-        child: authStore.isLoading
+        isLoading: controller.authStore.isLoading,
+        child: controller.authStore.isLoading
             ? Container()
             : CustomScrollView(
                 slivers: [
@@ -100,7 +98,7 @@ class _RegisterPhase2TopInterestsPageState
                                   height: 33,
                                 ),
                                 Text(
-                                  'Favorite Themes',
+                                  AppLocalizations.of(context)!.favoriteThemes,
                                   style: TextStyle(
                                     color: Color(0xff03145C),
                                     fontSize: 22,
@@ -120,7 +118,8 @@ class _RegisterPhase2TopInterestsPageState
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Select the hashtags that correspond to the themes you want to explore and learn.',
+                                          AppLocalizations.of(context)!.selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn
+                                         ,
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 18,
@@ -138,7 +137,8 @@ class _RegisterPhase2TopInterestsPageState
                                           height: 16,
                                         ),
                                         Text(
-                                          'Select at least 1 hashtag',
+                                           AppLocalizations.of(context)!.selectAtLeastOneHashtag
+                                          ,
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 18,
@@ -171,7 +171,7 @@ class _RegisterPhase2TopInterestsPageState
                                             children: [
                                               Icon(Icons.add),
                                               Text(
-                                                'Select hashtags',
+                                                AppLocalizations.of(context)!.selectHashtags,
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 16,
@@ -183,7 +183,7 @@ class _RegisterPhase2TopInterestsPageState
                                           Visibility(
                                             visible: existTagsSelected,
                                             child: Text(
-                                              '${controller.selectedTags.length} Tags Selected',
+                                              '${controller.selectedTags.length}'+AppLocalizations.of(context)!.tagsSelected,
                                               style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 16,
@@ -306,14 +306,14 @@ class MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<MyDialog> {
-  List<InterestsTags> filterTags = [];
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    this.filterTags = controller.allTags;
+    controller.filterTags = controller.allTags;
+    setState(() {});
   }
 
   @override
@@ -338,7 +338,8 @@ class _MyDialogState extends State<MyDialog> {
           children: [
             TextFormField(
               onChanged: (value) {
-                controller.filterTagsByText(value);
+                controller.filterTagsByText(
+                    text: value, update: () => setState(() {}));
               },
               decoration: GlobalConstants.of(context).loginInputTheme(''),
             ),
@@ -346,7 +347,7 @@ class _MyDialogState extends State<MyDialog> {
             Wrap(
               direction: Axis.horizontal,
               spacing: 1,
-              children: filterTags.map((tag) {
+              children: controller.filterTags.map((tag) {
                 return ChoiceChip(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(45)),
