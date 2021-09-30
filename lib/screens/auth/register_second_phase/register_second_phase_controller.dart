@@ -57,12 +57,6 @@ class RegisterSecondPhaseController {
 
   late AuthStore authStore;
 
-  RegisterSecondPhaseController();
-
-  Future getLoggedUser() async {
-    user = authStore.currentUser;
-  }
-
   Future<void> getPhoneNumber(String phoneNumber, String codeCountry) async {
     await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
   }
@@ -130,9 +124,9 @@ class RegisterSecondPhaseController {
         user!.addressLongitude = position.longitude;
 
         this.trackingEvents.signupCompletedStepIIIOfSignupII({
-          // "addressCity": widget.args['user'].addressCity,
-          // "addressState": widget.args['user'].addressState,
-          // "addressCountryCode": widget.args['user'].addressCountryCode,
+          "addressCity": user!.addressCity,
+          "addressState": user!.addressState,
+          "addressCountryCode": user!.addressCountryCode,
         });
       } else {
         geolocationMessage =

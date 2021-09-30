@@ -67,26 +67,28 @@ class _RegisterPhase2DailyLearningGoalPageState
             left: GlobalConstants.of(context).screenHorizontalSpace - 9,
           ),
           child: InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 3.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        FeatherIcons.arrowLeft,
-                        color: Colors.black,
-                        size: 20,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!.back,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    ],
-                  ))),
+            onTap: () => Navigator.of(context).pop(),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3.0),
+              child: Row(
+                children: [
+                  Icon(
+                    FeatherIcons.arrowLeft,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.back,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       );
 
