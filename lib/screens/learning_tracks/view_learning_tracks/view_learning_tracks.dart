@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 
 class ViewLearningTracksScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class ViewLearningTracksScreen extends StatefulWidget {
 }
 
 class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   @override
   Widget build(BuildContext context) {
     List<ChaptersModel> listChapters = widget.args['list_chapters'];
@@ -153,7 +155,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                                     width: 8,
                                                   ),
                                                   Text(
-                                                    '${chapter.ooz.toString().replaceAll('.', ',')}',
+                                                    '${currencyFormatter.format(chapter.ooz)}',
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

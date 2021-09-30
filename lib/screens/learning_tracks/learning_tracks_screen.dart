@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
@@ -17,6 +18,13 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
   bool hasError = false;
+
+  int currentPage = 1;
+  final int _itemsPerPageCount = 6;
+  int _nextPageThreshold = 3;
+
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
   @override
   void initState() {
     super.initState();
@@ -32,12 +40,6 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
       setState(() {});
     });
   }
-
-  int currentPage = 1;
-
-  final int _itemsPerPageCount = 6;
-
-  int _nextPageThreshold = 3;
 
   bool _hasMoreItems = true;
   Future<void> _getData() async {
@@ -150,19 +152,17 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                           ),
                         );
                       }
+                      var learningTrack =
+                          learningTracksStore.allLearningTracks[index];
                       return InkWell(
-                        key: Key(learningTracksStore.allLearningTracks[index].id
-                            .toString()),
+                        key: Key(learningTrack.id.toString()),
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         onTap: () {
                           controller.insertPage(ViewLearningTracksScreen({
-                            'list_chapters': learningTracksStore
-                                .allLearningTracks[index].chapters,
-                            'description': learningTracksStore
-                                .allLearningTracks[index].description,
-                            'title': learningTracksStore
-                                .allLearningTracks[index].title,
+                            'list_chapters': learningTrack.chapters,
+                            'description': learningTrack.description,
+                            'title': learningTrack.title,
                           }));
                         },
                         child: Column(
@@ -170,10 +170,8 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                             Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      learningTracksStore
-                                          .allLearningTracks[index]
-                                          .userPhotoUrl),
+                                  backgroundImage:
+                                      NetworkImage(learningTrack.userPhotoUrl),
                                 ),
                                 SizedBox(
                                   width: 16,
@@ -183,14 +181,12 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      learningTracksStore
-                                          .allLearningTracks[index].userName,
+                                      learningTrack.userName,
                                     ),
                                     SizedBox(
                                       height: 6,
                                     ),
-                                    Text(learningTracksStore
-                                        .allLearningTracks[index].location)
+                                    Text(learningTrack.location)
                                   ],
                                 )
                               ],
@@ -204,8 +200,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(12)),
                                   child: Image.network(
-                                    learningTracksStore
-                                        .allLearningTracks[index].imageUrl,
+                                    learningTrack.imageUrl,
                                     width: 370,
                                     height: 210,
                                     fit: BoxFit.cover,
@@ -217,8 +212,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     padding: const EdgeInsets.only(
                                         bottom: 16.0, left: 16),
                                     child: Text(
-                                      learningTracksStore
-                                          .allLearningTracks[index].title,
+                                      learningTrack.title,
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 20),
                                     ),
@@ -233,7 +227,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${learningTracksStore.allLearningTracks[index].chapters.length.toString()} lessons',
+                                  '${learningTrack.chapters.length.toString()} lessons',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -243,7 +237,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      '${learningTracksStore.allLearningTracks[index].totalTimeInMinutes} min',
+                                      '${learningTrack.totalTimeInMinutes} min',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -270,7 +264,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                       width: 8,
                                     ),
                                     Text(
-                                      '${learningTracksStore.allLearningTracks[index].ooz.toString().replaceAll('.', ',')}',
+                                      '${currencyFormatter.format(learningTrack.ooz)}',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -285,8 +279,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                               height: 8,
                             ),
                             Text(
-                              learningTracksStore
-                                  .allLearningTracks[index].description,
+                              learningTrack.description,
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
