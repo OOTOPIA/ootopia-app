@@ -33,8 +33,10 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   }
 
   setAuthStoreToController() {
-    controller.authStore = authStore;
-    controller.user = authStore.currentUser;
+    if (controller.user == null) {
+        controller.authStore = authStore;
+        controller.user = authStore.currentUser;
+    }
   }
 
   get appBar => AppBar(
