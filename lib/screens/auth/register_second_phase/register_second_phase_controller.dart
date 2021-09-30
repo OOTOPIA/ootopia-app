@@ -34,6 +34,7 @@ class RegisterSecondPhaseController {
 
   //Step 04
   List<InterestsTags> selectedTags = [];
+  String currentLocaleName = '';
   List<InterestsTags> allTags = [];
   List<InterestsTags> filterTags = [];
 
@@ -144,10 +145,17 @@ class RegisterSecondPhaseController {
     });
   }
 
-  Future<void> getTags() async {
-    allTags = await authStore.interestsTagsrepository.getTags();
-
+  Future<void> getTags(String? language) async {
+    allTags = await this.authStore.interestsTagsrepository.getTags(language);
     authStore.isLoading = false;
+  }
+
+  updateLocalName() {
+    if (currentLocaleName != Platform.localeName.substring(0, 2)) {
+      currentLocaleName = Platform.localeName.substring(0, 2);
+      getTags(currentLocaleName);
+      selectedTags = [];
+    }
   }
 
   void filterTagsByText({required String text, required VoidCallback update}) {

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -20,7 +21,8 @@ class RegisterPhase2TopInterestsPage extends StatefulWidget {
 }
 
 class _RegisterPhase2TopInterestsPageState
-    extends State<RegisterPhase2TopInterestsPage> with SecureStoreMixin {
+    extends State<RegisterPhase2TopInterestsPage>
+    with SecureStoreMixin, WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
@@ -28,7 +30,19 @@ class _RegisterPhase2TopInterestsPageState
   @override
   void initState() {
     super.initState();
-    controller.getTags();
+    WidgetsBinding.instance!.addObserver(this);
+
+    controller.updateLocalName();
+    setState(() {});
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      controller.updateLocalName();
+      setState(() {});
+    }
   }
 
   get appBar => AppBar(
@@ -118,8 +132,8 @@ class _RegisterPhase2TopInterestsPageState
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          AppLocalizations.of(context)!.selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn
-                                         ,
+                                          AppLocalizations.of(context)!
+                                              .selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn,
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 18,
@@ -137,8 +151,8 @@ class _RegisterPhase2TopInterestsPageState
                                           height: 16,
                                         ),
                                         Text(
-                                           AppLocalizations.of(context)!.selectAtLeastOneHashtag
-                                          ,
+                                          AppLocalizations.of(context)!
+                                              .selectAtLeastOneHashtag,
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 18,
@@ -171,7 +185,8 @@ class _RegisterPhase2TopInterestsPageState
                                             children: [
                                               Icon(Icons.add),
                                               Text(
-                                                AppLocalizations.of(context)!.selectHashtags,
+                                                AppLocalizations.of(context)!
+                                                    .selectHashtags,
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 16,
@@ -183,7 +198,9 @@ class _RegisterPhase2TopInterestsPageState
                                           Visibility(
                                             visible: existTagsSelected,
                                             child: Text(
-                                              '${controller.selectedTags.length}'+AppLocalizations.of(context)!.tagsSelected,
+                                              '${controller.selectedTags.length}' +
+                                                  AppLocalizations.of(context)!
+                                                      .tagsSelected,
                                               style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 16,

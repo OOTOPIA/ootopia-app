@@ -21,7 +21,7 @@ class InterestsTagsRepositoryImpl
       Map<String, String> queryParams = {};
 
       if (language != null) {
-        queryParams['language'] = language;
+        queryParams['language'] = language.replaceFirst('_', '-');
       }
 
       String queryString = Uri(queryParameters: queryParams).query;
