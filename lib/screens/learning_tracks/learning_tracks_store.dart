@@ -24,7 +24,7 @@ abstract class LearningTracksStoreBase with Store {
 
   @action
   Future<void> lastLearningTracks() async {
-    var response = await _learningTracksRepositoryImpl.lasLearningTracks();
+    var response = await _learningTracksRepositoryImpl.lastLearningTracks();
     getLastLearningTracks = response;
   }
 }

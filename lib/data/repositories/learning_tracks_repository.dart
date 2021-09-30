@@ -5,14 +5,14 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class ILearningTracks {
   Future<List<LearningTracksModel>> listLearningTracks(
       {int? limit, int? offset});
-  Future<LearningTracksModel> lasLearningTracks();
+  Future<LearningTracksModel> lastLearningTracks();
 }
 
 class LearningTracksRepositoryImpl
     with SecureStoreMixin
     implements ILearningTracks {
   @override
-  Future<LearningTracksModel> lasLearningTracks() async {
+  Future<LearningTracksModel> lastLearningTracks() async {
     try {
       bool loggedIn = await getUserIsLoggedIn();
       if (!loggedIn) {
