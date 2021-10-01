@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/marketplace/components/marketplace_bar_widget.dart';
+
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -10,10 +12,6 @@ class MarketplaceScreen extends StatefulWidget {
 }
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
-  _goToWalletPage() => Navigator.pushNamed(
-        context,
-        PageRoute.Page.profile.route,
-      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +20,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             WalletBarWidget(onTap: _goToWalletPage),
+            MarketplaceBarWidget(),
           ],
         ),
       ),
     );
   }
+
+  _goToWalletPage() => Navigator.pushNamed(
+        context,
+        PageRoute.Page.profile.route,
+      );
 }
