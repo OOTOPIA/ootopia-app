@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.da
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
+import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         TimelinePage(null),
         LearningTracksScreen(),
         LearningTracksScreen(),
-        WalletPage(),
+        MarketplaceScreen(),
         ProfileScreen(null),
       ],
     );
@@ -295,11 +296,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
                 BottomIcon(
                   selectedWidget: SvgPicture.asset(
-                    'assets/icons/ooz_circle_icon.svg',
+                    'assets/icons/marketplace_icon.svg',
                     color: selectedIconColor,
                   ),
                   unselectedWidget: SvgPicture.asset(
-                    'assets/icons/ooz_circle_icon.svg',
+                    'assets/icons/marketplace_icon.svg',
                     color: unselectedIconColor,
                   ),
                 ),
@@ -468,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             controller.pages.length > controller.initialPages.length)
         ? null
         : controller.currentBottomIndex ==
-                    PageViewController.TAB_INDEX_PROFILE &&
+PageViewController.TAB_INDEX_PROFILE &&
                 controller.pages[controller.currentPageIndex] is ProfileScreen
             ? appBarProfile
             : appBar;
