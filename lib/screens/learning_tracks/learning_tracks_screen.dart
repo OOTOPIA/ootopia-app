@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,8 +23,8 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
   bool hasError = false;
 
   int currentPage = 1;
-  final int _itemsPerPageCount = 6;
-  int _nextPageThreshold = 3;
+  final int _itemsPerPageCount = 10;
+  int _nextPageThreshold = 5;
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
@@ -30,7 +33,8 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await learningTracksStore
-          .listLearningTracks(_itemsPerPageCount, 0)
+          .listLearningTracks(
+              limit: _itemsPerPageCount, offset: 0, locale: Platform.localeName)
           .onError((error, stackTrace) {
         setState(() {
           hasError = true;
@@ -46,9 +50,9 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
     hasError = false;
     await learningTracksStore
         .listLearningTracks(
-      _itemsPerPageCount,
-      (currentPage - 1) * _itemsPerPageCount,
-    )
+            limit: _itemsPerPageCount,
+            offset: (currentPage - 1) * _itemsPerPageCount,
+            locale: Platform.localeName)
         .onError((error, stackTrace) {
       setState(() {
         hasError = true;
@@ -70,11 +74,18 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
         buttonTextColor: Colors.black,
       );
     } else if (learningTracksStore.allLearningTracks.isEmpty) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context)!.dontExistLearningTracks,
-        ),
-      );
+      return Observer(builder: (context) {
+        if (learningTracksStore.isLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Center(
+          child: Text(
+            AppLocalizations.of(context)!.dontExistLearningTracks,
+          ),
+        );
+      });
     } else {
       return RefreshIndicator(
         onRefresh: () async {
@@ -100,7 +111,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                       AppLocalizations.of(context)!.learningTracks,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(
@@ -182,11 +193,21 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                   children: [
                                     Text(
                                       learningTrack.userName,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                     SizedBox(
-                                      height: 6,
+                                      height: 0,
                                     ),
-                                    Text(learningTrack.location)
+                                    Text(
+                                      learningTrack.location,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12,
+                                      ),
+                                    )
                                   ],
                                 )
                               ],
@@ -196,28 +217,49 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                             ),
                             Stack(
                               children: [
-                                ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  child: Image.network(
-                                    learningTrack.imageUrl,
-                                    width: 370,
-                                    height: 210,
-                                    fit: BoxFit.cover,
+                                Container(
+                                  width: 370,
+                                  height: 210,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12)),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        learningTrack.imageUrl,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12)),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.8),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Positioned(
                                   bottom: 0,
-                                  child: Padding(
+                                  child: Container(
                                     padding: const EdgeInsets.only(
                                         bottom: 16.0, left: 16),
                                     child: Text(
                                       learningTrack.title,
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -227,7 +269,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${learningTrack.chapters.length.toString()} lessons',
+                                  '${learningTrack.chapters.length.toString()} ${AppLocalizations.of(context)!.lessons}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
