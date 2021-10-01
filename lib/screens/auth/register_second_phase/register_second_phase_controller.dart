@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,8 +15,9 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
-class RegisterSecondPhaseController {
+class RegisterSecondPhaseController with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
 
@@ -29,7 +31,7 @@ class RegisterSecondPhaseController {
   final TextEditingController yearController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
-  final UserRepositoryImpl userRepository = UserRepositoryImpl();
+
   //Step 03
   final TextEditingController geolocationController = TextEditingController();
   FocusNode inputFocusNode = new FocusNode();
@@ -100,11 +102,16 @@ class RegisterSecondPhaseController {
     }
   }
 
-  storeAnniversaryDate() {
+  storeDataUserFirstStep() {
     if (validationBirthDate()) {
       user!.birthdate =
           "${yearController.text}/${monthController.text}/${dayController.text}";
     }
+
+    user!.bio = bioController.text.isNotEmpty ? bioController.text : null;
+    user!.countryCode = countryCode!.isNotEmpty ? countryCode : null;
+    user!.phone =
+        cellPhoneController.text.isNotEmpty ? cellPhoneController.text : null;
   }
 
   Future getImage(VoidCallback update) async {
@@ -200,7 +207,7 @@ class RegisterSecondPhaseController {
 
     var taskId = await this
         .userRepository
-        .updateUserProfile(authStore.currentUser!, [], uploader);
+        .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
     uploader.result.listen(
         (result) {
           if (result.statusCode == 200 && result.taskId == taskId) {
@@ -211,35 +218,10 @@ class RegisterSecondPhaseController {
         onError: (error) {
           completer.completeError(error);
         });
-    return completer.future;
-  }
+    user.registerPhase = 2;
+    user.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+    await setCurrentUser(json.encode(user.toJson()));
 
-  Future<void> updateUser() async {
-    try {
-      if (user?.photoFilePath != null) {
-        await _updateUserWithPhoto(user!, []);
-      } else if (user != null) {
-        await this.userRepository.updateUserProfile(user!, [], null);
-      }
-      await this.userRepository.getMyAccountDetails();
-    } catch (err) {}
-  }
-
-  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
-    var completer = new Completer<String>();
-    var uploader = FlutterUploader();
-    var taskId =
-        await this.userRepository.updateUserProfile(user, [], uploader);
-    uploader.result.listen(
-        (result) {
-          if (result.statusCode == 200 && result.taskId == taskId) {
-            completer.complete(user.id);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          completer.completeError(error);
-        });
     return completer.future;
   }
 }

@@ -7,6 +7,7 @@ import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -318,7 +319,32 @@ class _RegisterPhase2TopInterestsPageState
                                             color: Colors.white,
                                           )))),
                               onPressed: () {
-                                controller.updateUser();
+                                try {
+                                  controller.updateUser();
+
+                                  if (widget.args['returnToPageWithArgs'] !=
+                                      null) {
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                      PageRoute.Page.homeScreen.route,
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  } else {
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                      PageRoute.Page.homeScreen.route,
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  }
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          AppLocalizations.of(context)!
+                                              .errorUpdateProfile),
+                                    ),
+                                  );
+                                }
                               },
                             ),
                           )

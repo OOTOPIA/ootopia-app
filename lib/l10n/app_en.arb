@@ -373,6 +373,8 @@
 
     "searchForAHashtag" : "Search for a hashtag",
 
+    "errorUpdateProfile": "Error updating profile, try profile again",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }

@@ -298,8 +298,12 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 maxLength: 2,
                                 autofocus: false,
                                 decoration: GlobalConstants.of(context)
-                                    .loginInputTheme(
-                                        AppLocalizations.of(context)!.day),
+                                    .loginInputTheme('')
+                                    .copyWith(
+                                        label: Center(
+                                      child: Text(
+                                          AppLocalizations.of(context)!.day),
+                                    )),
                                 onChanged: (String text) {
                                   if (text.length == 2 &&
                                       int.parse(text) <= 31) {
@@ -322,8 +326,12 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 maxLength: 2,
                                 autofocus: false,
                                 decoration: GlobalConstants.of(context)
-                                    .loginInputTheme(
-                                        AppLocalizations.of(context)!.month),
+                                    .loginInputTheme('')
+                                    .copyWith(
+                                        label: Center(
+                                      child: Text(
+                                          AppLocalizations.of(context)!.month),
+                                    )),
                                 onChanged: (String text) {
                                   if (text.length == 2 &&
                                       int.parse(text) <= 12) {
@@ -354,8 +362,12 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   }
                                 },
                                 decoration: GlobalConstants.of(context)
-                                    .loginInputTheme(
-                                        AppLocalizations.of(context)!.year),
+                                    .loginInputTheme('')
+                                    .copyWith(
+                                        label: Center(
+                                      child: Text(
+                                          AppLocalizations.of(context)!.year),
+                                    )),
                               ),
                             ),
                           ],
@@ -418,7 +430,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                             if (!controller.formKey.currentState!.validate())
                               return;
 
-                            controller.storeAnniversaryDate();
+                            controller.storeDataUserFirstStep();
 
                             if (controller.firstStepIsValid(context))
                               Navigator.of(context).pushNamed(
