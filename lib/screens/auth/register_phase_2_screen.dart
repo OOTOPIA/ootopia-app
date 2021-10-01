@@ -216,6 +216,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                           },
                           selectorConfig: SelectorConfig(
                             selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                            leadingPadding: 18,
+                            trailingSpace: false,
                           ),
                           validator: (value) {
                             if (value == null ||
