@@ -89,21 +89,45 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                         Container(
                                           width: 80,
                                           height: 80,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15)),
-                                            child: haveSvg
-                                                ? SvgPicture.network(
-                                                    chapter.videoThumbUrl,
-                                                    width: 80,
-                                                    height: 80,
-                                                  )
-                                                : Image.network(
-                                                    chapter.videoThumbUrl,
-                                                    width: 80,
-                                                    height: 80,
-                                                    fit: BoxFit.cover,
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15)),
+                                                child: haveSvg
+                                                    ? SvgPicture.network(
+                                                        chapter.videoThumbUrl,
+                                                        width: 80,
+                                                        height: 80,
+                                                      )
+                                                    : Image.network(
+                                                        chapter.videoThumbUrl,
+                                                        width: 80,
+                                                        height: 80,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  decoration:
+                                                      BoxDecoration(boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 20,
+                                                      color: Colors.black
+                                                          .withOpacity(0.16),
+                                                      offset: Offset(0, 3),
+                                                      spreadRadius: 0,
+                                                    )
+                                                  ]),
+                                                  child: Icon(
+                                                    Icons.play_arrow,
+                                                    color: Colors.white,
+                                                    size: 35,
                                                   ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                         SizedBox(
