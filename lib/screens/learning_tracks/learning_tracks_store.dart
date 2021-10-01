@@ -25,16 +25,25 @@ abstract class LearningTracksStoreBase with Store {
     required String locale,
   }) async {
     isLoading = true;
+    String lang = "en";
+    if (locale.startsWith('pt')) {
+      lang = 'pt-BR';
+    }
+
     var response = await _learningTracksRepositoryImpl.listLearningTracks(
-        limit: limit, offset: offset, locale: locale);
+        limit: limit, offset: offset, locale: lang);
     allLearningTracks.addAll(response);
     isLoading = false;
   }
 
   @action
   Future<void> lastLearningTracks({required String locale}) async {
+    String lang = "en";
+    if (locale.startsWith('pt')) {
+      lang = 'pt-BR';
+    }
     var response =
-        await _learningTracksRepositoryImpl.lastLearningTracks(locale: locale);
+        await _learningTracksRepositoryImpl.lastLearningTracks(locale: lang);
     getLastLearningTracks = response;
   }
 }

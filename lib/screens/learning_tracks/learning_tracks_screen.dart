@@ -52,7 +52,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
         .listLearningTracks(
             limit: _itemsPerPageCount,
             offset: (currentPage - 1) * _itemsPerPageCount,
-            locale: 'pt-br')
+            locale: Platform.localeName)
         .onError((error, stackTrace) {
       setState(() {
         hasError = true;
