@@ -18,7 +18,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
           decoration: BoxDecoration(
               image: DecorationImage(
             image: AssetImage(
-              'assets/images/seed.png',
+              'assets/images/kids_words.png',
             ),
             fit: BoxFit.cover,
           )),
@@ -33,9 +33,30 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                         height: GlobalConstants.of(context).spacingLarge,
                       ),
                       Text(
-                        AppLocalizations.of(context)!.albuns.toUpperCase(),
+                        AppLocalizations.of(context)!
+                            .regenerationGame
+                            .toUpperCase(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 22),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          shadows: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset:
+                                  Offset(0, 5), // changes position of shadow
+                            ),
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset:
+                                  Offset(1, 5), // changes position of shadow
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 27,
@@ -52,9 +73,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                       SizedBox(
                           height: GlobalConstants.of(context).spacingMedium),
                       Text(
-                        AppLocalizations.of(context)!
-                            .createYourOwnCategories
-                            .toUpperCase(),
+                        AppLocalizations.of(context)!.quiz.toUpperCase(),
                         style: TextStyle(
                           shadows: [
                             BoxShadow(
@@ -73,17 +92,16 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                             ),
                           ],
                           color: Colors.white,
-                          fontSize: 36,
+                          fontSize: 40,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                          height: GlobalConstants.of(context)
-                              .screenHorizontalSpace),
+                          height:
+                              GlobalConstants.of(context).intermediateSpacing),
                       Text(
-                        AppLocalizations.of(context)!
-                            .textForNextFeatureCategories,
+                        AppLocalizations.of(context)!.nextAboutQuiz,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -105,6 +123,34 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                           ],
                         ),
                         textAlign: TextAlign.left,
+                      ),
+                      SizedBox(
+                          height:
+                              GlobalConstants.of(context).intermediateSpacing),
+                      Text(
+                        AppLocalizations.of(context)!.plusQuizAboutOOz,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 23,
+                          shadows: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset:
+                                  Offset(0, 5), // changes position of shadow
+                            ),
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset:
+                                  Offset(1, 5), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                       SizedBox(
                         height: 50,
