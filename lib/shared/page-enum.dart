@@ -29,6 +29,8 @@ enum Page {
   editProfileScreen,
   newFutureCategories,
   viewLearningTracksScreen,
+  aboutQuizScreen,
+  videoLearningTracksScreen,
 }
 
 extension PageRoute on Page {

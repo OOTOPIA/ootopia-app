@@ -20,7 +20,6 @@ import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
-import 'package:ootopia_app/screens/auth/insert_invitation_code_store.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
@@ -34,6 +33,8 @@ import 'package:ootopia_app/screens/create_categories/create_categories_screen.d
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/about_quiz_screen.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/video_learning_tracks.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
@@ -263,6 +264,8 @@ class MainPage extends HookWidget {
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
     PageRoute.Page.editProfileScreen: (args) => EditProfileScreen(),
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
+    PageRoute.Page.aboutQuizScreen: (args) => AboutQuizScreen(),
+    PageRoute.Page.videoLearningTracksScreen: (args) => VideoLeaningTracks(),
   };
 
   @override
