@@ -30,6 +30,7 @@ enum Page {
   privacyPolicyScreen,
   editProfileScreen,
   newFutureCategories,
+  viewLearningTracksScreen,
 }
 
 extension PageRoute on Page {
