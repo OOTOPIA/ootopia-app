@@ -8,6 +8,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -61,7 +62,7 @@ class _RegisterPhase2TopInterestsPageState
         brightness: Brightness.light,
         leading: Padding(
           padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+            left: GlobalConstants.of(context).smallIntermediateSpacing,
           ),
           child: InkWell(
               onTap: () => Navigator.of(context).pop(),
@@ -76,8 +77,9 @@ class _RegisterPhase2TopInterestsPageState
                       ),
                       Text(
                         AppLocalizations.of(context)!.back,
-                        style: TextStyle(
-                          fontSize: 16,
+                        style: GoogleFonts.roboto(
+                          fontSize:
+                              Theme.of(context).textTheme.subtitle1!.fontSize,
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
@@ -100,7 +102,9 @@ class _RegisterPhase2TopInterestsPageState
                   SliverFillRemaining(
                     hasScrollBody: false,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              GlobalConstants.of(context).intermediateSpacing),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -111,18 +115,21 @@ class _RegisterPhase2TopInterestsPageState
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 34,
+                                  height:
+                                      GlobalConstants.of(context).spacingMedium,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.favoriteThemes,
-                                  style: TextStyle(
-                                    color: Color(0xff03145C),
-                                    fontSize: 22,
+                                  style: GoogleFonts.roboto(
+                                    color: LightColors.darkBlue,
+                                    fontSize: GlobalConstants.of(context)
+                                        .screenHorizontalSpace,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 8,
+                                  height:
+                                      GlobalConstants.of(context).spacingSmall,
                                 ),
                                 Visibility(
                                     visible:
@@ -136,35 +143,44 @@ class _RegisterPhase2TopInterestsPageState
                                         Text(
                                           AppLocalizations.of(context)!
                                               .selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn,
-                                          style: TextStyle(
+                                          style: GoogleFonts.roboto(
                                             color: Colors.grey,
-                                            fontSize: 18,
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .subtitle1!
+                                                .fontSize,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 12,
+                                          height: GlobalConstants.of(context)
+                                              .spacingSmall,
                                         ),
                                         Divider(
                                           color: Colors.grey,
                                           thickness: 1,
                                         ),
                                         SizedBox(
-                                          height: 16,
+                                          height: GlobalConstants.of(context)
+                                              .spacingNormal,
                                         ),
                                         Text(
                                           AppLocalizations.of(context)!
                                               .selectAtLeastOneHashtag,
-                                          style: TextStyle(
+                                          style: GoogleFonts.roboto(
                                             color: Colors.grey,
-                                            fontSize: 18,
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .subtitle1!
+                                                .fontSize,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
                                     )),
                                 SizedBox(
-                                  height: 8,
+                                  height:
+                                      GlobalConstants.of(context).spacingSmall,
                                 ),
                                 InkWell(
                                   onTap: () async {
@@ -177,13 +193,17 @@ class _RegisterPhase2TopInterestsPageState
                                     setState(() {});
                                   },
                                   child: Container(
-                                    margin: EdgeInsets.only(bottom: 16),
+                                    margin: EdgeInsets.only(
+                                        bottom: GlobalConstants.of(context)
+                                            .spacingNormal),
                                     height: 57,
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 0),
+                                        horizontal: GlobalConstants.of(context)
+                                            .spacingSmall,
+                                        vertical: 0),
                                     decoration: BoxDecoration(
-                                      border: new Border.all(
-                                        color: Color(0xff707070),
+                                      border: Border.all(
+                                        color: LightColors.grey,
                                         width: 0.25,
                                       ),
                                       borderRadius: BorderRadius.circular(5),
@@ -195,20 +215,26 @@ class _RegisterPhase2TopInterestsPageState
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 14),
+                                              padding: EdgeInsets.only(
+                                                  right: GlobalConstants.of(
+                                                          context)
+                                                      .spacingSmall),
                                               child: Icon(
                                                 Icons.add,
                                                 size: 31,
                                               ),
                                             ),
                                             Text(
-                                                AppLocalizations.of(context)!
-                                                    .searchForAHashtag,
-                                                style: GoogleFonts.roboto(
-                                                    color: Color(0xff000000),
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16)),
+                                              AppLocalizations.of(context)!
+                                                  .searchForAHashtag,
+                                              style: GoogleFonts.roboto(
+                                                  color: LightColors.blackText,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: Theme.of(context)
+                                                      .textTheme
+                                                      .subtitle1!
+                                                      .fontSize),
+                                            ),
                                           ],
                                         ),
                                         Visibility(
@@ -219,9 +245,12 @@ class _RegisterPhase2TopInterestsPageState
                                             '${controller.selectedTags.length} ' +
                                                 AppLocalizations.of(context)!
                                                     .tagsSelected,
-                                            style: TextStyle(
+                                            style: GoogleFonts.roboto(
                                               color: Colors.grey,
-                                              fontSize: 16,
+                                              fontSize: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1!
+                                                  .fontSize,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
@@ -234,16 +263,24 @@ class _RegisterPhase2TopInterestsPageState
                                   visible: controller.selectedTags.length != 0,
                                   child: Wrap(
                                     direction: Axis.horizontal,
-                                    spacing: 8,
+                                    spacing: GlobalConstants.of(context)
+                                        .spacingSmall,
                                     children:
                                         controller.selectedTags.map((tag) {
                                       return Container(
                                         height: 38,
-                                        margin: EdgeInsets.only(bottom: 8),
+                                        margin: EdgeInsets.only(
+                                            bottom: GlobalConstants.of(context)
+                                                .spacingSmall),
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                            horizontal:
+                                                GlobalConstants.of(context)
+                                                    .intermediateSpacing,
+                                            vertical:
+                                                GlobalConstants.of(context)
+                                                    .smallIntermediateSpacing),
                                         decoration: BoxDecoration(
-                                            color: Color(0xff03145C),
+                                            color: LightColors.darkBlue,
                                             borderRadius:
                                                 BorderRadius.circular(35),
                                             shape: BoxShape.rectangle),
@@ -252,16 +289,21 @@ class _RegisterPhase2TopInterestsPageState
                                           children: [
                                             Text(
                                               '${tag.name}',
-                                              style: TextStyle(
-                                                fontSize: 12,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: Theme.of(context)
+                                                    .textTheme
+                                                    .headline5!
+                                                    .fontSize,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                               ),
                                             ),
                                             GestureDetector(
                                               child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 16),
+                                                padding: EdgeInsets.only(
+                                                    left: GlobalConstants.of(
+                                                            context)
+                                                        .spacingNormal),
                                                 child: Icon(
                                                   Icons.close,
                                                   size: 14,
@@ -301,12 +343,10 @@ class _RegisterPhase2TopInterestsPageState
                                           side: BorderSide.none)),
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                          Color(0xff003694)),
-                                  padding:
-                                      MaterialStateProperty.all<EdgeInsets>(
-                                          EdgeInsets.all(
-                                              GlobalConstants.of(context)
-                                                  .spacingNormal))),
+                                          LightColors.blue),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.all(GlobalConstants.of(context)
+                                          .spacingNormal))),
                               child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: Center(
@@ -314,7 +354,10 @@ class _RegisterPhase2TopInterestsPageState
                                           AppLocalizations.of(context)!
                                               .conclude,
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .subtitle1!
+                                                .fontSize,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           )))),
@@ -385,40 +428,68 @@ class _MyDialogState extends State<MyDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      actionsPadding: EdgeInsets.all(0),
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: GlobalConstants.of(context).spacingNormal),
       titleTextStyle: TextStyle(
-        fontSize: 22,
+        fontSize: GlobalConstants.of(context).screenHorizontalSpace,
         fontWeight: FontWeight.w500,
         color: Colors.black,
       ),
-      title: Text(
-        AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
+      title: Column(
+        children: [
+          Text(
+            AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
+          ),
+          SizedBox(
+            height: GlobalConstants.of(context).intermediateSpacing,
+          ),
+          TextFormField(
+            style: TextStyle(height: 2.5),
+            onChanged: (value) {
+              controller.filterTagsByText(
+                  text: value, update: () => setState(() {}));
+            },
+            decoration: GlobalConstants.of(context).loginInputTheme(
+                AppLocalizations.of(context)!.selectAtLeastOneHashtag),
+          ),
+          SizedBox(
+            height: GlobalConstants.of(context).spacingMedium,
+          ),
+          Container(
+            color: LightColors.grey.withOpacity(.3),
+            width: double.infinity,
+            height: 1,
+          ),
+        ],
       ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(
-              onChanged: (value) {
-                controller.filterTagsByText(
-                    text: value, update: () => setState(() {}));
-              },
-              decoration: GlobalConstants.of(context).loginInputTheme(''),
+            SizedBox(
+              height: 26,
             ),
-            Divider(),
             Wrap(
               direction: Axis.horizontal,
-              spacing: 1,
+              spacing: GlobalConstants.of(context).spacingSmall,
               children: controller.filterTags.map((tag) {
                 return ChoiceChip(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: GlobalConstants.of(context).spacingNormal,
+                      vertical: 0),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(45)),
                       side: BorderSide(width: 1, color: Color(0xffE0E1E2))),
-                  label: Text(
-                    '${tag.name}',
-                    style: TextStyle(
-                        color: tag.seletedTag ? Colors.white : Colors.grey),
-                  ),
-                  selectedColor: Color(0xff03145C),
+                  label: Text('${tag.name}',
+                      style: GoogleFonts.roboto(
+                          color: tag.seletedTag
+                              ? Colors.white
+                              : LightColors.blackText.withOpacity(0.6),
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              Theme.of(context).textTheme.headline5!.fontSize)),
+                  selectedColor: LightColors.darkBlue,
                   backgroundColor: Colors.white,
                   selected: tag.seletedTag,
                   onSelected: (bool selected) {
@@ -434,33 +505,64 @@ class _MyDialogState extends State<MyDialog> {
                 );
               }).toList(),
             ),
+            SizedBox(
+              height: GlobalConstants.of(context).screenHorizontalSpace,
+            ),
           ],
         ),
       ),
       actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              AppLocalizations.of(context)!.cancel,
-              style: TextStyle(
-                  color: Color(0xff018F9C),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16),
-            )),
-        TextButton(
-            onPressed: () {
-              setState(() {});
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              AppLocalizations.of(context)!.confirm,
-              style: TextStyle(
-                  color: Color(0xff018F9C),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16),
-            )),
+        Column(
+          children: [
+            Container(
+              color: LightColors.grey.withOpacity(.3),
+              width: double.infinity,
+              height: 1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: GlobalConstants.of(context).spacingSmall),
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: TextStyle(
+                            color: Color(0xff018F9C),
+                            fontWeight: FontWeight.w500,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .fontSize),
+                      )),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: GlobalConstants.of(context).spacingSmall),
+                  child: TextButton(
+                      onPressed: () {
+                        setState(() {});
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.confirm,
+                        style: TextStyle(
+                            color: Color(0xff018F9C),
+                            fontWeight: FontWeight.w500,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .fontSize),
+                      )),
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
     );
   }

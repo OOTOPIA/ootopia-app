@@ -10,6 +10,7 @@ class GlobalConstants extends InheritedWidget {
   const GlobalConstants({required Widget child, Key? key})
       : super(key: key, child: child);
 
+  final double smallIntermediateSpacing = 12;
   final double spacingSmall = 8;
   final double spacingNormal = 16;
   final double intermediateSpacing = 24;
