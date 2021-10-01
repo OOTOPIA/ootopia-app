@@ -277,8 +277,6 @@ class _RegisterPhase2DailyLearningGoalPageState
                               onChanged: (dynamic value) {
                                 setState(() {
                                   controller.currentSliderValue = value;
-                                  controller.user!.dailyLearningGoalInMinutes =
-                                      value;
                                 });
                               },
                             ),
