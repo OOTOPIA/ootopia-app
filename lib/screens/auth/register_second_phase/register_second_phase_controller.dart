@@ -157,5 +157,7 @@ class RegisterSecondPhaseController {
     filterTags = allTags
         .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
         .toList();
+
+    update();
   }
 }
