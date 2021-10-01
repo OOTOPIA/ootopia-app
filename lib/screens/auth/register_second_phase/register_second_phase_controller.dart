@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,7 +28,7 @@ class RegisterSecondPhaseController {
   final TextEditingController yearController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
-
+  final UserRepositoryImpl userRepository = UserRepositoryImpl();
   //Step 03
   final TextEditingController geolocationController = TextEditingController();
   FocusNode inputFocusNode = new FocusNode();
@@ -157,5 +160,40 @@ class RegisterSecondPhaseController {
     filterTags = allTags
         .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
         .toList();
+    update();
+  }
+
+  Future<void> updateUser() async {
+    var idTags = selectedTags.map((tag) => tag.id).toList();
+
+    print(idTags);
+    try {
+      if (user!.photoFilePath != null) {
+        await _updateUserWithPhoto(user!, idTags);
+      } else if (user != null) {
+        await this.userRepository.updateUserProfile(user!, [], null);
+      }
+      await this.userRepository.getMyAccountDetails();
+    } catch (err) {}
+  }
+
+  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
+
+    var taskId = await this
+        .userRepository
+        .updateUserProfile(authStore.currentUser!, [], uploader);
+    uploader.result.listen(
+        (result) {
+          if (result.statusCode == 200 && result.taskId == taskId) {
+            completer.complete(user.id);
+          }
+        },
+        onDone: () {},
+        onError: (error) {
+          completer.completeError(error);
+        });
+    return completer.future;
   }
 }

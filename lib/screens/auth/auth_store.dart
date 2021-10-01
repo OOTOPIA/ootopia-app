@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
@@ -37,12 +36,6 @@ abstract class AuthStoreBase with Store {
   @observable
   bool errorOnGetTags = false;
 
-  @observable
-  List<InterestsTags> selectedTags = [];
-
-  @observable
-  List<InterestsTags> allTags = [];
-
   @action
   Future<User?> checkUserIsLogged() async =>
       this._currentUser = ObservableFuture(storage.getCurrentUser());
@@ -54,51 +47,6 @@ abstract class AuthStoreBase with Store {
   setUserIsLogged() {
     this._currentUser = ObservableFuture(storage.getCurrentUser());
     AppUsageTime.instance.startTimer();
-  }
-
-  @action
-  Future<void> searchTags(String nameTag) async {
-    allTags.contains(nameTag);
-  }
-
-  @action
-  void addTags(e) {
-    selectedTags.add(e);
-  }
-
-  @action
-  void removeTags(e) {
-    selectedTags.remove(e);
-  }
-
-  @action
-  Future<void> updateUser() async {
-    try {
-      if (currentUser?.photoFilePath != null) {
-        await _updateUserWithPhoto(currentUser!, []);
-      } else if (currentUser != null) {
-        await this.userRepository.updateUserProfile(currentUser!, [], null);
-      }
-      await this.userRepository.getMyAccountDetails();
-    } catch (err) {}
-  }
-
-  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
-    var completer = new Completer<String>();
-    var uploader = FlutterUploader();
-    var taskId =
-        await this.userRepository.updateUserProfile(currentUser!, [], uploader);
-    uploader.result.listen(
-        (result) {
-          if (result.statusCode == 200 && result.taskId == taskId) {
-            completer.complete(user.id);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          completer.completeError(error);
-        });
-    return completer.future;
   }
 
   @action

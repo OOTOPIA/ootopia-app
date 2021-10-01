@@ -62,56 +62,12 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
-  final _$selectedTagsAtom = Atom(name: 'AuthStoreBase.selectedTags');
-
-  @override
-  List<InterestsTags> get selectedTags {
-    _$selectedTagsAtom.reportRead();
-    return super.selectedTags;
-  }
-
-  @override
-  set selectedTags(List<InterestsTags> value) {
-    _$selectedTagsAtom.reportWrite(value, super.selectedTags, () {
-      super.selectedTags = value;
-    });
-  }
-
-  final _$allTagsAtom = Atom(name: 'AuthStoreBase.allTags');
-
-  @override
-  List<InterestsTags> get allTags {
-    _$allTagsAtom.reportRead();
-    return super.allTags;
-  }
-
-  @override
-  set allTags(List<InterestsTags> value) {
-    _$allTagsAtom.reportWrite(value, super.allTags, () {
-      super.allTags = value;
-    });
-  }
-
   final _$checkUserIsLoggedAsyncAction =
       AsyncAction('AuthStoreBase.checkUserIsLogged');
 
   @override
   Future<User?> checkUserIsLogged() {
     return _$checkUserIsLoggedAsyncAction.run(() => super.checkUserIsLogged());
-  }
-
-  final _$searchTagsAsyncAction = AsyncAction('AuthStoreBase.searchTags');
-
-  @override
-  Future<void> searchTags(String nameTag) {
-    return _$searchTagsAsyncAction.run(() => super.searchTags(nameTag));
-  }
-
-  final _$updateUserAsyncAction = AsyncAction('AuthStoreBase.updateUser');
-
-  @override
-  Future<void> updateUser() {
-    return _$updateUserAsyncAction.run(() => super.updateUser());
   }
 
   final _$updateUserRegenerarionGameLearningAlertAsyncAction =
@@ -162,34 +118,10 @@ mixin _$AuthStore on AuthStoreBase, Store {
   }
 
   @override
-  void addTags(dynamic e) {
-    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
-        name: 'AuthStoreBase.addTags');
-    try {
-      return super.addTags(e);
-    } finally {
-      _$AuthStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void removeTags(dynamic e) {
-    final _$actionInfo = _$AuthStoreBaseActionController.startAction(
-        name: 'AuthStoreBase.removeTags');
-    try {
-      return super.removeTags(e);
-    } finally {
-      _$AuthStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 isLoading: ${isLoading},
 errorOnGetTags: ${errorOnGetTags},
-selectedTags: ${selectedTags},
-allTags: ${allTags},
 currentUser: ${currentUser}
     ''';
   }
