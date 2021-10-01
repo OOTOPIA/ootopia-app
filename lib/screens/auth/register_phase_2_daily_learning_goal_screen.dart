@@ -119,7 +119,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                       Column(
                         children: [
                           SizedBox(
-                            height: 20,
+                            height: 30,
                           ),
                           Text(
                             AppLocalizations.of(context)!.regenerationGame,
@@ -292,7 +292,10 @@ class _RegisterPhase2DailyLearningGoalPageState
                                   AppLocalizations.of(context)!
                                       .isNotLearningGoalRating,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.subtitle1,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff707070)),
                                 )
                               : Container(),
                           SizedBox(
