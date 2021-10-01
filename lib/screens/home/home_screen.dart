@@ -295,13 +295,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ),
                 ),
                 BottomIcon(
-                  selectedWidget: SvgPicture.asset(
-                    'assets/icons/marketplace_icon.svg',
-                    color: selectedIconColor,
+                  selectedWidget: Image.asset(
+                    "assets/icons/marketplace_selected_icon.png",
                   ),
-                  unselectedWidget: SvgPicture.asset(
-                    'assets/icons/marketplace_icon.svg',
-                    color: unselectedIconColor,
+                  unselectedWidget: Image.asset(
+                    "assets/icons/marketplace_unselected_icon.png",
                   ),
                 ),
                 BottomIcon(
