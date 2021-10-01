@@ -29,7 +29,7 @@ class RegisterSecondPhaseController {
   final TextEditingController yearController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController cellPhoneController = TextEditingController();
-
+  final UserRepositoryImpl userRepository = UserRepositoryImpl();
   //Step 03
   final TextEditingController geolocationController = TextEditingController();
   FocusNode inputFocusNode = new FocusNode();
@@ -177,6 +177,41 @@ class RegisterSecondPhaseController {
     filterTags = allTags
         .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
         .toList();
+    update();
+  }
+
+  Future<void> updateUser() async {
+    var idTags = selectedTags.map((tag) => tag.id).toList();
+
+    print(idTags);
+    try {
+      if (user!.photoFilePath != null) {
+        await _updateUserWithPhoto(user!, idTags);
+      } else if (user != null) {
+        await this.userRepository.updateUserProfile(user!, [], null);
+      }
+      await this.userRepository.getMyAccountDetails();
+    } catch (err) {}
+  }
+
+  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
+
+    var taskId = await this
+        .userRepository
+        .updateUserProfile(authStore.currentUser!, [], uploader);
+    uploader.result.listen(
+        (result) {
+          if (result.statusCode == 200 && result.taskId == taskId) {
+            completer.complete(user.id);
+          }
+        },
+        onDone: () {},
+        onError: (error) {
+          completer.completeError(error);
+        });
+    return completer.future;
   }
 
   Future<void> updateUser() async {
