@@ -85,7 +85,6 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
     final node = FocusScope.of(context);
     authStore = Provider.of<AuthStore>(context);
     setAuthStoreToController();
-    print("current user build 01${authStore.currentUser}");
 
     return Scaffold(
       appBar: appBar,
@@ -342,6 +341,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 maxLength: 4,
                                 autofocus: false,
                                 onChanged: (String text) {
+                                  controller.birthdateIsValid(
+                                      context, () => setState(() {}));
                                   if (text.length == 4 &&
                                       int.parse(text) >= 1900) {
                                     node.nextFocus();
@@ -355,7 +356,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                           ],
                         ),
                         Visibility(
-                          visible: controller.birthdateIsValid(),
+                          visible: controller
+                              .birthdateValidationErrorMessage!.isNotEmpty,
                           child: Padding(
                             padding: EdgeInsets.only(
                               top: GlobalConstants.of(context).spacingNormal,

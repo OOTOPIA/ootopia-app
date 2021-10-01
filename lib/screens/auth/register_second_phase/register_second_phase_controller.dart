@@ -62,20 +62,29 @@ class RegisterSecondPhaseController {
     await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
   }
 
-  bool birthdateIsValid() {
-    try {
-      DateTime now = DateTime.now();
-      int day = int.parse(dayController.text);
-      int month = int.parse(monthController.text);
-      int year = int.parse(yearController.text);
+  void birthdateIsValid(BuildContext context, VoidCallback update) {
+    DateTime now = DateTime.now();
+    int day = int.parse(dayController.text);
+    int month = int.parse(monthController.text);
+    int year = int.parse(yearController.text);
 
-      return yearController.text.length == 4 &&
-          day <= 31 &&
-          month <= 12 &&
-          year >= 1900 &&
-          year < now.year;
-    } catch (error) {
-      return false;
+    if (!(yearController.text.length == 4 &&
+        day <= 31 &&
+        month <= 12 &&
+        year >= 1900 &&
+        year < now.year)) {
+      if (year.toString().length < 4) {
+        birthdateValidationErrorMessage =
+            AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
+      } else {
+        birthdateValidationErrorMessage =
+            AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
+      }
+
+      update();
+    } else {
+      birthdateValidationErrorMessage = '';
+      update();
     }
   }
 
@@ -89,20 +98,7 @@ class RegisterSecondPhaseController {
   }
 
   bool firstStepIsValid(BuildContext context) {
-    if (birthdateIsValid()) {
-      if (formKey.currentState!.validate()) {}
-    } else {
-      String year = yearController.text;
-      if (year.length < 4) {
-        birthdateValidationErrorMessage =
-            AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
-      } else {
-        birthdateValidationErrorMessage =
-            AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
-      }
-    }
-
-    return birthdateIsValid() && !validCellPhone;
+    return !validCellPhone;
   }
 
   getLocation(BuildContext context) {
@@ -114,7 +110,6 @@ class RegisterSecondPhaseController {
       // setState(() {
       if (placemarks.length > 0) {
         var placemark = placemarks[0];
-        print("Placemark: ${placemark.toJson()}");
         geolocationController.text =
             "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
