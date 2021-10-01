@@ -18,7 +18,6 @@ import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart'
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
-import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -184,7 +183,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       setState(() {});
                     },
                     onTapWalletItem: () {
-                      controller.goToPage(PageViewController.TAB_INDEX_WALLET);
+                      controller
+                          .goToPage(PageViewController.TAB_INDEX_MARKETPLACE);
                     },
                   ),
             body: Stack(
@@ -338,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     }
                     result = false;
                     break;
-                  case PageViewController.TAB_INDEX_WALLET:
+                  case PageViewController.TAB_INDEX_MARKETPLACE:
                     print("caiu 1");
                     if (authStore.currentUser == null) {
                       print("caiu 2");
@@ -469,11 +469,58 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             controller.pages.length > controller.initialPages.length)
         ? null
         : controller.currentBottomIndex ==
-PageViewController.TAB_INDEX_PROFILE &&
+                    PageViewController.TAB_INDEX_PROFILE &&
                 controller.pages[controller.currentPageIndex] is ProfileScreen
             ? appBarProfile
-            : appBar;
+            : controller.currentBottomIndex ==
+                        PageViewController.TAB_INDEX_MARKETPLACE &&
+                    controller.pages[controller.currentPageIndex]
+                        is MarketplaceScreen
+                ? appBarMarketplace
+                : appBar;
   }
+
+  get appBarMarketplace => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: InkWell(
+            onTap: () => controller.back(),
+            child: Padding(
+                padding: const EdgeInsets.only(left: 3.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      FeatherIcons.arrowLeft,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.back,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                  ],
+                )),
+          ),
+        ),
+      );
 
   get appBarProfile => PreferredSize(
         preferredSize: Size(double.infinity, 45),
