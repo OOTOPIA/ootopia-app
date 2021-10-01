@@ -21,7 +21,7 @@ class MarketplaceBarWidget extends StatelessWidget {
           Row(
             children: [
               Image.asset(
-                "assets/icons/marketplace_unselected_icon.png",
+                "assets/icons/marketplace_black_icon.png",
               ),
               const SizedBox(width: 4),
               Text(
