@@ -1,10 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -363,7 +360,9 @@ class _RegisterPhase2TopInterestsPageState
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           )))),
-                              onPressed: () {},
+                              onPressed: () {
+                                controller.updateUser();
+                              },
                             ),
                           )
                         ],
