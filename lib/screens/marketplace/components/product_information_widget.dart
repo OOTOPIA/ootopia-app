@@ -30,7 +30,7 @@ class ProductInformationWidget extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   'assets/icons/ooz_mini_blue.svg',
-                  color: Colors.black.withOpacity(0.7),
+                  color: Colors.black45,
                   height: 13.27,
                   width: 25.21,
                 ),
