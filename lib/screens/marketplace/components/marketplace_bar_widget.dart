@@ -23,7 +23,7 @@ class MarketplaceBarWidget extends StatelessWidget {
               Image.asset(
                 "assets/icons/marketplace_unselected_icon.png",
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Text(
                 'Marketplace',
                 style: TextStyle(
@@ -43,7 +43,7 @@ class MarketplaceBarWidget extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Icon(
                 Icons.arrow_forward_ios,
                 color: LightColors.blue,

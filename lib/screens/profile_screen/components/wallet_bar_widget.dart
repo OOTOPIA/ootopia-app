@@ -29,14 +29,14 @@ class WalletBarWidget extends StatelessWidget {
                   "assets/icons/ooz-coin-black.png",
                   width: 22,
                 ),
-                SizedBox(
-                  width: 4,
+                const SizedBox(width: 4),
+                Text(
+                  AppLocalizations.of(context)!.wallet,
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff000000),
+                      fontWeight: FontWeight.w500),
                 ),
-                Text(AppLocalizations.of(context)!.wallet,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xff000000),
-                        fontWeight: FontWeight.w500)),
               ],
             ),
             Row(
