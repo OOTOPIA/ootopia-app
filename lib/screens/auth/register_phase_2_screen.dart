@@ -134,7 +134,10 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   bottom: 7,
                                   right: 37,
                                   child: InkWell(
-                                    onTap: controller.getImage,
+                                    onTap: () {
+                                      controller
+                                          .getImage(() => setState(() {}));
+                                    },
                                     child: Container(
                                       decoration: new BoxDecoration(
                                         shape: BoxShape.circle,
@@ -414,6 +417,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                           onPressed: () {
                             if (!controller.formKey.currentState!.validate())
                               return;
+
+                            controller.storeAnniversaryDate();
 
                             if (controller.firstStepIsValid(context))
                               Navigator.of(context).pushNamed(

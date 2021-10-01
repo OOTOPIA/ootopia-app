@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,6 +17,7 @@ import 'package:ootopia_app/shared/geolocation.dart';
 
 class RegisterSecondPhaseController {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  final UserRepositoryImpl userRepository = UserRepositoryImpl();
 
   User? user;
   File? image;
@@ -62,18 +66,26 @@ class RegisterSecondPhaseController {
     await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
   }
 
-  void birthdateIsValid(BuildContext context, VoidCallback update) {
+  bool validationBirthDate() {
     DateTime now = DateTime.now();
     int day = int.parse(dayController.text);
     int month = int.parse(monthController.text);
     int year = int.parse(yearController.text);
 
-    if (!(yearController.text.length == 4 &&
+    if (yearController.text.length == 4 &&
         day <= 31 &&
         month <= 12 &&
         year >= 1900 &&
-        year < now.year)) {
-      if (year.toString().length < 4) {
+        year < now.year) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void birthdateIsValid(BuildContext context, VoidCallback update) {
+    if (!validationBirthDate()) {
+      if (yearController.text.toString().length < 4) {
         birthdateValidationErrorMessage =
             AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
       } else {
@@ -88,13 +100,21 @@ class RegisterSecondPhaseController {
     }
   }
 
-  Future getImage() async {
+  storeAnniversaryDate() {
+    if (validationBirthDate()) {
+      user!.birthdate =
+          "${yearController.text}/${monthController.text}/${dayController.text}";
+    }
+  }
+
+  Future getImage(VoidCallback update) async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (user != null && pickedFile != null) {
       image = File(pickedFile.path);
       user!.photoFilePath = pickedFile.path;
     }
+    update();
   }
 
   bool firstStepIsValid(BuildContext context) {
@@ -157,5 +177,34 @@ class RegisterSecondPhaseController {
     filterTags = allTags
         .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
         .toList();
+  }
+
+  Future<void> updateUser() async {
+    try {
+      if (user?.photoFilePath != null) {
+        await _updateUserWithPhoto(user!, []);
+      } else if (user != null) {
+        await this.userRepository.updateUserProfile(user!, [], null);
+      }
+      await this.userRepository.getMyAccountDetails();
+    } catch (err) {}
+  }
+
+  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
+    var taskId =
+        await this.userRepository.updateUserProfile(user, [], uploader);
+    uploader.result.listen(
+        (result) {
+          if (result.statusCode == 200 && result.taskId == taskId) {
+            completer.complete(user.id);
+          }
+        },
+        onDone: () {},
+        onError: (error) {
+          completer.completeError(error);
+        });
+    return completer.future;
   }
 }

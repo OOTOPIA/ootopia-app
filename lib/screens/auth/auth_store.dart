@@ -72,36 +72,6 @@ abstract class AuthStoreBase with Store {
   }
 
   @action
-  Future<void> updateUser() async {
-    try {
-      if (currentUser?.photoFilePath != null) {
-        await _updateUserWithPhoto(currentUser!, []);
-      } else if (currentUser != null) {
-        await this.userRepository.updateUserProfile(currentUser!, [], null);
-      }
-      await this.userRepository.getMyAccountDetails();
-    } catch (err) {}
-  }
-
-  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
-    var completer = new Completer<String>();
-    var uploader = FlutterUploader();
-    var taskId =
-        await this.userRepository.updateUserProfile(currentUser!, [], uploader);
-    uploader.result.listen(
-        (result) {
-          if (result.statusCode == 200 && result.taskId == taskId) {
-            completer.complete(user.id);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          completer.completeError(error);
-        });
-    return completer.future;
-  }
-
-  @action
   updateUserRegenerarionGameLearningAlert(String type) async {
     try {
       await userRepository.updateUserRegenerarionGameLearningAlert(type);
