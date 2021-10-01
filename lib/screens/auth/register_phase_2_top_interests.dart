@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -32,15 +33,17 @@ class _RegisterPhase2TopInterestsPageState
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
 
-    controller.updateLocalName();
-    setState(() {});
+    Future.delayed(Duration.zero).then((_) async {
+      await controller.updateLocalName();
+      setState(() {});
+    });
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      controller.updateLocalName();
+      await controller.updateLocalName();
       setState(() {});
     }
   }
@@ -88,7 +91,6 @@ class _RegisterPhase2TopInterestsPageState
 
   @override
   Widget build(BuildContext context) {
-    bool existTagsSelected = false;
     return Scaffold(
       appBar: appBar,
       body: LoadingOverlay(
@@ -107,9 +109,11 @@ class _RegisterPhase2TopInterestsPageState
                         children: [
                           Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 33,
+                                  height: 34,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!.favoriteThemes,
@@ -174,42 +178,57 @@ class _RegisterPhase2TopInterestsPageState
 
                                     setState(() {});
                                   },
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.add),
-                                              Text(
-                                                AppLocalizations.of(context)!
-                                                    .selectHashtags,
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Visibility(
-                                            visible: existTagsSelected,
-                                            child: Text(
-                                              '${controller.selectedTags.length}' +
-                                                  AppLocalizations.of(context)!
-                                                      .tagsSelected,
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 16),
+                                    height: 57,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 0),
+                                    decoration: BoxDecoration(
+                                      border: new Border.all(
+                                        color: Color(0xff707070),
+                                        width: 0.25,
+                                      ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 14),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 31,
                                               ),
                                             ),
+                                            Text(
+                                                AppLocalizations.of(context)!
+                                                    .searchForAHashtag,
+                                                style: GoogleFonts.roboto(
+                                                    color: Color(0xff000000),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16)),
+                                          ],
+                                        ),
+                                        Visibility(
+                                          visible:
+                                              controller.selectedTags.length >
+                                                  0,
+                                          child: Text(
+                                            '${controller.selectedTags.length} ' +
+                                                AppLocalizations.of(context)!
+                                                    .tagsSelected,
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -217,12 +236,12 @@ class _RegisterPhase2TopInterestsPageState
                                   visible: controller.selectedTags.length != 0,
                                   child: Wrap(
                                     direction: Axis.horizontal,
-                                    spacing: 1,
+                                    spacing: 8,
                                     children:
                                         controller.selectedTags.map((tag) {
                                       return Container(
-                                        height: 40,
-                                        margin: EdgeInsets.all(5),
+                                        height: 38,
+                                        margin: EdgeInsets.only(bottom: 8),
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 24, vertical: 12),
                                         decoration: BoxDecoration(

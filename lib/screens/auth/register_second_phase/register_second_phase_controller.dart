@@ -165,10 +165,10 @@ class RegisterSecondPhaseController {
     authStore.isLoading = false;
   }
 
-  updateLocalName() {
+  updateLocalName() async {
     if (currentLocaleName != Platform.localeName.substring(0, 2)) {
       currentLocaleName = Platform.localeName.substring(0, 2);
-      getTags(currentLocaleName);
+      await getTags(currentLocaleName);
       selectedTags = [];
     }
   }
