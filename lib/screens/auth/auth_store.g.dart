@@ -107,13 +107,6 @@ mixin _$AuthStore on AuthStoreBase, Store {
     return _$searchTagsAsyncAction.run(() => super.searchTags(nameTag));
   }
 
-  final _$updateUserAsyncAction = AsyncAction('AuthStoreBase.updateUser');
-
-  @override
-  Future<void> updateUser() {
-    return _$updateUserAsyncAction.run(() => super.updateUser());
-  }
-
   final _$updateUserRegenerarionGameLearningAlertAsyncAction =
       AsyncAction('AuthStoreBase.updateUserRegenerarionGameLearningAlert');
 
