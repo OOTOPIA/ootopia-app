@@ -365,6 +365,9 @@
     "optional":"Optional",
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
+
+    "searchForAHashtag" : "Search for a hashtag",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     }
