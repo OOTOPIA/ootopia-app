@@ -24,23 +24,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             MarketplaceBarWidget(),
             Expanded(
               child: SingleChildScrollView(
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  direction: Axis.horizontal,
-                  runSpacing: MediaQuery.of(context).size.width * 0.02,
-                  spacing: MediaQuery.of(context).size.width * 0.02,
-                  children: [
-                    ...productList(list),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(''),
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    direction: Axis.horizontal,
+                    runSpacing: 24,
+                    spacing: 24,
+                    children: [
+                      ...productList(list),
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text(''),
+                        height: 171,
+                        width: 171,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -50,7 +53,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     );
   }
 
-  final list = [1, 2, 3, 4];
+  final list = [1, 2, 3];
   _goToWalletPage() => Navigator.pushNamed(
         context,
         PageRoute.Page.profile.route,
