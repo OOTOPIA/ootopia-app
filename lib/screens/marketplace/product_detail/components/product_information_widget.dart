@@ -2,23 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
-class ProductInformationWidget extends StatelessWidget {
+class ProductInformationWidget extends StatefulWidget {
   final String informationTitle, description, oozValue;
+  final double marginTopTitle, horizontalMargin, marginBottom;
   const ProductInformationWidget(
       {required this.informationTitle,
       required this.description,
-      required this.oozValue});
+      required this.oozValue,
+      this.marginTopTitle = 18.5,
+      this.horizontalMargin = 26,
+      this.marginBottom = 80});
+
+  @override
+  State<ProductInformationWidget> createState() =>
+      _ProductInformationWidgetState();
+}
+
+class _ProductInformationWidgetState extends State<ProductInformationWidget> {
+  bool expands = false;
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 26),
+      margin: EdgeInsets.symmetric(horizontal: widget.horizontalMargin),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(top: 18.5, bottom: 8),
+            margin: EdgeInsets.only(top: widget.marginTopTitle, bottom: 8),
             child: Text(
-              informationTitle,
+              widget.informationTitle,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
@@ -36,7 +48,7 @@ class ProductInformationWidget extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 7.99),
-                  child: Text(oozValue,
+                  child: Text(widget.oozValue,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: LightColors.grey)),
@@ -44,12 +56,21 @@ class ProductInformationWidget extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            description,
-            style: TextStyle(fontSize: 14, color: Colors.black87),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expands = !expands;
+              });
+            },
+            child: Text(
+              widget.description,
+              maxLines: expands ? 100 : 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 14, color: Colors.black87),
+            ),
           ),
           SizedBox(
-            height: 80,
+            height: widget.marginBottom,
           )
         ],
       ),
