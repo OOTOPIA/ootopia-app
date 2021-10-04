@@ -212,46 +212,58 @@ class _RegisterPhase2TopInterestsPageState
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  right: GlobalConstants.of(
-                                                          context)
-                                                      .spacingSmall),
-                                              child: Icon(
-                                                Icons.add,
-                                                size: 31,
+                                        Expanded(
+                                          flex: 2,
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: GlobalConstants.of(
+                                                            context)
+                                                        .spacingSmall),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size: 31,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              AppLocalizations.of(context)!
-                                                  .searchForAHashtag,
-                                              style: GoogleFonts.roboto(
-                                                  color: LightColors.blackText,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1!
-                                                      .fontSize),
-                                            ),
-                                          ],
+                                              Text(
+                                                AppLocalizations.of(context)!
+                                                    .searchForAHashtag,
+                                                style: GoogleFonts.roboto(
+                                                    color:
+                                                        LightColors.blackText,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: Theme.of(context)
+                                                        .textTheme
+                                                        .subtitle1!
+                                                        .fontSize),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: GlobalConstants.of(context)
+                                              .spacingSmall,
                                         ),
                                         Visibility(
                                           visible:
                                               controller.selectedTags.length >
                                                   0,
-                                          child: Text(
-                                            '${controller.selectedTags.length} ' +
-                                                AppLocalizations.of(context)!
-                                                    .tagsSelected,
-                                            style: GoogleFonts.roboto(
-                                              color: Colors.grey,
-                                              fontSize: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!
-                                                  .fontSize,
-                                              fontWeight: FontWeight.w400,
+                                          child: Expanded(
+                                            child: Text(
+                                              '${controller.selectedTags.length} ' +
+                                                  AppLocalizations.of(context)!
+                                                      .tagsSelected,
+                                              overflow: TextOverflow.clip,
+                                              textAlign: TextAlign.right,
+                                              style: GoogleFonts.roboto(
+                                                color: Colors.grey,
+                                                fontSize: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1!
+                                                    .fontSize,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -329,66 +341,66 @@ class _RegisterPhase2TopInterestsPageState
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: GlobalConstants.of(context).spacingNormal,
-                            ),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25.0),
-                                          side: BorderSide.none)),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          LightColors.blue),
-                                  padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.all(GlobalConstants.of(context)
-                                          .spacingNormal))),
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Center(
-                                      child: Text(
-                                          AppLocalizations.of(context)!
-                                              .conclude,
-                                          style: TextStyle(
-                                            fontSize: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1!
-                                                .fontSize,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          )))),
-                              onPressed: () {
-                                try {
-                                  controller.updateUser();
+                          Visibility(
+                            visible: controller.selectedTags.isNotEmpty,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    GlobalConstants.of(context).spacingNormal,
+                              ),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            side: BorderSide.none)),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            LightColors.blue),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.all(
+                                            GlobalConstants.of(context)
+                                                .spacingNormal))),
+                                child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Center(
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .conclude,
+                                            style: TextStyle(
+                                              fontSize: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1!
+                                                  .fontSize,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            )))),
+                                onPressed: () async {
+                                  try {
+                                    if (controller.selectedTags.isNotEmpty) {
+                                      await controller.updateUser();
 
-                                  if (widget.args['returnToPageWithArgs'] !=
-                                      null) {
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil(
-                                      PageRoute.Page.homeScreen.route,
-                                      (Route<dynamic> route) => false,
-                                    );
-                                  } else {
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil(
-                                      PageRoute.Page.homeScreen.route,
-                                      (Route<dynamic> route) => false,
+                                      setState(() {});
+
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    }
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .errorUpdateProfile),
+                                      ),
                                     );
                                   }
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          AppLocalizations.of(context)!
-                                              .errorUpdateProfile),
-                                    ),
-                                  );
-                                }
-                              },
+                                },
+                              ),
                             ),
                           )
                         ],

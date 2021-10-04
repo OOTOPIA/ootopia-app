@@ -194,7 +194,6 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   Future<void> updateUser() async {
     var idTags = selectedTags.map((tag) => tag.id).toList();
 
-    print(idTags);
     try {
       if (user!.photoFilePath != null) {
         await _updateUserWithPhoto(user!, idTags);
@@ -202,7 +201,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         await this.userRepository.updateUserProfile(user!, [], null);
       }
       await this.userRepository.getMyAccountDetails();
-    } catch (err) {}
+    } catch (err) {
+      throw (err);
+    }
   }
 
   Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
