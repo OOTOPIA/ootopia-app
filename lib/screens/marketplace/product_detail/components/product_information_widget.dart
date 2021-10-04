@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class ProductInformationWidget extends StatefulWidget {
   final ProductModel productModel;
-  final double marginTopTitle, marginLeft, marginRight,  marginBottom;
+  final double marginTopTitle, marginLeft, marginRight, marginBottom;
   const ProductInformationWidget(
       {required this.productModel,
       this.marginTopTitle = 18.5,
@@ -23,33 +24,41 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: widget.marginLeft, right: widget.marginRight),
+      margin: EdgeInsets.only(
+          left: getAdaptiveSize(widget.marginLeft, context),
+          right: getAdaptiveSize(widget.marginRight, context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(top: widget.marginTopTitle, bottom: 12),
+            margin: EdgeInsets.only(
+                top: getAdaptiveSize(widget.marginTopTitle, context),
+                bottom: getAdaptiveSize(12, context)),
             child: Text(
               widget.productModel.title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: getAdaptiveSize(20, context),
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Container(
             margin: EdgeInsets.only(
-              bottom: 8,
+              bottom: getAdaptiveSize(8, context),
             ),
             child: Row(
               children: [
                 SvgPicture.asset(
                   'assets/icons/ooz_mini_blue.svg',
                   color: Colors.black45,
-                  height: 13.27,
-                  width: 25.21,
+                  height: getAdaptiveSize(13.27, context),
+                  width: getAdaptiveSize(25.21, context),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 7.99),
+                  padding:
+                      EdgeInsets.only(left: getAdaptiveSize(7.99, context)),
                   child: Text(widget.productModel.oozValue.toString(),
                       style: TextStyle(
+                          fontSize: getAdaptiveSize(14, context),
                           fontWeight: FontWeight.bold,
                           color: LightColors.grey)),
                 )
@@ -66,11 +75,13 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
               widget.productModel.description,
               maxLines: expands ? 100 : 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14, color: Colors.black87),
+              style: TextStyle(
+                  fontSize: getAdaptiveSize(14, context),
+                  color: Colors.black87),
             ),
           ),
           SizedBox(
-            height: widget.marginBottom,
+            height: getAdaptiveSize(widget.marginBottom, context),
           )
         ],
       ),

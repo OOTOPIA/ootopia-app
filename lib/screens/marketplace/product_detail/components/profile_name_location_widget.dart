@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 
 class ProfileNameLocationWidget extends StatelessWidget {
   final String profileImageUrl, profileName, location;
@@ -10,25 +11,30 @@ class ProfileNameLocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only( top: 16, bottom: 16.5, right: 26),
+      margin: EdgeInsets.only(
+          top: getAdaptiveSize(16, context),
+          bottom: getAdaptiveSize(16.5, context),
+          right: getAdaptiveSize(26, context)),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 18,
+            radius: getAdaptiveSize(18, context),
             backgroundImage: NetworkImage(profileImageUrl),
           ),
           Container(
-            margin: EdgeInsets.only(left: 19),
+            margin: EdgeInsets.only(left: getAdaptiveSize(19, context)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   profileName,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: getAdaptiveSize(14, context),
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
                   location,
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: getAdaptiveSize(12, context)),
                 ),
               ],
             ),
