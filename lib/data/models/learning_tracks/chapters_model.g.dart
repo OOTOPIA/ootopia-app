@@ -9,24 +9,26 @@ part of 'chapters_model.dart';
 ChaptersModel _$ChaptersModelFromJson(Map<String, dynamic> json) {
   return ChaptersModel(
     id: json['id'] as int,
+    video: json['video'] as String,
     title: json['title'] as String,
     videoUrl: json['videoUrl'] as String,
     videoThumbUrl: json['videoThumbUrl'] as String,
     ooz: (json['ooz'] as num).toDouble(),
     createdAt: json['createdAt'] as String,
     updatedAt: json['updatedAt'] as String,
-    timeInMinutes: json['timeInMinutes'] as int,
+    time: json['time'] as String,
   );
 }
 
 Map<String, dynamic> _$ChaptersModelToJson(ChaptersModel instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'video': instance.video,
       'title': instance.title,
       'videoUrl': instance.videoUrl,
       'videoThumbUrl': instance.videoThumbUrl,
       'ooz': instance.ooz,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'timeInMinutes': instance.timeInMinutes,
+      'time': instance.time,
     };

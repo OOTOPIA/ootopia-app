@@ -5,23 +5,25 @@ part 'chapters_model.g.dart';
 @JsonSerializable()
 class ChaptersModel {
   int id;
+  String video;
   String title;
   String videoUrl;
   String videoThumbUrl;
   double ooz;
   String createdAt;
   String updatedAt;
-  int timeInMinutes;
+  String time;
 
   ChaptersModel({
     required this.id,
+    required this.video,
     required this.title,
     required this.videoUrl,
     required this.videoThumbUrl,
     required this.ooz,
     required this.createdAt,
     required this.updatedAt,
-    required this.timeInMinutes,
+    required this.time,
   });
 
   factory ChaptersModel.fromJson(Map<String, dynamic> json) =>

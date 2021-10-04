@@ -79,11 +79,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                               return InkWell(
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
-                                onTap: () {
-                                  print('aqui');
-                                  Navigator.of(context).pushNamed(PageRoute
-                                      .Page.videoLearningTracksScreen.route);
-                                },
+                                onTap: () {},
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -155,7 +151,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    '${chapter.timeInMinutes} min',
+                                                    '${chapter.time} min',
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

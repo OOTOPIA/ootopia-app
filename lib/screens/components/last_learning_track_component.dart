@@ -175,7 +175,7 @@ class _LastLearningTrackComponentsState
                             Row(
                               children: [
                                 Text(
-                                  '${lastLearningTracks!.totalTimeInMinutes} min',
+                                  '${lastLearningTracks!.time} min',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
