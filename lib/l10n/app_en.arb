@@ -30,6 +30,8 @@
     "checkYourEmail": "Check Your E-Mail",
     "weSentYouALinkToCreateANewPassword": "We sent you a link to create a new password for: ",
 
+    "thisIsWhereYourPositiveImpactMattersMost":"This is where your positive impact matters most!",
+
 
     "regenerationGame": "Regeneration game",
     "aboutRegenerationGame": "The Regeneration Game is a way to contribute to regenerative movement through the OOTOPIA app. Personal Goal refers to the amount of time you want to engage in the game. Every day, a new round of the game starts at 20h. Everytime you meet your daily goal, you receive rewards in OOz currency.",
@@ -47,13 +49,19 @@
     "getCurrentLocation": "Get current location",
 
     "dateOfBirth": "Date of Birth",
-    "day": "day",
-    "month": "month",
-    "year": "year",
+    "day": "DD",
+    "month": "MM",
+    "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Please enter a valid birthdate in format DD/MM/YYYY",
     "pleaseEnterAValidBirthdate": "Please enter a valid birthdate",
 
     "others": "Others",
+
+    "favoriteThemes": "Favorite Themes",
+    "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Select the hashtags that correspond to the themes you want to explore and learn.",
+    "selectAtLeastOneHashtag": "Select at least 1 hashtag",
+    "selectHashtags": "Select hashtags",
+    "tagsSelected": "Tags Selected",
 
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
     "nameAndSurname": "Name and surname",
@@ -66,8 +74,12 @@
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "We value and respect your data! That's why it will never be trade with third parties. We stand for total transparency and ethics!",
 
     "iAcceptThe": "I accept the ",
-    "useTerms": "use terms.",
+    "useTerms": "terms of use",
+    "and": " and ",
+    "privacy": "privacy.",
     "youNeedToAcceptTheTermsOfUseToContinue": "You need to accept the Terms of Use to continue",
+
+    "weRespectAndProtectThePrivacyofYourData":"We respect and protect the privacy of your data. \nCheck out our ethical and transparency precepts here.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "You need to enable some \npermissions to allow full \nuse of the camera.",
 
@@ -300,7 +312,8 @@
     "ooz25":" 25,00 OOz ",  
     "pictureByRommelDiaz":"Picture by Rommel Diaz",
     "joinToOOTOPIA":"Invitation to join me on OOTOPIA\nExperience the movement that is regenerating planet Earth!\nDownload the app and register with this code: %USER_CODE%\nYou'll also receive 15.00 OOz of credit.\nLIVE OOTOPIA NOW! ✨ 🌎 ❤️",
-    "continueAccess":"continue",
+    "continueAccess":"Continue",
+    "conclude":"Conclude",
     "enterYourInvitationCode":"Enter your invitation code",
     "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is emerging thanks to people like you!",
     "skip":"Skip",
@@ -347,12 +360,21 @@
     "textForNextFeatureCategories":"In the next app update, you will have access to albums and will be able to organize your content into different publishing categories.\n\nIn addition to organizing your profile, you will also be able to view other Ootopians' albums.",
 
     "medals": "Medals",
+    "iAccept": "I accept",
     "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    "optional":"Optional",
+    "chooseYourDailyGoal":"Choose your daily goal for game participation.",
+    "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
     
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Here you will find learning tracks that will bring you a deeper understanding of the main regenerative practices. Watch, answer the quizzes, and earn even more OOz.",
     "seeAll":"See all",
     "dontExistLearningTracks":"Don't exist learning tracks",
+
+    "searchForAHashtag" : "Search for a hashtag",
+
+    "errorUpdateProfile": "Error updating profile, try profile again",
+
     "lessons":"lessons",
     "@helloWorld": {
         "description": "A programmer greeting"
