@@ -34,7 +34,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     spacing: 24,
                     children: [
                       ...productList(list),
-                      CreateOfferButtonWidget(),
+                      CreateOfferButtonWidget(onTap: () => debugPrint('click')),
                     ],
                   ),
                 ),
