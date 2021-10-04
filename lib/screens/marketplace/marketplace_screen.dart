@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/marketplace/components/marketplace_bar_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_item_widget.dart';
 
@@ -61,7 +60,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       id: '123',
       photoUrl:
           'https://images.pexels.com/photos/6469283/pexels-photo-6469283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-      price: '110.0',
+      price: '110,0',
       title: 'Plant a tree and help to reforest the Atlantic Atlantic',
       user: User(
         fullname: 'IB Florestas',
@@ -74,7 +73,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       id: '123',
       photoUrl:
           'https://images.pexels.com/photos/6469283/pexels-photo-6469283.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-      price: '110.0',
+      price: '110,0',
       title: 'Daily Sustainable Tips Mini class - Dur.: 30 min',
       user: User(
         fullname: 'Luize Sehn',
