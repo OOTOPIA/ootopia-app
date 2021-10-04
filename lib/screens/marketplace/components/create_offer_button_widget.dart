@@ -22,6 +22,7 @@ class CreateOfferButtonWidget extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/thin_add_icon.svg',
             ),
+            SizedBox(height: 10),
             Text(
               AppLocalizations.of(context)!.createYourOffer,
               style: TextStyle(
