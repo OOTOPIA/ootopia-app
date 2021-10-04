@@ -15,11 +15,12 @@ class MessageOptionalWidget extends StatelessWidget {
           hintText: "Message - optional",
           hintStyle: TextStyle(
             color: LightColors.grey,
+            fontWeight: FontWeight.w500
           ),
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 0.5, color: LightColors.grey)),
+              borderSide: BorderSide(width: 0.25, color: LightColors.grey)),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 0.5, color: LightColors.grey)),
+              borderSide: BorderSide(width: 0.25, color: LightColors.grey)),
         ),
       ),
     );
