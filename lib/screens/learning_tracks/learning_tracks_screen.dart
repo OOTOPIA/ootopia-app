@@ -277,7 +277,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      '${learningTrack.totalTimeInMinutes} min',
+                                      '${learningTrack.time} min',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,

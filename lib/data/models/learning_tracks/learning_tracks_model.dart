@@ -13,7 +13,8 @@ class LearningTracksModel {
   List<ChaptersModel> chapters;
   String createdAt;
   String updatedAt;
-  int totalTimeInMinutes;
+  String time;
+  String strapiId;
   String imageUrl;
   double ooz;
   String location;
@@ -29,8 +30,9 @@ class LearningTracksModel {
     required this.updatedAt,
     required this.imageUrl,
     required this.ooz,
-    required this.totalTimeInMinutes,
+    required this.time,
     required this.location,
+    required this.strapiId,
   });
 
   factory LearningTracksModel.fromJson(Map<String, dynamic> json) =>

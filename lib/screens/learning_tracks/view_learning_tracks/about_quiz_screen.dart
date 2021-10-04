@@ -65,9 +65,10 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                           child: CircleAvatar(
                               backgroundColor: Color(0xff003694),
                               radius: 78,
-                              child: SvgPicture.asset(
-                                'assets/icons/Icon-feather-image.svg',
-                                height: 62,
+                              child: Image.asset(
+                                'assets/icons/ooz_white.png',
+                                height: 93,
+                                width: 49,
                                 color: Colors.white,
                               ))),
                       SizedBox(
@@ -105,6 +106,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
+                          fontWeight: FontWeight.w400,
                           shadows: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.25),
@@ -153,7 +155,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 86,
                       ),
                       Container(
                         padding: const EdgeInsets.only(bottom: 28.0),
@@ -196,8 +198,8 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                       quarterTurns: -1,
                       child: RichText(
                         text: TextSpan(
-                          text:
-                              AppLocalizations.of(context)!.pictureByEttyFidele,
+                          text: AppLocalizations.of(context)!
+                              .pictureByMikaBaumeister,
                           style: TextStyle(color: Colors.white, fontSize: 10),
                         ),
                       ),

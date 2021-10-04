@@ -20,8 +20,9 @@ LearningTracksModel _$LearningTracksModelFromJson(Map<String, dynamic> json) {
     updatedAt: json['updatedAt'] as String,
     imageUrl: json['imageUrl'] as String,
     ooz: (json['ooz'] as num).toDouble(),
-    totalTimeInMinutes: json['totalTimeInMinutes'] as int,
+    time: json['time'] as String,
     location: json['location'] as String,
+    strapiId: json['strapiId'] as String,
   );
 }
 
@@ -36,7 +37,8 @@ Map<String, dynamic> _$LearningTracksModelToJson(
       'chapters': instance.chapters,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'totalTimeInMinutes': instance.totalTimeInMinutes,
+      'time': instance.time,
+      'strapiId': instance.strapiId,
       'imageUrl': instance.imageUrl,
       'ooz': instance.ooz,
       'location': instance.location,
