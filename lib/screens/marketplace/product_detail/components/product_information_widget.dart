@@ -5,11 +5,12 @@ import 'package:ootopia_app/theme/light/colors.dart';
 
 class ProductInformationWidget extends StatefulWidget {
   final ProductModel productModel;
-  final double marginTopTitle, horizontalMargin, marginBottom;
+  final double marginTopTitle, marginLeft, marginRight,  marginBottom;
   const ProductInformationWidget(
       {required this.productModel,
       this.marginTopTitle = 18.5,
-      this.horizontalMargin = 26,
+      this.marginLeft = 26,
+      this.marginRight = 26,
       this.marginBottom = 80});
 
   @override
@@ -22,12 +23,12 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: widget.horizontalMargin),
+      margin: EdgeInsets.only(left: widget.marginLeft, right: widget.marginRight),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(top: widget.marginTopTitle, bottom: 8),
+            margin: EdgeInsets.only(top: widget.marginTopTitle, bottom: 12),
             child: Text(
               widget.productModel.title,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
