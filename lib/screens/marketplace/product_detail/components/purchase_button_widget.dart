@@ -8,31 +8,28 @@ class PurchaseButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 26),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: onPressed,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: LightColors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(45.0),
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 16),
               ),
             ),
-          )
-        ],
-      ),
+            style: ElevatedButton.styleFrom(
+              primary: LightColors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(45.0),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
