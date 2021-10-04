@@ -10,7 +10,7 @@ class ProfileNameLocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 26, top: 16, bottom: 16.5, right: 26),
+      margin: EdgeInsets.only( top: 16, bottom: 16.5, right: 26),
       child: Row(
         children: [
           CircleAvatar(
