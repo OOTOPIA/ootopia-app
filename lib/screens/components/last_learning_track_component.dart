@@ -52,7 +52,12 @@ class _LastLearningTrackComponentsState
   @override
   Widget build(BuildContext context) {
     if (hasError) {
-      return Text('data');
+      return TryAgain(
+        performRequest,
+        buttonBackgroundColor: Colors.white,
+        messageTextColor: Colors.white,
+        buttonTextColor: Colors.black,
+      );
     } else if (lastLearningTracks == null) {
       return Container();
     } else {
