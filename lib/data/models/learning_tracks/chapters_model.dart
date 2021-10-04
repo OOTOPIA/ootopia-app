@@ -9,9 +9,7 @@ class ChaptersModel {
   String videoUrl;
   String videoThumbUrl;
   double ooz;
-  String createdAt;
-  String updatedAt;
-  int timeInMinutes;
+  String time;
 
   ChaptersModel({
     required this.id,
@@ -19,9 +17,7 @@ class ChaptersModel {
     required this.videoUrl,
     required this.videoThumbUrl,
     required this.ooz,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.timeInMinutes,
+    required this.time,
   });
 
   factory ChaptersModel.fromJson(Map<String, dynamic> json) =>

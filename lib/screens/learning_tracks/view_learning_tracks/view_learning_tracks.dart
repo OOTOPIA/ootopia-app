@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLearningTracksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -150,7 +151,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    '${chapter.timeInMinutes} min',
+                                                    chapter.time,
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

@@ -1,11 +1,9 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
@@ -40,8 +38,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
           hasError = true;
         });
       });
-
-      setState(() {});
+      setState(() {
+        _hasMoreItems =
+            learningTracksStore.allLearningTracks.length == _itemsPerPageCount;
+      });
     });
   }
 
@@ -151,7 +151,6 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         currentPage++;
                         _getData();
                       }
-
                       if (index ==
                           learningTracksStore.allLearningTracks.length) {
                         return Center(
@@ -201,11 +200,16 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     SizedBox(
                                       height: 0,
                                     ),
-                                    Text(
-                                      learningTrack.location,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
+                                    Visibility(
+                                      visible:
+                                          learningTrack.location != 'null' &&
+                                              learningTrack.location != null,
+                                      child: Text(
+                                        learningTrack.location!,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -279,7 +283,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      '${learningTrack.totalTimeInMinutes} min',
+                                      learningTrack.time,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -320,12 +324,15 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                             SizedBox(
                               height: 8,
                             ),
-                            Text(
-                              learningTrack.description,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                learningTrack.description,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w400),
+                              ),
                             ),
                             SizedBox(
                               height: 16,
