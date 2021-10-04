@@ -11,10 +11,6 @@ class ProductItem extends StatelessWidget {
       alignment: Alignment.center,
       height: 281,
       width: 171,
-      decoration: BoxDecoration(
-        color: Colors.amber,
-        borderRadius: BorderRadius.circular(15),
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -29,20 +25,44 @@ class ProductItem extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    productModel.user!.fullname!,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${productModel.user!.addressCity!}, ${productModel.user!.addressState!}',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      productModel.user!.fullname!,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      '${productModel.user!.addressCity!}, ${productModel.user!.addressState!}',
+                      style: TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                    ),
+                  ],
+                ),
               ),
             ],
+          ),
+          SizedBox(height: 7.6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image(
+              height: 171,
+              width: 171,
+              fit: BoxFit.cover,
+              image: NetworkImage(productModel.photoUrl!),
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            productModel.title!,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
         ],
       ),
