@@ -25,6 +25,21 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
     });
   }
 
+  final _$isLoadingAtom = Atom(name: 'LearningTracksStoreBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   final _$getLastLearningTracksAtom =
       Atom(name: 'LearningTracksStoreBase.getLastLearningTracks');
 
@@ -46,24 +61,26 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
       AsyncAction('LearningTracksStoreBase.listLearningTracks');
 
   @override
-  Future<void> listLearningTracks([int? limit, int? offset]) {
-    return _$listLearningTracksAsyncAction
-        .run(() => super.listLearningTracks(limit, offset));
+  Future<void> listLearningTracks(
+      {int? limit, int? offset, required String locale}) {
+    return _$listLearningTracksAsyncAction.run(() =>
+        super.listLearningTracks(limit: limit, offset: offset, locale: locale));
   }
 
   final _$lastLearningTracksAsyncAction =
       AsyncAction('LearningTracksStoreBase.lastLearningTracks');
 
   @override
-  Future<void> lastLearningTracks() {
+  Future<void> lastLearningTracks({required String locale}) {
     return _$lastLearningTracksAsyncAction
-        .run(() => super.lastLearningTracks());
+        .run(() => super.lastLearningTracks(locale: locale));
   }
 
   @override
   String toString() {
     return '''
 allLearningTracks: ${allLearningTracks},
+isLoading: ${isLoading},
 getLastLearningTracks: ${getLastLearningTracks}
     ''';
   }

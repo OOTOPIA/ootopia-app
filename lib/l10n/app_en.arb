@@ -368,13 +368,14 @@
     
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Here you will find learning tracks that will bring you a deeper understanding of the main regenerative practices. Watch, answer the quizzes, and earn even more OOz.",
-    "seeAll":"see all",
+    "seeAll":"See all",
     "dontExistLearningTracks":"Don't exist learning tracks",
 
     "searchForAHashtag" : "Search for a hashtag",
 
     "errorUpdateProfile": "Error updating profile, try profile again",
 
+    "lessons":"lessons",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

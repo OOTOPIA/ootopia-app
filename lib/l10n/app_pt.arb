@@ -366,4 +366,9 @@
 
     "searchForAHashtag" : "Procure uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile"
+    "learningTracks":"Learning Tracks",
+    "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
+    "seeAll":"Veja todos",
+     "dontExistLearningTracks":"Não existem learning tracks",
+     "lessons":"lições"
 }
