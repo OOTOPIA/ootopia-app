@@ -70,6 +70,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   bool validationBirthDate() {
     DateTime now = DateTime.now();
+
+    if(dayController.text == "" || monthController.text == "" || yearController.text == "") return false;
+
     int day = int.parse(dayController.text);
     int month = int.parse(monthController.text);
     int year = int.parse(yearController.text);
