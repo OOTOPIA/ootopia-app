@@ -39,6 +39,7 @@ class _LastLearningTrackComponentsState
         .lastLearningTracks(locale: Platform.localeName)
         .onError((error, stackTrace) {
       setState(() {
+        print(error);
         hasError = true;
       });
     });
@@ -51,12 +52,7 @@ class _LastLearningTrackComponentsState
   @override
   Widget build(BuildContext context) {
     if (hasError) {
-      return TryAgain(
-        performRequest,
-        buttonBackgroundColor: Colors.white,
-        messageTextColor: Colors.white,
-        buttonTextColor: Colors.black,
-      );
+      return Text('data');
     } else if (lastLearningTracks == null) {
       return Container();
     } else {
@@ -175,7 +171,7 @@ class _LastLearningTrackComponentsState
                             Row(
                               children: [
                                 Text(
-                                  '${lastLearningTracks!.time} min',
+                                  lastLearningTracks!.time,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,

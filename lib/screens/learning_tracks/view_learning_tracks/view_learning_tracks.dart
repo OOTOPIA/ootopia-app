@@ -151,7 +151,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    '${chapter.time} min',
+                                                    chapter.time,
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

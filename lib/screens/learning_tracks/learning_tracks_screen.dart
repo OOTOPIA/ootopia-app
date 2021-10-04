@@ -283,7 +283,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      '${learningTrack.time} min',
+                                      learningTrack.time,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
