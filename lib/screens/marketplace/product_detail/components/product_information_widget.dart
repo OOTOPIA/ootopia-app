@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class ProductInformationWidget extends StatefulWidget {
-  final String informationTitle, description, oozValue;
+  final ProductModel productModel;
   final double marginTopTitle, horizontalMargin, marginBottom;
   const ProductInformationWidget(
-      {required this.informationTitle,
-      required this.description,
-      required this.oozValue,
+      {required this.productModel,
       this.marginTopTitle = 18.5,
       this.horizontalMargin = 26,
       this.marginBottom = 80});
@@ -30,7 +29,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
           Container(
             margin: EdgeInsets.only(top: widget.marginTopTitle, bottom: 8),
             child: Text(
-              widget.informationTitle,
+              widget.productModel.title,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
@@ -48,7 +47,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 7.99),
-                  child: Text(widget.oozValue,
+                  child: Text(widget.productModel.oozValue.toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: LightColors.grey)),
@@ -63,7 +62,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
               });
             },
             child: Text(
-              widget.description,
+              widget.productModel.description,
               maxLines: expands ? 100 : 3,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 14, color: Colors.black87),
