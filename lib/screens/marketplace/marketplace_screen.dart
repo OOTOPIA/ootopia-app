@@ -3,7 +3,7 @@ import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/marketplace/components/marketplace_bar_widget.dart';
-import 'package:ootopia_app/screens/marketplace/components/product_list_widget.dart';
+import 'package:ootopia_app/screens/marketplace/components/product_item_widget.dart';
 
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
