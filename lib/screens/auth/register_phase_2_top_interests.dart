@@ -27,6 +27,8 @@ class _RegisterPhase2TopInterestsPageState
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
 
+  bool isloading = false;
+
   @override
   void initState() {
     super.initState();
@@ -94,7 +96,7 @@ class _RegisterPhase2TopInterestsPageState
     return Scaffold(
       appBar: appBar,
       body: LoadingOverlay(
-        isLoading: controller.authStore.isLoading,
+        isLoading: controller.authStore.isLoading || isloading,
         child: controller.authStore.isLoading
             ? Container()
             : CustomScrollView(
@@ -380,9 +382,14 @@ class _RegisterPhase2TopInterestsPageState
                                 onPressed: () async {
                                   try {
                                     if (controller.selectedTags.isNotEmpty) {
+                                      setState(() {
+                                        isloading = true;
+                                      });
                                       await controller.updateUser();
 
-                                      setState(() {});
+                                      setState(() {
+                                        isloading = false;
+                                      });
 
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
@@ -391,6 +398,9 @@ class _RegisterPhase2TopInterestsPageState
                                       );
                                     }
                                   } catch (e) {
+                                    setState(() {
+                                      isloading = false;
+                                    });
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
