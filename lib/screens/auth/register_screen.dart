@@ -637,43 +637,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           ],
                         ),
                       ),
-                      // Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.stretch,
-                      //   mainAxisSize: MainAxisSize.max,
-                      //   mainAxisAlignment: MainAxisAlignment.end,
-                      //   children: [
-                      //     FlatButton(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.all(
-                      //           GlobalConstants.of(context).spacingNormal,
-                      //         ),
-                      //         child: Text(
-                      //           AppLocalizations.of(context)!.continueAccess,
-                      //           style: TextStyle(
-                      //             fontSize: 16,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.white,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       onPressed: () {
-                      //         if (_formKey.currentState!.validate()) {
-                      //           _submit();
-                      //         }
-                      //       },
-                      //       color: LightColors.blue,
-                      //       splashColor: Colors.black54,
-                      //       shape: RoundedRectangleBorder(
-                      //         side: BorderSide(
-                      //           color: LightColors.blue,
-                      //           width: 2,
-                      //           style: BorderStyle.solid,
-                      //         ),
-                      //         borderRadius: BorderRadius.circular(50),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                     ],
                   ),
                 ],
