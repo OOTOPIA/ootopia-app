@@ -151,7 +151,6 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         currentPage++;
                         _getData();
                       }
-                      print(_hasMoreItems);
                       if (index ==
                           learningTracksStore.allLearningTracks.length) {
                         return Center(
