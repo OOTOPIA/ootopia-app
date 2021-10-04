@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/marketplace/components/marketplace_bar_widget.dart';
-import 'package:ootopia_app/screens/marketplace/components/product_item_widget.dart';
-
+import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -35,15 +34,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     spacing: 24,
                     children: [
                       ...productList(list),
-                      Container(
-                        alignment: Alignment.center,
-                        child: Text(''),
-                        height: 171,
-                        width: 171,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(15)),
-                      ),
+                      CreateOfferButtonWidget(),
                     ],
                   ),
                 ),
