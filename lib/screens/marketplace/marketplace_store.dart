@@ -26,7 +26,7 @@ abstract class MarketplaceStoreBase with Store {
     try {
       final List<ProductModel> products =
           await _marketplaceRepository.getProducts();
-      productList.addAll(products);
+      productList.addAll(list);
       viewState = ViewState.done;
     } catch (error) {
       viewState = ViewState.error;
@@ -41,13 +41,13 @@ final list = <ProductModel>[
 
 final productJson = '''{
     "id": 0,
-    "title": "string",
-    "description": "string",
-    "photoUrl": "string",
-    "price": 0,
-    "userName": "string",
-    "userEmail": "string",
-    "userPhotoUrl": "string",
+    "title": "What is Lorem Ipsum?",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
+    "photoUrl": "https://images.pexels.com/photos/357514/pexels-photo-357514.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
+    "price": 100,
+    "userName": "Caio Vinicius",
+    "userEmail": "caio.jesus@devmagic.com.br",
+    "userPhotoUrl": "https://reqres.in/img/faces/2-image.jpg",
     "userPhoneNumber": "string",
-    "userLocation": "string"
+    "userLocation": "Aracaju Sergipe"
   }''';

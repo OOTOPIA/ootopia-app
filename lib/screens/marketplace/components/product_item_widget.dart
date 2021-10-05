@@ -17,6 +17,7 @@ class ProductItem extends StatelessWidget {
         width: 171,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -25,7 +26,7 @@ class ProductItem extends StatelessWidget {
                     height: 36,
                     width: 36,
                     fit: BoxFit.cover,
-                    image: NetworkImage(productModel.photoUrl),
+                    image: NetworkImage(productModel.userPhotoUrl!),
                   ),
                 ),
                 SizedBox(width: 16),
