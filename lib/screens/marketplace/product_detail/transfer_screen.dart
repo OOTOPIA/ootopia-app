@@ -8,11 +8,11 @@ import 'package:ootopia_app/screens/marketplace/product_detail/components/profil
 import 'package:ootopia_app/screens/marketplace/product_detail/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/rounded_thumbnail_image_widget.dart';
 
-class ConfirmPurchaseScreen extends StatelessWidget {
+class TransferScreen extends StatelessWidget {
   final User user;
   final ProductModel productModel;
 
-  const ConfirmPurchaseScreen(
+  const TransferScreen(
       {Key? key, required this.user, required this.productModel})
       : super(key: key);
 

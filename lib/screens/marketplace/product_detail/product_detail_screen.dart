@@ -5,7 +5,7 @@ import 'package:ootopia_app/screens/marketplace/product_detail/components/horizo
 import 'package:ootopia_app/screens/marketplace/product_detail/components/product_information_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/profile_name_location_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/purchase_button_widget.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/confirm_purchase_screen.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail/transfer_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   @override
@@ -57,7 +57,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (conetxt) => ConfirmPurchaseScreen(
+                builder: (conetxt) => TransferScreen(
                   user: user,
                   productModel: productModel,
                 ),
