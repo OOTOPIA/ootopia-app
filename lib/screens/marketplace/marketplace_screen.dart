@@ -17,11 +17,10 @@ class MarketplaceScreen extends StatefulWidget {
 }
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
-  late MarketplaceStore marketplaceStore;
+  final marketplaceStore = MarketplaceStore();
 
   @override
   void initState() {
-    marketplaceStore = MarketplaceStore();
     marketplaceStore.getProductList();
     super.initState();
   }

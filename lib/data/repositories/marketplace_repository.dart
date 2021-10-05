@@ -1,13 +1,9 @@
-import 'dart:convert';
-
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class MarketplaceRepository {
-  Future<List<ProductModel>> getProducts();
+  Future<List<ProductModel>> getProducts({int? limit, int? offset});
   Future<Map<String, String>> getHeaders();
 }
 
@@ -19,22 +15,21 @@ class MarketplaceRepositoryImpl
     with SecureStoreMixin
     implements MarketplaceRepository {
   @override
-  Future<List<ProductModel>> getProducts() async {
+  Future<List<ProductModel>> getProducts({int? limit, int? offset}) async {
     try {
-      final response = await http.get(
-        Uri.parse(dotenv.env['API_URL']! + "market-place"),
-        headers: await getHeaders(),
-      );
+      final response = await ApiClient.api().get("market-place",
+          queryParameters: {'limit': limit, 'offset': offset});
+
       if (response.statusCode == 200) {
-        final List jsonList = jsonDecode(response.body);
-        if (jsonList.isNotEmpty) {
-          return jsonList
-              .map((product) => ProductModel.fromJson(product))
-              .toList();
-        }
-        return <ProductModel>[];
+        final List<ProductModel> productList = [];
+        final data = response.data;
+        data.forEach((element) {
+          final product = ProductModel.fromJson(element);
+          productList.add(product);
+        });
+        return productList;
       } else {
-        throw Exception('Failed to load products');
+        throw Exception('Something went wrong');
       }
     } catch (error) {
       throw Exception('Failed to load products $error');
