@@ -56,7 +56,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                 Padding(
                   padding:
                       EdgeInsets.only(left: getAdaptiveSize(7.99, context)),
-                  child: Text(widget.productModel.oozValue.toString(),
+                  child: Text(widget.productModel.price.toString(),
                       style: TextStyle(
                           fontSize: getAdaptiveSize(14, context),
                           fontWeight: FontWeight.bold,

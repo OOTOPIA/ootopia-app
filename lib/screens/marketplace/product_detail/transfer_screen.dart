@@ -8,13 +8,13 @@ import 'package:ootopia_app/screens/marketplace/product_detail/components/profil
 import 'package:ootopia_app/screens/marketplace/product_detail/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/rounded_thumbnail_image_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail/transfer_success_screen.dart';
 
 class TransferScreen extends StatelessWidget {
-  final User user;
   final ProductModel productModel;
 
   const TransferScreen(
-      {Key? key, required this.user, required this.productModel})
+      {Key? key, required this.productModel})
       : super(key: key);
 
   @override
@@ -33,9 +33,9 @@ class TransferScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     ProfileNameLocationWidget(
-                      profileImageUrl: user.photoUrl!,
-                      profileName: user.fullname!,
-                      location: user.addressCity!,
+                      profileImageUrl: productModel.userPhotoUrl!,
+                      profileName: productModel.userName,
+                      location: productModel.userLocation!,
                     ),
                     Expanded(
                       child: Column(
@@ -48,7 +48,7 @@ class TransferScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   RoundedThumbnailImageWidget(
-                                    imageUrl: productModel.imageUrl,
+                                    imageUrl: productModel.photoUrl,
                                     radius: 12,
                                   ),
                                   Container(
@@ -71,7 +71,13 @@ class TransferScreen extends StatelessWidget {
                           PurchaseButtonWidget(
                               title: AppLocalizations.of(context)!.confirm,
                               marginBottom: getAdaptiveSize(10, context),
-                              onPressed: () {})
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TransferSuccessScreen()));
+                              })
                         ],
                       ),
                     )

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -65,7 +66,13 @@ class TransferSuccessScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(45.0),
                         )),
-                    onPressed: () {},
+                    onPressed: () {
+                       Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            HomeScreen()));
+                    },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: getAdaptiveSize(20, context),

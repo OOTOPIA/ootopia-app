@@ -19,7 +19,9 @@ class ProfileNameLocationWidget extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: getAdaptiveSize(18, context),
-            backgroundImage: NetworkImage(profileImageUrl),
+            backgroundImage: profileImageUrl.isEmpty
+                ? AssetImage("assets/icons_profile/profile.png")
+                : NetworkImage(profileImageUrl) as ImageProvider,
           ),
           Container(
             margin: EdgeInsets.only(left: getAdaptiveSize(19, context)),
