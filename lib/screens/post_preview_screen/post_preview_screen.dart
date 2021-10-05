@@ -69,9 +69,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   PostCreate postData = PostCreate();
 
-  List<MultiSelectItem<InterestsTags>> _items = [];
+  List<MultiSelectItem<InterestsTagsModel>> _items = [];
 
-  List<InterestsTags> _selectedTags = [];
+  List<InterestsTagsModel> _selectedTags = [];
 
   Future<void> _getTags() async {
     setState(() {
@@ -85,7 +85,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       setState(() {
         _isLoading = false;
         _items = tags
-            .map((tag) => MultiSelectItem<InterestsTags>(tag, tag.name))
+            .map((tag) => MultiSelectItem<InterestsTagsModel>(tag, tag.name))
             .toList();
       });
     }).onError((error, stackTrace) {
@@ -657,7 +657,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                   ),
                   margin: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingNormal),
-                  child: MultiSelectDialogField<InterestsTags?>(
+                  child: MultiSelectDialogField<InterestsTagsModel?>(
                     listType: MultiSelectListType.CHIP,
                     selectedColor: Color(0xff03145C),
                     selectedItemsTextStyle: TextStyle(

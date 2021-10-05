@@ -7,8 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class InterestsTagsModal extends StatefulWidget {
-  final List<InterestsTags> allTags;
-  final List<InterestsTags>? selectedTags;
+  final List<InterestsTagsModel> allTags;
+  final List<InterestsTagsModel>? selectedTags;
   InterestsTagsModal({
     required this.allTags,
     this.selectedTags,
@@ -19,8 +19,8 @@ class InterestsTagsModal extends StatefulWidget {
 }
 
 class _InterestsTagsModalState extends State<InterestsTagsModal> {
-  List<InterestsTags> filterTags = [];
-  List<InterestsTags> tagsSelected = [];
+  List<InterestsTagsModel> filterTags = [];
+  List<InterestsTagsModel> tagsSelected = [];
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
   void updateTagsSelected() {
     filterTags.forEach((tag) {
       if (tagsSelected.every((_tag) => tag.id == _tag.id)) {
-        tag.seletedTag = true;
+        tag.selectedTag = true;
       }
     });
   }
@@ -127,7 +127,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                   label: Text(
                     '${tag.name}',
                     style: GoogleFonts.roboto(
-                      color: tag.seletedTag
+                      color: tag.selectedTag == true
                           ? Colors.white
                           : LightColors.blackText.withOpacity(0.6),
                       fontWeight: FontWeight.bold,
@@ -136,10 +136,10 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                   ),
                   selectedColor: LightColors.darkBlue,
                   backgroundColor: Colors.white,
-                  selected: tag.seletedTag,
+                  selected: tag.selectedTag == true,
                   onSelected: (bool selected) {
                     setState(() {
-                      tag.seletedTag = selected;
+                      tag.selectedTag = selected;
                     });
                     if (selected) {
                       tagsSelected.add(tag);

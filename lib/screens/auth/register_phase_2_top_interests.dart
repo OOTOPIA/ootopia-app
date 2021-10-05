@@ -338,8 +338,8 @@ class _RegisterPhase2TopInterestsPageState
                                               ),
                                               onTap: () {
                                                 setState(() {
-                                                  if (tag.seletedTag) {
-                                                    tag.seletedTag = false;
+                                                  if (tag.selectedTag == true) {
+                                                    tag.selectedTag = false;
                                                     controller.selectedTags
                                                         .remove(tag);
                                                   }
