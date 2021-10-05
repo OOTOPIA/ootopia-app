@@ -12,13 +12,13 @@ mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
   final _$productListAtom = Atom(name: 'MarketplaceStoreBase.productList');
 
   @override
-  List<ProductModel> get productList {
+  ObservableList<ProductModel> get productList {
     _$productListAtom.reportRead();
     return super.productList;
   }
 
   @override
-  set productList(List<ProductModel> value) {
+  set productList(ObservableList<ProductModel> value) {
     _$productListAtom.reportWrite(value, super.productList, () {
       super.productList = value;
     });

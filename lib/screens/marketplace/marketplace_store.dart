@@ -7,5 +7,5 @@ class MarketplaceStore = MarketplaceStoreBase with _$MarketplaceStore;
 
 abstract class MarketplaceStoreBase with Store {
   @observable
-  var productList = <ProductModel>[];
+  ObservableList<ProductModel> productList = ObservableList();
 }
