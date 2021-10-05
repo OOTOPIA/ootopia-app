@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_player.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class VideoLeaningTracks extends StatefulWidget {
@@ -14,22 +13,6 @@ class VideoLeaningTracks extends StatefulWidget {
 }
 
 class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
-  late VideoPlayerController videoPlayerController;
-  String totalTimeVideoText = '';
-  String postionVideoText = '';
-  int totalTimeVideoInSeconds = 0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    videoPlayerController =
-        VideoPlayerController.asset('assets/videos/ootopia_learning.mp4')
-          ..initialize().then((value) {
-            videoPlayerController.play();
-          });
-  }
-
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
@@ -84,13 +67,7 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
                   Container(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height * 0.5,
-                    child: VideoPlayerLearningTracks(
-                      videoPlayerController: videoPlayerController,
-                      totalTimeVideo: totalTimeVideoText,
-                      postionVideo: postionVideoText,
-                      totalTimeVideoInSeconds:
-                          totalTimeVideoInSeconds.toDouble(),
-                    ),
+                    child: VideoPlayerLearningTracks(),
                   ),
                   SizedBox(
                     height: 26,
@@ -113,7 +90,6 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
                               EdgeInsets.all(15)),
                         ),
                         onPressed: () {
-                          videoPlayerController.pause();
                           Navigator.of(context)
                               .pushNamed(PageRoute.Page.aboutQuizScreen.route);
                         },
@@ -146,11 +122,6 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
                   ),
                 ],
               )
-            : VideoPlayerLearningTracks(
-                videoPlayerController: videoPlayerController,
-                totalTimeVideo: totalTimeVideoText,
-                postionVideo: postionVideoText,
-                totalTimeVideoInSeconds: totalTimeVideoInSeconds.toDouble(),
-              ));
+            : VideoPlayerLearningTracks());
   }
 }

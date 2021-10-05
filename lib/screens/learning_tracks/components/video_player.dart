@@ -5,16 +5,7 @@ import 'package:video_player/video_player.dart';
 
 // ignore: must_be_immutable
 class VideoPlayerLearningTracks extends StatefulWidget {
-  final VideoPlayerController videoPlayerController;
-  final String totalTimeVideo;
-  final String postionVideo;
-  double totalTimeVideoInSeconds;
-  VideoPlayerLearningTracks({
-    required this.videoPlayerController,
-    required this.totalTimeVideo,
-    required this.postionVideo,
-    required this.totalTimeVideoInSeconds,
-  });
+  VideoPlayerLearningTracks();
 
   @override
   _VideoPlayerLearningTracksState createState() =>
@@ -22,8 +13,12 @@ class VideoPlayerLearningTracks extends StatefulWidget {
 }
 
 class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
+  late VideoPlayerController videoPlayerController;
   Timer? timerOpacity;
+  String totalTimeVideoText = '';
+  String positionVideoText = '';
   int totalTimeVideoInSeconds = 0;
+  double currentValueSlider = 0;
 
   String timeVideo(Duration time) {
     totalTimeVideoInSeconds = 0;
@@ -47,22 +42,35 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
     return "$hoursInString$minutesInString:$secondsInString";
   }
 
-  String totalTimeVideoText = '';
-  String postionVideoText = '';
+  int currentPosition = 0;
+  double maxDurationVideo = 0;
+  bool onChangedStart = false;
+  @override
+  void initState() {
+    super.initState();
+    videoPlayerController = VideoPlayerController.asset(
+        'assets/videos/ootopia_learning.mp4')
+      ..addListener(() {
+        setState(() {
+          maxDurationVideo =
+              videoPlayerController.value.duration.inSeconds.toDouble();
+          totalTimeVideoText = timeVideo(videoPlayerController.value.duration);
+          positionVideoText = timeVideo(videoPlayerController.value.position);
+          if (!onChangedStart) {
+            currentPosition = videoPlayerController.value.position.inSeconds;
+          }
+        });
+      })
+      ..initialize().then((value) {
+        videoPlayerController.play();
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
-    widget.videoPlayerController.addListener(() {
-      setState(() {
-        totalTimeVideoText =
-            timeVideo(widget.videoPlayerController.value.duration);
-        postionVideoText =
-            timeVideo(widget.videoPlayerController.value.position);
-        print(widget.videoPlayerController.value.position);
-      });
-    });
     return Stack(
       children: [
-        VideoPlayer(widget.videoPlayerController),
+        VideoPlayer(videoPlayerController),
         Align(
             alignment: Alignment.center,
             child: AnimatedOpacity(
@@ -71,9 +79,9 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      widget.videoPlayerController.value.isPlaying
-                          ? widget.videoPlayerController.pause()
-                          : widget.videoPlayerController.play();
+                      videoPlayerController.value.isPlaying
+                          ? videoPlayerController.pause()
+                          : videoPlayerController.play();
 
                       timerOpacity?.cancel();
                       timerOpacity = Timer(Duration(seconds: 1),
@@ -84,7 +92,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                     backgroundColor: Color(0xff35AD6C),
                     radius: 28.5,
                     child: Icon(
-                      (widget.videoPlayerController.value.isPlaying
+                      (videoPlayerController.value.isPlaying
                           ? Icons.pause
                           : Icons.play_arrow),
                       size: 23,
@@ -110,7 +118,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '${widget.postionVideo}',
+                    '$positionVideoText',
                     style: TextStyle(
                       color: Color(0xffCDCDCD),
                       fontSize: 12,
@@ -134,13 +142,21 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                         thumbColor: Color(0xff35ad6c),
                         min: 0,
                         divisions: 1,
-                        max: widget.totalTimeVideoInSeconds,
-                        value: widget.totalTimeVideoInSeconds,
-                        onChanged: (value) {
+                        max: maxDurationVideo,
+                        value: currentPosition.toDouble(),
+                        onChanged: (value) {},
+                        onChangeStart: (value) {
                           setState(() {
-                            widget.videoPlayerController
-                                .seekTo(Duration(seconds: value.toInt()));
+                            onChangedStart = true;
                           });
+                        },
+                        onChangeEnd: (value) async {
+                          setState(() {
+                            onChangedStart = false;
+                            currentPosition = value.toInt();
+                          });
+                          await videoPlayerController
+                              .seekTo(Duration(seconds: value.toInt()));
                         },
                       ),
                     ),
@@ -149,7 +165,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                     width: 10,
                   ),
                   Text(
-                    widget.totalTimeVideo,
+                    '$totalTimeVideoText',
                     style: TextStyle(
                       color: Color(0xffCDCDCD),
                       fontSize: 12,
