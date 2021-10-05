@@ -16,7 +16,7 @@ class ProductModel {
   final String title;
   final String description;
   final String photoUrl;
-  final int price;
+  final double price;
   final String userName;
   final String? userEmail;
   final String? userPhotoUrl;
