@@ -10,13 +10,18 @@ import 'package:ootopia_app/screens/marketplace/product_detail/components/rounde
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/transfer_success_screen.dart';
 
-class TransferScreen extends StatelessWidget {
+class TransferScreen extends StatefulWidget {
   final ProductModel productModel;
 
-  const TransferScreen(
-      {Key? key, required this.productModel})
+  const TransferScreen({Key? key, required this.productModel})
       : super(key: key);
 
+  @override
+  State<TransferScreen> createState() => _TransferScreenState();
+}
+
+class _TransferScreenState extends State<TransferScreen> {
+  TextEditingController messageOptional = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child: LayoutBuilder(
@@ -33,9 +38,9 @@ class TransferScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     ProfileNameLocationWidget(
-                      profileImageUrl: productModel.userPhotoUrl ?? "",
-                      profileName: productModel.userName,
-                      location: productModel.userLocation ?? "",
+                      profileImageUrl: widget.productModel.userPhotoUrl ?? "",
+                      profileName: widget.productModel.userName,
+                      location: widget.productModel.userLocation ?? "",
                     ),
                     Expanded(
                       child: Column(
@@ -48,14 +53,14 @@ class TransferScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   RoundedThumbnailImageWidget(
-                                    imageUrl: productModel.photoUrl,
+                                    imageUrl: widget.productModel.photoUrl,
                                     radius: 12,
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width *
                                         0.65,
                                     child: ProductInformationWidget(
-                                      productModel: productModel,
+                                      productModel: widget.productModel,
                                       marginTopTitle: 0,
                                       marginBottom:
                                           getAdaptiveSize(24, context),
@@ -65,18 +70,23 @@ class TransferScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              MessageOptionalWidget(),
+                              MessageOptionalWidget(
+                                messageController: messageOptional,
+                              ),
                             ],
                           ),
                           PurchaseButtonWidget(
                               title: AppLocalizations.of(context)!.confirm,
                               marginBottom: getAdaptiveSize(10, context),
                               onPressed: () {
+                                print("MESSAGE: ${messageOptional.text}");
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            TransferSuccessScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        TransferSuccessScreen(),
+                                  ),
+                                );
                               })
                         ],
                       ),
