@@ -192,7 +192,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           'assets/icons/Icon-metro-trophy.png',
                         ),
                         Text(
-                          '23',
+                          '${authStore!.currentUser!.totalTrophyQuantity}',
                           style: TextStyle(
                               color: Color(0xff00A5FC),
                               fontWeight: FontWeight.bold,

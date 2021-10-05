@@ -1,16 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class RegisterPhase2DailyLearningGoalPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  final Map<String, dynamic> args;
   RegisterPhase2DailyLearningGoalPage(this.args);
 
   @override
@@ -26,6 +28,8 @@ class _RegisterPhase2DailyLearningGoalPageState
   late VideoPlayerController _videoPlayerController;
   bool _isNotLearningGoalRating = false;
   Timer? timerOpacity;
+  RegisterSecondPhaseController controller =
+      RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
@@ -36,15 +40,57 @@ class _RegisterPhase2DailyLearningGoalPageState
             _videoPlayerController.play();
             setState(() {});
           });
-
     setState(() {
-      if (widget.args['user'].dailyLearningGoalInMinutes != null &&
-          widget.args['user'].dailyLearningGoalInMinutes >= 10) {
+      if (controller.user!.dailyLearningGoalInMinutes != null &&
+          controller.user!.dailyLearningGoalInMinutes! >= 10) {
         _learningGoalRating =
-            widget.args['user'].dailyLearningGoalInMinutes.toDouble();
+            controller.user!.dailyLearningGoalInMinutes!.toDouble();
       }
     });
   }
+
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: InkWell(
+            onTap: () => Navigator.of(context).pop(),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3.0),
+              child: Row(
+                children: [
+                  Icon(
+                    FeatherIcons.arrowLeft,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.back,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
 
   @override
   void dispose() {
@@ -55,230 +101,239 @@ class _RegisterPhase2DailyLearningGoalPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
       body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(
-                      GlobalConstants.of(context).spacingMedium,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/white_logo.png',
-                              height: GlobalConstants.of(context).logoHeight,
-                            ),
-                          ],
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      GlobalConstants.of(context).screenHorizontalSpace),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.regenerationGame,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Color(0xff03145C),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.watchVideoToLearn,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff707070),
+                            fontWeight: FontWeight.w400),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: GlobalConstants.of(context).spacingNormal,
+                          bottom: 26,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingNormal,
-                          ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.regenerationGame,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingNormal,
-                            bottom: GlobalConstants.of(context).spacingLarge,
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _videoPlayerController.value.isPlaying
-                                      ? _videoPlayerController.pause()
-                                      : _videoPlayerController.play();
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _videoPlayerController.value.isPlaying
+                                  ? _videoPlayerController.pause()
+                                  : _videoPlayerController.play();
 
-                                  timerOpacity?.cancel();
-                                  timerOpacity = Timer(
-                                      Duration(seconds: 1),
-                                      () =>
-                                          setState(() => timerOpacity = null));
-                                });
-                              },
-                              child: Container(
-                                  height:
-                                      _videoPlayerController.value.size.height,
-                                  width:
-                                      _videoPlayerController.value.size.width,
-                                  child: Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child:
-                                            VideoPlayer(_videoPlayerController),
-                                      ),
-                                      AnimatedOpacity(
-                                        opacity: timerOpacity != null ? 1 : 0.0,
-                                        duration: Duration(milliseconds: 200),
-                                        child: timerOpacity != null
-                                            ? Center(
-                                                child: Icon(
-                                                  (_videoPlayerController
-                                                          .value.isPlaying
-                                                      ? Icons
-                                                          .pause_circle_outline
-                                                      : Icons
-                                                          .play_circle_outline),
-                                                  size: 64,
-                                                  color: Colors.black87,
-                                                ),
-                                              )
-                                            : IgnorePointer(
-                                                child: Center(
-                                                  child: Icon(
-                                                    (_videoPlayerController
-                                                            .value.isPlaying
-                                                        ? Icons
-                                                            .pause_circle_outline
-                                                        : Icons
-                                                            .play_circle_outline),
-                                                    size: 64,
-                                                    color: Colors.black87,
-                                                  ),
-                                                ),
-                                              ),
-                                      )
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(
-                        //     top: GlobalConstants.of(context).spacingNormal,
-                        //     bottom: GlobalConstants.of(context).spacingLarge,
-                        //   ),
-                        //   child: SizedBox(
-                        //     height: 200,
-                        //     child: Container(
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(12),
-                        //         shape: BoxShape.rectangle,
-                        //         color: Colors.green,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-
-                        Text(
-                          AppLocalizations.of(context)!
-                              .setTheTimeForYourDailyLearningGoal,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        SizedBox(
-                          height: GlobalConstants.of(context).spacingSmall,
-                        ),
-                        SliderTheme(
-                          data: SliderThemeData(
-                            thumbColor: Colors.white,
-                            activeTrackColor: Colors.white,
-                          ),
-                          child: Slider(
-                            value: _learningGoalRating,
-                            min: 00,
-                            max: 60,
-                            divisions: 6,
-                            onChanged: (newRating) {
-                              setState(() {
-                                _learningGoalRating = newRating;
-                                if (_learningGoalRating < 10) {
-                                  _isNotLearningGoalRating = true;
-                                } else {
-                                  _isNotLearningGoalRating = false;
-                                }
-                              });
-                            },
-                            label:
-                                "${_learningGoalRating.toStringAsFixed(0)} min.",
-                          ),
-                        ),
-                        _isNotLearningGoalRating
-                            ? SizedBox(
-                                height:
-                                    GlobalConstants.of(context).spacingLarge,
-                              )
-                            : Container(),
-                        _isNotLearningGoalRating
-                            ? Text(
-                                AppLocalizations.of(context)!
-                                    .isNotLearningGoalRating,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.subtitle1,
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: GlobalConstants.of(context).spacingLarge,
-                        ),
-                        FlatButton(
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                              GlobalConstants.of(context).spacingNormal,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.confirm,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            widget.args['user'].dailyLearningGoalInMinutes =
-                                _learningGoalRating.round();
-
-                            this
-                                .trackingEvents
-                                .signupCompletedStepIIOfSignupII({
-                              "dailyLearningGoalInMinutes":
-                                  widget.args['user'].dailyLearningGoalInMinutes
+                              timerOpacity?.cancel();
+                              timerOpacity = Timer(Duration(seconds: 1),
+                                  () => setState(() => timerOpacity = null));
                             });
-                            Navigator.of(context).pushNamed(
-                              PageRoute
-                                  .Page.registerPhase2GeolocationScreen.route,
-                              arguments: widget.args,
-                            );
                           },
-                          color: Colors.white,
-                          splashColor: Colors.black54,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                              style: BorderStyle.solid,
-                            ),
-                            borderRadius: BorderRadius.circular(50),
+                          child: Container(
+                              height: _videoPlayerController.value.size.height,
+                              width: _videoPlayerController.value.size.width,
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: VideoPlayer(_videoPlayerController),
+                                  ),
+                                  AnimatedOpacity(
+                                    opacity: timerOpacity != null ? 1 : 0.0,
+                                    duration: Duration(milliseconds: 200),
+                                    child: timerOpacity != null
+                                        ? Center(
+                                            child: Icon(
+                                              (_videoPlayerController
+                                                      .value.isPlaying
+                                                  ? Icons.pause_circle_outline
+                                                  : Icons.play_circle_outline),
+                                              size: 64,
+                                              color: Colors.black87,
+                                            ),
+                                          )
+                                        : IgnorePointer(
+                                            child: Center(
+                                              child: Icon(
+                                                (_videoPlayerController
+                                                        .value.isPlaying
+                                                    ? Icons.pause_circle_outline
+                                                    : Icons
+                                                        .play_circle_outline),
+                                                size: 64,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                          ),
+                                  )
+                                ],
+                              )),
+                        ),
+                      ),
+                      Divider(
+                        color: Color(0xff707070).withOpacity(.6),
+                        height: 1,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 24, bottom: 24),
+                        child: Text(
+                          AppLocalizations.of(context)!.chooseYourDailyGoal,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff707070),
                           ),
                         ),
-                      ],
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingSmall,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.minutesPerDay,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff707070)),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingSmall,
+                      ),
+                      SfSliderTheme(
+                        data: SfSliderThemeData(
+                            activeTrackColor:
+                                Color(0xff03DAC5).withOpacity(0.08),
+                            inactiveTrackColor:
+                                Color(0xff03DAC5).withOpacity(0.3),
+                            inactiveDividerRadius: 4.8,
+                            minorTickSize: Size(10, 10),
+                            tickSize: Size(20, 20),
+                            thumbColor: Colors.white,
+                            activeDividerColor: Color(0xff03DAC5),
+                            overlayColor: Color(0xff03DAC5),
+                            activeDividerStrokeColor: Color(0xff03DAC5),
+                            disabledActiveDividerColor: Color(0xff03DAC5),
+                            thumbStrokeColor: Color(0xff03DAC5),
+                            inactiveTickColor: Color(0xff03DAC5),
+                            disabledThumbColor: Color(0xff03DAC5),
+                            activeMinorTickColor: Color(0xff03DAC5),
+                            inactiveDividerColor: Color(0xff03DAC5),
+                            overlayRadius: 9,
+                            inactiveTrackHeight: 9.5,
+                            trackCornerRadius: 9,
+                            tickOffset: Offset(10, 10),
+                            thumbRadius: 9.3,
+                            activeTrackHeight: 9.5,
+                            activeLabelStyle:
+                                TextStyle(color: Colors.grey, fontSize: 14),
+                            inactiveLabelStyle:
+                                TextStyle(color: Colors.grey, fontSize: 14),
+                            activeDividerRadius: 4.8),
+                        child: SfSlider(
+                          min: 0.0,
+                          max: 60,
+                          value: controller.currentSliderValue,
+                          interval: 10,
+                          stepSize: 10,
+                          showLabels: true,
+                          showDividers: true,
+                          onChanged: (dynamic value) {
+                            setState(() {
+                              controller.currentSliderValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                      _isNotLearningGoalRating
+                          ? SizedBox(
+                              height: GlobalConstants.of(context).spacingLarge,
+                            )
+                          : Container(),
+                      _isNotLearningGoalRating
+                          ? Text(
+                              AppLocalizations.of(context)!
+                                  .isNotLearningGoalRating,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff707070)),
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingNormal,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              side: BorderSide.none),
+                        ),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Color(0xff003694)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(
+                                GlobalConstants.of(context).spacingNormal)),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.continueAccess,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        _videoPlayerController.pause();
+                        controller.user!.dailyLearningGoalInMinutes =
+                            _learningGoalRating.round();
+                        this.trackingEvents.signupCompletedStepIIOfSignupII({
+                          "dailyLearningGoalInMinutes":
+                              controller.user!.dailyLearningGoalInMinutes
+                        });
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.registerPhase2GeolocationScreen.route,
+                          arguments: widget.args,
+                        );
+                      },
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

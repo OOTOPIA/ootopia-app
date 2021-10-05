@@ -26,6 +26,7 @@ import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
 import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
 import 'package:ootopia_app/screens/auth/register_screen.dart';
+import 'package:ootopia_app/screens/auth/policy_and_terms_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
@@ -262,6 +263,14 @@ class MainPage extends HookWidget {
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
+    PageRoute.Page.termsOfUseScreen: (args) => PolicyAndTermsScreen(
+          filename: args['filename'],
+          onAccept: args['onAccept'],
+        ),
+    PageRoute.Page.privacyPolicyScreen: (args) => PolicyAndTermsScreen(
+          filename: args['filename'],
+          onAccept: args['onAccept'],
+        ),
     PageRoute.Page.editProfileScreen: (args) => EditProfileScreen(),
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
     PageRoute.Page.aboutQuizScreen: (args) => AboutQuizScreen(),

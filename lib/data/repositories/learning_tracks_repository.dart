@@ -15,10 +15,6 @@ class LearningTracksRepositoryImpl
   Future<LearningTracksModel> lastLearningTracks(
       {required String locale}) async {
     try {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (!loggedIn) {
-        return Future.error('user not logged');
-      }
       var response =
           await ApiClient.api().get("learning-tracks/last", queryParameters: {
         'locale': locale,
@@ -36,11 +32,6 @@ class LearningTracksRepositoryImpl
   Future<List<LearningTracksModel>> listLearningTracks(
       {int? limit, int? offset, required String locale}) async {
     try {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (!loggedIn) {
-        return Future.error('user not logged');
-      }
-
       var response =
           await ApiClient.api().get("learning-tracks", queryParameters: {
         'limit': limit,
