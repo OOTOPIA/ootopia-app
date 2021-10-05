@@ -45,25 +45,15 @@ class TransferScreen extends StatelessWidget {
                             children: [
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   RoundedThumbnailImageWidget(
                                     imageUrl: productModel.imageUrl,
                                     radius: 12,
                                   ),
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width < 400
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.55
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.65,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.65,
                                     child: ProductInformationWidget(
                                       productModel: productModel,
                                       marginTopTitle: 0,
