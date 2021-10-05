@@ -22,6 +22,7 @@ import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +39,8 @@ class PostPreviewPage extends StatefulWidget {
   _PostPreviewPageState createState() => _PostPreviewPageState();
 }
 
-class _PostPreviewPageState extends State<PostPreviewPage> {
+class _PostPreviewPageState extends State<PostPreviewPage>
+    with SecureStoreMixin, WidgetsBindingObserver {
   late FlickManager flickManager;
   late VideoPlayerController videoPlayer;
   late FlickMultiManager flickMultiManager;
@@ -63,6 +65,7 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
   String tagsErrorMessage = "";
   Image? image;
   Size? imageSize;
+  String currenLocalization = '';
 
   PostCreate postData = PostCreate();
 
@@ -75,7 +78,10 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
       _isLoading = true;
       _errorOnGetTags = false;
     });
-    this._tagsRepository.getTags().then((tags) {
+
+    currenLocalization = Platform.localeName.substring(0, 2);
+
+    this._tagsRepository.getTags(currenLocalization).then((tags) {
       setState(() {
         _isLoading = false;
         _items = tags
@@ -255,6 +261,8 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     });
     super.initState();
 
+    WidgetsBinding.instance!.addObserver(this);
+
     flickMultiManager = FlickMultiManager();
     videoPlayer = VideoPlayerController.file(File(widget.args["filePath"]))
       ..setLooping(true);
@@ -315,6 +323,15 @@ class _PostPreviewPageState extends State<PostPreviewPage> {
     }
 
     _getTags();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (currenLocalization != Platform.localeName.substring(0, 2) &&
+        AppLifecycleState.resumed == state) {
+      await _getTags();
+    }
   }
 
   @override

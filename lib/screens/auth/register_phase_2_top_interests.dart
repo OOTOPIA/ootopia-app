@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -434,21 +437,63 @@ class MyDialog extends StatefulWidget {
 class _MyDialogState extends State<MyDialog> {
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
+  List<InterestsTags> filterTags = [];
+  List<InterestsTags> tagsSelected = [];
 
   @override
   void initState() {
     super.initState();
-    controller.filterTags = controller.allTags;
+    filterTags.clear();
+    tagsSelected.clear();
+
+    print(
+        'INICIOUUUUUUUUUUUUUUU ${controller.allTags.every((element) => element.seletedTag == true)} ${controller.selectedTags.length}  ');
+
+    setState(() {
+      filterTags = [...controller.allTags.toList()];
+
+      tagsSelected = [...controller.selectedTags.toList()];
+    });
+
     setState(() {});
+
+    controller.allTags.forEach((e) {
+      print("INICIOUUUUUUUU KAKAKAKAKA ${e.seletedTag} ${e.name}");
+    });
+  }
+
+  void filterTagsByText(String text) {
+    setState(() {
+      filterTags = [
+        ...controller.allTags
+            .where((tag) => tag.name.toLowerCase().contains(text.toLowerCase()))
+            .toList()
+      ];
+
+      updateTagsSelected();
+    });
+  }
+
+  void updateTagsSelected() {
+    filterTags.forEach((tag) {
+      if (tagsSelected.every((_tag) => tag.id == _tag.id)) {
+        tag.seletedTag = true;
+        print("INICIOUUUUUUUUUUUUUUU entou");
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    print("INICIOUUUUUUUUUUUUUUU removeu matu");
   }
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "INICIOUUUUUUUUUUUUUUU ${filterTags.every((element) => element.seletedTag == true)}");
+
     return AlertDialog(
       actionsPadding: EdgeInsets.all(0),
       contentPadding: EdgeInsets.symmetric(
@@ -469,8 +514,7 @@ class _MyDialogState extends State<MyDialog> {
           TextFormField(
             style: TextStyle(height: 2.5),
             onChanged: (value) {
-              controller.filterTagsByText(
-                  text: value, update: () => setState(() {}));
+              filterTagsByText(value);
             },
             decoration: GlobalConstants.of(context).loginInputTheme(
                 AppLocalizations.of(context)!.selectAtLeastOneHashtag),
@@ -495,7 +539,9 @@ class _MyDialogState extends State<MyDialog> {
             Wrap(
               direction: Axis.horizontal,
               spacing: GlobalConstants.of(context).spacingSmall,
-              children: controller.filterTags.map((tag) {
+              children: filterTags.map((tag) {
+                print('INICIOUUUUUUUU');
+
                 return ChoiceChip(
                   padding: EdgeInsets.symmetric(
                       horizontal: GlobalConstants.of(context).spacingNormal,
@@ -519,9 +565,9 @@ class _MyDialogState extends State<MyDialog> {
                       tag.seletedTag = selected;
                     });
                     if (selected) {
-                      controller.selectedTags.add(tag);
+                      tagsSelected.add(tag);
                     } else {
-                      controller.selectedTags.remove(tag);
+                      tagsSelected.remove(tag);
                     }
                   },
                 );
@@ -549,6 +595,11 @@ class _MyDialogState extends State<MyDialog> {
                       top: GlobalConstants.of(context).spacingSmall),
                   child: TextButton(
                       onPressed: () {
+                        tagsSelected = controller.selectedTags;
+
+                        print(
+                            "INICIOUUUUUUU ${controller.selectedTags} ASDFGH");
+                        setState(() {});
                         Navigator.of(context).pop();
                       },
                       child: Text(
@@ -567,6 +618,9 @@ class _MyDialogState extends State<MyDialog> {
                       top: GlobalConstants.of(context).spacingSmall),
                   child: TextButton(
                       onPressed: () {
+                        controller.selectedTags = tagsSelected;
+                        filterTags = [];
+
                         setState(() {});
                         Navigator.of(context).pop();
                       },
