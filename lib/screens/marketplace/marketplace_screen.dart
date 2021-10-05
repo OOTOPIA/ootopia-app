@@ -43,7 +43,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.end,
+                          crossAxisAlignment: WrapCrossAlignment.start,
                           direction: Axis.horizontal,
                           runSpacing: 24,
                           spacing: 24,
