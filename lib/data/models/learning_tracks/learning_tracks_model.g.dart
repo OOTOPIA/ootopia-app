@@ -8,7 +8,7 @@ part of 'learning_tracks_model.dart';
 
 LearningTracksModel _$LearningTracksModelFromJson(Map<String, dynamic> json) {
   return LearningTracksModel(
-    id: json['id'] as int,
+    id: json['id'] as String,
     userPhotoUrl: json['userPhotoUrl'] as String,
     userName: json['userName'] as String,
     title: json['title'] as String,
@@ -21,8 +21,7 @@ LearningTracksModel _$LearningTracksModelFromJson(Map<String, dynamic> json) {
     imageUrl: json['imageUrl'] as String,
     ooz: (json['ooz'] as num).toDouble(),
     time: json['time'] as String,
-    location: json['location'] as String,
-    strapiId: json['strapiId'] as String,
+    location: json['location'] as String?,
   );
 }
 
@@ -38,7 +37,6 @@ Map<String, dynamic> _$LearningTracksModelToJson(
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
       'time': instance.time,
-      'strapiId': instance.strapiId,
       'imageUrl': instance.imageUrl,
       'ooz': instance.ooz,
       'location': instance.location,

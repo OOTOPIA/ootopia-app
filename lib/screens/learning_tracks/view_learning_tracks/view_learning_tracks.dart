@@ -80,9 +80,12 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 onTap: () {
-                                  print('aqui');
-                                  Navigator.of(context).pushNamed(PageRoute
-                                      .Page.videoLearningTracksScreen.route);
+                                  Navigator.of(context).pushNamed(
+                                      PageRoute
+                                          .Page.videoLearningTracksScreen.route,
+                                      arguments: {
+                                        'videoUrl': chapter.videoUrl
+                                      });
                                 },
                                 child: Column(
                                   children: [
@@ -155,7 +158,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    '${chapter.timeInMinutes} min',
+                                                    chapter.time,
                                                     style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

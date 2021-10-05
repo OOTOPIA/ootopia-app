@@ -39,6 +39,7 @@ class _LastLearningTrackComponentsState
         .lastLearningTracks(locale: Platform.localeName)
         .onError((error, stackTrace) {
       setState(() {
+        print(error);
         hasError = true;
       });
     });
@@ -175,7 +176,7 @@ class _LastLearningTrackComponentsState
                             Row(
                               children: [
                                 Text(
-                                  '${lastLearningTracks!.time} min',
+                                  lastLearningTracks!.time,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,

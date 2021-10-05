@@ -5,7 +5,7 @@ part 'learning_tracks_model.g.dart';
 
 @JsonSerializable()
 class LearningTracksModel {
-  int id;
+  String id;
   String userPhotoUrl;
   String userName;
   String title;
@@ -14,10 +14,9 @@ class LearningTracksModel {
   String createdAt;
   String updatedAt;
   String time;
-  String strapiId;
   String imageUrl;
   double ooz;
-  String location;
+  String? location;
 
   LearningTracksModel({
     required this.id,
@@ -32,7 +31,6 @@ class LearningTracksModel {
     required this.ooz,
     required this.time,
     required this.location,
-    required this.strapiId,
   });
 
   factory LearningTracksModel.fromJson(Map<String, dynamic> json) =>
