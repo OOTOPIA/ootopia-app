@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransferSuccessScreen extends StatelessWidget {
   @override
@@ -27,13 +28,13 @@ class TransferSuccessScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "ETHICAL MARKETPLACE",
+                    AppLocalizations.of(context)!.ethicalMarketplace,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: getAdaptiveSize(22, context)),
                   ),
                   Text(
-                    "The place to exchange goods and services that positively impact our lives and the planet.",
+                    AppLocalizations.of(context)!.ethicalMarketplaceDescription,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: getAdaptiveSize(18, context)),
@@ -46,14 +47,14 @@ class TransferSuccessScreen extends StatelessWidget {
                         scale: MediaQuery.of(context).size.width > 720 ? 2 : 4,
                       )),
                   Text(
-                    "THANKS FOR YOUR ORDER",
+                    AppLocalizations.of(context)!.thanksForYourOrder,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: getAdaptiveSize(28, context)),
                   ),
                   Text(
-                    "The vendor will soon contact you by email to arrange delivery of your purchase.",
+                    AppLocalizations.of(context)!.messageVendorContact,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: getAdaptiveSize(18, context)),
@@ -70,7 +71,7 @@ class TransferSuccessScreen extends StatelessWidget {
                           horizontal: getAdaptiveSize(20, context),
                           vertical: getAdaptiveSize(18, context)),
                       child: Text(
-                        "Close",
+                        AppLocalizations.of(context)!.close,
                         style: TextStyle(
                             color: LightColors.silverText,
                             fontSize: getAdaptiveSize(16, context),

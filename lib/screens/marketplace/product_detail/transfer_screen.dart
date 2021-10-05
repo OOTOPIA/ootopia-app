@@ -7,6 +7,7 @@ import 'package:ootopia_app/screens/marketplace/product_detail/components/produc
 import 'package:ootopia_app/screens/marketplace/product_detail/components/profile_name_location_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/rounded_thumbnail_image_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransferScreen extends StatelessWidget {
   final User user;
@@ -78,7 +79,7 @@ class TransferScreen extends StatelessWidget {
                             ],
                           ),
                           PurchaseButtonWidget(
-                              title: "Confirm",
+                              title: AppLocalizations.of(context)!.confirm,
                               marginBottom: getAdaptiveSize(10, context),
                               onPressed: () {})
                         ],

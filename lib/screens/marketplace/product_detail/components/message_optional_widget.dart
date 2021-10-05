@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class MessageOptionalWidget extends StatelessWidget {
   @override
@@ -14,7 +16,7 @@ class MessageOptionalWidget extends StatelessWidget {
         textAlignVertical: TextAlignVertical.top,
         style: TextStyle(fontSize: getAdaptiveSize(14, context)),
         decoration: InputDecoration(
-          hintText: "Message - optional",
+          hintText: AppLocalizations.of(context)!.messageOptional,
           hintStyle: TextStyle(
             fontSize: getAdaptiveSize(14, context),
             color: LightColors.grey,

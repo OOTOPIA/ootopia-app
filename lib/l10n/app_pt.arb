@@ -350,5 +350,14 @@
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
     "seeAll":"veja todos",
-     "dontExistLearningTracks":"Não existem learning tracks"
+     "dontExistLearningTracks":"Não existem learning tracks",
+
+    "ethicalMarketplace": "MERCADO ÉTICO",
+    "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
+    "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
+    "messageVendorContact": "O vendedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua compra",
+    "messageOptional": "Mensagem - Opcional",
+    "purchaseNow": "Compre agora"
+
+
 }
