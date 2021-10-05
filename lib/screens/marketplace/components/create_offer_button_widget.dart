@@ -24,7 +24,6 @@ class CreateOfferButtonWidget extends StatelessWidget {
             borderType: BorderType.RRect,
             radius: Radius.circular(12),
             child: Container(
-              alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

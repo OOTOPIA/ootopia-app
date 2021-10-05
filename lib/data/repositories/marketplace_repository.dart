@@ -32,7 +32,7 @@ class MarketplaceRepositoryImpl
               .map((product) => ProductModel.fromJson(product))
               .toList();
         }
-        return jsonList as List<ProductModel>;
+        return <ProductModel>[];
       } else {
         throw Exception('Failed to load products');
       }
