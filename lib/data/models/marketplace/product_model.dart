@@ -1,27 +1,51 @@
-import 'package:ootopia_app/data/models/users/user_model.dart';
-
 class ProductModel {
-  String? id;
-  User? user;
-  String? photoUrl;
-  String? title;
-  String? price;
-  //TODO: Alinhar model com API
   ProductModel({
-    this.id,
-    this.user,
-    this.photoUrl,
-    this.title,
-    this.price,
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.photoUrl,
+    required this.price,
+    required this.userName,
+    this.userEmail,
+    this.userPhotoUrl,
+    this.userPhoneNumber,
+    this.userLocation,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
-      id: json['id'],
-      user: User.fromJson(json['user']),
-      photoUrl: json['photoUrl'],
-      title: json['title'],
-      price: json['price'],
-    );
-  }
+  final int id;
+  final String title;
+  final String description;
+  final String photoUrl;
+  final int price;
+  final String userName;
+  final String? userEmail;
+  final String? userPhotoUrl;
+  final String? userPhoneNumber;
+  final String? userLocation;
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
+        id: json["id"],
+        title: json["title"],
+        description: json["description"],
+        photoUrl: json["photoUrl"],
+        price: json["price"],
+        userName: json["userName"],
+        userEmail: json["userEmail"],
+        userPhotoUrl: json["userPhotoUrl"],
+        userPhoneNumber: json["userPhoneNumber"],
+        userLocation: json["userLocation"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "description": description,
+        "photoUrl": photoUrl,
+        "price": price,
+        "userName": userName,
+        "userEmail": userEmail,
+        "userPhotoUrl": userPhotoUrl,
+        "userPhoneNumber": userPhoneNumber,
+        "userLocation": userLocation,
+      };
 }
