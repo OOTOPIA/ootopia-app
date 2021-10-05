@@ -315,7 +315,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ],
               onTap: (int index) {
-                print(index);
                 var result = true;
                 switch (index) {
                   case PageViewController.TAB_INDEX_TIMELINE:
