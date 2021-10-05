@@ -33,9 +33,9 @@ class TransferScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     ProfileNameLocationWidget(
-                      profileImageUrl: productModel.userPhotoUrl!,
+                      profileImageUrl: productModel.userPhotoUrl ?? "",
                       profileName: productModel.userName,
-                      location: productModel.userLocation!,
+                      location: productModel.userLocation ?? "",
                     ),
                     Expanded(
                       child: Column(

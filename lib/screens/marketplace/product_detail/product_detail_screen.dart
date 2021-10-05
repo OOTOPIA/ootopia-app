@@ -29,7 +29,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: ProfileNameLocationWidget(
                     profileImageUrl: widget.productModel.userPhotoUrl ?? "",
                     profileName: widget.productModel.userName,
-                    location: widget.productModel.userLocation!),
+                    location: widget.productModel.userLocation ?? ""),
               ),
               HorizontalExpandedImageWidget(urlImage: widget.productModel.photoUrl),
               ProductInformationWidget(
