@@ -25,7 +25,7 @@ class ProductItem extends StatelessWidget {
                     height: 36,
                     width: 36,
                     fit: BoxFit.cover,
-                    image: NetworkImage(productModel.user!.photoUrl!),
+                    image: NetworkImage(productModel.photoUrl),
                   ),
                 ),
                 SizedBox(width: 16),
@@ -34,13 +34,13 @@ class ProductItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        productModel.user!.fullname!,
+                        productModel.userName,
                         style: TextStyle(fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
                       Text(
-                        '${productModel.user!.addressCity!}, ${productModel.user!.addressState!}',
+                        '${productModel.userLocation}',
                         style: TextStyle(fontSize: 12),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -58,12 +58,12 @@ class ProductItem extends StatelessWidget {
                 height: 171,
                 width: 171,
                 fit: BoxFit.cover,
-                image: NetworkImage(productModel.photoUrl!),
+                image: NetworkImage(productModel.photoUrl),
               ),
             ),
             SizedBox(height: 8),
             Text(
-              productModel.title!,
+              productModel.title,
               style: TextStyle(fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
@@ -79,7 +79,7 @@ class ProductItem extends StatelessWidget {
                 ),
                 SizedBox(width: 7),
                 Text(
-                  productModel.price!,
+                  '${productModel.price}',
                   style: TextStyle(color: LightColors.grey),
                 ),
               ],
