@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,6 +40,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _repeatPasswordController =
       TextEditingController();
   final PageController controller = PageController(initialPage: 0);
+
+  RegisterSecondPhaseController phase2Controller =
+      RegisterSecondPhaseController.getInstance();
 
   bool nameIsValid = true;
   bool mailIsValid = true;
@@ -197,8 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     Padding(
                       padding: EdgeInsets.all(
-                        GlobalConstants.of(context).spacingMedium
-                      ),
+                          GlobalConstants.of(context).spacingMedium),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,6 +220,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
+                                  phase2Controller
+                                      .cleanTextEditingControllers();
                                   _submit();
                                 }
                               },
