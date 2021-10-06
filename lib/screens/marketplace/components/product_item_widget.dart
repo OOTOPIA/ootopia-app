@@ -9,13 +9,14 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widthScreen = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () => debugPrint('click'),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
             alignment: Alignment.center,
-            width: constraints.maxWidth / 2,
+            width: widthScreen >= 760 ? 171 : constraints.maxWidth / 2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,8 +57,10 @@ class ProductItem extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image(
-                    height: 171,
-                    width: 171,
+                    height:
+                        widthScreen >= 760 ? 171 : constraints.maxWidth / 2.2,
+                    width:
+                        widthScreen >= 760 ? 171 : constraints.maxWidth / 2.2,
                     fit: BoxFit.cover,
                     image: NetworkImage(productModel.imageUrl),
                   ),
