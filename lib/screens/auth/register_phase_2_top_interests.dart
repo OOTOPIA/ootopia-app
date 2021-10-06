@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/components/interests_tags_modal/interests_tags_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -186,11 +190,19 @@ class _RegisterPhase2TopInterestsPageState
                                 ),
                                 InkWell(
                                   onTap: () async {
-                                    await showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return MyDialog();
-                                        });
+                                    InterestsTagsController
+                                        interestsTagsController =
+                                        InterestsTagsController();
+                                    var result =
+                                        await interestsTagsController.show(
+                                      context,
+                                      controller.allTags,
+                                      controller.selectedTags,
+                                    );
+
+                                    if (result != null) {
+                                      controller.selectedTags = result;
+                                    }
 
                                     setState(() {});
                                   },
@@ -326,8 +338,8 @@ class _RegisterPhase2TopInterestsPageState
                                               ),
                                               onTap: () {
                                                 setState(() {
-                                                  if (tag.seletedTag) {
-                                                    tag.seletedTag = false;
+                                                  if (tag.selectedTag == true) {
+                                                    tag.selectedTag = false;
                                                     controller.selectedTags
                                                         .remove(tag);
                                                   }
@@ -420,172 +432,6 @@ class _RegisterPhase2TopInterestsPageState
                 ],
               ),
       ),
-    );
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  MyDialog();
-
-  @override
-  _MyDialogState createState() => _MyDialogState();
-}
-
-class _MyDialogState extends State<MyDialog> {
-  RegisterSecondPhaseController controller =
-      RegisterSecondPhaseController.getInstance();
-
-  @override
-  void initState() {
-    super.initState();
-    controller.filterTags = controller.allTags;
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      actionsPadding: EdgeInsets.all(0),
-      contentPadding: EdgeInsets.symmetric(
-          horizontal: GlobalConstants.of(context).spacingNormal),
-      titleTextStyle: TextStyle(
-        fontSize: GlobalConstants.of(context).screenHorizontalSpace,
-        fontWeight: FontWeight.w500,
-        color: Colors.black,
-      ),
-      title: Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
-          ),
-          SizedBox(
-            height: GlobalConstants.of(context).intermediateSpacing,
-          ),
-          TextFormField(
-            style: TextStyle(height: 2.5),
-            onChanged: (value) {
-              controller.filterTagsByText(
-                  text: value, update: () => setState(() {}));
-            },
-            decoration: GlobalConstants.of(context).loginInputTheme(
-                AppLocalizations.of(context)!.selectAtLeastOneHashtag),
-          ),
-          SizedBox(
-            height: GlobalConstants.of(context).spacingMedium,
-          ),
-          Container(
-            color: LightColors.grey.withOpacity(.3),
-            width: double.infinity,
-            height: 1,
-          ),
-        ],
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 26,
-            ),
-            Wrap(
-              direction: Axis.horizontal,
-              spacing: GlobalConstants.of(context).spacingSmall,
-              children: controller.filterTags.map((tag) {
-                return ChoiceChip(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: GlobalConstants.of(context).spacingNormal,
-                      vertical: 0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(45)),
-                      side: BorderSide(width: 1, color: Color(0xffE0E1E2))),
-                  label: Text('${tag.name}',
-                      style: GoogleFonts.roboto(
-                          color: tag.seletedTag
-                              ? Colors.white
-                              : LightColors.blackText.withOpacity(0.6),
-                          fontWeight: FontWeight.bold,
-                          fontSize:
-                              Theme.of(context).textTheme.headline5!.fontSize)),
-                  selectedColor: LightColors.darkBlue,
-                  backgroundColor: Colors.white,
-                  selected: tag.seletedTag,
-                  onSelected: (bool selected) {
-                    setState(() {
-                      tag.seletedTag = selected;
-                    });
-                    if (selected) {
-                      controller.selectedTags.add(tag);
-                    } else {
-                      controller.selectedTags.remove(tag);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-            SizedBox(
-              height: GlobalConstants.of(context).screenHorizontalSpace,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        Column(
-          children: [
-            Container(
-              color: LightColors.grey.withOpacity(.3),
-              width: double.infinity,
-              height: 1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: GlobalConstants.of(context).spacingSmall),
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.cancel,
-                        style: TextStyle(
-                            color: Color(0xff018F9C),
-                            fontWeight: FontWeight.w500,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .subtitle1!
-                                .fontSize),
-                      )),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: GlobalConstants.of(context).spacingSmall),
-                  child: TextButton(
-                      onPressed: () {
-                        setState(() {});
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.confirm,
-                        style: TextStyle(
-                            color: Color(0xff018F9C),
-                            fontWeight: FontWeight.w500,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .subtitle1!
-                                .fontSize),
-                      )),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
