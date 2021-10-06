@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLearningTracksScreen extends StatefulWidget {
   final Map<String, dynamic> args;

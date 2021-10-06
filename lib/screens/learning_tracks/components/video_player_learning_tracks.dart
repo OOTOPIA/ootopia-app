@@ -36,7 +36,8 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network('${widget.videoUrl}')
+    videoPlayerController = VideoPlayerController.network(
+        'https://videodelivery.net/3c67ce59afe0c35a6ce7c8abb6cab9af/manifest/video.m3u8')
       ..addListener(() {
         if (mounted) {
           setState(() {
@@ -62,8 +63,12 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
     videoPlayerController.dispose();
   }
 
+  bool onClickSlider = false;
+
   @override
   Widget build(BuildContext context) {
+    var sizePlayerVideo =
+        MediaQuery.of(context).size.width / (widthVideo / heightVideo);
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -76,21 +81,26 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       },
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: widthVideo > heightVideo
+            ? sizePlayerVideo
+            : MediaQuery.of(context).size.height * 0.5,
         child: Stack(
           children: [
             Container(
               color: Color(0xffB7B7B7),
               alignment: Alignment.center,
               child: AspectRatio(
-                  aspectRatio: widthVideo / heightVideo,
-                  child: VideoPlayer(videoPlayerController)),
+                aspectRatio: widthVideo / heightVideo,
+                child: VideoPlayer(videoPlayerController),
+              ),
             ),
             Align(
               alignment: Alignment.center,
-              child: onChangedStart
+              child: onClickSlider
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: Color(0xff35AD6C),
+                      ),
                     )
                   : AnimatedOpacity(
                       opacity: timerOpacity != null ? 1 : 0.0,
@@ -165,29 +175,34 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                               min: 0,
                               max: maxDurationVideo,
                               value: currentPosition.toDouble(),
-                              onChanged: (value) {
+                              onChangeStart: (value) async {
+                                await videoPlayerController.pause();
+                                setState(() {
+                                  onClickSlider = true;
+                                  Future.delayed(Duration(milliseconds: 300),
+                                      () {
+                                    onClickSlider = false;
+                                  });
+                                });
+                              },
+                              onChanged: (value) async {
                                 setState(() {
                                   totalTimeVideoText = timeVideo(
                                       videoPlayerController.value.duration);
+
                                   positionVideoText = timeVideo(
                                       videoPlayerController.value.position);
                                   currentPosition = value.toInt();
+                                  onClickSlider = false;
                                 });
-                              },
-                              onChangeStart: (value) {
-                                setState(() {
-                                  onChangedStart = true;
-                                  print('onChangedStart $onChangedStart');
-                                });
-                              },
-                              onChangeEnd: (value) {
-                                setState(() {
-                                  onChangedStart = false;
-                                  currentPosition = value.toInt();
-                                  print('onChangeEnd $onChangedStart');
-                                });
-                                videoPlayerController
+                                await videoPlayerController
                                     .seekTo(Duration(seconds: value.toInt()));
+                              },
+                              onChangeEnd: (value) async {
+                                setState(() {
+                                  onClickSlider = false;
+                                });
+                                await videoPlayerController.play();
                               },
                             ),
                           ),
