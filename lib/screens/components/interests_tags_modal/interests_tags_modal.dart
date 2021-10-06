@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
@@ -53,7 +54,10 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
 
   void updateTagsSelected() {
     filterTags.forEach((tag) {
-      if (tagsSelected.every((_tag) => tag.id == _tag.id)) {
+      if (tagsSelected
+              .singleWhereOrNull((element) => element.id == tag.id)
+              ?.id !=
+          null) {
         tag.selectedTag = true;
       }
     });
