@@ -432,6 +432,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
 
                             controller.storeDataUserFirstStep();
 
+                            if(!controller.birthDateIsValid()) return;
+
                             if (controller.firstStepIsValid(context))
                               Navigator.of(context).pushNamed(
                                   PageRoute

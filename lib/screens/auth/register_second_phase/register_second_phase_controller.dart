@@ -58,6 +58,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   String? countryCode;
   bool validCellPhone = false;
+  bool validBirthDate = true;
   String? birthdateValidationErrorMessage = '';
 
   double currentSliderValue = 10.0;
@@ -73,7 +74,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
     if (dayController.text == "" ||
         monthController.text == "" ||
-        yearController.text == "") return false;
+        yearController.text == "") {
+      validBirthDate = true;
+      return false;
+    }
 
     int day = int.parse(dayController.text);
     int month = int.parse(monthController.text);
@@ -81,13 +85,26 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
     if (yearController.text.length == 4 &&
         day <= 31 &&
+        day > 0 &&
         month <= 12 &&
+        month > 0 &&
         year >= 1900 &&
         year < now.year) {
+      validBirthDate = true;
       return true;
     } else {
+      validBirthDate = false;
       return false;
     }
+  }
+
+  void cleanTextEditingControllers() {
+    dayController.clear();
+    monthController.clear();
+    yearController.clear();
+    bioController.clear();
+    cellPhoneController.clear();
+    geolocationController.clear();
   }
 
   void birthdateIsValid(BuildContext context, VoidCallback update) {
@@ -129,6 +146,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     update();
   }
 
+  bool birthDateIsValid() {
+    return validBirthDate;
+  }
+
   bool firstStepIsValid(BuildContext context) {
     return !validCellPhone;
   }
@@ -139,7 +160,6 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     Geolocation.determinePosition(context).then((Position position) async {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
-      // setState(() {
       if (placemarks.length > 0) {
         var placemark = placemarks[0];
         geolocationController.text =
@@ -162,13 +182,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         geolocationErrorMessage =
             AppLocalizations.of(context)!.weCouldntGetYourLocation;
       }
-      // });
     }).onError((error, stackTrace) {
-      // setState(() {
       geolocationMessage =
           AppLocalizations.of(context)!.failedToGetCurrentLocation;
       geolocationErrorMessage = error.toString();
-      // });
     });
   }
 
