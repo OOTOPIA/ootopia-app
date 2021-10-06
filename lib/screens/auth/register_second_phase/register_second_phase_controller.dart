@@ -39,10 +39,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   String geolocationMessage = "Please, wait...";
 
   //Step 04
-  List<InterestsTags> selectedTags = [];
+  List<InterestsTagsModel> selectedTags = [];
   String currentLocaleName = '';
-  List<InterestsTags> allTags = [];
-  List<InterestsTags> filterTags = [];
+  List<InterestsTagsModel> allTags = [];
+  List<InterestsTagsModel> filterTags = [];
 
   static RegisterSecondPhaseController? _instance;
 
