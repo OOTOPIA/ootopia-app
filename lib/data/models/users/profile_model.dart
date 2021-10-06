@@ -4,7 +4,7 @@ import 'badges_model.dart';
 class Profile extends Equatable {
   String id;
   String fullname;
-  String birthdate;
+  String? birthdate;
   String? bio;
   String? photoUrl;
   List<Badge>? badges;

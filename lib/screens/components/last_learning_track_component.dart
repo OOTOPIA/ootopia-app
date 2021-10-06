@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
-import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:provider/provider.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,6 +25,7 @@ class _LastLearningTrackComponentsState
 
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
+  late AuthStore authStore;
   bool hasError = false;
   @override
   void initState() {
@@ -33,8 +38,11 @@ class _LastLearningTrackComponentsState
   Future<void> performRequest() async {
     hasError = false;
 
-    await learningTracksStore.lastLearningTracks().onError((error, stackTrace) {
+    await learningTracksStore
+        .lastLearningTracks(locale: Platform.localeName)
+        .onError((error, stackTrace) {
       setState(() {
+        print(error);
         hasError = true;
       });
     });
@@ -46,14 +54,8 @@ class _LastLearningTrackComponentsState
 
   @override
   Widget build(BuildContext context) {
-    if (hasError) {
-      return TryAgain(
-        performRequest,
-        buttonBackgroundColor: Colors.white,
-        messageTextColor: Colors.white,
-        buttonTextColor: Colors.black,
-      );
-    } else if (lastLearningTracks == null) {
+    authStore = Provider.of<AuthStore>(context);
+    if (lastLearningTracks == null) {
       return Container();
     } else {
       return Container(
@@ -89,7 +91,19 @@ class _LastLearningTrackComponentsState
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onTap: () {
-                    controller.selectBottomTab(1);
+                    if (authStore.currentUser == null) {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "wallet",
+                            "arguments": null
+                          }
+                        },
+                      );
+                    } else {
+                      controller.selectBottomTab(1);
+                    }
                   },
                   child: Row(
                     children: [
@@ -123,11 +137,23 @@ class _LastLearningTrackComponentsState
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onTap: () {
-                    controller.insertPage(ViewLearningTracksScreen({
-                      'list_chapters': lastLearningTracks!.chapters,
-                      'description': lastLearningTracks!.description,
-                      'title': lastLearningTracks!.title,
-                    }));
+                    if (authStore.currentUser == null) {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "wallet",
+                            "arguments": null
+                          }
+                        },
+                      );
+                    } else {
+                      controller.insertPage(ViewLearningTracksScreen({
+                        'list_chapters': lastLearningTracks!.chapters,
+                        'description': lastLearningTracks!.description,
+                        'title': lastLearningTracks!.title,
+                      }));
+                    }
                   },
                   child: Row(
                     children: [
@@ -162,8 +188,8 @@ class _LastLearningTrackComponentsState
                               child: Text(
                                 lastLearningTracks!.title,
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
                                   color: Colors.black,
                                 ),
                               ),
@@ -171,7 +197,7 @@ class _LastLearningTrackComponentsState
                             Row(
                               children: [
                                 Text(
-                                  '${lastLearningTracks!.totalTimeInMinutes} min',
+                                  lastLearningTracks!.time,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/navigator-state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class NavigatorBar extends StatefulWidget {
   final Function? onClickButton;
@@ -23,17 +25,17 @@ class NavigatorBar extends StatefulWidget {
 class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
   bool loggedIn = false;
   User? user;
+  late AuthStore authStore;
 
   @override
   void initState() {
     super.initState();
-    _checkUserIsLoggedIn();
   }
 
   void _checkUserIsLoggedIn() async {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
-      user = await getCurrentUser();
+      user = authStore.currentUser!;
       print("LOGGED USER: ${user!.toJson()}");
     }
   }
@@ -53,6 +55,9 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
+    _checkUserIsLoggedIn();
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(

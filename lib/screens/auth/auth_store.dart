@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
+import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
+import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -16,10 +20,21 @@ abstract class AuthStoreBase with Store {
 
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
+  final InterestsTagsRepositoryImpl interestsTagsrepository =
+      InterestsTagsRepositoryImpl();
+
   final AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
+  double currentSliderValue = 0;
 
   @observable
   ObservableFuture<User?>? _currentUser;
+
+  @observable
+  bool isLoading = true;
+
+  @observable
+  bool errorOnGetTags = false;
 
   @action
   Future<User?> checkUserIsLogged() async =>
@@ -56,6 +71,7 @@ abstract class AuthStoreBase with Store {
     });
   }
 
+  //TODO colocar criar controller para a register_first_phase
   @action
   Future<bool> registerUser(
       {required String name,

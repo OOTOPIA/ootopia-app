@@ -5,7 +5,7 @@ part 'learning_tracks_model.g.dart';
 
 @JsonSerializable()
 class LearningTracksModel {
-  int id;
+  String id;
   String userPhotoUrl;
   String userName;
   String title;
@@ -13,10 +13,10 @@ class LearningTracksModel {
   List<ChaptersModel> chapters;
   String createdAt;
   String updatedAt;
-  int totalTimeInMinutes;
+  String time;
   String imageUrl;
   double ooz;
-  String location;
+  String? location;
 
   LearningTracksModel({
     required this.id,
@@ -29,7 +29,7 @@ class LearningTracksModel {
     required this.updatedAt,
     required this.imageUrl,
     required this.ooz,
-    required this.totalTimeInMinutes,
+    required this.time,
     required this.location,
   });
 

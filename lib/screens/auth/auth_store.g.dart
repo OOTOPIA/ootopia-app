@@ -32,6 +32,36 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$isLoadingAtom = Atom(name: 'AuthStoreBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  final _$errorOnGetTagsAtom = Atom(name: 'AuthStoreBase.errorOnGetTags');
+
+  @override
+  bool get errorOnGetTags {
+    _$errorOnGetTagsAtom.reportRead();
+    return super.errorOnGetTags;
+  }
+
+  @override
+  set errorOnGetTags(bool value) {
+    _$errorOnGetTagsAtom.reportWrite(value, super.errorOnGetTags, () {
+      super.errorOnGetTags = value;
+    });
+  }
+
   final _$checkUserIsLoggedAsyncAction =
       AsyncAction('AuthStoreBase.checkUserIsLogged');
 
@@ -90,6 +120,8 @@ mixin _$AuthStore on AuthStoreBase, Store {
   @override
   String toString() {
     return '''
+isLoading: ${isLoading},
+errorOnGetTags: ${errorOnGetTags},
 currentUser: ${currentUser}
     ''';
   }

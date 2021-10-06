@@ -34,6 +34,8 @@
 
     "confirm": "Confirmar",
 
+    "thisIsWhereYourPositiveImpactMattersMost":"É aqui que o seu impacto positivo é mais importante!",
+
     "pleaseWait": "Por favor, aguarde...",
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
     "weCouldntGetYourLocation2": "Não foi possível obter sua localização.",
@@ -43,11 +45,17 @@
     "getCurrentLocation": "Obtenha a localização atual",
 
     "dateOfBirth": "Data de nascimento",
-    "day": "dia",
-    "month": "mês",
-    "year": "ano",
+    "day": "DD",
+    "month": "MM",
+    "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Insira uma data de nascimento válida no formato DD/MM/AAAA",
     "pleaseEnterAValidBirthdate": "Por favor digite uma data de nascimento válida",
+
+    "favoriteThemes": "Temas Favoritos",
+    "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
+    "selectAtLeastOneHashtag": "Selecione ao menos 1 hashtag",
+    "selectHashtags": "Selecione hashtags",
+    "tagsSelected": "Tags selecionadas",
 
     "others": "Outras(os)",
 
@@ -62,8 +70,12 @@
     "weValueAndRespectYourDataThatsWhyItWillNeverBeTradeWithThirdParties": "Valorizamos e respeitamos seus dados! É por isso que nunca serão comercializados com terceiros. Defendemos total transparência e ética!",
 
     "iAcceptThe": "Eu aceito o ",
-    "useTerms": "termos de uso.",
+    "useTerms": "termos de uso",
+    "and": " e ",
+    "privacy": "privacidade.",
     "youNeedToAcceptTheTermsOfUseToContinue": "Você precisa aceitar os Termos de Uso para continuar",
+
+    "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados. \nConfira aqui nossos preceitos éticos e de transparência.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "Você precisa habilitar algumas \npermissões para permitir o uso completo \n da câmera.",
     
@@ -83,7 +95,7 @@
     "noContinueEditing": "Não, continue editando",
     "yes": "Sim",
     "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao carregar o vídeo, tente enviar o vídeo novamente.",
-    "pleaseSelectAtLeast1Tag": "Please select at least 1 tag",
+    "pleaseSelectAtLeast1Tag": "Selecione pelo menos 1 tag",
     "selectAtLeast1Tag": "Selecione pelo menos 1 tag",
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao enviar o vídeo, tente enviar o vídeo novamente.",
     "newPost": "Nova postagem",
@@ -299,7 +311,8 @@
     "ooz25":" 25,00 OOz ",
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
     "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA\nExperimente o movimento que está regenerando o planeta Terra! \nBaixe o aplicativo e registre-se com este código: %USER_CODE%\nVocê também receberá 15,00 OOz de crédito.\nVIVA A OOTOPIA AGORA! ✨ 🌎 ❤️",
-    "continueAccess":"continue",
+    "continueAccess":"Continue",
+    "conclude":"Concluir",
     "enterYourInvitationCode":"Digite seu código de acesso",
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que está emergindo graças a pessoas como você!",
     "skip":"Pular",
@@ -346,18 +359,24 @@
     "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopíacos.",
     "enterYourNumber":"Insira seu número",
     "medals": "Medalhas",
+    "iAccept": "Eu aceito",
+    "chooseYourDailyGoal":"Escolha sua meta diária de participação no jogo.",
+    "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
     "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
+
+    "searchForAHashtag" : "Procure uma hashtag",
+    "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
-    "seeAll":"veja todos",
-     "dontExistLearningTracks":"Não existem learning tracks",
 
     "ethicalMarketplace": "MERCADO ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
     "messageVendorContact": "O vendedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua compra",
     "messageOptional": "Mensagem - Opcional",
-    "purchaseNow": "Compre agora"
+    "purchaseNow": "Compre agora",
 
-
+    "seeAll":"Veja todos",
+     "dontExistLearningTracks":"Não existem learning tracks",
+     "lessons":"lições"
 }

@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class InterestsTagsRepository {
-  Future<List<InterestsTags>> getTags([String language]);
+  Future<List<InterestsTagsModel>> getTags([String language]);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -16,12 +16,12 @@ const Map<String, String> API_HEADERS = {
 class InterestsTagsRepositoryImpl
     with SecureStoreMixin
     implements InterestsTagsRepository {
-  Future<List<InterestsTags>> getTags([String? language]) async {
+  Future<List<InterestsTagsModel>> getTags([String? language]) async {
     try {
       Map<String, String> queryParams = {};
 
       if (language != null) {
-        queryParams['language'] = language;
+        queryParams['language'] = language.replaceFirst('_', '-');
       }
 
       String queryString = Uri(queryParameters: queryParams).query;
@@ -31,9 +31,8 @@ class InterestsTagsRepositoryImpl
         headers: API_HEADERS,
       );
       if (response.statusCode == 200) {
-        print("INTERESTS TAGS RESPONSE ${response.body}");
         return (json.decode(response.body) as List)
-            .map((i) => InterestsTags.fromJson(i))
+            .map((i) => InterestsTagsModel.fromJson(i))
             .toList();
       } else {
         throw Exception('Failed to load interests tags');
