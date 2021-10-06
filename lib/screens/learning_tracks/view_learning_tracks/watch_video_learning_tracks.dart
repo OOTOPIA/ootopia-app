@@ -6,12 +6,15 @@ import 'package:ootopia_app/screens/learning_tracks/components/video_player.dart
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-class VideoLeaningTracks extends StatefulWidget {
+class WatchVideoLeaningTracks extends StatefulWidget {
+  final String videoUrl;
+  WatchVideoLeaningTracks(this.videoUrl);
   @override
-  _VideoLeaningTracksState createState() => _VideoLeaningTracksState();
+  _WatchVideoLeaningTracksState createState() =>
+      _WatchVideoLeaningTracksState();
 }
 
-class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
+class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
@@ -65,11 +68,7 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
         body: isPortrait
             ? ListView(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: VideoPlayerLearningTracks(),
-                  ),
+                  VideoPlayerLearningTracks(widget.videoUrl),
                   SizedBox(
                     height: 26,
                   ),
@@ -124,6 +123,6 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
                   ),
                 ],
               )
-            : VideoPlayerLearningTracks());
+            : VideoPlayerLearningTracks(widget.videoUrl));
   }
 }

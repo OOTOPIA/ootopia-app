@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLearningTracksScreen extends StatefulWidget {
@@ -80,11 +81,11 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    PageRoute
-                                        .Page.videoLearningTracksScreen.route,
-                                    arguments: {'videoUrl': chapter.videoUrl},
-                                  );
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return WatchVideoLeaningTracks(
+                                        chapter.videoUrl);
+                                  }));
                                 },
                                 child: Column(
                                   children: [

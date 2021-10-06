@@ -238,11 +238,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       size: 20,
                     ),
                     onTap: () {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.videoLearningTracksScreen.route,
-                      );
-                      // controller.insertPage(InvitationScreen());
-                      // Navigator.of(context).pop();
+                      controller.insertPage(InvitationScreen());
+                      Navigator.of(context).pop();
                     },
                   ),
                 ),
