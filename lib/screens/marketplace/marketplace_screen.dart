@@ -59,18 +59,29 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       child: SingleChildScrollView(
                         controller: _scrollController,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0, bottom: 20),
-                          child: Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            direction: Axis.horizontal,
-                            runSpacing: 24,
-                            spacing: 24,
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 50),
+                          child: Column(
                             children: [
-                              ...productList(marketplaceStore.productList),
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                direction: Axis.horizontal,
+                                runSpacing: 24,
+                                spacing: 24,
+                                children: [
+                                  ...productList(marketplaceStore.productList),
+                                  Visibility(
+                                    visible: marketplaceStore.viewState !=
+                                        ViewState.loading,
+                                    child:
+                                        CreateOfferButtonWidget(onTap: () {}),
+                                  ),
+                                ],
+                              ),
                               Visibility(
                                 visible: marketplaceStore.viewState ==
-                                    ViewState.done,
-                                child: CreateOfferButtonWidget(onTap: () {}),
+                                    ViewState.loadingNewData,
+                                child:
+                                    Center(child: CircularProgressIndicator()),
                               ),
                             ],
                           ),
@@ -86,11 +97,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       ),
     );
   }
-
-  _goToWalletPage() => Navigator.pushNamed(
-        context,
-        PageRoute.Page.profile.route,
-      );
 
   List<Widget> productList(List<dynamic> list) =>
       list.map((product) => ProductItem(productModel: product)).toList();

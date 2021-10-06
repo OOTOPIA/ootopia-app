@@ -7,7 +7,7 @@ part 'marketplace_store.g.dart';
 
 class MarketplaceStore = MarketplaceStoreBase with _$MarketplaceStore;
 
-enum ViewState { loading, error, done }
+enum ViewState { loading, error, done, loadingNewData }
 
 abstract class MarketplaceStoreBase with Store {
   final _marketplaceRepository = MarketplaceRepositoryImpl();
@@ -28,20 +28,23 @@ abstract class MarketplaceStoreBase with Store {
 
   @action
   Future<void> getProductList({int? limit, int? offset}) async {
-    final List<ProductModel> response =
-        await _marketplaceRepository.getProducts(limit: limit, offset: offset);
-    productList.addAll(response);
-    print(productList.length);
-    viewState = ViewState.done;
+    try {
+      final List<ProductModel> response = await _marketplaceRepository
+          .getProducts(limit: limit, offset: offset);
+      productList.addAll(response);
+      print(productList.length);
+      viewState = ViewState.done;
+    } catch (error) {
+      throw UnimplementedError();
+    }
   }
 
   @action
   Future<void> getData() async {
-    viewState = ViewState.loading;
+    viewState = ViewState.loadingNewData;
     await getProductList(
       limit: itemsPerPageCount,
       offset: productList.length - 1,
     );
-    hasMoreItems = productList.length == itemsPerPageCount;
   }
 }
