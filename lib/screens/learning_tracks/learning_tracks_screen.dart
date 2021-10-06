@@ -171,8 +171,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         onTap: () {
                           controller.insertPage(ViewLearningTracksScreen({
                             'list_chapters': learningTrack.chapters,
-                            'description': learningTrack.description,
-                            'title': learningTrack.title,
+                            'learning_tracks': learningTrack,
                           }));
                         },
                         child: Column(
