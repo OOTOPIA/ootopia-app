@@ -39,10 +39,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   String geolocationMessage = "Please, wait...";
 
   //Step 04
-  List<InterestsTags> selectedTags = [];
+  List<InterestsTagsModel> selectedTags = [];
   String currentLocaleName = '';
-  List<InterestsTags> allTags = [];
-  List<InterestsTags> filterTags = [];
+  List<InterestsTagsModel> allTags = [];
+  List<InterestsTagsModel> filterTags = [];
 
   static RegisterSecondPhaseController? _instance;
 
@@ -71,7 +71,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   bool validationBirthDate() {
     DateTime now = DateTime.now();
 
-    if(dayController.text == "" || monthController.text == "" || yearController.text == "") return false;
+    if (dayController.text == "" ||
+        monthController.text == "" ||
+        yearController.text == "") return false;
 
     int day = int.parse(dayController.text);
     int month = int.parse(monthController.text);
