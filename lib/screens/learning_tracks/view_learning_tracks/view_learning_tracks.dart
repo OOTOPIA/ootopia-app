@@ -81,11 +81,10 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                 splashColor: Colors.transparent,
                                 onTap: () {
                                   Navigator.of(context).pushNamed(
-                                      PageRoute
-                                          .Page.videoLearningTracksScreen.route,
-                                      arguments: {
-                                        'videoUrl': chapter.videoUrl
-                                      });
+                                    PageRoute
+                                        .Page.videoLearningTracksScreen.route,
+                                    arguments: {'videoUrl': chapter.videoUrl},
+                                  );
                                 },
                                 child: Column(
                                   children: [

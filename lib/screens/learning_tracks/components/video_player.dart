@@ -43,15 +43,18 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
     videoPlayerController =
         VideoPlayerController.asset('assets/videos/ootopia_learning.mp4')
           ..addListener(() {
-            setState(() {
-              maxDurationVideo =
-                  videoPlayerController.value.duration.inSeconds.toDouble();
-              totalTimeVideoText =
-                  timeVideo(videoPlayerController.value.duration);
-              positionVideoText =
-                  timeVideo(videoPlayerController.value.position);
-              currentPosition = videoPlayerController.value.position.inSeconds;
-            });
+            if (mounted) {
+              setState(() {
+                maxDurationVideo =
+                    videoPlayerController.value.duration.inSeconds.toDouble();
+                totalTimeVideoText =
+                    timeVideo(videoPlayerController.value.duration);
+                positionVideoText =
+                    timeVideo(videoPlayerController.value.position);
+                currentPosition =
+                    videoPlayerController.value.position.inSeconds;
+              });
+            }
           })
           ..initialize().then((value) {
             videoPlayerController.play();
@@ -66,42 +69,48 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       children: [
         VideoPlayer(videoPlayerController),
         Align(
-            alignment: Alignment.center,
-            child: AnimatedOpacity(
-                opacity: timerOpacity != null ? 1 : 0.0,
-                duration: Duration(milliseconds: 200),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      videoPlayerController.value.isPlaying
-                          ? videoPlayerController.pause()
-                          : videoPlayerController.play();
+          alignment: Alignment.center,
+          child: AnimatedOpacity(
+            opacity: timerOpacity != null ? 1 : 0.0,
+            duration: Duration(milliseconds: 200),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  videoPlayerController.value.isPlaying
+                      ? videoPlayerController.pause()
+                      : videoPlayerController.play();
 
-                      timerOpacity?.cancel();
-                      timerOpacity = Timer(Duration(seconds: 1),
-                          () => setState(() => timerOpacity = null));
-                    });
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xff35AD6C),
-                    radius: 28.5,
-                    child: Icon(
-                      (videoPlayerController.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow),
-                      size: 23,
-                      color: Colors.white,
-                    ),
-                  ),
-                ))),
+                  timerOpacity?.cancel();
+                  timerOpacity = Timer(
+                    Duration(seconds: 1),
+                    () => setState(() => timerOpacity = null),
+                  );
+                });
+              },
+              child: CircleAvatar(
+                backgroundColor: Color(0xff35AD6C),
+                radius: 28.5,
+                child: Icon(
+                  (videoPlayerController.value.isPlaying
+                      ? Icons.pause
+                      : Icons.play_arrow),
+                  size: 23,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: GestureDetector(
             onTap: () {
               setState(() {
                 timerOpacity?.cancel();
-                timerOpacity = Timer(Duration(seconds: 1),
-                    () => setState(() => timerOpacity = null));
+                timerOpacity = Timer(
+                  Duration(seconds: 1),
+                  () => setState(() => timerOpacity = null),
+                );
               });
             },
             child: Container(
@@ -137,7 +146,15 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                         min: 0,
                         max: maxDurationVideo,
                         value: currentPosition.toDouble(),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          setState(() {
+                            totalTimeVideoText =
+                                timeVideo(videoPlayerController.value.duration);
+                            positionVideoText =
+                                timeVideo(videoPlayerController.value.position);
+                            currentPosition = value.toInt();
+                          });
+                        },
                         onChangeStart: (value) {
                           setState(() {
                             onChangedStart = true;

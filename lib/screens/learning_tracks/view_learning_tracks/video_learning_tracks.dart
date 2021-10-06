@@ -34,29 +34,31 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
                     left: GlobalConstants.of(context).screenHorizontalSpace,
                   ),
                   child: InkWell(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 3.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                FeatherIcons.arrowLeft,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)!.back,
-                                style: GoogleFonts.roboto(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .fontSize,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              )
-                            ],
-                          ))),
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 3.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            FeatherIcons.arrowLeft,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.back,
+                            style: GoogleFonts.roboto(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .fontSize,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               )
             : null,
@@ -74,32 +76,33 @@ class _VideoLeaningTracksState extends State<VideoLeaningTracks> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 68.0),
                     child: ElevatedButton(
-                        style: ButtonStyle(
-                          fixedSize:
-                              MaterialStateProperty.all<Size>(Size(276, 53)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                side: BorderSide.none),
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Color(0xff003694)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.all(15)),
+                      style: ButtonStyle(
+                        fixedSize:
+                            MaterialStateProperty.all<Size>(Size(276, 53)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              side: BorderSide.none),
                         ),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(PageRoute.Page.aboutQuizScreen.route);
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.quiz,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Color(0xff003694)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(15)),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(PageRoute.Page.aboutQuizScreen.route);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.quiz,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 16,
