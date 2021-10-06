@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-// ignore: must_be_immutable
 class VideoPlayerLearningTracks extends StatefulWidget {
   VideoPlayerLearningTracks();
 
@@ -14,60 +13,55 @@ class VideoPlayerLearningTracks extends StatefulWidget {
 
 class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   late VideoPlayerController videoPlayerController;
+
   Timer? timerOpacity;
   String totalTimeVideoText = '';
   String positionVideoText = '';
-  int totalTimeVideoInSeconds = 0;
-  double currentValueSlider = 0;
+  int currentPosition = 0;
+  double maxDurationVideo = 0;
+  bool onChangedStart = false;
 
   String timeVideo(Duration time) {
-    totalTimeVideoInSeconds = 0;
     String hoursInString =
         time.inHours == 0 ? '' : time.inHours.toString() + ":";
-
-    totalTimeVideoInSeconds += time.inHours * 3600;
 
     String minutesInString = time.inMinutes.toString().length > 1
         ? time.inMinutes.remainder(60).toString()
         : '0${time.inMinutes.remainder(60).toString()}';
 
-    totalTimeVideoInSeconds += time.inMinutes * 60;
-
     String secondsInString = time.inSeconds.toString().length > 1
         ? time.inSeconds.toString().substring(0, 2)
         : '0${time.inSeconds.toString()}';
 
-    totalTimeVideoInSeconds += time.inSeconds;
-
     return "$hoursInString$minutesInString:$secondsInString";
   }
 
-  int currentPosition = 0;
-  double maxDurationVideo = 0;
-  bool onChangedStart = false;
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.asset(
-        'assets/videos/ootopia_learning.mp4')
-      ..addListener(() {
-        setState(() {
-          maxDurationVideo =
-              videoPlayerController.value.duration.inSeconds.toDouble();
-          totalTimeVideoText = timeVideo(videoPlayerController.value.duration);
-          positionVideoText = timeVideo(videoPlayerController.value.position);
-          if (!onChangedStart) {
-            currentPosition = videoPlayerController.value.position.inSeconds;
-          }
-        });
-      })
-      ..initialize().then((value) {
-        videoPlayerController.play();
-      });
+
+    videoPlayerController =
+        VideoPlayerController.asset('assets/videos/ootopia_learning.mp4')
+          ..addListener(() {
+            setState(() {
+              maxDurationVideo =
+                  videoPlayerController.value.duration.inSeconds.toDouble();
+              totalTimeVideoText =
+                  timeVideo(videoPlayerController.value.duration);
+              positionVideoText =
+                  timeVideo(videoPlayerController.value.position);
+              currentPosition = videoPlayerController.value.position.inSeconds;
+            });
+          })
+          ..initialize().then((value) {
+            videoPlayerController.play();
+          });
   }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments;
+    print(args);
     return Stack(
       children: [
         VideoPlayer(videoPlayerController),
@@ -141,7 +135,6 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                         activeColor: Color(0xff35ad6c),
                         thumbColor: Color(0xff35ad6c),
                         min: 0,
-                        divisions: 1,
                         max: maxDurationVideo,
                         value: currentPosition.toDouble(),
                         onChanged: (value) {},
@@ -150,12 +143,12 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                             onChangedStart = true;
                           });
                         },
-                        onChangeEnd: (value) async {
+                        onChangeEnd: (value) {
                           setState(() {
                             onChangedStart = false;
                             currentPosition = value.toInt();
                           });
-                          await videoPlayerController
+                          videoPlayerController
                               .seekTo(Duration(seconds: value.toInt()));
                         },
                       ),

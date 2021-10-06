@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 
 class AboutQuizScreen extends StatefulWidget {
@@ -8,6 +9,13 @@ class AboutQuizScreen extends StatefulWidget {
 }
 
 class _AboutQuizScreenState extends State<AboutQuizScreen> {
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  @override
+  void initState() {
+    super.initState();
+    trackingEvents.learningTracksQuiz();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
