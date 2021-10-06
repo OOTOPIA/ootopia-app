@@ -33,7 +33,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Container(
                         margin: EdgeInsets.only(
                           right: getAdaptiveSize(16, context),
-                          left: getAdaptiveSize(16, context),
+                          left: getAdaptiveSize(26, context),
                         ),
                         child: ProfileNameLocationWidget(
                           profileImageUrl:

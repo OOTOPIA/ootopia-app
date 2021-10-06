@@ -27,8 +27,8 @@ class _TransferScreenState extends State<TransferScreen> {
       builder: (context, constraint) {
         return Container(
           margin: EdgeInsets.only(
-            right: getAdaptiveSize(16, context),
-            left: getAdaptiveSize(16, context),
+            right: getAdaptiveSize(26, context),
+            left: getAdaptiveSize(26, context),
           ),
           child: SingleChildScrollView(
             child: ConstrainedBox(
