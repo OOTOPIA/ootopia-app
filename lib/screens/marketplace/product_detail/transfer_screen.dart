@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/message_optional_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/product_information_widget.dart';
@@ -79,7 +78,6 @@ class _TransferScreenState extends State<TransferScreen> {
                               title: AppLocalizations.of(context)!.confirm,
                               marginBottom: getAdaptiveSize(10, context),
                               onPressed: () {
-                                print("MESSAGE: ${messageOptional.text}");
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

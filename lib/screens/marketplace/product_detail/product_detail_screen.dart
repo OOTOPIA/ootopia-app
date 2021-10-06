@@ -6,17 +6,17 @@ import 'package:ootopia_app/screens/marketplace/product_detail/components/profil
 import 'package:ootopia_app/screens/marketplace/product_detail/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/transfer_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class ProductDetailScreen extends StatefulWidget {
+  final SmartPageController controller;
   final ProductModel productModel;
-  ProductDetailScreen({required this.productModel});
+  ProductDetailScreen({required this.productModel, required this.controller});
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +31,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     profileName: widget.productModel.userName,
                     location: widget.productModel.userLocation ?? ""),
               ),
-              HorizontalExpandedImageWidget(urlImage: widget.productModel.photoUrl),
+              HorizontalExpandedImageWidget(
+                  urlImage: widget.productModel.photoUrl),
               ProductInformationWidget(
                 productModel: widget.productModel,
               )
@@ -45,14 +46,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: PurchaseButtonWidget(
           title: AppLocalizations.of(context)!.purchaseNow,
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (conetxt) => TransferScreen(
-                  productModel: widget.productModel,
-                ),
-              ),
-            );
+            widget.controller.insertPage(TransferScreen(
+              productModel: widget.productModel,
+            ));
           },
         ),
       ),

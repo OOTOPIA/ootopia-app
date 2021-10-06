@@ -67,11 +67,10 @@ class TransferSuccessScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(45.0),
                         )),
                     onPressed: () {
-                       Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            HomeScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
