@@ -41,7 +41,7 @@ class ProductItem extends StatelessWidget {
                             maxLines: 1,
                           ),
                           Text(
-                            '${productModel.userLocation}',
+                            '${productModel.location}',
                             style: TextStyle(fontSize: 12),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -59,7 +59,7 @@ class ProductItem extends StatelessWidget {
                     height: 171,
                     width: 171,
                     fit: BoxFit.cover,
-                    image: NetworkImage(productModel.photoUrl),
+                    image: NetworkImage(productModel.imageUrl),
                   ),
                 ),
                 SizedBox(height: 8),
