@@ -42,7 +42,6 @@ class _LastLearningTrackComponentsState
         .lastLearningTracks(locale: Platform.localeName)
         .onError((error, stackTrace) {
       setState(() {
-        print(error);
         hasError = true;
       });
     });
