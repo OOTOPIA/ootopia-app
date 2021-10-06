@@ -11,82 +11,84 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => debugPrint('click'),
-      child: Container(
-        alignment: Alignment.center,
-        height: 281,
-        width: 171,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ClipOval(
-                  child: Image(
-                    height: 36,
-                    width: 36,
-                    fit: BoxFit.fitHeight,
-                    image: NetworkImage(productModel.userPhotoUrl!),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        productModel.userName,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                      Text(
-                        '${productModel.userLocation}',
-                        style: TextStyle(fontSize: 12),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        softWrap: false,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 7.6),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image(
-                height: 171,
-                width: 171,
-                fit: BoxFit.cover,
-                image: NetworkImage(productModel.photoUrl),
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              productModel.title,
-              style: TextStyle(fontWeight: FontWeight.bold),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            ),
-            SizedBox(height: 7),
-            Row(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            alignment: Alignment.center,
+            width: constraints.maxWidth / 2,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.asset(
-                  'assets/icons/ooz_mini_blue.svg',
-                  height: 10,
-                  color: LightColors.grey,
+                Row(
+                  children: [
+                    ClipOval(
+                      child: Image(
+                        height: 36,
+                        fit: BoxFit.fitHeight,
+                        image: NetworkImage(productModel.userPhotoUrl!),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            productModel.userName,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          Text(
+                            '${productModel.userLocation}',
+                            style: TextStyle(fontSize: 12),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 7),
+                SizedBox(height: 7.6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image(
+                    height: 171,
+                    width: 171,
+                    fit: BoxFit.cover,
+                    image: NetworkImage(productModel.photoUrl),
+                  ),
+                ),
+                SizedBox(height: 8),
                 Text(
-                  '${productModel.price}',
-                  style: TextStyle(color: LightColors.grey),
+                  productModel.title,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                SizedBox(height: 7),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/ooz_mini_blue.svg',
+                      height: 10,
+                      color: LightColors.grey,
+                    ),
+                    SizedBox(width: 7),
+                    Text(
+                      '${productModel.price}',
+                      style: TextStyle(color: LightColors.grey),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
