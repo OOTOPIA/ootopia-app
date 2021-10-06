@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/home/home_screen.dart';
 
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class MarketplaceScreen extends StatefulWidget {
@@ -59,14 +58,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       child: SingleChildScrollView(
                         controller: _scrollController,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0, bottom: 50),
+                          padding: EdgeInsets.only(
+                            left:
+                                GlobalConstants.of(context).intermediateSpacing,
+                            right:
+                                GlobalConstants.of(context).intermediateSpacing,
+                            top: 8.0,
+                            bottom: 50,
+                          ),
                           child: Column(
                             children: [
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.start,
                                 direction: Axis.horizontal,
                                 runSpacing: 24,
-                                spacing: 24,
                                 children: [
                                   ...productList(marketplaceStore.productList),
                                   Visibility(

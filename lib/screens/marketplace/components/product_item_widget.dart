@@ -26,7 +26,7 @@ class ProductItem extends StatelessWidget {
                       child: Image(
                         height: 36,
                         fit: BoxFit.fitHeight,
-                        image: NetworkImage(productModel.userPhotoUrl!),
+                        image: NetworkImage(productModel.userPhotoUrl),
                       ),
                     ),
                     SizedBox(width: 16),
