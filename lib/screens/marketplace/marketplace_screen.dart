@@ -18,11 +18,20 @@ class MarketplaceScreen extends StatefulWidget {
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final marketplaceStore = MarketplaceStore();
   late SmartPageController pageController;
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     marketplaceStore.getProductList(
         limit: marketplaceStore.itemsPerPageCount, offset: 0);
     pageController = SmartPageController.getInstance();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) {
+          marketplaceStore.getData();
+        }
+      }
+    });
     super.initState();
   }
 
@@ -48,8 +57,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     MarketplaceBarWidget(),
                     Expanded(
                       child: SingleChildScrollView(
+                        controller: _scrollController,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 20),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.start,
                             direction: Axis.horizontal,

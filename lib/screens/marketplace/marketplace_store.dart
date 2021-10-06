@@ -13,7 +13,6 @@ abstract class MarketplaceStoreBase with Store {
   final _marketplaceRepository = MarketplaceRepositoryImpl();
 
   final int itemsPerPageCount = 5;
-  int nextPageThreshold = 3;
 
   @observable
   int currentPage = 1;
@@ -32,6 +31,7 @@ abstract class MarketplaceStoreBase with Store {
     final List<ProductModel> response =
         await _marketplaceRepository.getProducts(limit: limit, offset: offset);
     productList.addAll(response);
+    print(productList.length);
     viewState = ViewState.done;
   }
 
@@ -40,7 +40,7 @@ abstract class MarketplaceStoreBase with Store {
     viewState = ViewState.loading;
     await getProductList(
       limit: itemsPerPageCount,
-      offset: (currentPage - 1) * itemsPerPageCount,
+      offset: productList.length - 1,
     );
     hasMoreItems = productList.length == itemsPerPageCount;
   }
