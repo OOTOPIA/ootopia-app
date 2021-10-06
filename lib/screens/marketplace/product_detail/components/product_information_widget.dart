@@ -6,13 +6,15 @@ import 'package:ootopia_app/theme/light/colors.dart';
 
 class ProductInformationWidget extends StatefulWidget {
   final ProductModel productModel;
+  final bool isContractible;
   final double marginTopTitle, marginLeft, marginRight, marginBottom;
   const ProductInformationWidget(
       {required this.productModel,
       this.marginTopTitle = 18.5,
       this.marginLeft = 26,
       this.marginRight = 26,
-      this.marginBottom = 80});
+      this.marginBottom = 40,
+      this.isContractible = true});
 
   @override
   State<ProductInformationWidget> createState() =>
@@ -67,13 +69,18 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
           ),
           GestureDetector(
             onTap: () {
-              setState(() {
-                expands = !expands;
-              });
+              if (widget.isContractible)
+                setState(() {
+                  expands = !expands;
+                });
             },
             child: Text(
               widget.productModel.description,
-              maxLines: expands ? 100 : 3,
+              maxLines: widget.isContractible
+                  ? expands
+                      ? 100
+                      : 3
+                  : 100,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: getAdaptiveSize(14, context),
