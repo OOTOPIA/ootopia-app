@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/page-enum.dart';
 // import 'package:ootopia_app/shared/analytics.server.dart';
@@ -469,7 +470,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       isLoggedInUserProfile
-                          ? WalletBarWidget(onTap: _goToWalletPage)
+                          ? WalletBarWidget(
+                              onTap: () => controller.insertPage(WalletPage()))
                           : Container(),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
