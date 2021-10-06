@@ -44,7 +44,7 @@ abstract class MarketplaceStoreBase with Store {
     viewState = ViewState.loadingNewData;
     await getProductList(
       limit: itemsPerPageCount,
-      offset: productList.length - 1,
+      offset: productList.length,
     );
   }
 }
