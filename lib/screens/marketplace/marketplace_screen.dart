@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-
+import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
+
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
@@ -21,45 +21,57 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   @override
   void initState() {
-    marketplaceStore.getProductList();
+    marketplaceStore.getProductList(
+        limit: marketplaceStore.itemsPerPageCount, offset: 0);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Observer(
-        builder: (context) {
-          return LoadingOverlay(
-            isLoading: marketplaceStore.viewState == ViewState.loading,
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  WalletBarWidget(onTap: _goToWalletPage),
-                  MarketplaceBarWidget(),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          direction: Axis.horizontal,
-                          runSpacing: 24,
-                          spacing: 24,
-                          children: [
-                            ...productList(marketplaceStore.productList),
-                            CreateOfferButtonWidget(onTap: () {}),
-                          ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        marketplaceStore.productList.clear();
+        marketplaceStore.currentPage = 1;
+        marketplaceStore.getData();
+      },
+      child: Scaffold(
+        body: Observer(
+          builder: (context) {
+            return LoadingOverlay(
+              isLoading: marketplaceStore.viewState == ViewState.loading,
+              child: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    WalletBarWidget(onTap: _goToWalletPage),
+                    MarketplaceBarWidget(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            direction: Axis.horizontal,
+                            runSpacing: 24,
+                            spacing: 24,
+                            children: [
+                              ...productList(marketplaceStore.productList),
+                              Visibility(
+                                visible: marketplaceStore.viewState ==
+                                    ViewState.done,
+                                child: CreateOfferButtonWidget(onTap: () {}),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

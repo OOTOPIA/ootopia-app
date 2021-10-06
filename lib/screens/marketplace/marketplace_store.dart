@@ -12,17 +12,36 @@ enum ViewState { loading, error, done }
 abstract class MarketplaceStoreBase with Store {
   final _marketplaceRepository = MarketplaceRepositoryImpl();
 
+  final int itemsPerPageCount = 5;
+  int nextPageThreshold = 3;
+
+  @observable
+  int currentPage = 1;
+
   @observable
   ViewState viewState = ViewState.loading;
 
   @observable
   ObservableList<ProductModel> productList = ObservableList();
 
+  @observable
+  var hasMoreItems = true;
+
   @action
-  Future<void> getProductList() async {
+  Future<void> getProductList({int? limit, int? offset}) async {
     final List<ProductModel> response =
-        await _marketplaceRepository.getProducts(limit: 3);
+        await _marketplaceRepository.getProducts(limit: limit, offset: offset);
     productList.addAll(response);
     viewState = ViewState.done;
+  }
+
+  @action
+  Future<void> getData() async {
+    viewState = ViewState.loading;
+    await getProductList(
+      limit: itemsPerPageCount,
+      offset: (currentPage - 1) * itemsPerPageCount,
+    );
+    hasMoreItems = productList.length == itemsPerPageCount;
   }
 }
