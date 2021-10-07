@@ -8,7 +8,8 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class WatchVideoLeaningTracks extends StatefulWidget {
   final String videoUrl;
-  WatchVideoLeaningTracks(this.videoUrl);
+  final String thumbVideo;
+  WatchVideoLeaningTracks({required this.videoUrl, required this.thumbVideo});
   @override
   _WatchVideoLeaningTracksState createState() =>
       _WatchVideoLeaningTracksState();
@@ -68,7 +69,10 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
         body: isPortrait
             ? ListView(
                 children: [
-                  VideoPlayerLearningTracks(widget.videoUrl),
+                  VideoPlayerLearningTracks(
+                    videoUrl: widget.videoUrl,
+                    thumbVideo: widget.thumbVideo,
+                  ),
                   SizedBox(
                     height: 26,
                   ),
@@ -123,6 +127,9 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
                   ),
                 ],
               )
-            : VideoPlayerLearningTracks(widget.videoUrl));
+            : VideoPlayerLearningTracks(
+                videoUrl: widget.videoUrl,
+                thumbVideo: widget.thumbVideo,
+              ));
   }
 }

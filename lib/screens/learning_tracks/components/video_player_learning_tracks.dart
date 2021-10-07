@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerLearningTracks extends StatefulWidget {
   final String videoUrl;
-  VideoPlayerLearningTracks(this.videoUrl);
+  final String thumbVideo;
+  VideoPlayerLearningTracks({required this.videoUrl, required this.thumbVideo});
 
   @override
   _VideoPlayerLearningTracksState createState() =>
@@ -36,8 +38,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(
-        'https://videodelivery.net/3c67ce59afe0c35a6ce7c8abb6cab9af/manifest/video.m3u8')
+    videoPlayerController = VideoPlayerController.network('${widget.videoUrl}')
       ..addListener(() {
         if (mounted) {
           setState(() {
@@ -81,17 +82,23 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       },
       child: Container(
         width: double.infinity,
-        height: widthVideo > heightVideo
-            ? sizePlayerVideo
-            : MediaQuery.of(context).size.height * 0.5,
+        height: widthVideo > heightVideo ? sizePlayerVideo : 510,
         child: Stack(
           children: [
-            Container(
-              color: Color(0xffB7B7B7),
-              alignment: Alignment.center,
-              child: AspectRatio(
-                aspectRatio: widthVideo / heightVideo,
-                child: VideoPlayer(videoPlayerController),
+            Image.network(
+              widget.thumbVideo,
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+              child: Container(
+                color: Colors.black.withOpacity(0.4),
+                alignment: Alignment.center,
+                child: AspectRatio(
+                  aspectRatio: widthVideo / heightVideo,
+                  child: VideoPlayer(videoPlayerController),
+                ),
               ),
             ),
             Align(

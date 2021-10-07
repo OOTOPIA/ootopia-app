@@ -17,8 +17,6 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   @override
   Widget build(BuildContext context) {
-    print('teste ${widget.args['learning_tracks']}');
-
     List<ChaptersModel> listChapters = widget.args['list_chapters'];
     LearningTracksModel learningTracks = widget.args['learning_tracks'];
     return Scaffold(
@@ -87,7 +85,9 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return WatchVideoLeaningTracks(
-                                        chapter.videoUrl);
+                                      videoUrl: chapter.videoUrl,
+                                      thumbVideo: chapter.videoThumbUrl,
+                                    );
                                   }));
                                 },
                                 child: Column(
