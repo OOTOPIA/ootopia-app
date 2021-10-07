@@ -102,10 +102,10 @@ class _RegisterPhase2DailyLearningGoalPageState
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    return isPortrait
-        ? Scaffold(
-            appBar: appBar,
-            body: Container(
+    return Scaffold(
+      appBar: isPortrait? appBar: null,
+      body: isPortrait
+          ? Container(
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -213,7 +213,9 @@ class _RegisterPhase2DailyLearningGoalPageState
                                                   SystemChrome
                                                       .setPreferredOrientations([
                                                     DeviceOrientation
-                                                        .landscapeRight
+                                                        .landscapeRight,
+                                                    DeviceOrientation
+                                                        .landscapeLeft
                                                   ]);
                                                 },
                                                 icon: Icon(
@@ -383,10 +385,8 @@ class _RegisterPhase2DailyLearningGoalPageState
                   ),
                 ),
               ),
-            ),
-          )
-        : Scaffold(
-            body: GestureDetector(
+            )
+          : GestureDetector(
               onTap: () {
                 setState(() {
                   _videoPlayerController.value.isPlaying
@@ -434,8 +434,10 @@ class _RegisterPhase2DailyLearningGoalPageState
                       right: 2,
                       child: IconButton(
                           onPressed: () {
-                            SystemChrome.setPreferredOrientations(
-                                [DeviceOrientation.portraitUp]);
+                            SystemChrome.setPreferredOrientations([
+                              DeviceOrientation.portraitUp,
+                              DeviceOrientation.portraitDown
+                            ]);
                           },
                           icon: Icon(
                             Icons.fullscreen,
@@ -444,6 +446,6 @@ class _RegisterPhase2DailyLearningGoalPageState
                 ],
               ),
             ),
-          );
+    );
   }
 }
