@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail/transfer_success_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
 
@@ -16,70 +16,81 @@ class CardInformationBalance extends StatelessWidget {
   final String action;
   final String? otherUserId;
   final String? postId;
+  final String? description;
+  final String? origin;
 
-  CardInformationBalance({
-    required this.balanceOfTransactions,
-    required this.iconForeground,
-    required this.iconBackground,
-    required this.toOrFrom,
-    required this.originTransaction,
-    required this.action,
-    this.otherUserId,
-    this.postId,
-  });
+  CardInformationBalance(
+      {required this.balanceOfTransactions,
+      required this.iconForeground,
+      required this.iconBackground,
+      required this.toOrFrom,
+      required this.originTransaction,
+      required this.action,
+      this.otherUserId,
+      this.postId,
+      this.description,
+      this.origin});
 
   String getTransactionDescription(context) {
-    String origin = '';
+    String text = '';
 
     switch (originTransaction) {
       case 'total_game_completed':
-        origin = AppLocalizations.of(context)!.totalGameCompleted;
+        text = AppLocalizations.of(context)!.totalGameCompleted;
         break;
       case 'personal_goal_achieved':
-        origin = AppLocalizations.of(context)!.personalGoalAchieved;
+        text = AppLocalizations.of(context)!.personalGoalAchieved;
         break;
       case 'gratitude_reward':
-        origin = AppLocalizations.of(context)!.gratitudeReward;
+        text = AppLocalizations.of(context)!.gratitudeReward;
         break;
       case 'invitation_code':
-        origin = AppLocalizations.of(context)!.invitationCode;
+        text = AppLocalizations.of(context)!.invitationCode;
         break;
       case 'invitation_code_sent':
-        origin = AppLocalizations.of(context)!.invitationCodeSent;
+        text = AppLocalizations.of(context)!.invitationCodeSent;
         break;
       case 'invitation_code_accepted':
-        origin = AppLocalizations.of(context)!.invitationCodeAccepted;
+        text = AppLocalizations.of(context)!.invitationCodeAccepted;
         break;
+      case 'market_place_transfer':
+        text = this.description ?? "";
+        break;
+     
     }
 
-    return origin;
+    return text;
   }
 
   String getTransactionTitle(context) {
-    String origin = '';
+    String text = '';
 
     switch (originTransaction) {
       case 'total_game_completed':
-        origin = AppLocalizations.of(context)!.regenerationGame;
+        text = AppLocalizations.of(context)!.regenerationGame;
         break;
       case 'personal_goal_achieved':
-        origin = AppLocalizations.of(context)!.regenerationGame;
+        text = AppLocalizations.of(context)!.regenerationGame;
         break;
       case 'gratitude_reward':
-        origin = AppLocalizations.of(context)!.gratitudeReward;
+        text = AppLocalizations.of(context)!.gratitudeReward;
         break;
       case 'invitation_code':
-        origin = AppLocalizations.of(context)!.invitationCode;
+        text = AppLocalizations.of(context)!.invitationCode;
         break;
       case 'invitation_code_sent':
-        origin = AppLocalizations.of(context)!.invitationCodeSent;
+        text = AppLocalizations.of(context)!.invitationCodeSent;
         break;
       case 'invitation_code_accepted':
-        origin = AppLocalizations.of(context)!.invitationCodeAccepted;
+        text = AppLocalizations.of(context)!.invitationCodeAccepted;
         break;
+      case 'market_place_transfer':
+        text = AppLocalizations.of(context)!.marketPlaceTransfer;
+        break;
+      
     }
 
-    return origin;
+    return text;
   }
 
   int colorOfBalance = 0xff003694;
@@ -181,6 +192,8 @@ class CardInformationBalance extends StatelessWidget {
                                 marginBottom: true,
                               );
                             });
+                      } else if (this.origin == "market_place_transfer"){
+                            showDialog(context: context, builder: (context) => TransferSuccessScreen());
                       }
                     }
                   },
