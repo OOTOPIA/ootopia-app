@@ -67,7 +67,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
-                          height: 18,
+                          height: 16,
                         ),
                         Divider(
                           color: Colors.grey,
@@ -87,7 +87,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      height: 16.5,
+                                      height: 8,
                                     ),
                                     Row(
                                       children: [
@@ -200,7 +200,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                       ],
                                     ),
                                     SizedBox(
-                                      height: 16,
+                                      height: 8,
                                     ),
                                     index == listChapters.length - 1
                                         ? Container()
