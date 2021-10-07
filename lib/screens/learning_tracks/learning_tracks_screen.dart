@@ -253,6 +253,8 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Positioned(
                                   bottom: 0,
                                   child: Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.84,
                                     padding: const EdgeInsets.only(
                                         bottom: 16.0, left: 16),
                                     child: Text(
