@@ -61,17 +61,26 @@ class ProductItem extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 7.6),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image(
-                      height: widthScreen >= 760
-                          ? (constraints.maxWidth / 4) - 24
-                          : (constraints.maxWidth / 2) - 24,
-                      width: widthScreen >= 760
-                          ? (constraints.maxWidth / 4) - 24
-                          : (constraints.maxWidth / 2) - 24,
-                      fit: BoxFit.cover,
-                      image: NetworkImage(productModel.imageUrl),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: LightColors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image(
+                        height: widthScreen >= 760
+                            ? (constraints.maxWidth / 4) - 24
+                            : (constraints.maxWidth / 2) - 24,
+                        width: widthScreen >= 760
+                            ? (constraints.maxWidth / 4) - 24
+                            : (constraints.maxWidth / 2) - 24,
+                        fit: BoxFit.fitWidth,
+                        image: NetworkImage(productModel.imageUrl),
+                      ),
                     ),
                   ),
                   SizedBox(height: 8),
