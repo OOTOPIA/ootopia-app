@@ -10,13 +10,12 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widthScreen = MediaQuery.of(context).size.width;
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    print(widthScreen);
     return InkWell(
       onTap: () => debugPrint('click'),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
+            padding: EdgeInsets.only(right: 9),
             alignment: Alignment.center,
             width: widthScreen >= 760 ? 171 : constraints.maxWidth / 2,
             child: Column(
@@ -39,13 +38,17 @@ class ProductItem extends StatelessWidget {
                         children: [
                           Text(
                             productModel.userName,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: widthScreen <= 360 ? 12 : 14,
+                            ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
                           Text(
                             '${productModel.location}',
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(
+                                fontSize: widthScreen <= 360 ? 10 : 12),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             softWrap: false,
