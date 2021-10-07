@@ -370,5 +370,10 @@
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
     "seeAll":"Veja todos",
      "dontExistLearningTracks":"Não existem learning tracks",
-     "lessons":"lições"
+     "lessons":"lições",
+     "respondQuiz":"Responda ao questionário para confirmar o que você aprendeu e receba OOz para cada resposta correta.",
+     "plusQuizAboutOOz":"Além disso, você receberá créditos OOz para cada resposta correta.",
+     "nextAboutQuiz":"Na próxima atualização do aplicativo, você terá acesso a questionários logo após assistir as Trilhas de aprendizagem. Esta é uma excelente forma de consolidar o que você aprendeu.",
+     "quiz":"Quiz",
+     "pictureByMikaBaumeister":"Foto de Mika Baumeister"
 }

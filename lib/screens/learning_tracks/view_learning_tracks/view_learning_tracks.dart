@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 
 class ViewLearningTracksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -17,8 +17,6 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   @override
   Widget build(BuildContext context) {
-    print('teste ${widget.args['learning_tracks']}');
-
     List<ChaptersModel> listChapters = widget.args['list_chapters'];
     LearningTracksModel learningTracks = widget.args['learning_tracks'];
     return Scaffold(
@@ -83,7 +81,14 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                               return InkWell(
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return WatchVideoLeaningTracks(
+                                      chapter: chapter,
+                                    );
+                                  }));
+                                },
                                 child: Column(
                                   children: [
                                     SizedBox(

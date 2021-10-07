@@ -376,6 +376,11 @@
     "errorUpdateProfile": "Error updating profile, try profile again",
 
     "lessons":"lessons",
+    "respondQuiz":"Respond the quiz to confirm what you've learned and receive OOz for every correct answer.",
+    "plusQuizAboutOOz":"Plus, you'll receive OOz credits for each correct answer.",
+    "nextAboutQuiz":"In the next app update, you will have access to quizzes right after watching Learning Tracks. This is an excellent way to consolidate what you've learned.",
+    "quiz":"Quiz",
+    "pictureByMikaBaumeister":"Picture by Mika Baumeister",
     "@helloWorld": {
         "description": "A programmer greeting"
     }
