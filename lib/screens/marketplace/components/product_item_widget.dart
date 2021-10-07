@@ -65,10 +65,10 @@ class ProductItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     child: Image(
                       height: widthScreen >= 760
-                          ? 171
+                          ? (constraints.maxWidth / 4) - 24
                           : (constraints.maxWidth / 2) - 24,
                       width: widthScreen >= 760
-                          ? 171
+                          ? (constraints.maxWidth / 4) - 24
                           : (constraints.maxWidth / 2) - 24,
                       fit: BoxFit.cover,
                       image: NetworkImage(productModel.imageUrl),
