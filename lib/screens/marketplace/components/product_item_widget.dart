@@ -26,11 +26,20 @@ class ProductItem extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      ClipOval(
-                        child: Image(
-                          height: widthScreen <= 320 ? 28 : 36,
-                          fit: BoxFit.fitHeight,
-                          image: NetworkImage(productModel.userPhotoUrl),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: LightColors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: ClipOval(
+                          child: Image(
+                            height: widthScreen <= 320 ? 28 : 36,
+                            fit: BoxFit.fitHeight,
+                            image: NetworkImage(productModel.userPhotoUrl),
+                          ),
                         ),
                       ),
                       SizedBox(width: 16),
