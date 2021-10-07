@@ -41,8 +41,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(
-        'https://videodelivery.net/3c67ce59afe0c35a6ce7c8abb6cab9af/manifest/video.m3u8')
+    videoPlayerController = VideoPlayerController.network(widget.videoUrl)
       ..addListener(() {
         if (mounted) {
           setState(() {
@@ -88,11 +87,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
         heightPlayerVideo = MediaQuery.of(context).size.height * 0.75;
       }
     } else {
-      if (widthVideo > heightVideo) {
-        heightPlayerVideo = MediaQuery.of(context).size.height;
-      } else {
-        heightPlayerVideo = MediaQuery.of(context).size.height;
-      }
+      heightPlayerVideo = MediaQuery.of(context).size.height;
     }
     return SingleChildScrollView(
       child: Column(
