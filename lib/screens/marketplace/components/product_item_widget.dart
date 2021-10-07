@@ -10,6 +10,8 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final widthScreen = MediaQuery.of(context).size.width;
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    print(widthScreen);
     return InkWell(
       onTap: () => debugPrint('click'),
       child: LayoutBuilder(
@@ -25,7 +27,7 @@ class ProductItem extends StatelessWidget {
                   children: [
                     ClipOval(
                       child: Image(
-                        height: 36,
+                        height: widthScreen <= 320 ? 28 : 36,
                         fit: BoxFit.fitHeight,
                         image: NetworkImage(productModel.userPhotoUrl),
                       ),
