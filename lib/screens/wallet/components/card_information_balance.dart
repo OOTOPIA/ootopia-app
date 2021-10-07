@@ -193,7 +193,7 @@ class CardInformationBalance extends StatelessWidget {
                               );
                             });
                       } else if (this.origin == "market_place_transfer"){
-                            showDialog(context: context, builder: (context) => TransferSuccessScreen());
+                            showDialog(context: context, builder: (context) => TransferSuccessScreen(goToWalletPage: false,));
                       }
                     }
                   },

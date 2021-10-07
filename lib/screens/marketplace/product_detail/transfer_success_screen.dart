@@ -7,13 +7,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class TransferSuccessScreen extends StatelessWidget {
-  SmartPageController controller = SmartPageController.getInstance();
+  final SmartPageController controller = SmartPageController.getInstance();
+  final bool goToWalletPage;
+  TransferSuccessScreen({this.goToWalletPage = true});
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        controller.insertPage(WalletPage());
         Navigator.pop(context);
+        if (goToWalletPage)
+          controller.insertPage(WalletPage(), ignoreTabHistory: true);
         return false;
       },
       child: Scaffold(
@@ -77,7 +80,7 @@ class TransferSuccessScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(45.0),
                           )),
                       onPressed: () {
-                        controller.insertPage(WalletPage());
+                        if (goToWalletPage) controller.insertPage(WalletPage());
                         Navigator.pop(context);
                       },
                       child: Padding(
