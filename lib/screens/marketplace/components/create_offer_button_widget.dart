@@ -47,6 +47,7 @@ class CreateOfferButtonWidget extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: LightColors.grey,
+                            fontSize: 18,
                           ),
                         ),
                       ],
