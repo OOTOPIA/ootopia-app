@@ -16,7 +16,7 @@ class MessageOptionalWidget extends StatelessWidget {
         maxLines: null,
         minLines: null,
         textAlignVertical: TextAlignVertical.top,
-        style: TextStyle(fontSize: getAdaptiveSize(14, context)),
+        style: TextStyle(fontSize: getAdaptiveSize(14, context), fontWeight: FontWeight.normal),
         decoration: InputDecoration(
           hintText: AppLocalizations.of(context)!.messageOptional,
           hintStyle: TextStyle(
