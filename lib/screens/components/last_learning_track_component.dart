@@ -240,15 +240,15 @@ class _LastLearningTrackComponentsState
                   ),
                 ),
                 SizedBox(
-                  height: 13,
+                  height: 8,
                 ),
               ],
             ),
             Divider(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey,
             ),
             SizedBox(
-              height: 18,
+              height: 12,
             ),
           ],
         ),
