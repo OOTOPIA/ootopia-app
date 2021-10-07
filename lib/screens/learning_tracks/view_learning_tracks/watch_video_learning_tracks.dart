@@ -2,14 +2,14 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_player_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class WatchVideoLeaningTracks extends StatefulWidget {
-  final String videoUrl;
-  final String thumbVideo;
-  WatchVideoLeaningTracks({required this.videoUrl, required this.thumbVideo});
+  final ChaptersModel chapter;
+  WatchVideoLeaningTracks({required this.chapter});
   @override
   _WatchVideoLeaningTracksState createState() =>
       _WatchVideoLeaningTracksState();
@@ -70,8 +70,8 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
             ? ListView(
                 children: [
                   VideoPlayerLearningTracks(
-                    videoUrl: widget.videoUrl,
-                    thumbVideo: widget.thumbVideo,
+                    videoUrl: widget.chapter.videoUrl,
+                    thumbVideo: widget.chapter.videoThumbUrl,
                   ),
                   SizedBox(
                     height: 26,
@@ -98,7 +98,7 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
                             .pushNamed(PageRoute.Page.aboutQuizScreen.route);
                       },
                       child: Text(
-                        AppLocalizations.of(context)!.quiz,
+                        AppLocalizations.of(context)!.quiz.toUpperCase(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -128,8 +128,8 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
                 ],
               )
             : VideoPlayerLearningTracks(
-                videoUrl: widget.videoUrl,
-                thumbVideo: widget.thumbVideo,
+                videoUrl: widget.chapter.videoUrl,
+                thumbVideo: widget.chapter.videoThumbUrl,
               ));
   }
 }

@@ -85,8 +85,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return WatchVideoLeaningTracks(
-                                      videoUrl: chapter.videoUrl,
-                                      thumbVideo: chapter.videoThumbUrl,
+                                      chapter: chapter,
                                     );
                                   }));
                                 },

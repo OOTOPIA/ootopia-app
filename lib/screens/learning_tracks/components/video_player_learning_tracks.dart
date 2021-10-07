@@ -54,6 +54,13 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
         }
       })
       ..initialize().then((value) {
+        setState(() {
+          timerOpacity?.cancel();
+          timerOpacity = Timer(
+            Duration(seconds: 1),
+            () => setState(() => timerOpacity = null),
+          );
+        });
         videoPlayerController.play();
       });
   }
@@ -68,8 +75,22 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
 
   @override
   Widget build(BuildContext context) {
-    var sizePlayerVideo =
-        MediaQuery.of(context).size.width / (widthVideo / heightVideo);
+    var sizePlayerVideo = 0.0;
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      if (widthVideo > heightVideo) {
+        sizePlayerVideo =
+            MediaQuery.of(context).size.width / (widthVideo / heightVideo);
+      } else {
+        sizePlayerVideo = 510;
+      }
+    } else {
+      if (widthVideo > heightVideo) {
+        sizePlayerVideo = double.infinity;
+      } else {
+        sizePlayerVideo =
+            MediaQuery.of(context).size.width / (widthVideo / heightVideo);
+      }
+    }
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -82,7 +103,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       },
       child: Container(
         width: double.infinity,
-        height: widthVideo > heightVideo ? sizePlayerVideo : 510,
+        height: sizePlayerVideo,
         child: Stack(
           children: [
             Image.network(
@@ -90,15 +111,22 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
               fit: BoxFit.cover,
               width: double.infinity,
             ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-              child: Container(
-                color: Colors.black.withOpacity(0.4),
-                alignment: Alignment.center,
-                child: AspectRatio(
-                  aspectRatio: widthVideo / heightVideo,
-                  child: VideoPlayer(videoPlayerController),
+            ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 40,
+                  sigmaY: 40,
                 ),
+                child: Container(
+                  color: Colors.black.withOpacity(0.4),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: AspectRatio(
+                aspectRatio: widthVideo / heightVideo,
+                child: VideoPlayer(videoPlayerController),
               ),
             ),
             Align(

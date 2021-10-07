@@ -29,144 +29,184 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
             ),
             fit: BoxFit.cover,
           )),
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 26),
+          child: Center(
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  fillOverscroll: true,
+                  hasScrollBody: false,
                   child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: GlobalConstants.of(context).spacingLarge,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!
-                            .regenerationGame
-                            .toUpperCase(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(0, 5), // changes position of shadow
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(1, 5), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 27,
-                      ),
-                      Center(
-                          child: CircleAvatar(
-                              backgroundColor: Color(0xff003694),
-                              radius: 78,
-                              child: Image.asset(
-                                'assets/icons/ooz_white.png',
-                                height: 93,
-                                width: 49,
-                                color: Colors.white,
-                              ))),
-                      SizedBox(
-                          height: GlobalConstants.of(context).spacingMedium),
-                      Text(
-                        AppLocalizations.of(context)!.quiz.toUpperCase(),
-                        style: TextStyle(
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(0, 5), // changes position of shadow
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(1, 5), // changes position of shadow
-                            ),
-                          ],
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                          height:
-                              GlobalConstants.of(context).intermediateSpacing),
-                      Text(
-                        AppLocalizations.of(context)!.nextAboutQuiz,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(0, 5), // changes position of shadow
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(1, 5), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      SizedBox(
-                          height:
-                              GlobalConstants.of(context).intermediateSpacing),
-                      Text(
-                        AppLocalizations.of(context)!.plusQuizAboutOOz,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 23,
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(0, 5), // changes position of shadow
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 3,
-                              offset:
-                                  Offset(1, 5), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 86,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 26),
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: GlobalConstants.of(context)
+                                          .spacingLarge,
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .regenerationGame
+                                          .toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        shadows: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(0,
+                                                5), // changes position of shadow
+                                          ),
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(1,
+                                                5), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 27,
+                                    ),
+                                    Center(
+                                        child: CircleAvatar(
+                                            backgroundColor: Color(0xff003694),
+                                            radius: 78,
+                                            child: Image.asset(
+                                              'assets/icons/ooz_white.png',
+                                              height: 93,
+                                              width: 49,
+                                              color: Colors.white,
+                                            ))),
+                                    SizedBox(
+                                        height: GlobalConstants.of(context)
+                                            .spacingMedium),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .quiz
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                        shadows: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(0,
+                                                5), // changes position of shadow
+                                          ),
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(1,
+                                                5), // changes position of shadow
+                                          ),
+                                        ],
+                                        color: Colors.white,
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                        height: GlobalConstants.of(context)
+                                            .intermediateSpacing),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .nextAboutQuiz,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        shadows: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(0,
+                                                5), // changes position of shadow
+                                          ),
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(1,
+                                                5), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    SizedBox(
+                                        height: GlobalConstants.of(context)
+                                            .intermediateSpacing),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .plusQuizAboutOOz,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 23,
+                                        shadows: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.25),
+                                            spreadRadius: 0,
+                                            blurRadius: 3,
+                                            offset: Offset(0,
+                                                5), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 16, right: 16),
+                                  child: RotatedBox(
+                                    quarterTurns: -1,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: AppLocalizations.of(context)!
+                                            .pictureByMikaBaumeister,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 28.0),
-                        alignment: Alignment.bottomCenter,
+                        padding: const EdgeInsets.only(bottom: 28),
                         child: ElevatedButton(
                             style: ButtonStyle(
                               fixedSize: MaterialStateProperty.all<Size>(
@@ -196,29 +236,12 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                       ),
                     ],
                   ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16, right: 16),
-                    child: RotatedBox(
-                      quarterTurns: -1,
-                      child: RichText(
-                        text: TextSpan(
-                          text: AppLocalizations.of(context)!
-                              .pictureByMikaBaumeister,
-                          style: TextStyle(color: Colors.white, fontSize: 10),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
             ),
           ),
         ),
       ),
     );
-    ;
   }
 }
