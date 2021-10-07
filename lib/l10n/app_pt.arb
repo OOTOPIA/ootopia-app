@@ -377,6 +377,8 @@
     "purchaseNow": "Compre agora",
 
     "seeAll":"Veja todos",
-     "dontExistLearningTracks":"Não existem learning tracks",
-     "lessons":"lições"
+    "dontExistLearningTracks":"Não existem learning tracks",
+    "lessons":"lições",
+    "marketPlaceTransfer": "Transferência de mercado"
+
 }

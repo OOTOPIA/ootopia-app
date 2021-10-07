@@ -385,6 +385,7 @@
     "ethicalMarketplaceDescription": "The place to exchange goods and services that positively impact our lives and the planet.",
     "messageVendorContact": "The vendor will soon contact you by email to arrange delivery of your purchase.",
     "messageOptional": "Message - Optional",
-    "purchaseNow": "Purchase Now"
+    "purchaseNow": "Purchase Now",
+    "marketPlaceTransfer": "Marketplace Transfer"
     
 }
