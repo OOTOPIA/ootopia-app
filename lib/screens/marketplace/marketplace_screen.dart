@@ -62,8 +62,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                           padding: EdgeInsets.only(
                             left:
                                 GlobalConstants.of(context).intermediateSpacing,
-                            right:
-                                GlobalConstants.of(context).intermediateSpacing,
                             top: 8.0,
                             bottom: 50,
                           ),
