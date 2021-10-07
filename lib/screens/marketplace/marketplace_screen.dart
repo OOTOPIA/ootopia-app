@@ -71,7 +71,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 ...productList(marketplaceStore.productList),
                                 Visibility(
                                   visible: marketplaceStore.viewState !=
-                                      ViewState.loading,
+                                          ViewState.loading &&
+                                      marketplaceStore.productList.isNotEmpty,
                                   child: CreateOfferButtonWidget(onTap: () {}),
                                 ),
                               ],
