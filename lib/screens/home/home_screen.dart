@@ -297,9 +297,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 BottomIcon(
                   selectedWidget: Image.asset(
                     "assets/icons/marketplace_selected_icon.png",
+                    height: 28,
                   ),
                   unselectedWidget: Image.asset(
                     "assets/icons/marketplace_unselected_icon.png",
+                    height: 28,
                   ),
                 ),
                 BottomIcon(
