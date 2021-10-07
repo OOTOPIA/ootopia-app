@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/message_optional_widget.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail/components/product_information_widget.dart';
@@ -21,6 +22,8 @@ class TransferScreen extends StatefulWidget {
 
 class _TransferScreenState extends State<TransferScreen> {
   TextEditingController messageOptional = TextEditingController();
+  MarketplaceRepositoryImpl marketplaceRepositoryImpl =
+      MarketplaceRepositoryImpl();
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child: LayoutBuilder(
@@ -75,17 +78,10 @@ class _TransferScreenState extends State<TransferScreen> {
                             ],
                           ),
                           PurchaseButtonWidget(
-                              title: AppLocalizations.of(context)!.confirm,
-                              marginBottom: getAdaptiveSize(10, context),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        TransferSuccessScreen(),
-                                  ),
-                                );
-                              })
+                            title: AppLocalizations.of(context)!.confirm,
+                            marginBottom: getAdaptiveSize(10, context),
+                            onPressed: makePurchase,
+                          )
                         ],
                       ),
                     )
@@ -97,5 +93,20 @@ class _TransferScreenState extends State<TransferScreen> {
         );
       },
     )));
+  }
+
+  Future<void> makePurchase() async {
+    final response = await marketplaceRepositoryImpl.makePurchase(
+        productId: "40accdaa-191a-4369-aa3a-54f50e2869de",
+        optionalMessage: messageOptional.text);
+
+    if (response)
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TransferSuccessScreen(),
+        ),
+      );
+    debugPrint("ERRO AO COMPRAR PRODUTO");
   }
 }
