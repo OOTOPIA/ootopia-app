@@ -210,11 +210,11 @@ class _RegisterPhase2DailyLearningGoalPageState
                                             right: 2,
                                             child: IconButton(
                                                 onPressed: () {
-                                                    SystemChrome
-                                                        .setPreferredOrientations([
-                                                      DeviceOrientation
-                                                          .landscapeRight
-                                                    ]);
+                                                  SystemChrome
+                                                      .setPreferredOrientations([
+                                                    DeviceOrientation
+                                                        .landscapeRight
+                                                  ]);
                                                 },
                                                 icon: Icon(
                                                   Icons.fullscreen,
@@ -321,6 +321,20 @@ class _RegisterPhase2DailyLearningGoalPageState
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
                           ],
+                        ),
+                        Visibility(
+                          visible: controller.currentSliderValue == 0.0,
+                          child: Text(
+                            AppLocalizations.of(context)!.settingGoalToZero,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
+                          ),
+                        ),
+                        SizedBox(
+                          height: GlobalConstants.of(context).spacingNormal,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 20),
