@@ -48,53 +48,45 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           builder: (context) {
             return LoadingOverlay(
               isLoading: marketplaceStore.viewState == ViewState.loading,
-              child: SafeArea(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    WalletBarWidget(
-                        onTap: () => pageController.insertPage(WalletPage())),
-                    MarketplaceBarWidget(),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left:
-                                GlobalConstants.of(context).intermediateSpacing,
-                            top: 8.0,
-                            bottom: 50,
-                          ),
-                          child: Column(
-                            children: [
-                              Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                spacing: widthScreen > 720 ? 10 : 0,
-                                direction: Axis.horizontal,
-                                runSpacing: 24,
-                                children: [
-                                  ...productList(marketplaceStore.productList),
-                                  Visibility(
-                                    visible: marketplaceStore.viewState !=
-                                        ViewState.loading,
-                                    child:
-                                        CreateOfferButtonWidget(onTap: () {}),
-                                  ),
-                                ],
-                              ),
-                              Visibility(
-                                visible: marketplaceStore.viewState ==
-                                    ViewState.loadingNewData,
-                                child:
-                                    Center(child: CircularProgressIndicator()),
-                              ),
-                            ],
-                          ),
+              child: Column(
+                children: [
+                  WalletBarWidget(
+                      onTap: () => pageController.insertPage(WalletPage())),
+                  MarketplaceBarWidget(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 8.0,
+                          bottom: 50,
+                        ),
+                        child: Column(
+                          children: [
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              direction: Axis.horizontal,
+                              runSpacing: 24,
+                              children: [
+                                ...productList(marketplaceStore.productList),
+                                Visibility(
+                                  visible: marketplaceStore.viewState !=
+                                      ViewState.loading,
+                                  child: CreateOfferButtonWidget(onTap: () {}),
+                                ),
+                              ],
+                            ),
+                            Visibility(
+                              visible: marketplaceStore.viewState ==
+                                  ViewState.loadingNewData,
+                              child: Center(child: CircularProgressIndicator()),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
