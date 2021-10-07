@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
@@ -208,6 +209,21 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                ),
+                                minimumSize: MaterialStateProperty.all(
+                                  Size(60, 58),
+                                ),
+                                backgroundColor: _termsCheckbox
+                                    ? MaterialStateProperty.all(
+                                        LightColors.blue)
+                                    : MaterialStateProperty.all(Colors.grey),
+                              ),
                               child: Text(
                                 AppLocalizations.of(context)!.continueAccess,
                                 style: Theme.of(context)
@@ -218,19 +234,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  phase2Controller
-                                      .cleanTextEditingControllers();
-                                  _submit();
-                                }
-                              },
-                            ).defaultButton(
-                              context,
-                              style: ButtonStyle(
-                                elevation:
-                                    MaterialStateProperty.all<double>(0.0),
-                              ),
+                              onPressed: _termsCheckbox
+                                  ? () {
+                                      if (_formKey.currentState!.validate()) {
+                                        phase2Controller
+                                            .cleanTextEditingControllers();
+                                        _submit();
+                                      }
+                                    }
+                                  : () {},
                             ),
                           ),
                         ],
@@ -315,6 +327,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                             AppLocalizations.of(context)!
                                                 .nameAndSurname)
                                         .copyWith(
+                                          labelStyle: GoogleFonts.roboto(
+                                              color: nameIsValid
+                                                  ? LightColors.lightGrey
+                                                  : LightColors.errorRed,
+                                              fontWeight: FontWeight.w500),
                                           prefixIcon: ImageIcon(
                                             AssetImage(
                                                 "assets/icons/personicon.png"),
@@ -349,13 +366,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!.email)
                                         .copyWith(
+                                            labelStyle: GoogleFonts.roboto(
+                                                color: mailIsValid
+                                                    ? LightColors.lightGrey
+                                                    : LightColors.errorRed,
+                                                fontWeight: FontWeight.w500),
                                             prefixIcon: ImageIcon(
-                                          AssetImage("assets/icons/mail.png"),
-                                          color: mailIsValid
-                                              ? LightColors.grey
-                                              : LightColors.errorRed,
-                                          size: 20,
-                                        )),
+                                              AssetImage(
+                                                  "assets/icons/mail.png"),
+                                              color: mailIsValid
+                                                  ? LightColors.grey
+                                                  : LightColors.errorRed,
+                                              size: 20,
+                                            )),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         setState(() {
@@ -390,6 +413,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                               .password,
                                         )
                                         .copyWith(
+                                          labelStyle: GoogleFonts.roboto(
+                                              color: passIsValid
+                                                  ? LightColors.lightGrey
+                                                  : LightColors.errorRed,
+                                              fontWeight: FontWeight.w500),
                                           prefixIcon: ImageIcon(
                                             AssetImage("assets/icons/lock.png"),
                                             color: passIsValid
@@ -441,6 +469,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                               .confirmPassword,
                                         )
                                         .copyWith(
+                                          labelStyle: GoogleFonts.roboto(
+                                              color: pass2IsValid
+                                                  ? LightColors.lightGrey
+                                                  : LightColors.errorRed,
+                                              fontWeight: FontWeight.w500),
                                           prefixIcon: ImageIcon(
                                             AssetImage("assets/icons/lock.png"),
                                             color: pass2IsValid
