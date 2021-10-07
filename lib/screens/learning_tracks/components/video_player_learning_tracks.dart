@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerLearningTracks extends StatefulWidget {
@@ -22,7 +23,6 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   String positionVideoText = '';
   int currentPosition = 0;
   double maxDurationVideo = 0;
-  bool onChangedStart = false;
   var widthVideo = 1.0;
   var heightVideo = 1.0;
 
@@ -75,21 +75,16 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
 
   @override
   Widget build(BuildContext context) {
-    var sizePlayerVideo = 0.0;
+    var heightPlayerVideo = 0.0;
     if (MediaQuery.of(context).orientation == Orientation.portrait) {
       if (widthVideo > heightVideo) {
-        sizePlayerVideo =
+        heightPlayerVideo =
             MediaQuery.of(context).size.width / (widthVideo / heightVideo);
       } else {
-        sizePlayerVideo = 510;
+        heightPlayerVideo = 510;
       }
     } else {
-      if (widthVideo > heightVideo) {
-        sizePlayerVideo = double.infinity;
-      } else {
-        sizePlayerVideo =
-            MediaQuery.of(context).size.width / (widthVideo / heightVideo);
-      }
+      heightPlayerVideo = MediaQuery.of(context).size.height;
     }
     return GestureDetector(
       onTap: () {
@@ -102,8 +97,8 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
         });
       },
       child: Container(
-        width: double.infinity,
-        height: sizePlayerVideo,
+        width: MediaQuery.of(context).size.width,
+        height: heightPlayerVideo,
         child: Stack(
           children: [
             Image.network(

@@ -66,13 +66,16 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
                 ),
               )
             : null,
-        body: isPortrait
-            ? ListView(
+        body: ListView(
+          children: [
+            VideoPlayerLearningTracks(
+              videoUrl: widget.chapter.videoUrl,
+              thumbVideo: widget.chapter.videoThumbUrl,
+            ),
+            Visibility(
+              visible: isPortrait,
+              child: Column(
                 children: [
-                  VideoPlayerLearningTracks(
-                    videoUrl: widget.chapter.videoUrl,
-                    thumbVideo: widget.chapter.videoThumbUrl,
-                  ),
                   SizedBox(
                     height: 26,
                   ),
@@ -126,10 +129,9 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
                     height: 19,
                   ),
                 ],
-              )
-            : VideoPlayerLearningTracks(
-                videoUrl: widget.chapter.videoUrl,
-                thumbVideo: widget.chapter.videoThumbUrl,
-              ));
+              ),
+            )
+          ],
+        ));
   }
 }
