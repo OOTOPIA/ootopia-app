@@ -59,7 +59,8 @@ class _TransferScreenState extends State<TransferScreen> {
                                     radius: 12,
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width *
+                                    width: MediaQuery.of(context).size.width < 400 ? MediaQuery.of(context).size.width *
+                                        0.58 : MediaQuery.of(context).size.width *
                                         0.65,
                                     child: ProductInformationWidget(
                                       productModel: widget.productModel,
