@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 
 class WalletTransfer extends Equatable {
   String id;
@@ -17,6 +16,7 @@ class WalletTransfer extends Equatable {
   String? photoUrl;
   bool fromPlatform = false;
   dynamic dateTransaction;
+  String? description;
 
   WalletTransfer({
     required this.id,
@@ -34,6 +34,7 @@ class WalletTransfer extends Equatable {
     this.photoUrl,
     this.dateTransaction,
     required this.fromPlatform,
+    this.description
   }) {
     // this.dateTransaction =
     //     DateFormat('dd-MM-yyyy').format(DateTime.parse(createdAt));
@@ -59,6 +60,7 @@ class WalletTransfer extends Equatable {
       dateTransaction: json['dateTransaction'],
       fromPlatform:
           (json['fromPlatform'] == null ? false : json['fromPlatform']),
+      description: json['description']
     );
   }
 
@@ -79,5 +81,6 @@ class WalletTransfer extends Equatable {
         photoUrl,
         dateTransaction,
         fromPlatform,
+        description
       ];
 }
