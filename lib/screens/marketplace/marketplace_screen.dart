@@ -36,12 +36,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final widthScreen = MediaQuery.of(context).size.width;
     return RefreshIndicator(
       onRefresh: () async {
         marketplaceStore.productList.clear();
         marketplaceStore.currentPage = 1;
-        marketplaceStore.getData();
+        marketplaceStore.getProductList();
       },
       child: Scaffold(
         body: Observer(
@@ -62,6 +61,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                           bottom: 50,
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Wrap(
                               crossAxisAlignment: WrapCrossAlignment.start,
