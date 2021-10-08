@@ -18,10 +18,7 @@ class WatchVideoLeaningTracks extends StatefulWidget {
 class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
   @override
   Widget build(BuildContext context) {
-    var isPortrait = false;
-    setState(() {
-      isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    });
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       appBar: isPortrait
           ? AppBar(
