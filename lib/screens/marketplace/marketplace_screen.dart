@@ -25,13 +25,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     marketplaceStore.getProductList(
         limit: marketplaceStore.itemsPerPageCount, offset: 0);
     pageController = SmartPageController.getInstance();
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        if (_scrollController.position.pixels != 0) {
-          marketplaceStore.getData();
-        }
-      }
-    });
+    _scrollController.addListener(
+      () => marketplaceStore.updateOnScroll(_scrollController),
+    );
     super.initState();
   }
 
@@ -44,7 +40,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           builder: (context) {
             if (marketplaceStore.viewState == ViewState.error) {
               return TryAgain(
-                marketplaceStore.getData,
+                marketplaceStore.refreshData,
               );
             }
             return LoadingOverlay(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 
@@ -10,7 +12,11 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
   Future<List<ProductModel>> getProducts({int? limit, int? offset}) async {
     try {
       final response = await ApiClient.api().get("market-place",
-          queryParameters: {'limit': limit, 'offset': offset});
+          queryParameters: {
+            'limit': limit,
+            'offset': offset,
+            'locale': getLocale()
+          });
 
       if (response.statusCode == 200) {
         final List<ProductModel> productList = [];
@@ -27,4 +33,6 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
       throw Exception('Failed to load products $error');
     }
   }
+
+  String getLocale() => Platform.localeName == 'pt_BR' ? 'pt-BR' : 'en';
 }
