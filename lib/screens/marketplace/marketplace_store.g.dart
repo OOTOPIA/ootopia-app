@@ -85,6 +85,14 @@ mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
     return _$getDataAsyncAction.run(() => super.getData());
   }
 
+  final _$refreshDataAsyncAction =
+      AsyncAction('MarketplaceStoreBase.refreshData');
+
+  @override
+  Future<void> refreshData() {
+    return _$refreshDataAsyncAction.run(() => super.refreshData());
+  }
+
   @override
   String toString() {
     return '''

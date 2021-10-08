@@ -37,12 +37,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
-        marketplaceStore.productList.clear();
-        marketplaceStore.currentPage = 1;
-        marketplaceStore.viewState = ViewState.refresh;
-        marketplaceStore.getProductList();
-      },
+      onRefresh: () async => marketplaceStore.refreshData(),
       child: Scaffold(
         body: Observer(
           builder: (context) {

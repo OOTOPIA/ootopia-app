@@ -47,4 +47,12 @@ abstract class MarketplaceStoreBase with Store {
       offset: productList.length,
     );
   }
+
+  @action
+  Future<void> refreshData() async {
+    productList.clear();
+    currentPage = 1;
+    viewState = ViewState.refresh;
+    await getProductList();
+  }
 }
