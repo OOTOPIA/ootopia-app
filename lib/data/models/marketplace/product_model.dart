@@ -1,24 +1,3 @@
-//     required this.id,
-//     required this.title,
-//     required this.description,
-//     required this.photoUrl,
-//     required this.price,
-//     required this.userName,
-//     this.userEmail,
-//     this.userPhotoUrl,
-//     this.userPhoneNumber,
-//     this.userLocation,
-//   final int id;
-//   final String title;
-//   final String description;
-//   final String photoUrl;
-//   final double price;
-//   final String userName;
-//   final String? userEmail;
-//   final String? userPhotoUrl;
-//   final String? userPhoneNumber;
-//   final String? userLocation;
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_model.g.dart';
