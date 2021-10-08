@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class ProductItem extends StatelessWidget {
+  final SmartPageController controller;
   final ProductModel productModel;
-  const ProductItem({Key? key, required this.productModel}) : super(key: key);
+  const ProductItem({Key? key, required this.productModel, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class ProductItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: InkWell(
-        onTap: () => debugPrint('click'),
+        onTap: () => controller.insertPage(ProductDetailScreen(productModel: productModel, controller: controller,)),
         child: LayoutBuilder(
           builder: (context, constraints) {
             return Container(

@@ -37,9 +37,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         child: ProfileNameLocationWidget(
                           profileImageUrl:
-                              widget.productModel.userPhotoUrl ?? "",
+                              widget.productModel.userPhotoUrl,
                           profileName: widget.productModel.userName,
-                          location: widget.productModel.userLocation ?? "",
+                          location: widget.productModel.location,
                         ),
                       ),
                       Expanded(
@@ -47,7 +47,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             HorizontalExpandedImageWidget(
-                                urlImage: widget.productModel.photoUrl),
+                                urlImage: widget.productModel.imageUrl),
                             ProductInformationWidget(
                               productModel: widget.productModel,
                               isContractible: false,

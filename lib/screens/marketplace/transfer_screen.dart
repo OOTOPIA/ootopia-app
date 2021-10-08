@@ -42,9 +42,9 @@ class _TransferScreenState extends State<TransferScreen> {
                 child: Column(
                   children: <Widget>[
                     ProfileNameLocationWidget(
-                      profileImageUrl: widget.productModel.userPhotoUrl ?? "",
+                      profileImageUrl: widget.productModel.userPhotoUrl,
                       profileName: widget.productModel.userName,
-                      location: widget.productModel.userLocation ?? "",
+                      location: widget.productModel.location,
                     ),
                     Expanded(
                       child: Column(
@@ -57,7 +57,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   RoundedThumbnailImageWidget(
-                                    imageUrl: widget.productModel.photoUrl,
+                                    imageUrl: widget.productModel.imageUrl,
                                     radius: 12,
                                   ),
                                   Container(
