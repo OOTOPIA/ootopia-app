@@ -38,7 +38,7 @@ abstract class MarketplaceStoreBase with Store {
       print(productList.length);
       viewState = ViewState.done;
     } catch (error) {
-      throw UnimplementedError();
+      viewState = ViewState.error;
     }
   }
 

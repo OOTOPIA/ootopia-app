@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/components/try_again.dart';
 
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -42,6 +42,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       child: Scaffold(
         body: Observer(
           builder: (context) {
+            if (marketplaceStore.viewState == ViewState.error) {
+              return TryAgain(
+                marketplaceStore.getData,
+              );
+            }
             return LoadingOverlay(
               isLoading: marketplaceStore.viewState == ViewState.loading,
               child: Provider(
