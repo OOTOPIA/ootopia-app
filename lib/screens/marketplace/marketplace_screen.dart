@@ -55,7 +55,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   children: [
                     WalletBarWidget(
                         totalBalance: walletStore.wallet != null
-                            ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                            ? '${marketplaceStore.currencyFormatter.format(walletStore.wallet!.totalBalance)}'
                             : '0,00',
                         onTap: () => pageController.insertPage(WalletPage())),
                     MarketplaceBarWidget(),
