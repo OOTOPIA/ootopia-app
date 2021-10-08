@@ -8,7 +8,7 @@ import 'package:ootopia_app/screens/marketplace/components/product_information_w
 import 'package:ootopia_app/screens/marketplace/components/profile_name_location_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/rounded_thumbnail_image_widget.dart';
-import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
+import 'package:ootopia_app/screens/marketplace/transfer_store.dart';
 
 class TransferScreen extends StatefulWidget {
   final ProductModel productModel;
@@ -24,6 +24,8 @@ class _TransferScreenState extends State<TransferScreen> {
   TextEditingController messageOptional = TextEditingController();
   MarketplaceRepositoryImpl marketplaceRepositoryImpl =
       MarketplaceRepositoryImpl();
+  TransferStore transferStore = TransferStore();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(child: LayoutBuilder(
@@ -59,9 +61,16 @@ class _TransferScreenState extends State<TransferScreen> {
                                     radius: 12,
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width < 400 ? MediaQuery.of(context).size.width *
-                                        0.58 : MediaQuery.of(context).size.width *
-                                        0.65,
+                                    width:
+                                        MediaQuery.of(context).size.width < 400
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.58
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.65,
                                     child: ProductInformationWidget(
                                       productModel: widget.productModel,
                                       marginTopTitle: 0,
@@ -81,7 +90,7 @@ class _TransferScreenState extends State<TransferScreen> {
                           PurchaseButtonWidget(
                             title: AppLocalizations.of(context)!.confirm,
                             marginBottom: getAdaptiveSize(10, context),
-                            onPressed: makePurchase,
+                            onPressed: () => makePurchase(),
                           )
                         ],
                       ),
@@ -96,18 +105,14 @@ class _TransferScreenState extends State<TransferScreen> {
     )));
   }
 
-  Future<void> makePurchase() async {
-    final response = await marketplaceRepositoryImpl.makePurchase(
-        productId: "40accdaa-191a-4369-aa3a-54f50e2869de",
-        optionalMessage: messageOptional.text);
-
-    if (response)
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TransferSuccessScreen(),
-        ),
-      );
-    debugPrint("ERRO AO COMPRAR PRODUTO");
+  void makePurchase() {
+    try {
+      transferStore.makePurchase(
+          productId: widget.productModel.id,
+          optionalMessage: messageOptional.text);
+    } catch (e) {
+      transferStore.showSnackbarMessage(
+          context: context, message: e.toString());
+    }
   }
 }
