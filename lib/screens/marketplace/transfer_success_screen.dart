@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
+import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -80,7 +81,7 @@ class TransferSuccessScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(45.0),
                           )),
                       onPressed: () {
-                        if (goToWalletPage) controller.insertPage(WalletPage());
+                        if (goToWalletPage) controller.insertPage(MarketplaceScreen());
                         Navigator.pop(context);
                       },
                       child: Padding(

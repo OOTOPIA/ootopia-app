@@ -9,6 +9,7 @@ import 'package:ootopia_app/screens/marketplace/components/profile_name_location
 import 'package:ootopia_app/screens/marketplace/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/rounded_thumbnail_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_store.dart';
+import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 
 class TransferScreen extends StatefulWidget {
   final ProductModel productModel;
@@ -88,10 +89,9 @@ class _TransferScreenState extends State<TransferScreen> {
                             ],
                           ),
                           PurchaseButtonWidget(
-                            title: AppLocalizations.of(context)!.confirm,
-                            marginBottom: getAdaptiveSize(10, context),
-                            onPressed: () => makePurchase(),
-                          )
+                              title: AppLocalizations.of(context)!.confirm,
+                              marginBottom: getAdaptiveSize(10, context),
+                              onPressed: () => makePurchase()),
                         ],
                       ),
                     )
@@ -105,11 +105,14 @@ class _TransferScreenState extends State<TransferScreen> {
     )));
   }
 
-  void makePurchase() {
+  void makePurchase() async {
     try {
-      transferStore.makePurchase(
+      final response = await transferStore.makePurchase(
           productId: widget.productModel.id,
           optionalMessage: messageOptional.text);
+      if (response)
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => TransferSuccessScreen()));
     } catch (e) {
       transferStore.showSnackbarMessage(
           context: context, message: e.toString());
