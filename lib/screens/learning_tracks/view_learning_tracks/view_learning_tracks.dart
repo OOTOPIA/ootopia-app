@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 
 class ViewLearningTracksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -17,17 +18,18 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   @override
   Widget build(BuildContext context) {
     List<ChaptersModel> listChapters = widget.args['list_chapters'];
-    String description = widget.args['description'];
-    String title = widget.args['title'];
+    LearningTracksModel learningTracks = widget.args['learning_tracks'];
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(bottom: 24),
         child: SingleChildScrollView(
           child: Stack(
             children: [
-              Image.asset(
-                'assets/images/ootopia-learning-track.png',
+              Image.network(
+                learningTracks.imageUrl,
+                height: 162,
                 width: double.infinity,
+                fit: BoxFit.cover,
               ),
               Container(
                 margin: EdgeInsets.only(top: 120),
@@ -42,7 +44,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                           height: 24,
                         ),
                         Text(
-                          '$title',
+                          '${learningTracks.title}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -54,7 +56,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                           height: 18,
                         ),
                         Text(
-                          "$description",
+                          "${learningTracks.description}",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -63,7 +65,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
-                          height: 18,
+                          height: 16,
                         ),
                         Divider(
                           color: Colors.grey,
@@ -79,11 +81,18 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                               return InkWell(
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return WatchVideoLeaningTracks(
+                                      chapter: chapter,
+                                    );
+                                  }));
+                                },
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      height: 16.5,
+                                      height: 8,
                                     ),
                                     Row(
                                       children: [
@@ -196,7 +205,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                       ],
                                     ),
                                     SizedBox(
-                                      height: 16,
+                                      height: 8,
                                     ),
                                     index == listChapters.length - 1
                                         ? Container()

@@ -101,40 +101,43 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
               SizedBox(
                 height: 17,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
                       AppLocalizations.of(context)!.learningTracks,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
                       AppLocalizations.of(context)!.aboutLearningTracks,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               SizedBox(
-                height: 16,
+                height: 8,
               ),
               Divider(
                 color: Colors.grey,
               ),
               SizedBox(
-                height: 24,
+                height: 16,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24),
@@ -171,8 +174,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         onTap: () {
                           controller.insertPage(ViewLearningTracksScreen({
                             'list_chapters': learningTrack.chapters,
-                            'description': learningTrack.description,
-                            'title': learningTrack.title,
+                            'learning_tracks': learningTrack,
                           }));
                         },
                         child: Column(
@@ -180,11 +182,13 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                             Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(learningTrack.userPhotoUrl),
+                                  radius: 16,
+                                  backgroundImage: NetworkImage(
+                                    learningTrack.userPhotoUrl,
+                                  ),
                                 ),
                                 SizedBox(
-                                  width: 16,
+                                  width: 8,
                                 ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,9 +200,6 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 0,
                                     ),
                                     Visibility(
                                       visible:
@@ -217,13 +218,13 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                               ],
                             ),
                             SizedBox(
-                              height: 13,
+                              height: 8,
                             ),
                             Stack(
                               children: [
                                 Container(
-                                  width: 370,
-                                  height: 210,
+                                  width: double.infinity,
+                                  height: 200,
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12)),
@@ -252,13 +253,15 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Positioned(
                                   bottom: 0,
                                   child: Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.84,
                                     padding: const EdgeInsets.only(
                                         bottom: 16.0, left: 16),
                                     child: Text(
                                       learningTrack.title,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -341,7 +344,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                               color: Colors.grey,
                             ),
                             SizedBox(
-                              height: 24,
+                              height: 16,
                             ),
                           ],
                         ),

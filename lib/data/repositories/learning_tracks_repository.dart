@@ -38,6 +38,7 @@ class LearningTracksRepositoryImpl
         'offset': offset,
         'locale': locale,
       });
+      print(response);
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((i) => LearningTracksModel.fromJson(i))
