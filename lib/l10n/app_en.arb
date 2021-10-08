@@ -381,6 +381,7 @@
     "nextAboutQuiz":"In the next app update, you will have access to quizzes right after watching Learning Tracks. This is an excellent way to consolidate what you've learned.",
     "quiz":"Quiz",
     "pictureByMikaBaumeister":"Picture by Mika Baumeister",
+    "completed": "completed",
     "@helloWorld": {
         "description": "A programmer greeting"
     }

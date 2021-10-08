@@ -3,19 +3,48 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_player_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import '../../../data/repositories/learning_tracks_repository.dart';
 
 class WatchVideoLeaningTracks extends StatefulWidget {
   final ChaptersModel chapter;
-  WatchVideoLeaningTracks({required this.chapter});
+  final LearningTracksModel? learningTrack;
+  Function updateStatusVideoChapter;
+
+  WatchVideoLeaningTracks({
+    required this.chapter,
+    this.learningTrack,
+    required this.updateStatusVideoChapter,
+  });
   @override
   _WatchVideoLeaningTracksState createState() =>
       _WatchVideoLeaningTracksState();
 }
 
 class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
+  LearningTracksRepositoryImpl learningTracksRepositoryImpl =
+      LearningTracksRepositoryImpl();
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  updateStatusVideo() {
+    if (widget.chapter.completed != true) {
+      setState(() {
+        widget.chapter.completed = true;
+        // learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
+        //   widget.learningTrack!.id,
+        //   widget.chapter.id,
+        // );
+        widget.updateStatusVideoChapter();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
@@ -68,6 +97,7 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
         videoUrl: widget.chapter.videoUrl,
         thumbVideo: widget.chapter.videoThumbUrl,
         viewQuiz: viewButtonQuiz(isPortrait),
+        updateStatusVideo: updateStatusVideo,
       ),
     );
   }

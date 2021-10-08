@@ -17,6 +17,7 @@ class LearningTracksModel {
   String imageUrl;
   double ooz;
   String? location;
+  bool? completed;
 
   LearningTracksModel({
     required this.id,
@@ -31,6 +32,7 @@ class LearningTracksModel {
     required this.ooz,
     required this.time,
     required this.location,
+    this.completed,
   });
 
   factory LearningTracksModel.fromJson(Map<String, dynamic> json) =>
