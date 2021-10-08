@@ -15,6 +15,7 @@ class ViewLearningTracksScreen extends StatefulWidget {
 
 class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
   @override
   Widget build(BuildContext context) {
     List<ChaptersModel> listChapters = widget.args['list_chapters'];
