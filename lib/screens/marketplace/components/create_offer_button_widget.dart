@@ -22,19 +22,20 @@ class CreateOfferButtonWidget extends StatelessWidget {
           builder: (context, constraints) {
             return Column(
               children: [
-                SizedBox(height: widthScreen <= 320 ? 35.6 : 43.6),
+                SizedBox(height: widthScreen <= 320 ? 36.6 : 44.6),
                 DottedBorder(
                   strokeCap: StrokeCap.square,
                   dashPattern: [10, 10],
                   borderType: BorderType.RRect,
                   radius: Radius.circular(12),
+                  padding: EdgeInsets.all(0),
                   child: Container(
                     height: widthScreen >= 760
-                        ? (constraints.maxWidth / 4) - 25
-                        : (constraints.maxWidth / 2) - 25,
+                        ? (constraints.maxWidth / 4) - 24
+                        : (constraints.maxWidth / 2) - 24,
                     width: widthScreen >= 760
-                        ? (constraints.maxWidth / 4) - 25
-                        : (constraints.maxWidth / 2) - 25,
+                        ? (constraints.maxWidth / 4) - 24
+                        : (constraints.maxWidth / 2) - 24,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
