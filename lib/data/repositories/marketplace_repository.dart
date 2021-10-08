@@ -5,10 +5,6 @@ abstract class MarketplaceRepository {
   Future<List<ProductModel>> getProducts({int? limit, int? offset});
 }
 
-const Map<String, String> API_HEADERS = {
-  'Content-Type': 'application/json; charset=UTF-8'
-};
-
 class MarketplaceRepositoryImpl implements MarketplaceRepository {
   @override
   Future<List<ProductModel>> getProducts({int? limit, int? offset}) async {
