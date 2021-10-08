@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:provider/provider.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductModel productModel;
@@ -9,6 +11,7 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final marketplaceStore = Provider.of<MarketplaceStore>(context);
     final widthScreen = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -110,7 +113,8 @@ class ProductItem extends StatelessWidget {
                       ),
                       SizedBox(width: 7),
                       Text(
-                        '${productModel.price}',
+                        marketplaceStore.currencyFormatter
+                            .format(productModel.price),
                         style: TextStyle(color: LightColors.grey),
                       ),
                     ],

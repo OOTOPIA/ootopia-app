@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
@@ -25,6 +26,8 @@ abstract class MarketplaceStoreBase with Store {
 
   @observable
   var hasMoreItems = true;
+
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   @action
   Future<void> getProductList({int? limit, int? offset}) async {

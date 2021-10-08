@@ -7,6 +7,7 @@ import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class MarketplaceScreen extends StatefulWidget {
@@ -43,48 +44,53 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           builder: (context) {
             return LoadingOverlay(
               isLoading: marketplaceStore.viewState == ViewState.loading,
-              child: Column(
-                children: [
-                  WalletBarWidget(
-                      onTap: () => pageController.insertPage(WalletPage())),
-                  MarketplaceBarWidget(),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: 8.0,
-                          bottom: 50,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              direction: Axis.horizontal,
-                              runSpacing: 24,
-                              children: [
-                                ...productList(marketplaceStore.productList),
-                                Visibility(
-                                  visible: marketplaceStore.viewState !=
-                                          ViewState.loading &&
-                                      marketplaceStore.viewState !=
-                                          ViewState.refresh,
-                                  child: CreateOfferButtonWidget(onTap: () {}),
-                                ),
-                              ],
-                            ),
-                            Visibility(
-                              visible: marketplaceStore.viewState ==
-                                  ViewState.loadingNewData,
-                              child: Center(child: CircularProgressIndicator()),
-                            ),
-                          ],
+              child: Provider(
+                create: (_) => marketplaceStore,
+                child: Column(
+                  children: [
+                    WalletBarWidget(
+                        onTap: () => pageController.insertPage(WalletPage())),
+                    MarketplaceBarWidget(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: 8.0,
+                            bottom: 50,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                direction: Axis.horizontal,
+                                runSpacing: 24,
+                                children: [
+                                  ...productList(marketplaceStore.productList),
+                                  Visibility(
+                                    visible: marketplaceStore.viewState !=
+                                            ViewState.loading &&
+                                        marketplaceStore.viewState !=
+                                            ViewState.refresh,
+                                    child:
+                                        CreateOfferButtonWidget(onTap: () {}),
+                                  ),
+                                ],
+                              ),
+                              Visibility(
+                                visible: marketplaceStore.viewState ==
+                                    ViewState.loadingNewData,
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
