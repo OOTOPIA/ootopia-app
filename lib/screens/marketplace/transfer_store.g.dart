@@ -1,0 +1,28 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'transfer_store.dart';
+
+// **************************************************************************
+// StoreGenerator
+// **************************************************************************
+
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+
+mixin _$TransferStore on _TransferStoreBase, Store {
+  final _$makePurchaseAsyncAction =
+      AsyncAction('_TransferStoreBase.makePurchase');
+
+  @override
+  Future<bool> makePurchase(
+      {required String productId, required String optionalMessage}) {
+    return _$makePurchaseAsyncAction.run(() => super
+        .makePurchase(productId: productId, optionalMessage: optionalMessage));
+  }
+
+  @override
+  String toString() {
+    return '''
+
+    ''';
+  }
+}
