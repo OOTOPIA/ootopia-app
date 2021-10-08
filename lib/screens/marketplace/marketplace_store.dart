@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
@@ -34,8 +35,8 @@ abstract class MarketplaceStoreBase with Store {
     try {
       final List<ProductModel> response = await _marketplaceRepository
           .getProducts(limit: limit, offset: offset);
+      hasMoreItems = response.length == itemsPerPageCount;
       productList.addAll(response);
-      print(productList.length);
       viewState = ViewState.done;
     } catch (error) {
       viewState = ViewState.error;
@@ -57,5 +58,13 @@ abstract class MarketplaceStoreBase with Store {
     currentPage = 1;
     viewState = ViewState.refresh;
     await getProductList();
+  }
+
+  void updateOnScroll(ScrollController scrollController) {
+    if (scrollController.position.atEdge) {
+      if (scrollController.position.pixels != 0) {
+        if (hasMoreItems) getData();
+      }
+    }
   }
 }
