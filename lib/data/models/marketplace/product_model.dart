@@ -11,10 +11,10 @@ class ProductModel {
   final String description;
   final String locale;
   final String imageUrl;
-  final String imageUpdatedAt;
+  final String? imageUpdatedAt;
   final double price;
   final String location;
-  final String deletedAt;
+  final String? deletedAt;
   final String createdAt;
   final String updatedAt;
   final String userName;
