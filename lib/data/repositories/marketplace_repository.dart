@@ -1,19 +1,15 @@
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class MarketplaceRepository {
   Future<List<ProductModel>> getProducts({int? limit, int? offset});
-  Future<Map<String, String>> getHeaders();
 }
 
 const Map<String, String> API_HEADERS = {
   'Content-Type': 'application/json; charset=UTF-8'
 };
 
-class MarketplaceRepositoryImpl
-    with SecureStoreMixin
-    implements MarketplaceRepository {
+class MarketplaceRepositoryImpl implements MarketplaceRepository {
   @override
   Future<List<ProductModel>> getProducts({int? limit, int? offset}) async {
     try {
@@ -34,20 +30,5 @@ class MarketplaceRepositoryImpl
     } catch (error) {
       throw Exception('Failed to load products $error');
     }
-  }
-
-  @override
-  Future<Map<String, String>> getHeaders() async {
-    bool loggedIn = await getUserIsLoggedIn();
-    if (!loggedIn) {
-      return API_HEADERS;
-    }
-    String? token = await getAuthToken();
-    if (token == null) return API_HEADERS;
-
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + token
-    };
   }
 }
