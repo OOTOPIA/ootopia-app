@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/horizontal_expanded_image_widget.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/product_information_widget.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/profile_name_location_widget.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/purchase_button_widget.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/transfer_screen.dart';
+import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
+import 'package:ootopia_app/screens/marketplace/components/horizontal_expanded_image_widget.dart';
+import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
+import 'package:ootopia_app/screens/marketplace/components/profile_name_location_widget.dart';
+import 'package:ootopia_app/screens/marketplace/components/purchase_button_widget.dart';
+import 'package:ootopia_app/screens/marketplace/transfer_screen.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

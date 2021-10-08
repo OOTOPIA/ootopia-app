@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
+import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class ProductInformationWidget extends StatefulWidget {

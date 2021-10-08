@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/transfer_success_screen.dart';
+import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
 

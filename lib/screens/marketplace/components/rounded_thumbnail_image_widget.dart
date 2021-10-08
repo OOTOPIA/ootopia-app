@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail/components/get_adaptive_size.dart';
+import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 
 class RoundedThumbnailImageWidget extends StatelessWidget {
   final double width, height, radius;
