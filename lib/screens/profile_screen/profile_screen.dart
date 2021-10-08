@@ -465,6 +465,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       isLoggedInUserProfile
                           ? WalletBarWidget(
+                              totalBalance: walletStore.wallet != null
+                                  ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                  : '0,00',
                               onTap: () => controller.insertPage(WalletPage()))
                           : Container(),
                       SizedBox(
