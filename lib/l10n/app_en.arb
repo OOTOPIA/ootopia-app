@@ -386,6 +386,8 @@
     "messageVendorContact": "The vendor will soon contact you by email to arrange delivery of your purchase.",
     "messageOptional": "Message - Optional",
     "purchaseNow": "Purchase Now",
-    "marketPlaceTransfer": "Marketplace Transfer"
+    "marketPlaceTransfer": "Marketplace Transfer",
+    "insufficientBalance": "It was not possible to complete the purchase because your balance is insufficient.",
+    "generalError": "Unable to perform the operation."
     
 }
