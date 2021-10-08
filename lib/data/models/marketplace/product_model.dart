@@ -33,7 +33,7 @@ class ProductModel {
   final String locale;
   final String imageUrl;
   final String imageUpdatedAt;
-  final String price;
+  final double price;
   final String location;
   final String deletedAt;
   final String createdAt;

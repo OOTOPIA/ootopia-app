@@ -16,7 +16,7 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
     locale: json['locale'] as String,
     imageUrl: json['imageUrl'] as String,
     imageUpdatedAt: json['imageUpdatedAt'] as String,
-    price: json['price'] as String,
+    price: (json['price'] as num).toDouble(),
     location: json['location'] as String,
     deletedAt: json['deletedAt'] as String,
     createdAt: json['createdAt'] as String,
