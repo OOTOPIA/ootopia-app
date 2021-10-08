@@ -8,7 +8,7 @@ class HorizontalExpandedImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getAdaptiveSize(MediaQuery.of(context).size.height * 0.5, context),
+      height: getAdaptiveSize(MediaQuery.of(context).size.width > 720 ? MediaQuery.of(context).size.height * 0.3 : MediaQuery.of(context).size.height * 0.5, context),
       width: double.infinity,
       child: ClipRRect(
         child: FittedBox(

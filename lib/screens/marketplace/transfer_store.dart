@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 
 part 'transfer_store.g.dart';
 
@@ -32,9 +33,9 @@ abstract class _TransferStoreBase with Store {
       {required BuildContext context, required String message}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message.contains("INSUFFICIENT_BALANCE")
+        content: Text(message.contains("INSUFFICIENT_BALANCE",)
             ? AppLocalizations.of(context)!.insufficientBalance
-            : AppLocalizations.of(context)!.generalError),
+            : AppLocalizations.of(context)!.generalError, style: TextStyle(fontSize: getAdaptiveSize(14, context)),),
         backgroundColor: Colors.red,
       ),
     );

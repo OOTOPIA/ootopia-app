@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
+import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class ProductInformationWidget extends StatefulWidget {
@@ -23,6 +24,8 @@ class ProductInformationWidget extends StatefulWidget {
 
 class _ProductInformationWidgetState extends State<ProductInformationWidget> {
   bool expands = false;
+  final marketplaceStore = MarketplaceStore();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,8 +37,9 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
         children: [
           Container(
             margin: EdgeInsets.only(
-                top: getAdaptiveSize(widget.marginTopTitle, context),
-                bottom: getAdaptiveSize(12, context)),
+              top: getAdaptiveSize(widget.marginTopTitle, context),
+              bottom: getAdaptiveSize(12, context),
+            ),
             child: Text(
               widget.productModel.title,
               style: TextStyle(
@@ -58,7 +62,8 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                 Padding(
                   padding:
                       EdgeInsets.only(left: getAdaptiveSize(7.99, context)),
-                  child: Text(widget.productModel.price.toString(),
+                  child: Text( marketplaceStore.currencyFormatter
+                            .format(widget.productModel.price),
                       style: TextStyle(
                           fontSize: getAdaptiveSize(14, context),
                           fontWeight: FontWeight.bold,
