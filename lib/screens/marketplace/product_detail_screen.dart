@@ -36,8 +36,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           left: getAdaptiveSize(26, context),
                         ),
                         child: ProfileNameLocationWidget(
-                          profileImageUrl:
-                              widget.productModel.userPhotoUrl,
+                          profileImageUrl: widget.productModel.userPhotoUrl,
                           profileName: widget.productModel.userName,
                           location: widget.productModel.location,
                         ),
@@ -58,7 +57,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 26),
                         child: PurchaseButtonWidget(
-                          title: AppLocalizations.of(context)!.purchaseNow,
+                          content: Text(
+                            AppLocalizations.of(context)!.purchaseNow,
+                            style: TextStyle(
+                                fontSize: getAdaptiveSize(16, context)),
+                          ),
                           marginBottom: getAdaptiveSize(10, context),
                           onPressed: () {
                             pageController.insertPage(TransferScreen(

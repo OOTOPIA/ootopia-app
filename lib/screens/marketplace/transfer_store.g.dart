@@ -9,6 +9,21 @@ part of 'transfer_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$TransferStore on _TransferStoreBase, Store {
+  final _$isLoadingAtom = Atom(name: '_TransferStoreBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   final _$makePurchaseAsyncAction =
       AsyncAction('_TransferStoreBase.makePurchase');
 
@@ -22,7 +37,7 @@ mixin _$TransferStore on _TransferStoreBase, Store {
   @override
   String toString() {
     return '''
-
+isLoading: ${isLoading}
     ''';
   }
 }

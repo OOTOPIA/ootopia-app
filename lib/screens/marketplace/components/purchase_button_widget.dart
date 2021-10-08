@@ -3,10 +3,10 @@ import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dar
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class PurchaseButtonWidget extends StatelessWidget {
-  final String title;
+  final Widget content;
   final Function() onPressed;
   final double marginBottom;
-  const PurchaseButtonWidget({required this.title, this.marginBottom = 0, required this.onPressed});
+  const PurchaseButtonWidget({required this.content, this.marginBottom = 0, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,7 @@ class PurchaseButtonWidget extends StatelessWidget {
               onPressed: onPressed,
               child: Padding(
                 padding:  EdgeInsets.symmetric(vertical: getAdaptiveSize(15, context)),
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: getAdaptiveSize(16, context)),
-                ),
+                child: content
               ),
               style: ElevatedButton.styleFrom(
                 primary: LightColors.blue,

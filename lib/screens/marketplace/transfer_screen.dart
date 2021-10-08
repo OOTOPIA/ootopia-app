@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
@@ -23,87 +25,115 @@ class TransferScreen extends StatefulWidget {
 
 class _TransferScreenState extends State<TransferScreen> {
   final messageOptional = TextEditingController();
-  final marketplaceRepositoryImpl =
-      MarketplaceRepositoryImpl();
+  final marketplaceRepositoryImpl = MarketplaceRepositoryImpl();
   final transferStore = TransferStore();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SafeArea(child: LayoutBuilder(
-      builder: (context, constraint) {
-        return Container(
-          margin: EdgeInsets.only(
-            right: getAdaptiveSize(26, context),
-            left: getAdaptiveSize(26, context),
-          ),
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraint.maxHeight),
-              child: IntrinsicHeight(
-                child: Column(
-                  children: <Widget>[
-                    ProfileNameLocationWidget(
-                      profileImageUrl: widget.productModel.userPhotoUrl,
-                      profileName: widget.productModel.userName,
-                      location: widget.productModel.location,
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
+    return Scaffold(
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraint) {
+            return Container(
+              margin: EdgeInsets.only(
+                right: getAdaptiveSize(26, context),
+                left: getAdaptiveSize(26, context),
+              ),
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: <Widget>[
+                        ProfileNameLocationWidget(
+                          profileImageUrl: widget.productModel.userPhotoUrl,
+                          profileName: widget.productModel.userName,
+                          location: widget.productModel.location,
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                              Column(
                                 children: [
-                                  RoundedThumbnailImageWidget(
-                                    imageUrl: widget.productModel.imageUrl,
-                                    radius: 12,
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      RoundedThumbnailImageWidget(
+                                        imageUrl: widget.productModel.imageUrl,
+                                        radius: 12,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width <
+                                                    400
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.58
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.65,
+                                        child: ProductInformationWidget(
+                                          productModel: widget.productModel,
+                                          marginTopTitle: 0,
+                                          marginBottom:
+                                              getAdaptiveSize(32, context),
+                                          marginLeft:
+                                              getAdaptiveSize(16, context),
+                                          marginRight: 0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width < 400
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.58
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.65,
-                                    child: ProductInformationWidget(
-                                      productModel: widget.productModel,
-                                      marginTopTitle: 0,
-                                      marginBottom:
-                                          getAdaptiveSize(32, context),
-                                      marginLeft: getAdaptiveSize(16, context),
-                                      marginRight: 0,
-                                    ),
+                                  MessageOptionalWidget(
+                                    messageController: messageOptional,
                                   ),
                                 ],
                               ),
-                              MessageOptionalWidget(
-                                messageController: messageOptional,
-                              ),
+                              Observer(builder: (context) {
+                                return PurchaseButtonWidget(
+                                    content: transferStore.isLoading
+                                        ? loadingWidget()
+                                        : Text(
+                                            AppLocalizations.of(context)!
+                                                .confirm,
+                                            style: TextStyle(
+                                                fontSize: getAdaptiveSize(
+                                                    16, context)),
+                                          ),
+                                    marginBottom: getAdaptiveSize(10, context),
+                                    onPressed: () => makePurchase());
+                              }),
                             ],
                           ),
-                          PurchaseButtonWidget(
-                              title: AppLocalizations.of(context)!.confirm,
-                              marginBottom: getAdaptiveSize(10, context),
-                              onPressed: () => makePurchase()),
-                        ],
-                      ),
-                    )
-                  ],
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      },
-    )));
+            );
+          },
+        ),
+      ),
+    );
   }
+
+  Widget loadingWidget() => Container(
+        height: 20,
+        width: 20,
+        child: Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.transparent,
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
+      );
 
   void makePurchase() async {
     try {
