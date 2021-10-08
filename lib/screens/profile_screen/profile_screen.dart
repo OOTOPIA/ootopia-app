@@ -115,11 +115,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  _goToWalletPage() => Navigator.pushNamed(
-        context,
-        PageRoute.Page.profile.route,
-      );
-
   bool get isLoggedInUserProfile {
     return authStore.currentUser == null
         ? false
