@@ -75,7 +75,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                       productModel: widget.productModel,
                                       marginTopTitle: 0,
                                       marginBottom:
-                                          getAdaptiveSize(24, context),
+                                          getAdaptiveSize(32, context),
                                       marginLeft: getAdaptiveSize(16, context),
                                       marginRight: 0,
                                     ),
