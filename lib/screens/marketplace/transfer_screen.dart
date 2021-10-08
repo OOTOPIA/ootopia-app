@@ -8,7 +8,6 @@ import 'package:ootopia_app/screens/marketplace/components/product_information_w
 import 'package:ootopia_app/screens/marketplace/components/profile_name_location_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/rounded_thumbnail_image_widget.dart';
-import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_store.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 

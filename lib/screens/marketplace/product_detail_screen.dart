@@ -10,14 +10,14 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final SmartPageController controller;
   final ProductModel productModel;
-  ProductDetailScreen({required this.productModel, required this.controller});
+  ProductDetailScreen({required this.productModel});
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  final pageController = SmartPageController.getInstance();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +61,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           title: AppLocalizations.of(context)!.purchaseNow,
                           marginBottom: getAdaptiveSize(10, context),
                           onPressed: () {
-                            widget.controller.insertPage(TransferScreen(
+                            pageController.insertPage(TransferScreen(
                               productModel: widget.productModel,
                             ));
                           },

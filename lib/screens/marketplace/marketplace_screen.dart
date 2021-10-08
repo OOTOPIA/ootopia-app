@@ -101,5 +101,5 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   }
 
   List<Widget> productList(List<dynamic> list) =>
-      list.map((product) => ProductItem(productModel: product, controller: pageController,)).toList();
+      list.map((product) => ProductItem(productModel: product)).toList();
 }
