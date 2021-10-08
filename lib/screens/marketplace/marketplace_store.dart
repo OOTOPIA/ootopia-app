@@ -7,7 +7,7 @@ part 'marketplace_store.g.dart';
 
 class MarketplaceStore = MarketplaceStoreBase with _$MarketplaceStore;
 
-enum ViewState { loading, error, done, loadingNewData }
+enum ViewState { loading, error, done, loadingNewData, refresh }
 
 abstract class MarketplaceStoreBase with Store {
   final _marketplaceRepository = MarketplaceRepositoryImpl();

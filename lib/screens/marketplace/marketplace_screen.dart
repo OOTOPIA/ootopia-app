@@ -40,6 +40,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       onRefresh: () async {
         marketplaceStore.productList.clear();
         marketplaceStore.currentPage = 1;
+        marketplaceStore.viewState = ViewState.refresh;
         marketplaceStore.getProductList();
       },
       child: Scaffold(
@@ -72,7 +73,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 Visibility(
                                   visible: marketplaceStore.viewState !=
                                           ViewState.loading &&
-                                      marketplaceStore.productList.isNotEmpty,
+                                      marketplaceStore.viewState !=
+                                          ViewState.refresh,
                                   child: CreateOfferButtonWidget(onTap: () {}),
                                 ),
                               ],
