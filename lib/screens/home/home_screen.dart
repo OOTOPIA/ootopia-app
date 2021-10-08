@@ -321,6 +321,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   case PageViewController.TAB_INDEX_TIMELINE:
                     controller.resetNavigation();
                     break;
+                  case PageViewController.TAB_INDEX_LEARNING_TRACKS:
+                    if (authStore.currentUser == null) {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                        arguments: {
+                          "returnToPageWithArgs": {
+                            "currentPageName": "wallet",
+                            "arguments": null
+                          }
+                        },
+                      );
+                      result = false;
+                    }
+                    break;
                   case PageViewController.TAB_INDEX_CAMERA:
                     if (authStore.currentUser == null) {
                       Navigator.of(context).pushNamed(
@@ -341,7 +355,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   case PageViewController.TAB_INDEX_MARKETPLACE:
                     print("caiu 1");
                     if (authStore.currentUser == null) {
-                      print("caiu 2");
                       Navigator.of(context).pushNamed(
                         PageRoute.Page.loginScreen.route,
                         arguments: {

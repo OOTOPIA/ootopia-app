@@ -10,6 +10,7 @@ class GlobalConstants extends InheritedWidget {
   const GlobalConstants({required Widget child, Key? key})
       : super(key: key, child: child);
 
+  final double smallIntermediateSpacing = 12;
   final double spacingSmall = 8;
   final double spacingNormal = 16;
   final double intermediateSpacing = 24;
@@ -23,7 +24,7 @@ class GlobalConstants extends InheritedWidget {
   InputDecoration loginInputTheme(String labelText) {
     return InputDecoration(
         counterText: "",
-        labelText: labelText,
+        labelText: labelText.isNotEmpty ? labelText : null,
         labelStyle: GoogleFonts.roboto(
             color: LightColors.lightGrey, fontWeight: FontWeight.w500),
         floatingLabelBehavior: FloatingLabelBehavior.never,

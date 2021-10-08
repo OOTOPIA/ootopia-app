@@ -26,9 +26,13 @@ enum Page {
   chatWithUsersScreen,
   invitationScreen,
   insertInvitationCode,
+  termsOfUseScreen,
+  privacyPolicyScreen,
   editProfileScreen,
   newFutureCategories,
   viewLearningTracksScreen,
+  aboutQuizScreen,
+  videoLearningTracksScreen,
 }
 
 extension PageRoute on Page {

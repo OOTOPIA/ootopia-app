@@ -14,17 +14,36 @@ abstract class LearningTracksStoreBase with Store {
   var allLearningTracks = <LearningTracksModel>[];
 
   @observable
+  bool isLoading = false;
+
+  @observable
   LearningTracksModel? getLastLearningTracks;
   @action
-  Future<void> listLearningTracks([int? limit, int? offset]) async {
+  Future<void> listLearningTracks({
+    int? limit,
+    int? offset,
+    required String locale,
+  }) async {
+    isLoading = true;
+    String lang = "en";
+    if (locale.startsWith('pt')) {
+      lang = 'pt-BR';
+    }
+
     var response = await _learningTracksRepositoryImpl.listLearningTracks(
-        limit: limit, offset: offset);
+        limit: limit, offset: offset, locale: lang);
     allLearningTracks.addAll(response);
+    isLoading = false;
   }
 
   @action
-  Future<void> lastLearningTracks() async {
-    var response = await _learningTracksRepositoryImpl.lastLearningTracks();
+  Future<void> lastLearningTracks({required String locale}) async {
+    String lang = "en";
+    if (locale.startsWith('pt')) {
+      lang = 'pt-BR';
+    }
+    var response =
+        await _learningTracksRepositoryImpl.lastLearningTracks(locale: lang);
     getLastLearningTracks = response;
   }
 }

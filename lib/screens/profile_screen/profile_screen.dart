@@ -17,7 +17,6 @@ import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
 //Files
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';

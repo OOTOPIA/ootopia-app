@@ -1,299 +1,388 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/utils/circle-painter.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:provider/provider.dart';
 import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
+import 'register_second_phase/register_second_phase_controller.dart';
+
 class RegisterPhase2Page extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
   RegisterPhase2Page([this.args]);
   @override
   _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
 }
 
-class _RegisterPhase2PageState extends State<RegisterPhase2Page>
-    with SecureStoreMixin {
-  final TextEditingController _dayController = TextEditingController();
-  final TextEditingController _monthController = TextEditingController();
-  final TextEditingController _yearController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  File? _image;
-  final picker = ImagePicker();
-  User? user;
-  String birthdateValidationErrorMessage = "";
+class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-
-  Future getLoggedUser() async {
-    setState(() {
-      getCurrentUser().then((value) {
-        user = value;
-      });
-    });
-  }
-
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (user != null && pickedFile != null) {
-        _image = File(pickedFile.path);
-        user!.photoFilePath = pickedFile.path;
-      }
-    });
-  }
-
-  bool _birthdateIsValid() {
-    try {
-      DateTime now = DateTime.now();
-      int day = int.parse(_dayController.text);
-      int month = int.parse(_monthController.text);
-      int year = int.parse(_yearController.text);
-      return _yearController.text.length == 4 &&
-          day <= 31 &&
-          month <= 12 &&
-          year >= 1900 &&
-          year < now.year;
-    } catch (error) {
-      return false;
-    }
-  }
+  late AuthStore authStore;
+  RegisterSecondPhaseController controller =
+      RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    getLoggedUser();
     this.trackingEvents.signupStartedSignupPartII();
   }
+
+  setAuthStoreToController() {
+    if (controller.user == null) {
+      controller.authStore = authStore;
+      controller.user = authStore.currentUser;
+    }
+  }
+
+  get appBar => AppBar(
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 34,
+          ),
+        ),
+        toolbarHeight: 45,
+        elevation: 2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        brightness: Brightness.light,
+        leading: Padding(
+          padding: EdgeInsets.only(
+            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
+          ),
+          child: InkWell(
+              onTap: () => Navigator.of(context).pop(),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        FeatherIcons.arrowLeft,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.back,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ))),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
+    authStore = Provider.of<AuthStore>(context);
+    setAuthStoreToController();
+
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/login_bg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(
-                      GlobalConstants.of(context).spacingMedium,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+      appBar: appBar,
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: GlobalConstants.of(context).screenHorizontalSpace),
+        child: Form(
+          key: controller.formKey,
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/white_logo.png',
-                              height: GlobalConstants.of(context).logoHeight,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingNormal,
-                          ),
+                        SizedBox(
+                          height: 33,
                         ),
                         Center(
-                          child: SizedBox(
-                            width: 140,
-                            height: 140,
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width: 140,
-                                  height: 140,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      getImage();
-                                    },
-                                    child: CustomPaint(
-                                      painter: CirclePainter(),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(3.0),
-                                        child: _image == null
-                                            ? Image.asset(
-                                                'assets/icons/profile_large.png',
-                                                width: 36,
-                                              )
-                                            : CircleAvatar(
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          300),
-                                                  child: Image.file(
-                                                    _image!,
-                                                    fit: BoxFit.cover,
-                                                    width: 140,
-                                                    height: 140,
-                                                  ),
-                                                ),
-                                                radius: 300,
-                                              ),
-                                      ),
-                                    ),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 30.0),
+                                child: Container(
+                                  decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
                                   ),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: SizedBox(
-                                    width: 36,
-                                    height: 36,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white),
-                                      child: CustomPaint(
-                                        painter: CirclePainter(),
-                                        child: IconButton(
-                                          icon: SvgPicture.asset(
-                                              'assets/icons/add_without_border.svg'),
-                                          color: Colors.white,
-                                          onPressed: () {
-                                            getImage();
-                                          },
+                                  child: controller.image == null
+                                      ? CircleAvatar(
+                                          radius: 57,
+                                          backgroundImage: AssetImage(
+                                              'assets/images/empty_photo_profile.png'),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 57,
+                                          backgroundImage: Image.file(
+                                            controller.image!,
+                                            fit: BoxFit.cover,
+                                          ).image,
                                         ),
-                                      ),
-                                    ),
-                                  ),
                                 ),
-                              ],
+                              ),
+                              Positioned(
+                                  bottom: 7,
+                                  right: 37,
+                                  child: InkWell(
+                                    onTap: () {
+                                      controller
+                                          .getImage(() => setState(() {}));
+                                    },
+                                    child: Container(
+                                      decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: new Border.all(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.4),
+                                            spreadRadius: 1,
+                                            blurRadius: 6,
+                                            offset: Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: CircleAvatar(
+                                          backgroundColor: Color(0xff03DAC5),
+                                          radius: 20,
+                                          child: Icon(
+                                            Icons.camera_alt_outlined,
+                                            size: 22,
+                                            color: Colors.white,
+                                          )),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 22,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(AppLocalizations.of(context)!.bio,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Color(0xff7F7F7F),
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        SizedBox(
+                          height: 7,
+                        ),
+                        TextFormField(
+                            controller: controller.bioController,
+                            maxLines: 5,
+                            decoration: GlobalConstants.of(context)
+                                .loginInputTheme(
+                                    AppLocalizations.of(context)!.bio)
+                                .copyWith(alignLabelWithHint: true)),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                AppLocalizations.of(context)!.mobilePhone,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color(0xff7F7F7F),
+                                    fontWeight: FontWeight.w500))),
+                        SizedBox(
+                          height: 7,
+                        ),
+                        InternationalPhoneNumberInput(
+                          onInputChanged: (PhoneNumber number) {
+                            setState(() {
+                              controller.countryCode =
+                                  number.isoCode.toString();
+                            });
+                            controller.getPhoneNumber(
+                                number.toString(), number.isoCode.toString());
+                          },
+                          onInputValidated: (bool value) {
+                            setState(() {
+                              controller.validCellPhone = !value;
+                            });
+                          },
+                          selectorConfig: SelectorConfig(
+                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                            leadingPadding: 18,
+                            trailingSpace: false,
+                          ),
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.contains('+')) {
+                              return AppLocalizations.of(context)!
+                                  .mobilephoneToExperience;
+                            } else if (controller.validCellPhone) {
+                              return AppLocalizations.of(context)!
+                                  .insertValidCellPhone;
+                            }
+                            return null;
+                          },
+                          textFieldController: controller.cellPhoneController,
+                          formatInput: true,
+                          errorMessage: AppLocalizations.of(context)!
+                              .mobilephoneToExperience,
+                          inputBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 0.25),
+                          ),
+                          scrollPadding: EdgeInsets.all(0),
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: true, decimal: true),
+                          inputDecoration: InputDecoration(
+                            errorMaxLines: 4,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(width: 0.25),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(width: 0.25),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.25, color: Color(0xff8E1816)),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(
+                                  width: 0.25, color: Color(0xff8E1816)),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingLarge,
-                          ),
+                        SizedBox(
+                          height: 22,
                         ),
-                        Text(
-                          AppLocalizations.of(context)!.dateOfBirth,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingNormal,
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [],
-                          ),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                                AppLocalizations.of(context)!.dateOfBirth,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color(0xff7F7F7F),
+                                    fontWeight: FontWeight.w500))),
+                        SizedBox(
+                          height: 7,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      GlobalConstants.of(context).spacingSmall,
-                                ),
-                                child: TextFormField(
-                                  textAlign: TextAlign.center,
-                                  controller: _dayController,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 2,
-                                  autofocus: false,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
+                              flex: 1,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: controller.dayController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 2,
+                                autofocus: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme('')
+                                    .copyWith(
+                                        label: Center(
+                                      child: Text(
                                           AppLocalizations.of(context)!.day),
-                                  onChanged: (String text) {
-                                    if (text.length == 2 &&
-                                        int.parse(text) <= 31) {
-                                      node.nextFocus();
-                                    }
-                                  },
-                                  onEditingComplete: () => node.nextFocus(),
-                                ),
+                                    )),
+                                onChanged: (String text) {
+                                  if (text.length == 2 &&
+                                      int.parse(text) <= 31) {
+                                    node.nextFocus();
+                                  }
+                                },
+                                onEditingComplete: () => node.nextFocus(),
                               ),
                             ),
+                            SizedBox(
+                              width: GlobalConstants.of(context)
+                                  .screenHorizontalSpace,
+                            ),
                             Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      GlobalConstants.of(context).spacingSmall,
-                                ),
-                                child: TextFormField(
-                                  textAlign: TextAlign.center,
-                                  controller: _monthController,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 2,
-                                  autofocus: false,
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
+                              flex: 1,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: controller.monthController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 2,
+                                autofocus: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme('')
+                                    .copyWith(
+                                        label: Center(
+                                      child: Text(
                                           AppLocalizations.of(context)!.month),
-                                  onChanged: (String text) {
-                                    if (text.length == 2 &&
-                                        int.parse(text) <= 12) {
-                                      node.nextFocus();
-                                    }
-                                  },
-                                  onEditingComplete: () => node.nextFocus(),
-                                ),
+                                    )),
+                                onChanged: (String text) {
+                                  if (text.length == 2 &&
+                                      int.parse(text) <= 12) {
+                                    node.nextFocus();
+                                  }
+                                },
+                                onEditingComplete: () => node.nextFocus(),
                               ),
                             ),
+                            SizedBox(
+                              width: GlobalConstants.of(context)
+                                  .screenHorizontalSpace,
+                            ),
                             Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      GlobalConstants.of(context).spacingSmall,
-                                ),
-                                child: TextFormField(
-                                  textAlign: TextAlign.center,
-                                  controller: _yearController,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 4,
-                                  autofocus: false,
-                                  onChanged: (String text) {
-                                    if (text.length == 4 &&
-                                        int.parse(text) >= 1900) {
-                                      node.nextFocus();
-                                    }
-                                  },
-                                  decoration: GlobalConstants.of(context)
-                                      .loginInputTheme(
+                              flex: 1,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: controller.yearController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 4,
+                                autofocus: false,
+                                onChanged: (String text) {
+                                  controller.birthdateIsValid(
+                                      context, () => setState(() {}));
+                                  if (text.length == 4 &&
+                                      int.parse(text) >= 1900) {
+                                    node.nextFocus();
+                                  }
+                                },
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme('')
+                                    .copyWith(
+                                        label: Center(
+                                      child: Text(
                                           AppLocalizations.of(context)!.year),
-                                ),
+                                    )),
                               ),
                             ),
                           ],
                         ),
                         Visibility(
-                          visible: birthdateValidationErrorMessage.isNotEmpty,
+                          visible: controller
+                              .birthdateValidationErrorMessage!.isNotEmpty,
                           child: Padding(
                             padding: EdgeInsets.only(
                               top: GlobalConstants.of(context).spacingNormal,
                               bottom: GlobalConstants.of(context).spacingSmall,
                             ),
                             child: Text(
-                              birthdateValidationErrorMessage,
+                              controller.birthdateValidationErrorMessage
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.redAccent,
@@ -304,76 +393,63 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page>
                         SizedBox(
                           height: GlobalConstants.of(context).spacingLarge,
                         ),
-                        FlatButton(
-                          child: Padding(
-                            padding: EdgeInsets.all(
-                              GlobalConstants.of(context).spacingNormal,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.confirm,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: GlobalConstants.of(context).spacingLarge,
+                      ),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      side: BorderSide.none)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xff003694)),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(GlobalConstants.of(context)
+                                      .spacingNormal))),
+                          child: Observer(
+                            builder: (_) => SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)!.continueAccess,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                           onPressed: () {
-                            if (_birthdateIsValid()) {
-                              setState(() {
-                                birthdateValidationErrorMessage = "";
-                              });
-                              this
-                                  .trackingEvents
-                                  .signupCompletedStepIOfSignupII({
-                                "havePhoto": _image != null ? true : false
-                              });
+                            if (!controller.formKey.currentState!.validate())
+                              return;
 
-                              user!.birthdate =
-                                  "${_yearController.text}-${_monthController.text}-${_dayController.text}";
+                            controller.storeDataUserFirstStep();
 
+                            if(!controller.birthDateIsValid()) return;
+
+                            if (controller.firstStepIsValid(context))
                               Navigator.of(context).pushNamed(
-                                PageRoute
-                                    .Page
-                                    .registerPhase2DailyLearningGoalScreen
-                                    .route,
-                                arguments: {
-                                  "user": user,
-                                  "returnToPageWithArgs":
-                                      widget.args!["returnToPageWithArgs"],
-                                },
-                              );
-                            } else {
-                              setState(() {
-                                String year = _yearController.text;
-                                if (year.length < 4) {
-                                  birthdateValidationErrorMessage =
-                                      AppLocalizations.of(context)!
-                                          .pleaseEnterAValidBirthdateInFormat;
-                                } else {
-                                  birthdateValidationErrorMessage =
-                                      AppLocalizations.of(context)!
-                                          .pleaseEnterAValidBirthdate;
-                                }
-                              });
-                            }
-                          },
-                          color: Colors.white,
-                          splashColor: Colors.black54,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                              style: BorderStyle.solid,
-                            ),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                                  PageRoute
+                                      .Page
+                                      .registerPhase2DailyLearningGoalScreen
+                                      .route,
+                                  arguments: {
+                                    "user": authStore.currentUser,
+                                    "returnToPageWithArgs":
+                                        widget.args!["returnToPageWithArgs"]
+                                  });
+                          }),
+                    )
+                  ],
                 ),
-              ),
+              )
             ],
           ),
         ),

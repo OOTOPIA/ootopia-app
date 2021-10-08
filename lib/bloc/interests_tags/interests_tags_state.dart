@@ -22,7 +22,7 @@ class LoadingState extends InterestsTagsState {
 }
 
 class LoadedSucessState extends InterestsTagsState {
-  List<InterestsTags> tags;
+  List<InterestsTagsModel> tags;
   LoadedSucessState(this.tags);
   @override
   List<Object> get props => [tags];

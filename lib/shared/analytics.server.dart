@@ -103,6 +103,10 @@ class AnalyticsTracking {
     this.trackingEvent("Profile - Create album", null);
   }
 
+  learningTracksQuiz() {
+    this.trackingEvent("Learning tracks - Quiz", null);
+  }
+
   timelineCreatedAPost(String type) {
     final Identify identify = Identify()..add('Content posted', 1);
     this.trackingDataUser(identify);

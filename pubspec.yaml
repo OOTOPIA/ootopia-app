@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.0.0+0
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.13.4 <3.0.0"
 
 dependencies:
   flutter:
@@ -83,6 +83,7 @@ dependencies:
   intl_phone_number_input: ^0.7.0+2
   syncfusion_flutter_sliders: ^19.2.62
   firebase_dynamic_links: ^2.0.9
+  webview_flutter: ^2.0.14
   smart_page_navigation: ^1.1.0
   dotted_border: ^2.0.0+1
 
@@ -117,6 +118,7 @@ flutter:
     - assets/icons/
     - assets/icons_profile/
     - assets/videos/
+    - assets/docs/
     - .env
   # To add assets to your application, add an assets section, like this:
   # assets:
