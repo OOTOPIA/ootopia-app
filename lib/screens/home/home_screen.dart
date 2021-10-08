@@ -613,7 +613,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
         ),
         toolbarHeight: 45,
-        elevation: 0,
+        elevation: controller.currentBottomIndex ==
+                PageViewController.TAB_INDEX_TIMELINE
+            ? 0
+            : 0.5,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         brightness: Brightness.light,
         leading: Padding(
