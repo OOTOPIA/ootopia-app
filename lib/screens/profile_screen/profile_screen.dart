@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/page-enum.dart';
 // import 'package:ootopia_app/shared/analytics.server.dart';
@@ -111,10 +113,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
     );
-  }
-
-  _goToWalletPage() {
-    controller.selectBottomTab(3);
   }
 
   bool get isLoggedInUserProfile {
@@ -466,94 +464,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       isLoggedInUserProfile
-                          ? InkWell(
-                              onTap: () {
-                                _goToWalletPage();
-                              },
-                              child: Container(
-                                width: double.maxFinite,
-                                height: 60,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: GlobalConstants.of(context)
-                                        .intermediateSpacing),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff707070).withOpacity(.05)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Image.asset(
-                                          "assets/icons/ooz-coin-black.png",
-                                          width: 22,
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Text(
-                                            AppLocalizations.of(context)!
-                                                .wallet,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Color(0xff000000),
-                                                fontWeight: FontWeight.w500)),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              AppLocalizations.of(context)!
-                                                  .currentOOZBalance,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Color(0xff707070),
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                  "assets/icons/ooz_only_active.png",
-                                                  width: 20,
-                                                ),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  walletStore.wallet != null
-                                                      ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
-                                                      : '0,00',
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Color(0xff003694),
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            color: Color(0xff03145C),
-                                            size: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
+                          ? WalletBarWidget(
+                              onTap: () => controller.insertPage(WalletPage()))
                           : Container(),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
