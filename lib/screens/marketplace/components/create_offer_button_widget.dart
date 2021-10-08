@@ -30,11 +30,11 @@ class CreateOfferButtonWidget extends StatelessWidget {
                   radius: Radius.circular(12),
                   child: Container(
                     height: widthScreen >= 760
-                        ? (constraints.maxWidth / 4) - 24
-                        : (constraints.maxWidth / 2) - 24,
+                        ? (constraints.maxWidth / 4) - 25
+                        : (constraints.maxWidth / 2) - 25,
                     width: widthScreen >= 760
-                        ? (constraints.maxWidth / 4) - 24
-                        : (constraints.maxWidth / 2) - 24,
+                        ? (constraints.maxWidth / 4) - 25
+                        : (constraints.maxWidth / 2) - 25,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
