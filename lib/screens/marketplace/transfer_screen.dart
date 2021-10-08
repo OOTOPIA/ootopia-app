@@ -124,12 +124,12 @@ class _TransferScreenState extends State<TransferScreen> {
   }
 
   Widget loadingWidget() => Container(
-        height: 20,
-        width: 20,
+        height: getAdaptiveSize(20, context),
+        width: getAdaptiveSize(20, context),
         child: Center(
           child: CircularProgressIndicator(
             backgroundColor: Colors.transparent,
-            strokeWidth: 2,
+            strokeWidth: getAdaptiveSize(2, context),
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ),
