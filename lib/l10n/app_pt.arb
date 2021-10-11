@@ -370,12 +370,23 @@
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
+
+    "ethicalMarketplace": "MERCADO ÉTICO",
+    "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
+    "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
+    "messageVendorContact": "O vendedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua compra",
+    "messageOptional": "Mensagem - Opcional",
+    "purchaseNow": "Compre agora",
+
     "seeAll":"Veja todos",
      "dontExistLearningTracks":"Não existem learning tracks",
      "lessons":"lições",
      "respondQuiz":"Responda ao questionário para confirmar o que você aprendeu e receba OOz para cada resposta correta.",
      "plusQuizAboutOOz":"Além disso, você receberá créditos OOz para cada resposta correta.",
-     "nextAboutQuiz":"Na próxima atualização do aplicativo, você terá acesso a questionários logo após assistir as Trilhas de aprendizagem. Esta é uma excelente forma de consolidar o que você aprendeu.",
+     "nextAboutQuiz":"Na próxima atualização do aplicativo, você terá acesso a questionários logo após assistir as Trilhas de aprendizagem.\nEsta é uma excelente forma de consolidar o que você aprendeu.",
      "quiz":"Quiz",
-     "pictureByMikaBaumeister":"Foto de Mika Baumeister"
+     "pictureByMikaBaumeister":"Foto de Mika Baumeister",
+     "marketPlaceTransfer": "Transferência de mercado",
+     "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
+     "generalError": "Não foi possível realizar a operação."
 }

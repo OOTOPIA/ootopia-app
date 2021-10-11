@@ -84,7 +84,7 @@ dependencies:
   syncfusion_flutter_sliders: ^19.2.62
   firebase_dynamic_links: ^2.0.9
   webview_flutter: ^2.0.14
-  smart_page_navigation: ^1.1.0
+  smart_page_navigation: ^1.1.2
   dotted_border: ^2.0.0+1
 
 dev_dependencies:

@@ -380,10 +380,21 @@
     "lessons":"lessons",
     "respondQuiz":"Respond the quiz to confirm what you've learned and receive OOz for every correct answer.",
     "plusQuizAboutOOz":"Plus, you'll receive OOz credits for each correct answer.",
-    "nextAboutQuiz":"In the next app update, you will have access to quizzes right after watching Learning Tracks. This is an excellent way to consolidate what you've learned.",
+    "nextAboutQuiz":"In the next app update, you will have access to quizzes right after watching Learning Tracks.\nThis is an excellent way to consolidate what you've learned.",
     "quiz":"Quiz",
     "pictureByMikaBaumeister":"Picture by Mika Baumeister",
     "@helloWorld": {
         "description": "A programmer greeting"
-    }
+    },
+
+    "ethicalMarketplace": "ETHICAL MARKETPLACE",
+    "thanksForYourOrder": "THANKS FOR YOUR ORDER",
+    "ethicalMarketplaceDescription": "The place to exchange goods and services that positively impact our lives and the planet.",
+    "messageVendorContact": "The vendor will soon contact you by email to arrange delivery of your purchase.",
+    "messageOptional": "Message - Optional",
+    "purchaseNow": "Purchase Now",
+    "marketPlaceTransfer": "Marketplace Transfer",
+    "insufficientBalance": "It was not possible to complete the purchase because your balance is insufficient.",
+    "generalError": "Unable to perform the operation."
+    
 }
