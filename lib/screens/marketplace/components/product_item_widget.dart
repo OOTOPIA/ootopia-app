@@ -17,7 +17,7 @@ class ProductItem extends StatelessWidget {
     final marketplaceStore = Provider.of<MarketplaceStore>(context);
     final widthScreen = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 24),
       child: InkWell(
         onTap: () => pageController
             .insertPage(ProductDetailScreen(productModel: productModel)),
