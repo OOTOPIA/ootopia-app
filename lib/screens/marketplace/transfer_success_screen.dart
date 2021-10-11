@@ -7,8 +7,8 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class TransferSuccessScreen extends StatelessWidget {
   final  pageController = SmartPageController.getInstance();
-  final bool goToWalletPage;
-  TransferSuccessScreen({this.goToWalletPage = true});
+  final bool goToMarketPlacePage;
+  TransferSuccessScreen({this.goToMarketPlacePage = true});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +72,7 @@ class TransferSuccessScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(45.0),
                         )),
                     onPressed: () {
-                      if (goToWalletPage) pageController.selectBottomTab(3);
+                      if (goToMarketPlacePage) pageController.selectBottomTab(3);
                       Navigator.pop(context);
                     },
                     child: Padding(
