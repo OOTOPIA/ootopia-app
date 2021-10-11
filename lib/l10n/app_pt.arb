@@ -254,9 +254,9 @@
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
-    "badgeSower": "Distintivo: Semeador",
-    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Semeador é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
-    "areYouASowerToo": "Você também é semeador?",
+    "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Change Maker Pro é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
+    "areYouAChangeMakerProToo": "Você também é um Change Maker Pro?",
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
@@ -304,7 +304,7 @@
     "changeMakerProInvitationCode":"CÓDIGO CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO CONVITE DE BOAS-VINDAS",
-    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
+    "sendChangeMakerProInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba",
     "forEachNewcomer": "para cada recém-chegado.\nSeu amigo receberá",
    "ooz15":" 15,00 OOz.",

@@ -130,15 +130,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                       builder: (BuildContext context) {
                                         return SnackBarWidget(
                                           menu: AppLocalizations.of(context)!
-                                              .badgeSower,
+                                              .badgeChangeMakerPro,
                                           text: AppLocalizations.of(context)!
-                                              .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                              .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                                           about: AppLocalizations.of(context)!
                                               .learnMore,
                                           contact: {
                                             "text":
                                                 AppLocalizations.of(context)!
-                                                    .areYouASowerToo,
+                                                    .areYouAChangeMakerProToo,
                                             "textLink":
                                                 AppLocalizations.of(context)!
                                                     .getInContact,

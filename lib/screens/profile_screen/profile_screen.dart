@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     marginBottom: true,
                                     contact: {
                                       "text": AppLocalizations.of(context)!
-                                          .areYouASowerToo,
+                                          .areYouAChangeMakerProToo,
                                       "textLink": AppLocalizations.of(context)!
                                           .getInContact,
                                     },
