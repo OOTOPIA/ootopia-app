@@ -33,7 +33,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
 
   @override
   void initState() {
-    Timer(Duration(milliseconds: 5000),() {
+    Timer(Duration(milliseconds: 5000), () {
       setState(() {
         Navigator.of(context).pop();
       });
@@ -62,7 +62,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
                 ),
                 IconButton(
                     onPressed: () {
-                      if(widget.onClose != null) widget.onClose!();
+                      if (widget.onClose != null) widget.onClose!();
                       Navigator.of(context).pop();
                     },
                     icon: Icon(
@@ -115,6 +115,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
               visible: widget.about.isNotEmpty,
               child: TextButton(
                 onPressed: () {},
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
                 child: Text(
                   widget.about.toUpperCase(),
                   style: TextStyle(
