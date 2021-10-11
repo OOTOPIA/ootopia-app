@@ -72,7 +72,7 @@ class TransferSuccessScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(45.0),
                         )),
                     onPressed: () {
-                      if (goToMarketPlacePage) pageController.selectBottomTab(3);
+                      if (goToMarketPlacePage) pageController.resetNavigation(redirectToBottomOptionIndex: 3);
                       Navigator.pop(context);
                     },
                     child: Padding(
