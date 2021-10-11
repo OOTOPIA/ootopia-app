@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -30,7 +28,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late ProfileScreenStore profileStore;
   late AuthStore authStore;
   PhoneNumber? codeCountryPhoneNnumber;
-  File? filePath;
   SmartPageController controller = SmartPageController.getInstance();
   @override
   void initState() {
@@ -141,119 +138,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
                       Center(
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 30.0),
-                              child: filePath == null
-                                  ? editProfileStore.photoUrl == null
-                                      ? CircleAvatar(
-                                          radius: 55,
-                                          child: Image.asset(
-                                            'assets/icons/user.png',
-                                          ))
-                                      : Container(
-                                          decoration: new BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: new Border.all(
-                                              color: Colors.white,
-                                              width: 3.0,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                                spreadRadius: 5,
-                                                blurRadius: 7,
-                                                offset: Offset(0,
-                                                    3), // changes position of shadow
-                                              ),
-                                            ],
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 55,
-                                            backgroundImage: NetworkImage(
-                                                editProfileStore.photoUrl
-                                                    .toString()),
-                                          ),
-                                        )
-                                  : Container(
-                                      decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: new Border.all(
-                                          color: Colors.white,
-                                          width: 3.0,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 7,
-                                            offset: Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                      ),
-                                      child: CircleAvatar(
-                                        radius: 55,
-                                        backgroundImage: Image.file(
-                                          filePath!,
-                                          fit: BoxFit.cover,
-                                        ).image,
-                                      ),
-                                    ),
-                            ),
-                            Positioned(
-                                bottom: 5,
-                                right: filePath == null
-                                    ? editProfileStore.photoUrl == null
-                                        ? 29
-                                        : 33
-                                    : 33,
-                                child: InkWell(
-                                  onTap: () async {
-                                    final ImagePicker _picker = ImagePicker();
-                                    // Pick an image
-                                    final image = await _picker.getImage(
-                                        source: ImageSource.gallery);
-
-                                    final File file = File(image!.path);
-                                    setState(() {
-                                      filePath = file;
-                                      editProfileStore.photoFilePathLocal =
-                                          image.path;
-                                    });
-                                  },
-                                  child: Container(
-                                    decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: new Border.all(
-                                        color: Colors.white,
-                                        width: 2.0,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 5,
-                                          offset: Offset(0,
-                                              2), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundColor: Color(0xff03DAC5),
-                                      radius: 22.5,
-                                      child: SvgPicture.asset(
-                                        'assets/icons/camera.svg',
-                                        width: 20.78,
-                                        height: 17,
-                                        alignment: Alignment.center,
-                                      ),
-                                    ),
-                                  ),
-                                ))
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 30.0),
+                          child: PhotoEdit(
+                            photoUrl: editProfileStore.photoUrl.toString(),
+                            updatePhoto: (String? imagePath) async {
+                              if (imagePath != null) {
+                                setState(() {
+                                  editProfileStore.photoFilePathLocal =
+                                      imagePath;
+                                });
+                              }
+                            },
+                          ),
                         ),
                       ),
                       SizedBox(
