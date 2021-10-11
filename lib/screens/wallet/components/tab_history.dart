@@ -151,13 +151,15 @@ class TabHistoryState extends State<TabHistory> {
                                   child: CardInformationBalance(
                                     balanceOfTransactions:
                                         '${_e.balance.toStringAsFixed(2)}',
-                                    iconForeground: '${_e.photoUrl ?? ''}',
-                                    iconBackground: '${_e.icon}',
-                                    toOrFrom: '${_e.otherUsername ?? ''}',
+                                    iconForeground: _e.photoUrl ?? "",
+                                    iconBackground: _e.photoUrl ?? _e.icon ?? '',
+                                    toOrFrom: _e.otherUsername ?? '',
                                     originTransaction: '${_e.origin}',
                                     action: '${_e.action}',
                                     otherUserId: '${_e.otherUserId}',
                                     postId: _e.postId,
+                                    description: _e.description,
+                                    origin: _e.origin,
                                   ),
                                 );
                               }).toList(),

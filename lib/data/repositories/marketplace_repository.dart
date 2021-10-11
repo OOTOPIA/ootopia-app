@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'dart:io';
 
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
@@ -5,6 +8,8 @@ import 'package:ootopia_app/data/repositories/api.dart';
 
 abstract class MarketplaceRepository {
   Future<List<ProductModel>> getProducts({int? limit, int? offset});
+  Future<Response<dynamic>> makePurchase(
+      {required String productId, required String optionalMessage});
 }
 
 class MarketplaceRepositoryImpl implements MarketplaceRepository {
@@ -34,5 +39,18 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
     }
   }
 
+  @override
+  Future<Response<dynamic>> makePurchase(
+      {required String productId, required String optionalMessage}) async {
+    final body = jsonEncode({"message": optionalMessage});
+    try {
+      final response = await ApiClient.api()
+          .post("market-place" + "/$productId" + "/purchase", data: body);
+
+      return response;
+    } catch (e) {
+      return throw e;
+    }
+  }
   String getLocale() => Platform.localeName == 'pt_BR' ? 'pt-BR' : 'en';
 }
