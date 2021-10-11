@@ -187,71 +187,77 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           }
         },
-        child: WillPopScope(
-          onWillPop: () => backButtonPage(),
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _blocBuilder(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(
-                          GlobalConstants.of(context).spacingMedium),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                ),
-                                minimumSize: MaterialStateProperty.all(
-                                  Size(60, 58),
-                                ),
-                                backgroundColor: _termsCheckbox
-                                    ? MaterialStateProperty.all(
-                                        LightColors.blue)
-                                    : MaterialStateProperty.all(Colors.grey),
-                              ),
-                              child: Text(
-                                AppLocalizations.of(context)!.continueAccess,
-                                style: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .hintStyle!
-                                    .copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              onPressed: _termsCheckbox
-                                  ? () {
-                                      if (_formKey.currentState!.validate()) {
-                                        phase2Controller
-                                            .cleanTextEditingControllers();
-                                        _submit();
-                                      }
-                                    }
-                                  : () {},
-                            ),
-                          ),
-                        ],
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: WillPopScope(
+            onWillPop: () => backButtonPage(),
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _blocBuilder(),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.all(
+                            GlobalConstants.of(context).spacingMedium),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                  ),
+                                  minimumSize: MaterialStateProperty.all(
+                                    Size(60, 58),
+                                  ),
+                                  backgroundColor: _termsCheckbox
+                                      ? MaterialStateProperty.all(
+                                          LightColors.blue)
+                                      : MaterialStateProperty.all(
+                                          Color(0xFF5D7FBB)),
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.continueAccess,
+                                  style: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .hintStyle!
+                                      .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                onPressed: _termsCheckbox
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          phase2Controller
+                                              .cleanTextEditingControllers();
+                                          _submit();
+                                        }
+                                      }
+                                    : () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -319,9 +325,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   TextFormField(
                                     controller: _nameController,
                                     keyboardType: TextInputType.name,
-                                    autocorrect: false,
+                                    autocorrect: true,
                                     textCapitalization:
-                                        TextCapitalization.words,
+                                        TextCapitalization.sentences,
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!
