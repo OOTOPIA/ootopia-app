@@ -64,7 +64,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                         controller: _scrollController,
                         child: Padding(
                           padding: EdgeInsets.only(
-                            top: 8.0,
                             bottom: 50,
                           ),
                           child: Column(
