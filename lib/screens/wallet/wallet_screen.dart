@@ -38,7 +38,8 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
       walletStore.getWallet();
       controller.addOnBottomNavigationBarChanged((index) {
         if (mounted) {
-          if (index == PageViewController.TAB_INDEX_WALLET) {
+          //TODO: Avaliar initstate da tela de wallet
+          if (index == PageViewController.TAB_INDEX_MARKETPLACE) {
             _performAllRequests();
           }
           setState(() {});

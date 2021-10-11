@@ -25,7 +25,7 @@ class PageViewController {
   static const int TAB_INDEX_TIMELINE = 0;
   static const int TAB_INDEX_LEARNING_TRACKS = 1;
   static const int TAB_INDEX_CAMERA = 2;
-  static const int TAB_INDEX_WALLET = 3;
+  static const int TAB_INDEX_MARKETPLACE = 3;
   static const int TAB_INDEX_PROFILE = 4;
 
   PageViewController() {
