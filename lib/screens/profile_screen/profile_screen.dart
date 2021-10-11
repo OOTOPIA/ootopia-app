@@ -364,10 +364,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return SnackBarWidget(
                                               menu:
                                                   AppLocalizations.of(context)!
-                                                      .medals,
+                                                      .laurelWreath,
                                               text: AppLocalizations.of(
                                                       context)!
-                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
@@ -395,10 +395,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return SnackBarWidget(
                                               menu:
                                                   AppLocalizations.of(context)!
-                                                      .medals,
+                                                      .laurelWreath,
                                               text: AppLocalizations.of(
                                                       context)!
-                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
@@ -426,10 +426,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return SnackBarWidget(
                                               menu:
                                                   AppLocalizations.of(context)!
-                                                      .medals,
+                                                      .laurelWreath,
                                               text: AppLocalizations.of(
                                                       context)!
-                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,

@@ -360,11 +360,11 @@
     "createYourOwnCategories":"crie suas próprias categorias",
     "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopíacos.",
     "enterYourNumber":"Insira seu número",
-    "medals": "Medalhas",
+    "laurelWreath": "Coroas de Louros",
     "iAccept": "Eu aceito",
     "chooseYourDailyGoal":"Escolha sua meta diária de participação no jogo.",
     "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
-    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
+    "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As Coroas de Louros representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
 
     "searchForAHashtag" : "Procure uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
