@@ -62,7 +62,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             style: TextStyle(
                                 fontSize: getAdaptiveSize(16, context)),
                           ),
-                          marginBottom: getAdaptiveSize(10, context),
+                          marginBottom: getAdaptiveSize(23, context),
                           onPressed: () {
                             pageController.insertPage(TransferScreen(
                               productModel: widget.productModel,
