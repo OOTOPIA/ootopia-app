@@ -73,7 +73,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.start,
                                 direction: Axis.horizontal,
-                                runSpacing: 24,
                                 children: [
                                   ...productList(marketplaceStore.productList),
                                   Visibility(
