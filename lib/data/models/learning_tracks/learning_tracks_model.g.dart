@@ -22,6 +22,7 @@ LearningTracksModel _$LearningTracksModelFromJson(Map<String, dynamic> json) {
     ooz: (json['ooz'] as num).toDouble(),
     time: json['time'] as String,
     location: json['location'] as String?,
+    completed: json['completed'] as bool,
   );
 }
 
@@ -40,4 +41,5 @@ Map<String, dynamic> _$LearningTracksModelToJson(
       'imageUrl': instance.imageUrl,
       'ooz': instance.ooz,
       'location': instance.location,
+      'completed': instance.completed,
     };

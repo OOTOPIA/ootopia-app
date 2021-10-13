@@ -14,12 +14,33 @@ class ViewLearningTracksScreen extends StatefulWidget {
 }
 
 class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
+  List<ChaptersModel>? listChapters;
+  LearningTracksModel? learningTracks;
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+
+    listChapters = widget.args['list_chapters'];
+    learningTracks = widget.args['learning_tracks'];
+  }
+
+  void updateStatusVideoChapter() {
+    if (learningTracks?.completed != true) {
+      bool allVideosOfTheChaptersSeen =
+          listChapters!.every((chapter) => chapter.completed == true);
+      widget.args['updateLearningTrack']();
+
+      learningTracks!.completed = allVideosOfTheChaptersSeen;
+      setState(() {});
+    }
+  }
+
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   @override
   Widget build(BuildContext context) {
-    List<ChaptersModel> listChapters = widget.args['list_chapters'];
-    LearningTracksModel learningTracks = widget.args['learning_tracks'];
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(bottom: 24),
@@ -27,7 +48,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
           child: Stack(
             children: [
               Image.network(
-                learningTracks.imageUrl,
+                learningTracks!.imageUrl,
                 height: 162,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -45,7 +66,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                           height: 24,
                         ),
                         Text(
-                          '${learningTracks.title}',
+                          '${learningTracks!.title}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -57,7 +78,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                           height: 18,
                         ),
                         Text(
-                          "${learningTracks.description}",
+                          "${learningTracks!.description}",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -74,9 +95,9 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                         ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: listChapters.length,
+                            itemCount: listChapters!.length,
                             itemBuilder: (context, index) {
-                              var chapter = listChapters[index];
+                              var chapter = listChapters![index];
                               var haveSvg =
                                   chapter.videoThumbUrl.contains('.svg');
                               return InkWell(
@@ -86,7 +107,10 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return WatchVideoLeaningTracks(
+                                      learningTrack: learningTracks,
                                       chapter: chapter,
+                                      updateStatusVideoChapter:
+                                          updateStatusVideoChapter,
                                     );
                                   }));
                                 },
@@ -184,7 +208,10 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                                     'assets/icons/ooz_mini_blue.svg',
                                                     height: 10,
                                                     width: 19.33,
-                                                    color: Color(0xffA3A3A3),
+                                                    color: chapter.completed ==
+                                                            true
+                                                        ? Color(0xff018F9C)
+                                                        : Color(0xffA3A3A3),
                                                   ),
                                                   SizedBox(
                                                     width: 8,
@@ -195,7 +222,11 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                                       fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w400,
-                                                      color: Colors.grey,
+                                                      color: chapter
+                                                                  .completed ==
+                                                              true
+                                                          ? Color(0xff018F9C)
+                                                          : Colors.grey,
                                                     ),
                                                   ),
                                                 ],
@@ -203,12 +234,19 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                             ],
                                           ),
                                         ),
+                                        if (chapter.completed == true)
+                                          SvgPicture.asset(
+                                            'assets/icons/Icon-feather-check-circle.svg',
+                                            height: 19,
+                                            width: 19,
+                                            color: Color(0xff018F9C),
+                                          ),
                                       ],
                                     ),
                                     SizedBox(
                                       height: 8,
                                     ),
-                                    index == listChapters.length - 1
+                                    index == listChapters!.length - 1
                                         ? Container()
                                         : Divider(
                                             color: Colors.grey,
