@@ -78,34 +78,40 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
       child: Column(
         children: [
           SizedBox(
-            height: 26,
+            height: 24,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 68.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all<Size>(Size(276, 53)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide.none),
-                ),
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color(0xff003694)),
-                padding:
-                    MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+          ElevatedButton(
+            style: ButtonStyle(
+              maximumSize: MaterialStateProperty.all<Size>(
+                Size(276, 53),
               ),
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(PageRoute.Page.aboutQuizScreen.route);
-              },
-              child: Text(
-                AppLocalizations.of(context)!.quiz.toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              minimumSize: MaterialStateProperty.all<Size>(
+                Size(276, 53),
+              ),
+              fixedSize: MaterialStateProperty.all<Size>(
+                Size(276, 53),
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    side: BorderSide(color: Color(0xff003694))),
+              ),
+              shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Color(0xff003694)),
+              padding:
+                  MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+            ),
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(PageRoute.Page.aboutQuizScreen.route);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.quiz.toUpperCase(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -117,7 +123,7 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
             child: Text(
               AppLocalizations.of(context)!.respondQuiz,
               style: TextStyle(
-                color: Colors.grey,
+                color: Color(0xff707070),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
