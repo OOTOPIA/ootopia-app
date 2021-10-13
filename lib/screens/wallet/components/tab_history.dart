@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/screens/wallet/components/card_information_balance.dart';
 import 'package:ootopia_app/screens/wallet/components/chip_information_date_and_sum.dart';
@@ -152,7 +153,7 @@ class TabHistoryState extends State<TabHistory> {
                                     balanceOfTransactions:
                                         '${_e.balance.toStringAsFixed(2)}',
                                     iconForeground: _e.photoUrl ?? "",
-                                    iconBackground: _e.photoUrl ?? _e.icon ?? '',
+                                    iconBackground: _e.icon ?? '',
                                     toOrFrom: _e.otherUsername ?? '',
                                     originTransaction: '${_e.origin}',
                                     action: '${_e.action}',
@@ -160,6 +161,7 @@ class TabHistoryState extends State<TabHistory> {
                                     postId: _e.postId,
                                     description: _e.description,
                                     origin: _e.origin,
+                                    learningTrackId: _e.learningTrackId ?? '',
                                   ),
                                 );
                               }).toList(),

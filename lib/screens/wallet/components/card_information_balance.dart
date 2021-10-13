@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class CardInformationBalance extends StatelessWidget {
   final String iconForeground;
@@ -19,18 +21,23 @@ class CardInformationBalance extends StatelessWidget {
   final String? postId;
   final String? description;
   final String? origin;
+  final String? learningTrackId;
 
-  CardInformationBalance(
-      {required this.balanceOfTransactions,
-      required this.iconForeground,
-      required this.iconBackground,
-      required this.toOrFrom,
-      required this.originTransaction,
-      required this.action,
-      this.otherUserId,
-      this.postId,
-      this.description,
-      this.origin});
+  SmartPageController controller = SmartPageController.getInstance();
+
+  CardInformationBalance({
+    required this.balanceOfTransactions,
+    required this.iconForeground,
+    required this.iconBackground,
+    required this.toOrFrom,
+    required this.originTransaction,
+    required this.action,
+    this.otherUserId,
+    this.postId,
+    this.description,
+    this.origin,
+    this.learningTrackId,
+  });
 
   String getTransactionDescription(context) {
     String text = '';
@@ -128,6 +135,12 @@ class CardInformationBalance extends StatelessWidget {
       );
     }
 
+    void _goToLearningTracks() async {
+      controller.insertPage(ViewLearningTracksScreen({
+        'id': this.learningTrackId,
+      }));
+    }
+
     var iconBackground = this.iconBackground.contains('.svg')
         ? SvgPicture.network(
             this.iconBackground,
@@ -151,6 +164,9 @@ class CardInformationBalance extends StatelessWidget {
             "assets/icons/user_without_image_profile.png",
             fit: BoxFit.cover);
       }
+    } else if (this.originTransaction.isNotEmpty &&
+        this.originTransaction == "learning_track") {
+      iconForeground = Image.network(this.iconForeground, fit: BoxFit.cover);
     } else {
       iconForeground = SvgPicture.asset(
           "assets/icons/ooz_circle_icon_active.svg",
@@ -204,6 +220,8 @@ class CardInformationBalance extends StatelessWidget {
                             builder: (context) => TransferSuccessScreen(
                                   goToMarketPlacePage: false,
                                 ));
+                      } else if (this.origin == "learning_track") {
+                        _goToLearningTracks();
                       }
                     }
                   },

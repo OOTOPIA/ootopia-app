@@ -31,7 +31,7 @@ class LearningTracksModel {
     required this.imageUrl,
     required this.ooz,
     required this.time,
-    required this.location,
+    this.location,
     required this.completed,
   });
 
