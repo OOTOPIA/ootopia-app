@@ -44,7 +44,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
       Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 26),
+        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: Color(0xff018F9C),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,16 +61,22 @@ class _SnackbarStates extends State<SnackBarWidget> {
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
-                      if (widget.onClose != null) widget.onClose!();
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ))
+                  constraints: BoxConstraints.loose(Size(22, 24)),
+                  onPressed: () {
+                    if (widget.onClose != null) widget.onClose!();
+                    Navigator.of(context).pop();
+                  },
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
               ],
             ),
+            SizedBox(height: 16),
             widget.emailToConcatenate != null
                 ? RichText(
                     text: new TextSpan(
@@ -111,11 +117,11 @@ class _SnackbarStates extends State<SnackBarWidget> {
                         }),
                 ),
               ])),
+            SizedBox(height: 16),
             Visibility(
               visible: widget.about.isNotEmpty,
-              child: TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              child: GestureDetector(
+                onTap: () {},
                 child: Text(
                   widget.about.toUpperCase(),
                   style: TextStyle(
