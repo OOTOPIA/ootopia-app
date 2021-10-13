@@ -110,6 +110,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -312,7 +313,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             Container(
               width: double.infinity,
               height: 34,
-              padding: EdgeInsets.only(left: 12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -324,18 +324,32 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: this.post.tags.length,
-                      itemBuilder: (ctx, index) {
-                        return Opacity(
-                          opacity: 0.8,
-                          child: HashtagName(
-                            hashtagName: this.post.tags[index],
+                    child: Theme(
+                      data: ThemeData(highlightColor: Color(0xff4D7BC9)),
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        isAlwaysShown: true,
+                        showTrackOnHover: true,
+                        radius: Radius.circular(10),
+                        thickness: 4,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: this.post.tags.length,
+                            itemBuilder: (ctx, index) {
+                              return Opacity(
+                                opacity: 0.8,
+                                child: HashtagName(
+                                  hashtagName: this.post.tags[index],
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     ),
                   ),
                 ],
