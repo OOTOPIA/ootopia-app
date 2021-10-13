@@ -10,7 +10,7 @@ class ChaptersModel {
   String videoThumbUrl;
   double ooz;
   String time;
-  bool? completed;
+  bool completed;
 
   ChaptersModel({
     required this.id,
@@ -19,7 +19,7 @@ class ChaptersModel {
     required this.videoThumbUrl,
     required this.ooz,
     required this.time,
-    this.completed,
+    required this.completed,
   });
 
   factory ChaptersModel.fromJson(Map<String, dynamic> json) =>

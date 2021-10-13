@@ -36,10 +36,10 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
     if (widget.chapter.completed != true) {
       setState(() {
         widget.chapter.completed = true;
-        // learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
-        //   widget.learningTrack!.id,
-        //   widget.chapter.id,
-        // );
+        learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
+          widget.learningTrack!.id,
+          widget.chapter.id,
+        );
         widget.updateStatusVideoChapter();
       });
     }

@@ -57,6 +57,9 @@ class CardInformationBalance extends StatelessWidget {
       case 'market_place_transfer':
         text = this.description ?? "";
         break;
+      case 'learning_track':
+        text = this.description ?? "";
+        break;
     }
 
     return text;
@@ -86,6 +89,9 @@ class CardInformationBalance extends StatelessWidget {
         break;
       case 'market_place_transfer':
         text = AppLocalizations.of(context)!.marketPlaceTransfer;
+        break;
+      case 'learning_track':
+        text = AppLocalizations.of(context)!.learningTracks;
         break;
     }
 
@@ -269,8 +275,9 @@ class CardInformationBalance extends StatelessWidget {
                       text: TextSpan(children: [
                     TextSpan(
                         text: '$typeActionFromOrTo',
-                        style:
-                            TextStyle(color: Color(0xff707070), fontSize: getAdaptiveSize(12, context))),
+                        style: TextStyle(
+                            color: Color(0xff707070),
+                            fontSize: getAdaptiveSize(12, context))),
                     TextSpan(
                         text:
                             ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
@@ -304,7 +311,9 @@ class CardInformationBalance extends StatelessWidget {
               Text(
                 '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
                 style: TextStyle(
-                    fontWeight: FontWeight.w500, color: Color(colorOfBalance), fontSize: getAdaptiveSize(14, context)),
+                    fontWeight: FontWeight.w500,
+                    color: Color(colorOfBalance),
+                    fontSize: getAdaptiveSize(14, context)),
               ),
             ],
           ),
