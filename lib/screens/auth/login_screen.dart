@@ -182,9 +182,13 @@ class _LoginPageState extends State<LoginPage> {
                                   Container(
                                     height: 72,
                                     child: TextFormField(
+                                      controller: _emailController,
                                       autocorrect: false,
                                       enableSuggestions: false,
-                                      controller: _emailController,
+                                      onTap: () {
+                                        mailIsValid = true;
+                                        setState(() {});
+                                      },
                                       keyboardType: TextInputType.emailAddress,
                                       style: GoogleFonts.roboto(
                                           fontWeight: FontWeight.w500,
@@ -202,6 +206,24 @@ class _LoginPageState extends State<LoginPage> {
                                                     : LightColors.errorRed,
                                                 size: 20,
                                               ),
+                                              errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
+                                              errorStyle: mailIsValid
+                                                  ? TextStyle(
+                                                      color: Colors.transparent,
+                                                      fontSize: 0)
+                                                  : TextStyle(),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
                                               labelStyle: mailIsValid
                                                   ? GoogleFonts.roboto(
                                                       color:
@@ -247,6 +269,10 @@ class _LoginPageState extends State<LoginPage> {
                                         children: [
                                           TextFormField(
                                             controller: _passwordController,
+                                            onTap: () {
+                                              passIsValid = true;
+                                              setState(() {});
+                                            },
                                             obscureText: !_showPassword,
                                             style: GoogleFonts.roboto(
                                                 fontWeight: FontWeight.w500,
@@ -258,6 +284,12 @@ class _LoginPageState extends State<LoginPage> {
                                                             context)!
                                                         .password)
                                                 .copyWith(
+                                                  errorStyle: passIsValid
+                                                      ? TextStyle(
+                                                          color: Colors
+                                                              .transparent,
+                                                          fontSize: 0)
+                                                      : TextStyle(),
                                                   labelStyle: passIsValid
                                                       ? GoogleFonts.roboto(
                                                           color: LightColors
@@ -276,6 +308,22 @@ class _LoginPageState extends State<LoginPage> {
                                                         ? LightColors.grey
                                                         : LightColors.errorRed,
                                                   ),
+                                                  errorBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                    color: passIsValid
+                                                        ? LightColors.grey
+                                                        : LightColors.errorRed,
+                                                  )),
+                                                  focusedErrorBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                    color: passIsValid
+                                                        ? LightColors.grey
+                                                        : LightColors.errorRed,
+                                                  )),
                                                   suffixIcon: GestureDetector(
                                                     child: ImageIcon(
                                                       _showPassword == false
@@ -307,7 +355,6 @@ class _LoginPageState extends State<LoginPage> {
                                               setState(() {
                                                 passIsValid = true;
                                               });
-
                                               return null;
                                             },
                                           ),

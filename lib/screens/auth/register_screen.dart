@@ -318,6 +318,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 children: [
                                   TextFormField(
                                     controller: _nameController,
+                                    onTap: () {
+                                      nameIsValid = true;
+                                      setState(() {});
+                                    },
                                     keyboardType: TextInputType.name,
                                     autocorrect: false,
                                     textCapitalization:
@@ -327,6 +331,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                             AppLocalizations.of(context)!
                                                 .nameAndSurname)
                                         .copyWith(
+                                          errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                            color: nameIsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                          )),
+                                          errorStyle: nameIsValid
+                                              ? TextStyle(
+                                                  color: Colors.transparent,
+                                                  fontSize: 0)
+                                              : TextStyle(),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                            color: nameIsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                          )),
                                           labelStyle: GoogleFonts.roboto(
                                               color: nameIsValid
                                                   ? LightColors.lightGrey
@@ -361,11 +383,33 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   TextFormField(
                                     controller: _emailController,
+                                    onTap: () {
+                                      mailIsValid = true;
+                                      setState(() {});
+                                    },
                                     keyboardType: TextInputType.emailAddress,
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!.email)
                                         .copyWith(
+                                            errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                              color: mailIsValid
+                                                  ? LightColors.grey
+                                                  : LightColors.errorRed,
+                                            )),
+                                            errorStyle: mailIsValid
+                                                ? TextStyle(
+                                                    color: Colors.transparent,
+                                                    fontSize: 0)
+                                                : TextStyle(),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                              color: mailIsValid
+                                                  ? LightColors.grey
+                                                  : LightColors.errorRed,
+                                            )),
                                             labelStyle: GoogleFonts.roboto(
                                                 color: mailIsValid
                                                     ? LightColors.lightGrey
@@ -406,6 +450,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
+                                    onTap: () {
+                                      passIsValid = true;
+                                      setState(() {});
+                                    },
                                     obscureText: !_showPassword,
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
@@ -413,6 +461,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                               .password,
                                         )
                                         .copyWith(
+                                          errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                            color: passIsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                          )),
+                                          errorStyle: passIsValid
+                                              ? TextStyle(
+                                                  color: Colors.transparent,
+                                                  fontSize: 0)
+                                              : TextStyle(),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                            color: passIsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                          )),
                                           labelStyle: GoogleFonts.roboto(
                                               color: passIsValid
                                                   ? LightColors.lightGrey
@@ -462,6 +528,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   TextFormField(
                                     controller: _repeatPasswordController,
+                                    onTap: () {
+                                      pass2IsValid = true;
+                                      setState(() {});
+                                    },
                                     obscureText: !_showRepeatPassword,
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
@@ -469,6 +539,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                               .confirmPassword,
                                         )
                                         .copyWith(
+                                          errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                            color: pass2IsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                          )),
+                                          errorStyle: pass2IsValid
+                                              ? TextStyle(
+                                                  color: Colors.transparent,
+                                                  fontSize: 0)
+                                              : TextStyle(),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                            color: pass2IsValid
+                                                ? LightColors.grey
+                                                : LightColors.errorRed,
+                                          )),
                                           labelStyle: GoogleFonts.roboto(
                                               color: pass2IsValid
                                                   ? LightColors.lightGrey
