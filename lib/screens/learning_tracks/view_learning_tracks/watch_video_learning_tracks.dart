@@ -153,6 +153,7 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
             child: Text(
               AppLocalizations.of(context)!.respondQuiz,
               style: TextStyle(
+                height: 1,
                 color: Color(0xff707070),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
