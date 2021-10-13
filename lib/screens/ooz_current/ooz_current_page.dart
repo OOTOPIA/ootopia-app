@@ -12,10 +12,10 @@ class AboutOOzCurrentScreen extends StatefulWidget {
 class _AboutOOzCurrentScreenState extends State<AboutOOzCurrentScreen> {
   @override
   void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
+    super.initState();
   }
 
   @override
