@@ -19,11 +19,11 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
 
   @override
   void initState() {
+    super.initState();
+    // TODO: implement initState
+
     listChapters = widget.args['list_chapters'];
     learningTracks = widget.args['learning_tracks'];
-
-    // TODO: implement initState
-    super.initState();
   }
 
   void updateStatusVideoChapter() {
