@@ -19,7 +19,7 @@ class PurchaseButtonWidget extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onPressed,
               child: Padding(
-                padding:  EdgeInsets.symmetric(vertical: getAdaptiveSize(15, context)),
+                padding:  EdgeInsets.symmetric(vertical: 15),
                 child: content
               ),
               style: ElevatedButton.styleFrom(

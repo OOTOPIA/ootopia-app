@@ -43,7 +43,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
             child: Text(
               widget.productModel.title,
               style: TextStyle(
-                  fontSize: getAdaptiveSize(20, context),
+                  fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
           ),
@@ -65,7 +65,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                   child: Text( marketplaceStore.currencyFormatter
                             .format(widget.productModel.price),
                       style: TextStyle(
-                          fontSize: getAdaptiveSize(14, context),
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: LightColors.grey)),
                 )
@@ -88,7 +88,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                   : 100,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  fontSize: getAdaptiveSize(14, context),
+                  fontSize: 14,
                   color: Colors.black87),
             ),
           ),

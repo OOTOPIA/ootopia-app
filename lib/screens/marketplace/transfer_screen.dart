@@ -101,9 +101,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                         : Text(
                                             AppLocalizations.of(context)!
                                                 .confirm,
-                                            style: TextStyle(
-                                                fontSize: getAdaptiveSize(
-                                                    16, context)),
+                                            style: TextStyle(fontSize: 16),
                                           ),
                                     marginBottom: getAdaptiveSize(23, context),
                                     onPressed: () => makePurchase());

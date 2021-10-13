@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class TransferSuccessScreen extends StatelessWidget {
-  final  pageController = SmartPageController.getInstance();
+  final pageController = SmartPageController.getInstance();
   final bool goToMarketPlacePage;
   TransferSuccessScreen({this.goToMarketPlacePage = true});
   @override
@@ -33,37 +33,29 @@ class TransferSuccessScreen extends StatelessWidget {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.ethicalMarketplace,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: getAdaptiveSize(22, context)),
+                    style: TextStyle(color: Colors.white, fontSize: 22),
                   ),
                   Text(
-                    AppLocalizations.of(context)!
-                        .ethicalMarketplaceDescription,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: getAdaptiveSize(18, context)),
+                    AppLocalizations.of(context)!.ethicalMarketplaceDescription,
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   CircleAvatar(
                       backgroundColor: LightColors.blue,
                       radius: getAdaptiveSize(80, context),
                       child: Image.asset(
                         "assets/images/wallet.png",
-                        scale:
-                            MediaQuery.of(context).size.width > 720 ? 2 : 4,
+                        scale: MediaQuery.of(context).size.width > 720 ? 2 : 4,
                       )),
                   Text(
                     AppLocalizations.of(context)!.thanksForYourOrder,
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: getAdaptiveSize(28, context)),
+                        fontSize: 28),
                   ),
                   Text(
                     AppLocalizations.of(context)!.messageVendorContact,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: getAdaptiveSize(18, context)),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -72,7 +64,9 @@ class TransferSuccessScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(45.0),
                         )),
                     onPressed: () {
-                      if (goToMarketPlacePage) pageController.resetNavigation(redirectToBottomOptionIndex: 3);
+                      if (goToMarketPlacePage)
+                        pageController.resetNavigation(
+                            redirectToBottomOptionIndex: 3);
                       Navigator.pop(context);
                     },
                     child: Padding(
@@ -83,7 +77,7 @@ class TransferSuccessScreen extends StatelessWidget {
                         AppLocalizations.of(context)!.close,
                         style: TextStyle(
                             color: LightColors.silverText,
-                            fontSize: getAdaptiveSize(16, context),
+                            fontSize: 16,
                             fontWeight: FontWeight.bold),
                       ),
                     ),

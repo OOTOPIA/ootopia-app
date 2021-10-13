@@ -60,7 +60,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           content: Text(
                             AppLocalizations.of(context)!.purchaseNow,
                             style: TextStyle(
-                                fontSize: getAdaptiveSize(16, context)),
+                                fontSize: 16),
                           ),
                           marginBottom: getAdaptiveSize(23, context),
                           onPressed: () {

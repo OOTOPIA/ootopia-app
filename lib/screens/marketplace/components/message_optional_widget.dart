@@ -21,7 +21,7 @@ class MessageOptionalWidget extends StatelessWidget {
           contentPadding: EdgeInsets.all(getAdaptiveSize(16, context)),
           hintText: AppLocalizations.of(context)!.messageOptional,
           hintStyle: TextStyle(
-              fontSize: getAdaptiveSize(14, context),
+              fontSize: 14,
               color: LightColors.grey,
               fontWeight: FontWeight.w500),
           enabledBorder: OutlineInputBorder(

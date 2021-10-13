@@ -31,13 +31,13 @@ class ProfileNameLocationWidget extends StatelessWidget {
                 Text(
                   profileName,
                   style: TextStyle(
-                      fontSize: getAdaptiveSize(14, context),
+                      fontSize: 14,
                       fontWeight: FontWeight.bold),
                 ),
                 if (location.isNotEmpty)
                   Text(
                     location,
-                    style: TextStyle(fontSize: getAdaptiveSize(12, context)),
+                    style: TextStyle(fontSize: 12),
                   ),
               ],
             ),
