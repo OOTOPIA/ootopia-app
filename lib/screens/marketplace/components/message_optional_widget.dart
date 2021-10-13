@@ -9,7 +9,7 @@ class MessageOptionalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getAdaptiveSize(100, context),
+      height: getAdaptiveSize(120, context),
       child: TextField(
         controller: messageController,
         expands: true,
@@ -18,6 +18,7 @@ class MessageOptionalWidget extends StatelessWidget {
         textAlignVertical: TextAlignVertical.top,
         style: TextStyle(fontSize: getAdaptiveSize(14, context), fontWeight: FontWeight.normal),
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(getAdaptiveSize(16, context)),
           hintText: AppLocalizations.of(context)!.messageOptional,
           hintStyle: TextStyle(
               fontSize: getAdaptiveSize(14, context),
