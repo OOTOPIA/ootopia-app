@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/screens/wallet/components/card_information_balance.dart';
 import 'package:ootopia_app/screens/wallet/components/chip_information_date_and_sum.dart';
@@ -51,8 +50,6 @@ class TabHistoryState extends State<TabHistory> {
 
   @override
   Widget build(BuildContext context) {
-    int totalEntries = 0;
-    int index = 0;
     switch (widget.action) {
       case "all":
         groupedTransfersByDate = widget.store.allGroupedTransfersByDate;
@@ -64,9 +61,7 @@ class TabHistoryState extends State<TabHistory> {
         groupedTransfersByDate = widget.store.sentGroupedTransfersByDate;
         break;
     }
-    totalEntries = (groupedTransfersByDate == null
-        ? 0
-        : groupedTransfersByDate!.entries.length);
+
     return Observer(
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
@@ -120,7 +115,6 @@ class TabHistoryState extends State<TabHistory> {
                       int lengthItemMapSumOfDayTransfer = 0;
                       sumFormated =
                           f.format(widget.store.mapSumDaysTransfer[e.key]);
-                      index++;
                       return Padding(
                         padding: EdgeInsets.only(
                           left: 24,
@@ -143,11 +137,9 @@ class TabHistoryState extends State<TabHistory> {
                             ),
                             Column(
                               children: e.value.map((_e) {
-                                index++;
-                                totalEntries++;
-                                return Padding(
+                                return Container(
                                   padding: EdgeInsets.only(
-                                    bottom: index == totalEntries ? 120 : 16,
+                                    bottom: 19,
                                   ),
                                   child: CardInformationBalance(
                                     balanceOfTransactions:
