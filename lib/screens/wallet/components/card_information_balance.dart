@@ -323,8 +323,10 @@ class CardInformationBalance extends StatelessWidget {
           width: getAdaptiveSize(80, context),
           child: GestureDetector(
             onTap: () {
-              Navigator.of(context)
-                  .pushNamed(PageRoute.Page.aboutOOzCurrentScreen.route);
+              if (this.originTransaction == 'gratitude_reward') {
+                Navigator.of(context)
+                    .pushNamed(PageRoute.Page.aboutOOzCurrentScreen.route);
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
