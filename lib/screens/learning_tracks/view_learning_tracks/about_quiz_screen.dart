@@ -14,7 +14,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
     trackingEvents.learningTracksQuiz();
@@ -41,6 +41,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      primary: true,
       body: Container(
         height: double.infinity,
         decoration: BoxDecoration(
