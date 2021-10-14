@@ -49,4 +49,33 @@ class LearningTracksRepositoryImpl
       return throw Exception('failed to get learning track $e');
     }
   }
+
+  @override
+  updateStatusVideoLearningTrack(String learningTrackId, int chapterId) async {
+    try {
+      await ApiClient.api()
+          .post("learning-tracks/${learningTrackId}/chapter/${chapterId}");
+
+      return 'sucess';
+    } catch (e) {
+      return throw Exception('failed to get learning track $e');
+    }
+  }
+
+  @override
+  Future<LearningTracksModel> getLearningTracksById(
+      String learningTrackId) async {
+    try {
+      var response =
+          await ApiClient.api().get("learning-tracks/${learningTrackId}");
+
+      if (response.statusCode == 200) {
+        return LearningTracksModel.fromJson(response.data);
+      }
+
+      return throw Exception('Something went wrong');
+    } catch (e) {
+      return throw Exception('failed to get learning track $e');
+    }
+  }
 }
