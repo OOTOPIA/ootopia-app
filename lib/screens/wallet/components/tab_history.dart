@@ -162,6 +162,8 @@ class TabHistoryState extends State<TabHistory> {
                                     description: _e.description,
                                     origin: _e.origin,
                                     learningTrackId: _e.learningTrackId ?? '',
+                                    updateCardInformationBalance:
+                                        _performRequest,
                                   ),
                                 );
                               }).toList(),

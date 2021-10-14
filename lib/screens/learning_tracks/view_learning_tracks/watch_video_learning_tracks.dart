@@ -34,9 +34,9 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
 
   updateStatusVideo() {
     if (widget.chapter.completed != true) {
-      setState(() {
+      setState(() async {
         widget.chapter.completed = true;
-        learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
+        await learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
           widget.learningTrack!.id,
           widget.chapter.id,
         );

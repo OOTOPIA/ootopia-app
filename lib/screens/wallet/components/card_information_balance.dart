@@ -22,6 +22,7 @@ class CardInformationBalance extends StatelessWidget {
   final String? description;
   final String? origin;
   final String? learningTrackId;
+  Function? updateCardInformationBalance;
 
   SmartPageController controller = SmartPageController.getInstance();
 
@@ -37,6 +38,7 @@ class CardInformationBalance extends StatelessWidget {
     this.description,
     this.origin,
     this.learningTrackId,
+    this.updateCardInformationBalance,
   });
 
   String getTransactionDescription(context) {
@@ -138,6 +140,7 @@ class CardInformationBalance extends StatelessWidget {
     void _goToLearningTracks() async {
       controller.insertPage(ViewLearningTracksScreen({
         'id': this.learningTrackId,
+        'updateLearningTrack': this.updateCardInformationBalance!,
       }));
     }
 
