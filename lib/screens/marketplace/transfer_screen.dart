@@ -46,7 +46,7 @@ class _TransferScreenState extends State<TransferScreen> {
                     constraints: BoxConstraints(
                         minHeight: !FocusScope.of(context).hasFocus
                             ? constraint.maxHeight
-                            : MediaQuery.of(context).size.height * 0.8),
+                            : MediaQuery.of(context).size.height * 0.84),
                     child: IntrinsicHeight(
                       child: Column(
                         children: <Widget>[
