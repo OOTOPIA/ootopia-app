@@ -144,14 +144,12 @@ class CardInformationBalance extends StatelessWidget {
     var iconBackground = this.iconBackground.contains('.svg')
         ? SvgPicture.network(
             this.iconBackground,
-            width: getAdaptiveSize(52, context),
-            height: getAdaptiveSize(52, context),
+            width: 52,
+            height: 52,
             fit: BoxFit.cover,
           )
         : Image.network(this.iconBackground,
-            height: getAdaptiveSize(52, context),
-            width: getAdaptiveSize(52, context),
-            fit: BoxFit.cover);
+            height: 52, width: 52, fit: BoxFit.cover);
 
     var iconForeground;
 
@@ -179,7 +177,7 @@ class CardInformationBalance extends StatelessWidget {
         Row(
           children: [
             Container(
-              height: getAdaptiveSize(56, context),
+              height: 56,
               child: Stack(children: [
                 GestureDetector(
                   child: ClipRRect(
@@ -230,8 +228,8 @@ class CardInformationBalance extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: Container(
-                    width: getAdaptiveSize(30, context),
-                    height: getAdaptiveSize(30, context),
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(width: 2, color: Colors.white)),
@@ -251,7 +249,7 @@ class CardInformationBalance extends StatelessWidget {
             ),
             Container(
               // text and sent
-              margin: EdgeInsets.only(left: getAdaptiveSize(16, context)),
+              margin: EdgeInsets.only(left: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -264,15 +262,14 @@ class CardInformationBalance extends StatelessWidget {
                       style: TextStyle(
                           color: Color(0xff018F9C),
                           fontWeight: FontWeight.bold,
-                          fontSize: getAdaptiveSize(12, context)),
+                          fontSize: 12),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (this.originTransaction != "gratitude_reward")
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: getAdaptiveSize(4, context), horizontal: 0),
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                       child: Container(
                         width: MediaQuery.of(context).size.width < 400
                             ? MediaQuery.of(context).size.width * 0.3
@@ -282,7 +279,7 @@ class CardInformationBalance extends StatelessWidget {
                           style: TextStyle(
                             color: Color(0xff707070),
                             fontWeight: FontWeight.w400,
-                            fontSize: getAdaptiveSize(14, context),
+                            fontSize: 14,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -293,15 +290,14 @@ class CardInformationBalance extends StatelessWidget {
                       text: TextSpan(children: [
                     TextSpan(
                         text: '$typeActionFromOrTo',
-                        style: TextStyle(
-                            color: Color(0xff707070),
-                            fontSize: getAdaptiveSize(12, context))),
+                        style:
+                            TextStyle(color: Color(0xff707070), fontSize: 12)),
                     TextSpan(
                         text:
                             ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
                         style: TextStyle(
                             color: Color(0xff707070),
-                            fontSize: getAdaptiveSize(12, context),
+                            fontSize: 14,
                             fontWeight: FontWeight.bold),
                         recognizer: new TapGestureRecognizer()
                           ..onTap = () {
@@ -317,21 +313,21 @@ class CardInformationBalance extends StatelessWidget {
         ),
         SizedBox(
           // wallet Ozz
-          width: getAdaptiveSize(80, context),
+          width: 80,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SvgPicture.asset(
                 'assets/icons/ooz-coin-blue-small.svg',
                 color: Color(colorOfBalance),
-                height: getAdaptiveSize(10, context),
+                height: 10,
               ),
               Text(
                 '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Color(colorOfBalance),
-                    fontSize: getAdaptiveSize(14, context)),
+                    fontSize: 14),
               ),
             ],
           ),

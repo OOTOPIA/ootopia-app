@@ -59,10 +59,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: PurchaseButtonWidget(
                           content: Text(
                             AppLocalizations.of(context)!.purchaseNow,
-                            style: TextStyle(
-                                fontSize: getAdaptiveSize(16, context)),
+                            style: TextStyle(fontSize: 16),
                           ),
-                          marginBottom: getAdaptiveSize(23, context),
+                          marginBottom: 24,
                           onPressed: () {
                             pageController.insertPage(TransferScreen(
                               productModel: widget.productModel,

@@ -43,7 +43,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
             child: Text(
               widget.productModel.title,
               style: TextStyle(
-                  fontSize: getAdaptiveSize(20, context),
+                  fontSize: 20,
                   fontWeight: FontWeight.w600),
             ),
           ),
@@ -56,8 +56,8 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                 SvgPicture.asset(
                   'assets/icons/ooz_mini_blue.svg',
                   color: Colors.black45,
-                  height: getAdaptiveSize(13.27, context),
-                  width: getAdaptiveSize(25.21, context),
+                  height: 13.16,
+                  width: 25,
                 ),
                 Padding(
                   padding:
@@ -65,7 +65,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                   child: Text( marketplaceStore.currencyFormatter
                             .format(widget.productModel.price),
                       style: TextStyle(
-                          fontSize: getAdaptiveSize(14, context),
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: LightColors.grey)),
                 )
@@ -83,12 +83,12 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
               widget.productModel.description,
               maxLines: widget.isContractible
                   ? expands
-                      ? 100
+                      ? 1000
                       : 3
-                  : 100,
+                  : 1000,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  fontSize: getAdaptiveSize(14, context),
+                  fontSize: 14,
                   color: Colors.black87),
             ),
           ),

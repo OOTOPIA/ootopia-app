@@ -9,20 +9,21 @@ class MessageOptionalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getAdaptiveSize(120, context),
+      height: 147,
       child: TextField(
         controller: messageController,
         expands: true,
         maxLines: null,
         minLines: null,
+        textCapitalization: TextCapitalization.sentences,
         textAlignVertical: TextAlignVertical.top,
-        style: TextStyle(fontSize: getAdaptiveSize(14, context), fontWeight: FontWeight.normal),
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(getAdaptiveSize(16, context)),
           hintText: AppLocalizations.of(context)!.messageOptional,
           hintStyle: TextStyle(
-              fontSize: getAdaptiveSize(14, context),
-              color: LightColors.grey,
+              fontSize: 14,
+              color: Color(0xff000000).withOpacity(0.5),
               fontWeight: FontWeight.w500),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(width: 0.25, color: LightColors.grey)),
