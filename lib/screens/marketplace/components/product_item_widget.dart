@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
@@ -32,31 +33,29 @@ class ProductItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: LightColors.grey,
-                          ),
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: ClipOval(
                           child: Image(
-                            height: widthScreen <= 320 ? 28 : 36,
+                            height: 36,
                             fit: BoxFit.fitHeight,
                             image: NetworkImage(productModel.userPhotoUrl),
                           ),
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               productModel.userName,
-                              style: TextStyle(
+                              style: GoogleFonts.roboto(
                                 fontWeight: FontWeight.bold,
                                 fontSize: widthScreen <= 360 ? 12 : 14,
                               ),
@@ -65,7 +64,7 @@ class ProductItem extends StatelessWidget {
                             ),
                             Text(
                               '${productModel.location}',
-                              style: TextStyle(
+                              style: GoogleFonts.roboto(
                                   fontSize: widthScreen <= 360 ? 10 : 12),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -76,50 +75,51 @@ class ProductItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 7.6),
+                  const SizedBox(height: 7.6),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
                         color: LightColors.grey,
                       ),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(12),
                       child: Image(
-                        height: widthScreen >= 760
-                            ? (constraints.maxWidth / 4) - 24
-                            : (constraints.maxWidth / 2) - 24,
-                        width: widthScreen >= 760
-                            ? (constraints.maxWidth / 4) - 24
-                            : (constraints.maxWidth / 2) - 24,
-                        fit: BoxFit.fitWidth,
+                        height: 171,
+                        width: 171,
+                        fit: BoxFit.fitHeight,
                         image: NetworkImage(productModel.imageUrl),
                       ),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     productModel.title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
-                  SizedBox(height: 7),
+                  const SizedBox(height: 7),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SvgPicture.asset(
                         'assets/icons/ooz_mini_blue.svg',
-                        height: 10,
+                        height: 10.53,
+                        width: 20,
                         color: LightColors.grey,
                       ),
                       SizedBox(width: 7),
                       Text(
                         marketplaceStore.currencyFormatter
                             .format(productModel.price),
-                        style: TextStyle(color: LightColors.grey),
+                        style: GoogleFonts.roboto(
+                          color: LightColors.grey,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
