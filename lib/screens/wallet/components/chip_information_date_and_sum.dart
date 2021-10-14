@@ -29,25 +29,25 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Color(0xff003694),
-            fontSize: getAdaptiveSize(18, context),
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(
           // total by day
-          width: getAdaptiveSize(80, context),
+          width: 80,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SvgPicture.asset(
                 'assets/icons/ooz-coin-blue-small.svg',
                 color: Color(0xff003694),
-                height: getAdaptiveSize(10, context),
+                height: 10,
               ),
               Text(
                 ' ${double.parse(this.widget.sumFormated).isNegative ? '-' : ''} ${widget.sumFormated.length > 6 ? NumberFormat.compact().format(double.parse(widget.sumFormated.replaceAll('-', ''))).replaceAll('.', ',') : this.widget.sumFormated.replaceAll('-', '').replaceAll('.', ',')}',
                 style: TextStyle(
-                    fontSize: getAdaptiveSize(14, context),
+                    fontSize: 14,
                     color: Color(0xff003694),
                     fontWeight: FontWeight.w500),
               )

@@ -12,25 +12,23 @@ class PurchaseButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: marginBottom),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: onPressed,
-              child: Padding(
-                padding:  EdgeInsets.symmetric(vertical: 15),
-                child: content
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: LightColors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(45.0),
-                ),
-              ),
+      child: Container(
+        width: 366,
+        height: 53,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          child: Padding(
+            padding:  EdgeInsets.symmetric(vertical: 15),
+            child: content
+          ),
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            primary: LightColors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(45.0),
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
