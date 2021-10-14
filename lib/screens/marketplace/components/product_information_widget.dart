@@ -44,7 +44,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
               widget.productModel.title,
               style: TextStyle(
                   fontSize: getAdaptiveSize(20, context),
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.w600),
             ),
           ),
           Container(

@@ -10,10 +10,14 @@ class VideoPlayerLearningTracks extends StatefulWidget {
   final String videoUrl;
   final String thumbVideo;
   final Widget viewQuiz;
-  VideoPlayerLearningTracks(
-      {required this.videoUrl,
-      required this.thumbVideo,
-      required this.viewQuiz});
+  Function updateStatusVideo;
+
+  VideoPlayerLearningTracks({
+    required this.videoUrl,
+    required this.thumbVideo,
+    required this.viewQuiz,
+    required this.updateStatusVideo,
+  });
 
   @override
   _VideoPlayerLearningTracksState createState() =>
@@ -72,6 +76,19 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
           isLoading = false;
         });
         videoPlayerController.play();
+
+        videoPlayerController.addListener(() {
+          //custom Listner
+          setState(() {
+            if (videoPlayerController.value.isInitialized &&
+                (videoPlayerController.value.duration ==
+                    videoPlayerController.value.position)) {
+              //checking the duration and position every time
+              //Video Completed//
+              widget.updateStatusVideo();
+            }
+          });
+        });
       });
   }
 

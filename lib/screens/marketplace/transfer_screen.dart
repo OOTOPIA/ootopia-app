@@ -105,7 +105,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                                 fontSize: getAdaptiveSize(
                                                     16, context)),
                                           ),
-                                    marginBottom: getAdaptiveSize(10, context),
+                                    marginBottom: getAdaptiveSize(23, context),
                                     onPressed: () => makePurchase());
                               }),
                             ],

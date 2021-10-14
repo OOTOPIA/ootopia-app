@@ -1,23 +1,27 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AboutQuizScreen extends StatefulWidget {
+class AboutOOzCurrentScreen extends StatefulWidget {
   @override
-  _AboutQuizScreenState createState() => _AboutQuizScreenState();
+  State<AboutOOzCurrentScreen> createState() => _AboutOOzCurrentScreenState();
 }
 
-class _AboutQuizScreenState extends State<AboutQuizScreen> {
-  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+class _AboutOOzCurrentScreenState extends State<AboutOOzCurrentScreen> {
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
-    trackingEvents.learningTracksQuiz();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    this.setStatusBar(true);
   }
 
   void setStatusBar(bool getOutScreen) {
@@ -33,12 +37,6 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    this.setStatusBar(true);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
@@ -47,7 +45,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
         decoration: BoxDecoration(
             image: DecorationImage(
           image: AssetImage(
-            'assets/images/kids_words.png',
+            'assets/images/image_background_ooz_current.png',
           ),
           fit: BoxFit.cover,
         )),
@@ -68,28 +66,25 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                               padding: EdgeInsets.symmetric(horizontal: 26),
                               child: Column(
                                 children: <Widget>[
-                                  SizedBox(height: 50),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context)
+                                        .spacingLarge,
+                                  ),
                                   Text(
                                     AppLocalizations.of(context)!
-                                        .regenerationGame
+                                        .theOOzCurrent
                                         .toUpperCase(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 22,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
                                       shadows: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.25),
                                           spreadRadius: 0,
                                           blurRadius: 3,
                                           offset: Offset(0,
-                                              5), // changes position of shadow
-                                        ),
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 3,
-                                          offset: Offset(1,
                                               5), // changes position of shadow
                                         ),
                                       ],
@@ -97,53 +92,25 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .intermediateSpacing,
+                                        .spacingLarge,
                                   ),
                                   Center(
                                       child: CircleAvatar(
                                           backgroundColor: Color(0xff003694),
                                           radius: 78,
                                           child: Image.asset(
-                                            'assets/icons/ooz_white.png',
-                                            height: 119,
-                                            width: 62.08,
+                                            'assets/images/about_ooz_current.png',
+                                            height: 83,
+                                            width: 96,
                                             color: Colors.white,
                                           ))),
                                   SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .intermediateSpacing),
+                                    height: GlobalConstants.of(context)
+                                        .spacingLarge,
+                                  ),
                                   Text(
                                     AppLocalizations.of(context)!
-                                        .quiz
-                                        .toUpperCase(),
-                                    style: TextStyle(
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 3,
-                                          offset: Offset(0,
-                                              5), // changes position of shadow
-                                        ),
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 3,
-                                          offset: Offset(1,
-                                              5), // changes position of shadow
-                                        ),
-                                      ],
-                                      color: Colors.white,
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .spacingMedium),
-                                  Text(
-                                    AppLocalizations.of(context)!.nextAboutQuiz,
+                                        .aboutOOzCurrent,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
@@ -153,8 +120,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                                           color: Colors.black.withOpacity(0.25),
                                           spreadRadius: 0,
                                           blurRadius: 5,
-                                          offset: Offset(0,
-                                              5), // changes position of shadow
+                                          offset: Offset(0, 5),
                                         ),
                                       ],
                                     ),
@@ -163,28 +129,6 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                                   SizedBox(
                                       height: GlobalConstants.of(context)
                                           .spacingMedium),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .plusQuizAboutOOz,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 23,
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 5,
-                                          offset: Offset(0,
-                                              5), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                  ),
                                 ],
                               ),
                             ),
@@ -198,7 +142,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                                   child: RichText(
                                     text: TextSpan(
                                       text: AppLocalizations.of(context)!
-                                          .pictureByMikaBaumeister,
+                                          .pictureByClemOnojeghuo,
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 10),
                                     ),
@@ -211,7 +155,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.only(bottom: 28),
+                      padding: const EdgeInsets.only(bottom: 24),
                       child: ElevatedButton(
                           style: ButtonStyle(
                             fixedSize:
@@ -235,7 +179,7 @@ class _AboutQuizScreenState extends State<AboutQuizScreen> {
                           child: Text(
                             AppLocalizations.of(context)!.close,
                             style: TextStyle(
-                              color: Color(0xff666666),
+                              color: Colors.black.withOpacity(0.6),
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
