@@ -265,11 +265,15 @@ class _RegisterPhase2TopInterestsPageState
                                                   0,
                                           child: Expanded(
                                             child: Text(
-                                              controller.selectedTags.length>1? '${controller.selectedTags.length} ' +
-                                                  AppLocalizations.of(context)!
-                                                      .tagsSelected: '${controller.selectedTags.length} ' +
-                                                  AppLocalizations.of(context)!
-                                                      .tagSelected,
+                                              controller.selectedTags.length > 1
+                                                  ? '${controller.selectedTags.length} ' +
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .tagsSelected
+                                                  : '${controller.selectedTags.length} ' +
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .tagSelected,
                                               overflow: TextOverflow.clip,
                                               textAlign: TextAlign.right,
                                               style: GoogleFonts.roboto(
@@ -375,6 +379,11 @@ class _RegisterPhase2TopInterestsPageState
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             LightColors.blue),
+                                    minimumSize: MaterialStateProperty.all(
+                                      Size(60, 58),
+                                    ),
+                                    elevation:
+                                        MaterialStateProperty.all<double>(0.0),
                                     padding: MaterialStateProperty.all<EdgeInsets>(
                                         EdgeInsets.all(
                                             GlobalConstants.of(context)
