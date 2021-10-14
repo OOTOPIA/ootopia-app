@@ -17,7 +17,7 @@ class CreateOfferButtonWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 24),
         child: LayoutBuilder(
           builder: (context, constraints) {
             return Column(

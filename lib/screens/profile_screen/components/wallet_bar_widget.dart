@@ -3,17 +3,22 @@ import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
-class WalletBarWidget extends StatelessWidget {
+class WalletBarWidget extends StatefulWidget {
   final Function onTap;
-  const WalletBarWidget({Key? key, required this.onTap}) : super(key: key);
+  final String totalBalance;
+  WalletBarWidget({Key? key, required this.onTap, required this.totalBalance})
+      : super(key: key);
 
   @override
+  State<WalletBarWidget> createState() => _WalletBarWidgetState();
+}
+
+class _WalletBarWidgetState extends State<WalletBarWidget> {
+  @override
   Widget build(BuildContext context) {
-    final walletStore = Provider.of<WalletStore>(context);
     return InkWell(
-      onTap: () => onTap(),
+      onTap: () => widget.onTap(),
       child: Container(
         width: double.maxFinite,
         height: 60,
@@ -62,9 +67,7 @@ class WalletBarWidget extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          walletStore.wallet != null
-                              ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
-                              : '0,00',
+                          widget.totalBalance,
                           style: TextStyle(
                               fontSize: 14,
                               color: Color(0xff003694),

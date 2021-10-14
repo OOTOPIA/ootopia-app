@@ -14,6 +14,7 @@ ChaptersModel _$ChaptersModelFromJson(Map<String, dynamic> json) {
     videoThumbUrl: json['videoThumbUrl'] as String,
     ooz: (json['ooz'] as num).toDouble(),
     time: json['time'] as String,
+    completed: json['completed'] as bool,
   );
 }
 
@@ -25,4 +26,5 @@ Map<String, dynamic> _$ChaptersModelToJson(ChaptersModel instance) =>
       'videoThumbUrl': instance.videoThumbUrl,
       'ooz': instance.ooz,
       'time': instance.time,
+      'completed': instance.completed,
     };

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.501" height="20.507" viewBox="0 0 20.501 20.507">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #018f9c;
+      }
+    </style>
+  </defs>
+  <g id="Icon_feather-check-circle" data-name="Icon feather-check-circle" transform="translate(-2.249 -2.238)">
+    <path id="Caminho_1144" data-name="Caminho 1144" class="cls-1" d="M12.495,22.745A10.252,10.252,0,1,1,16.671,3.128a.75.75,0,1,1-.611,1.37,8.75,8.75,0,1,0,5.189,8v-.874a.75.75,0,1,1,1.5,0V12.5A10.265,10.265,0,0,1,12.495,22.745Z" transform="translate(0 0)"/>
+    <path id="Caminho_1145" data-name="Caminho 1145" class="cls-1" d="M16.35,16.259a.75.75,0,0,1-.531-.22l-2.85-2.85a.75.75,0,1,1,1.061-1.061l2.319,2.319,8.97-8.978A.75.75,0,1,1,26.38,6.53l-9.5,9.509A.75.75,0,0,1,16.35,16.259Z" transform="translate(-3.85 -1.103)"/>
+  </g>
+</svg>

@@ -460,72 +460,78 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             child: Positioned(
                               height: 32,
                               right: 0,
-                              child: Container(
-                                  width: 90,
-                                  padding: EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 6),
-                                        child: this.post.oozToTransfer == 0
-                                            ? Image(
-                                                image: AssetImage(
-                                                  'assets/icons/ooz_only.png',
-                                                ),
-                                                width: 16,
-                                              )
-                                            : Image(
-                                                image: AssetImage(
-                                                  'assets/icons/ooz_only_active.png',
-                                                ),
-                                                width: 16,
-                                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(PageRoute
+                                      .Page.aboutOOzCurrentScreen.route);
+                                },
+                                child: Container(
+                                    width: 90,
+                                    padding: EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                        width: 1,
                                       ),
-                                      this.post.oozToTransfer > 0
-                                          ? Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 4),
-                                              child: Text(
-                                                "+ " +
-                                                    currencyFormatter.format(
-                                                        this
-                                                            .post
-                                                            .oozToTransfer),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Color(0xFF003694),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            )
-                                          : Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 4),
-                                              child: Text(
-                                                currencyFormatter.format(this
-                                                    .post
-                                                    .oozTotalCollected),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            )
-                                    ],
-                                  )),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 6),
+                                          child: this.post.oozToTransfer == 0
+                                              ? Image(
+                                                  image: AssetImage(
+                                                    'assets/icons/ooz_only.png',
+                                                  ),
+                                                  width: 16,
+                                                )
+                                              : Image(
+                                                  image: AssetImage(
+                                                    'assets/icons/ooz_only_active.png',
+                                                  ),
+                                                  width: 16,
+                                                ),
+                                        ),
+                                        this.post.oozToTransfer > 0
+                                            ? Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 4),
+                                                child: Text(
+                                                  "+ " +
+                                                      currencyFormatter.format(
+                                                          this
+                                                              .post
+                                                              .oozToTransfer),
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Color(0xFF003694),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              )
+                                            : Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 4),
+                                                child: Text(
+                                                  currencyFormatter.format(this
+                                                      .post
+                                                      .oozTotalCollected),
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              )
+                                      ],
+                                    )),
+                              ),
                             ),
                           ),
                         ],

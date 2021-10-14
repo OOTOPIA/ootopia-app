@@ -115,6 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  final currencyFormatter = NumberFormat('#,##0.00', 'ID');
+
   bool get isLoggedInUserProfile {
     return authStore.currentUser == null
         ? false
@@ -465,6 +467,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       isLoggedInUserProfile
                           ? WalletBarWidget(
+                              totalBalance: walletStore.wallet != null
+                                  ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
+                                  : '0,00',
                               onTap: () => controller.insertPage(WalletPage()))
                           : Container(),
                       SizedBox(

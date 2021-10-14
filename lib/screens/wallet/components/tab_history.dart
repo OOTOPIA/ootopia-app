@@ -50,8 +50,6 @@ class TabHistoryState extends State<TabHistory> {
 
   @override
   Widget build(BuildContext context) {
-    int totalEntries = 0;
-    int index = 0;
     switch (widget.action) {
       case "all":
         groupedTransfersByDate = widget.store.allGroupedTransfersByDate;
@@ -63,9 +61,7 @@ class TabHistoryState extends State<TabHistory> {
         groupedTransfersByDate = widget.store.sentGroupedTransfersByDate;
         break;
     }
-    totalEntries = (groupedTransfersByDate == null
-        ? 0
-        : groupedTransfersByDate!.entries.length);
+
     return Observer(
       builder: (_) => RefreshIndicator(
         onRefresh: () => _performRequest(),
@@ -119,7 +115,6 @@ class TabHistoryState extends State<TabHistory> {
                       int lengthItemMapSumOfDayTransfer = 0;
                       sumFormated =
                           f.format(widget.store.mapSumDaysTransfer[e.key]);
-                      index++;
                       return Padding(
                         padding: EdgeInsets.only(
                           left: 24,
@@ -142,17 +137,15 @@ class TabHistoryState extends State<TabHistory> {
                             ),
                             Column(
                               children: e.value.map((_e) {
-                                index++;
-                                totalEntries++;
-                                return Padding(
+                                return Container(
                                   padding: EdgeInsets.only(
-                                    bottom: index == totalEntries ? 120 : 16,
+                                    bottom: 19,
                                   ),
                                   child: CardInformationBalance(
                                     balanceOfTransactions:
                                         '${_e.balance.toStringAsFixed(2)}',
                                     iconForeground: _e.photoUrl ?? "",
-                                    iconBackground: _e.photoUrl ?? _e.icon ?? '',
+                                    iconBackground: _e.icon ?? '',
                                     toOrFrom: _e.otherUsername ?? '',
                                     originTransaction: '${_e.origin}',
                                     action: '${_e.action}',
@@ -160,6 +153,7 @@ class TabHistoryState extends State<TabHistory> {
                                     postId: _e.postId,
                                     description: _e.description,
                                     origin: _e.origin,
+                                    learningTrackId: _e.learningTrackId ?? '',
                                   ),
                                 );
                               }).toList(),

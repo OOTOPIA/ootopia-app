@@ -3,19 +3,48 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_player_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import '../../../data/repositories/learning_tracks_repository.dart';
 
 class WatchVideoLeaningTracks extends StatefulWidget {
   final ChaptersModel chapter;
-  WatchVideoLeaningTracks({required this.chapter});
+  final LearningTracksModel? learningTrack;
+  Function updateStatusVideoChapter;
+
+  WatchVideoLeaningTracks({
+    required this.chapter,
+    this.learningTrack,
+    required this.updateStatusVideoChapter,
+  });
   @override
   _WatchVideoLeaningTracksState createState() =>
       _WatchVideoLeaningTracksState();
 }
 
 class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
+  LearningTracksRepositoryImpl learningTracksRepositoryImpl =
+      LearningTracksRepositoryImpl();
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  updateStatusVideo() {
+    if (widget.chapter.completed != true) {
+      setState(() {
+        widget.chapter.completed = true;
+        learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
+          widget.learningTrack!.id,
+          widget.chapter.id,
+        );
+        widget.updateStatusVideoChapter();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
@@ -68,6 +97,7 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
         videoUrl: widget.chapter.videoUrl,
         thumbVideo: widget.chapter.videoThumbUrl,
         viewQuiz: viewButtonQuiz(isPortrait),
+        updateStatusVideo: updateStatusVideo,
       ),
     );
   }
@@ -78,34 +108,40 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
       child: Column(
         children: [
           SizedBox(
-            height: 26,
+            height: 24,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 68.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all<Size>(Size(276, 53)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide.none),
-                ),
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color(0xff003694)),
-                padding:
-                    MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+          ElevatedButton(
+            style: ButtonStyle(
+              maximumSize: MaterialStateProperty.all<Size>(
+                Size(276, 53),
               ),
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(PageRoute.Page.aboutQuizScreen.route);
-              },
-              child: Text(
-                AppLocalizations.of(context)!.quiz.toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              minimumSize: MaterialStateProperty.all<Size>(
+                Size(276, 53),
+              ),
+              fixedSize: MaterialStateProperty.all<Size>(
+                Size(276, 53),
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    side: BorderSide(color: Color(0xff003694))),
+              ),
+              shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Color(0xff003694)),
+              padding:
+                  MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+            ),
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(PageRoute.Page.aboutQuizScreen.route);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.quiz.toUpperCase(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -117,7 +153,8 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
             child: Text(
               AppLocalizations.of(context)!.respondQuiz,
               style: TextStyle(
-                color: Colors.grey,
+                height: 1,
+                color: Color(0xff707070),
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),

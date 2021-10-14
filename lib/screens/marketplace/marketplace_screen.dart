@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 
@@ -7,6 +8,7 @@ import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -17,11 +19,13 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final marketplaceStore = MarketplaceStore();
+  final walletStore = WalletStore();
   late SmartPageController pageController;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
+    walletStore.getWallet();
     marketplaceStore.getProductList(
         limit: marketplaceStore.itemsPerPageCount, offset: 0);
     pageController = SmartPageController.getInstance();
@@ -50,6 +54,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 child: Column(
                   children: [
                     WalletBarWidget(
+                        totalBalance: walletStore.wallet != null
+                            ? '${marketplaceStore.currencyFormatter.format(walletStore.wallet!.totalBalance)}'
+                            : '0,00',
                         onTap: () => pageController.insertPage(WalletPage())),
                     MarketplaceBarWidget(),
                     Expanded(
@@ -57,7 +64,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                         controller: _scrollController,
                         child: Padding(
                           padding: EdgeInsets.only(
-                            top: 8.0,
                             bottom: 50,
                           ),
                           child: Column(
@@ -66,7 +72,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.start,
                                 direction: Axis.horizontal,
-                                runSpacing: 24,
                                 children: [
                                   ...productList(marketplaceStore.productList),
                                   Visibility(

@@ -33,6 +33,7 @@ enum Page {
   viewLearningTracksScreen,
   aboutQuizScreen,
   videoLearningTracksScreen,
+  aboutOOzCurrentScreen,
 }
 
 extension PageRoute on Page {

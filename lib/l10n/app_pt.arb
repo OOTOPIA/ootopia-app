@@ -383,10 +383,14 @@
      "lessons":"lições",
      "respondQuiz":"Responda ao questionário para confirmar o que você aprendeu e receba OOz para cada resposta correta.",
      "plusQuizAboutOOz":"Além disso, você receberá créditos OOz para cada resposta correta.",
-     "nextAboutQuiz":"Na próxima atualização do aplicativo, você terá acesso a questionários logo após assistir as Trilhas de aprendizagem. Esta é uma excelente forma de consolidar o que você aprendeu.",
+     "nextAboutQuiz":"Na próxima atualização do aplicativo, você terá acesso a questionários logo após assistir as Trilhas de Aprendizagem.\nEsta é uma excelente forma de consolidar o que você aprendeu.",
      "quiz":"Quiz",
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
+     "completed": "Completo",
      "marketPlaceTransfer": "Transferência de mercado",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
-     "generalError": "Não foi possível realizar a operação."
+     "generalError": "Não foi possível realizar a operação.",
+     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\n No app OOTOPIA, seus OOz valem o equivalente a reais e podem ser usados ​​no Mercado Ético e para premiar as publicações mais inspiradoras.",
+     "theOOzCurrent":"a moeda ooz",
+     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo"
 }

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class CardInformationBalance extends StatelessWidget {
   final String iconForeground;
@@ -19,18 +21,23 @@ class CardInformationBalance extends StatelessWidget {
   final String? postId;
   final String? description;
   final String? origin;
+  final String? learningTrackId;
 
-  CardInformationBalance(
-      {required this.balanceOfTransactions,
-      required this.iconForeground,
-      required this.iconBackground,
-      required this.toOrFrom,
-      required this.originTransaction,
-      required this.action,
-      this.otherUserId,
-      this.postId,
-      this.description,
-      this.origin});
+  SmartPageController controller = SmartPageController.getInstance();
+
+  CardInformationBalance({
+    required this.balanceOfTransactions,
+    required this.iconForeground,
+    required this.iconBackground,
+    required this.toOrFrom,
+    required this.originTransaction,
+    required this.action,
+    this.otherUserId,
+    this.postId,
+    this.description,
+    this.origin,
+    this.learningTrackId,
+  });
 
   String getTransactionDescription(context) {
     String text = '';
@@ -55,6 +62,9 @@ class CardInformationBalance extends StatelessWidget {
         text = AppLocalizations.of(context)!.invitationCodeAccepted;
         break;
       case 'market_place_transfer':
+        text = this.description ?? "";
+        break;
+      case 'learning_track':
         text = this.description ?? "";
         break;
     }
@@ -86,6 +96,9 @@ class CardInformationBalance extends StatelessWidget {
         break;
       case 'market_place_transfer':
         text = AppLocalizations.of(context)!.marketPlaceTransfer;
+        break;
+      case 'learning_track':
+        text = AppLocalizations.of(context)!.learningTracks;
         break;
     }
 
@@ -122,6 +135,12 @@ class CardInformationBalance extends StatelessWidget {
       );
     }
 
+    void _goToLearningTracks() async {
+      controller.insertPage(ViewLearningTracksScreen({
+        'id': this.learningTrackId,
+      }));
+    }
+
     var iconBackground = this.iconBackground.contains('.svg')
         ? SvgPicture.network(
             this.iconBackground,
@@ -130,9 +149,7 @@ class CardInformationBalance extends StatelessWidget {
             fit: BoxFit.cover,
           )
         : Image.network(this.iconBackground,
-            height: 52,
-            width: 52,
-            fit: BoxFit.cover);
+            height: 52, width: 52, fit: BoxFit.cover);
 
     var iconForeground;
 
@@ -145,6 +162,9 @@ class CardInformationBalance extends StatelessWidget {
             "assets/icons/user_without_image_profile.png",
             fit: BoxFit.cover);
       }
+    } else if (this.originTransaction.isNotEmpty &&
+        this.originTransaction == "learning_track") {
+      iconForeground = Image.network(this.iconForeground, fit: BoxFit.cover);
     } else {
       iconForeground = SvgPicture.asset(
           "assets/icons/ooz_circle_icon_active.svg",
@@ -198,6 +218,8 @@ class CardInformationBalance extends StatelessWidget {
                             builder: (context) => TransferSuccessScreen(
                                   goToMarketPlacePage: false,
                                 ));
+                      } else if (this.origin == "learning_track") {
+                        _goToLearningTracks();
                       }
                     }
                   },
@@ -247,8 +269,7 @@ class CardInformationBalance extends StatelessWidget {
                   ),
                   if (this.originTransaction != "gratitude_reward")
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 0),
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                       child: Container(
                         width: MediaQuery.of(context).size.width < 400
                             ? MediaQuery.of(context).size.width * 0.3
@@ -304,7 +325,9 @@ class CardInformationBalance extends StatelessWidget {
               Text(
                 '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
                 style: TextStyle(
-                    fontWeight: FontWeight.w500, color: Color(colorOfBalance), fontSize: 14),
+                    fontWeight: FontWeight.w500,
+                    color: Color(colorOfBalance),
+                    fontSize: 14),
               ),
             ],
           ),
