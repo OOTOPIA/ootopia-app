@@ -321,22 +321,28 @@ class CardInformationBalance extends StatelessWidget {
         SizedBox(
           // wallet Ozz
           width: getAdaptiveSize(80, context),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SvgPicture.asset(
-                'assets/icons/ooz-coin-blue-small.svg',
-                color: Color(colorOfBalance),
-                height: getAdaptiveSize(10, context),
-              ),
-              Text(
-                '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Color(colorOfBalance),
-                    fontSize: getAdaptiveSize(14, context)),
-              ),
-            ],
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(PageRoute.Page.aboutOOzCurrentScreen.route);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/ooz-coin-blue-small.svg',
+                  color: Color(colorOfBalance),
+                  height: getAdaptiveSize(10, context),
+                ),
+                Text(
+                  '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Color(colorOfBalance),
+                      fontSize: getAdaptiveSize(14, context)),
+                ),
+              ],
+            ),
           ),
         ),
       ],
