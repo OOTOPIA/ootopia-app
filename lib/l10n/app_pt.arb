@@ -34,7 +34,7 @@
 
     "confirm": "Confirmar",
 
-    "thisIsWhereYourPositiveImpactMattersMost":"É aqui que o seu impacto positivo é mais importante!",
+    "thisIsWhereYourPositiveImpactMattersMost":"É aqui que seu impacto positivo importa mais!",
 
     "pleaseWait": "Por favor, aguarde...",
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
@@ -53,9 +53,10 @@
 
     "favoriteThemes": "Temas Favoritos",
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
-    "selectAtLeastOneHashtag": "Selecione ao menos 1 hashtag",
+    "selectAtLeastOneHashtag": "Selecione pelo menos uma hashtag",
     "selectHashtags": "Selecione hashtags",
-    "tagsSelected": "Tags selecionadas",
+    "tagsSelected": "tags selecionadas",
+    "tagSelected":"tag selecionada",
 
     "others": "Outras(os)",
 
@@ -95,7 +96,7 @@
     "noContinueEditing": "Não, continue editando",
     "yes": "Sim",
     "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao carregar o vídeo, tente enviar o vídeo novamente.",
-    "pleaseSelectAtLeast1Tag": "Selecione pelo menos 1 tag",
+    "pleaseSelectAtLeast1Tag": "Selecione pelo menos uma hashtag",
     "selectAtLeast1Tag": "Selecione pelo menos 1 tag",
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao enviar o vídeo, tente enviar o vídeo novamente.",
     "newPost": "Nova postagem",
@@ -366,7 +367,7 @@
     "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
     "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
 
-    "searchForAHashtag" : "Procure uma hashtag",
+    "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",

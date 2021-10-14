@@ -532,7 +532,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding: EdgeInsets.only(
                                 bottom:
-                                    GlobalConstants.of(context).spacingMedium,
+                                    20,
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

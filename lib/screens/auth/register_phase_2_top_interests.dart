@@ -265,9 +265,11 @@ class _RegisterPhase2TopInterestsPageState
                                                   0,
                                           child: Expanded(
                                             child: Text(
-                                              '${controller.selectedTags.length} ' +
+                                              controller.selectedTags.length>1? '${controller.selectedTags.length} ' +
                                                   AppLocalizations.of(context)!
-                                                      .tagsSelected,
+                                                      .tagsSelected: '${controller.selectedTags.length} ' +
+                                                  AppLocalizations.of(context)!
+                                                      .tagSelected,
                                               overflow: TextOverflow.clip,
                                               textAlign: TextAlign.right,
                                               style: GoogleFonts.roboto(

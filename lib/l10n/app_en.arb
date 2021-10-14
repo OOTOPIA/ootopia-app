@@ -59,9 +59,10 @@
 
     "favoriteThemes": "Favorite Themes",
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Select the hashtags that correspond to the themes you want to explore and learn.",
-    "selectAtLeastOneHashtag": "Select at least 1 hashtag",
+    "selectAtLeastOneHashtag": "Select at least one hashtag",
     "selectHashtags": "Select hashtags",
-    "tagsSelected": "Tags Selected",
+    "tagsSelected": "tags selected",
+    "tagSelected": "tag selected",
 
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
     "nameAndSurname": "name",
@@ -99,7 +100,7 @@
     "noContinueEditing": "No, continue editing",
     "yes": "Yes",
     "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "There was a problem loading the video, please try to upload the video again.",
-    "pleaseSelectAtLeast1Tag": "Please select at least 1 tag",
+    "pleaseSelectAtLeast1Tag": "Select at least one hashtag",
     "selectAtLeast1Tag": "Select at least 1 tag",
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "There was a problem uploading the video, please try to upload the video again.",
     "newPost": "New Post",
