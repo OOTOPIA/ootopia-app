@@ -221,10 +221,10 @@ class _RegisterPhase2DailyLearningGoalPageState
                                                   ),
                                                 ),
                                               ),
-                                        Positioned(
-                                            bottom: 2,
-                                            right: 2,
-                                            child: IconButton(
+                                            Positioned(
+                                              bottom: 2,
+                                              right: 2,
+                                              child: IconButton(
                                                 onPressed: () {
                                                   SystemChrome
                                                       .setPreferredOrientations([
@@ -237,10 +237,130 @@ class _RegisterPhase2DailyLearningGoalPageState
                                                 icon: Icon(
                                                   Icons.fullscreen,
                                                   color: Colors.white,
-                                                )))
-                                      ],
-                                    )),
-                              ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                                bottom: 2,
+                                                right: 2,
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      SystemChrome
+                                                          .setPreferredOrientations([
+                                                        DeviceOrientation
+                                                            .landscapeRight,
+                                                        DeviceOrientation
+                                                            .landscapeLeft
+                                                      ]);
+                                                    },
+                                                    icon: ImageIcon(
+                                                        AssetImage(
+                                                            "assets/icons/icon_maximizescreen.png"),
+                                                        color:
+                                                            Color(0xFFCDCDCD),
+                                                        size: 16)))
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                                Divider(
+                                  color: Color(0xff707070).withOpacity(.6),
+                                  height: 1,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 24, bottom: 24),
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .chooseYourDailyGoal,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff707070),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.minutesPerDay,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff707070)),
+                                ),
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingSmall,
+                                ),
+                                SfSliderTheme(
+                                  data: SfSliderThemeData(
+                                      activeTrackColor:
+                                          Color(0xff03DAC5).withOpacity(0.08),
+                                      inactiveTrackColor:
+                                          Color(0xff03DAC5).withOpacity(0.3),
+                                      inactiveDividerRadius: 4.8,
+                                      minorTickSize: Size(10, 10),
+                                      tickSize: Size(20, 20),
+                                      thumbColor: Colors.white,
+                                      activeDividerColor: Color(0xff03DAC5),
+                                      overlayColor: Color(0xff03DAC5),
+                                      activeDividerStrokeColor:
+                                          Color(0xff03DAC5),
+                                      disabledActiveDividerColor:
+                                          Color(0xff03DAC5),
+                                      thumbStrokeColor: Color(0xff03DAC5),
+                                      inactiveTickColor: Color(0xff03DAC5),
+                                      disabledThumbColor: Color(0xff03DAC5),
+                                      activeMinorTickColor: Color(0xff03DAC5),
+                                      inactiveDividerColor: Color(0xff03DAC5),
+                                      overlayRadius: 9,
+                                      inactiveTrackHeight: 9.5,
+                                      trackCornerRadius: 9,
+                                      tickOffset: Offset(10, 10),
+                                      thumbRadius: 9.3,
+                                      activeTrackHeight: 9.5,
+                                      activeLabelStyle: TextStyle(
+                                          color: Colors.grey, fontSize: 14),
+                                      inactiveLabelStyle: TextStyle(
+                                          color: Colors.grey, fontSize: 14),
+                                      activeDividerRadius: 4.8),
+                                  child: SfSlider(
+                                    min: 0.0,
+                                    max: 60,
+                                    value: controller.currentSliderValue,
+                                    interval: 10,
+                                    stepSize: 10,
+                                    showLabels: true,
+                                    showDividers: true,
+                                    onChanged: (dynamic value) {
+                                      setState(() {
+                                        controller.currentSliderValue = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                _isNotLearningGoalRating
+                                    ? SizedBox(
+                                        height: GlobalConstants.of(context)
+                                            .spacingLarge,
+                                      )
+                                    : Container(),
+                                _isNotLearningGoalRating
+                                    ? Text(
+                                        AppLocalizations.of(context)!
+                                            .isNotLearningGoalRating,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff707070)),
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingNormal,
+                                ),
+                              ],
                             ),
                             Divider(
                               color: Color(0xff707070).withOpacity(.6),
@@ -339,19 +459,20 @@ class _RegisterPhase2DailyLearningGoalPageState
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
+                            Visibility(
+                              visible: controller.currentSliderValue == 0.0,
+                              child: Text(
+                                AppLocalizations.of(context)!.settingGoalToZero,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey),
+                              ),
+                            ),
                           ],
                         ),
-                        Visibility(
-                          visible: controller.currentSliderValue == 0.0,
-                          child: Text(
-                            AppLocalizations.of(context)!.settingGoalToZero,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey),
-                          ),
-                        ),
+                      ),
                         SizedBox(
                           height: GlobalConstants.of(context).spacingNormal,
                         ),
@@ -403,6 +524,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                         ),
                       ],
                     ),
+                    
                   ),
                 ]),
               ),
@@ -460,10 +582,11 @@ class _RegisterPhase2DailyLearningGoalPageState
                               DeviceOrientation.portraitDown
                             ]);
                           },
-                          icon: Icon(
-                            Icons.fullscreen,
-                            color: Colors.white,
-                          )))
+                          icon: ImageIcon(
+                              AssetImage(
+                                  "assets/icons/icon_minimizescreen.png"),
+                              color: Color(0xFFCDCDCD),
+                              size: 16)))
                 ],
               ),
             ),
