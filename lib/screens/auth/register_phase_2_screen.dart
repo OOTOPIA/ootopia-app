@@ -374,6 +374,11 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                           borderRadius:
                                               BorderRadius.circular(25.0),
                                           side: BorderSide.none)),
+                                  minimumSize: MaterialStateProperty.all(
+                                    Size(60, 58),
+                                  ),
+                                  elevation:
+                                      MaterialStateProperty.all<double>(0.0),
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
                                           Color(0xff003694)),

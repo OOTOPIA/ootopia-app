@@ -376,6 +376,11 @@ class _RegisterPhase2TopInterestsPageState
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             LightColors.blue),
+                                    minimumSize: MaterialStateProperty.all(
+                                      Size(60, 58),
+                                    ),
+                                    elevation:
+                                        MaterialStateProperty.all<double>(0.0),
                                     padding: MaterialStateProperty.all<EdgeInsets>(
                                         EdgeInsets.all(
                                             GlobalConstants.of(context)
