@@ -168,9 +168,9 @@ class CardInformationBalance extends StatelessWidget {
         this.originTransaction == "learning_track") {
       iconForeground = Image.network(this.iconForeground, fit: BoxFit.cover);
     } else {
-      iconForeground = SvgPicture.asset(
-          "assets/icons/ooz_circle_icon_active.svg",
-          fit: BoxFit.cover);
+      iconForeground = Image.asset(
+            "assets/icons/ooz_blue_circle.png",
+            fit: BoxFit.cover);
     }
 
     return Row(
