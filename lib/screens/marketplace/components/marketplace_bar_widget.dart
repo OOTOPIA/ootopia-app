@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -36,23 +36,29 @@ class MarketplaceBarWidget extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              Text(
-                AppLocalizations.of(context)!.createAnOffer,
-                style: GoogleFonts.roboto(
-                  color: LightColors.blue,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(PageRoute.Page.aboutEthicalMarketPlace.route);
+            },
+            child: Row(
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.createAnOffer,
+                  style: GoogleFonts.roboto(
+                    color: LightColors.blue,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: LightColors.blue,
-                size: 12,
-              )
-            ],
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: LightColors.blue,
+                  size: 12,
+                )
+              ],
+            ),
           )
         ],
       ),
