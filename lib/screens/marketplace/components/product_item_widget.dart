@@ -84,8 +84,12 @@ class ProductItem extends StatelessWidget with ImageHandler {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Container(
-                          height: 171,
-                          width: 171,
+                          width: widthScreen >= 760
+                              ? (constraints.maxWidth / 4) - 24
+                              : (constraints.maxWidth / 2) - 24,
+                          height: widthScreen >= 760
+                              ? (constraints.maxWidth / 4) - 24
+                              : (constraints.maxWidth / 2) - 24,
                           decoration: BoxDecoration(
                             color: LightColors.grey.withOpacity(.1),
                             borderRadius: BorderRadius.circular(12),
