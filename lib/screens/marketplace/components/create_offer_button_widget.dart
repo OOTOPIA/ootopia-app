@@ -55,7 +55,7 @@ class CreateOfferButtonWidget extends StatelessWidget {
                           Text(
                             AppLocalizations.of(context)!.createYourOffer,
                             textAlign: TextAlign.center,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.roboto(
                               fontWeight: FontWeight.bold,

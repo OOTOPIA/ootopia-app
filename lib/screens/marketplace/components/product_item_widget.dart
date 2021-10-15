@@ -41,16 +41,10 @@ class ProductItem extends StatelessWidget with ImageHandler {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: ClipOval(
-                        child: Image(
-                          height: 36,
-                          fit: BoxFit.fitHeight,
-                          image: NetworkImage(productModel.userPhotoUrl),
-                        ),
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundImage: NetworkImage(
+                        productModel.userPhotoUrl,
                       ),
                     ),
                     const SizedBox(width: 8),
