@@ -54,22 +54,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 0),
-                        child: PurchaseButtonWidget(
-                          content: Text(
-                            AppLocalizations.of(context)!.purchaseNow,
-                            style: GoogleFonts.roboto(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          marginBottom: 24,
-                          onPressed: () {
-                            pageController.insertPage(TransferScreen(
-                              productModel: widget.productModel,
-                            ));
-                          },
-                        ),
-                      ),
+                      Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 24),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: PurchaseButtonWidget(
+                                  content: Text(
+                                    AppLocalizations.of(context)!
+                                        .purchaseNow,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  marginBottom: 24,
+                                  onPressed: () {
+                                    pageController
+                                        .insertPage(TransferScreen(
+                                      productModel: widget.productModel,
+                                    ));
+                                  },
+                                ),
+                              ),
+                            ],
+                          )),
                     ],
                   ),
                 ),
