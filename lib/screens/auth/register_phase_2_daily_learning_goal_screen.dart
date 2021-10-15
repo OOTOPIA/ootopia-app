@@ -243,10 +243,12 @@ class _RegisterPhase2DailyLearningGoalPageState
                                                             .landscapeLeft
                                                       ]);
                                                     },
-                                                    icon: Icon(
-                                                      Icons.fullscreen,
-                                                      color: Colors.white,
-                                                    )))
+                                                    icon: ImageIcon(
+                                                        AssetImage(
+                                                            "assets/icons/icon_maximizescreen.png"),
+                                                        color:
+                                                            Color(0xFFCDCDCD),
+                                                        size: 16)))
                                           ],
                                         )),
                                   ),
@@ -419,6 +421,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                         ),
                       ),
                     ),
+                    
                   ),
                 ]),
               ),
@@ -476,10 +479,11 @@ class _RegisterPhase2DailyLearningGoalPageState
                               DeviceOrientation.portraitDown
                             ]);
                           },
-                          icon: Icon(
-                            Icons.fullscreen,
-                            color: Colors.white,
-                          )))
+                          icon: ImageIcon(
+                              AssetImage(
+                                  "assets/icons/icon_minimizescreen.png"),
+                              color: Color(0xFFCDCDCD),
+                              size: 16)))
                 ],
               ),
             ),
