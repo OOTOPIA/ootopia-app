@@ -27,13 +27,19 @@ class _TransferScreenState extends State<TransferScreen> {
   final messageOptional = TextEditingController();
   final marketplaceRepositoryImpl = MarketplaceRepositoryImpl();
   final transferStore = TransferStore();
+  bool hasFocus = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            setState(() {
+              hasFocus = false;
+            });
+          },
           child: LayoutBuilder(
             builder: (context, constraint) {
               return Container(
@@ -44,7 +50,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 child: SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                        minHeight: !FocusScope.of(context).hasFocus
+                        minHeight: !hasFocus
                             ? constraint.maxHeight
                             : MediaQuery.of(context).size.height * 0.84),
                     child: IntrinsicHeight(
@@ -100,6 +106,11 @@ class _TransferScreenState extends State<TransferScreen> {
                                     ),
                                     MessageOptionalWidget(
                                       messageController: messageOptional,
+                                      onTap: () {
+                                        setState(() {
+                                          hasFocus = true;
+                                        });
+                                      },
                                     ),
                                   ],
                                 ),

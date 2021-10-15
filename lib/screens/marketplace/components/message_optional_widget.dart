@@ -5,7 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MessageOptionalWidget extends StatelessWidget {
   TextEditingController messageController = TextEditingController();
-  MessageOptionalWidget({required this.messageController});
+  final Function() onTap;
+  MessageOptionalWidget({required this.messageController, required this.onTap});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,6 +16,7 @@ class MessageOptionalWidget extends StatelessWidget {
         expands: true,
         maxLines: null,
         minLines: null,
+        onTap: onTap,
         textCapitalization: TextCapitalization.sentences,
         textAlignVertical: TextAlignVertical.top,
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
