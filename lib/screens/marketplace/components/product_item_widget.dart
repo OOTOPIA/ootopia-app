@@ -97,6 +97,12 @@ class ProductItem extends StatelessWidget with ImageHandler {
                         );
                       }
                       return Container(
+                        width: widthScreen >= 760
+                            ? (constraints.maxWidth / 4) - 24
+                            : (constraints.maxWidth / 2) - 24,
+                        height: widthScreen >= 760
+                            ? (constraints.maxWidth / 4) - 24
+                            : (constraints.maxWidth / 2) - 24,
                         decoration: BoxDecoration(
                           border: isWidthGreaterThanHeight(snapshot.data!)
                               ? null
@@ -109,12 +115,6 @@ class ProductItem extends StatelessWidget with ImageHandler {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image(
-                            width: widthScreen >= 760
-                                ? (constraints.maxWidth / 4) - 24
-                                : (constraints.maxWidth / 2) - 24,
-                            height: widthScreen >= 760
-                                ? (constraints.maxWidth / 4) - 24
-                                : (constraints.maxWidth / 2) - 24,
                             fit: isWidthGreaterThanHeight(snapshot.data!)
                                 ? BoxFit.cover
                                 : BoxFit.fitHeight,
