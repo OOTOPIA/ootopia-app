@@ -14,55 +14,63 @@ class CreateOfferButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widthScreen = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => onTap(),
       child: Padding(
         padding: const EdgeInsets.only(left: 12, right: 12, bottom: 24),
-        child: Column(
-          children: [
-            SizedBox(height: 44.6),
-            DottedBorder(
-              strokeCap: StrokeCap.square,
-              dashPattern: [10, 10],
-              borderType: BorderType.RRect,
-              radius: Radius.circular(12),
-              padding: EdgeInsets.all(0),
-              color: LightColors.grey,
-              child: Container(
-                height: 171,
-                width: 171,
-                decoration: BoxDecoration(
-                  color: LightColors.grey.withOpacity(.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/thin_add_icon.svg',
-                        height: 48,
-                        width: 48,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final sizeConstraints = widthScreen >= 760
+                ? (constraints.maxWidth / 4) - 24
+                : (constraints.maxWidth / 2) - 24;
+            return Column(
+              children: [
+                SizedBox(height: 44.6),
+                DottedBorder(
+                  strokeCap: StrokeCap.square,
+                  dashPattern: [10, 10],
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(12),
+                  padding: EdgeInsets.all(0),
+                  color: LightColors.grey,
+                  child: Container(
+                    width: sizeConstraints,
+                    height: sizeConstraints,
+                    decoration: BoxDecoration(
+                      color: LightColors.grey.withOpacity(.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/thin_add_icon.svg',
+                            height: 48,
+                            width: 48,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            AppLocalizations.of(context)!.createYourOffer,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.bold,
+                              color: LightColors.grey,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        AppLocalizations.of(context)!.createYourOffer,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.bold,
-                          color: LightColors.grey,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
