@@ -4,7 +4,7 @@
         "description": "The current language"
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
-    "liveInOotopiaNowMessage": "LIVE IN OOTOPIA NOW!",
+    "liveInOotopiaNowMessage": "LIVE OOTOPIA NOW!",
     "email": "e-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "password",
@@ -61,8 +61,8 @@
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Select the hashtags that correspond to the themes you want to explore and learn.",
     "selectAtLeastOneHashtag": "Select at least one hashtag",
     "selectHashtags": "Select hashtags",
-    "tagsSelected": "tags selected",
-    "tagSelected": "tag selected",
+    "tagsSelected": "selected",
+    "tagSelected": "selected",
 
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
     "nameAndSurname": "name",

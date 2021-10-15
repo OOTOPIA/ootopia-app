@@ -135,7 +135,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 24,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)!
@@ -148,8 +148,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(
-                                    top: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                    top: 32,
                                     bottom: 26,
                                   ),
                                   child: GestureDetector(
@@ -382,7 +381,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                                         side: BorderSide.none),
                                   ),
                                   minimumSize: MaterialStateProperty.all(
-                                    Size(60, 58),
+                                    Size(60, 55),
                                   ),
                                   elevation:
                                       MaterialStateProperty.all<double>(0.0),

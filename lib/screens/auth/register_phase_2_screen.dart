@@ -144,7 +144,10 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               decoration: GlobalConstants.of(context)
                                   .loginInputTheme(
                                       AppLocalizations.of(context)!.optional)
-                                  .copyWith(alignLabelWithHint: true),
+                                  .copyWith(
+                                      alignLabelWithHint: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 16)),
                               validator: (value) => null,
                             ),
                             SizedBox(
@@ -364,7 +367,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            bottom: GlobalConstants.of(context).spacingLarge,
+                            bottom: 24,
                           ),
                           child: ElevatedButton(
                               style: ButtonStyle(
@@ -375,7 +378,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                               BorderRadius.circular(25.0),
                                           side: BorderSide.none)),
                                   minimumSize: MaterialStateProperty.all(
-                                    Size(60, 58),
+                                    Size(60, 55),
                                   ),
                                   elevation:
                                       MaterialStateProperty.all<double>(0.0),
