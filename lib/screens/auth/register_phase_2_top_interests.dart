@@ -209,8 +209,6 @@ class _RegisterPhase2TopInterestsPageState
                                             .spacingNormal),
                                     height: 57,
                                     padding: EdgeInsets.symmetric(
-                                        // horizontal: GlobalConstants.of(context)
-                                        //     .spacingSmall,
                                         vertical: 0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
