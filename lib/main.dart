@@ -18,6 +18,7 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
+import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_marketplace.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
@@ -275,6 +276,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
     PageRoute.Page.aboutQuizScreen: (args) => AboutQuizScreen(),
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
+    PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
   };
 
   @override
