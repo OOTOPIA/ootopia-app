@@ -118,18 +118,25 @@ class _TransferScreenState extends State<TransferScreen> {
                     ),
                   ),
                   Observer(builder: (context) {
-                    return PurchaseButtonWidget(
-                        content: transferStore.isLoading
-                            ? loadingWidget()
-                            : Text(
-                                AppLocalizations.of(context)!.confirm,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                        marginBottom: 24,
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          makePurchase();
-                        });
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(children: [
+                        Expanded(
+                          child: PurchaseButtonWidget(
+                              content: transferStore.isLoading
+                                  ? loadingWidget()
+                                  : Text(
+                                      AppLocalizations.of(context)!.confirm,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                              marginBottom: 24,
+                              onPressed: () {
+                                FocusScope.of(context).unfocus();
+                                makePurchase();
+                              }),
+                        )
+                      ]),
+                    );
                   }),
                 ],
               ),
