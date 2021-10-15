@@ -21,6 +21,7 @@ class CardInformationBalance extends StatelessWidget {
   final String? description;
   final String? origin;
   final String? learningTrackId;
+  Function? updateCardInformationBalance;
 
   SmartPageController controller = SmartPageController.getInstance();
 
@@ -36,6 +37,7 @@ class CardInformationBalance extends StatelessWidget {
     this.description,
     this.origin,
     this.learningTrackId,
+    this.updateCardInformationBalance,
   });
 
   String getTransactionDescription(context) {
@@ -137,6 +139,7 @@ class CardInformationBalance extends StatelessWidget {
     void _goToLearningTracks() async {
       controller.insertPage(ViewLearningTracksScreen({
         'id': this.learningTrackId,
+        'updateLearningTrack': this.updateCardInformationBalance!,
       }));
     }
 
@@ -176,57 +179,63 @@ class CardInformationBalance extends StatelessWidget {
         Row(
           children: [
             Container(
-              height: 48,
-              width: 48,
+              height: 55,
+              width: 55,
               child: Stack(children: [
-                GestureDetector(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: iconBackground,
-                  ),
-                  onTap: () {
-                    if (this.otherUserId != null) {
-                      if (this.originTransaction == 'gratitude_reward') {
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.timelineProfileScreen.route,
-                          arguments: {
-                            "userId": this.otherUserId,
-                            "postId": this.postId,
-                            "postSelected": 0,
-                          },
-                        );
-                      } else if (this.originTransaction ==
-                              "total_game_completed" ||
-                          this.originTransaction == "personal_goal_achieved") {
-                        showModalBottomSheet(
-                            barrierColor: Colors.black.withAlpha(1),
-                            context: context,
-                            backgroundColor: Colors.black.withAlpha(1),
-                            builder: (BuildContext context) {
-                              return SnackBarWidget(
-                                menu: AppLocalizations.of(context)!
-                                    .regenerationGame,
-                                text: AppLocalizations.of(context)!
-                                    .aboutRegenerationGame,
-                                about: AppLocalizations.of(context)!.learnMore,
-                                marginBottom: true,
-                              );
-                            });
-                      } else if (this.origin == "market_place_transfer") {
-                        showDialog(
-                            context: context,
-                            builder: (context) => TransferSuccessScreen(
-                                  goToMarketPlacePage: false,
-                                ));
-                      } else if (this.origin == "learning_track") {
-                        _goToLearningTracks();
+                Container(
+                  height: 48,
+                  width: 48,
+                  child: GestureDetector(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: iconBackground,
+                    ),
+                    onTap: () {
+                      if (this.otherUserId != null) {
+                        if (this.originTransaction == 'gratitude_reward') {
+                          Navigator.of(context).pushNamed(
+                            PageRoute.Page.timelineProfileScreen.route,
+                            arguments: {
+                              "userId": this.otherUserId,
+                              "postId": this.postId,
+                              "postSelected": 0,
+                            },
+                          );
+                        } else if (this.originTransaction ==
+                                "total_game_completed" ||
+                            this.originTransaction ==
+                                "personal_goal_achieved") {
+                          showModalBottomSheet(
+                              barrierColor: Colors.black.withAlpha(1),
+                              context: context,
+                              backgroundColor: Colors.black.withAlpha(1),
+                              builder: (BuildContext context) {
+                                return SnackBarWidget(
+                                  menu: AppLocalizations.of(context)!
+                                      .regenerationGame,
+                                  text: AppLocalizations.of(context)!
+                                      .aboutRegenerationGame,
+                                  about:
+                                      AppLocalizations.of(context)!.learnMore,
+                                  marginBottom: true,
+                                );
+                              });
+                        } else if (this.origin == "market_place_transfer") {
+                          showDialog(
+                              context: context,
+                              builder: (context) => TransferSuccessScreen(
+                                    goToMarketPlacePage: false,
+                                  ));
+                        } else if (this.origin == "learning_track") {
+                          _goToLearningTracks();
+                        }
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
                 Positioned(
                   bottom: 0,
-                  right: 0,
+                  right: -1,
                   child: Container(
                     width: 30,
                     height: 30,
@@ -314,22 +323,30 @@ class CardInformationBalance extends StatelessWidget {
         SizedBox(
           // wallet Ozz
           width: 80,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SvgPicture.asset(
-                'assets/icons/ooz-coin-blue-small.svg',
-                color: Color(colorOfBalance),
-                height: 10,
-              ),
-              Text(
-                '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Color(colorOfBalance),
-                    fontSize: 14),
-              ),
-            ],
+          child: GestureDetector(
+            onTap: () {
+              if (this.originTransaction == 'gratitude_reward') {
+                Navigator.of(context)
+                    .pushNamed(PageRoute.Page.aboutOOzCurrentScreen.route);
+              }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/ooz-coin-blue-small.svg',
+                  color: Color(colorOfBalance),
+                  height: 10,
+                ),
+                Text(
+                  '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Color(colorOfBalance),
+                      fontSize: 14),
+                ),
+              ],
+            ),
           ),
         ),
       ],

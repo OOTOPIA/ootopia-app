@@ -7,7 +7,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
@@ -17,10 +16,10 @@ import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -185,10 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       controller.resetNavigation();
                       setState(() {});
                     },
-                    onTapWalletItem: () {
-                      controller
-                          .goToPage(PageViewController.TAB_INDEX_MARKETPLACE);
-                    },
+                    onTapWalletItem: () => controller.insertPage(WalletPage()),
                   ),
             body: Stack(
               children: [
