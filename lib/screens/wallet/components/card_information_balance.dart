@@ -269,7 +269,10 @@ class CardInformationBalance extends StatelessWidget {
                     child: Text(
                       getTransactionTitle(context),
                       style: TextStyle(
-                          color: Color(0xff018F9C),
+                          color:
+                              this.originTransaction == "market_place_transfer"
+                                  ? Color(0xff000000)
+                                  : Color(0xff018F9C),
                           fontWeight: FontWeight.bold,
                           fontSize: 12),
                       maxLines: 1,

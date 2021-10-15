@@ -125,7 +125,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                 AppLocalizations.of(context)!.confirm,
                                 style: TextStyle(fontSize: 16),
                               ),
-                        marginBottom: 23,
+                        marginBottom: 24,
                         onPressed: () {
                           FocusScope.of(context).unfocus();
                           makePurchase();

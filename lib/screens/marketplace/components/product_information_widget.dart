@@ -11,7 +11,7 @@ class ProductInformationWidget extends StatefulWidget {
   final double marginTopTitle, marginLeft, marginRight, marginBottom;
   const ProductInformationWidget(
       {required this.productModel,
-      this.marginTopTitle = 18.5,
+      this.marginTopTitle = 16,
       this.marginLeft = 26,
       this.marginRight = 26,
       this.marginBottom = 40,
