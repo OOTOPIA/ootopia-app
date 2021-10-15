@@ -107,6 +107,10 @@ class AnalyticsTracking {
     this.trackingEvent("Learning tracks - Quiz", null);
   }
 
+  creteOfferMarketPlace() {
+    this.trackingEvent("Create Offer - MarketingPlace", null);
+  }
+
   timelineCreatedAPost(String type) {
     final Identify identify = Identify()..add('Content posted', 1);
     this.trackingDataUser(identify);

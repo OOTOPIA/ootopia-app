@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
-
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
@@ -79,8 +78,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             ViewState.loading &&
                                         marketplaceStore.viewState !=
                                             ViewState.refresh,
-                                    child:
-                                        CreateOfferButtonWidget(onTap: () {}),
+                                    child: CreateOfferButtonWidget(onTap: () {
+                                      Navigator.of(context).pushNamed(PageRoute
+                                          .Page.aboutEthicalMarketPlace.route);
+                                    }),
                                   ),
                                 ],
                               ),
