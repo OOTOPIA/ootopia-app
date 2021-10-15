@@ -325,7 +325,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 children: [
                   Expanded(
                     child: Theme(
-                      data: ThemeData(highlightColor: Color(0xff4D7BC9)),
+                      data: ThemeData(highlightColor: Color(0xff03145C)),
                       child: Scrollbar(
                         controller: _scrollController,
                         isAlwaysShown: true,
@@ -336,6 +336,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           padding: EdgeInsets.symmetric(horizontal: 12),
                           child: ListView.builder(
                             controller: _scrollController,
+                            physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
                             itemCount: this.post.tags.length,
