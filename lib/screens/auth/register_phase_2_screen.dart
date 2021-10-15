@@ -6,7 +6,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:provider/provider.dart';
-import '../../shared/analytics.server.dart';
+// import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -17,28 +17,29 @@ class RegisterPhase2Page extends StatefulWidget {
   final Map<String, dynamic>? args;
 
   RegisterPhase2Page([this.args]);
+
   @override
   _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
 }
 
 class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
-  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  late AuthStore authStore;
+  // AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  // late AuthStore authStore;
   RegisterSecondPhaseController controller =
       RegisterSecondPhaseController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    this.trackingEvents.signupStartedSignupPartII();
+    // this.trackingEvents.signupStartedSignupPartII();
   }
 
-  setAuthStoreToController() {
-    if (controller.user == null) {
-      controller.authStore = authStore;
-      controller.user = authStore.currentUser;
-    }
-  }
+  // setAuthStoreToController() {
+  //   if (controller.user == null) {
+  //     controller.authStore = authStore;
+  //     controller.user = authStore.currentUser;
+  //   }
+  // }
 
   get appBar => AppBar(
         centerTitle: true,
@@ -84,8 +85,6 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    authStore = Provider.of<AuthStore>(context);
-    setAuthStoreToController();
 
     return Scaffold(
       appBar: appBar,
@@ -407,16 +406,10 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 if (!controller.birthDateIsValid()) return;
 
                                 if (controller.firstStepIsValid(context))
-                                  Navigator.of(context).pushNamed(
-                                      PageRoute
-                                          .Page
-                                          .registerPhase2DailyLearningGoalScreen
-                                          .route,
-                                      arguments: {
-                                        "user": authStore.currentUser,
-                                        "returnToPageWithArgs":
-                                            widget.args!["returnToPageWithArgs"]
-                                      });
+                                  Navigator.of(context).pushNamed(PageRoute
+                                      .Page
+                                      .registerPhase2DailyLearningGoalScreen
+                                      .route);
                               }),
                         )
                       ],

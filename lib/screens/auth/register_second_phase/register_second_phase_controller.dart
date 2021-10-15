@@ -26,6 +26,16 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   //Step 01
   final formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController repeatPasswordController =
+      TextEditingController();
+
+  //Step 02
+  final TextEditingController codeController = TextEditingController();
+
+  // implements
   final TextEditingController dayController = TextEditingController();
   final TextEditingController monthController = TextEditingController();
   final TextEditingController yearController = TextEditingController();

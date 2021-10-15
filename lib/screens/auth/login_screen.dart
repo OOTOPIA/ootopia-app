@@ -444,20 +444,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              if (widget.args != null &&
-                                  widget.args!['returnToPageWithArgs'] !=
-                                      null) {
-                                Navigator.of(context).pushNamed(
-                                  PageRoute.Page.registerScreen.route,
-                                  arguments: {
-                                    "returnToPageWithArgs":
-                                        widget.args!['returnToPageWithArgs']
-                                  },
-                                );
-                              } else {
-                                Navigator.of(context).pushNamed(
-                                    PageRoute.Page.registerScreen.route);
-                              }
+                              Navigator.of(context).pushNamed(
+                                  PageRoute.Page.registerScreen.route);
                             },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(
