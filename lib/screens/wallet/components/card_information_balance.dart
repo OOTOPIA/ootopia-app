@@ -109,6 +109,13 @@ class CardInformationBalance extends StatelessWidget {
   int colorOfBalance = 0xff003694;
   String typeActionFromOrTo = '';
 
+  void _goToLearningTracks() async {
+    controller.insertPage(ViewLearningTracksScreen({
+      'id': this.learningTrackId,
+      'updateLearningTrack': this.updateCardInformationBalance!,
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (action) {
@@ -134,13 +141,6 @@ class CardInformationBalance extends StatelessWidget {
           "id": this.otherUserId,
         },
       );
-    }
-
-    void _goToLearningTracks() async {
-      controller.insertPage(ViewLearningTracksScreen({
-        'id': this.learningTrackId,
-        'updateLearningTrack': this.updateCardInformationBalance!,
-      }));
     }
 
     var iconBackground = this.iconBackground.contains('.svg')
