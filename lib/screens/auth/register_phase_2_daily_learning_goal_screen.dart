@@ -118,163 +118,131 @@ class _RegisterPhase2DailyLearningGoalPageState
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 30,
+                        Column(children: [
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.regenerationGame,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 22,
+                                color: Color(0xff03145C),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.watchVideoToLearn,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff707070),
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: GlobalConstants.of(context).spacingNormal,
+                              bottom: 26,
                             ),
-                            Text(
-                              AppLocalizations.of(context)!.regenerationGame,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  color: Color(0xff03145C),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.watchVideoToLearn,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xff707070),
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingNormal,
-                                bottom: 26,
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _videoPlayerController.value.isPlaying
-                                        ? _videoPlayerController.pause()
-                                        : _videoPlayerController.play();
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _videoPlayerController.value.isPlaying
+                                      ? _videoPlayerController.pause()
+                                      : _videoPlayerController.play();
 
-                                    timerOpacity?.cancel();
-                                    timerOpacity = Timer(
-                                        Duration(seconds: 1),
-                                        () => setState(
-                                            () => timerOpacity = null));
-                                  });
-                                },
-                                child: Container(
-                                    height: 210,
-                                    width: 360,
-                                    child: Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          child: VideoPlayer(
-                                              _videoPlayerController),
-                                        ),
-                                        _videoPlayerController.value.isPlaying
-                                            ? AnimatedOpacity(
-                                                opacity: timerOpacity != null
-                                                    ? 1
-                                                    : 0.0,
-                                                duration:
-                                                    Duration(milliseconds: 200),
-                                                child: timerOpacity != null
-                                                    ? Center(
-                                                        child: CircleAvatar(
-                                                          backgroundColor:
-                                                              Color(0xff35AD6C),
-                                                          radius: 28.5,
-                                                          child: Icon(
-                                                            Icons.pause,
-                                                            size: 23,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : IgnorePointer(
-                                                        child: Center(
-                                                          child: CircleAvatar(
-                                                            backgroundColor:
-                                                                Color(
-                                                                    0xff35AD6C),
-                                                            radius: 28.5,
-                                                            child: Icon(
-                                                              Icons.pause,
-                                                              size: 23,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
+                                  timerOpacity?.cancel();
+                                  timerOpacity = Timer(
+                                      Duration(seconds: 1),
+                                      () =>
+                                          setState(() => timerOpacity = null));
+                                });
+                              },
+                              child: Container(
+                                height: 210,
+                                width: 360,
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child:
+                                          VideoPlayer(_videoPlayerController),
+                                    ),
+                                    _videoPlayerController.value.isPlaying
+                                        ? AnimatedOpacity(
+                                            opacity:
+                                                timerOpacity != null ? 1 : 0.0,
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            child: timerOpacity != null
+                                                ? Center(
+                                                    child: CircleAvatar(
+                                                      backgroundColor:
+                                                          Color(0xff35AD6C),
+                                                      radius: 28.5,
+                                                      child: Icon(
+                                                        Icons.pause,
+                                                        size: 23,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : IgnorePointer(
+                                                    child: Center(
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            Color(0xff35AD6C),
+                                                        radius: 28.5,
+                                                        child: Icon(
+                                                          Icons.pause,
+                                                          size: 23,
+                                                          color: Colors.white,
                                                         ),
                                                       ),
-                                              )
-                                            : Center(
-                                                child: CircleAvatar(
-                                                  backgroundColor:
-                                                      Color(0xff35AD6C),
-                                                  radius: 28.5,
-                                                  child: Icon(
-                                                    Icons.play_arrow,
-                                                    size: 23,
-                                                    color: Colors.white,
+                                                    ),
                                                   ),
-                                                ),
+                                          )
+                                        : Center(
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Color(0xff35AD6C),
+                                              radius: 28.5,
+                                              child: Icon(
+                                                Icons.play_arrow,
+                                                size: 23,
+                                                color: Colors.white,
                                               ),
-                                        Positioned(
-                                          bottom: 2,
-                                          right: 2,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              SystemChrome
-                                                  .setPreferredOrientations([
-                                                DeviceOrientation
-                                                    .landscapeRight,
-                                                DeviceOrientation.landscapeLeft
-                                              ]);
-                                            },
-                                            icon: Icon(
-                                              Icons.fullscreen,
-                                              color: Colors.white,
                                             ),
                                           ),
-                                        ),
-                                        Positioned(
-                                            bottom: 2,
-                                            right: 2,
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  SystemChrome
-                                                      .setPreferredOrientations([
-                                                    DeviceOrientation
-                                                        .landscapeRight,
-                                                    DeviceOrientation
-                                                        .landscapeLeft
-                                                  ]);
-                                                },
-                                                icon: ImageIcon(
-                                                    AssetImage(
-                                                        "assets/icons/icon_maximizescreen.png"),
-                                                    color: Color(0xFFCDCDCD),
-                                                    size: 16)))
-                                      ],
-                                    )),
+                                    Positioned(
+                                      bottom: 2,
+                                      right: 2,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          SystemChrome
+                                              .setPreferredOrientations([
+                                            DeviceOrientation.landscapeRight,
+                                            DeviceOrientation.landscapeLeft
+                                          ]);
+                                        },
+                                        icon: ImageIcon(
+                                            AssetImage(
+                                                "assets/icons/icon_maximizescreen.png"),
+                                            color: Color(0xFFCDCDCD),
+                                            size: 16),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                            Divider(
-                              color: Color(0xff707070).withOpacity(.6),
-                              height: 1,
-                            ),
-                            _isNotLearningGoalRating
-                                ? SizedBox(
-                                    height: GlobalConstants.of(context)
-                                        .spacingLarge,
-                                  )
-                                : Container(),
-                            SizedBox(
-                              height: GlobalConstants.of(context).spacingNormal,
-                            ),
-                          ],
+                          ),
+                        ]),
+                        Divider(
+                          color: Color(0xff707070).withOpacity(.6),
+                          height: 1,
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 24, bottom: 24),
