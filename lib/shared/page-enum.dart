@@ -34,6 +34,7 @@ enum Page {
   aboutQuizScreen,
   videoLearningTracksScreen,
   aboutOOzCurrentScreen,
+  aboutEthicalMarketPlace
 }
 
 extension PageRoute on Page {
