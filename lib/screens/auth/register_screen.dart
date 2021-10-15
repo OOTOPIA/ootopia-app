@@ -214,7 +214,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             Expanded(
                               child: ElevatedButton(
                                 style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all<double>(0.0),
+                                  elevation:
+                                      MaterialStateProperty.all<double>(0.0),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -291,33 +292,63 @@ class _RegisterPageState extends State<RegisterPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .liveInOotopiaNowMessage,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(
+                            //       AppLocalizations.of(context)!
+                            //           .liveInOotopiaNowMessage,
+                            //       textAlign: TextAlign.center,
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .subtitle1!
+                            //           .copyWith(
+                            //               color: LightColors.blue,
+                            //               fontSize: 24),
+                            //     ),
+                            //     Container(
+                            //       height: 50,
+                            //       width: 50,
+                            //       child: Image(
+                            //         image: AssetImage(
+                            //             "assets/images/butterfly.png"),
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      AppLocalizations.of(context)!
+                                          .liveInOotopiaNowMessage,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.roboto(
                                           color: LightColors.blue,
-                                          fontSize: 24),
-                                ),
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: Image(
-                                    image: AssetImage(
-                                        "assets/images/butterfly.png"),
-                                  ),
-                                )
-                              ],
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w900)),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: 50,
+                                        child: Image(
+                                          image: AssetImage(
+                                              "assets/images/butterfly.png"),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 32,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingMedium,
+                                
                                 bottom:
                                     GlobalConstants.of(context).spacingMedium,
                               ),
@@ -532,8 +563,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                bottom:
-                                    20,
+                                bottom: 20,
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
