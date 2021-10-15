@@ -28,10 +28,11 @@ class ProductItem extends StatelessWidget with ImageHandler {
         onTap: () => pageController
             .insertPage(ProductDetailScreen(productModel: productModel)),
         child: LayoutBuilder(builder: (context, constraints) {
+          final sizeConstraints = widthScreen >= 760
+              ? (constraints.maxWidth / 4) - 24
+              : (constraints.maxWidth / 2) - 24;
           return Container(
-            width: widthScreen >= 760
-                ? (constraints.maxWidth / 4) - 24
-                : (constraints.maxWidth / 2) - 24,
+            width: sizeConstraints,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,12 +85,8 @@ class ProductItem extends StatelessWidget with ImageHandler {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Container(
-                          width: widthScreen >= 760
-                              ? (constraints.maxWidth / 4) - 24
-                              : (constraints.maxWidth / 2) - 24,
-                          height: widthScreen >= 760
-                              ? (constraints.maxWidth / 4) - 24
-                              : (constraints.maxWidth / 2) - 24,
+                          width: sizeConstraints,
+                          height: sizeConstraints,
                           decoration: BoxDecoration(
                             color: LightColors.grey.withOpacity(.1),
                             borderRadius: BorderRadius.circular(12),
@@ -97,12 +94,8 @@ class ProductItem extends StatelessWidget with ImageHandler {
                         );
                       }
                       return Container(
-                        width: widthScreen >= 760
-                            ? (constraints.maxWidth / 4) - 24
-                            : (constraints.maxWidth / 2) - 24,
-                        height: widthScreen >= 760
-                            ? (constraints.maxWidth / 4) - 24
-                            : (constraints.maxWidth / 2) - 24,
+                        width: sizeConstraints,
+                        height: sizeConstraints,
                         decoration: BoxDecoration(
                           border: isWidthGreaterThanHeight(snapshot.data!)
                               ? null

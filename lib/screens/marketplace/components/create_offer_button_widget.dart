@@ -21,6 +21,9 @@ class CreateOfferButtonWidget extends StatelessWidget {
         padding: const EdgeInsets.only(left: 12, right: 12, bottom: 24),
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final sizeConstraints = widthScreen >= 760
+                ? (constraints.maxWidth / 4) - 24
+                : (constraints.maxWidth / 2) - 24;
             return Column(
               children: [
                 SizedBox(height: 44.6),
@@ -32,12 +35,8 @@ class CreateOfferButtonWidget extends StatelessWidget {
                   padding: EdgeInsets.all(0),
                   color: LightColors.grey,
                   child: Container(
-                    width: widthScreen >= 760
-                        ? (constraints.maxWidth / 4) - 24
-                        : (constraints.maxWidth / 2) - 24,
-                    height: widthScreen >= 760
-                        ? (constraints.maxWidth / 4) - 24
-                        : (constraints.maxWidth / 2) - 24,
+                    width: sizeConstraints,
+                    height: sizeConstraints,
                     decoration: BoxDecoration(
                       color: LightColors.grey.withOpacity(.1),
                       borderRadius: BorderRadius.circular(12),
