@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -177,7 +176,8 @@ class CardInformationBalance extends StatelessWidget {
         Row(
           children: [
             Container(
-              height: 56,
+              height: 48,
+              width: 48,
               child: Stack(children: [
                 GestureDetector(
                   child: ClipRRect(

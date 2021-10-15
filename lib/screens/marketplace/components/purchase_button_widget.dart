@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class PurchaseButtonWidget extends StatelessWidget {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 
 part 'transfer_store.g.dart';
 
@@ -43,7 +42,7 @@ abstract class _TransferStoreBase with Store {
           )
               ? AppLocalizations.of(context)!.insufficientBalance
               : AppLocalizations.of(context)!.generalError,
-          style: TextStyle(fontSize: getAdaptiveSize(14, context)),
+          style: TextStyle(fontSize: 14),
         ),
         backgroundColor: Colors.red,
       ),

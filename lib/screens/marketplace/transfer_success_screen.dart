@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -53,8 +52,7 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
           ),
           Container(
             height: MediaQuery.of(context).size.height,
-            margin:
-                EdgeInsets.symmetric(horizontal: getAdaptiveSize(26, context)),
+            margin: EdgeInsets.symmetric(horizontal: 26),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,9 +105,8 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
                       Navigator.pop(context);
                     },
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getAdaptiveSize(20, context),
-                          vertical: getAdaptiveSize(18, context)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                       child: Text(
                         AppLocalizations.of(context)!.close,
                         style: TextStyle(

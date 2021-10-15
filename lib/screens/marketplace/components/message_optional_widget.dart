@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,7 +20,7 @@ class MessageOptionalWidget extends StatelessWidget {
         textAlignVertical: TextAlignVertical.top,
         style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(getAdaptiveSize(16, context)),
+          contentPadding: EdgeInsets.all(16),
           hintText: AppLocalizations.of(context)!.messageOptional,
           hintStyle: TextStyle(
               fontSize: 14,

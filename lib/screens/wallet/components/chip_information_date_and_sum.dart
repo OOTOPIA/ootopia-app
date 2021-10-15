@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 
 class ChipSumForDate extends StatefulWidget {
   final String date;

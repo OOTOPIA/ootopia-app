@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 
 class ProfileNameLocationWidget extends StatelessWidget {
   final String profileImageUrl, profileName, location;
@@ -13,8 +12,8 @@ class ProfileNameLocationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-        top: getAdaptiveSize(16, context),
-        bottom: getAdaptiveSize(16.5, context),
+        top: 16,
+        bottom: 16,
       ),
       child: Row(
         children: [

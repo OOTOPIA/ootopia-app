@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 
 class HorizontalExpandedImageWidget extends StatelessWidget {
   final String urlImage;
@@ -8,7 +7,9 @@ class HorizontalExpandedImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getAdaptiveSize(MediaQuery.of(context).size.width > 720 ? MediaQuery.of(context).size.height * 0.3 : MediaQuery.of(context).size.height * 0.5, context),
+      height: MediaQuery.of(context).size.width > 720
+          ? MediaQuery.of(context).size.height * 0.3
+          : MediaQuery.of(context).size.height * 0.5,
       width: double.infinity,
       child: ClipRRect(
         child: FittedBox(

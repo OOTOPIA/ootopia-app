@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/marketplace/components/message_optional_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
@@ -44,8 +43,8 @@ class _TransferScreenState extends State<TransferScreen> {
             builder: (context, constraint) {
               return Container(
                 margin: EdgeInsets.only(
-                  right: getAdaptiveSize(26, context),
-                  left: getAdaptiveSize(26, context),
+                  right: 26,
+                  left: 26,
                 ),
                 child: SingleChildScrollView(
                   child: ConstrainedBox(
@@ -95,10 +94,8 @@ class _TransferScreenState extends State<TransferScreen> {
                                           child: ProductInformationWidget(
                                             productModel: widget.productModel,
                                             marginTopTitle: 0,
-                                            marginBottom:
-                                                getAdaptiveSize(32, context),
-                                            marginLeft:
-                                                getAdaptiveSize(16, context),
+                                            marginBottom: 32,
+                                            marginLeft: 16,
                                             marginRight: 0,
                                           ),
                                         ),
@@ -123,8 +120,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                                   .confirm,
                                               style: TextStyle(fontSize: 16),
                                             ),
-                                      marginBottom:
-                                          getAdaptiveSize(23, context),
+                                      marginBottom: 23,
                                       onPressed: () {
                                         FocusScope.of(context).unfocus();
                                         makePurchase();
@@ -147,12 +143,12 @@ class _TransferScreenState extends State<TransferScreen> {
   }
 
   Widget loadingWidget() => Container(
-        height: getAdaptiveSize(20, context),
-        width: getAdaptiveSize(20, context),
+        height: 20,
+        width: 20,
         child: Center(
           child: CircularProgressIndicator(
             backgroundColor: Colors.transparent,
-            strokeWidth: getAdaptiveSize(2, context),
+            strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ),
