@@ -371,7 +371,7 @@
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
-    "ethicalMarketplace": "MERCADO ÉTICO",
+    "ethicalMarketplace": "MARKETPLACE ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
     "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
@@ -387,10 +387,12 @@
      "quiz":"Quiz",
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
      "completed": "Completo",
-     "marketPlaceTransfer": "Mercado Ético",
+     "marketPlaceTransfer": "Marketplace Ético",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
      "generalError": "Não foi possível realizar a operação.",
      "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\nNo app OOTOPIA, seus OOz valem o equivalente a Reais e podem ser usados ​​no Marketplace Ético e para recompensar as publicações mais inspiradoras.",
      "theOOzCurrent":"a moeda ooz",
-     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo"
+     "pictureByClemOnojeghuo": "Foto de Clem Onojeghuo",
+     "pictureBy": "Foto de"
+
 }

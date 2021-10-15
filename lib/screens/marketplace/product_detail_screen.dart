@@ -55,7 +55,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 26),
+                        margin: EdgeInsets.symmetric(horizontal: 0),
                         child: PurchaseButtonWidget(
                           content: Text(
                             AppLocalizations.of(context)!.purchaseNow,

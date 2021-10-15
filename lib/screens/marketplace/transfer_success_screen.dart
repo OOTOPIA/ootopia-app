@@ -20,7 +20,7 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
   }
@@ -64,14 +64,35 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
                       child: Text(
                         AppLocalizations.of(context)!.ethicalMarketplace,
                         style: GoogleFonts.roboto(
-                            color: Colors.white, fontSize: 22),
+                          color: Colors.white,
+                          fontSize: 22,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(0, 5),
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Text(
-                      AppLocalizations.of(context)!
-                          .ethicalMarketplaceDescription,
-                      style:
-                          GoogleFonts.roboto(color: Colors.white, fontSize: 18),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Text(
+                        AppLocalizations.of(context)!
+                            .ethicalMarketplaceDescription,
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 18,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(0, 5),
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -85,11 +106,28 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
                   style: GoogleFonts.roboto(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(0, 5),
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                      ],
                       fontSize: 28),
                 ),
                 Text(
                   AppLocalizations.of(context)!.messageVendorContact,
-                  style: GoogleFonts.roboto(color: Colors.white, fontSize: 18),
+                  style: GoogleFonts.roboto(
+                    color: Colors.white,
+                    fontSize: 18,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(0, 5),
+                        blurRadius: 10,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(),
                 Container(
@@ -130,11 +168,12 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
               child: RotatedBox(
                 quarterTurns: 3,
                 child: Text(
-                  "Picture by Clem Onojeghuo",
+                  AppLocalizations.of(context)!.pictureBy + " Clem Onojeghuo",
                   style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w300),
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
               ),
             ),
