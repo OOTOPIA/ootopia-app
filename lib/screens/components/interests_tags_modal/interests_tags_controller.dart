@@ -8,9 +8,20 @@ class InterestsTagsController {
     List<InterestsTagsModel> allTags,
     List<InterestsTagsModel>? selectedTags,
   ) async {
-    return await showDialog(
+    return await showGeneralDialog(
       context: context,
-      builder: (context) {
+      barrierDismissible: false,
+      transitionDuration: Duration(milliseconds: 500),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale: animation,
+            child: child,
+          ),
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
         return InterestsTagsModal(
           allTags: new List<InterestsTagsModel>.from(
               allTags.map((t) => InterestsTagsModel.fromJson(t.toJson()))),
@@ -20,6 +31,6 @@ class InterestsTagsController {
               : null),
         );
       },
-    );
+    ) as List<InterestsTagsModel>;
   }
 }
