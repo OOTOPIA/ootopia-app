@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'dart:convert';
 
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -10,8 +9,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class AuthRepository {
   Future<User> login(String email, String password);
-  Future<User> register(
-      String name, String email, String password, String invitationCode);
+  Future<User> register(Auth user, List<String> tagsIds);
   Future recoverPassword(String email, String lang);
   Future resetPassword(String newPassword);
 }
@@ -56,25 +54,24 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   }
 
   @override
-  Future<User> register(String name, String email, String password,
-      String? invitationCode) async {
+  Future<User> register(Auth user, List<String>? tagsIds) async {
     final response = await http.post(
       Uri.parse(dotenv.env['API_URL']! + "users"),
       headers: API_HEADERS,
       body: jsonEncode(<String, dynamic>{
-        "fullname": name,
-        "email": email,
-        "password": password,
+        "fullname": user.fullname,
+        "email": user.email,
+        "password": user.password,
+        "invitationCode": user.invitationCode,
         "acceptedTerms": true,
-        "invitationCode": invitationCode
       }),
     );
 
     print("REGISTER RESPONSE BODY ${response.body}");
 
     if (response.statusCode == 201) {
+      // await this.login( user.email as String, user.password as String);
       User user = User.fromJson(json.decode(response.body));
-      await this.login(email, password);
       return user;
     } else {
       Map<String, dynamic> decode = json.decode(response.body);

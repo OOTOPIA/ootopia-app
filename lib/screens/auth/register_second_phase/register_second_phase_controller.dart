@@ -4,12 +4,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:gallery_saver/files.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
+import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,6 +26,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 class RegisterSecondPhaseController with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
 
   User? user;
   File? image;
@@ -254,5 +261,31 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     await setCurrentUser(json.encode(user.toJson()));
 
     return completer.future;
+  }
+
+  Future _registerUser(Auth user, List<String> tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
+
+    await this.authRepository.register(user, tagsIds);
+
+    // var taskId = await this
+    //     .userRepository
+    //     .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+    // uploader.result.listen(
+    //     (result) {
+    //       if (result.statusCode == 200 && result.taskId == taskId) {
+    //         completer.complete(user.id);
+    //       }
+    //     },
+    //     onDone: () {},
+    //     onError: (error) {
+    //       completer.completeError(error);
+    //     });
+    // user.registerPhase = 2;
+    // user.dailyLearningGoalInMinutes = currentSliderValue.toInt();
+    // await setCurrentUser(json.encode(user.toJson()));
+
+    // return completer.future;
   }
 }
