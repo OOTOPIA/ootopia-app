@@ -74,7 +74,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        margin: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         color: Colors.white,
         child: Material(

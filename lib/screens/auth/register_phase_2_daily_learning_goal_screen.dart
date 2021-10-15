@@ -110,6 +110,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                 key: _formKey,
                 child: CustomScrollView(slivers: [
                   SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -282,51 +283,54 @@ class _RegisterPhase2DailyLearningGoalPageState
                                   height:
                                       GlobalConstants.of(context).spacingSmall,
                                 ),
-                                SfSliderTheme(
-                                  data: SfSliderThemeData(
-                                      activeTrackColor:
-                                          Color(0xff03DAC5).withOpacity(0.08),
-                                      inactiveTrackColor:
-                                          Color(0xff03DAC5).withOpacity(0.3),
-                                      inactiveDividerRadius: 4.8,
-                                      minorTickSize: Size(10, 10),
-                                      tickSize: Size(20, 20),
-                                      thumbColor: Colors.white,
-                                      activeDividerColor: Color(0xff03DAC5),
-                                      overlayColor: Color(0xff03DAC5),
-                                      activeDividerStrokeColor:
-                                          Color(0xff03DAC5),
-                                      disabledActiveDividerColor:
-                                          Color(0xff03DAC5),
-                                      thumbStrokeColor: Color(0xff03DAC5),
-                                      inactiveTickColor: Color(0xff03DAC5),
-                                      disabledThumbColor: Color(0xff03DAC5),
-                                      activeMinorTickColor: Color(0xff03DAC5),
-                                      inactiveDividerColor: Color(0xff03DAC5),
-                                      overlayRadius: 9,
-                                      inactiveTrackHeight: 9.5,
-                                      trackCornerRadius: 9,
-                                      tickOffset: Offset(10, 10),
-                                      thumbRadius: 9.3,
-                                      activeTrackHeight: 9.5,
-                                      activeLabelStyle: TextStyle(
-                                          color: Colors.grey, fontSize: 14),
-                                      inactiveLabelStyle: TextStyle(
-                                          color: Colors.grey, fontSize: 14),
-                                      activeDividerRadius: 4.8),
-                                  child: SfSlider(
-                                    min: 0.0,
-                                    max: 60,
-                                    value: controller.currentSliderValue,
-                                    interval: 10,
-                                    stepSize: 10,
-                                    showLabels: true,
-                                    showDividers: true,
-                                    onChanged: (dynamic value) {
-                                      setState(() {
-                                        controller.currentSliderValue = value;
-                                      });
-                                    },
+                                Container(
+                                  height: 60,
+                                  child: SfSliderTheme(
+                                    data: SfSliderThemeData(
+                                        activeTrackColor:
+                                            Color(0xff03DAC5).withOpacity(0.08),
+                                        inactiveTrackColor:
+                                            Color(0xff03DAC5).withOpacity(0.3),
+                                        inactiveDividerRadius: 4.8,
+                                        minorTickSize: Size(10, 10),
+                                        tickSize: Size(20, 20),
+                                        thumbColor: Colors.white,
+                                        activeDividerColor: Color(0xff03DAC5),
+                                        overlayColor: Color(0xff03DAC5),
+                                        activeDividerStrokeColor:
+                                            Color(0xff03DAC5),
+                                        disabledActiveDividerColor:
+                                            Color(0xff03DAC5),
+                                        thumbStrokeColor: Color(0xff03DAC5),
+                                        inactiveTickColor: Color(0xff03DAC5),
+                                        disabledThumbColor: Color(0xff03DAC5),
+                                        activeMinorTickColor: Color(0xff03DAC5),
+                                        inactiveDividerColor: Color(0xff03DAC5),
+                                        overlayRadius: 9,
+                                        inactiveTrackHeight: 9.5,
+                                        trackCornerRadius: 9,
+                                        tickOffset: Offset(10, 10),
+                                        thumbRadius: 9.3,
+                                        activeTrackHeight: 9.5,
+                                        activeLabelStyle: TextStyle(
+                                            color: Colors.grey, fontSize: 14),
+                                        inactiveLabelStyle: TextStyle(
+                                            color: Colors.grey, fontSize: 14),
+                                        activeDividerRadius: 4.8),
+                                    child: SfSlider(
+                                      min: 0.0,
+                                      max: 60,
+                                      value: controller.currentSliderValue,
+                                      interval: 10,
+                                      stepSize: 10,
+                                      showLabels: true,
+                                      showDividers: true,
+                                      onChanged: (dynamic value) {
+                                        setState(() {
+                                          controller.currentSliderValue = value;
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ),
                                 _isNotLearningGoalRating
@@ -421,7 +425,6 @@ class _RegisterPhase2DailyLearningGoalPageState
                         ),
                       ),
                     ),
-                    
                   ),
                 ]),
               ),
@@ -444,31 +447,47 @@ class _RegisterPhase2DailyLearningGoalPageState
                     borderRadius: BorderRadius.circular(12),
                     child: VideoPlayer(_videoPlayerController),
                   ),
-                  AnimatedOpacity(
-                    opacity: timerOpacity != null ? 1 : 0.0,
-                    duration: Duration(milliseconds: 200),
-                    child: timerOpacity != null
-                        ? Center(
+                  _videoPlayerController.value.isPlaying
+                      ? AnimatedOpacity(
+                          opacity: timerOpacity != null ? 1 : 0.0,
+                          duration: Duration(milliseconds: 200),
+                          child: timerOpacity != null
+                              ? Center(
+                                  child: CircleAvatar(
+                                    backgroundColor: Color(0xff35AD6C),
+                                    radius: 28.5,
+                                    child: Icon(
+                                      Icons.pause,
+                                      size: 23,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              : IgnorePointer(
+                                  child: Center(
+                                    child: CircleAvatar(
+                                      backgroundColor: Color(0xff35AD6C),
+                                      radius: 28.5,
+                                      child: Icon(
+                                        Icons.pause,
+                                        size: 23,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        )
+                      : Center(
+                          child: CircleAvatar(
+                            backgroundColor: Color(0xff35AD6C),
+                            radius: 28.5,
                             child: Icon(
-                              (_videoPlayerController.value.isPlaying
-                                  ? Icons.pause_circle_outline
-                                  : Icons.play_circle_outline),
-                              size: 64,
-                              color: Colors.black87,
-                            ),
-                          )
-                        : IgnorePointer(
-                            child: Center(
-                              child: Icon(
-                                (_videoPlayerController.value.isPlaying
-                                    ? Icons.pause_circle_outline
-                                    : Icons.play_circle_outline),
-                                size: 64,
-                                color: Colors.black87,
-                              ),
+                              Icons.play_arrow,
+                              size: 23,
+                              color: Colors.white,
                             ),
                           ),
-                  ),
+                        ),
                   Positioned(
                       bottom: 2,
                       right: 2,
