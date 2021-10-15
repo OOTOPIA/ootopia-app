@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -147,14 +146,12 @@ class CardInformationBalance extends StatelessWidget {
     var iconBackground = this.iconBackground.contains('.svg')
         ? SvgPicture.network(
             this.iconBackground,
-            width: getAdaptiveSize(52, context),
-            height: getAdaptiveSize(52, context),
+            width: 52,
+            height: 52,
             fit: BoxFit.cover,
           )
         : Image.network(this.iconBackground,
-            height: getAdaptiveSize(52, context),
-            width: getAdaptiveSize(52, context),
-            fit: BoxFit.cover);
+            height: 52, width: 52, fit: BoxFit.cover);
 
     var iconForeground;
 
@@ -182,59 +179,66 @@ class CardInformationBalance extends StatelessWidget {
         Row(
           children: [
             Container(
-              height: getAdaptiveSize(56, context),
+              height: 55,
+              width: 55,
               child: Stack(children: [
-                GestureDetector(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: iconBackground,
-                  ),
-                  onTap: () {
-                    if (this.otherUserId != null) {
-                      if (this.originTransaction == 'gratitude_reward') {
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.timelineProfileScreen.route,
-                          arguments: {
-                            "userId": this.otherUserId,
-                            "postId": this.postId,
-                            "postSelected": 0,
-                          },
-                        );
-                      } else if (this.originTransaction ==
-                              "total_game_completed" ||
-                          this.originTransaction == "personal_goal_achieved") {
-                        showModalBottomSheet(
-                            barrierColor: Colors.black.withAlpha(1),
-                            context: context,
-                            backgroundColor: Colors.black.withAlpha(1),
-                            builder: (BuildContext context) {
-                              return SnackBarWidget(
-                                menu: AppLocalizations.of(context)!
-                                    .regenerationGame,
-                                text: AppLocalizations.of(context)!
-                                    .aboutRegenerationGame,
-                                about: AppLocalizations.of(context)!.learnMore,
-                                marginBottom: true,
-                              );
-                            });
-                      } else if (this.origin == "market_place_transfer") {
-                        showDialog(
-                            context: context,
-                            builder: (context) => TransferSuccessScreen(
-                                  goToMarketPlacePage: false,
-                                ));
-                      } else if (this.origin == "learning_track") {
-                        _goToLearningTracks();
+                Container(
+                  height: 48,
+                  width: 48,
+                  child: GestureDetector(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: iconBackground,
+                    ),
+                    onTap: () {
+                      if (this.otherUserId != null) {
+                        if (this.originTransaction == 'gratitude_reward') {
+                          Navigator.of(context).pushNamed(
+                            PageRoute.Page.timelineProfileScreen.route,
+                            arguments: {
+                              "userId": this.otherUserId,
+                              "postId": this.postId,
+                              "postSelected": 0,
+                            },
+                          );
+                        } else if (this.originTransaction ==
+                                "total_game_completed" ||
+                            this.originTransaction ==
+                                "personal_goal_achieved") {
+                          showModalBottomSheet(
+                              barrierColor: Colors.black.withAlpha(1),
+                              context: context,
+                              backgroundColor: Colors.black.withAlpha(1),
+                              builder: (BuildContext context) {
+                                return SnackBarWidget(
+                                  menu: AppLocalizations.of(context)!
+                                      .regenerationGame,
+                                  text: AppLocalizations.of(context)!
+                                      .aboutRegenerationGame,
+                                  about:
+                                      AppLocalizations.of(context)!.learnMore,
+                                  marginBottom: true,
+                                );
+                              });
+                        } else if (this.origin == "market_place_transfer") {
+                          showDialog(
+                              context: context,
+                              builder: (context) => TransferSuccessScreen(
+                                    goToMarketPlacePage: false,
+                                  ));
+                        } else if (this.origin == "learning_track") {
+                          _goToLearningTracks();
+                        }
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
                 Positioned(
                   bottom: 0,
-                  right: 0,
+                  right: -1,
                   child: Container(
-                    width: getAdaptiveSize(30, context),
-                    height: getAdaptiveSize(30, context),
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(width: 2, color: Colors.white)),
@@ -254,7 +258,7 @@ class CardInformationBalance extends StatelessWidget {
             ),
             Container(
               // text and sent
-              margin: EdgeInsets.only(left: getAdaptiveSize(16, context)),
+              margin: EdgeInsets.only(left: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -267,15 +271,14 @@ class CardInformationBalance extends StatelessWidget {
                       style: TextStyle(
                           color: Color(0xff018F9C),
                           fontWeight: FontWeight.bold,
-                          fontSize: getAdaptiveSize(12, context)),
+                          fontSize: 12),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (this.originTransaction != "gratitude_reward")
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: getAdaptiveSize(4, context), horizontal: 0),
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                       child: Container(
                         width: MediaQuery.of(context).size.width < 400
                             ? MediaQuery.of(context).size.width * 0.3
@@ -285,7 +288,7 @@ class CardInformationBalance extends StatelessWidget {
                           style: TextStyle(
                             color: Color(0xff707070),
                             fontWeight: FontWeight.w400,
-                            fontSize: getAdaptiveSize(14, context),
+                            fontSize: 14,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -296,15 +299,14 @@ class CardInformationBalance extends StatelessWidget {
                       text: TextSpan(children: [
                     TextSpan(
                         text: '$typeActionFromOrTo',
-                        style: TextStyle(
-                            color: Color(0xff707070),
-                            fontSize: getAdaptiveSize(12, context))),
+                        style:
+                            TextStyle(color: Color(0xff707070), fontSize: 12)),
                     TextSpan(
                         text:
                             ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
                         style: TextStyle(
                             color: Color(0xff707070),
-                            fontSize: getAdaptiveSize(12, context),
+                            fontSize: 14,
                             fontWeight: FontWeight.bold),
                         recognizer: new TapGestureRecognizer()
                           ..onTap = () {
@@ -320,7 +322,7 @@ class CardInformationBalance extends StatelessWidget {
         ),
         SizedBox(
           // wallet Ozz
-          width: getAdaptiveSize(80, context),
+          width: 80,
           child: GestureDetector(
             onTap: () {
               if (this.originTransaction == 'gratitude_reward') {
@@ -334,14 +336,14 @@ class CardInformationBalance extends StatelessWidget {
                 SvgPicture.asset(
                   'assets/icons/ooz-coin-blue-small.svg',
                   color: Color(colorOfBalance),
-                  height: getAdaptiveSize(10, context),
+                  height: 10,
                 ),
                 Text(
                   '${this.action == "sent" && this.originTransaction != "invitation_code_sent" ? '-' : ''} ${this.balanceOfTransactions.length > 6 ? NumberFormat.compact().format(double.parse(this.balanceOfTransactions)).replaceAll('.', ',') : this.balanceOfTransactions.replaceAll('.', ',')}',
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Color(colorOfBalance),
-                      fontSize: getAdaptiveSize(14, context)),
+                      fontSize: 14),
                 ),
               ],
             ),
