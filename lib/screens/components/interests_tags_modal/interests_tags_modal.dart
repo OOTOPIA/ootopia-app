@@ -78,162 +78,167 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         color: Colors.white,
         child: Material(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                child: Column(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
-                      style:
-                          GoogleFonts.roboto(fontSize: 22, color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: GlobalConstants.of(context).intermediateSpacing,
-                    ),
-                    TextFormField(
-                      style: TextStyle(height: 0.1),
-                      onChanged: (value) {
-                        filterTagsByText(value);
-                      },
-                      decoration: GlobalConstants.of(context).loginInputTheme(
-                          AppLocalizations.of(context)!
-                              .selectAtLeastOneHashtag),
-                    ),
-                    SizedBox(
-                      height: GlobalConstants.of(context).spacingMedium,
-                    ),
-                    Container(
-                      color: LightColors.grey.withOpacity(.3),
-                      width: double.infinity,
-                      height: 1,
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(
-                        height: 26,
-                      ),
-                      Wrap(
-                        direction: Axis.horizontal,
-                        spacing: GlobalConstants.of(context).spacingSmall,
-                        children: filterTags.map((tag) {
-                          return ChoiceChip(
-                            padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  GlobalConstants.of(context).spacingNormal,
-                              vertical: 0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(45)),
-                              side: BorderSide(
-                                width: 1,
-                                color: Color(0xffE0E1E2),
-                              ),
-                            ),
-                            label: Text(
-                              '${tag.name}',
-                              style: GoogleFonts.roboto(
-                                color: tag.selectedTag == true
-                                    ? Colors.white
-                                    : LightColors.blackText.withOpacity(0.6),
-                                fontWeight: FontWeight.bold,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headline5!
-                                    .fontSize,
-                              ),
-                            ),
-                            selectedColor: LightColors.darkBlue,
-                            backgroundColor: Colors.white,
-                            selected: tag.selectedTag == true,
-                            onSelected: (bool selected) {
-                              setState(() {
-                                tag.selectedTag = selected;
-                              });
-                              if (selected) {
-                                tagsSelected.add(tag);
-                              } else {
-                                tagsSelected
-                                    .removeWhere((_tag) => _tag.id == tag.id);
-                              }
-                            },
-                          );
-                        }).toList(),
+                      Text(
+                        AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
+                        style: GoogleFonts.roboto(
+                            fontSize: 22, color: Colors.black),
                       ),
                       SizedBox(
-                        height:
-                            GlobalConstants.of(context).screenHorizontalSpace,
+                        height: GlobalConstants.of(context).intermediateSpacing,
+                      ),
+                      TextFormField(
+                        style: TextStyle(height: 0.1),
+                        onChanged: (value) {
+                          filterTagsByText(value);
+                        },
+                        decoration: GlobalConstants.of(context).loginInputTheme(
+                            AppLocalizations.of(context)!
+                                .selectAtLeastOneHashtag),
+                      ),
+                      SizedBox(
+                        height: GlobalConstants.of(context).spacingMedium,
+                      ),
+                      Container(
+                        color: LightColors.grey.withOpacity(.3),
+                        width: double.infinity,
+                        height: 1,
                       ),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                height: 65,
-                child: Column(
-                  children: [
-                    Container(
-                      color: LightColors.grey.withOpacity(.3),
-                      width: double.infinity,
-                      height: 1,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingSmall,
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.cancel,
-                              style: TextStyle(
-                                  color: Color(0xff018F9C),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .fontSize),
-                            ),
-                          ),
+                        SizedBox(
+                          height: 26,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: GlobalConstants.of(context).spacingSmall,
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(tagsSelected);
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.confirm,
-                              style: TextStyle(
-                                  color: Color(0xff018F9C),
-                                  fontWeight: FontWeight.w500,
+                        Wrap(
+                          direction: Axis.horizontal,
+                          spacing: GlobalConstants.of(context).spacingSmall,
+                          children: filterTags.map((tag) {
+                            return ChoiceChip(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    GlobalConstants.of(context).spacingNormal,
+                                vertical: 0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(45)),
+                                side: BorderSide(
+                                  width: 1,
+                                  color: Color(0xffE0E1E2),
+                                ),
+                              ),
+                              label: Text(
+                                '${tag.name}',
+                                style: GoogleFonts.roboto(
+                                  color: tag.selectedTag == true
+                                      ? Colors.white
+                                      : LightColors.blackText.withOpacity(0.6),
+                                  fontWeight: FontWeight.bold,
                                   fontSize: Theme.of(context)
                                       .textTheme
-                                      .subtitle1!
-                                      .fontSize),
-                            ),
-                          ),
+                                      .headline5!
+                                      .fontSize,
+                                ),
+                              ),
+                              selectedColor: LightColors.darkBlue,
+                              backgroundColor: Colors.white,
+                              selected: tag.selectedTag == true,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  tag.selectedTag = selected;
+                                });
+                                if (selected) {
+                                  tagsSelected.add(tag);
+                                } else {
+                                  tagsSelected
+                                      .removeWhere((_tag) => _tag.id == tag.id);
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(
+                          height:
+                              GlobalConstants.of(context).screenHorizontalSpace,
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  height: 65,
+                  child: Column(
+                    children: [
+                      Container(
+                        color: LightColors.grey.withOpacity(.3),
+                        width: double.infinity,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: GlobalConstants.of(context).spacingSmall,
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.cancel,
+                                style: TextStyle(
+                                    color: Color(0xff018F9C),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .fontSize),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: GlobalConstants.of(context).spacingSmall,
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(tagsSelected);
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.confirm,
+                                style: TextStyle(
+                                    color: Color(0xff018F9C),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .fontSize),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
