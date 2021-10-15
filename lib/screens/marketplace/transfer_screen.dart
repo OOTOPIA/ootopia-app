@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,112 +30,111 @@ class _TransferScreenState extends State<TransferScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-            setState(() {
-              hasFocus = false;
-            });
-          },
-          child: LayoutBuilder(
-            builder: (context, constraint) {
-              return Container(
-                margin: EdgeInsets.only(
-                  right: 26,
-                  left: 26,
-                ),
-                child: SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: !hasFocus
-                            ? constraint.maxHeight
-                            : MediaQuery.of(context).size.height * 0.84),
-                    child: IntrinsicHeight(
-                      child: Column(
-                        children: <Widget>[
-                          ProfileNameLocationWidget(
-                            profileImageUrl: widget.productModel.userPhotoUrl,
-                            profileName: widget.productModel.userName,
-                            location: widget.productModel.location,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        RoundedThumbnailImageWidget(
-                                          imageUrl:
-                                              widget.productModel.imageUrl,
-                                          radius: 12,
-                                        ),
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context)
-                                                          .size
-                                                          .width <
-                                                      400
-                                                  ? MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.58
-                                                  : MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.65,
-                                          child: ProductInformationWidget(
-                                            productModel: widget.productModel,
-                                            marginTopTitle: 0,
-                                            marginBottom: 32,
-                                            marginLeft: 16,
-                                            marginRight: 0,
+      resizeToAvoidBottomInset: false,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 26, right: 26, bottom: 16),
+                          child: Column(
+                            children: <Widget>[
+                              ProfileNameLocationWidget(
+                                profileImageUrl:
+                                    widget.productModel.userPhotoUrl,
+                                profileName: widget.productModel.userName,
+                                location: widget.productModel.location,
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          RoundedThumbnailImageWidget(
+                                            imageUrl:
+                                                widget.productModel.imageUrl,
+                                            radius: 12,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    MessageOptionalWidget(
-                                      messageController: messageOptional,
-                                      onTap: () {
-                                        setState(() {
-                                          hasFocus = true;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Observer(builder: (context) {
-                                  return PurchaseButtonWidget(
-                                      content: transferStore.isLoading
-                                          ? loadingWidget()
-                                          : Text(
-                                              AppLocalizations.of(context)!
-                                                  .confirm,
-                                              style: TextStyle(fontSize: 16),
+                                          Container(
+                                            width:
+                                                MediaQuery.of(context)
+                                                            .size
+                                                            .width <
+                                                        400
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.58
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.65,
+                                            child: ProductInformationWidget(
+                                              productModel: widget.productModel,
+                                              marginTopTitle: 0,
+                                              marginBottom: 32,
+                                              marginLeft: 16,
+                                              marginRight: 0,
                                             ),
-                                      marginBottom: 23,
-                                      onPressed: () {
-                                        FocusScope.of(context).unfocus();
-                                        makePurchase();
-                                      });
-                                }),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                                          ),
+                                        ],
+                                      ),
+                                      MessageOptionalWidget(
+                                        messageController: messageOptional,
+                                        onTap: () {
+                                          setState(() {
+                                            hasFocus = true;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          color: Color(0xff707070).withOpacity(0.2),
+                          height: 1,
+                          thickness: 1,
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              );
-            },
-          ),
+                  Observer(builder: (context) {
+                    return PurchaseButtonWidget(
+                        content: transferStore.isLoading
+                            ? loadingWidget()
+                            : Text(
+                                AppLocalizations.of(context)!.confirm,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                        marginBottom: 23,
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          makePurchase();
+                        });
+                  }),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

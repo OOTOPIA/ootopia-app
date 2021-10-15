@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/marketplace/components/horizontal_expanded_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
@@ -58,7 +59,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: PurchaseButtonWidget(
                           content: Text(
                             AppLocalizations.of(context)!.purchaseNow,
-                            style: TextStyle(fontSize: 16),
+                            style: GoogleFonts.roboto(
+                                fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           marginBottom: 24,
                           onPressed: () {

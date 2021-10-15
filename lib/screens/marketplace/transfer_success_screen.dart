@@ -63,13 +63,15 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
                       margin: const EdgeInsets.only(top: 50, bottom: 32),
                       child: Text(
                         AppLocalizations.of(context)!.ethicalMarketplace,
-                        style: TextStyle(color: Colors.white, fontSize: 22),
+                        style: GoogleFonts.roboto(
+                            color: Colors.white, fontSize: 22),
                       ),
                     ),
                     Text(
                       AppLocalizations.of(context)!
                           .ethicalMarketplaceDescription,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style:
+                          GoogleFonts.roboto(color: Colors.white, fontSize: 18),
                     ),
                   ],
                 ),
@@ -80,15 +82,16 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
                 Text(
                   AppLocalizations.of(context)!.thanksForYourOrder,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 28),
                 ),
                 Text(
                   AppLocalizations.of(context)!.messageVendorContact,
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style: GoogleFonts.roboto(color: Colors.white, fontSize: 18),
                 ),
+                SizedBox(),
                 Container(
                   margin: EdgeInsets.only(bottom: 24),
                   child: ElevatedButton(
@@ -109,7 +112,7 @@ class _TransferSuccessScreenState extends State<TransferSuccessScreen> {
                           EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                       child: Text(
                         AppLocalizations.of(context)!.close,
-                        style: TextStyle(
+                        style: GoogleFonts.roboto(
                             color: LightColors.silverText,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),

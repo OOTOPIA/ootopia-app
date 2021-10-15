@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
@@ -40,7 +41,8 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
             ),
             child: Text(
               widget.productModel.title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style:
+                  GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w600),
             ),
           ),
           Container(
@@ -58,12 +60,14 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                 Padding(
                   padding: EdgeInsets.only(left: 7.99),
                   child: Text(
-                      marketplaceStore.currencyFormatter
-                          .format(widget.productModel.price),
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: LightColors.grey)),
+                    marketplaceStore.currencyFormatter
+                        .format(widget.productModel.price),
+                    style: GoogleFonts.roboto(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: LightColors.grey,
+                    ),
+                  ),
                 )
               ],
             ),
@@ -83,7 +87,7 @@ class _ProductInformationWidgetState extends State<ProductInformationWidget> {
                       : 3
                   : 1000,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14, color: Colors.black87),
+              style: GoogleFonts.roboto(fontSize: 14, color: Colors.black87),
             ),
           ),
           SizedBox(

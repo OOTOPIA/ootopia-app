@@ -113,7 +113,7 @@ class ProductItem extends StatelessWidget {
                       SvgPicture.asset(
                         'assets/icons/ooz_mini_blue.svg',
                         height: 10,
-                        color: LightColors.grey,
+                        color: Color(0xff707070),
                       ),
                       SizedBox(width: 7),
                       Text(
