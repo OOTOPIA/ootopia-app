@@ -136,11 +136,12 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         cellPhoneController.text.isNotEmpty ? cellPhoneController.text : null;
   }
 
-  Future getImage(imagePath) async {
+  getImage(imagePath, VoidCallback update) {
     if (user != null && imagePath != null) {
       image = File(imagePath);
       user!.photoFilePath = imagePath;
     }
+    update();
   }
 
   bool birthDateIsValid() {
@@ -228,7 +229,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
     var taskId = await this
         .userRepository
-        .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+        .updateUserProfile(user, tagsIds, uploader);
     uploader.result.listen(
         (result) {
           if (result.statusCode == 200 && result.taskId == taskId) {

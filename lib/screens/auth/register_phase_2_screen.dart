@@ -118,6 +118,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 if (ImagePath != null) {
                                   controller.getImage(
                                     ImagePath,
+                                    ()=>setState(() {
+                                      
+                                    })
                                   );
                                 }
                               },
