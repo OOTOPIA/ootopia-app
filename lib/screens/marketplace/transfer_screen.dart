@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/marketplace/components/message_optional_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
@@ -27,109 +25,128 @@ class _TransferScreenState extends State<TransferScreen> {
   final messageOptional = TextEditingController();
   final marketplaceRepositoryImpl = MarketplaceRepositoryImpl();
   final transferStore = TransferStore();
+  bool hasFocus = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            return Container(
-              margin: EdgeInsets.only(
-                right: getAdaptiveSize(26, context),
-                left: getAdaptiveSize(26, context),
-              ),
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                  child: IntrinsicHeight(
+      resizeToAvoidBottomInset: false,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: <Widget>[
+                  Expanded(
                     child: Column(
-                      children: <Widget>[
-                        ProfileNameLocationWidget(
-                          profileImageUrl: widget.productModel.userPhotoUrl,
-                          profileName: widget.productModel.userName,
-                          location: widget.productModel.location,
-                        ),
-                        Expanded(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 26, right: 26, bottom: 16),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
+                              ProfileNameLocationWidget(
+                                profileImageUrl:
+                                    widget.productModel.userPhotoUrl,
+                                profileName: widget.productModel.userName,
+                                location: widget.productModel.location,
+                              ),
                               Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  Column(
                                     children: [
-                                      RoundedThumbnailImageWidget(
-                                        imageUrl: widget.productModel.imageUrl,
-                                        radius: 12,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          RoundedThumbnailImageWidget(
+                                            imageUrl:
+                                                widget.productModel.imageUrl,
+                                            radius: 12,
+                                          ),
+                                          Container(
+                                            width:
+                                                MediaQuery.of(context)
+                                                            .size
+                                                            .width <
+                                                        400
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.58
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.65,
+                                            child: ProductInformationWidget(
+                                              productModel: widget.productModel,
+                                              marginTopTitle: 0,
+                                              marginBottom: 32,
+                                              marginLeft: 16,
+                                              marginRight: 0,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width <
-                                                    400
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.58
-                                                : MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.65,
-                                        child: ProductInformationWidget(
-                                          productModel: widget.productModel,
-                                          marginTopTitle: 0,
-                                          marginBottom:
-                                              getAdaptiveSize(32, context),
-                                          marginLeft:
-                                              getAdaptiveSize(16, context),
-                                          marginRight: 0,
-                                        ),
+                                      MessageOptionalWidget(
+                                        messageController: messageOptional,
+                                        onTap: () {
+                                          setState(() {
+                                            hasFocus = true;
+                                          });
+                                        },
                                       ),
                                     ],
                                   ),
-                                  MessageOptionalWidget(
-                                    messageController: messageOptional,
-                                  ),
                                 ],
                               ),
-                              Observer(builder: (context) {
-                                return PurchaseButtonWidget(
-                                    content: transferStore.isLoading
-                                        ? loadingWidget()
-                                        : Text(
-                                            AppLocalizations.of(context)!
-                                                .confirm,
-                                            style: TextStyle(
-                                                fontSize: getAdaptiveSize(
-                                                    16, context)),
-                                          ),
-                                    marginBottom: getAdaptiveSize(23, context),
-                                    onPressed: () => makePurchase());
-                              }),
                             ],
                           ),
-                        )
+                        ),
+                        Divider(
+                          color: Color(0xff707070).withOpacity(0.2),
+                          height: 1,
+                          thickness: 1,
+                        ),
                       ],
                     ),
                   ),
-                ),
+                  Observer(builder: (context) {
+                    return PurchaseButtonWidget(
+                        content: transferStore.isLoading
+                            ? loadingWidget()
+                            : Text(
+                                AppLocalizations.of(context)!.confirm,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                        marginBottom: 24,
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          makePurchase();
+                        });
+                  }),
+                ],
               ),
-            );
-          },
+            )
+          ],
         ),
       ),
     );
   }
 
   Widget loadingWidget() => Container(
-        height: getAdaptiveSize(20, context),
-        width: getAdaptiveSize(20, context),
+        height: 20,
+        width: 20,
         child: Center(
           child: CircularProgressIndicator(
             backgroundColor: Colors.transparent,
-            strokeWidth: getAdaptiveSize(2, context),
+            strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ),

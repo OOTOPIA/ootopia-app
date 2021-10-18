@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -205,8 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: _blocBuilder(),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(
-                            GlobalConstants.of(context).spacingMedium),
+                        padding: EdgeInsets.all(24),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +224,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                   ),
                                   minimumSize: MaterialStateProperty.all(
-                                    Size(60, 58),
+                                    Size(60, 55),
                                   ),
                                   backgroundColor: _termsCheckbox
                                       ? MaterialStateProperty.all(
@@ -292,65 +293,73 @@ class _RegisterPageState extends State<RegisterPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Text(
-                            //       AppLocalizations.of(context)!
-                            //           .liveInOotopiaNowMessage,
-                            //       textAlign: TextAlign.center,
-                            //       style: Theme.of(context)
-                            //           .textTheme
-                            //           .subtitle1!
-                            //           .copyWith(
-                            //               color: LightColors.blue,
-                            //               fontSize: 24),
-                            //     ),
-                            //     Container(
-                            //       height: 50,
-                            //       width: 50,
-                            //       child: Image(
-                            //         image: AssetImage(
-                            //             "assets/images/butterfly.png"),
-                            //       ),
-                            //     )
-                            //   ],
-                            // ),
-                            Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      AppLocalizations.of(context)!
-                                          .liveInOotopiaNowMessage,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.roboto(
-                                          color: LightColors.blue,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w900)),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Image(
-                                          image: AssetImage(
-                                              "assets/images/butterfly.png"),
+                            Platform.localeName == "pt_BR"
+                                ? Center(
+                                    child: Container(
+                                    width: 323,
+                                    height: 47,
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .liveInOotopiaNowMessage,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.roboto(
+                                                  color: LightColors.blue,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold)),
                                         ),
-                                      ),
-                                      Container(
-                                        height: 32,
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            height: 37,
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/butterfly.png"),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ))
+                                : Center(
+                                    child: Container(
+                                    width: 278,
+                                    height: 47,
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .liveInOotopiaNowMessage,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.roboto(
+                                                  color: LightColors.blue,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            height: 37,
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/butterfly.png"),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )),
                             Padding(
                               padding: EdgeInsets.only(
-                                
-                                bottom:
-                                    GlobalConstants.of(context).spacingMedium,
+                                top: GlobalConstants.of(context).spacingMedium,
+                                bottom: 40,
                               ),
                               child: Column(
                                 children: [
@@ -395,7 +404,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .intermediateSpacing,
                                   ),
                                   TextFormField(
                                     controller: _emailController,
@@ -440,7 +449,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .intermediateSpacing,
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
@@ -496,7 +505,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .intermediateSpacing,
                                   ),
                                   TextFormField(
                                     controller: _repeatPasswordController,

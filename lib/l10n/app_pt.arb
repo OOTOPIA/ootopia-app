@@ -55,8 +55,8 @@
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
     "selectAtLeastOneHashtag": "Selecione pelo menos uma hashtag",
     "selectHashtags": "Selecione hashtags",
-    "tagsSelected": "tags selecionadas",
-    "tagSelected":"tag selecionada",
+    "tagsSelected": "selecionadas",
+    "tagSelected":"selecionada",
 
     "others": "Outras(os)",
 
@@ -349,7 +349,7 @@
 
     "currentOOZBalance": "Saldo OOz Atual",
     "createAnOffer": "Criar uma Oferta",
-    "createYourOffer":"Crie a sua oferta",
+    "createYourOffer":"Criar sua oferta",
 
     "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações",
     "welcomeCredit":"Crédito de Boas-Vindas",
@@ -372,12 +372,12 @@
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
-    "ethicalMarketplace": "MERCADO ÉTICO",
+    "ethicalMarketplace": "MARKETPLACE ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
-    "messageVendorContact": "O vendedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua compra",
+    "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
     "messageOptional": "Mensagem - Opcional",
-    "purchaseNow": "Compre agora",
+    "purchaseNow": "Adquirir Agora",
 
     "seeAll":"Veja todos",
      "dontExistLearningTracks":"Não existem learning tracks",
@@ -388,10 +388,14 @@
      "quiz":"Quiz",
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
      "completed": "Completo",
-     "marketPlaceTransfer": "Transferência de mercado",
+     "marketPlaceTransfer": "Marketplace Ético",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
      "generalError": "Não foi possível realizar a operação.",
-     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\n No app OOTOPIA, seus OOz valem o equivalente a reais e podem ser usados ​​no Mercado Ético e para premiar as publicações mais inspiradoras.",
+     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\nNo app OOTOPIA, seus OOz valem o equivalente a Reais e podem ser usados ​​no Marketplace Ético e para recompensar as publicações mais inspiradoras.",
      "theOOzCurrent":"a moeda ooz",
-     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo"
+     "pictureBy": "Foto de",
+     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo",
+     "nextAboutCreateOffer":"Na próxima atualização do aplicativo, todos poderão criar ofertas, produtos, serviços e experiências. Até lá, que tal nos dizer o que você gostaria de vender ou comprar?\n\nSuas sugestões e dúvidas são muito bem vindas!",
+     "aboutYourOfferHere":"SERÁ ÓTIMO VER SUA OFERTA AQUI",
+     "giveSuggestion":"Dar sugestão"
 }

@@ -329,33 +329,41 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 3),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/icons/ooz_mini_blue.svg',
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 6),
-                                          child: Text(
-                                            homeStore.dailyGoalStats != null
-                                                ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
-                                                : "0,00",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .accentColor,
-                                                ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pushNamed(
+                                            PageRoute.Page.aboutOOzCurrentScreen
+                                                .route);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/ooz_mini_blue.svg',
                                           ),
-                                        )
-                                      ],
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 6),
+                                            child: Text(
+                                              homeStore.dailyGoalStats != null
+                                                  ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
+                                                  : "0,00",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
+                                                  .copyWith(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .accentColor,
+                                                  ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],

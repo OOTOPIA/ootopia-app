@@ -75,7 +75,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         color: Colors.white,
         child: Material(
           child: GestureDetector(
@@ -88,10 +88,21 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                 Container(
                   child: Column(
                     children: [
-                      Text(
-                        AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag,
-                        style: GoogleFonts.roboto(
-                            fontSize: 22, color: Colors.black),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .pleaseSelectAtLeast1Tag,
+                              overflow: TextOverflow.clip,
+                              maxLines: 3,
+                              textDirection: TextDirection.ltr,
+                              style: GoogleFonts.roboto(
+                                  fontSize: 22, color: Colors.black),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: GlobalConstants.of(context).intermediateSpacing,
@@ -102,8 +113,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                           filterTagsByText(value);
                         },
                         decoration: GlobalConstants.of(context).loginInputTheme(
-                            AppLocalizations.of(context)!
-                                .selectAtLeastOneHashtag),
+                            AppLocalizations.of(context)!.searchForAHashtag),
                       ),
                       SizedBox(
                         height: GlobalConstants.of(context).spacingMedium,
@@ -122,7 +132,8 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                          height: 26,
+                          height:
+                              GlobalConstants.of(context).screenHorizontalSpace,
                         ),
                         Wrap(
                           direction: Axis.horizontal,
@@ -181,7 +192,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                   ),
                 ),
                 Container(
-                  height: 65,
+                  height: 70,
                   child: Column(
                     children: [
                       Container(
@@ -189,12 +200,15 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                         width: double.infinity,
                         height: 1,
                       ),
+                      SizedBox(
+                        height: 18,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                              top: GlobalConstants.of(context).spacingSmall,
+                              top: 0,
                             ),
                             child: TextButton(
                               onPressed: () {
@@ -214,7 +228,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              top: GlobalConstants.of(context).spacingSmall,
+                              top: 0,
                             ),
                             child: TextButton(
                               onPressed: () {

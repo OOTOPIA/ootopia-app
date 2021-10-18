@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
-import 'package:ootopia_app/screens/marketplace/components/get_adaptive_size.dart';
 import 'package:ootopia_app/screens/marketplace/components/horizontal_expanded_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/profile_name_location_widget.dart';
@@ -32,8 +32,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(
-                          right: getAdaptiveSize(16, context),
-                          left: getAdaptiveSize(26, context),
+                          right: 16,
+                          left: 26,
                         ),
                         child: ProfileNameLocationWidget(
                           profileImageUrl: widget.productModel.userPhotoUrl,
@@ -55,14 +55,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 26),
+                        margin: EdgeInsets.symmetric(horizontal: 0),
                         child: PurchaseButtonWidget(
                           content: Text(
                             AppLocalizations.of(context)!.purchaseNow,
-                            style: TextStyle(
-                                fontSize: getAdaptiveSize(16, context)),
+                            style: GoogleFonts.roboto(
+                                fontSize: 16, fontWeight: FontWeight.w600),
                           ),
-                          marginBottom: getAdaptiveSize(23, context),
+                          marginBottom: 24,
                           onPressed: () {
                             pageController.insertPage(TransferScreen(
                               productModel: widget.productModel,

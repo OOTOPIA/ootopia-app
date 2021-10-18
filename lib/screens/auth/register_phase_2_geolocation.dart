@@ -236,7 +236,7 @@ class _RegisterPhase2GeolocationPageState
                                           side: BorderSide.none),
                                     ),
                                     minimumSize: MaterialStateProperty.all(
-                                      Size(60, 58),
+                                      Size(60, 55),
                                     ),
                                     elevation:
                                         MaterialStateProperty.all<double>(0.0),
