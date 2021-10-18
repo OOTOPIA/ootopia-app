@@ -14,10 +14,10 @@ import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
+import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -310,51 +310,84 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 )
               ],
             ),
-            Container(
-              width: double.infinity,
-              height: 34,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                color: Color(0xff1A4188),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Theme(
-                      data: ThemeData(highlightColor: Color(0xff03145C)),
-                      child: Scrollbar(
-                        controller: _scrollController,
-                        isAlwaysShown: true,
-                        showTrackOnHover: true,
-                        radius: Radius.circular(10),
-                        thickness: 4,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12),
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: this.post.tags.length,
-                            itemBuilder: (ctx, index) {
-                              return Opacity(
-                                opacity: 0.8,
-                                child: HashtagName(
-                                  hashtagName: this.post.tags[index],
-                                ),
-                              );
-                            },
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    color: Color(0xff1A4188),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ScrollConfiguration(
+                            behavior: const ScrollBehavior()
+                                .copyWith(overscroll: false),
+                            child: MyScrollbar(
+                              thumbColor: Color(0xff03145C),
+                              trackColor: Color(0xff4D7BC9),
+                              thickness: 4,
+                              builder: (context, scrollController) =>
+                                  ListView.builder(
+                                controller: scrollController,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(left: 15),
+                                physics: ClampingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: this.post.tags.length,
+                                itemBuilder: (ctx, index) {
+                                  return Opacity(
+                                    opacity: 0.8,
+                                    child: HashtagName(
+                                      hashtagName: this.post.tags[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  left: 0.5,
+                  top: 5,
+                  child: Container(
+                    height: 15,
+                    width: 20.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                      ),
+                      color: Color(0xff1A4188),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 4,
+                  child: Container(
+                    height: 17,
+                    width: 20.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                      ),
+                      color: Color(0xff1A4188),
+                    ),
+                  ),
+                )
+              ],
             ),
             Stack(
               children: [
