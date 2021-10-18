@@ -230,7 +230,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.62,
+                      height: MediaQuery.of(context).size.height * 0.57,
                       child: TabBarView(
                         controller: _tabController,
                         children: [
@@ -240,6 +240,9 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 40,
+                    )
                   ],
                 ),
               ),

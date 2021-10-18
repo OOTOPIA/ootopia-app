@@ -136,14 +136,11 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         cellPhoneController.text.isNotEmpty ? cellPhoneController.text : null;
   }
 
-  Future getImage(VoidCallback update) async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (user != null && pickedFile != null) {
-      image = File(pickedFile.path);
-      user!.photoFilePath = pickedFile.path;
+  Future getImage(imagePath) async {
+    if (user != null && imagePath != null) {
+      image = File(imagePath);
+      user!.photoFilePath = imagePath;
     }
-    update();
   }
 
   bool birthDateIsValid() {

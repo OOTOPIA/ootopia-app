@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/screens/components/interests_tags_modal/interests_tags_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -212,8 +209,6 @@ class _RegisterPhase2TopInterestsPageState
                                             .spacingNormal),
                                     height: 57,
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: GlobalConstants.of(context)
-                                            .spacingSmall,
                                         vertical: 0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
@@ -224,7 +219,7 @@ class _RegisterPhase2TopInterestsPageState
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.start,
                                       children: [
                                         Expanded(
                                           flex: 2,
@@ -232,51 +227,50 @@ class _RegisterPhase2TopInterestsPageState
                                             children: [
                                               Padding(
                                                 padding: EdgeInsets.only(
-                                                    right: GlobalConstants.of(
-                                                            context)
-                                                        .spacingSmall),
-                                                child: Icon(
-                                                  Icons.add,
-                                                  size: 31,
-                                                ),
+                                                    right: 4, left:10),
+                                                child: ImageIcon(
+                                                    AssetImage(
+                                                        "assets/icons/icon_add.png"),
+                                                    size: 31),
                                               ),
+                                              SizedBox(width: 3,),
                                               Text(
                                                 AppLocalizations.of(context)!
                                                     .searchForAHashtag,
+                                                    overflow: TextOverflow.clip,
                                                 style: GoogleFonts.roboto(
                                                     color:
                                                         LightColors.blackText,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle1!
-                                                        .fontSize),
+                                                    fontSize: 16),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: GlobalConstants.of(context)
-                                              .spacingSmall,
                                         ),
                                         Visibility(
                                           visible:
                                               controller.selectedTags.length >
                                                   0,
-                                          child: Expanded(
-                                            child: Text(
-                                              '${controller.selectedTags.length} ' +
-                                                  AppLocalizations.of(context)!
-                                                      .tagsSelected,
-                                              overflow: TextOverflow.clip,
-                                              textAlign: TextAlign.right,
-                                              style: GoogleFonts.roboto(
-                                                color: Colors.grey,
-                                                fontSize: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1!
-                                                    .fontSize,
-                                                fontWeight: FontWeight.w400,
+                                          child: Padding(
+                                            padding:EdgeInsets.symmetric(horizontal: 10),
+                                            child: Expanded(
+                                              child: Text(
+                                                controller.selectedTags.length > 1
+                                                    ? '${controller.selectedTags.length} ' +
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .tagsSelected
+                                                    : '${controller.selectedTags.length} ' +
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .tagSelected,
+                                                overflow: TextOverflow.clip,
+                                                textAlign: TextAlign.right,
+                                                style: GoogleFonts.roboto(
+                                                  color: Colors.grey,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -373,6 +367,11 @@ class _RegisterPhase2TopInterestsPageState
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             LightColors.blue),
+                                    minimumSize: MaterialStateProperty.all(
+                                      Size(60, 55),
+                                    ),
+                                    elevation:
+                                        MaterialStateProperty.all<double>(0.0),
                                     padding: MaterialStateProperty.all<EdgeInsets>(
                                         EdgeInsets.all(
                                             GlobalConstants.of(context)

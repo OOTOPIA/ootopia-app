@@ -235,6 +235,11 @@ class _RegisterPhase2GeolocationPageState
                                               BorderRadius.circular(25.0),
                                           side: BorderSide.none),
                                     ),
+                                    minimumSize: MaterialStateProperty.all(
+                                      Size(60, 55),
+                                    ),
+                                    elevation:
+                                        MaterialStateProperty.all<double>(0.0),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             Color(0xff003694)),

@@ -34,7 +34,7 @@
 
     "confirm": "Confirmar",
 
-    "thisIsWhereYourPositiveImpactMattersMost":"É aqui que o seu impacto positivo é mais importante!",
+    "thisIsWhereYourPositiveImpactMattersMost":"É aqui que seu impacto positivo importa mais!",
 
     "pleaseWait": "Por favor, aguarde...",
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
@@ -53,15 +53,16 @@
 
     "favoriteThemes": "Temas Favoritos",
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
-    "selectAtLeastOneHashtag": "Selecione ao menos 1 hashtag",
+    "selectAtLeastOneHashtag": "Selecione pelo menos uma hashtag",
     "selectHashtags": "Selecione hashtags",
-    "tagsSelected": "Tags selecionadas",
+    "tagsSelected": "selecionadas",
+    "tagSelected":"selecionada",
 
     "others": "Outras(os)",
 
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Crie sua conta e junte-se ao \nmovimento para curar o planeta Terra!",
-    "nameAndSurname": "nome e sobrenome",
-    "pleaseEnterYourNameAndSurname": "Por favor, insira seu nome e sobrenome",
+    "nameAndSurname": "nome",
+    "pleaseEnterYourNameAndSurname": "Por favor, insira seu nome",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
     "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
@@ -95,7 +96,7 @@
     "noContinueEditing": "Não, continue editando",
     "yes": "Sim",
     "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao carregar o vídeo, tente enviar o vídeo novamente.",
-    "pleaseSelectAtLeast1Tag": "Selecione pelo menos 1 tag",
+    "pleaseSelectAtLeast1Tag": "Selecione pelo menos uma hashtag",
     "selectAtLeast1Tag": "Selecione pelo menos 1 tag",
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao enviar o vídeo, tente enviar o vídeo novamente.",
     "newPost": "Nova postagem",
@@ -311,7 +312,7 @@
     "ooz25":" 25,00 OOz ",
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
     "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA\nExperimente o movimento que está regenerando o planeta Terra! \nBaixe o aplicativo e registre-se com este código: %USER_CODE%\nVocê também receberá 15,00 OOz de crédito.\nVIVA A OOTOPIA AGORA! ✨ 🌎 ❤️",
-    "continueAccess":"Continue",
+    "continueAccess":"Continuar",
     "conclude":"Concluir",
     "enterYourInvitationCode":"Digite seu código de acesso",
     "yourAccessChannel": "O seu canal de acesso ao movimento regenerativo e ao belo mundo que está emergindo graças a pessoas como você!",
@@ -366,17 +367,17 @@
     "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
     "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As Coroas de Louros representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
 
-    "searchForAHashtag" : "Procure uma hashtag",
+    "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
-    "ethicalMarketplace": "MERCADO ÉTICO",
+    "ethicalMarketplace": "MARKETPLACE ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
-    "messageVendorContact": "O vendedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua compra",
+    "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
     "messageOptional": "Mensagem - Opcional",
-    "purchaseNow": "Compre agora",
+    "purchaseNow": "Adquirir Agora",
 
     "seeAll":"Veja todos",
      "dontExistLearningTracks":"Não existem learning tracks",
@@ -387,10 +388,14 @@
      "quiz":"Quiz",
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
      "completed": "Completo",
-     "marketPlaceTransfer": "Transferência de mercado",
+     "marketPlaceTransfer": "Marketplace Ético",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
      "generalError": "Não foi possível realizar a operação.",
-     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\n No app OOTOPIA, seus OOz valem o equivalente a reais e podem ser usados ​​no Mercado Ético e para premiar as publicações mais inspiradoras.",
+     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\nNo app OOTOPIA, seus OOz valem o equivalente a Reais e podem ser usados ​​no Marketplace Ético e para recompensar as publicações mais inspiradoras.",
      "theOOzCurrent":"a moeda ooz",
-     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo"
+     "pictureBy": "Foto de",
+     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo",
+     "nextAboutCreateOffer":"Na próxima atualização do aplicativo, todos poderão criar ofertas, produtos, serviços e experiências. Até lá, que tal nos dizer o que você gostaria de vender ou comprar?\n\nSuas sugestões e dúvidas são muito bem vindas!",
+     "aboutYourOfferHere":"SERÁ ÓTIMO VER SUA OFERTA AQUI",
+     "giveSuggestion":"Dar sugestão"
 }

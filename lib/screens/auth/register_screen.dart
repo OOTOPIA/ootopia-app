@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -187,71 +189,78 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           }
         },
-        child: WillPopScope(
-          onWillPop: () => backButtonPage(),
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _blocBuilder(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(
-                          GlobalConstants.of(context).spacingMedium),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                ),
-                                minimumSize: MaterialStateProperty.all(
-                                  Size(60, 58),
-                                ),
-                                backgroundColor: _termsCheckbox
-                                    ? MaterialStateProperty.all(
-                                        LightColors.blue)
-                                    : MaterialStateProperty.all(Colors.grey),
-                              ),
-                              child: Text(
-                                AppLocalizations.of(context)!.continueAccess,
-                                style: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .hintStyle!
-                                    .copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              onPressed: _termsCheckbox
-                                  ? () {
-                                      if (_formKey.currentState!.validate()) {
-                                        phase2Controller
-                                            .cleanTextEditingControllers();
-                                        _submit();
-                                      }
-                                    }
-                                  : () {},
-                            ),
-                          ),
-                        ],
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: WillPopScope(
+            onWillPop: () => backButtonPage(),
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _blocBuilder(),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.all(24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  elevation:
+                                      MaterialStateProperty.all<double>(0.0),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                  ),
+                                  minimumSize: MaterialStateProperty.all(
+                                    Size(60, 55),
+                                  ),
+                                  backgroundColor: _termsCheckbox
+                                      ? MaterialStateProperty.all(
+                                          LightColors.blue)
+                                      : MaterialStateProperty.all(
+                                          Color(0xFF5D7FBB)),
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.continueAccess,
+                                  style: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .hintStyle!
+                                      .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                onPressed: _termsCheckbox
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          phase2Controller
+                                              .cleanTextEditingControllers();
+                                          _submit();
+                                        }
+                                      }
+                                    : () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -284,35 +293,73 @@ class _RegisterPageState extends State<RegisterPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .liveInOotopiaNowMessage,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                          color: LightColors.blue,
-                                          fontSize: 24),
-                                ),
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: Image(
-                                    image: AssetImage(
-                                        "assets/images/butterfly.png"),
-                                  ),
-                                )
-                              ],
-                            ),
+                            Platform.localeName == "pt_BR"
+                                ? Center(
+                                    child: Container(
+                                    width: 323,
+                                    height: 47,
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .liveInOotopiaNowMessage,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.roboto(
+                                                  color: LightColors.blue,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            height: 37,
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/butterfly.png"),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ))
+                                : Center(
+                                    child: Container(
+                                    width: 278,
+                                    height: 47,
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .liveInOotopiaNowMessage,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.roboto(
+                                                  color: LightColors.blue,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            height: 37,
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/butterfly.png"),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )),
                             Padding(
                               padding: EdgeInsets.only(
                                 top: GlobalConstants.of(context).spacingMedium,
-                                bottom:
-                                    GlobalConstants.of(context).spacingMedium,
+                                bottom: 40,
                               ),
                               child: Column(
                                 children: [
@@ -323,9 +370,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                       setState(() {});
                                     },
                                     keyboardType: TextInputType.name,
-                                    autocorrect: false,
+                                    autocorrect: true,
                                     textCapitalization:
-                                        TextCapitalization.words,
+                                        TextCapitalization.sentences,
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!
@@ -379,7 +426,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .intermediateSpacing,
                                   ),
                                   TextFormField(
                                     controller: _emailController,
@@ -446,7 +493,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .intermediateSpacing,
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
@@ -524,7 +571,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   SizedBox(
                                     height: GlobalConstants.of(context)
-                                        .spacingNormal,
+                                        .intermediateSpacing,
                                   ),
                                   TextFormField(
                                     controller: _repeatPasswordController,
@@ -613,8 +660,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                bottom:
-                                    GlobalConstants.of(context).spacingMedium,
+                                bottom: 20,
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
