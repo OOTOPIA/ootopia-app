@@ -238,6 +238,7 @@ class CardInformationBalance extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
+                        color: Colors.white,
                         shape: BoxShape.circle,
                         border: Border.all(width: 2, color: Colors.white)),
                     child: ClipRRect(

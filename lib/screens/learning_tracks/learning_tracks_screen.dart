@@ -236,7 +236,9 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                             color: Color(0xff018F9C),
                                             width: 3,
                                           )
-                                        : Border.all(),
+                                        : Border.all(
+                                            color: Color.fromARGB(1, 0, 0, 0),
+                                            width: 0),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12)),
                                     image: DecorationImage(
