@@ -36,7 +36,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         ),
         Center(
           child: Text(
-            AppLocalizations.of(context)!.sendSowerInvitationCode,
+            AppLocalizations.of(context)!.sendChangeMakerProInvitationCode,
             textAlign: TextAlign.center,
           ),
         ),

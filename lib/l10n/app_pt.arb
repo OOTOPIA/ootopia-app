@@ -1,7 +1,7 @@
 {
     "language": "Portuguese",
     "helloWIfNotNowThenWhenorld": "Se não agora, então quando?\r\nSe não nós, então quem?\r\n\r\nBem-vindo ao movimento para\r\ncurar o planeta Terra!",
-    "liveInOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
+    "liveOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
     "email": "e-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "senha",
@@ -255,9 +255,9 @@
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
-    "badgeSower": "Distintivo: Semeador",
-    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Semeador é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
-    "areYouASowerToo": "Você também é semeador?",
+    "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Change Maker Pro é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
+    "areYouAChangeMakerProToo": "Você também é um Change Maker Pro?",
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
@@ -305,7 +305,7 @@
     "changeMakerProInvitationCode":"CÓDIGO CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO CONVITE DE BOAS-VINDAS",
-    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
+    "sendChangeMakerProInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba",
     "forEachNewcomer": "para cada recém-chegado.\nSeu amigo receberá",
    "ooz15":" 15,00 OOz.",
@@ -361,11 +361,11 @@
     "createYourOwnCategories":"crie suas próprias categorias",
     "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopíacos.",
     "enterYourNumber":"Insira seu número",
-    "medals": "Medalhas",
+    "laurelWreath": "Coroas de Louros",
     "iAccept": "Eu aceito",
     "chooseYourDailyGoal":"Escolha sua meta diária de participação no jogo.",
     "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
-    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
+    "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As Coroas de Louros representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
 
     "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",

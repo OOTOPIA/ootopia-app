@@ -259,7 +259,11 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                 child: Column(
                                   children: [
                                     TextFormField(
-                                      onTap: () => onCloseSnackbar(),
+                                      onTap: () {
+                                        onCloseSnackbar();
+                                        mailIsValid = true;
+                                        setState(() {});
+                                      },
                                       autocorrect: false,
                                       enableSuggestions: false,
                                       controller: _emailController,
@@ -272,6 +276,24 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                                               AppLocalizations.of(context)!
                                                   .email)
                                           .copyWith(
+                                              errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
+                                              errorStyle: mailIsValid
+                                                  ? TextStyle(
+                                                      color: Colors.transparent,
+                                                      fontSize: 0)
+                                                  : TextStyle(),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
                                               labelStyle: mailIsValid
                                                   ? GoogleFonts.roboto(
                                                       color:
