@@ -185,7 +185,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: GlobalConstants.of(context).intermediateSpacing,
+                        height:
+                            GlobalConstants.of(context).screenHorizontalSpace,
                       ),
                       Text(
                         store == null ? "" : store!.profile!.fullname,
@@ -197,8 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .subtitle1!
                                 .fontWeight),
                       ),
-                      SizedBox(
-                          height: GlobalConstants.of(context).spacingNormal),
+                      SizedBox(height: 13),
                       Text(
                         AppLocalizations.of(context)!
                             .regenerationGame
@@ -210,7 +210,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
-                          height: GlobalConstants.of(context).spacingSmall),
+                        height: GlobalConstants.of(context).spacingSmall,
+                      ),
                       Container(
                         height: 46,
                         width: MediaQuery.of(context).size.width * 0.65,
