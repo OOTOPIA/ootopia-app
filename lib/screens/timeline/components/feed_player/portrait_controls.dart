@@ -64,9 +64,9 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
             showIfVideoNotInitialized: false,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
                     color: Colors.black38,
                     borderRadius: BorderRadius.circular(20),
@@ -84,6 +84,8 @@ class FeedPlayerPortraitControls extends StatelessWidget with SecureStoreMixin {
                   ),
                 ),
                 IconButton(
+                  padding: EdgeInsets.only(left: 20),
+                  constraints: BoxConstraints(),
                   icon: const Icon(Icons.fullscreen),
                   tooltip: AppLocalizations.of(context)!.increaseVolumeBy10,
                   onPressed: () {
