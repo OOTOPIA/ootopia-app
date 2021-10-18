@@ -104,7 +104,7 @@ class _AboutEthicalMarketPlaceState extends State<AboutEthicalMarketPlace> {
                                   Text(
                                     AppLocalizations.of(context)!
                                         .ethicalMarketplaceDescription,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
