@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -12,13 +11,12 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class LoginPage extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
-  LoginPage([this.args]);
+  const LoginPage([this.args]);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -130,53 +128,57 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Center(
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/newlogo.png',
-                                  // height:
-                                  //     GlobalConstants.of(context).logoHeight,
-                                ),
-                              ],
-                            ),
-                            Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                            Container(
+                              width: 255,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                      AppLocalizations.of(context)!
-                                          .liveInOotopiaNowMessage,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.roboto(
-                                          color: LightColors.blue,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w900)),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Image(
-                                          image: AssetImage(
-                                              "assets/images/butterfly.png"),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 88),
+                                    child: Image.asset(
+                                      'assets/images/newlogo.png',
+                                      height: 109,
+                                      width: 56,
+                                    ),
+                                  ),
+                                  SizedBox(height: 23),
+                                  Container(
+                                    width: 255,
+                                    height: 47,
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          right: 7,
+                                          bottom: 10,
+                                          child: Container(
+                                            child: Image(
+                                              image: AssetImage(
+                                                  "assets/images/butterfly.png"),
+                                              width: 41,
+                                              height: 37,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        height: 32,
-                                      )
-                                    ],
-                                  )
+                                        Positioned(
+                                          bottom: 0,
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .liveOotopiaNowMessage,
+                                            style: GoogleFonts.roboto(
+                                                color: LightColors.blue,
+                                                fontSize: 23,
+                                                fontWeight: FontWeight.w900),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingMedium,
-                              ),
+                              padding: EdgeInsets.only(top: 36),
                               child: Column(
                                 children: [
                                   Container(
