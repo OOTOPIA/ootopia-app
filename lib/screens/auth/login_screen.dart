@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/auth/components/logo.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -129,54 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       Center(
                         child: Column(
                           children: [
-                            Container(
-                              width: 255,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 88),
-                                    child: Image.asset(
-                                      'assets/images/newlogo.png',
-                                      height: 109,
-                                      width: 56,
-                                    ),
-                                  ),
-                                  SizedBox(height: 23),
-                                  Container(
-                                    width: 255,
-                                    height: 47,
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          right: 7,
-                                          bottom: 10,
-                                          child: Container(
-                                            child: Image(
-                                              image: AssetImage(
-                                                  "assets/images/butterfly.png"),
-                                              width: 41,
-                                              height: 37,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .liveOotopiaNowMessage,
-                                            style: GoogleFonts.roboto(
-                                                color: LightColors.blue,
-                                                fontSize: 23,
-                                                fontWeight: FontWeight.w900),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            Logo(),
                             Padding(
                               padding: EdgeInsets.only(top: 36),
                               child: Column(
