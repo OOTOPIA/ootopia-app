@@ -14,7 +14,6 @@ import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
@@ -285,15 +284,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 builder: (BuildContext context) {
                                   return SnackBarWidget(
                                       menu: AppLocalizations.of(context)!
-                                          .badgeSower,
+                                          .badgeChangeMakerPro,
                                       text: AppLocalizations.of(context)!
-                                          .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                          .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
                                       marginBottom: true,
                                       contact: {
                                         "text": AppLocalizations.of(context)!
-                                            .areYouASowerToo,
+                                            .areYouAChangeMakerProToo,
                                         "textLink":
                                             AppLocalizations.of(context)!
                                                 .getInContact,

@@ -2,23 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/auth/components/logo.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class LoginPage extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
-  LoginPage([this.args]);
+  const LoginPage([this.args]);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -130,61 +129,22 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Center(
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/newlogo.png',
-                                  // height:
-                                  //     GlobalConstants.of(context).logoHeight,
-                                ),
-                              ],
-                            ),
-                            Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      AppLocalizations.of(context)!
-                                          .liveInOotopiaNowMessage,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.roboto(
-                                          color: LightColors.blue,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w900)),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Image(
-                                          image: AssetImage(
-                                              "assets/images/butterfly.png"),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 32,
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
+                            Logo(),
                             Padding(
-                              padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingMedium,
-                              ),
+                              padding: EdgeInsets.only(top: 36),
                               child: Column(
                                 children: [
                                   Container(
                                     height: 72,
                                     child: TextFormField(
+                                      controller: _emailController,
                                       autocorrect: false,
                                       enableSuggestions: false,
-                                      controller: _emailController,
+                                      onTap: () {
+                                        mailIsValid = true;
+                                        setState(() {});
+                                      },
                                       keyboardType: TextInputType.emailAddress,
                                       style: GoogleFonts.roboto(
                                           fontWeight: FontWeight.w500,
@@ -202,6 +162,24 @@ class _LoginPageState extends State<LoginPage> {
                                                     : LightColors.errorRed,
                                                 size: 20,
                                               ),
+                                              errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
+                                              errorStyle: mailIsValid
+                                                  ? TextStyle(
+                                                      color: Colors.transparent,
+                                                      fontSize: 0)
+                                                  : TextStyle(),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                color: mailIsValid
+                                                    ? LightColors.grey
+                                                    : LightColors.errorRed,
+                                              )),
                                               labelStyle: mailIsValid
                                                   ? GoogleFonts.roboto(
                                                       color:
@@ -247,6 +225,10 @@ class _LoginPageState extends State<LoginPage> {
                                         children: [
                                           TextFormField(
                                             controller: _passwordController,
+                                            onTap: () {
+                                              passIsValid = true;
+                                              setState(() {});
+                                            },
                                             obscureText: !_showPassword,
                                             style: GoogleFonts.roboto(
                                                 fontWeight: FontWeight.w500,
@@ -258,6 +240,12 @@ class _LoginPageState extends State<LoginPage> {
                                                             context)!
                                                         .password)
                                                 .copyWith(
+                                                  errorStyle: passIsValid
+                                                      ? TextStyle(
+                                                          color: Colors
+                                                              .transparent,
+                                                          fontSize: 0)
+                                                      : TextStyle(),
                                                   labelStyle: passIsValid
                                                       ? GoogleFonts.roboto(
                                                           color: LightColors
@@ -276,6 +264,22 @@ class _LoginPageState extends State<LoginPage> {
                                                         ? LightColors.grey
                                                         : LightColors.errorRed,
                                                   ),
+                                                  errorBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                    color: passIsValid
+                                                        ? LightColors.grey
+                                                        : LightColors.errorRed,
+                                                  )),
+                                                  focusedErrorBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                    color: passIsValid
+                                                        ? LightColors.grey
+                                                        : LightColors.errorRed,
+                                                  )),
                                                   suffixIcon: GestureDetector(
                                                     child: ImageIcon(
                                                       _showPassword == false
@@ -307,7 +311,6 @@ class _LoginPageState extends State<LoginPage> {
                                               setState(() {
                                                 passIsValid = true;
                                               });
-
                                               return null;
                                             },
                                           ),

@@ -12,19 +12,16 @@ class RegenerationStatusIcons extends StatefulWidget {
 }
 
 class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
-
-  goToCelebrationUser() async {//for tests
+  goToCelebrationUser() async {
+    //for tests
     await Navigator.of(context).pushNamed(
       PageRoute.Page.celebration.route,
-      arguments: {
-        "name": "Luis Reis",
-        "goal": "user",
-        "balance": "17,25"
-      },
+      arguments: {"name": "Luis Reis", "goal": "personal", "balance": "17,25"},
     );
   }
 
-  goToCelebrationCity() async {//for tests
+  goToCelebrationCity() async {
+    //for tests
     await Navigator.of(context).pushNamed(
       PageRoute.Page.celebration.route,
       arguments: {
@@ -35,16 +32,14 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
     );
   }
 
-  goToCelebrationGLobaal() async {//for tests
+  goToCelebrationGLobaal() async {
+    //for tests
     await Navigator.of(context).pushNamed(
       PageRoute.Page.celebration.route,
-      arguments: {
-        "name": "Luis Reis",
-        "goal": "global",
-        "balance": "17,25"
-      },
+      arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -57,7 +52,7 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
             color: Colors.black,
           ),
           GestureDetector(
-            onTap: () => goToCelebrationUser(),//for tests
+            onTap: () => goToCelebrationUser(), //for tests
             child: Container(
               width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(
@@ -81,7 +76,7 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
             color: Colors.black,
           ),
           GestureDetector(
-            onTap: () => goToCelebrationCity(),//for tests
+            onTap: () => goToCelebrationCity(), //for tests
             child: Container(
               width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(
@@ -105,7 +100,7 @@ class _RegenerationStatusIconsState extends State<RegenerationStatusIcons> {
             color: Colors.black,
           ),
           GestureDetector(
-            onTap: () => goToCelebrationGLobaal(),//for tests
+            onTap: () => goToCelebrationGLobaal(), //for tests
             child: Container(
               width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(

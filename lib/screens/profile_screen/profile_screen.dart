@@ -31,7 +31,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProfileScreen extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
   ProfileScreen([this.args]);
 
@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     marginBottom: true,
                                     contact: {
                                       "text": AppLocalizations.of(context)!
-                                          .areYouASowerToo,
+                                          .areYouAChangeMakerProToo,
                                       "textLink": AppLocalizations.of(context)!
                                           .getInContact,
                                     },
@@ -185,7 +185,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       SizedBox(
-                        height: GlobalConstants.of(context).intermediateSpacing,
+                        height:
+                            GlobalConstants.of(context).screenHorizontalSpace,
                       ),
                       Text(
                         store == null ? "" : store!.profile!.fullname,
@@ -197,8 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .subtitle1!
                                 .fontWeight),
                       ),
-                      SizedBox(
-                          height: GlobalConstants.of(context).spacingNormal),
+                      SizedBox(height: 13),
                       Text(
                         AppLocalizations.of(context)!
                             .regenerationGame
@@ -210,10 +210,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
-                          height: GlobalConstants.of(context).spacingSmall),
+                        height: GlobalConstants.of(context).spacingSmall,
+                      ),
                       Container(
                         height: 46,
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 0.65,
                         decoration: BoxDecoration(
                             border: Border.fromBorderSide(BorderSide(
                                 width: 1,
@@ -284,26 +285,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 });
                               },
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/icons_profile/teste.svg",
-                                    width: 19,
-                                    height: 16,
-                                    color: Color(0xff00A5FC),
+                                    "assets/icons_profile/laurel_wreath.svg",
+                                    width: 24,
+                                    height: 21,
+                                    color: Color(0xff018f9c),
                                   ),
                                   SizedBox(
                                     width: 8,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 2),
-                                    child: Text(
-                                        "${store?.profile!.totalTrophyQuantity!}",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff00A5FC),
-                                        )),
-                                  ),
+                                  Text(
+                                      "${store?.profile!.totalTrophyQuantity!}",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff018f9c),
+                                      )),
                                   SizedBox(
                                     width: 8,
                                   ),
@@ -364,10 +363,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return SnackBarWidget(
                                               menu:
                                                   AppLocalizations.of(context)!
-                                                      .medals,
+                                                      .laurelWreath,
                                               text: AppLocalizations.of(
                                                       context)!
-                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
@@ -395,10 +394,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return SnackBarWidget(
                                               menu:
                                                   AppLocalizations.of(context)!
-                                                      .medals,
+                                                      .laurelWreath,
                                               text: AppLocalizations.of(
                                                       context)!
-                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
@@ -426,10 +425,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           return SnackBarWidget(
                                               menu:
                                                   AppLocalizations.of(context)!
-                                                      .medals,
+                                                      .laurelWreath,
                                               text: AppLocalizations.of(
                                                       context)!
-                                                  .medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
