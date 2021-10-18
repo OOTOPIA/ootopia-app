@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 72,
+                                    height: 73,
                                     child: TextFormField(
                                       controller: _emailController,
                                       autocorrect: false,
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                                         .spacingSmall,
                                   ),
                                   Container(
-                                      height: 72,
+                                      height: 73,
                                       child: Stack(
                                         children: [
                                           TextFormField(
