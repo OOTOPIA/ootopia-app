@@ -20,11 +20,7 @@ class Auth extends Equatable {
   int? dailyLearningGoalInMinutes;
   bool? enableSustainableAds = false;
   bool? dontAskAgainToConfirmGratitudeReward = false;
-  int? registerPhase;
   String? token;
-  String? createdAt;
-  String? updatedAt;
-  List<Badge>? badges;
   bool? personalDialogOpened = false;
   bool? cityDialogOpened = false;
   bool? globalDialogOpened = false;
