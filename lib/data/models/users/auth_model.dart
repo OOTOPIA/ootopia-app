@@ -29,6 +29,10 @@ class Auth extends Equatable {
   int? globalTrophyQuantity;
   int? totalTrophyQuantity;
   String? countryCode;
+  int? registerPhase;
+  String? createdAt;
+  String? updatedAt;
+  List<Badge>? badges;
 
   Auth({
     this.id,

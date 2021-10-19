@@ -65,8 +65,10 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "email": user.email.toString(),
         "password": user.password.toString(),
         "acceptedTerms": true.toString(),
-        "invitationCode": user.invitationCode.toString(),
-        "countryCode": user.countryCode.toString(),
+        "invitationCode":
+            user.invitationCode == null ? "" : user.invitationCode.toString(),
+        "countryCode":
+            user.countryCode == null ? "" : user.countryCode.toString(),
         "bio": user.bio.toString(),
         "phone": user.phone.toString(),
         "birthdate": (user.birthdate == null ? "" : user.birthdate!),
@@ -76,8 +78,11 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
             (user.addressCountryCode == null ? "" : user.addressCountryCode!),
         "addressState": (user.addressState == null ? "" : user.addressState!),
         "addressCity": (user.addressCity == null ? "" : user.addressCity!),
-        "addressLatitude": user.addressLatitude.toString(),
-        "addressLongitude": user.addressLongitude.toString(),
+        "addressLatitude":
+            user.addressLatitude == null ? "" : user.addressLatitude.toString(),
+        "addressLongitude": user.addressLongitude == null
+            ? ""
+            : user.addressLongitude.toString(),
         "tagsIds": tagsIds!.join(",")
       };
 
@@ -125,7 +130,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           addressState: '',
         );
       } else {
-        final response = await http.put(
+        final response = await http.post(
           Uri.parse(
             dotenv.env['API_URL']! + "users",
           ),
@@ -133,7 +138,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           body: jsonEncode(data),
         );
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 201) {
           await setCurrentUser(response.body);
           return User.fromJson(json.decode(response.body));
         } else {

@@ -87,7 +87,7 @@ abstract class AuthStoreBase with Store {
           password: password,
           invitationCode: invitationCode);
 
-      var result = await authRepository.register(user, []);
+      var result = await authRepository.register(user, [], null);
       this
           .trackingEvents
           .trackingSignupCompletedSignup(result.id!, result.fullname!);

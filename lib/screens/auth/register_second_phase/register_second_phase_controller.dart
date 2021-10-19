@@ -272,20 +272,29 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       fullname: nameController.text,
       email: emailController.text,
       password: passwordController.text,
+      countryCode: user!.countryCode,
       bio: bioController.text,
       phone: cellPhoneController.text,
+      birthdate: user!.birthdate,
       dailyLearningGoalInMinutes: currentSliderValue.toInt(),
-      registerPhase: 2,
+      addressCountryCode: user!.addressCountryCode,
+      addressState: user!.addressState,
+      addressCity: user!.addressCity,
+      addressLatitude: user!.addressLatitude,
+      addressLongitude: user!.addressLongitude,
       photoFilePath: photoFilePath,
     );
 
-    List<String> tagsIds = selectedTags.map((e) => e.id) as List<String>;
+    List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
-    await this.authRepository.register(_user, tagsIds);
+    await this.authRepository.register(_user, tagsIds, uploader);
 
     var taskId = await this
         .userRepository
         .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+
+    await authRepository.login(_user.email!, _user.password!);
+
     // uploader.result.listen(
     //     (result) {
     //       if (result.statusCode == 200 && result.taskId == taskId) {

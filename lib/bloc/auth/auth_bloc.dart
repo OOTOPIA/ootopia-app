@@ -64,7 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> _mapUserRegisterToState(Auth user) async* {
     try {
-      var result = (await this.repository.register(user, []));
+      var result = (await this.repository.register(user, [], null));
       if (result != null) {
         yield EmptyState();
         yield LoadedSucessState(result);
