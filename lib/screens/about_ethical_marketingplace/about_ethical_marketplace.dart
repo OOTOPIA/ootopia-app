@@ -195,12 +195,12 @@ class _AboutEthicalMarketPlaceState extends State<AboutEthicalMarketPlace> {
                       padding: const EdgeInsets.only(
                           bottom: 24, left: 24, right: 24),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
                               style: ButtonStyle(
                                 fixedSize: MaterialStateProperty.all<Size>(
-                                    Size(101, 53)),
+                                    Size(88, 53)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -229,7 +229,7 @@ class _AboutEthicalMarketPlaceState extends State<AboutEthicalMarketPlace> {
                           ElevatedButton(
                               style: ButtonStyle(
                                 fixedSize: MaterialStateProperty.all<Size>(
-                                    Size(232, 53)),
+                                    Size(212, 53)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
