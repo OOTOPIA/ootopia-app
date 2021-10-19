@@ -3,18 +3,18 @@ import 'badges_model.dart';
 
 class Auth extends Equatable {
   String? id;
-  String fullname;
-  String email;
-  String password;
+  String? fullname;
+  String? email;
+  String? password;
   String? invitationCode;
   String? birthdate;
   String? photoUrl;
-  String? photoFilePath; //Used to upload user photo
+  String? photoFilePath;
   String? addressCountryCode;
   String? addressState;
   String? addressCity;
   String? bio;
-  String phone;
+  String? phone;
   double? addressLatitude;
   double? addressLongitude;
   int? dailyLearningGoalInMinutes;
@@ -36,12 +36,13 @@ class Auth extends Equatable {
 
   Auth({
     this.id,
-    required this.fullname,
-    required this.email,
-    required this.password,
+    this.fullname,
+    this.email,
+    this.password,
     this.invitationCode,
     this.birthdate,
     this.photoUrl,
+    this.photoFilePath,
     this.addressCountryCode,
     this.addressState,
     this.addressCity,
@@ -63,7 +64,7 @@ class Auth extends Equatable {
     this.globalTrophyQuantity,
     this.totalTrophyQuantity,
     this.bio,
-    required this.phone,
+    this.phone,
     this.countryCode,
   });
 
@@ -76,6 +77,7 @@ class Auth extends Equatable {
         invitationCode: json['invitationCode'],
         birthdate: json['birthdate'],
         photoUrl: json['photoUrl'],
+        photoFilePath: json['photoFilePath'],
         addressCountryCode: json['addressCountryCode'],
         addressState: json['addressState'],
         addressCity: json['addressCity'],
@@ -151,6 +153,7 @@ class Auth extends Equatable {
         'invitationCode': invitationCode,
         'birthdate': birthdate,
         'photoUrl': photoUrl,
+        'photoFilePath': photoFilePath,
         'addressCountryCode': addressCountryCode,
         'addressState': addressState,
         'addressCity': addressCity,
@@ -182,6 +185,7 @@ class Auth extends Equatable {
         invitationCode,
         birthdate,
         photoUrl,
+        photoFilePath,
         addressCountryCode,
         addressState,
         addressCity,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
+import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -80,8 +81,13 @@ abstract class AuthStoreBase with Store {
       String? invitationCode,
       required BuildContext context}) async {
     try {
-      var result =
-          await authRepository.register(name, email, password, invitationCode);
+      Auth user = Auth(
+          fullname: name,
+          email: email,
+          password: password,
+          invitationCode: invitationCode);
+
+      var result = await authRepository.register(user, []);
       this
           .trackingEvents
           .trackingSignupCompletedSignup(result.id!, result.fullname!);

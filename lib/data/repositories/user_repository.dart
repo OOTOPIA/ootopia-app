@@ -172,7 +172,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
                 field: "file",
               )
             ], // required: list of files that you want to upload
-            method: UploadMethod.PUT, // HTTP method  (POST or PUT or PATCH)
+            method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
             headers: await this.getHeaders("multipart/form-data"),
             data: data, // any data you want to send in upload request
             tag: "Uploading user photo",

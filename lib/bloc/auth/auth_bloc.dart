@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
@@ -27,12 +28,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is LoadingSucessLoginEvent) {
       yield LoadingState();
     } else if (event is LoginEvent) {
+      print("EVENT LoginEvent $event");
       yield* _mapUserLoginToState(event);
     } else if (event is RegisterEvent) {
-      yield* _mapUserRegisterToState(event);
+      print("EVENT RegisterEvent $event");
+      yield* _mapUserRegisterToState(event as Auth);
     } else if (event is RecoverPasswordEvent) {
+      print("EVENT RecoverPasswordEvent $event");
       yield* _mapRecoverPasswordToState(event);
     } else if (event is ResetPasswordEvent) {
+      print("EVENT ResetPasswordEvent $event");
       yield* _mapResetPasswordToState(event);
     }
   }
@@ -57,11 +62,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Stream<AuthState> _mapUserRegisterToState(RegisterEvent event) async* {
+  Stream<AuthState> _mapUserRegisterToState(Auth user) async* {
     try {
-      var result = (await this
-          .repository
-          .register(event.name, event.email, event.password, event.password));
+      var result = (await this.repository.register(user, []));
       if (result != null) {
         yield EmptyState();
         yield LoadedSucessState(result);

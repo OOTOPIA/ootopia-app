@@ -41,9 +41,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   }
 
   goToRegisterPhase() {
-    Navigator.of(context).pushNamed(
-      PageRoute.Page.registerPhase2Screen.route,
-    );
+    Navigator.of(context).pushNamed(PageRoute.Page.registerPhase2Screen.route);
   }
 
   @override

@@ -403,20 +403,23 @@ class _RegisterPhase2TopInterestsPageState
                                 onPressed: () async {
                                   try {
                                     if (controller.selectedTags.isNotEmpty) {
+                                      print("OIA ${controller.user}");
+                                      print(
+                                          "´pia ${controller.cellPhoneController.text}");
                                       setState(() {
                                         isloading = true;
                                       });
-                                      await controller.updateUser();
+                                      await controller.registerUser();
 
                                       setState(() {
                                         isloading = false;
                                       });
 
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                        PageRoute.Page.homeScreen.route,
-                                        (Route<dynamic> route) => false,
-                                      );
+                                      // Navigator.of(context)
+                                      //     .pushNamedAndRemoveUntil(
+                                      //   PageRoute.Page.homeScreen.route,
+                                      //   (Route<dynamic> route) => false,
+                                      // );
                                     }
                                   } catch (e) {
                                     setState(() {

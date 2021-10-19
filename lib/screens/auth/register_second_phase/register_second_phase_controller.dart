@@ -30,6 +30,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   User? user;
   File? image;
+  String? photoFilePath;
 
   //Step 01
   final formKey = GlobalKey<FormState>();
@@ -156,7 +157,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   Future getImage(imagePath) async {
     if (user != null && imagePath != null) {
       image = File(imagePath);
-      user!.photoFilePath = imagePath;
+      photoFilePath = imagePath;
     }
   }
 
@@ -263,15 +264,28 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     return completer.future;
   }
 
-  Future _registerUser(Auth user, List<String> tagsIds) async {
+  Future registerUser() async {
     var completer = new Completer<String>();
     var uploader = FlutterUploader();
 
-    await this.authRepository.register(user, tagsIds);
+    Auth _user = Auth(
+      fullname: nameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      bio: bioController.text,
+      phone: cellPhoneController.text,
+      dailyLearningGoalInMinutes: currentSliderValue.toInt(),
+      registerPhase: 2,
+      photoFilePath: photoFilePath,
+    );
 
-    // var taskId = await this
-    //     .userRepository
-    //     .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+    List<String> tagsIds = selectedTags.map((e) => e.id) as List<String>;
+
+    await this.authRepository.register(_user, tagsIds);
+
+    var taskId = await this
+        .userRepository
+        .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
     // uploader.result.listen(
     //     (result) {
     //       if (result.statusCode == 200 && result.taskId == taskId) {
