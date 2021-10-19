@@ -274,61 +274,61 @@ class _RegisterPhase2DailyLearningGoalPageState
                               height:
                                   GlobalConstants.of(context).spacingSmall,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children:[Expanded(
-                                child: Container(
-                                  height: 60,
-                                  child: SfSliderTheme(
-                                    data: SfSliderThemeData(
-                                        activeTrackColor:
-                                            Color(0xff03DAC5).withOpacity(0.08),
-                                        inactiveTrackColor:
-                                            Color(0xff03DAC5).withOpacity(0.3),
-                                        inactiveDividerRadius: 4.8,
-                                        minorTickSize: Size(10, 10),
-                                        tickSize: Size(20, 20),
-                                        thumbColor: Colors.white,
-                                        activeDividerColor: Color(0xff03DAC5),
-                                        overlayColor: Color(0xff03DAC5),
-                                        activeDividerStrokeColor:
-                                            Color(0xff03DAC5),
-                                        disabledActiveDividerColor:
-                                            Color(0xff03DAC5),
-                                        thumbStrokeColor: Color(0xff03DAC5),
-                                        inactiveTickColor: Color(0xff03DAC5),
-                                        disabledThumbColor: Color(0xff03DAC5),
-                                        activeMinorTickColor: Color(0xff03DAC5),
-                                        inactiveDividerColor: Color(0xff03DAC5),
-                                        overlayRadius: 9,
-                                        inactiveTrackHeight: 9.5,
-                                        trackCornerRadius: 9,
-                                        tickOffset: Offset(10, 10),
-                                        thumbRadius: 9.3,
-                                        activeTrackHeight: 9.5,
-                                        activeLabelStyle: TextStyle(
-                                            color: Colors.grey, fontSize: 14),
-                                        inactiveLabelStyle: TextStyle(
-                                            color: Colors.grey, fontSize: 14),
-                                        activeDividerRadius: 4.8),
-                                    child: SfSlider(
-                                      min: 0.0,
-                                      max: 60,
-                                      value: controller.currentSliderValue,
-                                      interval: 10,
-                                      stepSize: 10,
-                                      showLabels: true,
-                                      showDividers: true,
-                                      onChanged: (dynamic value) {
-                                        setState(() {
-                                          controller.currentSliderValue = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),]
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   children:[Expanded(
+                            //     child: Container(
+                            //       height: 60,
+                            //       child: SfSliderTheme(
+                            //         data: SfSliderThemeData(
+                            //             activeTrackColor:
+                            //                 Color(0xff03DAC5).withOpacity(0.08),
+                            //             inactiveTrackColor:
+                            //                 Color(0xff03DAC5).withOpacity(0.3),
+                            //             inactiveDividerRadius: 4.8,
+                            //             minorTickSize: Size(10, 10),
+                            //             tickSize: Size(20, 20),
+                            //             thumbColor: Colors.white,
+                            //             activeDividerColor: Color(0xff03DAC5),
+                            //             overlayColor: Color(0xff03DAC5),
+                            //             activeDividerStrokeColor:
+                            //                 Color(0xff03DAC5),
+                            //             disabledActiveDividerColor:
+                            //                 Color(0xff03DAC5),
+                            //             thumbStrokeColor: Color(0xff03DAC5),
+                            //             inactiveTickColor: Color(0xff03DAC5),
+                            //             disabledThumbColor: Color(0xff03DAC5),
+                            //             activeMinorTickColor: Color(0xff03DAC5),
+                            //             inactiveDividerColor: Color(0xff03DAC5),
+                            //             overlayRadius: 9,
+                            //             inactiveTrackHeight: 9.5,
+                            //             trackCornerRadius: 9,
+                            //             tickOffset: Offset(10, 10),
+                            //             thumbRadius: 9.3,
+                            //             activeTrackHeight: 9.5,
+                            //             activeLabelStyle: TextStyle(
+                            //                 color: Colors.grey, fontSize: 14),
+                            //             inactiveLabelStyle: TextStyle(
+                            //                 color: Colors.grey, fontSize: 14),
+                            //             activeDividerRadius: 4.8),
+                            //         child: SfSlider(
+                            //           min: 0.0,
+                            //           max: 60,
+                            //           value: controller.currentSliderValue,
+                            //           interval: 10,
+                            //           stepSize: 10,
+                            //           showLabels: true,
+                            //           showDividers: true,
+                            //           onChanged: (dynamic value) {
+                            //             setState(() {
+                            //               controller.currentSliderValue = value;
+                            //             });
+                            //           },
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),]
+                            // ),
                             _isNotLearningGoalRating
                                 ? SizedBox(
                                     height: GlobalConstants.of(context)
