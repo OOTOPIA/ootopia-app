@@ -62,6 +62,29 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$emailExistAtom = Atom(name: 'AuthStoreBase.emailExist');
+
+  @override
+  bool get emailExist {
+    _$emailExistAtom.reportRead();
+    return super.emailExist;
+  }
+
+  @override
+  set emailExist(bool value) {
+    _$emailExistAtom.reportWrite(value, super.emailExist, () {
+      super.emailExist = value;
+    });
+  }
+
+  final _$checkEmailExistAsyncAction =
+      AsyncAction('AuthStoreBase.checkEmailExist');
+
+  @override
+  Future<void> checkEmailExist(String email) {
+    return _$checkEmailExistAsyncAction.run(() => super.checkEmailExist(email));
+  }
+
   final _$checkUserIsLoggedAsyncAction =
       AsyncAction('AuthStoreBase.checkUserIsLogged');
 
@@ -122,6 +145,7 @@ mixin _$AuthStore on AuthStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 errorOnGetTags: ${errorOnGetTags},
+emailExist: ${emailExist},
 currentUser: ${currentUser}
     ''';
   }

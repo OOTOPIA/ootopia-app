@@ -37,6 +37,13 @@ abstract class AuthStoreBase with Store {
   @observable
   bool errorOnGetTags = false;
 
+  @observable
+  bool emailExist = false;
+
+  @action
+  Future<void> checkEmailExist(String email) async =>
+      emailExist = await authRepository.emailExist(email);
+
   @action
   Future<User?> checkUserIsLogged() async =>
       this._currentUser = ObservableFuture(storage.getCurrentUser());

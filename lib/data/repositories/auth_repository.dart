@@ -14,6 +14,7 @@ abstract class AuthRepository {
       Auth user, List<String>? tagsIds, FlutterUploader? uploader);
   Future recoverPassword(String email, String lang);
   Future resetPassword(String newPassword);
+  Future<bool> emailExist(String email);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -205,6 +206,23 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
       throw FetchDataException("TOKEN_EXPIRED");
     } else if (response.statusCode != 200) {
       throw FetchDataException('Failed to reset password');
+    }
+  }
+
+  @override
+  Future<bool> emailExist(String email) async {
+    try {
+      final response = await http.get(
+        Uri.parse(dotenv.env['API_URL']! + "users/email-exist/$email"),
+        headers: API_HEADERS,
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to check email exists');
+      }
+    } catch (error) {
+      throw Exception('Failed to check email exists' + error.toString());
     }
   }
 }

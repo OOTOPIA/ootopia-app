@@ -213,7 +213,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                               ),
                               onPressed: _termsCheckbox
-                                  ? () {
+                                  ? () async {
+                                      await phase2Controller.authStore
+                                          .checkEmailExist(phase2Controller
+                                              .emailController.text);
                                       if (phase2Controller.formKey.currentState!
                                           .validate()) {
                                         Navigator.of(context).pushNamed(
@@ -372,6 +375,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                     });
                                     return AppLocalizations.of(context)!
                                         .pleaseEnterYourValidEmailAddress;
+                                  } else if (phase2Controller
+                                      .authStore.emailExist) {
+                                    setState(() {
+                                      mailIsValid = false;
+                                    });
+                                    return 'mail invalid';
                                   }
                                   setState(() {
                                     mailIsValid = true;
