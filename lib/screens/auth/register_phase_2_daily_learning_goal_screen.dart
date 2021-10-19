@@ -106,310 +106,319 @@ class _RegisterPhase2DailyLearningGoalPageState
       appBar: isPortrait ? appBar : null,
       body: isPortrait
           ? SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: GlobalConstants.of(context).spacingNormal),
-              child: Form(
-                key: _formKey,
-                child: ListView(children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.regenerationGame,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 22,
-                              color: Color(0xff03145C),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.watchVideoToLearn,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xff707070),
-                              fontWeight: FontWeight.w400),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 32,
-                            bottom: 26,
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _videoPlayerController.value.isPlaying
-                                    ? _videoPlayerController.pause()
-                                    : _videoPlayerController.play();
-                                    
-                                timerOpacity?.cancel();
-                                timerOpacity = Timer(
-                                    Duration(seconds: 1),
-                                    () => setState(
-                                        () => timerOpacity = null));
-                              });
-                            },
-                            child: Container(
-                                height: 210,
-                                width: 360,
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(4),
-                                      child: VideoPlayer(
-                                          _videoPlayerController),
-                                    ),
-                                    _videoPlayerController.value.isPlaying
-                                        ? AnimatedOpacity(
-                                            opacity: timerOpacity != null
-                                                ? 1
-                                                : 0.0,
-                                            duration: Duration(
-                                                milliseconds: 200),
-                                            child: timerOpacity != null
-                                                ? Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: GlobalConstants.of(context).spacingNormal),
+                child: Form(
+                  key: _formKey,
+                  child: CustomScrollView(slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      fillOverscroll: true,
+                      child: Column(children: [
+                        Expanded(
+                          child: Container(
+                            height: controller.currentSliderValue == 0.0? 625 : 575,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.regenerationGame,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      color: Color(0xff03145C),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.watchVideoToLearn,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xff707070),
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 32,
+                                    bottom: 26,
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _videoPlayerController.value.isPlaying
+                                            ? _videoPlayerController.pause()
+                                            : _videoPlayerController.play();
+
+                                        timerOpacity?.cancel();
+                                        timerOpacity = Timer(
+                                            Duration(seconds: 1),
+                                            () => setState(
+                                                () => timerOpacity = null));
+                                      });
+                                    },
+                                    child: Container(
+                                        height: 210,
+                                        width: 360,
+                                        child: Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              child: VideoPlayer(
+                                                  _videoPlayerController),
+                                            ),
+                                            _videoPlayerController.value.isPlaying
+                                                ? AnimatedOpacity(
+                                                    opacity: timerOpacity != null
+                                                        ? 1
+                                                        : 0.0,
+                                                    duration: Duration(
+                                                        milliseconds: 200),
+                                                    child: timerOpacity != null
+                                                        ? Center(
+                                                            child: CircleAvatar(
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0xff35AD6C),
+                                                              radius: 28.5,
+                                                              child: Icon(
+                                                                Icons.pause,
+                                                                size: 23,
+                                                                color:
+                                                                    Colors.white,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : IgnorePointer(
+                                                            child: Center(
+                                                              child: CircleAvatar(
+                                                                backgroundColor:
+                                                                    Color(
+                                                                        0xff35AD6C),
+                                                                radius: 28.5,
+                                                                child: Icon(
+                                                                  Icons.pause,
+                                                                  size: 23,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                  )
+                                                : Center(
                                                     child: CircleAvatar(
                                                       backgroundColor:
-                                                          Color(
-                                                              0xff35AD6C),
+                                                          Color(0xff35AD6C),
                                                       radius: 28.5,
                                                       child: Icon(
-                                                        Icons.pause,
+                                                        Icons.play_arrow,
                                                         size: 23,
-                                                        color:
-                                                            Colors.white,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : IgnorePointer(
-                                                    child: Center(
-                                                      child: CircleAvatar(
-                                                        backgroundColor:
-                                                            Color(
-                                                                0xff35AD6C),
-                                                        radius: 28.5,
-                                                        child: Icon(
-                                                          Icons.pause,
-                                                          size: 23,
-                                                          color: Colors
-                                                              .white,
-                                                        ),
+                                                        color: Colors.white,
                                                       ),
                                                     ),
                                                   ),
-                                          )
-                                        : Center(
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Color(0xff35AD6C),
-                                              radius: 28.5,
-                                              child: Icon(
-                                                Icons.play_arrow,
-                                                size: 23,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                    Positioned(
-                                        bottom: 2,
-                                        right: 2,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              SystemChrome
-                                                  .setPreferredOrientations([
-                                                DeviceOrientation
-                                                    .landscapeRight,
-                                                DeviceOrientation
-                                                    .landscapeLeft
-                                              ]);
-                                            },
-                                            icon: ImageIcon(
-                                                AssetImage(
-                                                    "assets/icons/icon_maximizescreen.png"),
-                                                color: Color(0xFFCDCDCD),
-                                                size: 16)))
-                                  ],
-                                )),
-                          ),
-                        ),
-                        Divider(
-                          color: Color(0xff707070).withOpacity(.6),
-                          height: 1,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 24, bottom: 24),
-                          child: Text(
-                            AppLocalizations.of(context)!
-                                .chooseYourDailyGoal,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff707070),
+                                            Positioned(
+                                                bottom: 2,
+                                                right: 2,
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      SystemChrome
+                                                          .setPreferredOrientations([
+                                                        DeviceOrientation
+                                                            .landscapeRight,
+                                                        DeviceOrientation
+                                                            .landscapeLeft
+                                                      ]);
+                                                    },
+                                                    icon: ImageIcon(
+                                                        AssetImage(
+                                                            "assets/icons/icon_maximizescreen.png"),
+                                                        color: Color(0xFFCDCDCD),
+                                                        size: 16)))
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                                Divider(
+                                  color: Color(0xff707070).withOpacity(.6),
+                                  height: 1,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 24, bottom: 24),
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .chooseYourDailyGoal,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff707070),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.minutesPerDay,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff707070)),
+                                ),
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingSmall,
+                                ),
+                                SfSliderTheme(
+                                  data: SfSliderThemeData(
+                                      activeTrackColor:
+                                          Color(0xff03DAC5).withOpacity(0.08),
+                                      inactiveTrackColor:
+                                          Color(0xff03DAC5).withOpacity(0.3),
+                                      inactiveDividerRadius: 4.8,
+                                      minorTickSize: Size(10, 10),
+                                      tickSize: Size(20, 20),
+                                      thumbColor: Colors.white,
+                                      activeDividerColor: Color(0xff03DAC5),
+                                      overlayColor: Color(0xff03DAC5),
+                                      activeDividerStrokeColor: Color(0xff03DAC5),
+                                      disabledActiveDividerColor:
+                                          Color(0xff03DAC5),
+                                      thumbStrokeColor: Color(0xff03DAC5),
+                                      inactiveTickColor: Color(0xff03DAC5),
+                                      disabledThumbColor: Color(0xff03DAC5),
+                                      activeMinorTickColor: Color(0xff03DAC5),
+                                      inactiveDividerColor: Color(0xff03DAC5),
+                                      overlayRadius: 9,
+                                      inactiveTrackHeight: 9.5,
+                                      trackCornerRadius: 9,
+                                      tickOffset: Offset(10, 10),
+                                      thumbRadius: 9.3,
+                                      activeTrackHeight: 9.5,
+                                      activeLabelStyle: TextStyle(
+                                          color: Colors.grey, fontSize: 14),
+                                      inactiveLabelStyle: TextStyle(
+                                          color: Colors.grey, fontSize: 14),
+                                      activeDividerRadius: 4.8),
+                                  child: SfSlider(
+                                    min: 0.0,
+                                    max: 60,
+                                    value: controller.currentSliderValue,
+                                    interval: 10,
+                                    stepSize: 10,
+                                    showLabels: true,
+                                    showDividers: true,
+                                    onChanged: (dynamic value) {
+                                      setState(() {
+                                        controller.currentSliderValue = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                _isNotLearningGoalRating
+                                    ? SizedBox(
+                                        height: GlobalConstants.of(context)
+                                            .spacingLarge,
+                                      )
+                                    : Container(),
+                                _isNotLearningGoalRating
+                                    ? Text(
+                                        AppLocalizations.of(context)!
+                                            .isNotLearningGoalRating,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff707070)),
+                                      )
+                                    : Container(),
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingNormal,
+                                ),
+                                Visibility(
+                                  visible: controller.currentSliderValue == 0.0,
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .settingGoalToZero,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingNormal,
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        Text(
-                          AppLocalizations.of(context)!.minutesPerDay,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff707070)),
-                        ),
-                        SizedBox(
-                          height:
-                              GlobalConstants.of(context).spacingSmall,
-                        ),
-                        SfSliderTheme(
-                          data: SfSliderThemeData(
-                              activeTrackColor:
-                                  Color(0xff03DAC5).withOpacity(0.08),
-                              inactiveTrackColor:
-                                  Color(0xff03DAC5).withOpacity(0.3),
-                              inactiveDividerRadius: 4.8,
-                              minorTickSize: Size(10, 10),
-                              tickSize: Size(20, 20),
-                              thumbColor: Colors.white,
-                              activeDividerColor: Color(0xff03DAC5),
-                              overlayColor: Color(0xff03DAC5),
-                              activeDividerStrokeColor:
-                                  Color(0xff03DAC5),
-                              disabledActiveDividerColor:
-                                  Color(0xff03DAC5),
-                              thumbStrokeColor: Color(0xff03DAC5),
-                              inactiveTickColor: Color(0xff03DAC5),
-                              disabledThumbColor: Color(0xff03DAC5),
-                              activeMinorTickColor: Color(0xff03DAC5),
-                              inactiveDividerColor: Color(0xff03DAC5),
-                              overlayRadius: 9,
-                              inactiveTrackHeight: 9.5,
-                              trackCornerRadius: 9,
-                              tickOffset: Offset(10, 10),
-                              thumbRadius: 9.3,
-                              activeTrackHeight: 9.5,
-                              activeLabelStyle: TextStyle(
-                                  color: Colors.grey, fontSize: 14),
-                              inactiveLabelStyle: TextStyle(
-                                  color: Colors.grey, fontSize: 14),
-                              activeDividerRadius: 4.8),
-                          child: SfSlider(
-                            min: 0.0,
-                            max: 60,
-                            value: controller.currentSliderValue,
-                            interval: 10,
-                            stepSize: 10,
-                            showLabels: true,
-                            showDividers: true,
-                            onChanged: (dynamic value) {
-                              setState(() {
-                                controller.currentSliderValue = value;
-                              });
-                            },
-                          ),
-                        ),
-                        _isNotLearningGoalRating
-                            ? SizedBox(
-                                height: GlobalConstants.of(context)
-                                    .spacingLarge,
-                              )
-                            : Container(),
-                        _isNotLearningGoalRating
-                            ? Text(
-                                AppLocalizations.of(context)!
-                                    .isNotLearningGoalRating,
-                                textAlign: TextAlign.center,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Container(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      side: BorderSide.none),
+                                ),
+                                minimumSize: MaterialStateProperty.all(
+                                  Size(60, 55),
+                                ),
+                                elevation:
+                                    MaterialStateProperty.all<double>(0.0),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color(0xff003694)),
+                                padding: MaterialStateProperty.all<EdgeInsets>(
+                                    EdgeInsets.all(GlobalConstants.of(context)
+                                        .spacingNormal)),
+                              ),
+                              child: Text(
+                                AppLocalizations.of(context)!.continueAccess,
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff707070)),
-                              )
-                            : Container(),
-                        SizedBox(
-                          height:
-                              GlobalConstants.of(context).spacingNormal,
-                        ),
-                        Visibility(
-                          visible: controller.currentSliderValue == 0.0,
-                          child: Text(
-                            AppLocalizations.of(context)!
-                                .settingGoalToZero,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                _videoPlayerController.pause();
+                                controller.user!.dailyLearningGoalInMinutes =
+                                    _learningGoalRating.round();
+                                this
+                                    .trackingEvents
+                                    .signupCompletedStepIIOfSignupII({
+                                  "dailyLearningGoalInMinutes": controller
+                                      .user!.dailyLearningGoalInMinutes
+                                });
+                                Navigator.of(context).pushNamed(
+                                  PageRoute.Page.registerPhase2GeolocationScreen
+                                      .route,
+                                  arguments: widget.args,
+                                );
+                              },
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height:
-                              GlobalConstants.of(context).spacingNormal,
-                        ),
-                      ],
+                      ]),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                side: BorderSide.none),
-                          ),
-                          minimumSize: MaterialStateProperty.all(
-                            Size(60, 55),
-                          ),
-                          elevation:
-                              MaterialStateProperty.all<double>(0.0),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(
-                                  Color(0xff003694)),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.all(GlobalConstants.of(context)
-                                  .spacingNormal)),
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.continueAccess,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          _videoPlayerController.pause();
-                          controller.user!.dailyLearningGoalInMinutes =
-                              _learningGoalRating.round();
-                          this
-                              .trackingEvents
-                              .signupCompletedStepIIOfSignupII({
-                            "dailyLearningGoalInMinutes": controller
-                                .user!.dailyLearningGoalInMinutes
-                          });
-                          Navigator.of(context).pushNamed(
-                            PageRoute.Page.registerPhase2GeolocationScreen
-                                .route,
-                            arguments: widget.args,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ]),
+                  ]),
+                ),
               ),
-            ),
-          )
+            )
           : GestureDetector(
               onTap: () {
                 setState(() {
