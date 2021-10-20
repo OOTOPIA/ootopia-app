@@ -232,7 +232,7 @@ class _RegisterPhase2GeolocationPageState
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(25.0),
+                                              BorderRadius.circular(40.0),
                                           side: BorderSide.none),
                                     ),
                                     minimumSize: MaterialStateProperty.all(

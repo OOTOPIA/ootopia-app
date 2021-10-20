@@ -358,7 +358,7 @@ class _RegisterPhase2TopInterestsPageState
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(25.0),
+                                                BorderRadius.circular(40.0),
                                             side: BorderSide.none)),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(

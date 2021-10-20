@@ -363,7 +363,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
+                          padding: const EdgeInsets.only(top: 24,bottom: 20),
                           child: Container(
                             width: double.infinity,
                             child: ElevatedButton(
@@ -371,7 +371,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25.0),
+                                      borderRadius: BorderRadius.circular(40.0),
                                       side: BorderSide.none),
                                 ),
                                 minimumSize: MaterialStateProperty.all(
