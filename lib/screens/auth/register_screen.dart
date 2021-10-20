@@ -366,9 +366,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       nameIsValid = true;
                                       setState(() {});
                                     },
-                                    keyboardType: TextInputType.name,
-                                    autocorrect: true,
-                                    enableSuggestions: true,
                                     textCapitalization:
                                         TextCapitalization.words,
                                     decoration: GlobalConstants.of(context)
