@@ -31,7 +31,7 @@
     "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
-
+    "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "A meta diária escolhida foi de 10 minutos e está sendo usada para o jogo de regeneração.",
     "confirm": "Confirmar",
 
     "thisIsWhereYourPositiveImpactMattersMost":"É aqui que seu impacto positivo importa mais!",
@@ -256,7 +256,7 @@
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
     "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
-    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Change Maker Pro é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O emblema de Change Maker Pro é dado a indivíduos e organizações que estão liderando profissionalmente projetos para regenerar o planeta e criando amplo impacto positivo.",
     "areYouAChangeMakerProToo": "Você também é um Change Maker Pro?",
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",

@@ -38,6 +38,7 @@
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
+    "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "The daily goal chosen was 10 minutes and is being used for the regeneration game.",
 
 
     "pleaseWait": "Please, wait...",
@@ -263,7 +264,7 @@
     "received": "Received",
 
     "badgeChangeMakerPro": "Badge: Change Maker Pro",
-    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Change Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Change Maker Pro Badge is awarded to individuals and organizations that are professionally leading projects to regenerate the planet and creating extensive positive impact.",
     "areYouAChangeMakerProToo": "Are you a Change Maker Pro too?",
     "getInContact": "Get in contact!",
     "invitationCode": "Invitation code",
