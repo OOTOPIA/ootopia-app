@@ -6,10 +6,7 @@ class Geolocation {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
-    // await Geolocator.requestPermission();
-    // permission = await Geolocator.checkPermission();
-
+    // Test if location is allowed.
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -31,6 +28,7 @@ class Geolocation {
       }
     }
 
+    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
