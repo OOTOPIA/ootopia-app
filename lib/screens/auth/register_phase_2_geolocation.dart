@@ -129,9 +129,9 @@ class _RegisterPhase2GeolocationPageState
                                   Container(
                                     child: TextFormField(
                                       enabled: false,
-                                      style: TextStyle(color: LightColors.blue),
+                                      style: TextStyle(color: LightColors.blue, fontWeight: FontWeight.w500),
                                       focusNode: controller.inputFocusNode,
-                                      textAlign: TextAlign.center,
+                                      textAlign: TextAlign.left,
                                       controller:
                                           controller.geolocationController,
                                       keyboardType: TextInputType.number,

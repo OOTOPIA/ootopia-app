@@ -122,7 +122,6 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                         height: GlobalConstants.of(context).intermediateSpacing,
                       ),
                       TextFormField(
-                        style: TextStyle(height: 0.1),
                         onChanged: (value) {
                           filterTagsByText(value);
                         },
