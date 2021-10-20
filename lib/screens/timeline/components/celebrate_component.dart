@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -152,10 +153,10 @@ class CelebrationStates extends State<Celebration> {
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Color(0xFF000000)),
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  color: Color(0xFF000000),
+                                ),
                               ),
                             ),
                         ],
