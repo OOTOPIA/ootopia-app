@@ -53,7 +53,7 @@
 
     "favoriteThemes": "Temas Favoritos",
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
-    "selectAtLeastOneHashtag": "Selecione ao menos 1 hashtag",
+    "selectAtLeastOneHashtag": "Selecione pelo menos uma hashtag",
     "selectHashtags": "Selecione hashtags",
     "tagsSelected": "Tags selecionadas",
 
@@ -95,8 +95,8 @@
     "noContinueEditing": "Não, continue editando",
     "yes": "Sim",
     "thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao carregar o vídeo, tente enviar o vídeo novamente.",
-    "pleaseSelectAtLeast1Tag": "Selecione pelo menos 1 tag",
-    "selectAtLeast1Tag": "Selecione pelo menos 1 tag",
+    "pleaseSelectAtLeast1Tag": "Selecione pelo menos uma hashtag",
+    "selectAtLeast1Tag": "Selecione pelo menos uma hashtag",
     "thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain": "Ocorreu um problema ao enviar o vídeo, tente enviar o vídeo novamente.",
     "newPost": "Nova postagem",
     "sendPost": "Enviar postagem",
@@ -388,5 +388,9 @@
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
      "marketPlaceTransfer": "Transferência de mercado",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
-     "generalError": "Não foi possível realizar a operação."
+     "generalError": "Não foi possível realizar a operação.",
+     "selecteds": "selecionadas",
+     "selected2": "selecionada",
+     "searchForAtag": "Procure por uma hashtag"
+
 }
