@@ -314,7 +314,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 30,
+                  height: 32,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -360,24 +360,24 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   ),
                 ),
                 Positioned(
-                  left: 0.5,
-                  top: 5,
+                  left: 0.2,
+                  top: 4,
                   child: Container(
-                    height: 15,
+                    height: 20,
                     width: 20.5,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12),
+                        topLeft: Radius.circular(15),
                       ),
                       color: Color(0xff1A4188),
                     ),
                   ),
                 ),
                 Positioned(
-                  right: 0,
+                  right: 0.2,
                   top: 4,
                   child: Container(
-                    height: 17,
+                    height: 20,
                     width: 20.5,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
