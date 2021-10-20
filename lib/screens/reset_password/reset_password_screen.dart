@@ -156,7 +156,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   children: [
                                     Text(
                                       AppLocalizations.of(context)!
-                                          .liveInOotopiaNowMessage,
+                                          .liveOotopiaNowMessage,
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
@@ -210,12 +210,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      AppLocalizations.of(context)!
-                                          .creatingANewAccountPassword,
-                                      textAlign: TextAlign.center,
-                                      style:
-                                          Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600)
-                                    ),
+                                        AppLocalizations.of(context)!
+                                            .creatingANewAccountPassword,
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1!
+                                            .copyWith(
+                                                fontWeight: FontWeight.w600)),
                                   ),
                                 ],
                               ),

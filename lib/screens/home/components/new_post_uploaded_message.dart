@@ -1,14 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class NewPostUploadedMessageBox extends StatelessWidget {
-  String text;
   NewPostUploadedMessageBox({required this.text});
+  final String text;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +11,7 @@ class NewPostUploadedMessageBox extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Color(0xff73d778),
+          color: const Color(0xff03DAC5),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(

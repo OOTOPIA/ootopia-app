@@ -6,6 +6,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -102,7 +103,23 @@ class _RegenerationGameState extends State<RegenerationGame> {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () => {}, //Saiba mais
+                            onTap: () {
+                              showModalBottomSheet(
+                                  barrierColor: Colors.black.withAlpha(1),
+                                  context: context,
+                                  backgroundColor: Colors.black.withAlpha(1),
+                                  builder: (BuildContext context) {
+                                    return SnackBarWidget(
+                                      menu: AppLocalizations.of(context)!
+                                          .regenerationGame,
+                                      text: AppLocalizations.of(context)!
+                                          .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame,
+                                      about: AppLocalizations.of(context)!
+                                          .learnMore,
+                                      marginBottom: true,
+                                    );
+                                  });
+                            }, //Saiba mais
                             child: Padding(
                               padding: EdgeInsets.only(
                                 top: 10,
@@ -329,33 +346,41 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 3),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/icons/ooz_mini_blue.svg',
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 6),
-                                          child: Text(
-                                            homeStore.dailyGoalStats != null
-                                                ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
-                                                : "0,00",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .accentColor,
-                                                ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pushNamed(
+                                            PageRoute.Page.aboutOOzCurrentScreen
+                                                .route);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/ooz_mini_blue.svg',
                                           ),
-                                        )
-                                      ],
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 6),
+                                            child: Text(
+                                              homeStore.dailyGoalStats != null
+                                                  ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
+                                                  : "0,00",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
+                                                  .copyWith(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .accentColor,
+                                                  ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],

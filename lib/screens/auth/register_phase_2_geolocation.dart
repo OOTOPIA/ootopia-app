@@ -27,10 +27,12 @@ class _RegisterPhase2GeolocationPageState
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      controller.getLocation(context);
-    });
     super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      setState(() async {
+        await controller.getLocation(context);
+      });
+    });
   }
 
   get appBar => AppBar(
@@ -201,7 +203,9 @@ class _RegisterPhase2GeolocationPageState
                                         ),
                                       ),
                                       onPressed: () {
-                                        controller.getLocation(context);
+                                        setState(() async {
+                                          await controller.getLocation(context);
+                                        });
                                       },
                                       splashColor: Colors.black54,
                                       shape: RoundedRectangleBorder(
@@ -232,11 +236,11 @@ class _RegisterPhase2GeolocationPageState
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(25.0),
+                                              BorderRadius.circular(40.0),
                                           side: BorderSide.none),
                                     ),
                                     minimumSize: MaterialStateProperty.all(
-                                      Size(60, 58),
+                                      Size(60, 55),
                                     ),
                                     elevation:
                                         MaterialStateProperty.all<double>(0.0),

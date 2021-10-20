@@ -1,7 +1,7 @@
 {
     "language": "Portuguese",
     "helloWIfNotNowThenWhenorld": "Se não agora, então quando?\r\nSe não nós, então quem?\r\n\r\nBem-vindo ao movimento para\r\ncurar o planeta Terra!",
-    "liveInOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
+    "liveOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
     "email": "e-mail",
     "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "senha",
@@ -31,7 +31,7 @@
     "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
-
+    "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "A meta diária escolhida foi de 10 minutos e está sendo usada para o jogo de regeneração.",
     "confirm": "Confirmar",
 
     "thisIsWhereYourPositiveImpactMattersMost":"É aqui que seu impacto positivo importa mais!",
@@ -55,8 +55,8 @@
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
     "selectAtLeastOneHashtag": "Selecione pelo menos uma hashtag",
     "selectHashtags": "Selecione hashtags",
-    "tagsSelected": "tags selecionadas",
-    "tagSelected":"tag selecionada",
+    "tagsSelected": "selecionadas",
+    "tagSelected":"selecionada",
 
     "others": "Outras(os)",
 
@@ -255,9 +255,9 @@
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
-    "badgeSower": "Distintivo: Semeador",
-    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O Emblema Semeador é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
-    "areYouASowerToo": "Você também é semeador?",
+    "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O emblema de Change Maker Pro é dado a indivíduos e organizações que estão liderando profissionalmente projetos para regenerar o planeta e criando amplo impacto positivo.",
+    "areYouAChangeMakerProToo": "Você também é um Change Maker Pro?",
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
@@ -305,7 +305,7 @@
     "changeMakerProInvitationCode":"CÓDIGO CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO CONVITE DE BOAS-VINDAS",
-    "sendSowerInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
+    "sendChangeMakerProInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba",
     "forEachNewcomer": "para cada recém-chegado.\nSeu amigo receberá",
    "ooz15":" 15,00 OOz.",
@@ -349,7 +349,7 @@
 
     "currentOOZBalance": "Saldo OOz Atual",
     "createAnOffer": "Criar uma Oferta",
-    "createYourOffer":"Crie a sua oferta",
+    "createYourOffer":"Criar sua oferta",
 
     "thisUserHasNoPublicationsYet": "Este usuário ainda não tem publicações",
     "welcomeCredit":"Crédito de Boas-Vindas",
@@ -361,23 +361,23 @@
     "createYourOwnCategories":"crie suas próprias categorias",
     "textForNextFeatureCategories":"Na próxima atualização do aplicativo, você terá acesso a álbuns e poderá organizar seu conteúdo em diferentes categorias de publicação.\n\nAlém de organizar o seu perfil, você também poderá visualizar os álbuns de outros Ootopíacos.",
     "enterYourNumber":"Insira seu número",
-    "medals": "Medalhas",
+    "laurelWreath": "Coroas de Louros",
     "iAccept": "Eu aceito",
     "chooseYourDailyGoal":"Escolha sua meta diária de participação no jogo.",
     "watchVideoToLearn":"Assista ao vídeo para saber como funciona o jogo de regeneração e como participar dele.",
-    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As medalhas representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
+    "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "As Coroas de Louros representam quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
 
     "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Learning Tracks",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
-    "ethicalMarketplace": "MERCADO ÉTICO",
+    "ethicalMarketplace": "MARKETPLACE ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
-    "messageVendorContact": "O vendedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua compra",
+    "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
     "messageOptional": "Mensagem - Opcional",
-    "purchaseNow": "Compre agora",
+    "purchaseNow": "Adquirir Agora",
 
     "seeAll":"Veja todos",
      "dontExistLearningTracks":"Não existem learning tracks",
@@ -388,10 +388,14 @@
      "quiz":"Quiz",
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
      "completed": "Completo",
-     "marketPlaceTransfer": "Transferência de mercado",
+     "marketPlaceTransfer": "Marketplace Ético",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
      "generalError": "Não foi possível realizar a operação.",
-     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\n No app OOTOPIA, seus OOz valem o equivalente a reais e podem ser usados ​​no Mercado Ético e para premiar as publicações mais inspiradoras.",
+     "aboutOOzCurrent":"OOz é uma moeda digital que representa o valor gerado por ações regenerativas.\n\nNo app OOTOPIA, seus OOz valem o equivalente a Reais e podem ser usados ​​no Marketplace Ético e para recompensar as publicações mais inspiradoras.",
      "theOOzCurrent":"a moeda ooz",
-     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo"
+     "pictureBy": "Foto de",
+     "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo",
+     "nextAboutCreateOffer":"Na próxima atualização do aplicativo, todos poderão criar ofertas, produtos, serviços e experiências. Até lá, que tal nos dizer o que você gostaria de vender ou adquirir?\n\nSuas sugestões e dúvidas são muito bem vindas!",
+     "aboutYourOfferHere":"SERÁ ÓTIMO VER SUA OFERTA AQUI",
+     "giveSuggestion":"Dar sugestão"
 }

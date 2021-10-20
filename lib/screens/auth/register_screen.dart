@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +10,13 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
-
 import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegisterPage extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
   RegisterPage([this.args]);
   @override

@@ -105,6 +105,7 @@ class _RegisterPhase2TopInterestsPageState
                 slivers: [
                   SliverFillRemaining(
                     hasScrollBody: false,
+                    fillOverscroll: true,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal:
@@ -209,10 +210,7 @@ class _RegisterPhase2TopInterestsPageState
                                         bottom: GlobalConstants.of(context)
                                             .spacingNormal),
                                     height: 57,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: GlobalConstants.of(context)
-                                            .spacingSmall,
-                                        vertical: 0),
+                                    padding: EdgeInsets.symmetric(vertical: 0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: LightColors.grey,
@@ -224,44 +222,37 @@ class _RegisterPhase2TopInterestsPageState
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    right: GlobalConstants.of(
-                                                            context)
-                                                        .spacingSmall),
-                                                child: Icon(
-                                                  Icons.add,
-                                                  size: 31,
-                                                ),
-                                              ),
-                                              Text(
-                                                AppLocalizations.of(context)!
-                                                    .searchForAHashtag,
-                                                style: GoogleFonts.roboto(
-                                                    color:
-                                                        LightColors.blackText,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle1!
-                                                        .fontSize),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: GlobalConstants.of(context)
-                                              .spacingSmall,
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 4, left: 10),
+                                              child: ImageIcon(
+                                                  AssetImage(
+                                                      "assets/icons/icon_add.png"),
+                                                  size: 31),
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .searchForAHashtag,
+                                              overflow: TextOverflow.clip,
+                                              style: GoogleFonts.roboto(
+                                                  color: LightColors.blackText,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16),
+                                            ),
+                                          ],
                                         ),
                                         Visibility(
                                           visible:
                                               controller.selectedTags.length >
                                                   0,
-                                          child: Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10),
                                             child: Text(
                                               controller.selectedTags.length > 1
                                                   ? '${controller.selectedTags.length} ' +
@@ -276,10 +267,7 @@ class _RegisterPhase2TopInterestsPageState
                                               textAlign: TextAlign.right,
                                               style: GoogleFonts.roboto(
                                                 color: Colors.grey,
-                                                fontSize: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1!
-                                                    .fontSize,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.w400,
                                               ),
                                             ),
@@ -372,13 +360,13 @@ class _RegisterPhase2TopInterestsPageState
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(25.0),
+                                                BorderRadius.circular(40.0),
                                             side: BorderSide.none)),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
                                             LightColors.blue),
                                     minimumSize: MaterialStateProperty.all(
-                                      Size(60, 58),
+                                      Size(60, 55),
                                     ),
                                     elevation:
                                         MaterialStateProperty.all<double>(0.0),
