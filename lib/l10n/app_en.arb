@@ -4,7 +4,7 @@
         "description": "The current language"
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
-    "liveInOotopiaNowMessage": "LIVE OOTOPIA NOW!",
+    "liveOotopiaNowMessage": "LIVE OOTOPIA NOW!",
     "email": "e-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "password",
@@ -262,9 +262,9 @@
     "sent":"Sent",
     "received": "Received",
 
-    "badgeSower": "Badge: Sower",
-    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Sower Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
-    "areYouASowerToo": "Are you a sower too?",
+    "badgeChangeMakerPro": "Badge: Change Maker Pro",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Change Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
+    "areYouAChangeMakerProToo": "Are you a Change Maker Pro too?",
     "getInContact": "Get in contact!",
     "invitationCode": "Invitation code",
     "gratitudeReward": "Gratitude reward",
@@ -306,7 +306,7 @@
     "changeMakerProInvitationCode":"CHANGE MAKER PRO INVITATION CODE",
     "shareThisCode":"share this code",
     "welcomeInvitationCode":"WELCOME INVITATION CODE",
-    "sendSowerInvitationCode": "Send this code to invite people who are professionally leading projects to regenerate the planet and creating extensive impact.",
+    "sendChangeMakerProInvitationCode": "Send this code to invite people who are professionally leading projects to regenerate the planet and creating extensive impact.",
     "sendWelcomeInvitationCode": "Send this code to invite your friends and receive",
     "forEachNewcomer":"for each newcomer.\nYour friend will receive",
     "ooz15":" 15,00 OOz.",
@@ -362,9 +362,9 @@
     "pictureByEttyFidele":"picture By Etty Fidele",
     "textForNextFeatureCategories":"In the next app update, you will have access to albums and will be able to organize your content into different publishing categories.\n\nIn addition to organizing your profile, you will also be able to view other Ootopians' albums.",
 
-    "medals": "Medals",
+    "laurelWreath": "Laurel Wreath",
     "iAccept": "I accept",
-    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Laurel Wreath represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
     "optional":"Optional",
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
@@ -402,7 +402,7 @@
     "theOOzCurrent":"the ooz currency",
     "pictureBy": "Picture by",
     "pictureByClemOnojeghuo":"Picture by Clem Onojeghuo",
-    "nextAboutCreateOffer":"In the next app update, everyone will be able to create offers, products, services and experiences.Until then, how about telling us what you would like to sell or buy?\n\nYour suggestions and questions are very welcome!",
+    "nextAboutCreateOffer":"In the next app update, everyone will be able to create offers, products, services and experiences.Until then, how about telling us what you would like to sell or purchase?\n\nYour suggestions and questions are very welcome!",
     "aboutYourOfferHere":"IT WILL BE GREAT TO SEE YOUR OFFER HERE",
      "giveSuggestion":"Give suggestion"
 

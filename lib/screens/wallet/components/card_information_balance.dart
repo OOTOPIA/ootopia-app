@@ -168,9 +168,8 @@ class CardInformationBalance extends StatelessWidget {
         this.originTransaction == "learning_track") {
       iconForeground = Image.network(this.iconForeground, fit: BoxFit.cover);
     } else {
-      iconForeground = Image.asset(
-            "assets/icons/ooz_blue_circle.png",
-            fit: BoxFit.cover);
+      iconForeground =
+          Image.asset("assets/icons/ooz_blue_circle.png", fit: BoxFit.cover);
     }
 
     return Row(
@@ -221,11 +220,10 @@ class CardInformationBalance extends StatelessWidget {
                                 );
                               });
                         } else if (this.origin == "market_place_transfer") {
-                          showDialog(
-                              context: context,
+                          Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => TransferSuccessScreen(
                                     goToMarketPlacePage: false,
-                                  ));
+                                  )));
                         } else if (this.origin == "learning_track") {
                           _goToLearningTracks();
                         }
@@ -240,6 +238,7 @@ class CardInformationBalance extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
+                        color: Colors.white,
                         shape: BoxShape.circle,
                         border: Border.all(width: 2, color: Colors.white)),
                     child: ClipRRect(

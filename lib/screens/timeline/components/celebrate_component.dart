@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class Celebration extends StatefulWidget {
-  Map<String, dynamic> args;
+  final Map<String, dynamic> args;
 
   Celebration(this.args);
 
@@ -82,7 +82,6 @@ class CelebrationStates extends State<Celebration> {
                 child: Container(
                   height: _controller.value.size.height,
                   width: _controller.value.size.width,
-                  padding: EdgeInsets.only(bottom: 40),
                   child: VideoPlayer(_controller),
                 ),
               ),
@@ -143,13 +142,16 @@ class CelebrationStates extends State<Celebration> {
                                   ),
                                   textAlign: TextAlign.center,
                                 )),
-                          if (widget.args["goal"] == "user")
+                          if (widget.args["goal"] == "personal")
                             Padding(
-                              padding: EdgeInsets.only(top: 8),
+                              padding:
+                                  EdgeInsets.only(top: 8, left: 35, right: 35),
                               child: Text(
                                 AppLocalizations.of(context)!
                                     .youMetYourDailyGoalToHelpRegenerateThePlanet,
                                 textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -227,7 +229,7 @@ class CelebrationStates extends State<Celebration> {
                                   children: [
                                     if (widget.args["goal"] != "invitationCode")
                                       Text(
-                                        widget.args["goal"] == "user"
+                                        widget.args["goal"] == "personal"
                                             ? AppLocalizations.of(context)!
                                                 .nextStepIsToHelpMeetYourCityGoal
                                             : AppLocalizations.of(context)!

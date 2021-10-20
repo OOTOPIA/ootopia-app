@@ -12,7 +12,6 @@ class PurchaseButtonWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: marginBottom),
       child: Container(
-        width: 366,
         height: 53,
         child: ElevatedButton(
           onPressed: onPressed,
