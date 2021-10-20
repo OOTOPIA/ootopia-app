@@ -217,7 +217,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100),
+                                      borderRadius: BorderRadius.circular(40),
                                     ),
                                   ),
                                   minimumSize: MaterialStateProperty.all(
@@ -368,8 +368,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     },
                                     keyboardType: TextInputType.name,
                                     autocorrect: true,
+                                    enableSuggestions: true,
                                     textCapitalization:
-                                        TextCapitalization.sentences,
+                                        TextCapitalization.words,
                                     decoration: GlobalConstants.of(context)
                                         .loginInputTheme(
                                             AppLocalizations.of(context)!

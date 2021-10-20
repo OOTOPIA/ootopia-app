@@ -72,11 +72,25 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(120, 0, 0, 0),
+              offset: const Offset(
+                0.0,
+                3.0,
+              ),
+              blurRadius: 5.0,
+              spreadRadius: 0.5,
+            ), //BoxShadow
+          ],
+        ),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        color: Colors.white,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+        padding: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 6),
         child: Material(
           child: GestureDetector(
             onTap: () {
@@ -192,8 +206,9 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                   ),
                 ),
                 Container(
-                  height: 70,
+                  height: 56,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
                         color: LightColors.grey.withOpacity(.3),
@@ -201,7 +216,7 @@ class _InterestsTagsModalState extends State<InterestsTagsModal> {
                         height: 1,
                       ),
                       SizedBox(
-                        height: 18,
+                        height: 6,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
