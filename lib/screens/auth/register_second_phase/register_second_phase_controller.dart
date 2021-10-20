@@ -159,7 +159,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       Position position = await Geolocation.determinePosition(context);
 
       List<Placemark> placemarks =
-          await placemarkFromCoordinates(-23.613188481052, -46.743530564060);
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.length > 0) {
         var placemark = placemarks[0];
         geolocationController.text =
