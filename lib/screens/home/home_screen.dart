@@ -17,10 +17,10 @@ import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
-import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +40,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
+  late TimelineStore timelineStore;
+
   late ProfileScreenStore profileStore;
   Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
@@ -109,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         Theme.of(context).iconTheme.color!.withOpacity(0.7);
     authStore = Provider.of<AuthStore>(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
+    timelineStore = Provider.of<TimelineStore>(context);
 
     if (homeStore == null) {
       homeStore = Provider.of<HomeStore>(context);
@@ -321,6 +324,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 var result = true;
                 switch (index) {
                   case PageViewController.TAB_INDEX_TIMELINE:
+                    timelineStore.goToTopTimeline();
+
                     controller.resetNavigation();
                     break;
                   case PageViewController.TAB_INDEX_LEARNING_TRACKS:
@@ -607,11 +612,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   get appBar => AppBar(
         centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
+        title: GestureDetector(
+          onTap: controller.currentBottomIndex ==
+                  PageViewController.TAB_INDEX_TIMELINE
+              ? () {
+                  timelineStore.goToTopTimeline();
+                }
+              : null,
+          child: Padding(
+            padding: EdgeInsets.all(3),
+            child: Image.asset(
+              'assets/images/logo.png',
+              height: 34,
+            ),
           ),
         ),
         toolbarHeight: 45,
