@@ -200,7 +200,7 @@ abstract class HomeStoreBase with Store {
       String strMinutes = (minutes < 10) ? "0$minutes" : "$minutes";
       String strSeconds = (seconds < 10) ? "0$seconds" : "$seconds";
 
-      return (strHours.isNotEmpty ? strHours + "h " : "") +
+      return (strHours != "00" ? strHours + "h " : "") +
           strMinutes +
           "m " +
           (showSeconds == true ? strSeconds + "s" : "");
