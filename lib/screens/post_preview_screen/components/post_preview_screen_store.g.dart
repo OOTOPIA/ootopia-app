@@ -164,22 +164,22 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
       ActionController(name: '_PostPreviewScreenStoreBase');
 
   @override
-  void addItem(dynamic data) {
+  void addItem(dynamic item) {
     final _$actionInfo = _$_PostPreviewScreenStoreBaseActionController
         .startAction(name: '_PostPreviewScreenStoreBase.addItem');
     try {
-      return super.addItem(data);
+      return super.addItem(item);
     } finally {
       _$_PostPreviewScreenStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void removeItem(dynamic data) {
+  void removeItem(dynamic item) {
     final _$actionInfo = _$_PostPreviewScreenStoreBaseActionController
         .startAction(name: '_PostPreviewScreenStoreBase.removeItem');
     try {
-      return super.removeItem(data);
+      return super.removeItem(item);
     } finally {
       _$_PostPreviewScreenStoreBaseActionController.endAction(_$actionInfo);
     }

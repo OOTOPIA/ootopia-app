@@ -83,6 +83,7 @@ class _HashtagSelectSearchDialogWidgetState
               Observer(
                 builder: (context) => Container(
                   height: MediaQuery.of(context).size.height * 0.6,
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SingleChildScrollView(
                     child: Wrap(
                       children:
@@ -119,6 +120,8 @@ class _HashtagSelectSearchDialogWidgetState
                     ),
                     TextButton(
                         onPressed: () {
+                          widget.postPreviewScreenStore.filterValue = "";
+
                           Navigator.pop(context);
                         },
                         child: Text(

@@ -385,7 +385,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       onWillPop: () => _onWillPop(true),
       child: Scaffold(
         appBar: appbar(),
-        body: Observer(builder: (_) => body()),
+        body: GestureDetector(
+            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            child: Observer(builder: (_) => body())),
       ),
     );
   }
@@ -586,7 +588,6 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                   SizedBox(
                     height: GlobalConstants.of(context).screenHorizontalSpace,
                   ),
-               
                   Visibility(
                     visible: geolocationErrorMessage.isNotEmpty,
                     child: Padding(
@@ -664,6 +665,8 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                           children: [
                             GestureDetector(
                               onTap: () {
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
                                 showDialog(
                                   context: context,
                                   builder: (context) =>
@@ -787,6 +790,8 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                         fontWeight: FontWeight.bold),
                                   ),
                                   onPressed: () {
+                                    FocusScope.of(context)
+                                        .requestFocus(new FocusNode());
                                     setState(() {
                                       _selectedTags =
                                           postPreviewStore.selectedTags;
