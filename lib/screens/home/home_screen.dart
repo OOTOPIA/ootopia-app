@@ -656,9 +656,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       )),
                 ),
         ),
-        actions: [
-          if (controller.pages.length <= 5) remainingTime,
-        ],
+        // actions: [
+        //   if (controller.pages.length <= 5) remainingTime,
+        // ],
       );
 
   Widget get remainingTime => Observer(
