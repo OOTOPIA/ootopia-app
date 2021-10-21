@@ -9,6 +9,7 @@ import 'package:ootopia_app/screens/auth/register_second_phase/register_second_p
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class InsertInvitationCode extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -22,11 +23,11 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   bool visibleValidStatusCode = false;
   bool exibleText = false;
   bool isLoading = false;
-  TextEditingController _codeController = TextEditingController();
   FocusNode focus = FocusNode();
-  RegisterSecondPhaseController phase2Controller =
+  RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
   var insertInvitationCodeStore = InsertInvitationCodeStore();
+  SmartPageController pageController = SmartPageController.getInstance();
 
   void setStatusBar(bool getOutScreen) {
     if (getOutScreen) {
@@ -41,6 +42,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   }
 
   goToRegisterPhase() {
+    print(
+        "MANO OQ VEIO saindo do insert invitation pageHistory ==> ${pageController.pageHistory} pages ==> ${pageController.pages} pageHistoryTabSelected ==> ${pageController.pageHistoryTabSelected}");
     Navigator.of(context).pushNamed(PageRoute.Page.registerPhase2Screen.route);
   }
 
@@ -60,7 +63,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
 
   @override
   Widget build(BuildContext context) {
-    var auth = Provider.of<AuthStore>(context);
+    // var auth = Provider.of<AuthStore>(context);
 
     void submit(bool selectAccess) async {
       // setState(() {
@@ -201,7 +204,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                         TextFormField(
                           autocorrect: false,
                           autofocus: false,
-                          controller: phase2Controller.codeController,
+                          controller: registerController.codeController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide:

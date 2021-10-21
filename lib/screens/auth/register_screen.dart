@@ -14,6 +14,7 @@ import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegisterPage extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -24,8 +25,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // AuthBloc? authBloc;
-
   bool _termsCheckbox = false;
   bool termsOpened = false;
   bool isLoading = false;
@@ -34,9 +33,9 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _showRepeatPassword = false;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
-  final PageController controller = PageController(initialPage: 0);
+  SmartPageController pageController = SmartPageController.getInstance();
 
-  RegisterSecondPhaseController phase2Controller =
+  RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
 
   bool nameIsValid = true;
@@ -88,18 +87,24 @@ class _RegisterPageState extends State<RegisterPage> {
     _termsCheckbox = false;
 
     Navigator.pop(context);
-    // await controller.previousPage(
-    //   duration: Duration(milliseconds: 400),
-    //   curve: Curves.easeIn,
-    // );
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    phase2Controller.user = User();
-    phase2Controller.authStore = AuthStore();
+    registerController.user = User();
+    registerController.authStore = AuthStore();
+
+    print("MANO OQ VEIO  vai iniciar nessa pagina ${widget.args}");
+
+    if (widget.args?['returnToPageWithArgs'] != null &&
+        widget.args?['returnToPageWithArgs']['currentPageName'] != null) {
+      print(
+          "MANO OQ VEIO  vai iniciar nessa pagina ai => ${widget.args!['returnToPageWithArgs']['currentPageName']}");
+      registerController.returnToPage =
+          widget.args!['returnToPageWithArgs']['currentPageName'];
+    }
 
     this.trackingEvents.trackingSignupStartedSignup();
   }
@@ -147,21 +152,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "MANO OQ VEIO >>>>> _/_ ${ModalRoute.of(context)!.settings.arguments}");
     return Scaffold(
       appBar: appBar,
-      body:
-          //BlocListener<AuthBloc, AuthState>(
-          //   listener: (context, state) {
-          //     if (state is ErrorState) {
-          //       Scaffold.of(context).showSnackBar(
-          //         SnackBar(
-          //           content: Text(state.message),
-          //         ),
-          //       );
-          //     }
-          //   },
-          //   child:
-          GestureDetector(
+      body: GestureDetector(
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
@@ -215,10 +210,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               onPressed: _termsCheckbox
                                   ? () async {
-                                      await phase2Controller.authStore
-                                          .checkEmailExist(phase2Controller
+                                      await registerController.authStore
+                                          .checkEmailExist(registerController
                                               .emailController.text);
-                                      if (phase2Controller.formKey.currentState!
+                                      if (registerController
+                                          .formKey.currentState!
                                           .validate()) {
                                         Navigator.of(context).pushNamed(
                                             PageRoute.Page.insertInvitationCode
@@ -238,28 +234,18 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
-      // ),
     );
   }
 
   _form() {
-    return
-        // BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-        //   if (state is LoadedSucessState || state is ErrorState) {
-        //     isLoading = false;
-        //   }
-        //   return
-        //   LoadingOverlay(
-        // isLoading: isLoading,
-        // child:
-        Padding(
+    return Padding(
       padding: const EdgeInsets.only(top: 32),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: 24,
         ),
         child: Form(
-          key: phase2Controller.formKey,
+          key: registerController.formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +288,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Column(
                             children: [
                               TextFormField(
-                                controller: phase2Controller.nameController,
+                                controller: registerController.nameController,
                                 keyboardType: TextInputType.name,
                                 autocorrect: true,
                                 textCapitalization: TextCapitalization.words,
@@ -361,7 +347,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     GlobalConstants.of(context).spacingNormal,
                               ),
                               TextFormField(
-                                controller: phase2Controller.emailController,
+                                controller: registerController.emailController,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
@@ -392,7 +378,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     });
                                     return AppLocalizations.of(context)!
                                         .pleaseEnterYourValidEmailAddress;
-                                  } else if (phase2Controller
+                                  } else if (registerController
                                       .authStore.emailExist) {
                                     setState(() {
                                       mailIsValid = false;
@@ -410,7 +396,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     GlobalConstants.of(context).spacingNormal,
                               ),
                               TextFormField(
-                                controller: phase2Controller.passwordController,
+                                controller:
+                                    registerController.passwordController,
                                 obscureText: !_showPassword,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
@@ -466,7 +453,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               TextFormField(
                                 controller:
-                                    phase2Controller.repeatPasswordController,
+                                    registerController.repeatPasswordController,
                                 obscureText: !_showRepeatPassword,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
@@ -513,7 +500,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         .pleaseEnterTheSamePassword;
                                   }
                                   if (value !=
-                                      phase2Controller
+                                      registerController
                                           .passwordController.text) {
                                     setState(() {
                                       pass2IsValid = false;
@@ -680,8 +667,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
-      // ),
     );
-    // });
   }
 }

@@ -22,10 +22,15 @@ class CelebrationStates extends State<Celebration> {
   void _backButton(BuildContext context) {
     videoIsFinished = false;
     if (widget.args['goal'] == 'invitationCode') {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        PageRoute.Page.homeScreen.route,
-        ModalRoute.withName('/'),
-      );
+      print(
+          "MANO OQ VEIO caiu no if celebration ${widget.args['returnToPageWithArgs']['currentPageName']}");
+      Navigator.of(context)
+          .pushNamed(PageRoute.Page.homeScreen.route, arguments: {
+        'returnToPageWithArgs': {
+          'currentPageName': widget.args['returnToPageWithArgs']
+              ['currentPageName']
+        }
+      });
     } else {
       Navigator.pop(context);
     }
@@ -33,6 +38,8 @@ class CelebrationStates extends State<Celebration> {
 
   @override
   void initState() {
+    super.initState();
+
     _controller = VideoPlayerController.asset(
         'assets/videos/ootopia_celebration_cutter.mp4')
       ..initialize().then(
@@ -61,8 +68,6 @@ class CelebrationStates extends State<Celebration> {
     _controller.setLooping(false);
 
     setState(() {});
-
-    super.initState();
   }
 
   @override

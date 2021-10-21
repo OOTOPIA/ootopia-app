@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:gallery_saver/files.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,12 +13,12 @@ import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class RegisterSecondPhaseController with SecureStoreMixin {
@@ -31,32 +29,32 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   User? user;
   File? image;
   String? photoFilePath;
+  String returnToPage = "homeScreen";
 
   //Step 01
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController repeatPasswordController =
-      TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController repeatPasswordController = TextEditingController();
 
   //Step 02
-  final TextEditingController codeController = TextEditingController();
-
-  // implements
-  final TextEditingController dayController = TextEditingController();
-  final TextEditingController monthController = TextEditingController();
-  final TextEditingController yearController = TextEditingController();
-  final TextEditingController bioController = TextEditingController();
-  final TextEditingController cellPhoneController = TextEditingController();
+  TextEditingController codeController = TextEditingController();
 
   //Step 03
-  final TextEditingController geolocationController = TextEditingController();
+  TextEditingController dayController = TextEditingController();
+  TextEditingController monthController = TextEditingController();
+  TextEditingController yearController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
+  TextEditingController cellPhoneController = TextEditingController();
+
+  //Step 04
+  TextEditingController geolocationController = TextEditingController();
   FocusNode inputFocusNode = new FocusNode();
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
 
-  //Step 04
+  //Step 05
   List<InterestsTagsModel> selectedTags = [];
   String currentLocaleName = '';
   List<InterestsTagsModel> allTags = [];
@@ -117,6 +115,11 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   void cleanTextEditingControllers() {
+    nameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    repeatPasswordController.clear();
+    codeController.clear();
     dayController.clear();
     monthController.clear();
     yearController.clear();
@@ -295,9 +298,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
     await this.authRepository.register(_user, tagsIds, uploader);
 
-    var taskId = await this
-        .userRepository
-        .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+    // var taskId = await this
+    //     .userRepository
+    //     .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
 
     await authRepository.login(_user.email!, _user.password!);
 

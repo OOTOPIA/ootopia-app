@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 import 'register_second_phase/register_second_phase_controller.dart';
 
@@ -23,23 +24,17 @@ class RegisterPhase2Page extends StatefulWidget {
 }
 
 class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
-  // AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  // late AuthStore authStore;
-  RegisterSecondPhaseController controller =
+  RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
+  SmartPageController pageController = SmartPageController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    // this.trackingEvents.signupStartedSignupPartII();
-  }
 
-  // setAuthStoreToController() {
-  //   if (controller.user == null) {
-  //     controller.authStore = authStore;
-  //     controller.user = authStore.currentUser;
-  //   }
-  // }
+    print(
+        "MANO OQ VEIO chegou no phase 2 pageHistory ==> ${pageController.pageHistory} pages ==> ${pageController.pages} pageHistoryTabSelected ==> ${pageController.pageHistoryTabSelected}");
+  }
 
   get appBar => AppBar(
         centerTitle: true,
@@ -101,7 +96,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                 hasScrollBody: false,
                 child: Container(
                   child: Form(
-                    key: controller.formKey,
+                    key: registerController.formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,15 +107,11 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               height: 32,
                             ),
                             PhotoEdit(
-                              photoPath: controller.user!.photoFilePath,
+                              photoPath: registerController.user!.photoFilePath,
                               updatePhoto: (String? ImagePath) {
                                 if (ImagePath != null) {
-                                  controller.getImage(
-                                    ImagePath,
-                                    ()=>setState(() {
-                                      
-                                    })
-                                  );
+                                  registerController.getImage(
+                                      ImagePath, () => setState(() {}));
                                 }
                               },
                             ),
@@ -141,9 +132,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                             TextFormField(
                               autocorrect: true,
                               enableSuggestions: true,
-                              textCapitalization:
-                                        TextCapitalization.sentences,
-                              controller: controller.bioController,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller: registerController.bioController,
                               maxLines: 5,
                               decoration: GlobalConstants.of(context)
                                   .loginInputTheme(
@@ -171,15 +161,16 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                             InternationalPhoneNumberInput(
                               onInputChanged: (PhoneNumber number) {
                                 setState(() {
-                                  controller.countryCode =
+                                  registerController.countryCode =
                                       number.isoCode.toString();
                                 });
-                                controller.getPhoneNumber(number.toString(),
+                                registerController.getPhoneNumber(
+                                    number.toString(),
                                     number.isoCode.toString());
                               },
                               onInputValidated: (bool value) {
                                 setState(() {
-                                  controller.validCellPhone = !value;
+                                  registerController.validCellPhone = !value;
                                 });
                               },
                               selectorConfig: SelectorConfig(
@@ -194,14 +185,14 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                     value.contains('+')) {
                                   return AppLocalizations.of(context)!
                                       .mobilephoneToExperience;
-                                } else if (controller.validCellPhone) {
+                                } else if (registerController.validCellPhone) {
                                   return AppLocalizations.of(context)!
                                       .insertValidCellPhone;
                                 }
                                 return null;
                               },
                               textFieldController:
-                                  controller.cellPhoneController,
+                                  registerController.cellPhoneController,
                               formatInput: true,
                               errorMessage: AppLocalizations.of(context)!
                                   .mobilephoneToExperience,
@@ -262,7 +253,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   flex: 1,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
-                                    controller: controller.dayController,
+                                    controller:
+                                        registerController.dayController,
                                     keyboardType: TextInputType.number,
                                     maxLength: 2,
                                     autofocus: false,
@@ -291,7 +283,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   flex: 1,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
-                                    controller: controller.monthController,
+                                    controller:
+                                        registerController.monthController,
                                     keyboardType: TextInputType.number,
                                     maxLength: 2,
                                     autofocus: false,
@@ -320,12 +313,13 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                   flex: 1,
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
-                                    controller: controller.yearController,
+                                    controller:
+                                        registerController.yearController,
                                     keyboardType: TextInputType.number,
                                     maxLength: 4,
                                     autofocus: false,
                                     onChanged: (String text) {
-                                      controller.birthdateIsValid(
+                                      registerController.birthdateIsValid(
                                           context, () => setState(() {}));
                                       if (text.length == 4 &&
                                           int.parse(text) >= 1900) {
@@ -345,7 +339,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               ],
                             ),
                             Visibility(
-                              visible: controller
+                              visible: registerController
                                   .birthdateValidationErrorMessage!.isNotEmpty,
                               child: Padding(
                                 padding: EdgeInsets.only(
@@ -355,7 +349,8 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                       GlobalConstants.of(context).spacingSmall,
                                 ),
                                 child: Text(
-                                  controller.birthdateValidationErrorMessage
+                                  registerController
+                                      .birthdateValidationErrorMessage
                                       .toString(),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -394,31 +389,31 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                           EdgeInsets.all(
                                               GlobalConstants.of(context)
                                                   .spacingNormal))),
-                              child: Observer(
-                                builder: (_) => SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .continueAccess,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .continueAccess,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
                               onPressed: () {
-                                if (!controller.formKey.currentState!
+                                if (!registerController.formKey.currentState!
                                     .validate()) return;
 
-                                controller.storeDataUserFirstStep();
+                                registerController.storeDataUserFirstStep();
 
-                                if (!controller.birthDateIsValid()) return;
+                                if (!registerController.birthDateIsValid())
+                                  return;
 
-                                if (controller.firstStepIsValid(context))
+                                if (registerController
+                                    .firstStepIsValid(context))
                                   Navigator.of(context).pushNamed(PageRoute
                                       .Page
                                       .registerPhase2DailyLearningGoalScreen

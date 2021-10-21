@@ -51,6 +51,24 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  goToRegister() {
+    if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+      print("epa do opa ${widget.args!['returnToPageWithArgs']}");
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.registerScreen.route,
+        arguments: {
+          'returnToPageWithArgs': {
+            'currentPageName': widget.args!['returnToPageWithArgs']
+                ['currentPageName']
+          }
+        },
+      );
+    } else {
+      print('caiu aqui besta');
+      Navigator.of(context).pushNamed(PageRoute.Page.registerScreen.route);
+    }
+  }
+
   void _submit() {
     setState(() {
       isLoading = true;
@@ -447,8 +465,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                  PageRoute.Page.registerScreen.route);
+                              goToRegister();
                             },
                             splashColor: Colors.black54,
                             shape: RoundedRectangleBorder(

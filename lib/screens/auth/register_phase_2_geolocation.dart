@@ -22,7 +22,7 @@ class RegisterPhase2GeolocationPage extends StatefulWidget {
 class _RegisterPhase2GeolocationPageState
     extends State<RegisterPhase2GeolocationPage> {
   final _formKey = GlobalKey<FormState>();
-  RegisterSecondPhaseController controller =
+  RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
 
   @override
@@ -30,7 +30,7 @@ class _RegisterPhase2GeolocationPageState
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       setState(() async {
-        await controller.getLocation(context);
+        await registerController.getLocation(context);
       });
     });
   }
@@ -129,20 +129,23 @@ class _RegisterPhase2GeolocationPageState
                                   Container(
                                     child: TextFormField(
                                       enabled: false,
-                                      style: TextStyle(color: LightColors.blue, fontWeight: FontWeight.w500),
-                                      focusNode: controller.inputFocusNode,
+                                      style: TextStyle(
+                                          color: LightColors.blue,
+                                          fontWeight: FontWeight.w500),
+                                      focusNode:
+                                          registerController.inputFocusNode,
                                       textAlign: TextAlign.left,
-                                      controller:
-                                          controller.geolocationController,
+                                      controller: registerController
+                                          .geolocationController,
                                       keyboardType: TextInputType.number,
                                       autofocus: false,
                                       decoration: GlobalConstants.of(context)
-                                          .loginInputTheme(
-                                              controller.geolocationMessage)
+                                          .loginInputTheme(registerController
+                                              .geolocationMessage)
                                           .copyWith(
                                               prefixIcon: Icon(
                                             FeatherIcons.mapPin,
-                                            color: controller
+                                            color: registerController
                                                         .geolocationController
                                                         .text !=
                                                     null
@@ -155,7 +158,7 @@ class _RegisterPhase2GeolocationPageState
                                     ),
                                   ),
                                   Visibility(
-                                    visible: controller
+                                    visible: registerController
                                         .geolocationErrorMessage.isNotEmpty,
                                     child: Padding(
                                       padding: EdgeInsets.only(
@@ -165,7 +168,8 @@ class _RegisterPhase2GeolocationPageState
                                             .spacingSmall,
                                       ),
                                       child: Text(
-                                        controller.geolocationErrorMessage +
+                                        registerController
+                                                .geolocationErrorMessage +
                                             AppLocalizations.of(context)!
                                                 .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                                         textAlign: TextAlign.center,
@@ -176,7 +180,7 @@ class _RegisterPhase2GeolocationPageState
                                     ),
                                   ),
                                   SizedBox(
-                                    height: controller
+                                    height: registerController
                                             .geolocationErrorMessage.isNotEmpty
                                         ? GlobalConstants.of(context)
                                             .spacingNormal
@@ -184,7 +188,7 @@ class _RegisterPhase2GeolocationPageState
                                             .spacingLarge,
                                   ),
                                   Visibility(
-                                    visible: controller
+                                    visible: registerController
                                         .geolocationErrorMessage.isNotEmpty,
                                     child: FlatButton(
                                       child: Padding(
@@ -204,7 +208,8 @@ class _RegisterPhase2GeolocationPageState
                                       ),
                                       onPressed: () {
                                         setState(() async {
-                                          await controller.getLocation(context);
+                                          await registerController
+                                              .getLocation(context);
                                         });
                                       },
                                       splashColor: Colors.black54,
@@ -219,7 +224,7 @@ class _RegisterPhase2GeolocationPageState
                                     ),
                                   ),
                                   Visibility(
-                                    visible: controller
+                                    visible: registerController
                                         .geolocationErrorMessage.isNotEmpty,
                                     child: SizedBox(
                                       height: GlobalConstants.of(context)

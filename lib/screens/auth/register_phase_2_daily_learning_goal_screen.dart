@@ -29,7 +29,7 @@ class _RegisterPhase2DailyLearningGoalPageState
   late VideoPlayerController _videoPlayerController;
   bool _isNotLearningGoalRating = false;
   Timer? timerOpacity;
-  RegisterSecondPhaseController controller =
+  RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
 
   @override
@@ -42,10 +42,10 @@ class _RegisterPhase2DailyLearningGoalPageState
             setState(() {});
           });
     setState(() {
-      if (controller.user!.dailyLearningGoalInMinutes != null &&
-          controller.user!.dailyLearningGoalInMinutes! >= 10) {
+      if (registerController.user!.dailyLearningGoalInMinutes != null &&
+          registerController.user!.dailyLearningGoalInMinutes! >= 10) {
         _learningGoalRating =
-            controller.user!.dailyLearningGoalInMinutes!.toDouble();
+            registerController.user!.dailyLearningGoalInMinutes!.toDouble();
       }
     });
   }
@@ -118,14 +118,17 @@ class _RegisterPhase2DailyLearningGoalPageState
                       child: Column(children: [
                         Expanded(
                           child: Container(
-                            height: controller.currentSliderValue == 0.0? 625 : 575,
+                            height: registerController.currentSliderValue == 0.0
+                                ? 625
+                                : 575,
                             child: Column(
                               children: [
                                 SizedBox(
                                   height: 30,
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.regenerationGame,
+                                  AppLocalizations.of(context)!
+                                      .regenerationGame,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 22,
@@ -136,7 +139,8 @@ class _RegisterPhase2DailyLearningGoalPageState
                                   height: 24,
                                 ),
                                 Text(
-                                  AppLocalizations.of(context)!.watchVideoToLearn,
+                                  AppLocalizations.of(context)!
+                                      .watchVideoToLearn,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 16,
@@ -173,11 +177,13 @@ class _RegisterPhase2DailyLearningGoalPageState
                                               child: VideoPlayer(
                                                   _videoPlayerController),
                                             ),
-                                            _videoPlayerController.value.isPlaying
+                                            _videoPlayerController
+                                                    .value.isPlaying
                                                 ? AnimatedOpacity(
-                                                    opacity: timerOpacity != null
-                                                        ? 1
-                                                        : 0.0,
+                                                    opacity:
+                                                        timerOpacity != null
+                                                            ? 1
+                                                            : 0.0,
                                                     duration: Duration(
                                                         milliseconds: 200),
                                                     child: timerOpacity != null
@@ -190,14 +196,15 @@ class _RegisterPhase2DailyLearningGoalPageState
                                                               child: Icon(
                                                                 Icons.pause,
                                                                 size: 23,
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                               ),
                                                             ),
                                                           )
                                                         : IgnorePointer(
                                                             child: Center(
-                                                              child: CircleAvatar(
+                                                              child:
+                                                                  CircleAvatar(
                                                                 backgroundColor:
                                                                     Color(
                                                                         0xff35AD6C),
@@ -240,7 +247,8 @@ class _RegisterPhase2DailyLearningGoalPageState
                                                     icon: ImageIcon(
                                                         AssetImage(
                                                             "assets/icons/icon_maximizescreen.png"),
-                                                        color: Color(0xFFCDCDCD),
+                                                        color:
+                                                            Color(0xFFCDCDCD),
                                                         size: 16)))
                                           ],
                                         )),
@@ -287,7 +295,8 @@ class _RegisterPhase2DailyLearningGoalPageState
                                       thumbColor: Colors.white,
                                       activeDividerColor: Color(0xff03DAC5),
                                       overlayColor: Color(0xff03DAC5),
-                                      activeDividerStrokeColor: Color(0xff03DAC5),
+                                      activeDividerStrokeColor:
+                                          Color(0xff03DAC5),
                                       disabledActiveDividerColor:
                                           Color(0xff03DAC5),
                                       thumbStrokeColor: Color(0xff03DAC5),
@@ -309,14 +318,16 @@ class _RegisterPhase2DailyLearningGoalPageState
                                   child: SfSlider(
                                     min: 0.0,
                                     max: 60,
-                                    value: controller.currentSliderValue,
+                                    value:
+                                        registerController.currentSliderValue,
                                     interval: 10,
                                     stepSize: 10,
                                     showLabels: true,
                                     showDividers: true,
                                     onChanged: (dynamic value) {
                                       setState(() {
-                                        controller.currentSliderValue = value;
+                                        registerController.currentSliderValue =
+                                            value;
                                       });
                                     },
                                   ),
@@ -343,7 +354,9 @@ class _RegisterPhase2DailyLearningGoalPageState
                                       GlobalConstants.of(context).spacingNormal,
                                 ),
                                 Visibility(
-                                  visible: controller.currentSliderValue == 0.0,
+                                  visible:
+                                      registerController.currentSliderValue ==
+                                          0.0,
                                   child: Text(
                                     AppLocalizations.of(context)!
                                         .settingGoalToZero,
@@ -363,7 +376,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 24,bottom: 20),
+                          padding: const EdgeInsets.only(top: 24, bottom: 20),
                           child: Container(
                             width: double.infinity,
                             child: ElevatedButton(
@@ -396,13 +409,15 @@ class _RegisterPhase2DailyLearningGoalPageState
                               ),
                               onPressed: () {
                                 _videoPlayerController.pause();
-                                controller.user!.dailyLearningGoalInMinutes =
+                                registerController
+                                        .user!.dailyLearningGoalInMinutes =
                                     _learningGoalRating.round();
                                 this
                                     .trackingEvents
                                     .signupCompletedStepIIOfSignupII({
-                                  "dailyLearningGoalInMinutes": controller
-                                      .user!.dailyLearningGoalInMinutes
+                                  "dailyLearningGoalInMinutes":
+                                      registerController
+                                          .user!.dailyLearningGoalInMinutes
                                 });
                                 Navigator.of(context).pushNamed(
                                   PageRoute.Page.registerPhase2GeolocationScreen
