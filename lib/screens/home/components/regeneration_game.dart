@@ -253,8 +253,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                             .textTheme
                                             .subtitle2!
                                             .copyWith(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                         children: [
                                           TextSpan(
@@ -265,8 +265,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
                                                 ),
                                           )
                                         ]),
@@ -282,8 +282,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                           .textTheme
                                           .subtitle2!
                                           .copyWith(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                       children: [
                                         TextSpan(
@@ -296,8 +296,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                               .textTheme
                                               .subtitle2!
                                               .copyWith(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
                                               ),
                                         )
                                       ],
@@ -323,8 +323,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                   ),
                                   Padding(
@@ -336,6 +336,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                       children: [
                                         SvgPicture.asset(
                                           'assets/icons/ooz_mini_blue.svg',
+                                          height: 10,
                                         ),
                                         Padding(
                                           padding:
@@ -348,7 +349,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                  fontSize: 12,
+                                                  fontSize: 15,
                                                   fontWeight: FontWeight.bold,
                                                   color: Theme.of(context)
                                                       .accentColor,
