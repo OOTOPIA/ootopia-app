@@ -276,7 +276,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           children: [
                             Text(
                               AppLocalizations.of(context)!
-                                  .liveInOotopiaNowMessage,
+                                  .liveOotopiaNowMessage,
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
@@ -305,13 +305,29 @@ class _RegisterPageState extends State<RegisterPage> {
                                 controller: phase2Controller.nameController,
                                 keyboardType: TextInputType.name,
                                 autocorrect: true,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
+                                textCapitalization: TextCapitalization.words,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
                                         AppLocalizations.of(context)!
                                             .nameAndSurname)
                                     .copyWith(
+                                      errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: nameIsValid
+                                            ? LightColors.grey
+                                            : LightColors.errorRed,
+                                      )),
+                                      errorStyle: nameIsValid
+                                          ? TextStyle(
+                                              color: Colors.transparent,
+                                              fontSize: 0)
+                                          : TextStyle(),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: nameIsValid
+                                            ? LightColors.grey
+                                            : LightColors.errorRed,
+                                      )),
                                       labelStyle: GoogleFonts.roboto(
                                           color: nameIsValid
                                               ? LightColors.lightGrey

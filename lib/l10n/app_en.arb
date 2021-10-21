@@ -38,7 +38,7 @@
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
-    "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "The daily goal chosen was 10 minutes and is being used for the regeneration game.",
+    "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "The daily goal chosen was %GOAL_CHOSEN% minutes and is being used for the regeneration game.",
 
 
     "pleaseWait": "Please, wait...",
@@ -242,7 +242,7 @@
     "oozPartialBalance": "OOz Partial Balance",
     
     "congratulations": "Congratulations!",
-    "youMetYourDailyGoalToHelpRegenerateThePlanet": "You met your daily goal to help regenerate the planet",
+    "youMetYourDailyGoalToHelpRegenerateThePlanet": "You met your daily goal to help\nregenerate the planet",
     "totalBalance": "Total Balance",
     "nextStepIsToHelpMeetYourCityGoal": "Next step is to help meet your city goal.",
     "nextStepIsToHelpMeetYourGlobalGoal": "Next step is to help meet your global goal.",
@@ -342,7 +342,6 @@
     "enterYourNumber":"Your mobile number",
 
     "changeMakerPro": "Badge: Change Maker Pro",
-    "theChangeMakerPro": "TheChange Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
     "theRegenerationGame": "The regeneration game is a way to contribute to regenerative movement through the OOTOPIA app. The number of minutes represents the daily goal that the person has set for their participation in the game.",
 
     "personal": "Personal",

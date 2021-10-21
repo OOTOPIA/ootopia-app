@@ -226,14 +226,11 @@ class _RegisterPhase2TopInterestsPageState
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.only(
-                                                  right: 4, left: 10),
+                                                  right: 5, left: 8),
                                               child: ImageIcon(
                                                   AssetImage(
                                                       "assets/icons/icon_add.png"),
                                                   size: 31),
-                                            ),
-                                            SizedBox(
-                                              width: 3,
                                             ),
                                             Text(
                                               AppLocalizations.of(context)!
@@ -242,33 +239,39 @@ class _RegisterPhase2TopInterestsPageState
                                               style: GoogleFonts.roboto(
                                                   color: LightColors.blackText,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 16),
+                                                  fontSize: 15),
                                             ),
                                           ],
                                         ),
-                                        Visibility(
-                                          visible:
-                                              controller.selectedTags.length >
-                                                  0,
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Text(
-                                              controller.selectedTags.length > 1
-                                                  ? '${controller.selectedTags.length} ' +
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .tagsSelected
-                                                  : '${controller.selectedTags.length} ' +
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .tagSelected,
-                                              overflow: TextOverflow.clip,
-                                              textAlign: TextAlign.right,
-                                              style: GoogleFonts.roboto(
-                                                color: Colors.grey,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
+                                        Expanded(
+                                          child: Visibility(
+                                            visible:
+                                                controller.selectedTags.length >
+                                                    0,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 3, right: 10),
+                                              child: Text(
+                                                controller.selectedTags.length >
+                                                        1
+                                                    ? '${controller.selectedTags.length} ' +
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .tagsSelected
+                                                    : '${controller.selectedTags.length} ' +
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .tagSelected,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 3,
+                                                textAlign: TextAlign.right,
+                                                textDirection:
+                                                    TextDirection.ltr,
+                                                style: GoogleFonts.roboto(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
                                               ),
                                             ),
                                           ),
