@@ -1242,7 +1242,7 @@ class CustomContainerShapeBorder extends CustomPainter {
         Rect.fromLTRB(
           0,
           0,
-          46,
+          36,
           36,
         ),
         bottomLeft: Radius.circular(100),
@@ -1253,7 +1253,7 @@ class CustomContainerShapeBorder extends CustomPainter {
       paint,
     );
 
-    canvas.translate(45, 0);
+    canvas.translate(35, 0);
 
     var path = Path();
     path.lineTo(0, 18);
