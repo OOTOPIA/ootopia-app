@@ -10,10 +10,6 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class RegisterPhase2GeolocationPage extends StatefulWidget {
-  Map<String, dynamic> args;
-
-  RegisterPhase2GeolocationPage(this.args);
-
   @override
   _RegisterPhase2GeolocationPageState createState() =>
       _RegisterPhase2GeolocationPageState();
@@ -21,7 +17,6 @@ class RegisterPhase2GeolocationPage extends StatefulWidget {
 
 class _RegisterPhase2GeolocationPageState
     extends State<RegisterPhase2GeolocationPage> {
-  final _formKey = GlobalKey<FormState>();
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
 
@@ -78,6 +73,7 @@ class _RegisterPhase2GeolocationPageState
 
   @override
   Widget build(BuildContext context) {
+    var teste = ModalRoute.of(context) as Route;
     return Scaffold(
       appBar: appBar,
       body: Container(
@@ -87,202 +83,194 @@ class _RegisterPhase2GeolocationPageState
             children: [
               Expanded(
                 flex: 1,
-                child: Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal:
-                            GlobalConstants.of(context).screenHorizontalSpace),
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                children: [
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .thisIsWhereYourPositiveImpactMattersMost,
-                                    textAlign: TextAlign.center,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          GlobalConstants.of(context).screenHorizontalSpace),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .thisIsWhereYourPositiveImpactMattersMost,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Color(0xff707070)),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Image.asset(
+                                  'assets/images/earth.png',
+                                  width: double.maxFinite,
+                                  fit: BoxFit.cover,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Container(
+                                  child: TextFormField(
+                                    enabled: false,
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                        color: Color(0xff707070)),
+                                        color: LightColors.blue,
+                                        fontWeight: FontWeight.w500),
+                                    focusNode:
+                                        registerController.inputFocusNode,
+                                    textAlign: TextAlign.left,
+                                    controller: registerController
+                                        .geolocationController,
+                                    keyboardType: TextInputType.number,
+                                    autofocus: false,
+                                    decoration: GlobalConstants.of(context)
+                                        .loginInputTheme(registerController
+                                            .geolocationMessage)
+                                        .copyWith(
+                                            prefixIcon: Icon(
+                                          FeatherIcons.mapPin,
+                                          color: registerController
+                                                      .geolocationController
+                                                      .text !=
+                                                  null
+                                              ? LightColors.blue
+                                              : Colors.black,
+                                        )),
+                                    onEditingComplete: () =>
+                                        Geolocation.determinePosition(context),
                                   ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Image.asset(
-                                    'assets/images/earth.png',
-                                    width: double.maxFinite,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    height: 40,
-                                  ),
-                                  Container(
-                                    child: TextFormField(
-                                      enabled: false,
+                                ),
+                                Visibility(
+                                  visible: registerController
+                                      .geolocationErrorMessage.isNotEmpty,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      top: GlobalConstants.of(context)
+                                          .spacingNormal,
+                                      bottom: GlobalConstants.of(context)
+                                          .spacingSmall,
+                                    ),
+                                    child: Text(
+                                      registerController
+                                              .geolocationErrorMessage +
+                                          AppLocalizations.of(context)!
+                                              .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: LightColors.blue,
-                                          fontWeight: FontWeight.w500),
-                                      focusNode:
-                                          registerController.inputFocusNode,
-                                      textAlign: TextAlign.left,
-                                      controller: registerController
-                                          .geolocationController,
-                                      keyboardType: TextInputType.number,
-                                      autofocus: false,
-                                      decoration: GlobalConstants.of(context)
-                                          .loginInputTheme(registerController
-                                              .geolocationMessage)
-                                          .copyWith(
-                                              prefixIcon: Icon(
-                                            FeatherIcons.mapPin,
-                                            color: registerController
-                                                        .geolocationController
-                                                        .text !=
-                                                    null
-                                                ? LightColors.blue
-                                                : Colors.black,
-                                          )),
-                                      onEditingComplete: () =>
-                                          Geolocation.determinePosition(
-                                              context),
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
-                                  Visibility(
-                                    visible: registerController
-                                        .geolocationErrorMessage.isNotEmpty,
+                                ),
+                                SizedBox(
+                                  height: registerController
+                                          .geolocationErrorMessage.isNotEmpty
+                                      ? GlobalConstants.of(context)
+                                          .spacingNormal
+                                      : GlobalConstants.of(context)
+                                          .spacingLarge,
+                                ),
+                                Visibility(
+                                  visible: registerController
+                                      .geolocationErrorMessage.isNotEmpty,
+                                  child: FlatButton(
                                     child: Padding(
-                                      padding: EdgeInsets.only(
-                                        top: GlobalConstants.of(context)
+                                      padding: EdgeInsets.all(
+                                        GlobalConstants.of(context)
                                             .spacingNormal,
-                                        bottom: GlobalConstants.of(context)
-                                            .spacingSmall,
                                       ),
                                       child: Text(
-                                        registerController
-                                                .geolocationErrorMessage +
-                                            AppLocalizations.of(context)!
-                                                .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
-                                        textAlign: TextAlign.center,
+                                        AppLocalizations.of(context)!
+                                            .getCurrentLocation,
                                         style: TextStyle(
-                                          color: Colors.redAccent,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: registerController
-                                            .geolocationErrorMessage.isNotEmpty
-                                        ? GlobalConstants.of(context)
-                                            .spacingNormal
-                                        : GlobalConstants.of(context)
-                                            .spacingLarge,
-                                  ),
-                                  Visibility(
-                                    visible: registerController
-                                        .geolocationErrorMessage.isNotEmpty,
-                                    child: FlatButton(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(
-                                          GlobalConstants.of(context)
-                                              .spacingNormal,
-                                        ),
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .getCurrentLocation,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
+                                    onPressed: () {
+                                      setState(() async {
+                                        await registerController
+                                            .getLocation(context);
+                                      });
+                                    },
+                                    splashColor: Colors.black54,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        color: Colors.white,
+                                        width: 2,
+                                        style: BorderStyle.solid,
                                       ),
-                                      onPressed: () {
-                                        setState(() async {
-                                          await registerController
-                                              .getLocation(context);
-                                        });
-                                      },
-                                      splashColor: Colors.black54,
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                          color: Colors.white,
-                                          width: 2,
-                                          style: BorderStyle.solid,
-                                        ),
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
+                                      borderRadius: BorderRadius.circular(50),
                                     ),
                                   ),
-                                  Visibility(
-                                    visible: registerController
-                                        .geolocationErrorMessage.isNotEmpty,
-                                    child: SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .spacingNormal,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(40.0),
-                                          side: BorderSide.none),
-                                    ),
-                                    minimumSize: MaterialStateProperty.all(
-                                      Size(60, 55),
-                                    ),
-                                    elevation:
-                                        MaterialStateProperty.all<double>(0.0),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Color(0xff003694)),
-                                    padding:
-                                        MaterialStateProperty.all<EdgeInsets>(
-                                            EdgeInsets.all(
-                                                GlobalConstants.of(context)
-                                                    .spacingNormal)),
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(context)!
-                                        .continueAccess,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed(
-                                      PageRoute
-                                          .Page
-                                          .registerPhase2TopInterestsScreen
-                                          .route,
-                                      arguments: widget.args,
-                                    );
-                                  },
                                 ),
+                                Visibility(
+                                  visible: registerController
+                                      .geolocationErrorMessage.isNotEmpty,
+                                  child: SizedBox(
+                                    height: GlobalConstants.of(context)
+                                        .spacingNormal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
+                                        side: BorderSide.none),
+                                  ),
+                                  minimumSize: MaterialStateProperty.all(
+                                    Size(60, 55),
+                                  ),
+                                  elevation:
+                                      MaterialStateProperty.all<double>(0.0),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xff003694)),
+                                  padding:
+                                      MaterialStateProperty.all<EdgeInsets>(
+                                          EdgeInsets.all(
+                                              GlobalConstants.of(context)
+                                                  .spacingNormal)),
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.continueAccess,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                    PageRoute.Page
+                                        .registerPhase2TopInterestsScreen.route,
+                                  );
+                                },
                               ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               )

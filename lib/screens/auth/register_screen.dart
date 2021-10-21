@@ -17,9 +17,6 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegisterPage extends StatefulWidget {
-  final Map<String, dynamic>? args;
-
-  RegisterPage([this.args]);
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -86,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
   backButtonPage() async {
     _termsCheckbox = false;
 
-    Navigator.pop(context);
+    //Navigator.pop(context);
     setState(() {});
   }
 
@@ -95,16 +92,6 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     registerController.user = User();
     registerController.authStore = AuthStore();
-
-    print("MANO OQ VEIO  vai iniciar nessa pagina ${widget.args}");
-
-    if (widget.args?['returnToPageWithArgs'] != null &&
-        widget.args?['returnToPageWithArgs']['currentPageName'] != null) {
-      print(
-          "MANO OQ VEIO  vai iniciar nessa pagina ai => ${widget.args!['returnToPageWithArgs']['currentPageName']}");
-      registerController.returnToPage =
-          widget.args!['returnToPageWithArgs']['currentPageName'];
-    }
 
     this.trackingEvents.trackingSignupStartedSignup();
   }
@@ -152,8 +139,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "MANO OQ VEIO >>>>> _/_ ${ModalRoute.of(context)!.settings.arguments}");
     return Scaffold(
       appBar: appBar,
       body: GestureDetector(
@@ -217,8 +202,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                           .formKey.currentState!
                                           .validate()) {
                                         Navigator.of(context).pushNamed(
-                                            PageRoute.Page.insertInvitationCode
-                                                .route);
+                                          PageRoute
+                                              .Page.insertInvitationCode.route,
+                                        );
                                       }
                                     }
                                   : () {},

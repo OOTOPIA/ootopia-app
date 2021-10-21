@@ -241,16 +241,16 @@ class MainPage extends HookWidget {
     PageRoute.Page.commentScreen: (args) => CommentScreen(args),
     PageRoute.Page.profileScreen: (args) => ProfileScreen(args),
     PageRoute.Page.myProfileScreen: (args) => ProfileScreen(args),
-    PageRoute.Page.registerScreen: (args) => RegisterPage(args),
+    PageRoute.Page.registerScreen: (args) => RegisterPage(),
     PageRoute.Page.loginScreen: (args) => LoginPage(args),
     PageRoute.Page.cameraScreen: (args) => CameraScreen(),
     PageRoute.Page.registerPhase2Screen: (args) => RegisterPhase2Page(args),
     PageRoute.Page.registerPhase2DailyLearningGoalScreen: (args) =>
-        RegisterPhase2DailyLearningGoalPage(args),
+        RegisterPhase2DailyLearningGoalPage(),
     PageRoute.Page.registerPhase2GeolocationScreen: (args) =>
-        RegisterPhase2GeolocationPage(args),
+        RegisterPhase2GeolocationPage(),
     PageRoute.Page.registerPhase2TopInterestsScreen: (args) =>
-        RegisterPhase2TopInterestsPage(args),
+        RegisterPhase2TopInterestsPage(),
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
@@ -263,7 +263,7 @@ class MainPage extends HookWidget {
         RegenerarionGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
-    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
+    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(),
     PageRoute.Page.termsOfUseScreen: (args) => PolicyAndTermsScreen(
           filename: args['filename'],
           onAccept: args['onAccept'],

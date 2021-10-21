@@ -13,10 +13,6 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegisterPhase2TopInterestsPage extends StatefulWidget {
-  final Map<String, dynamic> args;
-
-  RegisterPhase2TopInterestsPage(this.args);
-
   @override
   _RegisterPhase2TopInterestsPageState createState() =>
       _RegisterPhase2TopInterestsPageState();
@@ -444,8 +440,10 @@ class _RegisterPhase2TopInterestsPageState
                                       } else {
                                         print(
                                             "MANO OQ VEIO ELSE ${registerController.returnToPage}");
-                                        Navigator.of(context).pushNamed(
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
                                           PageRoute.Page.homeScreen.route,
+                                          (Route<dynamic> route) => false,
                                           arguments: {
                                             "returnToPageWithArgs": {
                                               'currentPageName':

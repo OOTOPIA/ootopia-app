@@ -65,7 +65,15 @@ class _LoginPageState extends State<LoginPage> {
       );
     } else {
       print('caiu aqui besta');
-      Navigator.of(context).pushNamed(PageRoute.Page.registerScreen.route);
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.registerScreen.route,
+        arguments: {
+          'returnToPageWithArgs': {
+            'currentPageName': widget.args!['returnToPageWithArgs']
+                ['currentPageName']
+          }
+        },
+      );
     }
   }
 
@@ -89,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is ErrorState) {
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
                 ),

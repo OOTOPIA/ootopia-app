@@ -3,18 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code_store.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class InsertInvitationCode extends StatefulWidget {
-  final Map<String, dynamic> args;
-  InsertInvitationCode(this.args);
-
   @override
   _InsertInvitationCodeState createState() => _InsertInvitationCodeState();
 }
@@ -44,7 +39,9 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   goToRegisterPhase() {
     print(
         "MANO OQ VEIO saindo do insert invitation pageHistory ==> ${pageController.pageHistory} pages ==> ${pageController.pages} pageHistoryTabSelected ==> ${pageController.pageHistoryTabSelected}");
-    Navigator.of(context).pushNamed(PageRoute.Page.registerPhase2Screen.route);
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.registerPhase2Screen.route,
+    );
   }
 
   @override
@@ -63,75 +60,6 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
 
   @override
   Widget build(BuildContext context) {
-    // var auth = Provider.of<AuthStore>(context);
-
-    void submit(bool selectAccess) async {
-      // setState(() {
-      //   isLoading = true;
-      // });
-      // try {
-      //   if (selectAccess) {
-      // var user = await auth.registerUser(
-      //   name: widget.args['FULLNAME'],
-      //   email: widget.args['EMAIL'],
-      //   password: widget.args['PASSWORD'],
-      //   invitationCode: _codeController.text,
-      //   context: context,
-      // );
-      // if (user) {
-      //   Navigator.of(context).pushNamedAndRemoveUntil(
-      //     PageRoute.Page.registerPhase2Screen.route,
-      //     ModalRoute.withName('/'),
-      //     arguments: {
-      //       "returnToPageWithArgs": {
-      //         "pageRoute": PageRoute.Page.registerPhase2Screen.route,
-      //         "arguments": {
-      //           "returnToPageWithArgs": widget.args['returnToPageWithArgs'],
-      //           "name": widget.args['FULLNAME'],
-      //           "goal": "invitationCode",
-      //           "balance": "15,00",
-      //         },
-      //       }
-      //     },
-      //   );
-      // }
-      //   } else {
-      //     var user = await auth.registerUser(
-      //       name: widget.args['FULLNAME'],
-      //       email: widget.args['EMAIL'],
-      //       password: widget.args['PASSWORD'],
-      //       context: context,
-      //     );
-      //     if (user) {
-      //       Navigator.of(context).pushNamedAndRemoveUntil(
-      //         PageRoute.Page.homeScreen.route,
-      //         ModalRoute.withName('/'),
-      //       );
-      //     }
-      //   }
-      // } catch (e) {
-      //   setState(() {
-      //     isLoading = false;
-      //   });
-      //   String errorMessage = e.toString();
-      //   switch (errorMessage) {
-      //     case "EMAIL_ALREADY_EXISTS":
-      //       ScaffoldMessenger.of(context).showSnackBar(
-      //         SnackBar(
-      //             content: Text(
-      //                 'There is already a registered user with that email address')),
-      //       );
-      //       break;
-      //     case "Invitation Code invalid":
-      //       ScaffoldMessenger.of(context).showSnackBar(
-      //         SnackBar(content: Text('Invitation Code invalid')),
-      //       );
-      //       break;
-      //     default:
-      //   }
-      // }
-    }
-
     return Scaffold(
       body: LoadingOverlay(
         isLoading: isLoading,
