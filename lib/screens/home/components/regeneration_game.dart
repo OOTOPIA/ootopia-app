@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,8 @@ class RegenerationGame extends StatefulWidget {
   _RegenerationGameState createState() => _RegenerationGameState();
 }
 
-class _RegenerationGameState extends State<RegenerationGame> {
+class _RegenerationGameState extends State<RegenerationGame>
+    with SecureStoreMixin {
   Map<String, IconData> gameProgress = {
     'personal': FeatherIcons.user,
     'city': FeatherIcons.mapPin,
@@ -31,6 +34,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
 
   late HomeStore homeStore;
   late AuthStore authStore;
+  late User? user;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   double gameProgressIconSize = 40;
@@ -44,9 +48,14 @@ class _RegenerationGameState extends State<RegenerationGame> {
   @override
   void initState() {
     super.initState();
+    initUser();
     Future.delayed(Duration(milliseconds: 300), () {
       _resetDetailedIconPosition();
     });
+  }
+
+  initUser() async {
+    user = await getCurrentUser();
   }
 
   _resetDetailedIconPosition() {
@@ -103,7 +112,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () {
+                            onTap: () async {
                               showModalBottomSheet(
                                   barrierColor: Colors.black.withAlpha(1),
                                   context: context,
@@ -113,7 +122,9 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                       menu: AppLocalizations.of(context)!
                                           .regenerationGame,
                                       text: AppLocalizations.of(context)!
-                                          .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame,
+                                          .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                          .replaceAll('%GOAL_CHOSEN%',
+                                              '${user!.dailyLearningGoalInMinutes!}'),
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
                                       marginBottom: true,

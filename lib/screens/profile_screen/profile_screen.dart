@@ -167,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     menu: AppLocalizations.of(context)!
                                         .changeMakerPro,
                                     text: AppLocalizations.of(context)!
-                                        .theChangeMakerPro,
+                                        .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                                     about:
                                         AppLocalizations.of(context)!.learnMore,
                                     marginBottom: true,

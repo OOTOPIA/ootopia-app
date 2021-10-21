@@ -155,7 +155,7 @@ class CelebrationStates extends State<Celebration> {
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.roboto(
                                   fontSize: 16,
-                                  color: Color(0xFF000000),
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
