@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class AuthRepository {
@@ -22,6 +23,8 @@ const Map<String, String> API_HEADERS = {
 };
 
 class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
   Future<Map<String, String>> getRecoverPasswordHeader() async {
     String recoverPasswordToken = await getRecoverPasswordToken();
     if (recoverPasswordToken.isEmpty) {
@@ -42,7 +45,6 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
     );
 
     if (response.statusCode == 200) {
-      print("LOGIN RESPONSE BODY ${response.body}");
       User user = User.fromJson(json.decode(response.body));
 
       await setAuthToken(user.token!);
@@ -59,7 +61,6 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   @override
   Future<User> register(
       Auth user, List<String>? tagsIds, FlutterUploader? uploader) async {
-    // print("REGISTER RESPONSE BODY ${response.body}");
     try {
       Map<String, String> data = {
         "fullname": user.fullname.toString(),
@@ -84,20 +85,9 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "addressLongitude": user.addressLongitude == null
             ? ""
             : user.addressLongitude.toString(),
-        "tagsIds": tagsIds!.join(",")
+        "tagsIds": tagsIds!.join(","),
+        "registerPhase": user.registerPhase.toString(),
       };
-
-      //   final response = await http.post(
-      //   Uri.parse(dotenv.env['API_URL']! + "users"),
-      //   headers: API_HEADERS,
-      //   body: jsonEncode(<String, dynamic>{
-      //     "fullname": user.fullname,
-      //     "email": user.email,
-      //     "password": user.password,
-      //     "invitationCode": user.invitationCode,
-      //     "acceptedTerms": true,
-      //   }),
-      // );
 
       if (user.photoFilePath != null && uploader != null) {
         var result = await uploader.enqueue(
@@ -147,25 +137,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         }
       }
     } catch (error) {
-      print('$error');
       throw Exception('Failed to update user ' + error.toString());
     }
-
-    // if (response.statusCode == 201) {
-    //   // await this.login( user.email as String, user.password as String);
-    //   User user = User.fromJson(json.decode(response.body));
-    //   return user;
-    // } else {
-    //   Map<String, dynamic> decode = json.decode(response.body);
-    //   switch (decode['error']) {
-    //     case 'Invitation Code invalid':
-    //       throw FetchDataException(decode['error']);
-    //     case 'EMAIL_ALREADY_EXISTS':
-    //       throw FetchDataException(decode['error']);
-    //     default:
-    //       throw FetchDataException('Failed to register');
-    //   }
-    // }
   }
 
   @override
@@ -176,11 +149,9 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
       body: jsonEncode(<String, dynamic>{"email": email, "language": lang}),
     );
 
-    print("RECOVER PASSWORD RESPONSE ${response.body}");
-
     if (response.statusCode != 200) {
       Map<String, dynamic> decode = json.decode(response.body);
-      print("DECODED ERROR ${decode.toString()}");
+
       if (decode['error'] == "User not found") {
         throw FetchDataException("USER_NOT_FOUND");
       } else {

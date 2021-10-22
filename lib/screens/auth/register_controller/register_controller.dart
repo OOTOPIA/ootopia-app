@@ -285,6 +285,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       bio: bioController.text,
       phone: cellPhoneController.text,
       birthdate: user!.birthdate,
+      invitationCode: codeController.text,
       dailyLearningGoalInMinutes: currentSliderValue.toInt(),
       addressCountryCode: user!.addressCountryCode,
       addressState: user!.addressState,
@@ -292,6 +293,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       addressLatitude: user!.addressLatitude,
       addressLongitude: user!.addressLongitude,
       photoFilePath: photoFilePath,
+      registerPhase: 2,
     );
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();

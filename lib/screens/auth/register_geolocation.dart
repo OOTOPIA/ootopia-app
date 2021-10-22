@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 
@@ -9,14 +10,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/theme/light/colors.dart';
 
-class RegisterPhase2GeolocationPage extends StatefulWidget {
+class RegisterGeolocationScreen extends StatefulWidget {
+  final Map<String, dynamic>? args;
+
+  const RegisterGeolocationScreen([this.args]);
+
   @override
-  _RegisterPhase2GeolocationPageState createState() =>
-      _RegisterPhase2GeolocationPageState();
+  _RegisterGeolocationScreenState createState() =>
+      _RegisterGeolocationScreenState();
 }
 
-class _RegisterPhase2GeolocationPageState
-    extends State<RegisterPhase2GeolocationPage> {
+class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
 
@@ -73,7 +77,6 @@ class _RegisterPhase2GeolocationPageState
 
   @override
   Widget build(BuildContext context) {
-    var teste = ModalRoute.of(context) as Route;
     return Scaffold(
       appBar: appBar,
       body: Container(
@@ -261,8 +264,8 @@ class _RegisterPhase2GeolocationPageState
                                 ),
                                 onPressed: () {
                                   Navigator.of(context).pushNamed(
-                                    PageRoute.Page
-                                        .registerPhase2TopInterestsScreen.route,
+                                    PageRoute
+                                        .Page.registerTopInterestsScreen.route,
                                   );
                                 },
                               ),

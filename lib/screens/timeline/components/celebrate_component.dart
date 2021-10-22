@@ -22,15 +22,16 @@ class CelebrationStates extends State<Celebration> {
   void _backButton(BuildContext context) {
     videoIsFinished = false;
     if (widget.args['goal'] == 'invitationCode') {
-      print(
-          "MANO OQ VEIO caiu no if celebration ${widget.args['returnToPageWithArgs']['currentPageName']}");
-      Navigator.of(context)
-          .pushNamed(PageRoute.Page.homeScreen.route, arguments: {
-        'returnToPageWithArgs': {
-          'currentPageName': widget.args['returnToPageWithArgs']
-              ['currentPageName']
-        }
-      });
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        (Route<dynamic> route) => false,
+        arguments: {
+          "returnToPageWithArgs": {
+            'currentPageName': widget.args['returnToPageWithArgs']
+                ['currentPageName']
+          }
+        },
+      );
     } else {
       Navigator.pop(context);
     }

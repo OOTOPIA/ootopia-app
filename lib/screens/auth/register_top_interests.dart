@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+
 import 'package:ootopia_app/screens/components/interests_tags_modal/interests_tags_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -12,14 +13,17 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class RegisterPhase2TopInterestsPage extends StatefulWidget {
+class RegisterTopInterestsScreen extends StatefulWidget {
+  final Map<String, dynamic>? args;
+
+  const RegisterTopInterestsScreen([this.args]);
+
   @override
-  _RegisterPhase2TopInterestsPageState createState() =>
-      _RegisterPhase2TopInterestsPageState();
+  _RegisterTopInterestsScreenState createState() =>
+      _RegisterTopInterestsScreenState();
 }
 
-class _RegisterPhase2TopInterestsPageState
-    extends State<RegisterPhase2TopInterestsPage>
+class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
     with SecureStoreMixin, WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   SmartPageController pageController = SmartPageController.getInstance();
@@ -35,6 +39,7 @@ class _RegisterPhase2TopInterestsPageState
     WidgetsBinding.instance!.addObserver(this);
 
     Future.delayed(Duration.zero).then((_) async {
+      registerController.currentLocaleName = '';
       await registerController.updateLocalName();
       setState(() {});
     });
@@ -410,19 +415,12 @@ class _RegisterPhase2TopInterestsPageState
 
                                       navigationController.resetNavigation();
 
-                                      print(
-                                          "MANO OQ VEIO ${registerController.returnToPage}");
-                                      print(
-                                          "MANO OQ VEIO ${registerController.codeController.text}");
-                                      print(
-                                          "MANO OQ VEIO ${registerController.codeController.text != ''}");
                                       if (registerController
                                               .codeController.text !=
                                           '') {
-                                        print(
-                                            "MANO OQ VEIO IF ${registerController.returnToPage}");
                                         registerController
                                             .cleanTextEditingControllers();
+
                                         Navigator.of(context).pushNamed(
                                           PageRoute.Page.celebration.route,
                                           arguments: {
@@ -438,8 +436,6 @@ class _RegisterPhase2TopInterestsPageState
                                           },
                                         );
                                       } else {
-                                        print(
-                                            "MANO OQ VEIO ELSE ${registerController.returnToPage}");
                                         Navigator.of(context)
                                             .pushNamedAndRemoveUntil(
                                           PageRoute.Page.homeScreen.route,

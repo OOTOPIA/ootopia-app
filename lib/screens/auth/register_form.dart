@@ -8,7 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -16,12 +17,16 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterFormScreen extends StatefulWidget {
+  final Map<String, dynamic>? args;
+
+  RegisterFormScreen([this.args]);
+
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterFormScreenState createState() => _RegisterFormScreenState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterFormScreenState extends State<RegisterFormScreen> {
   bool _termsCheckbox = false;
   bool termsOpened = false;
   bool isLoading = false;
@@ -80,18 +85,19 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  backButtonPage() async {
-    _termsCheckbox = false;
-
-    //Navigator.pop(context);
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     registerController.user = User();
     registerController.authStore = AuthStore();
+    registerController.cleanTextEditingControllers();
+    _termsCheckbox = false;
+
+    if (widget.args?['returnToPageWithArgs'] != null &&
+        widget.args!['returnToPageWithArgs']['currentPageName'] != null) {
+      registerController.returnToPage =
+          widget.args!['returnToPageWithArgs']['currentPageName'];
+    }
 
     this.trackingEvents.trackingSignupStartedSignup();
   }
@@ -145,79 +151,74 @@ class _RegisterPageState extends State<RegisterPage> {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: WillPopScope(
-          onWillPop: () => backButtonPage(),
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _form(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(
-                          GlobalConstants.of(context).spacingMedium),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _form(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        GlobalConstants.of(context).spacingMedium),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
-                                minimumSize: MaterialStateProperty.all(
-                                  Size(60, 58),
-                                ),
-                                backgroundColor: _termsCheckbox
-                                    ? MaterialStateProperty.all(
-                                        LightColors.blue)
-                                    : MaterialStateProperty.all(
-                                        Color(0xFF5D7FBB)),
                               ),
-                              child: Text(
-                                AppLocalizations.of(context)!.continueAccess,
-                                style: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .hintStyle!
-                                    .copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              minimumSize: MaterialStateProperty.all(
+                                Size(60, 58),
                               ),
-                              onPressed: _termsCheckbox
-                                  ? () async {
-                                      await registerController.authStore
-                                          .checkEmailExist(registerController
-                                              .emailController.text);
-                                      if (registerController
-                                          .formKey.currentState!
-                                          .validate()) {
-                                        Navigator.of(context).pushNamed(
-                                          PageRoute
-                                              .Page.insertInvitationCode.route,
-                                        );
-                                      }
-                                    }
-                                  : () {},
+                              backgroundColor: _termsCheckbox
+                                  ? MaterialStateProperty.all(LightColors.blue)
+                                  : MaterialStateProperty.all(
+                                      Color(0xFF5D7FBB)),
                             ),
+                            child: Text(
+                              AppLocalizations.of(context)!.continueAccess,
+                              style: Theme.of(context)
+                                  .inputDecorationTheme
+                                  .hintStyle!
+                                  .copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            onPressed: _termsCheckbox
+                                ? () async {
+                                    await registerController.authStore
+                                        .checkEmailExist(registerController
+                                            .emailController.text);
+                                    if (registerController.formKey.currentState!
+                                        .validate()) {
+                                      Navigator.of(context).pushNamed(
+                                        PageRoute
+                                            .Page.insertInvitationCode.route,
+                                      );
+                                    }
+                                  }
+                                : () {},
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -369,7 +370,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     setState(() {
                                       mailIsValid = false;
                                     });
-                                    return 'mail invalid';
+                                    return AppLocalizations.of(context)!
+                                        .emailAlreadyRegistered;
                                   }
                                   setState(() {
                                     mailIsValid = true;

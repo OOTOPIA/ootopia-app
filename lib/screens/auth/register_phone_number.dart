@@ -6,24 +6,24 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:provider/provider.dart';
-// import '../../shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-import 'register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 
-class RegisterPhase2Page extends StatefulWidget {
+class RegisterPhoneNumberScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
 
-  RegisterPhase2Page([this.args]);
+  RegisterPhoneNumberScreen([this.args]);
 
   @override
-  _RegisterPhase2PageState createState() => _RegisterPhase2PageState();
+  _RegisterPhoneNumberScreenState createState() =>
+      _RegisterPhoneNumberScreenState();
 }
 
-class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
+class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
   SmartPageController pageController = SmartPageController.getInstance();
@@ -31,9 +31,6 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   @override
   void initState() {
     super.initState();
-
-    print(
-        "MANO OQ VEIO chegou no phase 2 pageHistory ==> ${pageController.pageHistory} pages ==> ${pageController.pages} pageHistoryTabSelected ==> ${pageController.pageHistoryTabSelected}");
   }
 
   get appBar => AppBar(
@@ -80,7 +77,6 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    var teste = ModalRoute.of(context) as Route;
     return Scaffold(
       appBar: appBar,
       body: GestureDetector(
@@ -402,9 +398,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
 
                               if (registerController.firstStepIsValid(context))
                                 Navigator.of(context).pushNamed(
-                                  PageRoute
-                                      .Page
-                                      .registerPhase2DailyLearningGoalScreen
+                                  PageRoute.Page.registerDailyLearningGoalScreen
                                       .route,
                                 );
                             }),

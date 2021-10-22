@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -12,14 +13,18 @@ import 'package:video_player/video_player.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
-class RegisterPhase2DailyLearningGoalPage extends StatefulWidget {
+class RegisterDailyLearningGoalScreen extends StatefulWidget {
+  final Map<String, dynamic>? args;
+
+  const RegisterDailyLearningGoalScreen([this.args]);
+
   @override
-  _RegisterPhase2DailyLearningGoalPageState createState() =>
-      _RegisterPhase2DailyLearningGoalPageState();
+  _RegisterDailyLearningGoalScreenState createState() =>
+      _RegisterDailyLearningGoalScreenState();
 }
 
-class _RegisterPhase2DailyLearningGoalPageState
-    extends State<RegisterPhase2DailyLearningGoalPage> {
+class _RegisterDailyLearningGoalScreenState
+    extends State<RegisterDailyLearningGoalScreen> {
   double _learningGoalRating = 10;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   late VideoPlayerController _videoPlayerController;
@@ -403,8 +408,7 @@ class _RegisterPhase2DailyLearningGoalPageState
                                     .user!.dailyLearningGoalInMinutes
                               });
                               Navigator.of(context).pushNamed(
-                                PageRoute
-                                    .Page.registerPhase2GeolocationScreen.route,
+                                PageRoute.Page.registerGeolocationScreen.route,
                               );
                             },
                           ),
