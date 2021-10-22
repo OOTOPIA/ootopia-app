@@ -22,16 +22,18 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  EditProfileStore editProfileStore = EditProfileStore();
   final formKey = GlobalKey<FormState>();
 
   late ProfileScreenStore profileStore;
   late AuthStore authStore;
+  late EditProfileStore editProfileStore;
   PhoneNumber? codeCountryPhoneNnumber;
   SmartPageController controller = SmartPageController.getInstance();
   @override
   void initState() {
     super.initState();
+    editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
+
     Future.delayed(Duration.zero, () async {
       await editProfileStore.getUser();
       codeCountryPhoneNnumber = PhoneNumber(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,7 +34,7 @@ class _RegenerationGameState extends State<RegenerationGame>
 
   late HomeStore homeStore;
   late AuthStore authStore;
-  late User? user;
+  late EditProfileStore editProfileStore;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   double gameProgressIconSize = 40;
@@ -48,14 +48,11 @@ class _RegenerationGameState extends State<RegenerationGame>
   @override
   void initState() {
     super.initState();
-    initUser();
+    editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
+    editProfileStore.getUser();
     Future.delayed(Duration(milliseconds: 300), () {
       _resetDetailedIconPosition();
     });
-  }
-
-  initUser() async {
-    user = await getCurrentUser();
   }
 
   _resetDetailedIconPosition() {
@@ -110,60 +107,62 @@ class _RegenerationGameState extends State<RegenerationGame>
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              showModalBottomSheet(
-                                  barrierColor: Colors.black.withAlpha(1),
-                                  context: context,
-                                  backgroundColor: Colors.black.withAlpha(1),
-                                  builder: (BuildContext context) {
-                                    return SnackBarWidget(
-                                      menu: AppLocalizations.of(context)!
+                        Observer(builder: (context) {
+                          return Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                showModalBottomSheet(
+                                    barrierColor: Colors.black.withAlpha(1),
+                                    context: context,
+                                    backgroundColor: Colors.black.withAlpha(1),
+                                    builder: (BuildContext context) {
+                                      return SnackBarWidget(
+                                        menu: AppLocalizations.of(context)!
+                                            .regenerationGame,
+                                        text: AppLocalizations.of(context)!
+                                            .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                            .replaceAll('%GOAL_CHOSEN%',
+                                                '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
+                                        about: AppLocalizations.of(context)!
+                                            .learnMore,
+                                        marginBottom: true,
+                                      );
+                                    });
+                              }, //Saiba mais
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  right:
+                                      GlobalConstants.of(context).spacingNormal,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!
                                           .regenerationGame,
-                                      text: AppLocalizations.of(context)!
-                                          .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
-                                          .replaceAll('%GOAL_CHOSEN%',
-                                              '${user!.dailyLearningGoalInMinutes!}'),
-                                      about: AppLocalizations.of(context)!
-                                          .learnMore,
-                                      marginBottom: true,
-                                    );
-                                  });
-                            }, //Saiba mais
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                right:
-                                    GlobalConstants.of(context).spacingNormal,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .regenerationGame,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                        ),
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!.learnMore,
-                                    style: Theme.of(context)
-                                        .accentTextTheme
-                                        .bodyText2!,
-                                  )
-                                ],
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline2!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                          ),
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)!.learnMore,
+                                      style: Theme.of(context)
+                                          .accentTextTheme
+                                          .bodyText2!,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -33,6 +33,7 @@ import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart'
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/create_categories/create_categories_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/about_quiz_screen.dart';
@@ -214,7 +215,10 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
           Provider<ProfileScreenStore>(
             create: (_) => ProfileScreenStore(),
-          )
+          ),
+          Provider<EditProfileStore>(
+            create: (_) => EditProfileStore(),
+          ),
         ],
         child: MaterialApp(
           supportedLocales: L10n.all,
