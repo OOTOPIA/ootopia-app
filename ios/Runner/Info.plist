@@ -72,14 +72,10 @@
 			<string>processing</string>
 			<string>remote-notification</string>
 		</array>
-		<plist version="1.0">
-			<dict>
-				<key>BGTaskSchedulerPermittedIdentifiers</key>
-				<array>
-					<string>org.ootopia</string>
-				</array>
-			</dict>
-		</plist>
+		<key>BGTaskSchedulerPermittedIdentifiers</key>
+		<array>
+			<string>org.ootopia</string>
+		</array>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
