@@ -118,6 +118,9 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                 if (ImagePath != null) {
                                   controller.getImage(
                                     ImagePath,
+                                    ()=>setState(() {
+                                      
+                                    })
                                   );
                                 }
                               },
@@ -137,8 +140,10 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                               height: 16,
                             ),
                             TextFormField(
-                              autocorrect: false,
-                              enableSuggestions: false,
+                              autocorrect: true,
+                              enableSuggestions: true,
+                              textCapitalization:
+                                        TextCapitalization.sentences,
                               controller: controller.bioController,
                               maxLines: 5,
                               decoration: GlobalConstants.of(context)
@@ -375,7 +380,7 @@ class _RegisterPhase2PageState extends State<RegisterPhase2Page> {
                                           RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(25.0),
+                                              BorderRadius.circular(40.0),
                                           side: BorderSide.none)),
                                   minimumSize: MaterialStateProperty.all(
                                     Size(60, 55),

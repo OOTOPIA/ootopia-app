@@ -48,7 +48,6 @@ class _AboutEthicalMarketPlaceState extends State<AboutEthicalMarketPlace> {
     return Scaffold(
       primary: true,
       body: Container(
-        height: double.infinity,
         decoration: BoxDecoration(
             image: DecorationImage(
           image: AssetImage(
@@ -65,145 +64,143 @@ class _AboutEthicalMarketPlaceState extends State<AboutEthicalMarketPlace> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    Stack(
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 26),
-                              child: Column(
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: GlobalConstants.of(context)
-                                        .spacingLarge,
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .ethicalMarketplace
-                                        .toUpperCase(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w400,
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 3,
-                                          offset: Offset(0,
-                                              5), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: GlobalConstants.of(context)
-                                        .intermediateSpacing,
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .ethicalMarketplaceDescription,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 3,
-                                          offset: Offset(0,
-                                              5), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 26),
-                                  Image.asset(
-                                    "assets/images/wallet.png",
-                                    scale: 2,
-                                  ),
-                                  SizedBox(
-                                    height: 24,
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .aboutYourOfferHere,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 5),
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 18,
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .nextAboutCreateOffer,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                      shadows: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          spreadRadius: 0,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 5),
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  SizedBox(
-                                      height: GlobalConstants.of(context)
-                                          .spacingMedium),
-                                ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              SizedBox(
+                                height:
+                                    GlobalConstants.of(context).spacingLarge,
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 16, right: 16),
-                                child: RotatedBox(
-                                  quarterTurns: -1,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: AppLocalizations.of(context)!
-                                          .pictureByClemOnojeghuo,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
+                              Text(
+                                AppLocalizations.of(context)!
+                                    .ethicalMarketplace
+                                    .toUpperCase(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w400,
+                                  shadows: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      spreadRadius: 0,
+                                      blurRadius: 3,
+                                      offset: Offset(
+                                          0, 5), // changes position of shadow
                                     ),
-                                  ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: GlobalConstants.of(context)
+                                    .intermediateSpacing,
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!
+                                    .ethicalMarketplaceDescription,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                  shadows: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      spreadRadius: 0,
+                                      blurRadius: 3,
+                                      offset: Offset(
+                                          0, 5), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 26),
+                              Image.asset(
+                                "assets/images/wallet.png",
+                                height: 156,
+                                width: 156,
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!
+                                    .aboutYourOfferHere,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      spreadRadius: 0,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 18,
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!
+                                    .nextAboutCreateOffer,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                  shadows: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      spreadRadius: 0,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(
+                                  height: GlobalConstants.of(context)
+                                      .spacingMedium),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, right: 16),
+                            child: RotatedBox(
+                              quarterTurns: -1,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: AppLocalizations.of(context)!
+                                      .pictureByClemOnojeghuo,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10),
                                 ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.only(bottom: 24),
+                      padding: const EdgeInsets.only(
+                          bottom: 24, left: 24, right: 24),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ElevatedButton(
                               style: ButtonStyle(
                                 fixedSize: MaterialStateProperty.all<Size>(
-                                    Size(104, 53)),
+                                    Size(88, 53)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -232,7 +229,7 @@ class _AboutEthicalMarketPlaceState extends State<AboutEthicalMarketPlace> {
                           ElevatedButton(
                               style: ButtonStyle(
                                 fixedSize: MaterialStateProperty.all<Size>(
-                                    Size(235, 53)),
+                                    Size(212, 53)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(

@@ -136,11 +136,12 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         cellPhoneController.text.isNotEmpty ? cellPhoneController.text : null;
   }
 
-  Future getImage(imagePath) async {
+  getImage(imagePath, VoidCallback update) {
     if (user != null && imagePath != null) {
       image = File(imagePath);
       user!.photoFilePath = imagePath;
     }
+    update();
   }
 
   bool birthDateIsValid() {
@@ -151,18 +152,22 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     return !validCellPhone;
   }
 
-  getLocation(BuildContext context) {
-    geolocationErrorMessage = "";
-    geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
-    Geolocation.determinePosition(context).then((Position position) async {
+  getLocation(BuildContext context) async {
+    try {
+      geolocationErrorMessage = "";
+      geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
+      Position position = await Geolocation.determinePosition(context);
+
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.length > 0) {
         var placemark = placemarks[0];
         geolocationController.text =
-            "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
+            "${placemark.subAdministrativeArea != '' ? placemark.subAdministrativeArea : placemark.locality}, ${placemark.administrativeArea} - ${placemark.country}";
 
-        user!.addressCity = placemark.subAdministrativeArea;
+        user!.addressCity = placemark.subAdministrativeArea != ''
+            ? placemark.subAdministrativeArea
+            : placemark.locality;
         user!.addressState = placemark.administrativeArea;
         user!.addressCountryCode = placemark.isoCountryCode;
         user!.addressLatitude = position.latitude;
@@ -173,17 +178,19 @@ class RegisterSecondPhaseController with SecureStoreMixin {
           "addressState": user!.addressState,
           "addressCountryCode": user!.addressCountryCode,
         });
+        geolocationErrorMessage = "";
+        geolocationMessage = "";
       } else {
         geolocationMessage =
             AppLocalizations.of(context)!.failedToGetCurrentLocation;
         geolocationErrorMessage =
             AppLocalizations.of(context)!.weCouldntGetYourLocation;
       }
-    }).onError((error, stackTrace) {
+    } catch (error) {
       geolocationMessage =
           AppLocalizations.of(context)!.failedToGetCurrentLocation;
       geolocationErrorMessage = error.toString();
-    });
+    }
   }
 
   Future<void> getTags(String? language) async {
@@ -226,9 +233,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     var completer = new Completer<String>();
     var uploader = FlutterUploader();
 
-    var taskId = await this
-        .userRepository
-        .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+    var taskId =
+        await this.userRepository.updateUserProfile(user, tagsIds, uploader);
     uploader.result.listen(
         (result) {
           if (result.statusCode == 200 && result.taskId == taskId) {

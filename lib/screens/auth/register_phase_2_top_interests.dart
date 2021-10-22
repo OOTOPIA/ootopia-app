@@ -104,6 +104,7 @@ class _RegisterPhase2TopInterestsPageState
                 slivers: [
                   SliverFillRemaining(
                     hasScrollBody: false,
+                    fillOverscroll: true,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal:
@@ -196,11 +197,11 @@ class _RegisterPhase2TopInterestsPageState
                                       controller.allTags,
                                       controller.selectedTags,
                                     );
-
+                                                
                                     if (result != null) {
                                       controller.selectedTags = result;
                                     }
-
+                                                
                                     setState(() {});
                                   },
                                   child: Container(
@@ -219,41 +220,37 @@ class _RegisterPhase2TopInterestsPageState
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    right: 4, left:10),
-                                                child: ImageIcon(
-                                                    AssetImage(
-                                                        "assets/icons/icon_add.png"),
-                                                    size: 31),
-                                              ),
-                                              SizedBox(width: 3,),
-                                              Text(
-                                                AppLocalizations.of(context)!
-                                                    .searchForAHashtag,
-                                                    overflow: TextOverflow.clip,
-                                                style: GoogleFonts.roboto(
-                                                    color:
-                                                        LightColors.blackText,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 16),
-                                              ),
-                                            ],
-                                          ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 5, left:8),
+                                              child: ImageIcon(
+                                                  AssetImage(
+                                                      "assets/icons/icon_add.png"),
+                                                  size: 31),
+                                            ),
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .searchForAHashtag,
+                                                  overflow: TextOverflow.clip,
+                                              style: GoogleFonts.roboto(
+                                                  color:
+                                                      LightColors.blackText,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 15),
+                                            ),
+                                          ],
                                         ),
-                                        Visibility(
-                                          visible:
-                                              controller.selectedTags.length >
-                                                  0,
-                                          child: Padding(
-                                            padding:EdgeInsets.symmetric(horizontal: 10),
-                                            child: Expanded(
+                                        Expanded(
+                                          child: Visibility(
+                                            visible:
+                                                controller.selectedTags.length >
+                                                    0,
+                                            child: Padding(
+                                              padding:EdgeInsets.only(left: 3, right:10),
                                               child: Text(
                                                 controller.selectedTags.length > 1
                                                     ? '${controller.selectedTags.length} ' +
@@ -264,11 +261,13 @@ class _RegisterPhase2TopInterestsPageState
                                                         AppLocalizations.of(
                                                                 context)!
                                                             .tagSelected,
-                                                overflow: TextOverflow.clip,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 3,
                                                 textAlign: TextAlign.right,
+                                                textDirection: TextDirection.ltr,
                                                 style: GoogleFonts.roboto(
                                                   color: Colors.grey,
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ),
@@ -362,7 +361,7 @@ class _RegisterPhase2TopInterestsPageState
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(25.0),
+                                                BorderRadius.circular(40.0),
                                             side: BorderSide.none)),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
@@ -397,11 +396,11 @@ class _RegisterPhase2TopInterestsPageState
                                         isloading = true;
                                       });
                                       await controller.updateUser();
-
+                      
                                       setState(() {
                                         isloading = false;
                                       });
-
+                      
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
                                         PageRoute.Page.homeScreen.route,
