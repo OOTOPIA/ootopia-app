@@ -462,9 +462,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   Positioned(
                     left: 60,
                     child: Opacity(
-                      opacity: 1.2 -
-                          ((((_draggablePositionX * 100) / 300) / 100)) -
-                          0.2,
+                      opacity: (1.2 -
+                                  ((((_draggablePositionX * 100) / 300) /
+                                      100)) -
+                                  0.2) >
+                              0
+                          ? 1.2 -
+                              ((((_draggablePositionX * 100) / 300) / 100)) -
+                              0.2
+                          : 0,
                       child: Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(
