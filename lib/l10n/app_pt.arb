@@ -391,6 +391,6 @@
      "generalError": "Não foi possível realizar a operação.",
      "selecteds": "selecionadas",
      "selected2": "selecionada",
-     "searchForAtag": "Procure por uma hashtag"
-
+     "searchForAtag": "Procure por uma hashtag",
+     "tooltipBlockedField": "Você está tentando enviar uma recompensa para si mesmo. Infelizmente, isto não é possível."
 }

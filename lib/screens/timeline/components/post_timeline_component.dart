@@ -11,17 +11,21 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
+import 'package:ootopia_app/screens/timeline/components/toast_widget.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'image_post_timeline_component.dart';
 
@@ -101,6 +105,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _oozError = false;
   String _oozErrorMessage = "";
   bool _oozSlidingOut = false;
+  late AuthStore authStore;
 
   GlobalKey _slideButtonKey = GlobalKey();
   GlobalKey _oozInfoKey = GlobalKey();
@@ -195,6 +200,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if (state is SuccessDeletePostState) {
@@ -694,6 +700,30 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       feedback: Container(),
                     ),
                   ),
+                  Visibility(
+                    visible: this.post.userId == authStore.currentUser!.id!,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: true,
+                          
+                          builder: (context) => ToastWidget(
+                            text: AppLocalizations.of(context)!.tooltipBlockedField,
+                            suffixIcon: Icons.info_outline
+                          ),
+                        );
+                      },
+                      child: Container(
+                          height: 36,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white.withOpacity(0.8),
+                          )),
+                    ),
+                  )
                 ],
               ),
             ),
