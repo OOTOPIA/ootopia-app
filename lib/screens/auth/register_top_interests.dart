@@ -39,7 +39,6 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
     WidgetsBinding.instance!.addObserver(this);
 
     Future.delayed(Duration.zero).then((_) async {
-      registerController.currentLocaleName = '';
       await registerController.updateLocalName();
       setState(() {});
     });
@@ -414,13 +413,13 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                       });
 
                                       navigationController.resetNavigation();
+                                      registerController.currentLocaleName = '';
+                                      registerController
+                                          .cleanTextEditingControllers();
 
                                       if (registerController
                                               .codeController.text !=
                                           '') {
-                                        registerController
-                                            .cleanTextEditingControllers();
-
                                         Navigator.of(context).pushNamed(
                                           PageRoute.Page.celebration.route,
                                           arguments: {

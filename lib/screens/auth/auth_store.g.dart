@@ -102,6 +102,13 @@ mixin _$AuthStore on AuthStoreBase, Store {
         .run(() => super.updateUserRegenerarionGameLearningAlert(type));
   }
 
+  final _$loginAsyncAction = AsyncAction('AuthStoreBase.login');
+
+  @override
+  Future<dynamic> login(String email, String password) {
+    return _$loginAsyncAction.run(() => super.login(email, password));
+  }
+
   final _$logoutAsyncAction = AsyncAction('AuthStoreBase.logout');
 
   @override
@@ -124,6 +131,23 @@ mixin _$AuthStore on AuthStoreBase, Store {
         email: email,
         invitationCode: invitationCode,
         context: context));
+  }
+
+  final _$resetPasswordAsyncAction = AsyncAction('AuthStoreBase.resetPassword');
+
+  @override
+  Future<dynamic> resetPassword(String newPassword) {
+    return _$resetPasswordAsyncAction
+        .run(() => super.resetPassword(newPassword));
+  }
+
+  final _$recoverPasswordAsyncAction =
+      AsyncAction('AuthStoreBase.recoverPassword');
+
+  @override
+  Future<dynamic> recoverPassword(String email, String lang) {
+    return _$recoverPasswordAsyncAction
+        .run(() => super.recoverPassword(email, lang));
   }
 
   final _$AuthStoreBaseActionController =

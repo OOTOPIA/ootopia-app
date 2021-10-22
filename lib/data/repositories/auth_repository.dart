@@ -11,8 +11,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 abstract class AuthRepository {
   Future<User> login(String email, String password);
-  Future<User> register(
-      Auth user, List<String>? tagsIds, FlutterUploader? uploader);
+  Future register(Auth user, List<String>? tagsIds, FlutterUploader? uploader);
   Future recoverPassword(String email, String lang);
   Future resetPassword(String newPassword);
   Future<bool> emailExist(String email);
@@ -59,7 +58,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   }
 
   @override
-  Future<User> register(
+  Future register(
       Auth user, List<String>? tagsIds, FlutterUploader? uploader) async {
     try {
       Map<String, String> data = {
@@ -105,21 +104,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
             tag: "Uploading user photo",
           ),
         );
-
-        await setCurrentUser(jsonEncode(user.toJson()));
-        return User(
-          fullname: '',
-          bio: '',
-          email: '',
-          birthdate: '',
-          id: '',
-          addressCity: '',
-          addressCountryCode: '',
-          addressLatitude: 0,
-          addressLongitude: 0,
-          badges: [],
-          addressState: '',
-        );
+        return result;
       } else {
         final response = await http.post(
           Uri.parse(
@@ -129,15 +114,12 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           body: jsonEncode(data),
         );
 
-        if (response.statusCode == 201) {
-          await setCurrentUser(response.body);
-          return User.fromJson(json.decode(response.body));
-        } else {
-          throw Exception('Failed to update user');
+        if (response.statusCode != 201) {
+          throw Exception('Failed to create user');
         }
       }
     } catch (error) {
-      throw Exception('Failed to update user ' + error.toString());
+      throw Exception('Failed to create user ' + error.toString());
     }
   }
 

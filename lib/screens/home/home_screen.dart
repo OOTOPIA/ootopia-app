@@ -316,8 +316,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ],
               onTap: (int index) {
                 var result = true;
-                print("MANO OQ VEIO index navigation bottom ${index}");
-
                 switch (index) {
                   case PageViewController.TAB_INDEX_TIMELINE:
                     controller.resetNavigation();
@@ -442,19 +440,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         }
       }
 
-      // Navigator.of(context).pushNamed(
-      //   PageRoute.Page.registerPhase2Screen.route,
-      //   arguments: {
-      //     "returnToPageWithArgs": {
-      //       "currentPageName": "my_profile",
-      //       "arguments": null
-      //     }
-      //   },
-      // );
-
       if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
-        print(
-            "MANO OQ VEIO page router caiu aqui ${widget.args!['returnToPageWithArgs']['pageRoute']}");
         Navigator.of(context).pushNamed(
           widget.args!['returnToPageWithArgs']['pageRoute'],
           arguments: widget.args!['returnToPageWithArgs']['arguments'],

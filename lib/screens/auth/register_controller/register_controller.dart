@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,7 +17,6 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class RegisterSecondPhaseController with SecureStoreMixin {
@@ -235,48 +233,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     update();
   }
 
-  Future<void> updateUser() async {
-    var idTags = selectedTags.map((tag) => tag.id).toList();
-
-    try {
-      if (user!.photoFilePath != null) {
-        await _updateUserWithPhoto(user!, idTags);
-      } else if (user != null) {
-        await this.userRepository.updateUserProfile(user!, [], null);
-      }
-      await this.userRepository.getMyAccountDetails();
-    } catch (err) {
-      throw (err);
-    }
-  }
-
-  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
-    var completer = new Completer<String>();
-    var uploader = FlutterUploader();
-
-    var taskId =
-        await this.userRepository.updateUserProfile(user, tagsIds, uploader);
-    uploader.result.listen(
-        (result) {
-          if (result.statusCode == 200 && result.taskId == taskId) {
-            completer.complete(user.id);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          completer.completeError(error);
-        });
-    user.registerPhase = 2;
-    user.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-    await setCurrentUser(json.encode(user.toJson()));
-
-    return completer.future;
-  }
-
   Future registerUser() async {
-    var completer = new Completer<String>();
-    var uploader = FlutterUploader();
-
     Auth _user = Auth(
       fullname: nameController.text,
       email: emailController.text,
@@ -298,28 +255,36 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
-    await this.authRepository.register(_user, tagsIds, uploader);
+    try {
+      if (_user.photoFilePath != null) {
+        await registerUserWithPhoto(_user, tagsIds);
+        await authRepository.login(_user.email!, _user.password!);
+      } else {
+        await this.authRepository.register(_user, tagsIds, null);
+        await authRepository.login(_user.email!, _user.password!);
+      }
+    } catch (err) {
+      throw (err);
+    }
+  }
 
-    // var taskId = await this
-    //     .userRepository
-    //     .updateUserProfile(authStore.currentUser!, tagsIds, uploader);
+  Future<String> registerUserWithPhoto(_user, tagsIds) async {
+    var completer = new Completer<String>();
+    var uploader = FlutterUploader();
 
-    await authRepository.login(_user.email!, _user.password!);
+    var taskId = await this.authRepository.register(_user, tagsIds, uploader);
+    uploader.result.listen(
+      (result) {
+        if (result.statusCode == 201 && result.taskId == taskId) {
+          completer.complete('completed');
+        }
+      },
+      onDone: () {},
+      onError: (error) {
+        completer.completeError(error);
+      },
+    );
 
-    // uploader.result.listen(
-    //     (result) {
-    //       if (result.statusCode == 200 && result.taskId == taskId) {
-    //         completer.complete(user.id);
-    //       }
-    //     },
-    //     onDone: () {},
-    //     onError: (error) {
-    //       completer.completeError(error);
-    //     });
-    // user.registerPhase = 2;
-    // user.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-    // await setCurrentUser(json.encode(user.toJson()));
-
-    // return completer.future;
+    return completer.future;
   }
 }
