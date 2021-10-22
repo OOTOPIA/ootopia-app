@@ -701,7 +701,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ),
                   ),
                   Visibility(
-                    visible: this.post.userId == authStore.currentUser!.id!,
+                    visible: this.post.userId == (authStore.currentUser?.id ?? ""),
                     child: GestureDetector(
                       onTap: () {
                         showDialog(
@@ -720,7 +720,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withOpacity(0.5),
                           )),
                     ),
                   )

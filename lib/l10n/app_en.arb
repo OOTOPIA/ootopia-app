@@ -399,6 +399,6 @@
     "selecteds": "selected",
     "selected2": "selected",
     "searchForAtag": "Search for a hashtag",
-    "tooltipBlockedField": "You are trying to send yourself a reward. Unfortunately, this is not possible."
+    "tooltipBlockedField": "You are trying to give yourself a gratitude reward. Unfortunately, this is not possible."
     
 }
