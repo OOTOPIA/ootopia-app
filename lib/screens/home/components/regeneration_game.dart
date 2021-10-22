@@ -111,23 +111,26 @@ class _RegenerationGameState extends State<RegenerationGame>
                           return Expanded(
                             child: InkWell(
                               onTap: () async {
-                                showModalBottomSheet(
-                                    barrierColor: Colors.black.withAlpha(1),
-                                    context: context,
-                                    backgroundColor: Colors.black.withAlpha(1),
-                                    builder: (BuildContext context) {
-                                      return SnackBarWidget(
-                                        menu: AppLocalizations.of(context)!
-                                            .regenerationGame,
-                                        text: AppLocalizations.of(context)!
-                                            .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
-                                            .replaceAll('%GOAL_CHOSEN%',
-                                                '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
-                                        about: AppLocalizations.of(context)!
-                                            .learnMore,
-                                        marginBottom: true,
-                                      );
-                                    });
+                                if (editProfileStore.currentUser != null) {
+                                  showModalBottomSheet(
+                                      barrierColor: Colors.black.withAlpha(1),
+                                      context: context,
+                                      backgroundColor:
+                                          Colors.black.withAlpha(1),
+                                      builder: (BuildContext context) {
+                                        return SnackBarWidget(
+                                          menu: AppLocalizations.of(context)!
+                                              .regenerationGame,
+                                          text: AppLocalizations.of(context)!
+                                              .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                              .replaceAll('%GOAL_CHOSEN%',
+                                                  '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
+                                          about: AppLocalizations.of(context)!
+                                              .learnMore,
+                                          marginBottom: true,
+                                        );
+                                      });
+                                }
                               }, //Saiba mais
                               child: Padding(
                                 padding: EdgeInsets.only(
