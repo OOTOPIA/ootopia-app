@@ -18,6 +18,7 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
+import 'package:ootopia_app/shared/local_storage.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
@@ -32,6 +33,7 @@ import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart'
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/create_categories/create_categories_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
+import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/about_quiz_screen.dart';
@@ -273,6 +275,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.editProfileScreen: (args) => EditProfileScreen(),
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
     PageRoute.Page.aboutQuizScreen: (args) => AboutQuizScreen(),
+    PageRoute.Page.initialScreen: (args) => InitialScreen(),
   };
 
   @override
@@ -282,7 +285,7 @@ class MainPage extends HookWidget {
       onWillPop: () async => !(await navigatorKey.currentState!.maybePop()),
       child: Navigator(
         key: navigatorKey,
-        initialRoute: PageRoute.Page.splashScreen.route,
+        initialRoute: PageRoute.Page.initialScreen.route,
         onGenerateRoute: (settings) {
           final pageName = settings.name;
 
