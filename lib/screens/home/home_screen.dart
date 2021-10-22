@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late AuthStore authStore;
   HomeStore? homeStore;
   late TimelineStore timelineStore;
+  late TimelinePostBloc timelinePostBloc;
 
   late ProfileScreenStore profileStore;
   Widget? currentPageWidget;
@@ -106,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    timelinePostBloc = BlocProvider.of<TimelinePostBloc>(context);
     Color selectedIconColor = Theme.of(context).accentColor;
     Color unselectedIconColor =
         Theme.of(context).iconTheme.color!.withOpacity(0.7);
@@ -324,7 +327,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 var result = true;
                 switch (index) {
                   case PageViewController.TAB_INDEX_TIMELINE:
-                    timelineStore.goToTopTimeline();
+                    if (controller.pages[controller.currentPageIndex]
+                        is TimelinePage)
+                      timelineStore.goToTopTimeline(timelinePostBloc);
 
                     controller.resetNavigation();
                     break;
@@ -616,7 +621,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           onTap: controller.currentBottomIndex ==
                   PageViewController.TAB_INDEX_TIMELINE
               ? () {
-                  timelineStore.goToTopTimeline();
+                  timelineStore.goToTopTimeline(timelinePostBloc);
                 }
               : null,
           child: Padding(

@@ -52,7 +52,6 @@ class _TimelinePageState extends State<TimelinePage>
   late TimelinePostBloc timelineBloc;
   bool loggedIn = false;
   User? user;
-  int currentPage = 1;
   final int _itemsPerPageCount = 10;
   int _nextPageThreshold = 5;
   bool _hasMoreItems = true;
@@ -64,7 +63,6 @@ class _TimelinePageState extends State<TimelinePage>
   late GeneralConfig transferOozToPostLimitConfig;
   late TimelineStore timelineStore;
 
-  List<TimelinePost> _allPosts = [];
   late FlickMultiManager flickMultiManager;
   late StreamSubscription _sub;
   late AuthStore authStore;
@@ -164,9 +162,9 @@ class _TimelinePageState extends State<TimelinePage>
   //       void _goToProfile() async {
   //         PageViewController.instance.addPage(ProfileScreen(
   //           {
-  //             "id": user != null && _allPosts[0].userId == user!.id
+  //             "id": user != null && timelineStore.allPosts[0].userId == user!.id
   //                 ? null
-  //                 : _allPosts[0].userId,
+  //                 : timelineStore.allPosts[0].userId,
   //           },
   //         ));
   //       }
@@ -231,7 +229,7 @@ class _TimelinePageState extends State<TimelinePage>
       setTransferOOZToPostLimit(transferOozToPostLimitConfig.value);
       //Recuperamos os posts apenas após a configuração inicial para evitar problema com o limite de transferência de OOZ
       timelineBloc.add(GetTimelinePostsEvent(
-          _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+          _itemsPerPageCount, (timelineStore.currentPage - 1) * _itemsPerPageCount));
     } catch (e) {
       //error
       print("Erro! ${e.toString()}");
@@ -349,13 +347,13 @@ class _TimelinePageState extends State<TimelinePage>
                           if (!state.onlyForRefreshCurrentList) {
                             _hasMoreItems =
                                 state.posts.length == _itemsPerPageCount;
-                            _allPosts.addAll(state.posts);
+                            timelineStore.allPosts.addAll(state.posts);
                           }
                         } else if (state is OnDeletedPostState) {
-                          _allPosts
+                          timelineStore.allPosts
                               .removeWhere((post) => post.id == state.postId);
                         } else if (state is OnUpdatePostCommentsCountState) {
-                          _allPosts
+                          timelineStore.allPosts
                               .firstWhere((post) => post.id == state.postId)
                               .commentsCount = state.commentsCount;
                         }
@@ -399,8 +397,8 @@ class _TimelinePageState extends State<TimelinePage>
                     child: RefreshIndicator(
                       onRefresh: () async {
                         setState(() {
-                          _allPosts = [];
-                          currentPage = 1;
+                          timelineStore.allPosts = [];
+                          timelineStore.currentPage = 1;
                         });
                         performAllRequests();
                       },
@@ -410,17 +408,17 @@ class _TimelinePageState extends State<TimelinePage>
                             const Divider(),
                         shrinkWrap: true,
                         cacheExtent: 1000,
-                        itemCount: _allPosts.length +
+                        itemCount: timelineStore.allPosts.length +
                             (_hasMoreItems
                                 ? 1
                                 : 0), //Adicionei +1 manualmente devido à POC do youtube
                         itemBuilder: (context, index) {
-                          if (index == _allPosts.length - _nextPageThreshold &&
+                          if (index == timelineStore.allPosts.length - _nextPageThreshold &&
                               _hasMoreItems) {
-                            currentPage++;
+                            timelineStore.currentPage++;
                             _getData();
                           }
-                          if (index == _allPosts.length) {
+                          if (index == timelineStore.allPosts.length) {
                             return Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(8),
@@ -434,9 +432,9 @@ class _TimelinePageState extends State<TimelinePage>
                             children: [
                               if (index == 0) LastLearningTrackComponents(),
                               PhotoTimeline(
-                                key: ObjectKey(_allPosts[index]),
+                                key: ObjectKey(timelineStore.allPosts[index]),
                                 index: index,
-                                post: _allPosts[index],
+                                post: timelineStore.allPosts[index],
                                 timelineBloc: this.timelineBloc,
                                 loggedIn: this.loggedIn,
                                 user: user,
@@ -529,6 +527,6 @@ class _TimelinePageState extends State<TimelinePage>
 
   Future<void> _getData() async {
     timelineBloc.add(GetTimelinePostsEvent(
-        _itemsPerPageCount, (currentPage - 1) * _itemsPerPageCount));
+        _itemsPerPageCount, (timelineStore.currentPage - 1) * _itemsPerPageCount));
   }
 }

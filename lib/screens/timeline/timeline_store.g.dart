@@ -25,6 +25,36 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
+  final _$allPostsAtom = Atom(name: 'TimelineStoreBase.allPosts');
+
+  @override
+  List<TimelinePost> get allPosts {
+    _$allPostsAtom.reportRead();
+    return super.allPosts;
+  }
+
+  @override
+  set allPosts(List<TimelinePost> value) {
+    _$allPostsAtom.reportWrite(value, super.allPosts, () {
+      super.allPosts = value;
+    });
+  }
+
+  final _$currentPageAtom = Atom(name: 'TimelineStoreBase.currentPage');
+
+  @override
+  int get currentPage {
+    _$currentPageAtom.reportRead();
+    return super.currentPage;
+  }
+
+  @override
+  set currentPage(int value) {
+    _$currentPageAtom.reportWrite(value, super.currentPage, () {
+      super.currentPage = value;
+    });
+  }
+
   final _$dailyGoalStatsAtom = Atom(name: 'TimelineStoreBase.dailyGoalStats');
 
   @override
@@ -53,11 +83,11 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
       ActionController(name: 'TimelineStoreBase');
 
   @override
-  void goToTopTimeline() {
+  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
     final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
         name: 'TimelineStoreBase.goToTopTimeline');
     try {
-      return super.goToTopTimeline();
+      return super.goToTopTimeline(timelinePostBloc);
     } finally {
       _$TimelineStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -78,6 +108,8 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   String toString() {
     return '''
 scrollController: ${scrollController},
+allPosts: ${allPosts},
+currentPage: ${currentPage},
 dailyGoalStats: ${dailyGoalStats}
     ''';
   }
