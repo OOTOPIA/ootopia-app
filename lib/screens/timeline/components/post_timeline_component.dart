@@ -460,19 +460,21 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 key: _slideButtonKey,
                 children: [
                   Positioned(
-                    left: 64,
+                    left: 60,
                     child: Opacity(
                       opacity: 1.2 -
                           ((((_draggablePositionX * 100) / 300) / 100)) -
                           0.2,
                       child: Container(
-                        margin: EdgeInsets.all(2),
-                        padding: EdgeInsets.only(top: 8, left: 6),
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(
+                          top: 11,
+                        ),
                         child: Text(
                           AppLocalizations.of(context)!
                               .slideToGiveAGratitudeReward,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             color: Color(
                               0xffBEBDBD,
                             ),
@@ -509,8 +511,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               height: 32,
                               right: 0,
                               child: Container(
-                                  width: 90,
-                                  padding: EdgeInsets.all(6),
+                                  width: 80,
+                                  // padding: EdgeInsets.all(6),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
                                     color: Colors.white,
@@ -522,11 +524,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 6),
+                                        padding: EdgeInsets.only(left: 8),
                                         child: this.post.oozToTransfer == 0
                                             ? Image(
                                                 image: AssetImage(
@@ -544,7 +545,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       this.post.oozToTransfer > 0
                                           ? Padding(
                                               padding:
-                                                  EdgeInsets.only(right: 4),
+                                                  EdgeInsets.only(right: 8),
                                               child: Text(
                                                 "+ " +
                                                     currencyFormatter.format(
@@ -553,6 +554,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                             .oozToTransfer),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
+                                                    fontSize: 12,
                                                     color: Color(0xFF003694),
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -567,6 +569,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                     .oozTotalCollected),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
+                                                    fontSize: 12,
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.bold),
