@@ -414,12 +414,12 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
 
                                       navigationController.resetNavigation();
                                       registerController.currentLocaleName = '';
-                                      registerController
-                                          .cleanTextEditingControllers();
 
                                       if (registerController
                                               .codeController.text !=
                                           '') {
+                                        registerController
+                                            .cleanTextEditingControllers();
                                         Navigator.of(context).pushNamed(
                                           PageRoute.Page.celebration.route,
                                           arguments: {
@@ -435,6 +435,8 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                           },
                                         );
                                       } else {
+                                        registerController
+                                            .cleanTextEditingControllers();
                                         Navigator.of(context)
                                             .pushNamedAndRemoveUntil(
                                           PageRoute.Page.homeScreen.route,
