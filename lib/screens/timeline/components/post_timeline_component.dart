@@ -513,7 +513,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     (_isDragging || _oozIsSent || _oozError) &&
                                     !_oozSlidingOut
                                 ? Container(
-                                    margin: EdgeInsets.all(1),
+                                    margin: EdgeInsets.only(bottom: 5),
                                     child: renderRewardStatus(),
                                   )
                                 : Container(),
@@ -859,7 +859,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     if (_oozIsSent || _oozError) {
       return Container(
         width: 26,
-        height: 30,
+        height: 26,
         decoration: (_oozError
             ? BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
