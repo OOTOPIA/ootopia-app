@@ -183,7 +183,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                     }
                                     if (registerController.formKey.currentState!
                                             .validate() &&
-                                        registerController
+                                        !registerController
                                             .authStore.emailExist) {
                                       Navigator.of(context).pushNamed(
                                         PageRoute.Page.registerPhoneNumberScreen
