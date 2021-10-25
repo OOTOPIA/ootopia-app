@@ -49,8 +49,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
     controller.resetNavigation();
-    Navigator.of(context).pushNamed(
+    Navigator.of(context).pushNamedAndRemoveUntil(
       PageRoute.Page.homeScreen.route,
+      (Route<dynamic> route) => false,
     );
   }
 
