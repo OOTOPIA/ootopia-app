@@ -266,23 +266,6 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                         AppLocalizations.of(context)!
                                             .nameAndSurname)
                                     .copyWith(
-                                      errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                        color: nameIsValid
-                                            ? LightColors.grey
-                                            : LightColors.errorRed,
-                                      )),
-                                      errorStyle: nameIsValid
-                                          ? TextStyle(
-                                              color: Colors.transparent,
-                                              fontSize: 0)
-                                          : TextStyle(),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                        color: nameIsValid
-                                            ? LightColors.grey
-                                            : LightColors.errorRed,
-                                      )),
                                       labelStyle: GoogleFonts.roboto(
                                           color: nameIsValid
                                               ? LightColors.lightGrey
