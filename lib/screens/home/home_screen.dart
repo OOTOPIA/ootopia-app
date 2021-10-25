@@ -22,6 +22,7 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
+import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -178,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         child: Observer(builder: (_) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             key: _scaffoldKey,
             appBar: currentAppBar(),
             drawer: controller.currentBottomIndex ==
@@ -193,10 +195,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       controller.resetNavigation();
                       setState(() {});
                     },
-                    onTapWalletItem: () {
-                      controller
-                          .goToPage(PageViewController.TAB_INDEX_MARKETPLACE);
-                    },
+                    onTapWalletItem: () => controller.insertPage(WalletPage()),
                   ),
             body: Stack(
               children: [
@@ -342,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         PageRoute.Page.loginScreen.route,
                         arguments: {
                           "returnToPageWithArgs": {
-                            "currentPageName": "wallet",
+                            "currentPageName": "learning_tracks",
                             "arguments": null
                           }
                         },
@@ -356,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         PageRoute.Page.loginScreen.route,
                         arguments: {
                           "returnToPageWithArgs": {
-                            "pageRoute": PageRoute.Page.cameraScreen.route,
+                            "currentPageName": "camera",
                             "arguments": null
                           }
                         },
@@ -374,7 +373,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         PageRoute.Page.loginScreen.route,
                         arguments: {
                           "returnToPageWithArgs": {
-                            "currentPageName": "wallet",
+                            "currentPageName": "marketplace",
                             "arguments": null
                           }
                         },
@@ -383,24 +382,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     }
                     break;
                   case PageViewController.TAB_INDEX_PROFILE:
-                    if (authStore.currentUser == null) {
-                      result = false;
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.loginScreen.route,
-                        arguments: {
-                          "returnToPageWithArgs": {
-                            "currentPageName": "my_profile",
-                            "arguments": null
-                          }
-                        },
-                      );
-                    } else {
-                      result = openProfile();
-                    }
+                    result = openProfile();
                     break;
                   default:
                 }
-                print("caiu 3");
+
                 return result;
               },
             ),
@@ -425,18 +411,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       result = false;
     }
 
-    if (authStore.currentUser!.registerPhase != 2) {
-      Navigator.of(context).pushNamed(
-        PageRoute.Page.registerPhase2Screen.route,
-        arguments: {
-          "returnToPageWithArgs": {
-            "currentPageName": "my_profile",
-            "arguments": null
-          }
-        },
-      );
-      result = false;
-    }
     return result;
   }
 
@@ -451,32 +425,43 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   _checkPageParams() {
     Timer(Duration(milliseconds: 300), () {
-      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+      if (widget.args != null &&
+          widget.args!['returnToPageWithArgs'] != null &&
+          widget.args!['returnToPageWithArgs']['currentPageName'] != null &&
+          authStore.currentUser != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
-                "my_profile" &&
-            authStore.currentUser != null) {
-          if (authStore.currentUser!.registerPhase == 2) {
-            setState(() {
-              controller.selectBottomTab(4);
-            });
-          } else if (authStore.currentUser!.registerPhase == 1) {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.registerPhase2Screen.route,
-              arguments: {
-                "returnToPageWithArgs": {
-                  "currentPageName": "my_profile",
-                  "arguments": null
-                }
-              },
-            );
-          }
-        } else if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
-          Navigator.of(context).pushNamed(
-            widget.args!['returnToPageWithArgs']['pageRoute'],
-            arguments: widget.args!['returnToPageWithArgs']['arguments'],
-          );
+            "learning_tracks") {
+          setState(() {
+            controller.selectBottomTab(1);
+          });
+        }
+        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+            "camera") {
+          setState(() {
+            controller.selectBottomTab(2);
+          });
+        }
+        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+            "marketplace") {
+          setState(() {
+            controller.selectBottomTab(3);
+          });
+        }
+        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+            "my_profile") {
+          setState(() {
+            controller.selectBottomTab(4);
+          });
         }
       }
+
+      if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
+        Navigator.of(context).pushNamed(
+          widget.args!['returnToPageWithArgs']['pageRoute'],
+          arguments: widget.args!['returnToPageWithArgs']['arguments'],
+        );
+      }
+
       if (widget.args != null &&
           widget.args!['createdPost'] != null &&
           widget.args!['createdPost'] == true) {

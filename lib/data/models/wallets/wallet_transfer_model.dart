@@ -8,6 +8,7 @@ class WalletTransfer extends Equatable {
   String? otherUserId;
   String? postId;
   String? otherUsername;
+  String? learningTrackId;
   String origin;
   String action;
   double balance;
@@ -18,50 +19,50 @@ class WalletTransfer extends Equatable {
   dynamic dateTransaction;
   String? description;
 
-  WalletTransfer({
-    required this.id,
-    required this.userId,
-    required this.walletId,
-    this.icon,
-    this.otherUserId,
-    this.postId,
-    this.otherUsername,
-    required this.origin,
-    required this.action,
-    required this.balance,
-    required this.createdAt,
-    required this.updatedAt,
-    this.photoUrl,
-    this.dateTransaction,
-    required this.fromPlatform,
-    this.description
-  }) {
+  WalletTransfer(
+      {required this.id,
+      required this.userId,
+      required this.walletId,
+      this.icon,
+      this.otherUserId,
+      this.postId,
+      this.otherUsername,
+      this.learningTrackId,
+      required this.origin,
+      required this.action,
+      required this.balance,
+      required this.createdAt,
+      required this.updatedAt,
+      this.photoUrl,
+      this.dateTransaction,
+      required this.fromPlatform,
+      this.description}) {
     // this.dateTransaction =
     //     DateFormat('dd-MM-yyyy').format(DateTime.parse(createdAt));
   }
 
   factory WalletTransfer.fromJson(Map<String, dynamic> json) {
     return WalletTransfer(
-      id: json['id'],
-      userId: json['userId'],
-      walletId: json['walletId'],
-      icon: json['icon'],
-      otherUserId: json['otherUserId'],
-      postId: json['postId'],
-      otherUsername: json['otherUsername'],
-      origin: json['origin'],
-      action: json['action'],
-      balance: (json['balance'] is double
-          ? json['balance']
-          : double.parse(json['balance'])),
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      photoUrl: json['photoUrl'],
-      dateTransaction: json['dateTransaction'],
-      fromPlatform:
-          (json['fromPlatform'] == null ? false : json['fromPlatform']),
-      description: json['description']
-    );
+        id: json['id'],
+        userId: json['userId'],
+        walletId: json['walletId'],
+        icon: json['icon'],
+        otherUserId: json['otherUserId'],
+        postId: json['postId'],
+        otherUsername: json['otherUsername'],
+        learningTrackId: json['learningTrackId'],
+        origin: json['origin'],
+        action: json['action'],
+        balance: (json['balance'] is double
+            ? json['balance']
+            : double.parse(json['balance'])),
+        createdAt: json['createdAt'],
+        updatedAt: json['updatedAt'],
+        photoUrl: json['photoUrl'],
+        dateTransaction: json['dateTransaction'],
+        fromPlatform:
+            (json['fromPlatform'] == null ? false : json['fromPlatform']),
+        description: json['description']);
   }
 
   @override
@@ -73,6 +74,7 @@ class WalletTransfer extends Equatable {
         otherUserId,
         postId,
         otherUsername,
+        learningTrackId,
         origin,
         action,
         balance,

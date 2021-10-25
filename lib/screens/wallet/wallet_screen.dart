@@ -11,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
@@ -106,36 +107,44 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              Container(
-                                height: 30,
-                                width: MediaQuery.of(context).size.width * 0.3,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  border: Border.all(color: Color(0xff003694)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/ooz-coin-blue-small.svg',
-                                      color: Color(0xff003694),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        walletStore.wallet != null
-                                            ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
-                                            : '0,00',
-                                        style: TextStyle(
-                                          color: Color(0xff003694),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(PageRoute
+                                      .Page.aboutOOzCurrentScreen.route);
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                    border:
+                                        Border.all(color: Color(0xff003694)),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/ooz-coin-blue-small.svg',
+                                        color: Color(0xff003694),
+                                      ),
+                                      Container(
+                                        child: Text(
+                                          walletStore.wallet != null
+                                              ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
+                                              : '0,00',
+                                          style: TextStyle(
+                                            color: Color(0xff003694),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
@@ -221,7 +230,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.62,
+                      height: MediaQuery.of(context).size.height * 0.57,
                       child: TabBarView(
                         controller: _tabController,
                         children: [
@@ -231,6 +240,9 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 40,
+                    )
                   ],
                 ),
               ),

@@ -7,13 +7,13 @@ enum Page {
   commentScreen,
   profileScreen,
   myProfileScreen,
-  registerScreen,
+  registerFormScreen,
   loginScreen,
   cameraScreen,
-  registerPhase2Screen,
-  registerPhase2DailyLearningGoalScreen,
-  registerPhase2GeolocationScreen,
-  registerPhase2TopInterestsScreen,
+  registerPhoneNumberScreen,
+  registerDailyLearningGoalScreen,
+  registerGeolocationScreen,
+  registerTopInterestsScreen,
   playerVideoFullScreen,
   menuProfile,
   postPreviewScreen,
@@ -33,7 +33,9 @@ enum Page {
   viewLearningTracksScreen,
   aboutQuizScreen,
   videoLearningTracksScreen,
-  initialScreen
+  initialScreen,
+  aboutOOzCurrentScreen,
+  aboutEthicalMarketPlace
 }
 
 extension PageRoute on Page {

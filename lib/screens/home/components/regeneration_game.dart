@@ -3,9 +3,12 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +21,8 @@ class RegenerationGame extends StatefulWidget {
   _RegenerationGameState createState() => _RegenerationGameState();
 }
 
-class _RegenerationGameState extends State<RegenerationGame> {
+class _RegenerationGameState extends State<RegenerationGame>
+    with SecureStoreMixin {
   Map<String, IconData> gameProgress = {
     'personal': FeatherIcons.user,
     'city': FeatherIcons.mapPin,
@@ -30,6 +34,7 @@ class _RegenerationGameState extends State<RegenerationGame> {
 
   late HomeStore homeStore;
   late AuthStore authStore;
+  late EditProfileStore editProfileStore;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   double gameProgressIconSize = 40;
@@ -43,6 +48,8 @@ class _RegenerationGameState extends State<RegenerationGame> {
   @override
   void initState() {
     super.initState();
+    editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
+    editProfileStore.getUser();
     Future.delayed(Duration(milliseconds: 300), () {
       _resetDetailedIconPosition();
     });
@@ -100,42 +107,65 @@ class _RegenerationGameState extends State<RegenerationGame> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => {}, //Saiba mais
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                right:
-                                    GlobalConstants.of(context).spacingNormal,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .regenerationGame,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                        ),
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)!.learnMore,
-                                    style: Theme.of(context)
-                                        .accentTextTheme
-                                        .bodyText2!,
-                                  )
-                                ],
+                        Observer(builder: (context) {
+                          return Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                if (editProfileStore.currentUser != null) {
+                                  showModalBottomSheet(
+                                      barrierColor: Colors.black.withAlpha(1),
+                                      context: context,
+                                      backgroundColor:
+                                          Colors.black.withAlpha(1),
+                                      builder: (BuildContext context) {
+                                        return SnackBarWidget(
+                                          menu: AppLocalizations.of(context)!
+                                              .regenerationGame,
+                                          text: AppLocalizations.of(context)!
+                                              .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                              .replaceAll('%GOAL_CHOSEN%',
+                                                  '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
+                                          about: AppLocalizations.of(context)!
+                                              .learnMore,
+                                          marginBottom: true,
+                                        );
+                                      });
+                                }
+                              }, //Saiba mais
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  right:
+                                      GlobalConstants.of(context).spacingNormal,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .regenerationGame,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline2!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color,
+                                          ),
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)!.learnMore,
+                                      style: Theme.of(context)
+                                          .accentTextTheme
+                                          .bodyText2!,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -329,34 +359,41 @@ class _RegenerationGameState extends State<RegenerationGame> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 3),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/icons/ooz_mini_blue.svg',
-                                          height: 10,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 6),
-                                          child: Text(
-                                            homeStore.dailyGoalStats != null
-                                                ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
-                                                : "0,00",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .accentColor,
-                                                ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pushNamed(
+                                            PageRoute.Page.aboutOOzCurrentScreen
+                                                .route);
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/ooz_mini_blue.svg',
                                           ),
-                                        )
-                                      ],
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 6),
+                                            child: Text(
+                                              homeStore.dailyGoalStats != null
+                                                  ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
+                                                  : "0,00",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle2!
+                                                  .copyWith(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context)
+                                                        .accentColor,
+                                                  ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],

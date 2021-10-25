@@ -45,6 +45,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
     });
   }
 
+  updateWidget() {
+    setState(() {});
+  }
+
   bool _hasMoreItems = true;
   Future<void> _getData() async {
     hasError = false;
@@ -175,6 +179,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                           controller.insertPage(ViewLearningTracksScreen({
                             'list_chapters': learningTrack.chapters,
                             'learning_tracks': learningTrack,
+                            'updateLearningTrack': updateWidget,
                           }));
                         },
                         child: Column(
@@ -226,6 +231,14 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                   width: double.infinity,
                                   height: 200,
                                   decoration: BoxDecoration(
+                                    border: learningTrack.completed == true
+                                        ? Border.all(
+                                            color: Color(0xff018F9C),
+                                            width: 3,
+                                          )
+                                        : Border.all(
+                                            color: Color.fromARGB(1, 0, 0, 0),
+                                            width: 0),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12)),
                                     image: DecorationImage(
@@ -286,11 +299,17 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      learningTrack.time,
+                                      learningTrack.completed == true
+                                          ? AppLocalizations.of(context)!
+                                              .completed
+                                              .toUpperCase()
+                                          : learningTrack.time,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.grey,
+                                        color: learningTrack.completed == true
+                                            ? Color(0xff018F9C)
+                                            : Colors.grey,
                                       ),
                                     ),
                                     SizedBox(
@@ -307,7 +326,9 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                       'assets/icons/ooz_mini_blue.svg',
                                       height: 10,
                                       width: 19.33,
-                                      color: Color(0xffA3A3A3),
+                                      color: learningTrack.completed == true
+                                          ? Color(0xff018F9C)
+                                          : Color(0xffA3A3A3),
                                     ),
                                     SizedBox(
                                       width: 8,
@@ -317,7 +338,9 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.grey,
+                                        color: learningTrack.completed == true
+                                            ? Color(0xff018F9C)
+                                            : Colors.grey,
                                       ),
                                     ),
                                   ],

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'dart:async';
@@ -33,7 +34,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
 
   @override
   void initState() {
-    Timer(Duration(milliseconds: 5000),() {
+    Timer(Duration(milliseconds: 5000), () {
       setState(() {
         Navigator.of(context).pop();
       });
@@ -44,7 +45,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: [
       Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 26),
+        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: Color(0xff018F9C),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,70 +55,83 @@ class _SnackbarStates extends State<SnackBarWidget> {
               children: [
                 Text(
                   widget.menu,
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
-                      if(widget.onClose != null) widget.onClose!();
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ))
+                  constraints: BoxConstraints.loose(Size(22, 24)),
+                  onPressed: () {
+                    if (widget.onClose != null) widget.onClose!();
+                    Navigator.of(context).pop();
+                  },
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
               ],
             ),
-            widget.emailToConcatenate != null
-                ? RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                      children: <TextSpan>[
-                        new TextSpan(text: widget.text),
-                        new TextSpan(
+            SizedBox(height: 16),
+            Container(
+              child: widget.emailToConcatenate != null
+                  ? RichText(
+                      text: TextSpan(
+                        style: GoogleFonts.roboto(
+                            color: Colors.white, fontSize: 16),
+                        children: <TextSpan>[
+                          TextSpan(text: widget.text),
+                          TextSpan(
                             text: widget.emailToConcatenate,
-                            style: new TextStyle(fontWeight: FontWeight.bold)),
-                      ],
+                            style: GoogleFonts.roboto(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Text(
+                      widget.text,
+                      style:
+                          GoogleFonts.roboto(color: Colors.white, fontSize: 16),
                     ),
-                  )
-                : Text(
-                    widget.text,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+            ),
             if (widget.contact != null &&
                 widget.contact!["text"] != null &&
                 widget.contact!["textLink"] != null)
               RichText(
                   text: TextSpan(children: [
                 TextSpan(
-                    text: widget.contact!["text"] + " ",
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                  text: widget.contact!["text"] + " ",
+                  style: GoogleFonts.roboto(color: Colors.white, fontSize: 16),
+                ),
                 TextSpan(
                   text: widget.contact!["textLink"],
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold),
+                  style: GoogleFonts.roboto(
+                    color: Colors.white,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold,
+                  ),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () => setState(() {
                           _openEmail('mailto:contact@ootopia.org');
                         }),
                 ),
               ])),
+            SizedBox(height: 16),
             Visibility(
               visible: widget.about.isNotEmpty,
-              child: TextButton(
-                onPressed: () {},
+              child: GestureDetector(
+                onTap: () {},
                 child: Text(
                   widget.about.toUpperCase(),
-                  style: TextStyle(
+                  style: GoogleFonts.roboto(
                     color: Color(0xff03DAC5),
                     fontSize: 16,
                   ),

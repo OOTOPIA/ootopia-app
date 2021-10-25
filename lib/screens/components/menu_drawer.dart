@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ootopia_app/data/models/users/badges_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
@@ -130,15 +127,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                       builder: (BuildContext context) {
                                         return SnackBarWidget(
                                           menu: AppLocalizations.of(context)!
-                                              .badgeSower,
+                                              .badgeChangeMakerPro,
                                           text: AppLocalizations.of(context)!
-                                              .theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                              .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
                                           about: AppLocalizations.of(context)!
                                               .learnMore,
                                           contact: {
                                             "text":
                                                 AppLocalizations.of(context)!
-                                                    .areYouASowerToo,
+                                                    .areYouAChangeMakerProToo,
                                             "textLink":
                                                 AppLocalizations.of(context)!
                                                     .getInContact,

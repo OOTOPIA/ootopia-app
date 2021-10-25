@@ -4,7 +4,7 @@
         "description": "The current language"
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
-    "liveInOotopiaNowMessage": "LIVE IN OOTOPIA NOW!",
+    "liveOotopiaNowMessage": "LIVE OOTOPIA NOW!",
     "email": "e-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "password",
@@ -38,6 +38,7 @@
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
+    "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "The daily goal chosen was %GOAL_CHOSEN% minutes and is being used for the regeneration game.",
 
 
     "pleaseWait": "Please, wait...",
@@ -61,11 +62,12 @@
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Select the hashtags that correspond to the themes you want to explore and learn.",
     "selectAtLeastOneHashtag": "Select at least one hashtag",
     "selectHashtags": "Select hashtags",
-    "tagsSelected": "Tags Selected",
+    "tagsSelected": "selected",
+    "tagSelected": "selected",
 
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
-    "nameAndSurname": "name and surname",
-    "pleaseEnterYourNameAndSurname": "Please enter your name and surname",
+    "nameAndSurname": "name",
+    "pleaseEnterYourNameAndSurname": "Please enter your name",
     "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
     "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
@@ -240,7 +242,7 @@
     "oozPartialBalance": "OOz Partial Balance",
     
     "congratulations": "Congratulations!",
-    "youMetYourDailyGoalToHelpRegenerateThePlanet": "You met your daily goal to help regenerate the planet",
+    "youMetYourDailyGoalToHelpRegenerateThePlanet": "You met your daily goal to help\nregenerate the planet",
     "totalBalance": "Total Balance",
     "nextStepIsToHelpMeetYourCityGoal": "Next step is to help meet your city goal.",
     "nextStepIsToHelpMeetYourGlobalGoal": "Next step is to help meet your global goal.",
@@ -261,9 +263,9 @@
     "sent":"Sent",
     "received": "Received",
 
-    "badgeSower": "Badge: Sower",
-    "theSowerBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Sower Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
-    "areYouASowerToo": "Are you a sower too?",
+    "badgeChangeMakerPro": "Badge: Change Maker Pro",
+    "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Change Maker Pro Badge is awarded to individuals and organizations that are professionally leading projects to regenerate the planet and creating extensive positive impact.",
+    "areYouAChangeMakerProToo": "Are you a Change Maker Pro too?",
     "getInContact": "Get in contact!",
     "invitationCode": "Invitation code",
     "gratitudeReward": "Gratitude reward",
@@ -305,7 +307,7 @@
     "changeMakerProInvitationCode":"CHANGE MAKER PRO INVITATION CODE",
     "shareThisCode":"share this code",
     "welcomeInvitationCode":"WELCOME INVITATION CODE",
-    "sendSowerInvitationCode": "Send this code to invite people who are professionally leading projects to regenerate the planet and creating extensive impact.",
+    "sendChangeMakerProInvitationCode": "Send this code to invite people who are professionally leading projects to regenerate the planet and creating extensive impact.",
     "sendWelcomeInvitationCode": "Send this code to invite your friends and receive",
     "forEachNewcomer":"for each newcomer.\nYour friend will receive",
     "ooz15":" 15,00 OOz.",
@@ -340,7 +342,6 @@
     "enterYourNumber":"Your mobile number",
 
     "changeMakerPro": "Badge: Change Maker Pro",
-    "theChangeMakerPro": "TheChange Maker Pro Badge is awarded to individuals and organizations that are leading consistent work to help regenerate planet Earth.",
     "theRegenerationGame": "The regeneration game is a way to contribute to regenerative movement through the OOTOPIA app. The number of minutes represents the daily goal that the person has set for their participation in the game.",
 
     "personal": "Personal",
@@ -361,9 +362,9 @@
     "pictureByEttyFidele":"picture By Etty Fidele",
     "textForNextFeatureCategories":"In the next app update, you will have access to albums and will be able to organize your content into different publishing categories.\n\nIn addition to organizing your profile, you will also be able to view other Ootopians' albums.",
 
-    "medals": "Medals",
+    "laurelWreath": "Laurel Wreath",
     "iAccept": "I accept",
-    "medalsRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Medals represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
+    "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Laurel Wreath represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
     "optional":"Optional",
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
@@ -383,6 +384,9 @@
     "nextAboutQuiz":"In the next app update, you will have access to quizzes right after watching Learning Tracks.\nThis is an excellent way to consolidate what you've learned.",
     "quiz":"Quiz",
     "pictureByMikaBaumeister":"Picture by Mika Baumeister",
+    "completed": "completed",
+    "emailAlreadyRegistered": "Email already registered, please insert another one.",
+
     "@helloWorld": {
         "description": "A programmer greeting"
     },
@@ -393,12 +397,20 @@
     "messageVendorContact": "The vendor will soon contact you by email to arrange delivery of your purchase.",
     "messageOptional": "Message - Optional",
     "purchaseNow": "Purchase Now",
-    "marketPlaceTransfer": "Marketplace Transfer",
+    "marketPlaceTransfer": "Ethical Marketplace",
     "insufficientBalance": "It was not possible to complete the purchase because your balance is insufficient.",
     "generalError": "Unable to perform the operation.",
     "selecteds": "selected",
     "selected2": "selected",
     "searchForAtag": "Search for a hashtag",
-    "tooltipBlockedField": "You are trying to give yourself a gratitude reward. Unfortunately, this is not possible."
+    "tooltipBlockedField": "You are trying to give yourself a gratitude reward. Unfortunately, this is not possible.",
     
+    "aboutOOzCurrent":"OOz is a digital currency that represents the value generated by regenerative actions.\n\nIn the OOTOPIA app, your OOz are worth the equivalent of Reais and can be used in the Ethical Marketplace and to reward the most inspiring publications.",
+    "theOOzCurrent":"the ooz currency",
+    "pictureBy": "Picture by",
+    "pictureByClemOnojeghuo":"Picture by Clem Onojeghuo",
+    "nextAboutCreateOffer":"In the next app update, everyone will be able to create offers, products, services and experiences.Until then, how about telling us what you would like to sell or purchase?\n\nYour suggestions and questions are very welcome!",
+    "aboutYourOfferHere":"IT WILL BE GREAT TO SEE YOUR OFFER HERE",
+     "giveSuggestion":"Give suggestion"
+
 }
