@@ -3,13 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code_store.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class InsertInvitationCode extends StatefulWidget {
+  final Map<String, dynamic>? args;
+
+  InsertInvitationCode([this.args]);
+
   @override
   _InsertInvitationCodeState createState() => _InsertInvitationCodeState();
 }
@@ -22,6 +29,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
   var insertInvitationCodeStore = InsertInvitationCodeStore();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+
   SmartPageController pageController = SmartPageController.getInstance();
 
   void setStatusBar(bool getOutScreen) {
@@ -38,13 +47,25 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
 
   goToRegisterPhase() {
     Navigator.of(context).pushNamed(
-      PageRoute.Page.registerPhoneNumberScreen.route,
+      PageRoute.Page.registerFormScreen.route,
     );
   }
 
   @override
   void initState() {
     super.initState();
+    super.initState();
+    registerController.user = User();
+    registerController.authStore = AuthStore();
+    registerController.cleanTextEditingControllers();
+
+    if (widget.args?['returnToPageWithArgs'] != null &&
+        widget.args!['returnToPageWithArgs']['currentPageName'] != null) {
+      registerController.returnToPage =
+          widget.args!['returnToPageWithArgs']['currentPageName'];
+    }
+
+    this.trackingEvents.trackingSignupStartedSignup();
     Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });

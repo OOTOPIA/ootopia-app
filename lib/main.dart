@@ -262,7 +262,7 @@ class MainPage extends HookWidget {
         RegenerarionGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
-    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(),
+    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
     PageRoute.Page.termsOfUseScreen: (args) => PolicyAndTermsScreen(
           filename: args['filename'],
           onAccept: args['onAccept'],
