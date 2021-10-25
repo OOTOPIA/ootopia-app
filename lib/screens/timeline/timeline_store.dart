@@ -33,10 +33,13 @@ abstract class TimelineStoreBase with Store {
       duration: Duration(seconds: 1),
       curve: Curves.fastOutSlowIn,
     );
-    allPosts.clear();
-    currentPage = 1;
-    Future.delayed(Duration(milliseconds: 500)).then((value) =>
-        timelinePostBloc.add(GetTimelinePostsEvent(10, 0)));
+
+    Future.delayed(Duration(milliseconds: 500)).then((value) {
+      allPosts.clear();
+      currentPage = 1;
+      timelinePostBloc.add(GetTimelinePostsEvent(10,
+       0));
+    });
   }
 
   @observable
