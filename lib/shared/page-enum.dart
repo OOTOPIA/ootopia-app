@@ -33,6 +33,7 @@ enum Page {
   viewLearningTracksScreen,
   aboutQuizScreen,
   videoLearningTracksScreen,
+  initialScreen,
   aboutOOzCurrentScreen,
   aboutEthicalMarketPlace
 }

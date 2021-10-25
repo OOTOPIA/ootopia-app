@@ -11,16 +11,21 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
+import 'package:ootopia_app/screens/timeline/components/toast_widget.dart';
+import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'image_post_timeline_component.dart';
 
@@ -100,6 +105,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _oozError = false;
   String _oozErrorMessage = "";
   bool _oozSlidingOut = false;
+  late AuthStore authStore;
 
   GlobalKey _slideButtonKey = GlobalKey();
   GlobalKey _oozInfoKey = GlobalKey();
@@ -109,6 +115,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -193,6 +200,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if (state is SuccessDeletePostState) {
@@ -308,37 +316,84 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 )
               ],
             ),
-            Container(
-              width: double.infinity,
-              height: 34,
-              padding: EdgeInsets.only(left: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                color: Color(0xff1A4188),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: this.post.tags.length,
-                      itemBuilder: (ctx, index) {
-                        return Opacity(
-                          opacity: 0.8,
-                          child: HashtagName(
-                            hashtagName: this.post.tags[index],
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    color: Color(0xff1A4188),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ScrollConfiguration(
+                            behavior: const ScrollBehavior()
+                                .copyWith(overscroll: false),
+                            child: MyScrollbar(
+                              thumbColor: Color(0xff03145C),
+                              trackColor: Color(0xff4D7BC9),
+                              thickness: 4,
+                              builder: (context, scrollController) =>
+                                  ListView.builder(
+                                controller: scrollController,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(left: 15),
+                                physics: ClampingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: this.post.tags.length,
+                                itemBuilder: (ctx, index) {
+                                  return Opacity(
+                                    opacity: 0.8,
+                                    child: HashtagName(
+                                      hashtagName: this.post.tags[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  left: 0.2,
+                  top: 4,
+                  child: Container(
+                    height: 20,
+                    width: 20.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                      ),
+                      color: Color(0xff1A4188),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0.2,
+                  top: 4,
+                  child: Container(
+                    height: 20,
+                    width: 20.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                      ),
+                      color: Color(0xff1A4188),
+                    ),
+                  ),
+                )
+              ],
             ),
             Stack(
               children: [
@@ -411,19 +466,27 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 key: _slideButtonKey,
                 children: [
                   Positioned(
-                    left: 64,
+                    left: 60,
                     child: Opacity(
-                      opacity: 1.2 -
-                          ((((_draggablePositionX * 100) / 300) / 100)) -
-                          0.2,
+                      opacity: (1.2 -
+                                  ((((_draggablePositionX * 100) / 300) /
+                                      100)) -
+                                  0.2) >
+                              0
+                          ? 1.2 -
+                              ((((_draggablePositionX * 100) / 300) / 100)) -
+                              0.2
+                          : 0,
                       child: Container(
-                        margin: EdgeInsets.all(2),
-                        padding: EdgeInsets.only(top: 8, left: 6),
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(
+                          top: 11,
+                        ),
                         child: Text(
                           AppLocalizations.of(context)!
                               .slideToGiveAGratitudeReward,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11,
                             color: Color(
                               0xffBEBDBD,
                             ),
@@ -465,8 +528,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       .Page.aboutOOzCurrentScreen.route);
                                 },
                                 child: Container(
-                                    width: 90,
-                                    padding: EdgeInsets.all(6),
+                                    width: 80,
+                                    padding: EdgeInsets.all(2),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       color: Colors.white,
@@ -478,11 +541,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.symmetric(
-                                              horizontal: 6),
+                                              horizontal: 3),
                                           child: this.post.oozToTransfer == 0
                                               ? Image(
                                                   image: AssetImage(
@@ -510,6 +573,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       color: Color(0xFF003694),
+                                                      fontSize: 12,
+
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -524,6 +589,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       color: Colors.black,
+                                                      fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -642,6 +708,42 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       feedback: Container(),
                     ),
                   ),
+                  Visibility(
+                    visible:
+                        this.post.userId == (authStore.currentUser?.id ?? ""),
+                    child: GestureDetector(
+                      
+                      onHorizontalDragEnd: (_) {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: true,
+                          builder: (context) => ToastWidget(
+                              text: AppLocalizations.of(context)!
+                                  .tooltipBlockedField,
+                              suffixIcon: Icons.info_outline),
+                        );
+                      },
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: true,
+                          builder: (context) => ToastWidget(
+                              text: AppLocalizations.of(context)!
+                                  .tooltipBlockedField,
+                              suffixIcon: Icons.info_outline),
+                        );
+                      },
+                      child: Container(
+                          height: 36,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white.withOpacity(0.5),
+                          )),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -790,7 +892,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       child: TextButton(
         style: TextButton.styleFrom(
           primary: Colors.black87,
-          padding: EdgeInsets.symmetric(horizontal: 6),
+          padding: EdgeInsets.symmetric(horizontal: 3),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
@@ -820,6 +922,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   AppLocalizations.of(context)!.send,
                   style: TextStyle(
                     color: Colors.black,
+                    fontSize: 12
                   ),
                 )
               : SizedBox(
@@ -1199,7 +1302,7 @@ class CustomContainerShapeBorder extends CustomPainter {
         Rect.fromLTRB(
           0,
           0,
-          46,
+          36,
           36,
         ),
         bottomLeft: Radius.circular(100),
@@ -1210,7 +1313,7 @@ class CustomContainerShapeBorder extends CustomPainter {
       paint,
     );
 
-    canvas.translate(45, 0);
+    canvas.translate(35, 0);
 
     var path = Path();
     path.lineTo(0, 18);

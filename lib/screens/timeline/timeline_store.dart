@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import "package:mobx/mobx.dart";
+import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -14,6 +16,28 @@ class TimelineStore = TimelineStoreBase with _$TimelineStore;
 
 abstract class TimelineStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
+
+  @observable
+  ScrollController scrollController = ScrollController();
+
+  @observable
+  List<TimelinePost> allPosts = [];
+
+  @observable
+  int currentPage = 1;
+
+  @action
+  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+    allPosts.clear();
+    currentPage = 1;
+    Future.delayed(Duration(milliseconds: 500)).then((value) =>
+        timelinePostBloc.add(GetTimelinePostsEvent(10, 0)));
+  }
 
   @observable
   ObservableFuture<DailyGoalStatsModel?>? dailyGoalStats;

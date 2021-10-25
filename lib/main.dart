@@ -11,7 +11,6 @@ import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
 import 'package:ootopia_app/bloc/wallet_transfer/wallet_transfer_bloc.dart';
-import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -32,6 +31,7 @@ import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart'
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/create_categories/create_categories_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
+import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
@@ -73,7 +73,6 @@ import 'l10n/l10n.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
-
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',
@@ -274,6 +273,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.editProfileScreen: (args) => EditProfileScreen(),
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
     PageRoute.Page.aboutQuizScreen: (args) => AboutQuizScreen(),
+    PageRoute.Page.initialScreen: (args) => InitialScreen(),
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
   };
@@ -285,7 +285,7 @@ class MainPage extends HookWidget {
       onWillPop: () async => !(await navigatorKey.currentState!.maybePop()),
       child: Navigator(
         key: navigatorKey,
-        initialRoute: PageRoute.Page.splashScreen.route,
+        initialRoute: PageRoute.Page.initialScreen.route,
         onGenerateRoute: (settings) {
           final pageName = settings.name;
 
