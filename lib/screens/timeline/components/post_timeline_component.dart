@@ -452,6 +452,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               ],
             ),
             Container(
+              height: 32,
               width: double.infinity,
               margin: EdgeInsets.symmetric(
                   vertical: GlobalConstants.of(context).spacingSmall),
@@ -466,7 +467,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 key: _slideButtonKey,
                 children: [
                   Positioned(
-                    left: 60,
+                    left: 54,
                     child: Opacity(
                       opacity: (1.2 -
                                   ((((_draggablePositionX * 100) / 300) /
@@ -480,13 +481,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       child: Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(
-                          top: 11,
+                          top: 10,
                         ),
                         child: Text(
                           AppLocalizations.of(context)!
                               .slideToGiveAGratitudeReward,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 10,
                             color: Color(
                               0xffBEBDBD,
                             ),
@@ -520,7 +521,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           Visibility(
                             visible: showOozToTransfer(),
                             child: Positioned(
-                              height: 32,
+                              height: 26,
                               right: 0,
                               child: GestureDetector(
                                 onTap: () {
@@ -574,7 +575,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                   style: TextStyle(
                                                       color: Color(0xFF003694),
                                                       fontSize: 12,
-
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -624,7 +624,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             ? _draggablePositionX + 36
                             : 80)
                         : 64,
-                    height: 36,
+                    height: 30,
                     child: Stack(
                       children: [
                         Container(
@@ -645,9 +645,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             visible: _isDragging,
                             child: Image(
                               image: AssetImage(
-                                  !this.postTimelineController.post.liked
-                                      ? 'assets/icons_profile/woow.png'
-                                      : 'assets/icons_profile/woow_active.png'),
+                                !this.postTimelineController.post.liked
+                                    ? 'assets/icons_profile/woow.png'
+                                    : 'assets/icons_profile/woow_active.png',
+                              ),
                             ),
                           ),
                         ),
@@ -684,13 +685,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       },
                       axis: Axis.horizontal,
                       child: Container(
-                        padding: const EdgeInsets.all(3),
-                        height: 36.0, // you can adjust the width as you need
+                        padding: const EdgeInsets.all(1),
+                        height: 30.0, // you can adjust the width as you need
                         child: Opacity(
                           opacity: 1.0,
                           child: SizedBox(
-                            width: 36,
-                            height: 36,
+                            width: 30,
+                            height: 30,
                             child: RotatedBox(
                                 quarterTurns: 1,
                                 child: IconButton(
@@ -712,7 +713,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     visible:
                         this.post.userId == (authStore.currentUser?.id ?? ""),
                     child: GestureDetector(
-                      
                       onHorizontalDragEnd: (_) {
                         showDialog(
                           context: context,
@@ -887,8 +887,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       );
     }
     return SizedBox(
-      width: 60,
-      height: 30,
+      height: 25,
       child: TextButton(
         style: TextButton.styleFrom(
           primary: Colors.black87,
@@ -920,10 +919,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           child: !_sendOOZIsLoading
               ? Text(
                   AppLocalizations.of(context)!.send,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12
-                  ),
+                  style: TextStyle(color: Colors.black, fontSize: 12),
                 )
               : SizedBox(
                   width: 16,
@@ -1302,8 +1298,8 @@ class CustomContainerShapeBorder extends CustomPainter {
         Rect.fromLTRB(
           0,
           0,
-          36,
-          36,
+          32,
+          30,
         ),
         bottomLeft: Radius.circular(100),
         topLeft: Radius.circular(100),
@@ -1313,17 +1309,17 @@ class CustomContainerShapeBorder extends CustomPainter {
       paint,
     );
 
-    canvas.translate(35, 0);
+    canvas.translate(31, 0);
 
     var path = Path();
-    path.lineTo(0, 18);
-    path.lineTo(18, 18);
+    path.lineTo(0, 15);
+    path.lineTo(15, 15);
     path.close();
     canvas.drawPath(path, paint);
 
     var path2 = Path();
-    path2.lineTo(18, 18);
-    path2.lineTo(0, 36);
+    path2.lineTo(15, 15);
+    path2.lineTo(0, 30);
     path2.close();
     canvas.drawPath(path2, paint);
     //var path = createPath(3, 36);
