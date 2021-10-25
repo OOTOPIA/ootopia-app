@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code_store.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class InsertInvitationCode extends StatefulWidget {
-  final Map<String, dynamic> args;
-  InsertInvitationCode(this.args);
-
   @override
   _InsertInvitationCodeState createState() => _InsertInvitationCodeState();
 }
@@ -20,76 +18,46 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   bool visibleValidStatusCode = false;
   bool exibleText = false;
   bool isLoading = false;
-  TextEditingController _codeController = TextEditingController();
   FocusNode focus = FocusNode();
+  RegisterSecondPhaseController registerController =
+      RegisterSecondPhaseController.getInstance();
+  var insertInvitationCodeStore = InsertInvitationCodeStore();
+  SmartPageController pageController = SmartPageController.getInstance();
+
+  void setStatusBar(bool getOutScreen) {
+    if (getOutScreen) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle());
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ));
+    }
+  }
+
+  goToRegisterPhase() {
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.registerPhoneNumberScreen.route,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 350), () {
+      this.setStatusBar(false);
+    });
+  }
+
+  @override
+  void dispose() {
+    this.setStatusBar(true);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var insertInvitationCodeStore = InsertInvitationCodeStore();
-    var auth = Provider.of<AuthStore>(context);
-
-    void submit(bool selectAccess) async {
-      setState(() {
-        isLoading = true;
-      });
-      try {
-        if (selectAccess) {
-          var user = await auth.registerUser(
-            name: widget.args['FULLNAME'],
-            email: widget.args['EMAIL'],
-            password: widget.args['PASSWORD'],
-            invitationCode: _codeController.text,
-            context: context,
-          );
-          if (user) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              PageRoute.Page.celebration.route,
-              ModalRoute.withName('/'),
-              arguments: {
-                "returnToPageWithArgs": widget.args['returnToPageWithArgs'],
-                "name": widget.args['FULLNAME'],
-                "goal": "invitationCode",
-                "balance": "15,00",
-              },
-            );
-          }
-        } else {
-          var user = await auth.registerUser(
-            name: widget.args['FULLNAME'],
-            email: widget.args['EMAIL'],
-            password: widget.args['PASSWORD'],
-            context: context,
-          );
-          if (user) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              PageRoute.Page.homeScreen.route,
-              ModalRoute.withName('/'),
-            );
-          }
-        }
-      } catch (e) {
-        setState(() {
-          isLoading = false;
-        });
-        String errorMessage = e.toString();
-        switch (errorMessage) {
-          case "EMAIL_ALREADY_EXISTS":
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      'There is already a registered user with that email address')),
-            );
-            break;
-          case "Invitation Code invalid":
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Invitation Code invalid')),
-            );
-            break;
-          default:
-        }
-      }
-    }
-
     return Scaffold(
       body: LoadingOverlay(
         isLoading: isLoading,
@@ -162,7 +130,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                         TextFormField(
                           autocorrect: false,
                           autofocus: false,
-                          controller: _codeController,
+                          controller: registerController.codeController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide:
@@ -265,7 +233,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                           MaterialStateProperty.all<EdgeInsets>(
                                               EdgeInsets.all(15)),
                                     ),
-                                    onPressed: () => submit(false),
+                                    onPressed: () => goToRegisterPhase(),
                                     child: Text(
                                       AppLocalizations.of(context)!.skip,
                                       style: TextStyle(
@@ -298,7 +266,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                     ),
                                     onPressed: !visibleValidStatusCode
                                         ? null
-                                        : () => submit(true),
+                                        : () => goToRegisterPhase(),
                                     child: Text(
                                       AppLocalizations.of(context)!.access,
                                       style: TextStyle(

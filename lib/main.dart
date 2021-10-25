@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
 import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
@@ -22,11 +21,11 @@ import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_m
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_daily_learning_goal_screen.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_geolocation.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_screen.dart';
-import 'package:ootopia_app/screens/auth/register_phase_2_top_interests.dart';
-import 'package:ootopia_app/screens/auth/register_screen.dart';
+import 'package:ootopia_app/screens/auth/register_daily_learning_goal_screen.dart';
+import 'package:ootopia_app/screens/auth/register_geolocation.dart';
+import 'package:ootopia_app/screens/auth/register_phone_number.dart';
+import 'package:ootopia_app/screens/auth/register_top_interests.dart';
+import 'package:ootopia_app/screens/auth/register_form.dart';
 import 'package:ootopia_app/screens/auth/policy_and_terms_screen.dart';
 import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
@@ -157,11 +156,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
         ),
         BlocProvider(
-          create: (BuildContext context) => AuthBloc(
-            AuthRepositoryImpl(),
-          ),
-        ),
-        BlocProvider(
           create: (BuildContext context) => CommentBloc(
             CommentRepositoryImpl(),
           ),
@@ -245,16 +239,17 @@ class MainPage extends HookWidget {
     PageRoute.Page.commentScreen: (args) => CommentScreen(args),
     PageRoute.Page.profileScreen: (args) => ProfileScreen(args),
     PageRoute.Page.myProfileScreen: (args) => ProfileScreen(args),
-    PageRoute.Page.registerScreen: (args) => RegisterPage(args),
     PageRoute.Page.loginScreen: (args) => LoginPage(args),
     PageRoute.Page.cameraScreen: (args) => CameraScreen(),
-    PageRoute.Page.registerPhase2Screen: (args) => RegisterPhase2Page(args),
-    PageRoute.Page.registerPhase2DailyLearningGoalScreen: (args) =>
-        RegisterPhase2DailyLearningGoalPage(args),
-    PageRoute.Page.registerPhase2GeolocationScreen: (args) =>
-        RegisterPhase2GeolocationPage(args),
-    PageRoute.Page.registerPhase2TopInterestsScreen: (args) =>
-        RegisterPhase2TopInterestsPage(args),
+    PageRoute.Page.registerFormScreen: (args) => RegisterFormScreen(args),
+    PageRoute.Page.registerPhoneNumberScreen: (args) =>
+        RegisterPhoneNumberScreen(args),
+    PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
+        RegisterDailyLearningGoalScreen(args),
+    PageRoute.Page.registerGeolocationScreen: (args) =>
+        RegisterGeolocationScreen(args),
+    PageRoute.Page.registerTopInterestsScreen: (args) =>
+        RegisterTopInterestsScreen(args),
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
@@ -267,7 +262,7 @@ class MainPage extends HookWidget {
         RegenerarionGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
-    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
+    PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(),
     PageRoute.Page.termsOfUseScreen: (args) => PolicyAndTermsScreen(
           filename: args['filename'],
           onAccept: args['onAccept'],

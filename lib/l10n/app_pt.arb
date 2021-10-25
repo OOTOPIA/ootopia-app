@@ -388,6 +388,9 @@
      "quiz":"Quiz",
      "pictureByMikaBaumeister":"Foto de Mika Baumeister",
      "completed": "Completo",
+     "emailAlreadyRegistered": "Email já cadastrado, por favor insira outro.",
+
+
      "marketPlaceTransfer": "Marketplace Ético",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
      "generalError": "Não foi possível realizar a operação.",

@@ -24,7 +24,13 @@ class CelebrationStates extends State<Celebration> {
     if (widget.args['goal'] == 'invitationCode') {
       Navigator.of(context).pushNamedAndRemoveUntil(
         PageRoute.Page.homeScreen.route,
-        ModalRoute.withName('/'),
+        (Route<dynamic> route) => false,
+        arguments: {
+          "returnToPageWithArgs": {
+            'currentPageName': widget.args['returnToPageWithArgs']
+                ['currentPageName']
+          }
+        },
       );
     } else {
       Navigator.pop(context);
@@ -33,6 +39,8 @@ class CelebrationStates extends State<Celebration> {
 
   @override
   void initState() {
+    super.initState();
+
     _controller = VideoPlayerController.asset(
         'assets/videos/ootopia_celebration_cutter.mp4')
       ..initialize().then(
@@ -61,8 +69,6 @@ class CelebrationStates extends State<Celebration> {
     _controller.setLooping(false);
 
     setState(() {});
-
-    super.initState();
   }
 
   @override

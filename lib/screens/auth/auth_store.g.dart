@@ -62,6 +62,29 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$emailExistAtom = Atom(name: 'AuthStoreBase.emailExist');
+
+  @override
+  bool get emailExist {
+    _$emailExistAtom.reportRead();
+    return super.emailExist;
+  }
+
+  @override
+  set emailExist(bool value) {
+    _$emailExistAtom.reportWrite(value, super.emailExist, () {
+      super.emailExist = value;
+    });
+  }
+
+  final _$checkEmailExistAsyncAction =
+      AsyncAction('AuthStoreBase.checkEmailExist');
+
+  @override
+  Future<void> checkEmailExist(String email) {
+    return _$checkEmailExistAsyncAction.run(() => super.checkEmailExist(email));
+  }
+
   final _$checkUserIsLoggedAsyncAction =
       AsyncAction('AuthStoreBase.checkUserIsLogged');
 
@@ -77,6 +100,13 @@ mixin _$AuthStore on AuthStoreBase, Store {
   Future updateUserRegenerarionGameLearningAlert(String type) {
     return _$updateUserRegenerarionGameLearningAlertAsyncAction
         .run(() => super.updateUserRegenerarionGameLearningAlert(type));
+  }
+
+  final _$loginAsyncAction = AsyncAction('AuthStoreBase.login');
+
+  @override
+  Future<dynamic> login(String email, String password) {
+    return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
   final _$logoutAsyncAction = AsyncAction('AuthStoreBase.logout');
@@ -103,6 +133,23 @@ mixin _$AuthStore on AuthStoreBase, Store {
         context: context));
   }
 
+  final _$resetPasswordAsyncAction = AsyncAction('AuthStoreBase.resetPassword');
+
+  @override
+  Future<dynamic> resetPassword(String newPassword) {
+    return _$resetPasswordAsyncAction
+        .run(() => super.resetPassword(newPassword));
+  }
+
+  final _$recoverPasswordAsyncAction =
+      AsyncAction('AuthStoreBase.recoverPassword');
+
+  @override
+  Future<dynamic> recoverPassword(String email, String lang) {
+    return _$recoverPasswordAsyncAction
+        .run(() => super.recoverPassword(email, lang));
+  }
+
   final _$AuthStoreBaseActionController =
       ActionController(name: 'AuthStoreBase');
 
@@ -122,6 +169,7 @@ mixin _$AuthStore on AuthStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 errorOnGetTags: ${errorOnGetTags},
+emailExist: ${emailExist},
 currentUser: ${currentUser}
     ''';
   }
