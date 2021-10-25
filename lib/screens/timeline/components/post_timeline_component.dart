@@ -1042,8 +1042,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   void onSlideButton() {
     double perc = (_draggablePositionX * 100) / getMaxSlideWidth();
-    if (_draggablePositionX > 1) {
-      this.post.oozToTransfer = ((oozGoal * perc) / 100).roundToDouble();
+    if (_draggablePositionX > 30) {
+      this.post.oozToTransfer = ((oozGoal * (perc - 30)) / 70).roundToDouble();
     } else {
       this.post.oozToTransfer = 0.0;
     }
