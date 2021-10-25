@@ -174,11 +174,17 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                             ),
                             onPressed: _termsCheckbox
                                 ? () async {
-                                    await registerController.authStore
-                                        .checkEmailExist(registerController
-                                            .emailController.text);
+                                    if (registerController
+                                            .emailController.text !=
+                                        '') {
+                                      await registerController.authStore
+                                          .checkEmailExist(registerController
+                                              .emailController.text);
+                                    }
                                     if (registerController.formKey.currentState!
-                                        .validate()) {
+                                            .validate() &&
+                                        registerController
+                                            .authStore.emailExist) {
                                       Navigator.of(context).pushNamed(
                                         PageRoute.Page.registerPhoneNumberScreen
                                             .route,
