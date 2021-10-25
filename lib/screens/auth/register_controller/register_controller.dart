@@ -124,6 +124,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     bioController.clear();
     cellPhoneController.clear();
     geolocationController.clear();
+    photoFilePath = null;
+    image = null;
+    user = User();
   }
 
   void birthdateIsValid(BuildContext context, VoidCallback update) {
