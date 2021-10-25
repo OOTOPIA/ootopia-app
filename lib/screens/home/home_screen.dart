@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
-import 'package:ootopia_app/shared/local_storage.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
@@ -51,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   double oozToRewardAfterSendPost = 0;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   late SmartPageController controller;
-  final StorageUtil storage = StorageUtil.storageInstance;
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance!.addObserver(this);
+    homeStore?.prefs?.setBool("showSplash", false);
 
     controller = SmartPageController.newInstance(
       context: context,
@@ -89,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.inactive:
         //homeStore?.stopDailyGoalTimer();
         //print("app in inactive");
+
         break;
       case AppLifecycleState.paused:
         //homeStore?.stopDailyGoalTimer();
@@ -97,9 +97,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         //homeStore?.stopDailyGoalTimer();
         //print("app in detached");
-
-        storage.setIsShowSplashScreen(value: true, key: "showSplash");
-
+        homeStore?.prefs?.setBool("showSplash", true);
         break;
     }
   }

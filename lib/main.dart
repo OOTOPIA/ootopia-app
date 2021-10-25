@@ -18,7 +18,6 @@ import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_repository.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
-import 'package:ootopia_app/shared/local_storage.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
@@ -73,7 +72,6 @@ import 'l10n/l10n.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
-
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',

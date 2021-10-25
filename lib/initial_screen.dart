@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/splash/splash_screen.dart';
-import 'package:ootopia_app/shared/local_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InitialScreen extends StatelessWidget {
-  final StorageUtil storage = StorageUtil.storageInstance;
+  SharedPreferences? sharedPreferences;
+  HomeStore? homeStore;
+
   @override
   Widget build(BuildContext context) {
-    if (storage.getIsShowSplashScreen("showSplash") ?? true) {
-      storage.setIsShowSplashScreen(key: "showSplash", value: false);
-      return SplashScreen(null);
-    }
+    homeStore = Provider.of<HomeStore>(context);
+    bool isShow = homeStore?.prefs?.getBool("showSplash") ?? true;
+    if (isShow) return SplashScreen(null);
     return HomeScreen();
   }
 }
