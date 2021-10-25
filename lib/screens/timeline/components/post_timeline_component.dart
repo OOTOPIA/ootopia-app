@@ -701,18 +701,30 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ),
                   ),
                   Visibility(
-                    visible: this.post.userId == (authStore.currentUser?.id ?? ""),
+                    visible:
+                        this.post.userId == (authStore.currentUser?.id ?? ""),
                     child: GestureDetector(
+                      
+                      onHorizontalDragEnd: (_) {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: true,
+                          builder: (context) => ToastWidget(
+                              text: AppLocalizations.of(context)!
+                                  .tooltipBlockedField,
+                              suffixIcon: Icons.info_outline),
+                        );
+                      },
                       onTap: () {
                         showDialog(
                           context: context,
                           barrierColor: Colors.transparent,
                           barrierDismissible: true,
-                          
                           builder: (context) => ToastWidget(
-                            text: AppLocalizations.of(context)!.tooltipBlockedField,
-                            suffixIcon: Icons.info_outline
-                          ),
+                              text: AppLocalizations.of(context)!
+                                  .tooltipBlockedField,
+                              suffixIcon: Icons.info_outline),
                         );
                       },
                       child: Container(
