@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/components/logo.dart';
@@ -55,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   goToRegister() {
     if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
       Navigator.of(context).pushNamed(
-        PageRoute.Page.registerFormScreen.route,
+        PageRoute.Page.insertInvitationCode.route,
         arguments: {
           'returnToPageWithArgs': {
             'currentPageName': widget.args!['returnToPageWithArgs']
@@ -65,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     } else {
       Navigator.of(context).pushNamed(
-        PageRoute.Page.registerFormScreen.route,
+        PageRoute.Page.insertInvitationCode.route,
       );
     }
   }

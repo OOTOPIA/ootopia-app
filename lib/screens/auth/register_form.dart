@@ -6,16 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
-import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegisterFormScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -33,9 +29,6 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
   bool showCheckBoxError = false;
   bool _showPassword = false;
   bool _showRepeatPassword = false;
-  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-
-  SmartPageController pageController = SmartPageController.getInstance();
 
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
@@ -44,12 +37,6 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
   bool mailIsValid = true;
   bool passIsValid = true;
   bool pass2IsValid = true;
-
-  void _toggleTerms() {
-    setState(() {
-      termsOpened = !termsOpened;
-    });
-  }
 
   void updateTermsCheck() {
     setState(() {
@@ -88,18 +75,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
   @override
   void initState() {
     super.initState();
-    registerController.user = User();
-    registerController.authStore = AuthStore();
-    registerController.cleanTextEditingControllers();
     _termsCheckbox = false;
-
-    if (widget.args?['returnToPageWithArgs'] != null &&
-        widget.args!['returnToPageWithArgs']['currentPageName'] != null) {
-      registerController.returnToPage =
-          widget.args!['returnToPageWithArgs']['currentPageName'];
-    }
-
-    this.trackingEvents.trackingSignupStartedSignup();
   }
 
   get appBar => AppBar(
@@ -204,8 +180,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                     if (registerController.formKey.currentState!
                                         .validate()) {
                                       Navigator.of(context).pushNamed(
-                                        PageRoute
-                                            .Page.insertInvitationCode.route,
+                                        PageRoute.Page.registerPhoneNumberScreen
+                                            .route,
                                       );
                                     }
                                   }
