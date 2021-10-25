@@ -87,7 +87,7 @@ abstract class _PostPreviewScreenStoreBase with Store {
 
     filteredtagsList = allTags
         .where(
-            (hashtagWidget) => hashtagWidget.item.label.contains(filterValue))
+            (hashtagWidget) => hashtagWidget.item.label.toLowerCase().contains(filterValue.toLowerCase()))
         .toList();
     filteredtagsList.map((item) => item).toList();
 
