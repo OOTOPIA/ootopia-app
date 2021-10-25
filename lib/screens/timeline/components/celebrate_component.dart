@@ -79,6 +79,7 @@ class CelebrationStates extends State<Celebration> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         child: Stack(
@@ -123,7 +124,7 @@ class CelebrationStates extends State<Celebration> {
                                           .toUpperCase(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 32,
+                                      fontSize: screenWidth <= 375 ? 28 : 32,
                                       color: Color(0xFF003694)),
                                 ),
                           if (widget.args["goal"] != "global")
@@ -186,7 +187,7 @@ class CelebrationStates extends State<Celebration> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "${widget.args["goal"] == "invitationCode" ? AppLocalizations.of(context)!.welcomeCredit : "OOz" + AppLocalizations.of(context)!.totalBalance}",
+                                      "${widget.args["goal"] == "invitationCode" ? AppLocalizations.of(context)!.welcomeCredit : "OOz " + AppLocalizations.of(context)!.totalBalance}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: widget.args["goal"] ==

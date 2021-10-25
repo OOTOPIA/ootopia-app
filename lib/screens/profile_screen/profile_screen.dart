@@ -185,9 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       SizedBox(
-                        height:
-                            GlobalConstants.of(context).screenHorizontalSpace,
-                      ),
+                          height: GlobalConstants.of(context).spacingSmall),
                       Text(
                         store == null ? "" : store!.profile!.fullname,
                         style: GoogleFonts.roboto(
@@ -198,7 +196,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .subtitle1!
                                 .fontWeight),
                       ),
-                      SizedBox(height: 13),
+                      SizedBox(
+                          height:
+                              GlobalConstants.of(context).intermediateSpacing),
                       Text(
                         AppLocalizations.of(context)!
                             .regenerationGame
@@ -209,117 +209,118 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Theme.of(context).textTheme.subtitle1!.fontSize,
                             fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(
-                        height: GlobalConstants.of(context).spacingSmall,
-                      ),
+                      SizedBox(height: 4),
                       Container(
                         height: 46,
-                        width: MediaQuery.of(context).size.width * 0.65,
                         decoration: BoxDecoration(
                             border: Border.fromBorderSide(BorderSide(
                                 width: 1,
                                 color: Color(0xff101010).withOpacity(.1))),
                             borderRadius: BorderRadius.circular(45)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  barrierColor: Colors.black.withAlpha(1),
-                                  backgroundColor: Colors.black.withAlpha(1),
-                                  builder: (BuildContext context) {
-                                    return SnackBarWidget(
-                                      menu: AppLocalizations.of(context)!
-                                          .regenerationGame,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    barrierColor: Colors.black.withAlpha(1),
+                                    backgroundColor: Colors.black.withAlpha(1),
+                                    builder: (BuildContext context) {
+                                      return SnackBarWidget(
+                                        menu: AppLocalizations.of(context)!
+                                            .regenerationGame,
+                                        text: AppLocalizations.of(context)!
+                                            .theRegenerationGame,
+                                        about: AppLocalizations.of(context)!
+                                            .learnMore,
+                                        marginBottom: true,
+                                      );
+                                    },
+                                  );
+                                },
+                                child: RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
                                       text: AppLocalizations.of(context)!
-                                          .theRegenerationGame,
-                                      about: AppLocalizations.of(context)!
-                                          .learnMore,
-                                      marginBottom: true,
-                                    );
-                                  },
-                                );
-                              },
-                              child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: AppLocalizations.of(context)!
-                                            .personalGoal +
-                                        ": ",
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.black87),
-                                  ),
-                                  TextSpan(
-                                    //text:
-                                    //"${authStore.currentUser!.dailyLearningGoalInMinutes}m",
-                                    text: "10m",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ]),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text("|",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (isVisible) {
-                                    isVisible = false;
-                                  } else {
-                                    isVisible = true;
-                                  }
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icons_profile/laurel_wreath.svg",
-                                    width: 24,
-                                    height: 21,
-                                    color: Color(0xff018f9c),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                      "${store?.profile!.totalTrophyQuantity!}",
+                                              .personalGoal +
+                                          ": ",
                                       style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff018f9c),
-                                      )),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  RotationTransition(
-                                    turns: !isVisible
-                                        ? AlwaysStoppedAnimation(270 / 360)
-                                        : AlwaysStoppedAnimation(90 / 360),
-                                    child: Icon(
-                                      Icons.arrow_back_ios_rounded,
-                                      color: Color(0xff03145C),
-                                      size: 12,
+                                          fontSize: 16, color: Colors.black87),
                                     ),
-                                  ),
-                                ],
+                                    TextSpan(
+                                      //text:
+                                      //"${authStore.currentUser!.dailyLearningGoalInMinutes}m",
+                                      text: "10m",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ]),
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text("|",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (isVisible) {
+                                      isVisible = false;
+                                    } else {
+                                      isVisible = true;
+                                    }
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/icons_profile/laurel_wreath.svg",
+                                      width: 24,
+                                      height: 21,
+                                      color: Color(0xff018f9c),
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                        "${store?.profile!.totalTrophyQuantity!}",
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff018f9c),
+                                        )),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    RotationTransition(
+                                      turns: !isVisible
+                                          ? AlwaysStoppedAnimation(270 / 360)
+                                          : AlwaysStoppedAnimation(90 / 360),
+                                      child: Icon(
+                                        Icons.arrow_back_ios_rounded,
+                                        color: Color(0xff03145C),
+                                        size: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(

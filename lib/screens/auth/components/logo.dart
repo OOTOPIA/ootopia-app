@@ -9,48 +9,15 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
     return Container(
-      width: 255,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 88),
-            child: Image.asset(
-              'assets/images/newlogo.png',
-              height: 109,
-              width: 56,
-            ),
-          ),
-          SizedBox(height: 23),
-          Container(
-            width: 255,
-            height: 47,
-            child: Stack(
-              children: [
-                Positioned(
-                  right: 7,
-                  bottom: 10,
-                  child: Container(
-                    child: Image(
-                      image: AssetImage("assets/images/butterfly.png"),
-                      width: 41,
-                      height: 37,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Text(
-                    AppLocalizations.of(context)!.liveOotopiaNowMessage,
-                    style: GoogleFonts.roboto(
-                        color: LightColors.blue,
-                        fontSize: 23,
-                        fontWeight: FontWeight.w900),
-                  ),
-                ),
-              ],
-            ),
+          Image.asset(
+            locale.languageCode == 'pt'
+                ? 'assets/icons/new_logo_pt.png'
+                : 'assets/icons/new_logo_en.png',
           ),
         ],
       ),
