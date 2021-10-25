@@ -486,7 +486,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           AppLocalizations.of(context)!
                               .slideToGiveAGratitudeReward,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 11,
                             color: Color(
                               0xffBEBDBD,
                             ),
