@@ -111,5 +111,7 @@
     	<string>motion</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
     	<string>speech</string>
+		<key>aps-environment</key>
+    	<string>development</string>
 	</dict>
 </plist>
