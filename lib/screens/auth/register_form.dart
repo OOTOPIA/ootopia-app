@@ -239,8 +239,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                 controller: registerController.nameController,
                                 keyboardType: TextInputType.name,
                                 autocorrect: true,
-                                textCapitalization:
-                                    TextCapitalization.sentences,
+                                enableSuggestions: true,
+                                textCapitalization: TextCapitalization.words,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
                                         AppLocalizations.of(context)!
