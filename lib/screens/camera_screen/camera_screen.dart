@@ -17,7 +17,6 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'components/crop_widget.dart';
 
