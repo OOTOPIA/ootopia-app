@@ -18,7 +18,7 @@ abstract class TimelineStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
 
   @observable
-  ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController(initialScrollOffset: 0.0);
 
   @observable
   List<TimelinePost> allPosts = [];
@@ -28,11 +28,13 @@ abstract class TimelineStoreBase with Store {
 
   @action
   void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+    if(scrollController.hasClients)
     scrollController.animateTo(
       scrollController.position.minScrollExtent,
       duration: Duration(seconds: 1),
       curve: Curves.fastOutSlowIn,
     );
+    
 
     Future.delayed(Duration(milliseconds: 500)).then((value) {
       allPosts.clear();
