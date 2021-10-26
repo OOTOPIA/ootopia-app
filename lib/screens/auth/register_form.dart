@@ -32,6 +32,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
+  GlobalKey<FormState> formRegister = GlobalKey<FormState>();
 
   bool nameIsValid = true;
   bool mailIsValid = true;
@@ -181,8 +182,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                           .checkEmailExist(registerController
                                               .emailController.text);
                                     }
-                                    if (registerController.formKey.currentState!
-                                            .validate() &&
+                                    if (formRegister.currentState!.validate() &&
                                         !registerController
                                             .authStore.emailExist) {
                                       Navigator.of(context).pushNamed(
@@ -214,7 +214,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
           horizontal: 24,
         ),
         child: Form(
-          key: registerController.formKey,
+          key: formRegister,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

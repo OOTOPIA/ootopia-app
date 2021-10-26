@@ -30,7 +30,6 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   String returnToPage = "homeScreen";
 
   //Step 01
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -146,16 +145,12 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     }
   }
 
-  storeDataUserFirstStep() {
+  setBirthDateAndCountryCode() {
     if (validationBirthDate()) {
       user!.birthdate =
           "${yearController.text}/${monthController.text}/${dayController.text}";
     }
-
-    user!.bio = bioController.text.isNotEmpty ? bioController.text : null;
     user!.countryCode = countryCode!.isNotEmpty ? countryCode : null;
-    user!.phone =
-        cellPhoneController.text.isNotEmpty ? cellPhoneController.text : null;
   }
 
   getImage(imagePath, VoidCallback update) {
