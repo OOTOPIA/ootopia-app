@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
+import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+
 import 'package:ootopia_app/screens/components/interests_tags_modal/interests_tags_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -10,24 +11,26 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class RegisterPhase2TopInterestsPage extends StatefulWidget {
-  final Map<String, dynamic> args;
+class RegisterTopInterestsScreen extends StatefulWidget {
+  final Map<String, dynamic>? args;
 
-  RegisterPhase2TopInterestsPage(this.args);
+  const RegisterTopInterestsScreen([this.args]);
 
   @override
-  _RegisterPhase2TopInterestsPageState createState() =>
-      _RegisterPhase2TopInterestsPageState();
+  _RegisterTopInterestsScreenState createState() =>
+      _RegisterTopInterestsScreenState();
 }
 
-class _RegisterPhase2TopInterestsPageState
-    extends State<RegisterPhase2TopInterestsPage>
+class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
     with SecureStoreMixin, WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  RegisterSecondPhaseController controller =
-      RegisterSecondPhaseController.getInstance();
+  SmartPageController pageController = SmartPageController.getInstance();
 
+  RegisterSecondPhaseController registerController =
+      RegisterSecondPhaseController.getInstance();
+  SmartPageController navigationController = SmartPageController.getInstance();
   bool isloading = false;
 
   @override
@@ -36,7 +39,7 @@ class _RegisterPhase2TopInterestsPageState
     WidgetsBinding.instance!.addObserver(this);
 
     Future.delayed(Duration.zero).then((_) async {
-      await controller.updateLocalName();
+      await registerController.updateLocalName();
       setState(() {});
     });
   }
@@ -45,7 +48,7 @@ class _RegisterPhase2TopInterestsPageState
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      await controller.updateLocalName();
+      await registerController.updateLocalName();
       setState(() {});
     }
   }
@@ -68,27 +71,28 @@ class _RegisterPhase2TopInterestsPageState
             left: GlobalConstants.of(context).smallIntermediateSpacing,
           ),
           child: InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 3.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        FeatherIcons.arrowLeft,
-                        color: Colors.black,
-                        size: 20,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!.back,
-                        style: GoogleFonts.roboto(
-                          fontSize:
-                              Theme.of(context).textTheme.subtitle1!.fontSize,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    ],
-                  ))),
+            onTap: () => Navigator.of(context).pop(),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3.0),
+              child: Row(
+                children: [
+                  Icon(
+                    FeatherIcons.arrowLeft,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.back,
+                    style: GoogleFonts.roboto(
+                      fontSize: Theme.of(context).textTheme.subtitle1!.fontSize,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
       );
 
@@ -97,8 +101,8 @@ class _RegisterPhase2TopInterestsPageState
     return Scaffold(
       appBar: appBar,
       body: LoadingOverlay(
-        isLoading: controller.authStore.isLoading || isloading,
-        child: controller.authStore.isLoading
+        isLoading: registerController.authStore.isLoading || isloading,
+        child: registerController.authStore.isLoading
             ? Container()
             : CustomScrollView(
                 slivers: [
@@ -136,8 +140,9 @@ class _RegisterPhase2TopInterestsPageState
                                       GlobalConstants.of(context).spacingSmall,
                                 ),
                                 Visibility(
-                                    visible:
-                                        controller.selectedTags.length == 0,
+                                    visible: registerController
+                                            .selectedTags.length ==
+                                        0,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -194,14 +199,14 @@ class _RegisterPhase2TopInterestsPageState
                                     var result =
                                         await interestsTagsController.show(
                                       context,
-                                      controller.allTags,
-                                      controller.selectedTags,
+                                      registerController.allTags,
+                                      registerController.selectedTags,
                                     );
-                                                
+
                                     if (result != null) {
-                                      controller.selectedTags = result;
+                                      registerController.selectedTags = result;
                                     }
-                                                
+
                                     setState(() {});
                                   },
                                   child: Container(
@@ -209,8 +214,7 @@ class _RegisterPhase2TopInterestsPageState
                                         bottom: GlobalConstants.of(context)
                                             .spacingNormal),
                                     height: 57,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 0),
+                                    padding: EdgeInsets.symmetric(vertical: 0),
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: LightColors.grey,
@@ -226,7 +230,7 @@ class _RegisterPhase2TopInterestsPageState
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.only(
-                                                  right: 5, left:8),
+                                                  right: 5, left: 8),
                                               child: ImageIcon(
                                                   AssetImage(
                                                       "assets/icons/icon_add.png"),
@@ -235,10 +239,9 @@ class _RegisterPhase2TopInterestsPageState
                                             Text(
                                               AppLocalizations.of(context)!
                                                   .searchForAHashtag,
-                                                  overflow: TextOverflow.clip,
+                                              overflow: TextOverflow.clip,
                                               style: GoogleFonts.roboto(
-                                                  color:
-                                                      LightColors.blackText,
+                                                  color: LightColors.blackText,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 15),
                                             ),
@@ -246,25 +249,29 @@ class _RegisterPhase2TopInterestsPageState
                                         ),
                                         Expanded(
                                           child: Visibility(
-                                            visible:
-                                                controller.selectedTags.length >
-                                                    0,
+                                            visible: registerController
+                                                    .selectedTags.length >
+                                                0,
                                             child: Padding(
-                                              padding:EdgeInsets.only(left: 3, right:10),
+                                              padding: EdgeInsets.only(
+                                                  left: 3, right: 10),
                                               child: Text(
-                                                controller.selectedTags.length > 1
-                                                    ? '${controller.selectedTags.length} ' +
+                                                registerController.selectedTags
+                                                            .length >
+                                                        1
+                                                    ? '${registerController.selectedTags.length} ' +
                                                         AppLocalizations.of(
                                                                 context)!
                                                             .tagsSelected
-                                                    : '${controller.selectedTags.length} ' +
+                                                    : '${registerController.selectedTags.length} ' +
                                                         AppLocalizations.of(
                                                                 context)!
                                                             .tagSelected,
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 3,
                                                 textAlign: TextAlign.right,
-                                                textDirection: TextDirection.ltr,
+                                                textDirection:
+                                                    TextDirection.ltr,
                                                 style: GoogleFonts.roboto(
                                                   color: Colors.grey,
                                                   fontSize: 12,
@@ -279,13 +286,15 @@ class _RegisterPhase2TopInterestsPageState
                                   ),
                                 ),
                                 Visibility(
-                                  visible: controller.selectedTags.length != 0,
+                                  visible:
+                                      registerController.selectedTags.length !=
+                                          0,
                                   child: Wrap(
                                     direction: Axis.horizontal,
                                     spacing: GlobalConstants.of(context)
                                         .spacingSmall,
-                                    children:
-                                        controller.selectedTags.map((tag) {
+                                    children: registerController.selectedTags
+                                        .map((tag) {
                                       return Container(
                                         height: 38,
                                         margin: EdgeInsets.only(
@@ -333,7 +342,8 @@ class _RegisterPhase2TopInterestsPageState
                                                 setState(() {
                                                   if (tag.selectedTag == true) {
                                                     tag.selectedTag = false;
-                                                    controller.selectedTags
+                                                    registerController
+                                                        .selectedTags
                                                         .remove(tag);
                                                   }
                                                 });
@@ -349,7 +359,7 @@ class _RegisterPhase2TopInterestsPageState
                             ),
                           ),
                           Visibility(
-                            visible: controller.selectedTags.isNotEmpty,
+                            visible: registerController.selectedTags.isNotEmpty,
                             child: Padding(
                               padding: EdgeInsets.only(
                                 bottom:
@@ -391,21 +401,55 @@ class _RegisterPhase2TopInterestsPageState
                                             )))),
                                 onPressed: () async {
                                   try {
-                                    if (controller.selectedTags.isNotEmpty) {
+                                    if (registerController
+                                        .selectedTags.isNotEmpty) {
                                       setState(() {
                                         isloading = true;
                                       });
-                                      await controller.updateUser();
-                      
+                                      await registerController.registerUser();
+
                                       setState(() {
                                         isloading = false;
                                       });
-                      
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                        PageRoute.Page.homeScreen.route,
-                                        (Route<dynamic> route) => false,
-                                      );
+
+                                      navigationController.resetNavigation();
+                                      registerController.currentLocaleName = '';
+
+                                      if (registerController
+                                              .codeController.text !=
+                                          '') {
+                                        registerController
+                                            .cleanTextEditingControllers();
+                                        Navigator.of(context).pushNamed(
+                                          PageRoute.Page.celebration.route,
+                                          arguments: {
+                                            "returnToPageWithArgs": {
+                                              'currentPageName':
+                                                  registerController
+                                                      .returnToPage
+                                            },
+                                            "name": registerController
+                                                .nameController.text,
+                                            "goal": "invitationCode",
+                                            "balance": "15,00",
+                                          },
+                                        );
+                                      } else {
+                                        registerController
+                                            .cleanTextEditingControllers();
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                          PageRoute.Page.homeScreen.route,
+                                          (Route<dynamic> route) => false,
+                                          arguments: {
+                                            "returnToPageWithArgs": {
+                                              'currentPageName':
+                                                  registerController
+                                                      .returnToPage
+                                            }
+                                          },
+                                        );
+                                      }
                                     }
                                   } catch (e) {
                                     setState(() {

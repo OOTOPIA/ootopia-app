@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
-import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
+import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -36,6 +36,13 @@ abstract class AuthStoreBase with Store {
   @observable
   bool errorOnGetTags = false;
 
+  @observable
+  bool emailExist = false;
+
+  @action
+  Future<void> checkEmailExist(String email) async =>
+      emailExist = await authRepository.emailExist(email);
+
   @action
   Future<User?> checkUserIsLogged() async =>
       this._currentUser = ObservableFuture(storage.getCurrentUser());
@@ -60,6 +67,24 @@ abstract class AuthStoreBase with Store {
   }
 
   @action
+  Future login(String email, String password) async {
+    try {
+      var result = (await this.authRepository.login(email, password));
+      if (result != null) {
+        User user = result;
+        this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
+      }
+    } catch (e) {
+      String errorMessage = e.toString();
+      if (errorMessage == "INVALID_PASSWORD") {
+        throw ("Invalid email and/or password");
+      } else {
+        throw ("Error on login");
+      }
+    }
+  }
+
+  @action
   logout() async {
     try {
       await AppUsageTime.instance.sendToApi();
@@ -80,14 +105,51 @@ abstract class AuthStoreBase with Store {
       String? invitationCode,
       required BuildContext context}) async {
     try {
-      var result =
-          await authRepository.register(name, email, password, invitationCode);
+      Auth user = Auth(
+          fullname: name,
+          email: email,
+          password: password,
+          invitationCode: invitationCode);
+
+      var result = await authRepository.register(user, [], null);
       this
           .trackingEvents
           .trackingSignupCompletedSignup(result.id!, result.fullname!);
       return true;
     } catch (e) {
       return Future.error(e);
+    }
+  }
+
+  @action
+  Future resetPassword(String newPassword) async {
+    try {
+      await this.authRepository.resetPassword(newPassword);
+      this.trackingEvents.userResetPassword()();
+    } catch (e) {
+      String errorMessage = e.toString();
+
+      if (errorMessage == "TOKEN_EXPIRED") {
+        throw ("O token expirou. Envie o e-mail para iniciar o processo de recuperação de senha novamente.");
+      } else {
+        throw ("Ocorreu um erro ao atualizar a senha. Tente novamente.");
+      }
+    }
+  }
+
+  @action
+  Future recoverPassword(String email, String lang) async {
+    try {
+      await this.authRepository.recoverPassword(email, lang);
+      this.trackingEvents.userRecoverPassword();
+    } catch (e) {
+      String errorMessage = e.toString();
+
+      if (errorMessage == "USER_NOT_FOUND") {
+        throw ("Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.");
+      } else {
+        throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
+      }
     }
   }
 }

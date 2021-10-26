@@ -1,14 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
+import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -20,25 +22,36 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 class RegisterSecondPhaseController with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
 
   User? user;
   File? image;
+  String? photoFilePath;
+  String returnToPage = "homeScreen";
 
   //Step 01
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController dayController = TextEditingController();
-  final TextEditingController monthController = TextEditingController();
-  final TextEditingController yearController = TextEditingController();
-  final TextEditingController bioController = TextEditingController();
-  final TextEditingController cellPhoneController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController repeatPasswordController = TextEditingController();
+
+  //Step 02
+  TextEditingController codeController = TextEditingController();
 
   //Step 03
-  final TextEditingController geolocationController = TextEditingController();
+  TextEditingController dayController = TextEditingController();
+  TextEditingController monthController = TextEditingController();
+  TextEditingController yearController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
+  TextEditingController cellPhoneController = TextEditingController();
+
+  //Step 04
+  TextEditingController geolocationController = TextEditingController();
   FocusNode inputFocusNode = new FocusNode();
   String geolocationErrorMessage = "";
   String geolocationMessage = "Please, wait...";
 
-  //Step 04
+  //Step 05
   List<InterestsTagsModel> selectedTags = [];
   String currentLocaleName = '';
   List<InterestsTagsModel> allTags = [];
@@ -99,12 +112,20 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   void cleanTextEditingControllers() {
+    nameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    repeatPasswordController.clear();
+    codeController.clear();
     dayController.clear();
     monthController.clear();
     yearController.clear();
     bioController.clear();
     cellPhoneController.clear();
     geolocationController.clear();
+    photoFilePath = null;
+    image = null;
+    user = User();
   }
 
   void birthdateIsValid(BuildContext context, VoidCallback update) {
@@ -124,22 +145,18 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     }
   }
 
-  storeDataUserFirstStep() {
+  setBirthDateAndCountryCode() {
     if (validationBirthDate()) {
       user!.birthdate =
           "${yearController.text}/${monthController.text}/${dayController.text}";
     }
-
-    user!.bio = bioController.text.isNotEmpty ? bioController.text : null;
     user!.countryCode = countryCode!.isNotEmpty ? countryCode : null;
-    user!.phone =
-        cellPhoneController.text.isNotEmpty ? cellPhoneController.text : null;
   }
 
   getImage(imagePath, VoidCallback update) {
     if (user != null && imagePath != null) {
       image = File(imagePath);
-      user!.photoFilePath = imagePath;
+      photoFilePath = imagePath;
     }
     update();
   }
@@ -214,40 +231,57 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     update();
   }
 
-  Future<void> updateUser() async {
-    var idTags = selectedTags.map((tag) => tag.id).toList();
+  Future registerUser() async {
+    Auth _user = Auth(
+      fullname: nameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      countryCode: user!.countryCode,
+      bio: bioController.text,
+      phone: cellPhoneController.text,
+      birthdate: user!.birthdate,
+      invitationCode: codeController.text,
+      dailyLearningGoalInMinutes: currentSliderValue.toInt(),
+      addressCountryCode: user!.addressCountryCode,
+      addressState: user!.addressState,
+      addressCity: user!.addressCity,
+      addressLatitude: user!.addressLatitude,
+      addressLongitude: user!.addressLongitude,
+      photoFilePath: photoFilePath,
+      registerPhase: 2,
+    );
+
+    List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
     try {
-      if (user!.photoFilePath != null) {
-        await _updateUserWithPhoto(user!, idTags);
-      } else if (user != null) {
-        await this.userRepository.updateUserProfile(user!, [], null);
+      if (_user.photoFilePath != null) {
+        await registerUserWithPhoto(_user, tagsIds);
+        await authRepository.login(_user.email!, _user.password!);
+      } else {
+        await this.authRepository.register(_user, tagsIds, null);
+        await authRepository.login(_user.email!, _user.password!);
       }
-      await this.userRepository.getMyAccountDetails();
     } catch (err) {
       throw (err);
     }
   }
 
-  Future<String> _updateUserWithPhoto(User user, List<String> tagsIds) async {
+  Future<String> registerUserWithPhoto(_user, tagsIds) async {
     var completer = new Completer<String>();
     var uploader = FlutterUploader();
 
-    var taskId =
-        await this.userRepository.updateUserProfile(user, tagsIds, uploader);
+    var taskId = await this.authRepository.register(_user, tagsIds, uploader);
     uploader.result.listen(
-        (result) {
-          if (result.statusCode == 200 && result.taskId == taskId) {
-            completer.complete(user.id);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          completer.completeError(error);
-        });
-    user.registerPhase = 2;
-    user.dailyLearningGoalInMinutes = currentSliderValue.toInt();
-    await setCurrentUser(json.encode(user.toJson()));
+      (result) {
+        if (result.statusCode == 201 && result.taskId == taskId) {
+          completer.complete('completed');
+        }
+      },
+      onDone: () {},
+      onError: (error) {
+        completer.completeError(error);
+      },
+    );
 
     return completer.future;
   }

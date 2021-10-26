@@ -11,16 +11,20 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
+import 'package:ootopia_app/screens/timeline/components/toast_widget.dart';
+import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'image_post_timeline_component.dart';
 
@@ -28,8 +32,6 @@ import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'dart:math' as math;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -86,9 +88,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   bool dragging = false;
 
-  late YoutubePlayerController _controller;
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
   bool _isPlayerReady = false;
 
   bool _isDragging = false;
@@ -100,6 +99,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _oozError = false;
   String _oozErrorMessage = "";
   bool _oozSlidingOut = false;
+  late AuthStore authStore;
 
   GlobalKey _slideButtonKey = GlobalKey();
   GlobalKey _oozInfoKey = GlobalKey();
@@ -109,6 +109,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -136,15 +137,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void _getTransferOozToPostLimitConfig() async {
     oozGoal = await getTransferOOZToPostLimit();
     setState(() {});
-  }
-
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
-    }
   }
 
   @override
@@ -193,6 +185,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if (state is SuccessDeletePostState) {
@@ -308,37 +301,84 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 )
               ],
             ),
-            Container(
-              width: double.infinity,
-              height: 34,
-              padding: EdgeInsets.only(left: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                color: Color(0xff1A4188),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: this.post.tags.length,
-                      itemBuilder: (ctx, index) {
-                        return Opacity(
-                          opacity: 0.8,
-                          child: HashtagName(
-                            hashtagName: this.post.tags[index],
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    color: Color(0xff1A4188),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ScrollConfiguration(
+                            behavior: const ScrollBehavior()
+                                .copyWith(overscroll: false),
+                            child: MyScrollbar(
+                              thumbColor: Color(0xff03145C),
+                              trackColor: Color(0xff4D7BC9),
+                              thickness: 4,
+                              builder: (context, scrollController) =>
+                                  ListView.builder(
+                                controller: scrollController,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(left: 15),
+                                physics: ClampingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: this.post.tags.length,
+                                itemBuilder: (ctx, index) {
+                                  return Opacity(
+                                    opacity: 0.8,
+                                    child: HashtagName(
+                                      hashtagName: this.post.tags[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  left: 0.2,
+                  top: 4,
+                  child: Container(
+                    height: 20,
+                    width: 20.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                      ),
+                      color: Color(0xff1A4188),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0.2,
+                  top: 4,
+                  child: Container(
+                    height: 20,
+                    width: 20.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                      ),
+                      color: Color(0xff1A4188),
+                    ),
+                  ),
+                )
+              ],
             ),
             Stack(
               children: [
@@ -397,6 +437,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               ],
             ),
             Container(
+              height: 32,
               width: double.infinity,
               margin: EdgeInsets.symmetric(
                   vertical: GlobalConstants.of(context).spacingSmall),
@@ -411,19 +452,27 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 key: _slideButtonKey,
                 children: [
                   Positioned(
-                    left: 64,
+                    left: 54,
                     child: Opacity(
-                      opacity: 1.2 -
-                          ((((_draggablePositionX * 100) / 300) / 100)) -
-                          0.2,
+                      opacity: (1.2 -
+                                  ((((_draggablePositionX * 100) / 300) /
+                                      100)) -
+                                  0.2) >
+                              0
+                          ? 1.2 -
+                              ((((_draggablePositionX * 100) / 300) / 100)) -
+                              0.2
+                          : 0,
                       child: Container(
-                        margin: EdgeInsets.all(2),
-                        padding: EdgeInsets.only(top: 8, left: 6),
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(
+                          top: 10,
+                        ),
                         child: Text(
                           AppLocalizations.of(context)!
                               .slideToGiveAGratitudeReward,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 10,
                             color: Color(
                               0xffBEBDBD,
                             ),
@@ -449,7 +498,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     (_isDragging || _oozIsSent || _oozError) &&
                                     !_oozSlidingOut
                                 ? Container(
-                                    margin: EdgeInsets.all(1),
+                                    margin: EdgeInsets.only(bottom: 5),
                                     child: renderRewardStatus(),
                                   )
                                 : Container(),
@@ -457,7 +506,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           Visibility(
                             visible: showOozToTransfer(),
                             child: Positioned(
-                              height: 32,
+                              height: 26,
                               right: 0,
                               child: GestureDetector(
                                 onTap: () {
@@ -465,8 +514,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       .Page.aboutOOzCurrentScreen.route);
                                 },
                                 child: Container(
-                                    width: 90,
-                                    padding: EdgeInsets.all(6),
+                                    width: 80,
+                                    padding: EdgeInsets.all(2),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       color: Colors.white,
@@ -478,11 +527,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.symmetric(
-                                              horizontal: 6),
+                                              horizontal: 3),
                                           child: this.post.oozToTransfer == 0
                                               ? Image(
                                                   image: AssetImage(
@@ -510,6 +559,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       color: Color(0xFF003694),
+                                                      fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -524,6 +574,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       color: Colors.black,
+                                                      fontSize: 12,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -558,7 +609,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             ? _draggablePositionX + 36
                             : 80)
                         : 64,
-                    height: 36,
+                    height: 30,
                     child: Stack(
                       children: [
                         Container(
@@ -579,9 +630,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                             visible: _isDragging,
                             child: Image(
                               image: AssetImage(
-                                  !this.postTimelineController.post.liked
-                                      ? 'assets/icons_profile/woow.png'
-                                      : 'assets/icons_profile/woow_active.png'),
+                                !this.postTimelineController.post.liked
+                                    ? 'assets/icons_profile/woow.png'
+                                    : 'assets/icons_profile/woow_active.png',
+                              ),
                             ),
                           ),
                         ),
@@ -618,13 +670,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       },
                       axis: Axis.horizontal,
                       child: Container(
-                        padding: const EdgeInsets.all(3),
-                        height: 36.0, // you can adjust the width as you need
+                        padding: const EdgeInsets.all(1),
+                        height: 30.0, // you can adjust the width as you need
                         child: Opacity(
                           opacity: 1.0,
                           child: SizedBox(
-                            width: 36,
-                            height: 36,
+                            width: 30,
+                            height: 30,
                             child: RotatedBox(
                                 quarterTurns: 1,
                                 child: IconButton(
@@ -642,6 +694,41 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       feedback: Container(),
                     ),
                   ),
+                  Visibility(
+                    visible:
+                        this.post.userId == (authStore.currentUser?.id ?? ""),
+                    child: GestureDetector(
+                      onHorizontalDragEnd: (_) {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: true,
+                          builder: (context) => ToastWidget(
+                              text: AppLocalizations.of(context)!
+                                  .tooltipBlockedField,
+                              suffixIcon: Icons.info_outline),
+                        );
+                      },
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierColor: Colors.transparent,
+                          barrierDismissible: true,
+                          builder: (context) => ToastWidget(
+                              text: AppLocalizations.of(context)!
+                                  .tooltipBlockedField,
+                              suffixIcon: Icons.info_outline),
+                        );
+                      },
+                      child: Container(
+                          height: 36,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white.withOpacity(0.5),
+                          )),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -757,7 +844,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     if (_oozIsSent || _oozError) {
       return Container(
         width: 26,
-        height: 30,
+        height: 26,
         decoration: (_oozError
             ? BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
@@ -785,12 +872,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       );
     }
     return SizedBox(
-      width: 60,
-      height: 30,
+      height: 25,
       child: TextButton(
         style: TextButton.styleFrom(
           primary: Colors.black87,
-          padding: EdgeInsets.symmetric(horizontal: 6),
+          padding: EdgeInsets.symmetric(horizontal: 3),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
@@ -818,9 +904,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           child: !_sendOOZIsLoading
               ? Text(
                   AppLocalizations.of(context)!.send,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: TextStyle(color: Colors.black, fontSize: 12),
                 )
               : SizedBox(
                   width: 16,
@@ -943,8 +1027,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   void onSlideButton() {
     double perc = (_draggablePositionX * 100) / getMaxSlideWidth();
-    if (_draggablePositionX > 1) {
-      this.post.oozToTransfer = ((oozGoal * perc) / 100).roundToDouble();
+    if (_draggablePositionX > 30) {
+      this.post.oozToTransfer = ((oozGoal * (perc - 30)) / 70).roundToDouble();
     } else {
       this.post.oozToTransfer = 0.0;
     }
@@ -1199,8 +1283,8 @@ class CustomContainerShapeBorder extends CustomPainter {
         Rect.fromLTRB(
           0,
           0,
-          46,
-          36,
+          32,
+          30,
         ),
         bottomLeft: Radius.circular(100),
         topLeft: Radius.circular(100),
@@ -1210,17 +1294,17 @@ class CustomContainerShapeBorder extends CustomPainter {
       paint,
     );
 
-    canvas.translate(45, 0);
+    canvas.translate(31, 0);
 
     var path = Path();
-    path.lineTo(0, 18);
-    path.lineTo(18, 18);
+    path.lineTo(0, 15);
+    path.lineTo(15, 15);
     path.close();
     canvas.drawPath(path, paint);
 
     var path2 = Path();
-    path2.lineTo(18, 18);
-    path2.lineTo(0, 36);
+    path2.lineTo(15, 15);
+    path2.lineTo(0, 30);
     path2.close();
     canvas.drawPath(path2, paint);
     //var path = createPath(3, 36);

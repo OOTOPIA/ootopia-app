@@ -283,8 +283,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                                             .textTheme
                                             .subtitle2!
                                             .copyWith(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                         children: [
                                           TextSpan(
@@ -295,8 +295,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
                                                 ),
                                           )
                                         ]),
@@ -312,8 +312,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                                           .textTheme
                                           .subtitle2!
                                           .copyWith(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                       children: [
                                         TextSpan(
@@ -326,8 +326,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                                               .textTheme
                                               .subtitle2!
                                               .copyWith(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
                                               ),
                                         )
                                       ],
@@ -353,8 +353,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                   ),
                                   Padding(

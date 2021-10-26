@@ -18,7 +18,8 @@ class DialogConfirm extends StatelessWidget {
           children: <Widget>[
             Text(
               this.textAlert,
-              style: Theme.of(context).textTheme.headline2,
+              style: TextStyle(color: Colors.grey),
+              
             ),
           ],
         ),

@@ -125,21 +125,9 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
                   },
                 );
                 return;
-              } else if (loggedIn) {
-                if (user!.registerPhase == 2) {
-                  Navigator.of(context).pushNamedIfNotCurrent(
-                      PageRoute.Page.myProfileScreen.route);
-                } else {
-                  Navigator.of(context).pushNamed(
-                    PageRoute.Page.registerPhase2Screen.route,
-                    arguments: {
-                      "returnToPageWithArgs": {
-                        "pageRoute": PageRoute.Page.myProfileScreen.route,
-                        "arguments": null
-                      }
-                    },
-                  );
-                }
+              } else {
+                Navigator.of(context).pushNamedIfNotCurrent(
+                    PageRoute.Page.myProfileScreen.route);
               }
               break;
           }

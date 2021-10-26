@@ -5,6 +5,7 @@ class User extends Equatable {
   String? id;
   String? fullname;
   String? email;
+  String? invitationCode;
   String? birthdate;
   String? photoUrl;
   String? photoFilePath; //Used to upload user photo
@@ -36,6 +37,7 @@ class User extends Equatable {
     this.id,
     this.fullname,
     this.email,
+    this.invitationCode,
     this.birthdate,
     this.photoUrl,
     this.addressCountryCode,
@@ -68,6 +70,7 @@ class User extends Equatable {
         id: json['id'],
         fullname: json['fullname'],
         email: json['email'],
+        invitationCode: json['invitationCode'],
         birthdate: json['birthdate'],
         photoUrl: json['photoUrl'],
         addressCountryCode: json['addressCountryCode'],
@@ -141,6 +144,7 @@ class User extends Equatable {
         'id': id,
         'fullname': fullname,
         'email': email,
+        'invitationCode': invitationCode,
         'birthdate': birthdate,
         'photoUrl': photoUrl,
         'addressCountryCode': addressCountryCode,
@@ -170,6 +174,7 @@ class User extends Equatable {
         id,
         fullname,
         email,
+        invitationCode,
         birthdate,
         photoUrl,
         addressCountryCode,

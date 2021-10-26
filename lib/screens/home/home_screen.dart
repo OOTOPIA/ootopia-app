@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
@@ -19,6 +21,7 @@ import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
+  late TimelineStore timelineStore;
+  late TimelinePostBloc timelinePostBloc;
+
   late ProfileScreenStore profileStore;
   Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
@@ -51,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
 
     WidgetsBinding.instance!.addObserver(this);
+    homeStore?.prefs?.setBool("showSplash", false);
 
     controller = SmartPageController.newInstance(
       context: context,
@@ -82,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.inactive:
         //homeStore?.stopDailyGoalTimer();
         //print("app in inactive");
+
         break;
       case AppLifecycleState.paused:
         //homeStore?.stopDailyGoalTimer();
@@ -90,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         //homeStore?.stopDailyGoalTimer();
         //print("app in detached");
+        homeStore?.prefs?.setBool("showSplash", true);
         break;
     }
   }
@@ -103,11 +112,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    timelinePostBloc = BlocProvider.of<TimelinePostBloc>(context);
     Color selectedIconColor = Theme.of(context).accentColor;
     Color unselectedIconColor =
         Theme.of(context).iconTheme.color!.withOpacity(0.7);
     authStore = Provider.of<AuthStore>(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
+    timelineStore = Provider.of<TimelineStore>(context);
 
     if (homeStore == null) {
       homeStore = Provider.of<HomeStore>(context);
@@ -318,6 +329,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 var result = true;
                 switch (index) {
                   case PageViewController.TAB_INDEX_TIMELINE:
+                    if (controller.pages[controller.currentPageIndex]
+                        is TimelinePage)
+                      timelineStore.goToTopTimeline(timelinePostBloc);
+
                     controller.resetNavigation();
                     break;
                   case PageViewController.TAB_INDEX_LEARNING_TRACKS:
@@ -326,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         PageRoute.Page.loginScreen.route,
                         arguments: {
                           "returnToPageWithArgs": {
-                            "currentPageName": "wallet",
+                            "currentPageName": "learning_tracks",
                             "arguments": null
                           }
                         },
@@ -340,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         PageRoute.Page.loginScreen.route,
                         arguments: {
                           "returnToPageWithArgs": {
-                            "pageRoute": PageRoute.Page.cameraScreen.route,
+                            "currentPageName": "camera",
                             "arguments": null
                           }
                         },
@@ -358,7 +373,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         PageRoute.Page.loginScreen.route,
                         arguments: {
                           "returnToPageWithArgs": {
-                            "currentPageName": "wallet",
+                            "currentPageName": "marketplace",
                             "arguments": null
                           }
                         },
@@ -367,24 +382,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     }
                     break;
                   case PageViewController.TAB_INDEX_PROFILE:
-                    if (authStore.currentUser == null) {
-                      result = false;
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.loginScreen.route,
-                        arguments: {
-                          "returnToPageWithArgs": {
-                            "currentPageName": "my_profile",
-                            "arguments": null
-                          }
-                        },
-                      );
-                    } else {
-                      result = openProfile();
-                    }
+                    result = openProfile();
                     break;
                   default:
                 }
-                print("caiu 3");
+
                 return result;
               },
             ),
@@ -409,18 +411,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       result = false;
     }
 
-    if (authStore.currentUser!.registerPhase != 2) {
-      Navigator.of(context).pushNamed(
-        PageRoute.Page.registerPhase2Screen.route,
-        arguments: {
-          "returnToPageWithArgs": {
-            "currentPageName": "my_profile",
-            "arguments": null
-          }
-        },
-      );
-      result = false;
-    }
     return result;
   }
 
@@ -435,32 +425,43 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   _checkPageParams() {
     Timer(Duration(milliseconds: 300), () {
-      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+      if (widget.args != null &&
+          widget.args!['returnToPageWithArgs'] != null &&
+          widget.args!['returnToPageWithArgs']['currentPageName'] != null &&
+          authStore.currentUser != null) {
         if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
-                "my_profile" &&
-            authStore.currentUser != null) {
-          if (authStore.currentUser!.registerPhase == 2) {
-            setState(() {
-              controller.selectBottomTab(4);
-            });
-          } else if (authStore.currentUser!.registerPhase == 1) {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.registerPhase2Screen.route,
-              arguments: {
-                "returnToPageWithArgs": {
-                  "currentPageName": "my_profile",
-                  "arguments": null
-                }
-              },
-            );
-          }
-        } else if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
-          Navigator.of(context).pushNamed(
-            widget.args!['returnToPageWithArgs']['pageRoute'],
-            arguments: widget.args!['returnToPageWithArgs']['arguments'],
-          );
+            "learning_tracks") {
+          setState(() {
+            controller.selectBottomTab(1);
+          });
+        }
+        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+            "camera") {
+          setState(() {
+            controller.selectBottomTab(2);
+          });
+        }
+        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+            "marketplace") {
+          setState(() {
+            controller.selectBottomTab(3);
+          });
+        }
+        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+            "my_profile") {
+          setState(() {
+            controller.selectBottomTab(4);
+          });
         }
       }
+
+      if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
+        Navigator.of(context).pushNamed(
+          widget.args!['returnToPageWithArgs']['pageRoute'],
+          arguments: widget.args!['returnToPageWithArgs']['arguments'],
+        );
+      }
+
       if (widget.args != null &&
           widget.args!['createdPost'] != null &&
           widget.args!['createdPost'] == true) {
@@ -604,11 +605,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   get appBar => AppBar(
         centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
+        title: GestureDetector(
+          onTap: controller.currentBottomIndex ==
+                  PageViewController.TAB_INDEX_TIMELINE
+              ? () {
+                  timelineStore.goToTopTimeline(timelinePostBloc);
+                }
+              : null,
+          child: Padding(
+            padding: EdgeInsets.all(3),
+            child: Image.asset(
+              'assets/images/logo.png',
+              height: 34,
+            ),
           ),
         ),
         toolbarHeight: 45,
@@ -653,9 +662,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       )),
                 ),
         ),
-        actions: [
-          if (controller.pages.length <= 5) remainingTime,
-        ],
+        // actions: [
+        //   if (controller.pages.length <= 5) remainingTime,
+        // ],
       );
 
   Widget get remainingTime => Observer(
