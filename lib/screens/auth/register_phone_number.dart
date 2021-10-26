@@ -388,13 +388,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                               ),
                             ),
                             onPressed: () {
-                              // if (!registerController.formKey.currentState!
-                              //     .validate()) return;
-
-                              // registerController.storeDataUserFirstStep();
-
-                              // if (!registerController.birthDateIsValid())
-                              //   return;
+                              registerController.setBirthDateAndCountryCode();
 
                               if (registerController.firstStepIsValid(context))
                                 Navigator.of(context).pushNamed(
