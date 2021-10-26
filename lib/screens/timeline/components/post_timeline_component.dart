@@ -91,9 +91,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   bool dragging = false;
 
-  late YoutubePlayerController _controller;
-  late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
   bool _isPlayerReady = false;
 
   bool _isDragging = false;
@@ -143,15 +140,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void _getTransferOozToPostLimitConfig() async {
     oozGoal = await getTransferOOZToPostLimit();
     setState(() {});
-  }
-
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
-    }
   }
 
   @override

@@ -97,5 +97,9 @@
 		<false/>
 		<key>io.flutter.embedded_views_preview</key>
 		<true/>
+		<key>NSContactsUsageDescription</key>
+		<string>Share the OOTOPIA experience with your contacts</string>
+		<key>NSCalendarsUsageDescription</key> 
+		<string>Allow us to improve your daily regeneration game experience</string>
 	</dict>
 </plist>
