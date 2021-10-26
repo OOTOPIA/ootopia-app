@@ -8,6 +8,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/auth/components/slogan.dart';
 import 'package:ootopia_app/screens/auth/register_second_phase/register_second_phase_controller.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:ootopia_app/bloc/auth/auth_bloc.dart';
@@ -290,69 +291,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Platform.localeName == "pt_BR"
-                                ? Center(
-                                    child: Container(
-                                    width: 323,
-                                    height: 47,
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .liveOotopiaNowMessage,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.roboto(
-                                                  color: LightColors.blue,
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: Container(
-                                            height: 37,
-                                            child: Image(
-                                              image: AssetImage(
-                                                  "assets/images/butterfly.png"),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ))
-                                : Center(
-                                    child: Container(
-                                    width: 278,
-                                    height: 47,
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .liveOotopiaNowMessage,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.roboto(
-                                                  color: LightColors.blue,
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold)),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: Container(
-                                            height: 37,
-                                            child: Image(
-                                              image: AssetImage(
-                                                  "assets/images/butterfly.png"),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
+                            Slogan(),
                             Padding(
                               padding: EdgeInsets.only(
                                 top: GlobalConstants.of(context).spacingMedium,

@@ -274,39 +274,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               SizedBox(
                                 width: 8,
                               ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    if (isVisible) {
-                                      isVisible = false;
-                                    } else {
-                                      isVisible = true;
-                                    }
-                                  });
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/icons_profile/laurel_wreath.svg",
-                                      width: 24,
-                                      height: 21,
-                                      color: Color(0xff018f9c),
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                        "${store?.profile!.totalTrophyQuantity!}",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        barrierColor: Colors.black.withAlpha(1),
+                                        backgroundColor:
+                                            Colors.black.withAlpha(1),
+                                        builder: (BuildContext context) {
+                                          return SnackBarWidget(
+                                              menu:
+                                                  AppLocalizations.of(context)!
+                                                      .laurelWreath,
+                                              text: AppLocalizations.of(
+                                                      context)!
+                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
+                                              about:
+                                                  AppLocalizations.of(context)!
+                                                      .learnMore,
+                                              marginBottom: true);
+                                        },
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          "assets/icons_profile/laurel_wreath.svg",
+                                          width: 24,
+                                          height: 21,
                                           color: Color(0xff018f9c),
-                                        )),
-                                    SizedBox(
-                                      width: 8,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                            "${store?.profile!.totalTrophyQuantity!}",
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xff018f9c),
+                                            )),
+                                      ],
                                     ),
-                                    RotationTransition(
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        if (isVisible) {
+                                          isVisible = false;
+                                        } else {
+                                          isVisible = true;
+                                        }
+                                      });
+                                    },
+                                    child: RotationTransition(
                                       turns: !isVisible
                                           ? AlwaysStoppedAnimation(270 / 360)
                                           : AlwaysStoppedAnimation(90 / 360),
@@ -316,8 +343,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         size: 12,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -344,98 +371,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    GestureDetector(
-                                      child: GamingDataWidget(
-                                        title: AppLocalizations.of(context)!
-                                            .personal,
-                                        icon: FeatherIcons.user,
-                                        amount: store == null
-                                            ? 0
-                                            : store!.profile!
-                                                .personalTrophyQuantity!,
-                                        colorIcon: Color(0xff00A5FC),
-                                      ),
-                                      onTap: () => showModalBottomSheet(
-                                        context: context,
-                                        barrierColor: Colors.black.withAlpha(1),
-                                        backgroundColor:
-                                            Colors.black.withAlpha(1),
-                                        builder: (BuildContext context) {
-                                          return SnackBarWidget(
-                                              menu:
-                                                  AppLocalizations.of(context)!
-                                                      .laurelWreath,
-                                              text: AppLocalizations.of(
-                                                      context)!
-                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
-                                              about:
-                                                  AppLocalizations.of(context)!
-                                                      .learnMore,
-                                              marginBottom: true);
-                                        },
-                                      ),
+                                    GamingDataWidget(
+                                      title: AppLocalizations.of(context)!
+                                          .personal,
+                                      icon: FeatherIcons.user,
+                                      amount: store == null
+                                          ? 0
+                                          : store!
+                                              .profile!.personalTrophyQuantity!,
+                                      colorIcon: Color(0xff00A5FC),
                                     ),
-                                    GestureDetector(
-                                      child: GamingDataWidget(
-                                        title:
-                                            AppLocalizations.of(context)!.city,
-                                        icon: FeatherIcons.mapPin,
-                                        amount: store == null
-                                            ? 0
-                                            : store!
-                                                .profile!.cityTrophyQuantity!,
-                                        colorIcon: Color(0xff0072C5),
-                                      ),
-                                      onTap: () => showModalBottomSheet(
-                                        context: context,
-                                        barrierColor: Colors.black.withAlpha(1),
-                                        backgroundColor:
-                                            Colors.black.withAlpha(1),
-                                        builder: (BuildContext context) {
-                                          return SnackBarWidget(
-                                              menu:
-                                                  AppLocalizations.of(context)!
-                                                      .laurelWreath,
-                                              text: AppLocalizations.of(
-                                                      context)!
-                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
-                                              about:
-                                                  AppLocalizations.of(context)!
-                                                      .learnMore,
-                                              marginBottom: true);
-                                        },
-                                      ),
+                                    GamingDataWidget(
+                                      title: AppLocalizations.of(context)!.city,
+                                      icon: FeatherIcons.mapPin,
+                                      amount: store == null
+                                          ? 0
+                                          : store!.profile!.cityTrophyQuantity!,
+                                      colorIcon: Color(0xff0072C5),
                                     ),
-                                    GestureDetector(
-                                      child: GamingDataWidget(
-                                        title: AppLocalizations.of(context)!
-                                            .planetary,
-                                        icon: FeatherIcons.globe,
-                                        amount: store == null
-                                            ? 0
-                                            : store!
-                                                .profile!.globalTrophyQuantity!,
-                                        colorIcon: Color(0xff012588),
-                                      ),
-                                      onTap: () => showModalBottomSheet(
-                                        context: context,
-                                        barrierColor: Colors.black.withAlpha(1),
-                                        backgroundColor:
-                                            Colors.black.withAlpha(1),
-                                        builder: (BuildContext context) {
-                                          return SnackBarWidget(
-                                              menu:
-                                                  AppLocalizations.of(context)!
-                                                      .laurelWreath,
-                                              text: AppLocalizations.of(
-                                                      context)!
-                                                  .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
-                                              about:
-                                                  AppLocalizations.of(context)!
-                                                      .learnMore,
-                                              marginBottom: true);
-                                        },
-                                      ),
+                                    GamingDataWidget(
+                                      title: AppLocalizations.of(context)!
+                                          .planetary,
+                                      icon: FeatherIcons.globe,
+                                      amount: store == null
+                                          ? 0
+                                          : store!
+                                              .profile!.globalTrophyQuantity!,
+                                      colorIcon: Color(0xff012588),
                                     ),
                                   ],
                                 ))
