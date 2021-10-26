@@ -385,7 +385,7 @@
     "quiz":"Quiz",
     "pictureByMikaBaumeister":"Picture by Mika Baumeister",
     "completed": "completed",
-    "emailAlreadyRegistered": "Email already registered, please insert another one.",
+    "emailAlreadyRegistered": "Email already registered, please insert another one",
 
     "@helloWorld": {
         "description": "A programmer greeting"
