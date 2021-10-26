@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/screens/auth/components/slogan.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -147,39 +148,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .liveOotopiaNowMessage,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                          color: LightColors.blue,
-                                          fontSize: 24),
-                                ),
-                                Column(
-                                  children: [
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      child: Image(
-                                        image: AssetImage(
-                                            "assets/images/butterfly.png"),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 22,
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
+                          Slogan(),
+                          SizedBox(height: 22),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

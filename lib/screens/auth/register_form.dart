@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/screens/auth/components/slogan.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 
 import 'package:ootopia_app/theme/light/colors.dart';
@@ -226,29 +227,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!
-                                  .liveOotopiaNowMessage,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: LightColors.blue, fontSize: 24),
-                            ),
-                            Container(
-                              height: 50,
-                              width: 50,
-                              child: Image(
-                                image:
-                                    AssetImage("assets/images/butterfly.png"),
-                              ),
-                            )
-                          ],
-                        ),
+                        Slogan(),
                         Padding(
                           padding: EdgeInsets.only(
                             top: GlobalConstants.of(context).spacingMedium,

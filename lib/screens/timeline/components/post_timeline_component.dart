@@ -34,8 +34,6 @@ import 'feed_player/multi_manager/flick_multi_player.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
 import 'dart:math' as math;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
