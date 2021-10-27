@@ -22,7 +22,7 @@ class GeneralConfigRepositoryImpl
       final response = await ApiClient.api().get("general-config/$name");
       if (response.statusCode == 200) {
         print("GENERAL CONFIG RESPONSE ${response.data}");
-        return Future.value(GeneralConfig.fromJson(json.decode(response.data)));
+        return Future.value(GeneralConfig.fromJson(response.data));
       } else {
         throw Exception('Failed to load wallet');
       }
