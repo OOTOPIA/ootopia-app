@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +29,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'dart:ui' as ui;
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -239,156 +241,161 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ],
             ),
-            bottomNavigationBar: new SmartPageBottomNavigationBar(
-              controller: controller,
-              options: SmartPageBottomNavigationOptions(
-                height: 50,
-                indicatorColor: Theme.of(context).accentColor,
-                backgroundColor: Colors.white,
-                showBorder: false,
-                showIndicator: true,
-                borderColor: Color(0xff707070).withOpacity(0.20),
-                selectedColor: selectedIconColor,
-                unselectedColor: unselectedIconColor,
+            bottomNavigationBar: Padding(
+              padding: homeStore!.iphoneHasNotch
+                  ? EdgeInsets.only(bottom: 16)
+                  : EdgeInsets.only(bottom: 0),
+              child: new SmartPageBottomNavigationBar(
+                controller: controller,
+                options: SmartPageBottomNavigationOptions(
+                  height: 50,
+                  indicatorColor: Theme.of(context).accentColor,
+                  backgroundColor: Colors.white,
+                  showBorder: false,
+                  showIndicator: true,
+                  borderColor: Color(0xff707070).withOpacity(0.20),
+                  selectedColor: selectedIconColor,
+                  unselectedColor: unselectedIconColor,
+                ),
+                children: [
+                  BottomIcon(
+                    selectedWidget: SvgPicture.asset(
+                      'assets/icons/home_icon.svg',
+                      color: selectedIconColor,
+                    ),
+                    unselectedWidget: SvgPicture.asset(
+                      'assets/icons/home_icon.svg',
+                      color: unselectedIconColor,
+                    ),
+                  ),
+                  BottomIcon(
+                    selectedWidget: SvgPicture.asset(
+                      'assets/icons/compass.svg',
+                      color: selectedIconColor,
+                    ),
+                    unselectedWidget: SvgPicture.asset(
+                      'assets/icons/compass.svg',
+                      color: unselectedIconColor,
+                    ),
+                  ),
+                  BottomIcon(
+                    selectedWidget: Center(
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Theme.of(context).accentColor,
+                        ),
+                        child: Icon(
+                          FeatherIcons.plus,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                    unselectedWidget: Center(
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Theme.of(context).accentColor,
+                        ),
+                        child: Icon(
+                          FeatherIcons.plus,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                  BottomIcon(
+                    selectedWidget: Image.asset(
+                      "assets/icons/marketplace_selected_icon.png",
+                      height: 28,
+                    ),
+                    unselectedWidget: Image.asset(
+                      "assets/icons/marketplace_unselected_icon.png",
+                      height: 28,
+                    ),
+                  ),
+                  BottomIcon(
+                    selectedWidget: SvgPicture.asset(
+                      'assets/icons/profile_icon.svg',
+                      color: selectedIconColor,
+                    ),
+                    unselectedWidget: SvgPicture.asset(
+                      'assets/icons/profile_icon.svg',
+                      color: unselectedIconColor,
+                    ),
+                  ),
+                ],
+                onTap: (int index) {
+                  var result = true;
+                  switch (index) {
+                    case PageViewController.TAB_INDEX_TIMELINE:
+                      if (controller.pages[controller.currentPageIndex]
+                          is TimelinePage)
+                        timelineStore.goToTopTimeline(timelinePostBloc);
+
+                      controller.resetNavigation();
+                      break;
+                    case PageViewController.TAB_INDEX_LEARNING_TRACKS:
+                      if (authStore.currentUser == null) {
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.loginScreen.route,
+                          arguments: {
+                            "returnToPageWithArgs": {
+                              "currentPageName": "learning_tracks",
+                              "arguments": null
+                            }
+                          },
+                        );
+                        result = false;
+                      }
+                      break;
+                    case PageViewController.TAB_INDEX_CAMERA:
+                      if (authStore.currentUser == null) {
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.loginScreen.route,
+                          arguments: {
+                            "returnToPageWithArgs": {
+                              "currentPageName": "camera",
+                              "arguments": null
+                            }
+                          },
+                        );
+                      } else {
+                        Navigator.of(context)
+                            .pushNamed(PageRoute.Page.cameraScreen.route);
+                      }
+                      result = false;
+                      break;
+                    case PageViewController.TAB_INDEX_MARKETPLACE:
+                      print("caiu 1");
+                      if (authStore.currentUser == null) {
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.loginScreen.route,
+                          arguments: {
+                            "returnToPageWithArgs": {
+                              "currentPageName": "marketplace",
+                              "arguments": null
+                            }
+                          },
+                        );
+                        result = false;
+                      }
+                      break;
+                    case PageViewController.TAB_INDEX_PROFILE:
+                      result = openProfile();
+                      break;
+                    default:
+                  }
+
+                  return result;
+                },
               ),
-              children: [
-                BottomIcon(
-                  selectedWidget: SvgPicture.asset(
-                    'assets/icons/home_icon.svg',
-                    color: selectedIconColor,
-                  ),
-                  unselectedWidget: SvgPicture.asset(
-                    'assets/icons/home_icon.svg',
-                    color: unselectedIconColor,
-                  ),
-                ),
-                BottomIcon(
-                  selectedWidget: SvgPicture.asset(
-                    'assets/icons/compass.svg',
-                    color: selectedIconColor,
-                  ),
-                  unselectedWidget: SvgPicture.asset(
-                    'assets/icons/compass.svg',
-                    color: unselectedIconColor,
-                  ),
-                ),
-                BottomIcon(
-                  selectedWidget: Center(
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Theme.of(context).accentColor,
-                      ),
-                      child: Icon(
-                        FeatherIcons.plus,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ),
-                  ),
-                  unselectedWidget: Center(
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Theme.of(context).accentColor,
-                      ),
-                      child: Icon(
-                        FeatherIcons.plus,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ),
-                  ),
-                ),
-                BottomIcon(
-                  selectedWidget: Image.asset(
-                    "assets/icons/marketplace_selected_icon.png",
-                    height: 28,
-                  ),
-                  unselectedWidget: Image.asset(
-                    "assets/icons/marketplace_unselected_icon.png",
-                    height: 28,
-                  ),
-                ),
-                BottomIcon(
-                  selectedWidget: SvgPicture.asset(
-                    'assets/icons/profile_icon.svg',
-                    color: selectedIconColor,
-                  ),
-                  unselectedWidget: SvgPicture.asset(
-                    'assets/icons/profile_icon.svg',
-                    color: unselectedIconColor,
-                  ),
-                ),
-              ],
-              onTap: (int index) {
-                var result = true;
-                switch (index) {
-                  case PageViewController.TAB_INDEX_TIMELINE:
-                    if (controller.pages[controller.currentPageIndex]
-                        is TimelinePage)
-                      timelineStore.goToTopTimeline(timelinePostBloc);
-
-                    controller.resetNavigation();
-                    break;
-                  case PageViewController.TAB_INDEX_LEARNING_TRACKS:
-                    if (authStore.currentUser == null) {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.loginScreen.route,
-                        arguments: {
-                          "returnToPageWithArgs": {
-                            "currentPageName": "learning_tracks",
-                            "arguments": null
-                          }
-                        },
-                      );
-                      result = false;
-                    }
-                    break;
-                  case PageViewController.TAB_INDEX_CAMERA:
-                    if (authStore.currentUser == null) {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.loginScreen.route,
-                        arguments: {
-                          "returnToPageWithArgs": {
-                            "currentPageName": "camera",
-                            "arguments": null
-                          }
-                        },
-                      );
-                    } else {
-                      Navigator.of(context)
-                          .pushNamed(PageRoute.Page.cameraScreen.route);
-                    }
-                    result = false;
-                    break;
-                  case PageViewController.TAB_INDEX_MARKETPLACE:
-                    print("caiu 1");
-                    if (authStore.currentUser == null) {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.loginScreen.route,
-                        arguments: {
-                          "returnToPageWithArgs": {
-                            "currentPageName": "marketplace",
-                            "arguments": null
-                          }
-                        },
-                      );
-                      result = false;
-                    }
-                    break;
-                  case PageViewController.TAB_INDEX_PROFILE:
-                    result = openProfile();
-                    break;
-                  default:
-                }
-
-                return result;
-              },
             ),
           );
         }),
@@ -417,6 +424,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   _checkStores() async {
     await homeStore?.getDailyGoalStats();
     homeStore?.startDailyGoalTimer();
+    if (Platform.isIOS)
+      homeStore?.getIphoneHasNotch(ui.window.physicalSize.height.toInt());
     if (authStore.currentUser == null) {
       authStore.checkUserIsLogged();
     }

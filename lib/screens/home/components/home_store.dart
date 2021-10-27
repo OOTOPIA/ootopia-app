@@ -3,6 +3,7 @@ import 'dart:async';
 import "package:mobx/mobx.dart";
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
+import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,9 @@ abstract class HomeStoreBase with Store {
 
   @observable
   bool userLogged = false;
+
+  @observable
+  bool iphoneHasNotch = false;
 
   @action
   startDailyGoalTimer() async {
@@ -134,6 +138,21 @@ abstract class HomeStoreBase with Store {
               _msToTime(_totalAppUsageTimeSoFarInMs, showSeconds: true);
         }
       });
+    }
+  }
+
+  @action
+  getIphoneHasNotch(int iosScreenSize) async {
+    try {
+      final response = await ApiClient.api().get(
+          'general-config/check-ios-has-notch?iosScreenSize=$iosScreenSize');
+      if (response.statusCode == 200) {
+        iphoneHasNotch = response.data["hasNotch"];
+      } else {
+        throw Exception('Failed to Validate Iphone Notch');
+      }
+    } catch (error) {
+      throw Exception('Failed to Validate Iphone Notch. Error: $error');
     }
   }
 
