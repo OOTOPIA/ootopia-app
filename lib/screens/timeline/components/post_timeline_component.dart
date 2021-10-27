@@ -19,7 +19,7 @@ import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.da
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
-import 'package:ootopia_app/screens/timeline/components/toast_widget.dart';
+import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -714,25 +714,27 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         this.post.userId == (authStore.currentUser?.id ?? ""),
                     child: GestureDetector(
                       onHorizontalDragEnd: (_) {
-                        showDialog(
-                          context: context,
-                          barrierColor: Colors.transparent,
-                          barrierDismissible: true,
-                          builder: (context) => ToastWidget(
-                              text: AppLocalizations.of(context)!
-                                  .tooltipBlockedField,
-                              suffixIcon: Icons.info_outline),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          CustomSnackbars(context).defaultSnackbar(
+                            text: AppLocalizations.of(context)!
+                                .tooltipBlockedField,
+                            backgroundColor: Color(0xff03DAC5),
+                            iconColor: Colors.white,
+                            suffixIcon: Icons.info_outline_rounded,
+                            textColor: Colors.white,
+                          ),
                         );
                       },
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          barrierColor: Colors.transparent,
-                          barrierDismissible: true,
-                          builder: (context) => ToastWidget(
-                              text: AppLocalizations.of(context)!
-                                  .tooltipBlockedField,
-                              suffixIcon: Icons.info_outline),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          CustomSnackbars(context).defaultSnackbar(
+                            text: AppLocalizations.of(context)!
+                                .tooltipBlockedField,
+                            backgroundColor: Color(0xff03DAC5),
+                            iconColor: Colors.white,
+                            suffixIcon: Icons.info_outline_rounded,
+                            textColor: Colors.white,
+                          ),
                         );
                       },
                       child: Container(
