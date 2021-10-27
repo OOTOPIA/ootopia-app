@@ -34,8 +34,9 @@ class _HashtagWidgetState extends State<HashtagWidget> {
         });
       },
       child: Container(
+        height: 38,
         margin:
-            EdgeInsets.only(bottom: GlobalConstants.of(context).spacingSmall, right: 2),
+            EdgeInsets.only(bottom: GlobalConstants.of(context).spacingSmall),
         padding: EdgeInsets.symmetric(
             horizontal: GlobalConstants.of(context).intermediateSpacing,
             vertical: GlobalConstants.of(context).smallIntermediateSpacing),
@@ -47,9 +48,9 @@ class _HashtagWidgetState extends State<HashtagWidget> {
         child: Text(
           widget.item.label,
           style: GoogleFonts.roboto(
-            color: widget.tagExists ? Colors.white : Colors.black45,
-            fontWeight: FontWeight.w600,
-          ),
+              color: widget.tagExists ? Colors.white : Colors.black45,
+              fontWeight: FontWeight.w600,
+              fontSize: Theme.of(context).textTheme.headline5!.fontSize),
         ),
       ),
     );
