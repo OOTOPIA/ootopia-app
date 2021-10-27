@@ -18,7 +18,8 @@ abstract class TimelineStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
 
   @observable
-  ScrollController scrollController = ScrollController(initialScrollOffset: 0.0);
+  ScrollController scrollController =
+      ScrollController(initialScrollOffset: 0.0);
 
   @observable
   List<TimelinePost> allPosts = [];
@@ -26,21 +27,22 @@ abstract class TimelineStoreBase with Store {
   @observable
   int currentPage = 1;
 
+  @observable
+  bool _sendingToApi = false;
+
   @action
   void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
-    if(scrollController.hasClients)
-    scrollController.animateTo(
-      scrollController.position.minScrollExtent,
-      duration: Duration(seconds: 1),
-      curve: Curves.fastOutSlowIn,
-    );
-    
+    if (scrollController.hasClients)
+      scrollController.animateTo(
+        scrollController.position.minScrollExtent,
+        duration: Duration(seconds: 1),
+        curve: Curves.fastOutSlowIn,
+      );
 
     Future.delayed(Duration(milliseconds: 500)).then((value) {
       allPosts.clear();
       currentPage = 1;
-      timelinePostBloc.add(GetTimelinePostsEvent(10,
-       0));
+      timelinePostBloc.add(GetTimelinePostsEvent(10, 0));
     });
   }
 
@@ -105,7 +107,8 @@ abstract class TimelineStoreBase with Store {
   }
 
   _sendToApi() async {
-    if (_timelineViewtimeSoFarInMs > 0) {
+    if (_timelineViewtimeSoFarInMs > 0 && !_sendingToApi) {
+      _sendingToApi = true;
       //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
       //Sendo assim o registro será enviado quando o app for aberto novamente
       Future.delayed(Duration.zero, () async {
@@ -113,6 +116,7 @@ abstract class TimelineStoreBase with Store {
         await repository.recordTimelineWatched(_timelineViewtimeSoFarInMs);
         _timelineViewtimeSoFarInMs = 0;
         prefs!.setInt(_prefsKey, 0);
+        _sendingToApi = false;
       });
     }
   }
