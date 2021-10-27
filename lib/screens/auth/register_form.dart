@@ -156,6 +156,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                   borderRadius: BorderRadius.circular(100),
                                 ),
                               ),
+                              elevation: MaterialStateProperty.all<double>(0.0),
                               minimumSize: MaterialStateProperty.all(
                                 Size(60, 58),
                               ),
@@ -281,6 +282,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                               TextFormField(
                                 controller: registerController.emailController,
                                 keyboardType: TextInputType.emailAddress,
+                                autocorrect: false,
+                                enableSuggestions: false,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
                                         AppLocalizations.of(context)!.email)
@@ -332,6 +335,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                 controller:
                                     registerController.passwordController,
                                 obscureText: !_showPassword,
+                                autocorrect: false,
+                                enableSuggestions: false,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
                                       AppLocalizations.of(context)!.password,
@@ -388,6 +393,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                 controller:
                                     registerController.repeatPasswordController,
                                 obscureText: !_showRepeatPassword,
+                                autocorrect: false,
+                                enableSuggestions: false,
                                 decoration: GlobalConstants.of(context)
                                     .loginInputTheme(
                                       AppLocalizations.of(context)!
