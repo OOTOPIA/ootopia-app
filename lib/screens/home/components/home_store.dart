@@ -3,6 +3,7 @@ import 'dart:async';
 import "package:mobx/mobx.dart";
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
+import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,9 @@ abstract class HomeStoreBase with Store {
 
   @observable
   bool userLogged = false;
+
+  @observable
+  bool iphoneHasNotch = false;
 
   @action
   startDailyGoalTimer() async {
@@ -135,6 +139,12 @@ abstract class HomeStoreBase with Store {
         }
       });
     }
+  }
+
+  @action
+  getIphoneHasNotch(int iosScreenSize) async {
+    iphoneHasNotch =
+        await GeneralConfigRepositoryImpl().getIosHasNotch(iosScreenSize);
   }
 
   @action

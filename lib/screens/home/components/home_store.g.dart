@@ -184,6 +184,21 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  final _$iphoneHasNotchAtom = Atom(name: 'HomeStoreBase.iphoneHasNotch');
+
+  @override
+  bool get iphoneHasNotch {
+    _$iphoneHasNotchAtom.reportRead();
+    return super.iphoneHasNotch;
+  }
+
+  @override
+  set iphoneHasNotch(bool value) {
+    _$iphoneHasNotchAtom.reportWrite(value, super.iphoneHasNotch, () {
+      super.iphoneHasNotch = value;
+    });
+  }
+
   final _$startDailyGoalTimerAsyncAction =
       AsyncAction('HomeStoreBase.startDailyGoalTimer');
 
@@ -191,6 +206,15 @@ mixin _$HomeStore on HomeStoreBase, Store {
   Future startDailyGoalTimer() {
     return _$startDailyGoalTimerAsyncAction
         .run(() => super.startDailyGoalTimer());
+  }
+
+  final _$getIphoneHasNotchAsyncAction =
+      AsyncAction('HomeStoreBase.getIphoneHasNotch');
+
+  @override
+  Future getIphoneHasNotch(int iosScreenSize) {
+    return _$getIphoneHasNotchAsyncAction
+        .run(() => super.getIphoneHasNotch(iosScreenSize));
   }
 
   final _$getDailyGoalStatsAsyncAction =
@@ -289,7 +313,8 @@ remainingTime: ${remainingTime},
 totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar},
 showCreatedPostAlert: ${showCreatedPostAlert},
 createdPostAlertAlreadyShowed: ${createdPostAlertAlreadyShowed},
-userLogged: ${userLogged}
+userLogged: ${userLogged},
+iphoneHasNotch: ${iphoneHasNotch}
     ''';
   }
 }

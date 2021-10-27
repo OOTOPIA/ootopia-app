@@ -30,4 +30,21 @@ class GeneralConfigRepositoryImpl
       throw Exception('Failed to load wallet. Error: $error');
     }
   }
+
+  Future<bool> getIosHasNotch(int iosScreenSize) async {
+    bool result = false;
+     try {
+      final response = await ApiClient.api().get(
+          'general-config/check-ios-has-notch?iosScreenSize=$iosScreenSize');
+      if (response.statusCode == 200) {
+        result = response.data["hasNotch"];
+      } else {
+        throw Exception('Failed to Validate Iphone Notch');
+      }
+    } catch (error) {
+      throw Exception('Failed to Validate Iphone Notch. Error: $error');
+    }
+
+    return result;
+  }
 }
