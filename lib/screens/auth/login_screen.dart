@@ -145,7 +145,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             children: [
                               Container(
-                                height: 73,
                                 child: TextFormField(
                                   controller: _emailController,
                                   autocorrect: false,
@@ -220,144 +219,118 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               SizedBox(
                                 height:
-                                    GlobalConstants.of(context).spacingSmall,
+                                    GlobalConstants.of(context).spacingMedium,
                               ),
                               Container(
-                                  height: 73,
-                                  child: Stack(
-                                    children: [
-                                      TextFormField(
-                                        controller: _passwordController,
-                                        onTap: () {
-                                          passIsValid = true;
-                                          setState(() {});
-                                        },
-                                        obscureText: !_showPassword,
-                                        style: GoogleFonts.roboto(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black),
-                                        decoration: GlobalConstants.of(context)
-                                            .loginInputTheme(
-                                                AppLocalizations.of(context)!
-                                                    .password)
-                                            .copyWith(
-                                              errorStyle: passIsValid
-                                                  ? TextStyle(
-                                                      color: Colors.transparent,
-                                                      fontSize: 0)
-                                                  : TextStyle(),
-                                              labelStyle: passIsValid
-                                                  ? GoogleFonts.roboto(
-                                                      color:
-                                                          LightColors.lightGrey,
-                                                      fontWeight:
-                                                          FontWeight.w500)
-                                                  : GoogleFonts.roboto(
-                                                      color:
-                                                          LightColors.errorRed,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                              prefixIcon: ImageIcon(
-                                                AssetImage(
-                                                    "assets/icons/lock.png"),
-                                                color: passIsValid
-                                                    ? LightColors.grey
-                                                    : LightColors.errorRed,
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                color: passIsValid
-                                                    ? LightColors.grey
-                                                    : LightColors.errorRed,
-                                              )),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                color: passIsValid
-                                                    ? LightColors.grey
-                                                    : LightColors.errorRed,
-                                              )),
-                                              suffixIcon: GestureDetector(
-                                                child: ImageIcon(
-                                                  _showPassword == false
-                                                      ? AssetImage(
-                                                          "assets/icons/eye-off.png")
-                                                      : AssetImage(
-                                                          "assets/icons/eye.png"),
-                                                  color: LightColors.grey,
-                                                  size: 2,
-                                                ),
-                                                onTap: () {
-                                                  setState(() {
-                                                    _showPassword =
-                                                        !_showPassword;
-                                                  });
-                                                },
-                                              ),
+                                child: Stack(
+                                  children: [
+                                    TextFormField(
+                                      controller: _passwordController,
+                                      onTap: () {
+                                        passIsValid = true;
+                                        setState(() {});
+                                      },
+                                      obscureText: !_showPassword,
+                                      style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black),
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme(
+                                              AppLocalizations.of(context)!
+                                                  .password)
+                                          .copyWith(
+                                            errorStyle: passIsValid
+                                                ? TextStyle(
+                                                    color: Colors.transparent,
+                                                    fontSize: 0)
+                                                : TextStyle(),
+                                            labelStyle: passIsValid
+                                                ? GoogleFonts.roboto(
+                                                    color:
+                                                        LightColors.lightGrey,
+                                                    fontWeight: FontWeight.w500)
+                                                : GoogleFonts.roboto(
+                                                    color: LightColors.errorRed,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                            prefixIcon: ImageIcon(
+                                              AssetImage(
+                                                  "assets/icons/lock.png"),
+                                              color: passIsValid
+                                                  ? LightColors.grey
+                                                  : LightColors.errorRed,
                                             ),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            setState(() {
-                                              passIsValid = false;
-                                            });
-                                            return AppLocalizations.of(context)!
-                                                .pleaseEnterYourPassword;
-                                          }
-                                          setState(() {
-                                            passIsValid = true;
-                                          });
-                                          return null;
-                                        },
-                                      ),
-                                      Positioned(
-                                        bottom: -45,
-                                        right: 0,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            top: 0,
-                                            bottom: GlobalConstants.of(context)
-                                                .spacingLarge,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context)
-                                                      .pushNamed(PageRoute
-                                                          .Page
-                                                          .recoverPasswordScreen
-                                                          .route);
-                                                },
-                                                child: Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .iForgotMyPassword,
-                                                    textAlign: TextAlign.center,
-                                                    style: GoogleFonts.roboto(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors.black,
-                                                    )
-
-                                                    // TextStyle(
-                                                    //     fontSize: 12,
-                                                    //     fontWeight: FontWeight.bold,
-                                                    //     decoration: TextDecoration.underline,
-                                                    //     color: Colors.black,
-                                                    //     fontFamily: 'RobotoRegular'),
-                                                    ),
+                                            errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                              color: passIsValid
+                                                  ? LightColors.grey
+                                                  : LightColors.errorRed,
+                                            )),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                              color: passIsValid
+                                                  ? LightColors.grey
+                                                  : LightColors.errorRed,
+                                            )),
+                                            suffixIcon: GestureDetector(
+                                              child: ImageIcon(
+                                                _showPassword == false
+                                                    ? AssetImage(
+                                                        "assets/icons/eye-off.png")
+                                                    : AssetImage(
+                                                        "assets/icons/eye.png"),
+                                                color: LightColors.grey,
+                                                size: 2,
                                               ),
-                                            ],
+                                              onTap: () {
+                                                setState(() {
+                                                  _showPassword =
+                                                      !_showPassword;
+                                                });
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          setState(() {
+                                            passIsValid = false;
+                                          });
+                                          return AppLocalizations.of(context)!
+                                              .pleaseEnterYourPassword;
+                                        }
+                                        setState(() {
+                                          passIsValid = true;
+                                        });
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 6),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(PageRoute
+                                          .Page.recoverPasswordScreen.route);
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .iForgotMyPassword,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Container(
                                 height: 24,
                               )
