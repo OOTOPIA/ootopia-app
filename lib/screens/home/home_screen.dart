@@ -373,7 +373,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       result = false;
                       break;
                     case PageViewController.TAB_INDEX_MARKETPLACE:
-                      print("caiu 1");
                       if (authStore.currentUser == null) {
                         Navigator.of(context).pushNamed(
                           PageRoute.Page.loginScreen.route,
