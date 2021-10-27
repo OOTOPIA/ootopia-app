@@ -89,7 +89,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.inactive:
         //homeStore?.stopDailyGoalTimer();
         //print("app in inactive");
-
         break;
       case AppLifecycleState.paused:
         //homeStore?.stopDailyGoalTimer();
@@ -425,53 +424,58 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   _checkPageParams() {
     Timer(Duration(milliseconds: 300), () {
-      if (widget.args != null &&
-          widget.args!['returnToPageWithArgs'] != null &&
-          widget.args!['returnToPageWithArgs']['currentPageName'] != null &&
-          authStore.currentUser != null) {
-        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
-            "learning_tracks") {
-          setState(() {
-            controller.selectBottomTab(1);
-          });
+      try {
+        if (widget.args != null &&
+            widget.args!['returnToPageWithArgs'] != null &&
+            widget.args!['returnToPageWithArgs']['currentPageName'] != null &&
+            authStore.currentUser != null) {
+          if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+              "learning_tracks") {
+            setState(() {
+              controller.selectBottomTab(1);
+            });
+          }
+          if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+              "camera") {
+            setState(() {
+              controller.selectBottomTab(2);
+            });
+          }
+          if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+              "marketplace") {
+            setState(() {
+              controller.selectBottomTab(3);
+            });
+          }
+          if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
+              "my_profile") {
+            setState(() {
+              controller.selectBottomTab(4);
+            });
+          }
         }
-        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
-            "camera") {
-          setState(() {
-            controller.selectBottomTab(2);
-          });
-        }
-        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
-            "marketplace") {
-          setState(() {
-            controller.selectBottomTab(3);
-          });
-        }
-        if (widget.args!['returnToPageWithArgs']['currentPageName'] ==
-            "my_profile") {
-          setState(() {
-            controller.selectBottomTab(4);
-          });
-        }
-      }
 
-      if (widget.args!['returnToPageWithArgs']['pageRoute'] != null) {
-        Navigator.of(context).pushNamed(
-          widget.args!['returnToPageWithArgs']['pageRoute'],
-          arguments: widget.args!['returnToPageWithArgs']['arguments'],
-        );
-      }
+        if (widget.args?['returnToPageWithArgs'] != null &&
+            widget.args?['returnToPageWithArgs']['pageRoute'] != null) {
+          Navigator.of(context).pushNamed(
+            widget.args!['returnToPageWithArgs']['pageRoute'],
+            arguments: widget.args!['returnToPageWithArgs']['arguments'],
+          );
+        }
 
-      if (widget.args != null &&
-          widget.args!['createdPost'] != null &&
-          widget.args!['createdPost'] == true) {
-        homeStore?.setShowCreatedPostAlert(true);
-        oozToRewardAfterSendPost = widget.args!['oozToReward'];
-        Timer(Duration(seconds: 5), () {
-          homeStore?.setShowCreatedPostAlert(false);
-          homeStore?.setCreatedPostAlertAlreadyShowed(true);
-          setState(() {});
-        });
+        if (widget.args != null &&
+            widget.args!['createdPost'] != null &&
+            widget.args!['createdPost'] == true) {
+          homeStore?.setShowCreatedPostAlert(true);
+          oozToRewardAfterSendPost = widget.args!['oozToReward'];
+          Timer(Duration(seconds: 5), () {
+            homeStore?.setShowCreatedPostAlert(false);
+            homeStore?.setCreatedPostAlertAlreadyShowed(true);
+            setState(() {});
+          });
+        }
+      } catch (err) {
+        print("Check page params error: $err");
       }
     });
   }
