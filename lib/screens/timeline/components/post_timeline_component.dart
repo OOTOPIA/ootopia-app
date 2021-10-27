@@ -480,6 +480,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           : 0,
                       child: Container(
                         height: 32,
+                        padding: EdgeInsets.only(bottom: 2),
                         alignment: Alignment.centerLeft,
                         child: Text(
                           AppLocalizations.of(context)!
