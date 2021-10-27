@@ -107,65 +107,62 @@ class _RegenerationGameState extends State<RegenerationGame>
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Observer(builder: (context) {
-                          return Expanded(
-                            child: InkWell(
-                              onTap: () async {
-                                if (editProfileStore.currentUser != null) {
-                                  showModalBottomSheet(
-                                      barrierColor: Colors.black.withAlpha(1),
-                                      context: context,
-                                      backgroundColor:
-                                          Colors.black.withAlpha(1),
-                                      builder: (BuildContext context) {
-                                        return SnackBarWidget(
-                                          menu: AppLocalizations.of(context)!
-                                              .regenerationGame,
-                                          text: AppLocalizations.of(context)!
-                                              .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
-                                              .replaceAll('%GOAL_CHOSEN%',
-                                                  '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
-                                          about: AppLocalizations.of(context)!
-                                              .learnMore,
-                                          marginBottom: true,
-                                        );
-                                      });
-                                }
-                              }, //Saiba mais
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  top: 10,
-                                  right:
-                                      GlobalConstants.of(context).spacingNormal,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .regenerationGame,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline2!
-                                          .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                          ),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)!.learnMore,
-                                      style: Theme.of(context)
-                                          .accentTextTheme
-                                          .bodyText2!,
-                                    )
-                                  ],
-                                ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () async {
+                              if (editProfileStore.currentUser != null) {
+                                showModalBottomSheet(
+                                    barrierColor: Colors.black.withAlpha(1),
+                                    context: context,
+                                    backgroundColor: Colors.black.withAlpha(1),
+                                    builder: (BuildContext context) {
+                                      return SnackBarWidget(
+                                        menu: AppLocalizations.of(context)!
+                                            .regenerationGame,
+                                        text: AppLocalizations.of(context)!
+                                            .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                            .replaceAll('%GOAL_CHOSEN%',
+                                                '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
+                                        about: AppLocalizations.of(context)!
+                                            .learnMore,
+                                        marginBottom: true,
+                                      );
+                                    });
+                              }
+                            }, //Saiba mais
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                top: 10,
+                                right:
+                                    GlobalConstants.of(context).spacingNormal,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .regenerationGame,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color,
+                                        ),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)!.learnMore,
+                                    style: Theme.of(context)
+                                        .accentTextTheme
+                                        .bodyText2!,
+                                  )
+                                ],
                               ),
                             ),
-                          );
-                        }),
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
