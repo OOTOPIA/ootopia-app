@@ -35,13 +35,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   @override
   void initState() {
     super.initState();
-    this.getAppInfo();
+    Future.delayed(Duration.zero, () async {
+      this.getAppInfo();
+    });
   }
 
   Future<void> getAppInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     setState(() {
-      this.appVersion = info.version;
+      this.appVersion = '${info.version}+${info.buildNumber}';
     });
   }
 
