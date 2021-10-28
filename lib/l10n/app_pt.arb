@@ -286,12 +286,13 @@
     "thereAreNoWalletRecords": "Não há registros de OZZ",
 
     "sendYourFeedback":"Envie seu feedback",
-    "questions":"Perguntas",
+    "questions":"perguntas",
     "suggestions": "sugestões",
-    "checkYourTransactions":"Confira suas transações",
-    "earnOzzSignup":"ganham OOz quando eles se inscrevem",
+    "checkYourTransactions":"confira suas transações",
+    "earn":"ganham",
+    "whenTheySignup":"quando eles se inscrevem",
     "inviteYourFriends":"Convide seus amigos",
-    "enterToOotopia": "entre no ootopia",
+    "enterToOotopia": "entre no OOTOPIA",
     "dialogTitleBeforeExiting": "Obrigado por participar da OOTOPIA!",
     "dialogDescriptionBeforeExiting": "Estamos fazendo este ambiente de teste e cada feedback nos ajudará a tornar o mundo um lugar melhor.\n\nAdoraríamos ouvir um pouco mais de você, como foi sua experiência hoje?",
     "notNow": "Agora não",
@@ -404,5 +405,6 @@
      "pictureByClemOnojeghuo":"Foto de Clem Onojeghuo",
      "nextAboutCreateOffer":"Na próxima atualização do aplicativo, todos poderão criar ofertas, produtos, serviços e experiências. Até lá, que tal nos dizer o que você gostaria de vender ou adquirir?\n\nSuas sugestões e dúvidas são muito bem vindas!",
      "aboutYourOfferHere":"SERÁ ÓTIMO VER SUA OFERTA AQUI",
-     "giveSuggestion":"Dar sugestão"
+     "giveSuggestion":"Dar sugestão",
+     "supportCenter":"Centro de Suporte"
 }
