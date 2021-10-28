@@ -65,7 +65,10 @@ class _HashtagSelectSearchDialogWidgetState
                   },
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.searchForAtag,
-                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.2)),
+                    hintStyle: GoogleFonts.roboto(
+                        color: Colors.black.withOpacity(0.2),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide:
@@ -90,13 +93,15 @@ class _HashtagSelectSearchDialogWidgetState
                       child: Wrap(
                         spacing: GlobalConstants.of(context).spacingSmall,
                         children: [
-                          SizedBox(height: 10, width: double.infinity,),
+                          SizedBox(
+                            height: 10,
+                            width: double.infinity,
+                          ),
                           ...widget.postPreviewScreenStore.filterValue.isEmpty
-                                ? allTags
-                                : widget.postPreviewScreenStore
-                                    .filterTagsPerName(allTags)
-                        ]
-                            ,
+                              ? allTags
+                              : widget.postPreviewScreenStore
+                                  .filterTagsPerName(allTags)
+                        ],
                       ),
                     ),
                   ),
