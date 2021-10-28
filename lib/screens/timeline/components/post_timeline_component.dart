@@ -465,15 +465,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               0.2
                           : 0,
                       child: Container(
+                        height: 32,
+                        padding: EdgeInsets.only(bottom: 2),
                         alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(
-                          top: 10,
-                        ),
                         child: Text(
                           AppLocalizations.of(context)!
                               .slideToGiveAGratitudeReward,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Color(
                               0xffBEBDBD,
                             ),
@@ -876,10 +875,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     }
     return SizedBox(
       height: 25,
+      
       child: TextButton(
         style: TextButton.styleFrom(
+          
           primary: Colors.black87,
-          padding: EdgeInsets.symmetric(horizontal: 3),
+          padding: EdgeInsets.only(left: 12),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),

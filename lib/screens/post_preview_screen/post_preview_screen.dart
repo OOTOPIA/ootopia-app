@@ -20,12 +20,12 @@ import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/confirm_post_button_widget.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/hashtag_select_search_dialog_widget.dart';
-import 'package:ootopia_app/screens/post_preview_screen/components/hashtage_widget.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:video_player/video_player.dart';
@@ -553,6 +553,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                     child: TextFormField(
                       maxLines: null,
                       minLines: 1,
+                      textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
                       controller: _descriptionInputController,
                       textAlign: TextAlign.left,
@@ -677,18 +678,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                 );
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 18, horizontal: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  border: Border.all(
-                                    color: Color(0xff707070),
-                                    width: .25,
-                                  ),
-                                ),
                                 margin: EdgeInsets.only(
-                                  bottom: 16,
+                                    bottom: GlobalConstants.of(context)
+                                        .spacingNormal),
+                                height: 57,
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: LightColors.grey,
+                                    width: 0.25,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -697,19 +697,20 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                     Row(
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 10),
+                                          padding: const EdgeInsets.only(
+                                              right: 10 ),
                                           child: Image.asset(
                                             "assets/icons/add_icon.png",
-                                            height: 20,
+                                            height: 24,
                                           ),
                                         ),
                                         Text(
                                           AppLocalizations.of(context)!
                                               .searchForAtag,
                                           style: GoogleFonts.roboto(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600),
+                                              fontSize: 15,
+                                              color: LightColors.blackText,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       ],
                                     ),
@@ -720,8 +721,8 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                             : "${postPreviewStore.selectedTags.length} ${postPreviewStore.selectedTags.length > 1 ? AppLocalizations.of(context)!.selecteds : AppLocalizations.of(context)!.selected2}",
                                         style: GoogleFonts.roboto(
                                             fontSize: 12,
-                                            color: Color(0xff707070),
-                                            fontWeight: FontWeight.w600)),
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400)),
                                   ],
                                 ),
                               ),
@@ -739,14 +740,24 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                                   .remove(item);
                                             },
                                             child: Container(
+                                              height: 38,
                                               margin: EdgeInsets.only(
-                                                  right: 10, bottom: 10),
+                                                  bottom: GlobalConstants.of(
+                                                          context)
+                                                      .spacingSmall,
+                                                  left: 2),
                                               padding: EdgeInsets.symmetric(
-                                                  horizontal: 24, vertical: 14),
+                                                  horizontal:
+                                                      GlobalConstants.of(
+                                                              context)
+                                                          .intermediateSpacing,
+                                                  vertical: GlobalConstants.of(
+                                                          context)
+                                                      .smallIntermediateSpacing),
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: Color(0xFF060053)),
+                                                      BorderRadius.circular(35),
+                                                  color: LightColors.darkBlue),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 mainAxisAlignment:
@@ -758,14 +769,15 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                                         const EdgeInsets.only(
                                                             right: 12),
                                                     child: Text(item.name,
-                                                        style:
-                                                            GoogleFonts.roboto(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 12)),
+                                                        style: GoogleFonts.roboto(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline5!
+                                                                .fontSize)),
                                                   ),
                                                   Icon(
                                                     Icons.close,
