@@ -386,9 +386,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                           FocusScope.of(context).unfocus();
                           if (_formKey.currentState!.validate()) {
                             _submit();
-                            print("VALIDADOOO");
                           }
-                          print('INVALIDOOO');
                         },
                         color: LightColors.blue,
                         splashColor: Colors.black54,
