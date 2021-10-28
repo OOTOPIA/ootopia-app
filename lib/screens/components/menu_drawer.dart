@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
@@ -87,6 +88,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           icon: Icon(
                             Icons.close,
                             size: 15,
+                            color: Colors.black,
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -103,7 +105,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           },
                           child: Padding(
                             padding: EdgeInsets.only(
-                                top: GlobalConstants.of(context).spacingNormal),
+                                top: GlobalConstants.of(context)
+                                    .intermediateSpacing),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -118,32 +121,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                   isBadges:
                                       authStore!.currentUser!.badges!.length >
                                           0,
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      barrierColor: Colors.black.withAlpha(1),
-                                      backgroundColor:
-                                          Colors.black.withAlpha(1),
-                                      builder: (BuildContext context) {
-                                        return SnackBarWidget(
-                                          menu: AppLocalizations.of(context)!
-                                              .badgeChangeMakerPro,
-                                          text: AppLocalizations.of(context)!
-                                              .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                          about: AppLocalizations.of(context)!
-                                              .learnMore,
-                                          contact: {
-                                            "text":
-                                                AppLocalizations.of(context)!
-                                                    .areYouAChangeMakerProToo,
-                                            "textLink":
-                                                AppLocalizations.of(context)!
-                                                    .getInContact,
-                                          },
-                                        );
-                                      },
-                                    );
-                                  },
+                                  onTap: () {},
                                 ),
                               ],
                             ),
@@ -153,7 +131,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     ],
                   ),
                 ),
-                Padding(
+                Container(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Align(
                     alignment: Alignment.center,
@@ -165,9 +143,13 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   ),
                 ),
                 Card(
-                  elevation: 1,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1,
+                    ),
                   ),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -185,19 +167,25 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text('|'),
-                        Image.asset(
-                          'assets/icons/Icon-metro-trophy.png',
+                        SvgPicture.asset(
+                          "assets/icons_profile/laurel_wreath.svg",
+                          width: 18,
+                          height: 17,
+                          color: Color(0xff018f9c),
                         ),
                         Text(
                           '${authStore!.currentUser!.totalTrophyQuantity}',
                           style: TextStyle(
-                              color: Color(0xff00A5FC),
+                              color: Color(0xff018F9C),
                               fontWeight: FontWeight.bold,
                               fontSize: 14),
                         )
                       ],
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: 8,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -214,9 +202,26 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           '${AppLocalizations.of(context)!.inviteYourFriends}',
                           style: TextStyle(fontSize: 12),
                         ),
-                        Text(
-                          '${AppLocalizations.of(context)!.earnOzzSignup}',
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                        RichText(
+                          text: TextSpan(
+                              text: AppLocalizations.of(context)!.earn,
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 10),
+                              children: [
+                                TextSpan(
+                                  text: " OOz ",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: AppLocalizations.of(context)!
+                                      .whenTheySignup,
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 10),
+                                )
+                              ]),
                         ),
                       ],
                     ),
@@ -232,7 +237,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     ),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
-                      size: 20,
+                      size: 15,
+                      color: Colors.black,
                     ),
                     onTap: () {
                       controller.insertPage(InvitationScreen());
@@ -262,13 +268,13 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       ],
                     ),
                     leading: Image.asset(
-                      'assets/icons/ooz-coin-small.png',
-                      color: Colors.black,
+                      'assets/icons/ooz-black-coin.png',
                       width: 24,
                     ),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
-                      size: 20,
+                      size: 15,
+                      color: Colors.black,
                     ),
                     onTap: () {
                       if (widget.onTapWalletItem != null) {
@@ -279,24 +285,16 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
                   child: ListTile(
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
+                          '${AppLocalizations.of(context)!.supportCenter}',
                           style: TextStyle(fontSize: 12),
                         ),
                         Text(
-                          '${AppLocalizations.of(context)!.sendYourFeedback}',
+                          '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
                           style: TextStyle(color: Colors.grey, fontSize: 10),
                         ),
                       ],
@@ -307,31 +305,33 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     ),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
-                      size: 20,
+                      size: 15,
+                      color: Colors.black,
                     ),
                     onTap: () {
-                      setState(() {
-                        Navigator.of(context).pushNamed(
-                            PageRoute.Page.chatWithUsersScreen.route);
-                      });
+                      Navigator.of(context)
+                          .pushNamed(PageRoute.Page.chatWithUsersScreen.route);
                     },
                   ),
                 ),
               ],
             ),
             Container(
-              width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(32),
+                    padding: EdgeInsets.symmetric(horizontal: 32),
                     child: Column(
                       children: [
                         Text(
-                          "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
+                          "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                        SizedBox(
+                          height: 6,
                         ),
                         Text(
                           AppLocalizations.of(context)!
@@ -339,8 +339,11 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
+                        SizedBox(
+                          height: 6,
+                        ),
                         Text(
-                          '\ndevmagic.com.br \n ootopia.org',
+                          'devmagic.com.br \n ootopia.org',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         )
@@ -386,39 +389,88 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
       children: [
         DrawerHeader(
             decoration: BoxDecoration(
-                color: Colors.white,
                 border:
                     Border(bottom: BorderSide(color: Colors.white, width: 0))),
-            padding: EdgeInsets.only(bottom: 70, top: 10, left: 15, right: 15),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border(
+            padding: EdgeInsets.only(bottom: 67, top: 10, left: 15, right: 15),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    padding: EdgeInsets.only(bottom: 16),
+                    icon: Icon(
+                      Icons.close,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: BoxDecoration(
+                    border: Border(
                       bottom: BorderSide(
-                color: Colors.grey.shade300,
-                width: 1.0,
-              ))),
-              child: ListTile(
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.person),
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          'assets/icons/user-plus-black.png',
+                          width: 15.83,
+                          height: 18.99,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${AppLocalizations.of(context)!.login}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              '${AppLocalizations.of(context)!.enterToOotopia}',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Color(0xff707070),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        PageRoute.Page.loginScreen.route,
+                      );
+                    },
+                  ),
                 ),
-                title: Text('${AppLocalizations.of(context)!.login}'),
-                subtitle:
-                    Text('${AppLocalizations.of(context)!.enterToOotopia}'),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20,
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    PageRoute.Page.loginScreen.route,
-                  );
-                },
-              ),
+              ],
             )),
         Expanded(
           child: Container(
-            padding: EdgeInsets.all(32),
+            padding: EdgeInsets.symmetric(horizontal: 32),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
