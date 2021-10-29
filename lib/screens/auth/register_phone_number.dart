@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -102,10 +99,10 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                           ),
                           PhotoEdit(
                             photoPath: registerController.user!.photoFilePath,
-                            updatePhoto: (String? ImagePath) {
-                              if (ImagePath != null) {
+                            updatePhoto: (String? imagePath) {
+                              if (imagePath != null) {
                                 registerController.getImage(
-                                    ImagePath, () => setState(() {}));
+                                    imagePath, () => setState(() {}));
                               }
                             },
                           ),
@@ -257,9 +254,13 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                             AppLocalizations.of(context)!.day),
                                       )),
                                   onChanged: (String text) {
+                                    registerController.birthdateIsValid(
+                                        context, () => setState(() {}));
                                     if (text.length == 2 &&
                                         int.parse(text) <= 31) {
                                       node.nextFocus();
+                                    } else {
+                                      registerController.exibTextError = true;
                                     }
                                   },
                                   onEditingComplete: () => node.nextFocus(),
@@ -287,9 +288,13 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                                 .month),
                                       )),
                                   onChanged: (String text) {
+                                    registerController.birthdateIsValid(
+                                        context, () => setState(() {}));
                                     if (text.length == 2 &&
                                         int.parse(text) <= 12) {
                                       node.nextFocus();
+                                    } else {
+                                      registerController.exibTextError = true;
                                     }
                                   },
                                   onEditingComplete: () => node.nextFocus(),
@@ -313,6 +318,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                     if (text.length == 4 &&
                                         int.parse(text) >= 1900) {
                                       node.nextFocus();
+                                    } else {
+                                      registerController.exibTextError = true;
                                     }
                                   },
                                   decoration: GlobalConstants.of(context)
@@ -327,8 +334,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                             ],
                           ),
                           Visibility(
-                            visible: registerController
-                                .birthdateValidationErrorMessage!.isNotEmpty,
+                            visible: registerController.exibTextError,
                             child: Padding(
                               padding: EdgeInsets.only(
                                 top: GlobalConstants.of(context).spacingNormal,
@@ -370,7 +376,10 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                     MaterialStateProperty.all<double>(0.0),
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color(0xff003694)),
+                                  registerController.firstStepIsValid()
+                                      ? Color(0xff003694)
+                                      : Color(0xff5d7fbb),
+                                ),
                                 padding: MaterialStateProperty.all<EdgeInsets>(
                                     EdgeInsets.all(GlobalConstants.of(context)
                                         .spacingNormal))),
@@ -387,15 +396,19 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 ),
                               ),
                             ),
-                            onPressed: () {
-                              registerController.setBirthDateAndCountryCode();
+                            onPressed: registerController.firstStepIsValid()
+                                ? () {
+                                    registerController
+                                        .setBirthDateAndCountryCode();
 
-                              if (registerController.firstStepIsValid(context))
-                                Navigator.of(context).pushNamed(
-                                  PageRoute.Page.registerDailyLearningGoalScreen
-                                      .route,
-                                );
-                            }),
+                                    Navigator.of(context).pushNamed(
+                                      PageRoute
+                                          .Page
+                                          .registerDailyLearningGoalScreen
+                                          .route,
+                                    );
+                                  }
+                                : null),
                       )
                     ],
                   ),
