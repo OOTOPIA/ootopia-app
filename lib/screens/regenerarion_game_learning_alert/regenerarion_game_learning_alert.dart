@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -94,22 +95,22 @@ class _RegenerarionGameLearningAlertState
                 ),
               ),
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * .11,
-              right: -GlobalConstants.of(context).screenHorizontalSpace - 20,
-              child: Transform.rotate(
-                  angle: 3 * pi / 2,
-                  child: Container(
-                    child: Text(
-                      _imageRights as String,
-                      textAlign: TextAlign.right,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontSize: 10,
-                            color: Colors.white,
-                          ),
-                    ),
-                  )),
-            ),
+            // Positioned(
+            //   top: 90,
+            //   right: -36,
+            //   child: Transform.rotate(
+            //       angle: 3 * pi / 2,
+            //       child: Container(
+            //         child: Text(
+            //           _imageRights as String,
+            //           textAlign: TextAlign.right,
+            //           style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            //                 fontSize: 10,
+            //                 color: Colors.white,
+            //               ),
+            //         ),
+            //       )),
+            // ),
             SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -170,7 +171,9 @@ class _RegenerarionGameLearningAlertState
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1!
-                                .copyWith(fontSize: isSmallPhone(40), color: Colors.white)
+                                .copyWith(
+                                    fontSize: isSmallPhone(40),
+                                    color: Colors.white)
                                 .copyWith(
                               shadows: [
                                 Shadow(
@@ -264,16 +267,15 @@ class _RegenerarionGameLearningAlertState
                                 style: ButtonStyle(
                                     padding: MaterialStateProperty.all(
                                         EdgeInsets.symmetric(
-                                            vertical: isSmallPhone(16), horizontal: isSmallPhone(32))),
+                                            vertical: isSmallPhone(16),
+                                            horizontal: isSmallPhone(32))),
                                     alignment: Alignment.center,
                                     backgroundColor:
-                                        MaterialStateProperty.all(
-                                            Colors.white),
+                                        MaterialStateProperty.all(Colors.white),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(40.0),
+                                      borderRadius: BorderRadius.circular(40.0),
                                     ))),
                                 child: Text(
                                   AppLocalizations.of(context)!.close,
@@ -294,16 +296,15 @@ class _RegenerarionGameLearningAlertState
                                 style: ButtonStyle(
                                     padding: MaterialStateProperty.all(
                                         EdgeInsets.symmetric(
-                                            vertical: isSmallPhone(16), horizontal: isSmallPhone(32))),
+                                            vertical: isSmallPhone(16),
+                                            horizontal: isSmallPhone(32))),
                                     alignment: Alignment.center,
-                                    backgroundColor:
-                                        MaterialStateProperty.all(
-                                            Color(0xFF003694)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color(0xFF003694)),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(40.0),
+                                      borderRadius: BorderRadius.circular(40.0),
                                     ))),
                                 child: Text(
                                   AppLocalizations.of(context)!.learnMore,
@@ -325,7 +326,24 @@ class _RegenerarionGameLearningAlertState
                   ],
                 ),
               ),
-            )
+            ),
+
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40, right: 16),
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Text(
+                    _imageRights as String,
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontSize: 10,
+                          color: Colors.white,
+                        ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
