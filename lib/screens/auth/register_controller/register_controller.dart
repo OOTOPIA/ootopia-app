@@ -71,7 +71,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   String? countryCode;
   bool validCellPhone = false;
-  bool validBirthDate = true;
+  bool exibTextError = false;
   String? birthdateValidationErrorMessage = '';
 
   double currentSliderValue = 10.0;
@@ -85,28 +85,24 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   bool validationBirthDate() {
     DateTime now = DateTime.now();
 
-    if (dayController.text == "" ||
-        monthController.text == "" ||
-        yearController.text == "") {
-      validBirthDate = true;
-      return false;
+    if (dayController.text.isEmpty &&
+        monthController.text.isEmpty &&
+        yearController.text.isEmpty) {
+      return true;
     }
 
-    int day = int.parse(dayController.text);
-    int month = int.parse(monthController.text);
-    int year = int.parse(yearController.text);
-
-    if (yearController.text.length == 4 &&
-        day <= 31 &&
-        day > 0 &&
-        month <= 12 &&
-        month > 0 &&
-        year >= 1900 &&
-        year < now.year) {
-      validBirthDate = true;
+    var day =
+        int.parse(dayController.text.isNotEmpty ? dayController.text : '0');
+    var month =
+        int.parse(monthController.text.isNotEmpty ? monthController.text : '0');
+    var year =
+        int.parse(yearController.text.isNotEmpty ? yearController.text : '0');
+    if ((day > 0 && day <= 31) &&
+        (month > 0 && month <= 12) &&
+        (year > 1900 && year <= now.year)) {
       return true;
     } else {
-      validBirthDate = false;
+      exibTextError = true;
       return false;
     }
   }
@@ -130,7 +126,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   void birthdateIsValid(BuildContext context, VoidCallback update) {
     if (!validationBirthDate()) {
-      if (yearController.text.toString().length < 4) {
+      if (yearController.text.toString().length < 4 &&
+          monthController.text.toString().length < 2 &&
+          dayController.text.toString().length < 2) {
         birthdateValidationErrorMessage =
             AppLocalizations.of(context)!.pleaseEnterAValidBirthdateInFormat;
       } else {
@@ -140,6 +138,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
       update();
     } else {
+      exibTextError = false;
+
       birthdateValidationErrorMessage = '';
       update();
     }
@@ -161,12 +161,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     update();
   }
 
-  bool birthDateIsValid() {
-    return validBirthDate;
-  }
-
-  bool firstStepIsValid(BuildContext context) {
-    return !validCellPhone;
+  bool firstStepIsValid() {
+    return !validCellPhone && validationBirthDate();
   }
 
   getLocation(BuildContext context) async {

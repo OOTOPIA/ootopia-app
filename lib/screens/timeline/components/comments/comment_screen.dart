@@ -27,7 +27,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     super.initState();
 
     Future.delayed(Duration.zero, () async {
-      commentStore.getComments('postId', currentPage);
+      await commentStore.getComments(widget.args['post'].id, currentPage);
     });
     postCommentsCount = widget.args['post'].commentsCount;
     this.trackingEvents.timelineViewedComments({
@@ -45,17 +45,104 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         slivers: [
           SliverFillRemaining(
             fillOverscroll: true,
-            hasScrollBody: false,
+            hasScrollBody: true,
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [],
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          color: LightColors.grey.withOpacity(0.05),
+                          width: double.infinity,
+                          alignment: Alignment.centerLeft,
+                          height: 56,
+                          padding: EdgeInsets.only(left: 24),
+                          child: Text(
+                            AppLocalizations.of(context)!.comments,
+                            style: TextStyle(
+                              color: Color(0xff003694),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: 22,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 19,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'data',
+                                                  style: TextStyle(
+                                                    color: LightColors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'data',
+                                                  style: TextStyle(
+                                                    color: LightColors.black,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: Text(
+                                            'Delete',
+                                            style: TextStyle(
+                                              color: LightColors.grey,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 25,
+                                    )
+                                  ],
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
+                  color: Color(0xffF8F8F8),
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: TextField(
                     style: TextStyle(color: Colors.black),
@@ -99,6 +186,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 13,
+                )
               ],
             ),
           )

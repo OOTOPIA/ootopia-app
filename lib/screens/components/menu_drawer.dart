@@ -35,13 +35,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   @override
   void initState() {
     super.initState();
-    this.getAppInfo();
+    Future.delayed(Duration.zero, () async {
+      this.getAppInfo();
+    });
   }
 
   Future<void> getAppInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     setState(() {
-      this.appVersion = info.version;
+      this.appVersion = '${info.version}+${info.buildNumber}';
     });
   }
 
@@ -374,7 +376,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   }
 }
 
-class DrawerWithNoCurrentUser extends StatelessWidget {
+class DrawerWithNoCurrentUser extends StatefulWidget {
   const DrawerWithNoCurrentUser({
     Key? key,
     required this.appVersion,
@@ -382,6 +384,12 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
 
   final String? appVersion;
 
+  @override
+  State<DrawerWithNoCurrentUser> createState() =>
+      _DrawerWithNoCurrentUserState();
+}
+
+class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -391,13 +399,14 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
             decoration: BoxDecoration(
                 border:
                     Border(bottom: BorderSide(color: Colors.white, width: 0))),
-            padding: EdgeInsets.only(bottom: 67, top: 10, left: 15, right: 15),
-            child: Stack(
+            padding: EdgeInsets.only(bottom: 0, top: 0, left: 15, right: 15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    padding: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(bottom: 6),
                     icon: Icon(
                       Icons.close,
                       size: 15,
@@ -409,7 +418,6 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  alignment: Alignment.bottomCenter,
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -475,7 +483,7 @@ class DrawerWithNoCurrentUser extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.\n",
+                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} ${widget.appVersion}.\n",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),

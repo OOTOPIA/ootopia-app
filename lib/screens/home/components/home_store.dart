@@ -67,6 +67,9 @@ abstract class HomeStoreBase with Store {
   @observable
   bool iphoneHasNotch = false;
 
+  @observable
+  bool seeCrisp = true;
+
   @action
   startDailyGoalTimer() async {
     _timerIsStarted = false;
@@ -213,7 +216,7 @@ abstract class HomeStoreBase with Store {
       return (strHours != "00" ? strHours + "h " : "") +
           strMinutes +
           "m " +
-          (showSeconds == true ? strSeconds + "s" : "");
+          (showSeconds == true && strHours == "00" ? strSeconds + "s" : "");
     } catch (err) {
       return "error";
     }
@@ -227,5 +230,10 @@ abstract class HomeStoreBase with Store {
     } else {
       userLogged = false;
     }
+  }
+
+  @action
+  void setSeeCrip(bool setSeeCrips) {
+    this.seeCrisp = setSeeCrips;
   }
 }
