@@ -83,8 +83,12 @@ class _RegenerationGameState extends State<RegenerationGame>
             decoration:
                 BoxDecoration(color: Theme.of(context).primaryColorLight),
             padding: EdgeInsets.only(
-              left: GlobalConstants.of(context).screenHorizontalSpace,
-              right: GlobalConstants.of(context).screenHorizontalSpace,
+              left: MediaQuery.of(context).size.width < 380
+                  ? 10
+                  : GlobalConstants.of(context).screenHorizontalSpace,
+              right: MediaQuery.of(context).size.width < 380
+                  ? 10
+                  : GlobalConstants.of(context).screenHorizontalSpace,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -184,6 +188,11 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 
+  isSmallPhone(double value) {
+    if (MediaQuery.of(context).size.width < 380) return value / 2;
+    return value;
+  }
+
   Widget get detailedGoal => InkWell(
         onTap: () {
           setState(() {
@@ -204,7 +213,8 @@ class _RegenerationGameState extends State<RegenerationGame>
             children: [
               SizedBox(
                 width: screenWidth -
-                    (GlobalConstants.of(context).screenHorizontalSpace * 2),
+                    isSmallPhone(
+                        GlobalConstants.of(context).screenHorizontalSpace * 2),
                 child: Stack(
                   children: [
                     AnimatedPositioned(
@@ -280,7 +290,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                                             .textTheme
                                             .subtitle2!
                                             .copyWith(
-                                              fontSize: 14,
+                                              fontSize: MediaQuery.of(context)
+                                                          .size
+                                                          .width <
+                                                      380
+                                                  ? 12
+                                                  : 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                         children: [
@@ -292,7 +307,13 @@ class _RegenerationGameState extends State<RegenerationGame>
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                  fontSize: 14,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                                  .size
+                                                                  .width <
+                                                              380
+                                                          ? 12
+                                                          : 14,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                           )
@@ -309,7 +330,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                                           .textTheme
                                           .subtitle2!
                                           .copyWith(
-                                            fontSize: 14,
+                                            fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width <
+                                                    380
+                                                ? 12
+                                                : 14,
                                             fontWeight: FontWeight.bold,
                                           ),
                                       children: [
@@ -323,7 +349,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                                               .textTheme
                                               .subtitle2!
                                               .copyWith(
-                                                fontSize: 14,
+                                                fontSize: MediaQuery.of(context)
+                                                            .size
+                                                            .width <
+                                                        380
+                                                    ? 12
+                                                    : 14,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                         )
@@ -350,7 +381,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                          fontSize: 14,
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  380
+                                              ? 12
+                                              : 14,
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -439,12 +475,12 @@ class _RegenerationGameState extends State<RegenerationGame>
             } else if (detailedGoalType == 'global') {
               _goToRegenerationGameAlert(type);
             } else {
-              if (authStore.currentUser!.personalDialogOpened == null ||
-                  authStore.currentUser!.personalDialogOpened == false) {
-                authStore.currentUser!.personalDialogOpened = true;
+              // if (authStore.currentUser!.personalDialogOpened == null ||
+              //     authStore.currentUser!.personalDialogOpened == false) {
+              //   authStore.currentUser!.personalDialogOpened = true;
 
-                _goToRegenerationGameAlert(type);
-              }
+              _goToRegenerationGameAlert(type);
+              // }
 
               setState(() {
                 showDetailedGoal = true;
