@@ -128,6 +128,13 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     user = User();
   }
 
+  void cleanBirthDateFields() {
+    dayController.clear();
+    monthController.clear();
+    yearController.clear();
+    birthdateValidationErrorMessage = '';
+  }
+
   void birthdateIsValid(BuildContext context, VoidCallback update) {
     if (!validationBirthDate()) {
       if (yearController.text.toString().length < 4) {
