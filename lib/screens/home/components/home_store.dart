@@ -213,7 +213,7 @@ abstract class HomeStoreBase with Store {
       return (strHours != "00" ? strHours + "h " : "") +
           strMinutes +
           "m " +
-          (showSeconds == true ? strSeconds + "s" : "");
+          (showSeconds == true && strHours == "00" ? strSeconds + "s" : "");
     } catch (err) {
       return "error";
     }
