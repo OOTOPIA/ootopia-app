@@ -17,7 +17,7 @@ import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
-import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
@@ -875,10 +875,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     }
     return SizedBox(
       height: 25,
-      
       child: TextButton(
         style: TextButton.styleFrom(
-          
           primary: Colors.black87,
           padding: EdgeInsets.only(left: 12),
           shape: const RoundedRectangleBorder(
