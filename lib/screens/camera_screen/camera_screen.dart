@@ -36,6 +36,7 @@ class _CameraAppState extends State<CameraApp>
   bool permissionsIsNeeded = true;
   late AssetEntity lastVideoThumbnail;
   final picker = ImagePicker();
+  bool flashIsOff = true;
 
   final FlutterUploader uploader = FlutterUploader();
 
@@ -136,9 +137,9 @@ class _CameraAppState extends State<CameraApp>
   }
 
   void setCamera() async {
-    if (controller != null) {
-      await controller!.dispose();
-    }
+    // if (controller != null) {
+    //   await controller!.dispose();
+    // }
 
     indexCamera = indexCamera == 0 ? 1 : 0;
     controller = CameraController(
@@ -146,7 +147,6 @@ class _CameraAppState extends State<CameraApp>
       ResolutionPreset.medium,
     );
     await controller!.initialize();
-    await controller!.setFlashMode(FlashMode.off);
 
     setState(() {});
   }
@@ -341,8 +341,20 @@ class _CameraAppState extends State<CameraApp>
     return IconButton(
       icon: Icon(Icons.no_flash),
       iconSize: 30,
-      color: Colors.white38,
-      onPressed: () {},
+      color: flashIsOff ? Colors.white38 : Colors.white,
+      onPressed: () async {
+        flashIsOff = controller?.value.flashMode == FlashMode.off;
+
+        setState(() {
+          if (flashIsOff) {
+            setFlashMode(FlashMode.torch);
+            flashIsOff = false;
+          } else {
+            setFlashMode(FlashMode.off);
+            flashIsOff = true;
+          }
+        });
+      },
     );
   }
 
