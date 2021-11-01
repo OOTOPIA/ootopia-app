@@ -135,11 +135,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         birthdateValidationErrorMessage =
             AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
       }
-
       update();
     } else {
       exibTextError = false;
-
       birthdateValidationErrorMessage = '';
       update();
     }
@@ -162,9 +160,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   bool firstStepIsValid() {
-    print('validate ${validationBirthDate()}');
-    print('celphone $validCellPhone');
-    return !validCellPhone && validationBirthDate();
+    return validCellPhone &&
+        validationBirthDate() &&
+        cellPhoneController.text.isNotEmpty;
   }
 
   getLocation(BuildContext context) async {
