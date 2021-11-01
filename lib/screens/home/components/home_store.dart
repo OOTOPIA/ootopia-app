@@ -175,10 +175,7 @@ abstract class HomeStoreBase with Store {
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
     try {
       this.dailyGoalStats = await userRepository.getDailyGoalStats();
-      print("DAILY GOAL TEST ${this.dailyGoalStats}");
-    } catch (err) {
-      print("DEU RUIM ${err}");
-    }
+    } catch (err) {}
     return this.dailyGoalStats;
   }
 

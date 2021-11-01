@@ -36,6 +36,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'dart:math' as math;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class PhotoTimeline extends StatefulWidget {
   final int? index;
   final TimelinePost post;
@@ -88,8 +89,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   bool dragging = false;
 
-  bool _isPlayerReady = false;
-
   bool _isDragging = false;
   double _draggablePositionX = 0;
   late Timer _onDragCanceledTimer;
@@ -109,7 +108,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
-  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
