@@ -30,6 +30,12 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    registerController.validCellPhone = false;
+    super.dispose();
+  }
+
   get appBar => AppBar(
         centerTitle: true,
         title: Padding(
@@ -74,6 +80,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
+    print(registerController.firstStepIsValid());
     return Scaffold(
       appBar: appBar,
       body: GestureDetector(

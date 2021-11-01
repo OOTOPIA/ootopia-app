@@ -162,6 +162,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   bool firstStepIsValid() {
+    print('validate ${validationBirthDate()}');
+    print('celphone $validCellPhone');
     return !validCellPhone && validationBirthDate();
   }
 
