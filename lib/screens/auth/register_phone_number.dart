@@ -33,6 +33,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
   @override
   void dispose() {
     registerController.validCellPhone = false;
+    registerController.exibTextError = false;
     super.dispose();
   }
 
