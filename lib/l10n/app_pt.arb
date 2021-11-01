@@ -230,7 +230,8 @@
     "yourCommitmentsEighteenth": "You agree that we can download and install updates to the Service on your device.",
     
     "congratulations": "Parabéns!",
-    "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar\n a regenerar o planeta",    
+    "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar\n a regenerar o planeta", 
+    "youMetYourDailyGoalToHelpRegenerateThePlanetWithoutParagraphs": "Você cumpriu sua meta diária de ajudar a regenerar o planeta", 
     "totalBalance": "Total Somado",
     "nextStepIsToHelpMeetYourCityGoal": "O próximo passo é ajudar a atingir o objetivo da sua cidade.",
     "keepMakingOOTOPIAAlive": "Continue fazendo OOTOPIA vivo!",
@@ -266,15 +267,15 @@
     "close": "Fechar",
 
     "personalLevel": "Nível pessoal",
-    "personalLevelText1": "Cada pessoa e cada ação conta! No jogo regenerativo, você recebe créditos em moeda OOz como recompensa por seu envolvimento com o aplicativo.",
+    "personalLevelText1": "Cada pessoa e cada ação conta!\nNo jogo regenerativo, você recebe créditos em moeda OOz como recompensa por seu envolvimento com o aplicativo.",
     "personalLevelText2": "Defina sua meta diária e comece a viver OOTOPIA agora!",
 
     "cityLevel": "Nível da cidade",
-    "cityLevelText1": "Quando colaboramos com nossa comunidade, amplificamos o impacto positivo! O objetivo do nível de cidade é a soma dos objetivos de todas as pessoas que usam o aplicativo em sua cidade.",
+    "cityLevelText1": "Quando colaboramos com nossa comunidade, amplificamos o impacto positivo!\nO objetivo do nível de cidade é a soma dos objetivos de todas as pessoas que usam o aplicativo em sua cidade.",
     "cityLevelText2": "Continue empenhado em ajudar sua cidade a cumprir suas metas diárias!",
 
     "planetaryLevel": "Nível planetário",
-    "planetaryLevelText1": "Juntos podemos mudar o mundo! O objetivo do Nível Planetário é a soma dos objetivos de todas as pessoas colaborando para criar o mundo maravilhoso em que queremos viver!",
+    "planetaryLevelText1": "Juntos podemos mudar o mundo!\nO objetivo do Nível Planetário é a soma dos objetivos de todas as pessoas colaborando para criar o mundo maravilhoso em que queremos viver!",
     "planetaryLevelText2pt1": "Estamos quase lá!",
     "planetaryLevelText2pt2": "Vamos cumprir a meta planetária hoje!",
     "invitationCode": "Código de convite",
