@@ -124,17 +124,18 @@ class CelebrationStates extends State<Celebration> {
                                           .toUpperCase(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: screenWidth <= 375 ? 28 : 32,
+                                      fontSize: screenWidth < 360 ? 26 : 32,
                                       color: Color(0xFF003694)),
                                 ),
                           if (widget.args["goal"] != "global")
                             Padding(
-                                padding: EdgeInsets.only(top: 8),
+                                padding: EdgeInsets.only(
+                                    top: screenWidth < 360 ? 6 : 8),
                                 child: Text(
                                   widget.args["name"],
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 24,
+                                      fontSize: screenWidth < 360 ? 22 : 24,
                                       color: Color(0xFF000000)),
                                 )),
                           if (widget.args["goal"] == "invitationCode")
@@ -152,16 +153,25 @@ class CelebrationStates extends State<Celebration> {
                                 )),
                           if (widget.args["goal"] == "personal")
                             Padding(
-                              padding:
-                                  EdgeInsets.only(top: 8, left: 35, right: 35),
+                              padding: EdgeInsets.only(
+                                  top: screenWidth < 360 ? 4 : 8,
+                                  left: 35,
+                                  right: 35),
                               child: Text(
-                                AppLocalizations.of(context)!
-                                    .youMetYourDailyGoalToHelpRegenerateThePlanet,
+                                screenWidth < 360
+                                    ? AppLocalizations.of(context)!
+                                        .youMetYourDailyGoalToHelpRegenerateThePlanetWithoutParagraphs
+                                    : AppLocalizations.of(context)!
+                                        .youMetYourDailyGoalToHelpRegenerateThePlanet,
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.roboto(
-                                  fontSize: 16,
+                                  fontSize: screenWidth < 360
+                                      ? 12
+                                      : screenWidth <= 375
+                                          ? 15
+                                          : 16,
                                   color: Colors.black,
                                 ),
                               ),
@@ -175,7 +185,7 @@ class CelebrationStates extends State<Celebration> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                height: 40,
+                                height: screenWidth < 360 ? 33 : 40,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(18),
@@ -193,11 +203,13 @@ class CelebrationStates extends State<Celebration> {
                                           fontSize: widget.args["goal"] ==
                                                   "invitationCode"
                                               ? 20
-                                              : 24,
+                                              : screenWidth < 360
+                                                  ? 20
+                                                  : 24,
                                           color: Color(0xFF003694)),
                                     ),
                                     Container(
-                                        height: 30,
+                                        height: screenWidth < 360 ? 26 : 30,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(18),
@@ -216,14 +228,19 @@ class CelebrationStates extends State<Celebration> {
                                                   AssetImage(
                                                       'assets/icons_profile/ootopia.png'),
                                                   color: Color(0xFF003694),
-                                                  size: 32,
+                                                  size: screenWidth < 360
+                                                      ? 28
+                                                      : 32,
                                                 ),
                                                 Text(
                                                   widget.args["balance"],
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 16,
+                                                      fontSize:
+                                                          screenWidth < 360
+                                                              ? 14
+                                                              : 16,
                                                       color: Color(0xFF003694)),
                                                 )
                                               ],
@@ -232,7 +249,8 @@ class CelebrationStates extends State<Celebration> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(
+                                    top: screenWidth < 360 ? 8 : 10),
                                 child: Column(
                                   children: [
                                     if (widget.args["goal"] != "invitationCode")
@@ -245,7 +263,8 @@ class CelebrationStates extends State<Celebration> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.normal,
-                                            fontSize: 16,
+                                            fontSize:
+                                                screenWidth < 360 ? 14 : 16,
                                             color: Color(0xFF000000)),
                                       ),
                                     Text(
@@ -253,17 +272,18 @@ class CelebrationStates extends State<Celebration> {
                                           .keepMakingOOTOPIAAlive,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: screenWidth < 360 ? 14 : 16,
                                           color: Color(0xFF000000)),
                                     )
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(
+                                    top: screenWidth < 360 ? 8 : 10),
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
-                                  height: 58,
+                                  height: screenWidth < 360 ? 46 : 58,
                                   child: TextButton(
                                     style: ButtonStyle(
                                         alignment: Alignment.center,

@@ -75,6 +75,8 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     homeStore = Provider.of<HomeStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     return DefaultTabController(
@@ -152,7 +154,9 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                           Padding(
                             padding: EdgeInsetsDirectional.only(top: 8),
                             child: Text(
-                              AppLocalizations.of(context)!.textExplainWallet,
+                              screenWidth <= 375
+                                  ? '${AppLocalizations.of(context)!.textExplainWalletWithoutParagraph}'
+                                  : '${AppLocalizations.of(context)!.textExplainWallet}',
                               style: TextStyle(
                                 fontSize: 14,
                               ),
@@ -230,7 +234,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.57,
+                      height: walletStore.getTabBarHeight(screenHeight),
                       child: TabBarView(
                         controller: _tabController,
                         children: [
