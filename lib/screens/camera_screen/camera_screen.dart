@@ -34,7 +34,7 @@ class _CameraAppState extends State<CameraApp>
   late XFile imageFile;
   late XFile videoFile;
   bool permissionsIsNeeded = true;
-  late AssetEntity lastVideoThumbnail;
+  AssetEntity? lastVideoThumbnail;
   final picker = ImagePicker();
   bool flashIsOff = true;
 
@@ -544,7 +544,7 @@ class _CameraAppState extends State<CameraApp>
                               width: 30,
                               height: 30,
                               child: FutureBuilder<Uint8List?>(
-                                future: lastVideoThumbnail.thumbData,
+                                future: lastVideoThumbnail?.thumbData,
                                 builder: (_, snapshot) {
                                   final bytes = snapshot.data;
                                   // If we have no data, display a spinner
