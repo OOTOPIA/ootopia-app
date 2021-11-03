@@ -255,6 +255,7 @@
     "youDontNothing": "Você não tem nada",
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
+    "textExplainWalletWithoutParagraph":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
     "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
     "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O emblema de Change Maker Pro é dado a indivíduos e organizações que estão liderando profissionalmente projetos para regenerar o planeta e criando amplo impacto positivo.",
@@ -262,7 +263,6 @@
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
-    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
 
     "close": "Fechar",
 

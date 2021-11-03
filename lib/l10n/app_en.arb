@@ -257,6 +257,7 @@
     "cropButton":"Crop image",
 
     "textExplainWallet" : "This is your OOz wallet. Here you can check your total \n balance and all incoming and outcoming transactions",
+    "textExplainWalletWithoutParagraph":"This is your OOz wallet. Here you can check your total balance and all incoming and outcoming transactions",
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
     "youDontNothing": "You don't have nothing",
