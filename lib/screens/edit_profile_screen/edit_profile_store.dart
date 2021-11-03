@@ -33,6 +33,9 @@ abstract class EditProfileStoreBase with Store {
   String? countryCode;
 
   @observable
+  String? dialCode;
+
+  @observable
   User? currentUser;
 
   @action
@@ -44,6 +47,7 @@ abstract class EditProfileStoreBase with Store {
     currentUser?.phone = cellPhoneController.text;
     currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
     currentUser?.countryCode = countryCode;
+    currentUser?.dialCode = dialCode;
 
     if (photoFilePathLocal != null) {
       currentUser?.photoFilePath = photoFilePathLocal;

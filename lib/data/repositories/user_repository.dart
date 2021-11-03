@@ -159,6 +159,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "phone": user.phone.toString(),
         "fullname": user.fullname.toString(),
         "countryCode": user.countryCode.toString(),
+        "dialCode": user.dialCode.toString(),
         "tagsIds": tagsIds.join(",")
       };
 

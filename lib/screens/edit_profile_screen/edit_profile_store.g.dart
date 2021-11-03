@@ -55,6 +55,21 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     });
   }
 
+  final _$dialCodeAtom = Atom(name: 'EditProfileStoreBase.dialCode');
+
+  @override
+  String? get dialCode {
+    _$dialCodeAtom.reportRead();
+    return super.dialCode;
+  }
+
+  @override
+  set dialCode(String? value) {
+    _$dialCodeAtom.reportWrite(value, super.dialCode, () {
+      super.dialCode = value;
+    });
+  }
+
   final _$currentUserAtom = Atom(name: 'EditProfileStoreBase.currentUser');
 
   @override
@@ -100,6 +115,7 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
 isloading: ${isloading},
 validCellPhone: ${validCellPhone},
 countryCode: ${countryCode},
+dialCode: ${dialCode},
 currentUser: ${currentUser}
     ''';
   }

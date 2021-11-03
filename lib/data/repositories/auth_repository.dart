@@ -70,6 +70,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
             user.invitationCode == null ? "" : user.invitationCode.toString(),
         "countryCode":
             user.countryCode == null ? "" : user.countryCode.toString(),
+        "dialCode": user.dialCode.toString(),
         "bio": user.bio.toString(),
         "phone": user.phone.toString(),
         "birthdate": (user.birthdate == null ? "" : user.birthdate!),
