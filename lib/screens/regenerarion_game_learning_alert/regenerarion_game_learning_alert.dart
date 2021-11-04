@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegenerarionGameLearningAlert extends StatefulWidget {
   Map<String, dynamic> args;
@@ -295,29 +296,39 @@ class _RegenerarionGameLearningAlertState
                             Expanded(
                               flex: 3,
                               child: Container(
-                                height: 53,
-                                child: TextButton(
-                                  style: ButtonStyle(
-                                      alignment: Alignment.center,
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Color(0xFF003694)),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                      ))),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.learnMore,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  onPressed: () => {},
-                                ),
-                              ),
+                                  height: 53,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                        alignment: Alignment.center,
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xFF003694)),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ))),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.learnMore,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
+                                  )),
                             ),
                           ],
                         ),

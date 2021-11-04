@@ -192,6 +192,21 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                                                 about: AppLocalizations.of(
                                                         context)!
                                                     .learnMore,
+                                                onTapAbout: () {
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(
+                                                    PageRoute
+                                                        .Page.homeScreen.route,
+                                                    (Route<dynamic> route) =>
+                                                        false,
+                                                    arguments: {
+                                                      "returnToPageWithArgs": {
+                                                        'currentPageName':
+                                                            "learning_tracks"
+                                                      }
+                                                    },
+                                                  );
+                                                },
                                                 marginBottom: true,
                                               );
                                             },
