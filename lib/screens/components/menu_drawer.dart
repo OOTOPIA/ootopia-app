@@ -478,7 +478,6 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w400,
                               ),
                             ),
                             Text(
