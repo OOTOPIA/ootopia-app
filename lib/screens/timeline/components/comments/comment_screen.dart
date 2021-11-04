@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -26,7 +25,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   CommentStore commentStore = CommentStore();
   late HomeStore homeStore;
   late AuthStore authStore;
-  int currentPage = 1;
   int postCommentsCount = 0;
   String postId = '';
 
@@ -36,10 +34,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     postId = widget.args['post'].id;
     Future.delayed(Duration.zero, () async {
+      commentStore.isLoading = true;
       homeStore.setResizeToAvoidBottomInset(true);
       homeStore.setSeeCrip(false);
 
-      await commentStore.getComments(postId, currentPage);
+      await commentStore.getComments(postId, commentStore.currentPage);
+      commentStore.isLoading = false;
     });
     postCommentsCount = widget.args['post'].commentsCount;
     this.trackingEvents.timelineViewedComments({
@@ -49,8 +49,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   Future<void> _getData() async {
-    print(currentPage);
-    await commentStore.getComments(postId, currentPage);
+    await commentStore.getComments(postId, commentStore.currentPage);
+    commentStore.isLoading = false;
   }
 
   @override
@@ -117,8 +117,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                       (ScrollNotification scrollInfo) {
                                     if (scrollInfo.metrics.pixels ==
                                         scrollInfo.metrics.maxScrollExtent) {
-                                      currentPage++;
+                                      commentStore.currentPage++;
+                                      commentStore.isLoading = true;
+
                                       _getData();
+                                      commentStore.isLoading = false;
+
                                       return true;
                                     } else {
                                       return false;
@@ -126,9 +130,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                   },
                                   child: RefreshIndicator(
                                     onRefresh: () async {
+                                      commentStore.isLoading = true;
                                       commentStore.listComments.clear();
-                                      currentPage = 1;
+                                      commentStore.currentPage = 1;
                                       await _getData();
+                                      commentStore.isLoading = false;
                                     },
                                     child: ListView.builder(
                                       padding:
@@ -180,6 +186,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                           ),
                                                     SizedBox(width: 8),
                                                     Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
@@ -194,15 +202,23 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                             fontSize: 14,
                                                           ),
                                                         ),
-                                                        Text(
-                                                          comment.text
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                            color: LightColors
-                                                                .black,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontSize: 14,
+                                                        Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.65,
+                                                          child: Text(
+                                                            comment.text,
+                                                            maxLines: 10,
+                                                            style: TextStyle(
+                                                              color: LightColors
+                                                                  .black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 14,
+                                                            ),
                                                           ),
                                                         ),
                                                       ],
@@ -255,6 +271,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                                 TextButton(
                                                                   onPressed:
                                                                       () async {
+                                                                    FocusManager
+                                                                        .instance
+                                                                        .primaryFocus
+                                                                        ?.unfocus();
                                                                     Navigator.of(
                                                                             context)
                                                                         .pop();
@@ -265,12 +285,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                                     commentStore
                                                                         .listComments
                                                                         .clear();
-                                                                    currentPage =
-                                                                        1;
-                                                                    await commentStore
-                                                                        .getComments(
-                                                                            postId,
-                                                                            currentPage);
+                                                                    commentStore
+                                                                        .currentPage = 1;
+                                                                    _getData();
                                                                   },
                                                                   child: Text(
                                                                     'OK',
@@ -387,6 +404,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                               AppLocalizations.of(context)!
                                                   .writeYourComment)));
                                 } else {
+                                  commentStore.currentPage = 1;
+
                                   await commentStore.createComment(
                                       postId, _inputController.text);
                                   _inputController.clear();

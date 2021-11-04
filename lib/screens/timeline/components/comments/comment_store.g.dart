@@ -39,10 +39,25 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$currentPageAtom = Atom(name: 'CommentStoreBase.currentPage');
+
+  @override
+  int get currentPage {
+    _$currentPageAtom.reportRead();
+    return super.currentPage;
+  }
+
+  @override
+  set currentPage(int value) {
+    _$currentPageAtom.reportWrite(value, super.currentPage, () {
+      super.currentPage = value;
+    });
+  }
+
   final _$getCommentsAsyncAction = AsyncAction('CommentStoreBase.getComments');
 
   @override
-  Future<List<Comment>> getComments(String postId, int page) {
+  Future<void> getComments(String postId, int page) {
     return _$getCommentsAsyncAction.run(() => super.getComments(postId, page));
   }
 
@@ -68,7 +83,8 @@ mixin _$CommentStore on CommentStoreBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-listComments: ${listComments}
+listComments: ${listComments},
+currentPage: ${currentPage}
     ''';
   }
 }
