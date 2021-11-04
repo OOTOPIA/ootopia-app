@@ -70,6 +70,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   final picker = ImagePicker();
 
   String? countryCode;
+  String? dialCode;
   bool validCellPhone = false;
   bool exibTextError = false;
   String? birthdateValidationErrorMessage = '';
@@ -122,6 +123,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     photoFilePath = null;
     image = null;
     user = User();
+    dialCode = '';
   }
 
   void birthdateIsValid(BuildContext context, VoidCallback update) {
@@ -135,11 +137,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         birthdateValidationErrorMessage =
             AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
       }
-
       update();
     } else {
       exibTextError = false;
-
       birthdateValidationErrorMessage = '';
       update();
     }
@@ -162,7 +162,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   bool firstStepIsValid() {
-    return !validCellPhone && validationBirthDate();
+    return validCellPhone &&
+        validationBirthDate() &&
+        cellPhoneController.text.isNotEmpty;
   }
 
   getLocation(BuildContext context) async {
@@ -233,6 +235,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       email: emailController.text,
       password: passwordController.text,
       countryCode: user!.countryCode,
+      dialCode: dialCode,
       bio: bioController.text,
       phone: cellPhoneController.text,
       birthdate: user!.birthdate,
