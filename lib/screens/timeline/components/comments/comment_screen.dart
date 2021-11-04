@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -49,6 +50,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   Future<void> _getData() async {
     commentStore.isLoading = true;
+    print(postId);
     await commentStore.getComments(postId, currentPage);
     commentStore.isLoading = false;
   }
@@ -115,15 +117,25 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 child: NotificationListener<ScrollNotification>(
                                   onNotification:
                                       (ScrollNotification scrollInfo) {
-                                    print(
-                                        'teste ${scrollInfo is ScrollEndNotification}');
+                                    print(scrollInfo);
+                                    if (scrollInfo is ScrollEndNotification) {
+                                      if (scrollInfo.dragDetails
+                                          is DragStartDetails) {
+                                      } else if (scrollInfo.dragDetails
+                                          is DragEndDetails) {
+                                        currentPage++;
+                                        _getData();
+                                      }
+                                    }
 
-                                    if (scrollInfo.metrics.pixels ==
-                                        scrollInfo.metrics.maxScrollExtent) {}
                                     return true;
                                   },
                                   child: RefreshIndicator(
-                                    onRefresh: _getData,
+                                    onRefresh: () async {
+                                      commentStore.listComments.clear();
+                                      currentPage = 1;
+                                      await _getData();
+                                    },
                                     child: ListView.builder(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 24),

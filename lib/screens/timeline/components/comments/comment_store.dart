@@ -19,9 +19,7 @@ abstract class CommentStoreBase with Store {
   Future<List<Comment>> getComments(String postId, int page) async {
     try {
       isLoading = true;
-      listComments.clear();
       var response = await commentRepository.getComments(postId, page);
-      print(response);
       listComments.addAll(response);
       isLoading = false;
 
