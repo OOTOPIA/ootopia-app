@@ -49,6 +49,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   Future<void> _getData() async {
+    print(currentPage);
     await commentStore.getComments(postId, currentPage);
   }
 
@@ -264,10 +265,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                                     commentStore
                                                                         .listComments
                                                                         .clear();
+                                                                    currentPage =
+                                                                        1;
                                                                     await commentStore
                                                                         .getComments(
                                                                             postId,
-                                                                            1);
+                                                                            currentPage);
                                                                   },
                                                                   child: Text(
                                                                     'OK',
