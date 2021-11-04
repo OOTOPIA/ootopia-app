@@ -171,6 +171,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     about:
                                         AppLocalizations.of(context)!.learnMore,
                                     marginBottom: true,
+                                    onTouchAbout: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
                                     contact: {
                                       "text": AppLocalizations.of(context)!
                                           .areYouAChangeMakerProToo,
@@ -238,6 +250,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         about: AppLocalizations.of(context)!
                                             .learnMore,
                                         marginBottom: true,
+                                        onTouchAbout: () {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                            PageRoute.Page.homeScreen.route,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              "returnToPageWithArgs": {
+                                                'currentPageName':
+                                                    "learning_tracks"
+                                              }
+                                            },
+                                          );
+                                        },
                                       );
                                     },
                                   );
@@ -294,6 +319,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
+                                              onTouchAbout: () {
+                                                Navigator.of(context)
+                                                    .pushNamedAndRemoveUntil(
+                                                  PageRoute
+                                                      .Page.homeScreen.route,
+                                                  (Route<dynamic> route) =>
+                                                      false,
+                                                  arguments: {
+                                                    "returnToPageWithArgs": {
+                                                      'currentPageName':
+                                                          "learning_tracks"
+                                                    }
+                                                  },
+                                                );
+                                              },
                                               marginBottom: true);
                                         },
                                       );

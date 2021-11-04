@@ -130,6 +130,19 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         about: AppLocalizations.of(context)!
                                             .learnMore,
                                         marginBottom: true,
+                                        onTouchAbout: () {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                            PageRoute.Page.homeScreen.route,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              "returnToPageWithArgs": {
+                                                'currentPageName':
+                                                    "learning_tracks"
+                                              }
+                                            },
+                                          );
+                                        },
                                       );
                                     });
                               }
@@ -156,11 +169,25 @@ class _RegenerationGameState extends State<RegenerationGame>
                                               .color,
                                         ),
                                   ),
-                                  Text(
-                                    AppLocalizations.of(context)!.learnMore,
-                                    style: Theme.of(context)
-                                        .accentTextTheme
-                                        .bodyText2!,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.learnMore,
+                                      style: Theme.of(context)
+                                          .accentTextTheme
+                                          .bodyText2!,
+                                    ),
                                   )
                                 ],
                               ),

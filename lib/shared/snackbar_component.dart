@@ -12,6 +12,7 @@ class SnackBarWidget extends StatefulWidget {
   Map<String, dynamic>? contact;
   String about;
   bool? marginBottom = false;
+  Function? onTouchAbout;
   Function? onClose;
 
   SnackBarWidget(
@@ -21,7 +22,8 @@ class SnackBarWidget extends StatefulWidget {
       required this.about,
       this.marginBottom,
       this.emailToConcatenate,
-      this.onClose});
+      this.onClose,
+      this.onTouchAbout});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -128,7 +130,9 @@ class _SnackbarStates extends State<SnackBarWidget> {
             Visibility(
               visible: widget.about.isNotEmpty,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  if (widget.onTouchAbout != null) widget.onTouchAbout!();
+                },
                 child: Text(
                   widget.about.toUpperCase(),
                   style: GoogleFonts.roboto(
