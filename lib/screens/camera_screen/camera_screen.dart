@@ -66,8 +66,9 @@ class _CameraAppState extends State<CameraApp>
 
   getLastVideoThumbnail() async {
     try {
-      var albums = await PhotoManager.getAssetPathList(type: RequestType.video);
-      final recentAlbum = albums.first;
+      List<AssetPathEntity> albums =
+          await PhotoManager.getAssetPathList(type: RequestType.video);
+      final AssetPathEntity recentAlbum = albums.first;
       final recentAssets = await recentAlbum.getAssetListRange(
         start: 0, // start at index 0
         end: 1, // end at a very big index (to get all the assets)
