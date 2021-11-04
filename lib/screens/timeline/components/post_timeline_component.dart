@@ -151,15 +151,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _popupMenuReturn(String selectedOption) {
-    switch (selectedOption) {
-      case 'Excluir':
-        _showMyDialog();
-        break;
-
-      case 'isUserNotOwnsPost':
-        // renderSnackBar();
-        break;
-      default:
+    if (selectedOption == 'Excluir' || selectedOption == 'Delete') {
+      _showMyDialog();
     }
   }
 

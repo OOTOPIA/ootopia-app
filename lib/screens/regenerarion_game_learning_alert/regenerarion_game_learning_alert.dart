@@ -264,28 +264,30 @@ class _RegenerarionGameLearningAlertState
                           children: [
                             Expanded(
                               flex: 2,
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsets.symmetric(
-                                            vertical: isSmallPhone(16),
-                                            horizontal: isSmallPhone(32))),
+                              child: Container(
+                                height: 53,
+                                child: TextButton(
+                                  style: ButtonStyle(
                                     alignment: Alignment.center,
                                     backgroundColor:
                                         MaterialStateProperty.all(Colors.white),
                                     shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(40.0),
-                                    ))),
-                                child: Text(
-                                  AppLocalizations.of(context)!.close,
-                                  style: TextStyle(
-                                      color: Colors.black87.withOpacity(.6),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
+                                      ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.close,
+                                    style: TextStyle(
+                                        color: Colors.black87.withOpacity(.6),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  onPressed: () => Navigator.of(context).pop(),
                                 ),
-                                onPressed: () => Navigator.of(context).pop(),
                               ),
                             ),
                             SizedBox(
@@ -293,40 +295,40 @@ class _RegenerarionGameLearningAlertState
                             ),
                             Expanded(
                               flex: 3,
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsets.symmetric(
-                                            vertical: isSmallPhone(16),
-                                            horizontal: isSmallPhone(32))),
-                                    alignment: Alignment.center,
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xFF003694)),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(40.0),
-                                    ))),
-                                child: Text(
-                                  AppLocalizations.of(context)!.learnMore,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                onPressed: () {
-                                 Navigator.of(context)
-                                            .pushNamedAndRemoveUntil(
-                                          PageRoute.Page.homeScreen.route,
-                                          (Route<dynamic> route) => false,
-                                          arguments: {
-                                            "returnToPageWithArgs": {
-                                              'currentPageName': "learning_tracks"
-                                            }
-                                          },
-                                        );
-                                },
-                              ),
+                              child: Container(
+                                  height: 53,
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                        alignment: Alignment.center,
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xFF003694)),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ))),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.learnMore,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
+                                  )),
                             ),
                           ],
                         ),
