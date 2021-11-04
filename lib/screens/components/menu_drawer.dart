@@ -273,7 +273,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       ],
                     ),
                     leading: Image.asset(
-                      'assets/icons/ooz-black-coin.png',
+                      'assets/icons/ozz-black.png',
                       width: 24,
                     ),
                     trailing: Icon(
@@ -336,7 +336,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey,
+                              color: LightColors.grey,
                               fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
@@ -346,7 +346,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           AppLocalizations.of(context)!
                               .madeWithLoveOnThisWonderfulPlanet,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: LightColors.grey,
+                          ),
                         ),
                         SizedBox(
                           height: 6,
@@ -354,14 +357,17 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         Text(
                           'devmagic.com.br \n ootopia.org',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: LightColors.grey,
+                          ),
                         )
                       ],
                     ),
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: TextButton.icon(
+                    child: TextButton(
                       style: TextButton.styleFrom(primary: Colors.black),
                       onPressed: () async {
                         // if (widget.onTapLogoutItem != null) {
@@ -369,8 +375,25 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         // }
                         clearAuth(context);
                       },
-                      icon: Icon(Icons.logout),
-                      label: Text(AppLocalizations.of(context)!.exit),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/logout.png',
+                            width: 18.22,
+                            height: 19.05,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.exit,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
