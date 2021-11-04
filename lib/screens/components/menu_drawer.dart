@@ -11,6 +11,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -134,7 +135,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: 4.0),
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
@@ -207,13 +208,13 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         RichText(
                           text: TextSpan(
                               text: AppLocalizations.of(context)!.earn,
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 10),
+                              style: TextStyle(
+                                  color: LightColors.grey, fontSize: 10),
                               children: [
                                 TextSpan(
                                   text: " OOz ",
                                   style: TextStyle(
-                                      color: Colors.grey,
+                                      color: LightColors.grey,
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -221,7 +222,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                   text: AppLocalizations.of(context)!
                                       .whenTheySignup,
                                   style: TextStyle(
-                                      color: Colors.grey, fontSize: 10),
+                                      color: LightColors.grey, fontSize: 10),
                                 )
                               ]),
                         ),
@@ -231,10 +232,11 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       padding: MediaQuery.of(context).size.width > 300
                           ? const EdgeInsets.only(bottom: 3.0, left: 4)
                           : EdgeInsets.all(0),
-                      child: Icon(
-                        FeatherIcons.userPlus,
+                      child: Image.asset(
+                        'assets/icons/add-user-plus.png',
                         color: Colors.black,
-                        size: 24,
+                        width: 24,
+                        height: 24,
                       ),
                     ),
                     trailing: Icon(
@@ -265,7 +267,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         ),
                         Text(
                           '${AppLocalizations.of(context)!.checkYourTransactions}',
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                          style:
+                              TextStyle(color: LightColors.grey, fontSize: 10),
                         ),
                       ],
                     ),
@@ -297,7 +300,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         ),
                         Text(
                           '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                          style:
+                              TextStyle(color: LightColors.grey, fontSize: 10),
                         ),
                       ],
                     ),
@@ -328,9 +332,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     child: Column(
                       children: [
                         Text(
-                          "OOTOPIA ${AppLocalizations.of(context)!.appVersion} $appVersion.",
+                          "${AppLocalizations.of(context)!.appVersion} OOTOPIA $appVersion.",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
                           height: 6,
@@ -455,7 +462,7 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
                               '${AppLocalizations.of(context)!.enterToOotopia}',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Color(0xff707070),
+                                color: LightColors.grey,
                               ),
                             ),
                           ],
@@ -483,20 +490,24 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "OOTOPIA ${AppLocalizations.of(context)!.appVersion} ${widget.appVersion}.\n",
+                  "${AppLocalizations.of(context)!.appVersion} OOTOPIA ${widget.appVersion}.\n",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: LightColors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 Text(
                   AppLocalizations.of(context)!
                       .madeWithLoveOnThisWonderfulPlanet,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(fontSize: 12, color: LightColors.grey),
                 ),
                 Text(
                   '\ndevmagic.com.br \n ootopia.org',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(fontSize: 12, color: LightColors.grey),
                 ),
                 SizedBox(
                   height: 20,
