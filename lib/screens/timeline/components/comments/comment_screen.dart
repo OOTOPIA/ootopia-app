@@ -26,7 +26,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   CommentStore commentStore = CommentStore();
   late HomeStore homeStore;
   late AuthStore authStore;
-  int currentPage = 2;
+  int currentPage = 1;
   int postCommentsCount = 0;
   String postId = '';
 
@@ -49,10 +49,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   Future<void> _getData() async {
-    commentStore.isLoading = true;
-    print(postId);
     await commentStore.getComments(postId, currentPage);
-    commentStore.isLoading = false;
   }
 
   @override
@@ -117,18 +114,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 child: NotificationListener<ScrollNotification>(
                                   onNotification:
                                       (ScrollNotification scrollInfo) {
-                                    print(scrollInfo);
-                                    if (scrollInfo is ScrollEndNotification) {
-                                      if (scrollInfo.dragDetails
-                                          is DragStartDetails) {
-                                      } else if (scrollInfo.dragDetails
-                                          is DragEndDetails) {
-                                        currentPage++;
-                                        _getData();
-                                      }
+                                    if (scrollInfo.metrics.pixels ==
+                                        scrollInfo.metrics.maxScrollExtent) {
+                                      currentPage++;
+                                      _getData();
+                                      return true;
+                                    } else {
+                                      return false;
                                     }
-
-                                    return true;
                                   },
                                   child: RefreshIndicator(
                                     onRefresh: () async {
@@ -268,8 +261,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                                         postId,
                                                                         comment
                                                                             .id);
-
-                                                                    _getData();
+                                                                    commentStore
+                                                                        .listComments
+                                                                        .clear();
+                                                                    await commentStore
+                                                                        .getComments(
+                                                                            postId,
+                                                                            1);
                                                                   },
                                                                   child: Text(
                                                                     'OK',

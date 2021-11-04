@@ -6,7 +6,7 @@ class CommentRepositoryImpl with SecureStoreMixin {
   Future<List<Comment>> getComments(postId, page) async {
     try {
       var response = await ApiClient.api()
-          .get('posts/$postId/comments', queryParameters: {'pages': page});
+          .get('posts/$postId/comments', queryParameters: {'page': page});
       if (response.statusCode == 200) {
         return (response.data as List).map((i) => Comment.fromJson(i)).toList();
       } else {
@@ -35,7 +35,6 @@ class CommentRepositoryImpl with SecureStoreMixin {
     try {
       var response = await ApiClient.api()
           .delete('posts/$postId/comments', data: {'commentsIds': commentsIds});
-      print('dale ${response.statusCode}');
       if (response.statusCode == 200) {
         return true;
       } else {
