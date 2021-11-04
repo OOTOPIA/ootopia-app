@@ -70,6 +70,9 @@ abstract class HomeStoreBase with Store {
   @observable
   bool seeCrisp = true;
 
+  @observable
+  bool resizeToAvoidBottomInset = false;
+
   @action
   startDailyGoalTimer() async {
     _timerIsStarted = false;
@@ -232,5 +235,10 @@ abstract class HomeStoreBase with Store {
   @action
   void setSeeCrip(bool setSeeCrips) {
     this.seeCrisp = setSeeCrips;
+  }
+
+  @action
+  void setResizeToAvoidBottomInset(bool resizeToAvoidBottomInset) {
+    this.resizeToAvoidBottomInset = resizeToAvoidBottomInset;
   }
 }

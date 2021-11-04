@@ -19,8 +19,9 @@ abstract class CommentStoreBase with Store {
   Future<List<Comment>> getComments(String postId, int page) async {
     try {
       isLoading = true;
-
+      listComments.clear();
       var response = await commentRepository.getComments(postId, page);
+      print(response);
       listComments.addAll(response);
       isLoading = false;
 
@@ -36,7 +37,6 @@ abstract class CommentStoreBase with Store {
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
-      getComments(postId, 1);
       await commentRepository.createComment(postId, text);
       isLoading = false;
     } catch (e) {
@@ -46,10 +46,10 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<List<Comment>> deleteComments(String postId, int page) async {
+  Future<bool> deleteComments(String postId, String id) async {
     try {
-      getComments(postId, page);
-      return await commentRepository.getComments(postId, page);
+      List<String> idComments = [id];
+      return await commentRepository.deleteComments(postId, idComments);
     } catch (e) {
       return Future.error(e);
     }

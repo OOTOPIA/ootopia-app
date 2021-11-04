@@ -7,14 +7,13 @@ class CommentRepositoryImpl with SecureStoreMixin {
     try {
       var response = await ApiClient.api()
           .get('posts/$postId/comments', queryParameters: {'pages': page});
-      print(response);
       if (response.statusCode == 200) {
         return (response.data as List).map((i) => Comment.fromJson(i)).toList();
       } else {
-        throw Exception('Failed to load post');
+        throw Exception('Failed to load comment');
       }
     } catch (error) {
-      throw Exception('Failed to load posts $error');
+      throw Exception('Failed to load comment $error');
     }
   }
 
@@ -25,14 +24,25 @@ class CommentRepositoryImpl with SecureStoreMixin {
       if (response.statusCode == 201) {
         return Comment.fromJson(response.data);
       } else {
-        throw Exception('Failed to create post');
+        throw Exception('Failed to create comment');
       }
     } catch (error) {
-      throw Exception('Failed to create post $error');
+      throw Exception('Failed to create comment $error');
     }
   }
 
-  Future<String> deleteComments(String postId, List<String> commentsIds) async {
-    return 'all';
+  Future<bool> deleteComments(String postId, List<String> commentsIds) async {
+    try {
+      var response = await ApiClient.api()
+          .delete('posts/$postId/comments', data: {'commentsIds': commentsIds});
+      print('dale ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Failed to delete comment');
+      }
+    } catch (error) {
+      throw Exception('Failed to delete comment $error');
+    }
   }
 }

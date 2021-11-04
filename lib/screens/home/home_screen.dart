@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         child: Observer(builder: (_) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: homeStore!.resizeToAvoidBottomInset,
             key: _scaffoldKey,
             appBar: currentAppBar(),
             drawer: controller.currentBottomIndex ==

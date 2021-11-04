@@ -59,9 +59,9 @@ mixin _$CommentStore on CommentStoreBase, Store {
       AsyncAction('CommentStoreBase.deleteComments');
 
   @override
-  Future<List<Comment>> deleteComments(String postId, int page) {
+  Future<bool> deleteComments(String postId, String id) {
     return _$deleteCommentsAsyncAction
-        .run(() => super.deleteComments(postId, page));
+        .run(() => super.deleteComments(postId, id));
   }
 
   @override
