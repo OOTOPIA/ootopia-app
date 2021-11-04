@@ -77,351 +77,348 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 child: ConstrainedBox(
               constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.85),
-              child: Column(
+              child: Stack(
                 children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                          color: LightColors.grey.withOpacity(0.05),
-                          alignment: Alignment.centerLeft,
-                          height: 56,
-                          padding: EdgeInsets.only(left: 24),
-                          child: Text(
-                            AppLocalizations.of(context)!.comments,
-                            style: TextStyle(
-                              color: Color(0xff003694),
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  Column(
+                    children: [
+                      Container(
+                        color: LightColors.grey.withOpacity(0.05),
+                        alignment: Alignment.centerLeft,
+                        height: 56,
+                        padding: EdgeInsets.only(left: 24),
+                        child: Text(
+                          AppLocalizations.of(context)!.comments,
+                          style: TextStyle(
+                            color: Color(0xff003694),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        commentStore.listComments.isEmpty
-                            ? Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.55,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  AppLocalizations.of(context)!.noComment,
-                                  textAlign: TextAlign.center,
-                                ),
-                              )
-                            : Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.61,
-                                child: NotificationListener<ScrollNotification>(
-                                  onNotification:
-                                      (ScrollNotification scrollInfo) {
-                                    if (scrollInfo.metrics.pixels ==
-                                        scrollInfo.metrics.maxScrollExtent) {
-                                      commentStore.currentPage++;
-                                      commentStore.isLoading = true;
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      commentStore.listComments.isEmpty
+                          ? Container(
+                              height: MediaQuery.of(context).size.height * 0.55,
+                              alignment: Alignment.center,
+                              child: Text(
+                                AppLocalizations.of(context)!.noComment,
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : Container(
+                              height: MediaQuery.of(context).size.height * 0.61,
+                              child: NotificationListener<ScrollNotification>(
+                                onNotification:
+                                    (ScrollNotification scrollInfo) {
+                                  FocusScope.of(context)
+                                      .requestFocus(new FocusNode());
+                                  if (scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                    commentStore.currentPage++;
+                                    commentStore.isLoading = true;
 
-                                      _getData();
-                                      commentStore.isLoading = false;
+                                    _getData();
+                                    commentStore.isLoading = false;
 
-                                      return true;
-                                    } else {
-                                      return false;
-                                    }
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                },
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    commentStore.isLoading = true;
+                                    commentStore.listComments.clear();
+                                    commentStore.currentPage = 1;
+                                    await _getData();
+                                    commentStore.isLoading = false;
                                   },
-                                  child: RefreshIndicator(
-                                    onRefresh: () async {
-                                      commentStore.isLoading = true;
-                                      commentStore.listComments.clear();
-                                      commentStore.currentPage = 1;
-                                      await _getData();
-                                      commentStore.isLoading = false;
-                                    },
-                                    child: ListView.builder(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 24),
-                                      shrinkWrap: true,
-                                      itemCount:
-                                          commentStore.listComments.length,
-                                      itemBuilder: (context, index) {
-                                        var comment =
-                                            commentStore.listComments[index];
-                                        bool visibleDelete;
-                                        if (authStore.currentUser == null) {
-                                          visibleDelete = false;
-                                        } else {
-                                          visibleDelete =
-                                              authStore.currentUser!.id! ==
-                                                  commentStore
-                                                      .listComments[index]
-                                                      .userId;
-                                        }
-                                        return Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    comment.photoUrl ==
-                                                                'null' ||
-                                                            comment.photoUrl ==
-                                                                null
-                                                        ? CircleAvatar(
-                                                            radius: 19,
-                                                            backgroundImage:
-                                                                AssetImage(
-                                                                    'assets/icons/user.png'),
-                                                          )
-                                                        : CircleAvatar(
-                                                            radius: 19,
-                                                            backgroundImage:
-                                                                NetworkImage(comment
-                                                                    .photoUrl!),
-                                                          ),
-                                                    SizedBox(width: 8),
-                                                    Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          comment.username!,
+                                  child: ListView.builder(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 24),
+                                    shrinkWrap: true,
+                                    itemCount: commentStore.listComments.length,
+                                    itemBuilder: (context, index) {
+                                      var comment =
+                                          commentStore.listComments[index];
+                                      bool visibleDelete;
+                                      if (authStore.currentUser == null) {
+                                        visibleDelete = false;
+                                      } else {
+                                        visibleDelete =
+                                            authStore.currentUser!.id! ==
+                                                commentStore
+                                                    .listComments[index].userId;
+                                      }
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  comment.photoUrl == 'null' ||
+                                                          comment.photoUrl ==
+                                                              null
+                                                      ? CircleAvatar(
+                                                          radius: 19,
+                                                          backgroundImage:
+                                                              AssetImage(
+                                                                  'assets/icons/user.png'),
+                                                        )
+                                                      : CircleAvatar(
+                                                          radius: 19,
+                                                          backgroundImage:
+                                                              NetworkImage(comment
+                                                                  .photoUrl!),
+                                                        ),
+                                                  SizedBox(width: 8),
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        comment.username!,
+                                                        style: TextStyle(
+                                                          color:
+                                                              LightColors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 14,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.60,
+                                                        child: Text(
+                                                          comment.text,
+                                                          maxLines: 10,
                                                           style: TextStyle(
                                                             color: LightColors
                                                                 .black,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                                FontWeight.w400,
                                                             fontSize: 14,
                                                           ),
                                                         ),
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.60,
-                                                          child: Text(
-                                                            comment.text,
-                                                            maxLines: 10,
-                                                            style: TextStyle(
-                                                              color: LightColors
-                                                                  .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontSize: 14,
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                              Visibility(
+                                                visible: visibleDelete,
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            content: Text(
+                                                              AppLocalizations.of(
+                                                                      context)!
+                                                                  .commentsWillBePermanentlyRemoved,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                Visibility(
-                                                  visible: visibleDelete,
-                                                  child: GestureDetector(
-                                                    onTap: () async {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return AlertDialog(
-                                                              content: Text(
-                                                                AppLocalizations.of(
-                                                                        context)!
-                                                                    .commentsWillBePermanentlyRemoved,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child: Text(
+                                                                  AppLocalizations.of(
+                                                                          context)!
+                                                                      .cancel,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                  child: Text(
-                                                                    AppLocalizations.of(
-                                                                            context)!
-                                                                        .cancel,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
+                                                              TextButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  FocusManager
+                                                                      .instance
+                                                                      .primaryFocus
+                                                                      ?.unfocus();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  await commentStore
+                                                                      .deleteComments(
+                                                                          postId,
+                                                                          comment
+                                                                              .id);
+                                                                  commentStore
+                                                                      .listComments
+                                                                      .clear();
+                                                                  commentStore
+                                                                      .currentPage = 1;
+                                                                  _getData();
+                                                                },
+                                                                child: Text(
+                                                                  'OK',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
                                                                   ),
                                                                 ),
-                                                                TextButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    FocusManager
-                                                                        .instance
-                                                                        .primaryFocus
-                                                                        ?.unfocus();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    await commentStore.deleteComments(
-                                                                        postId,
-                                                                        comment
-                                                                            .id);
-                                                                    commentStore
-                                                                        .listComments
-                                                                        .clear();
-                                                                    commentStore
-                                                                        .currentPage = 1;
-                                                                    _getData();
-                                                                  },
-                                                                  child: Text(
-                                                                    'OK',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .delete,
-                                                      style: TextStyle(
-                                                        color: LightColors.grey,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 12,
-                                                      ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Text(
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .delete,
+                                                    style: TextStyle(
+                                                      color: LightColors.grey,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 12,
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 25,
-                                            )
-                                          ],
-                                        );
-                                      },
-                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                          )
+                                        ],
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
-                      ],
-                    ),
+                            ),
+                    ],
                   ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      bottom: 24,
-                      left: 24,
-                      right: 24,
-                    ),
-                    child: TextField(
-                      focusNode:
-                          authStore.currentUser == null ? FocusNode() : null,
-                      onTap: authStore.currentUser == null
-                          ? () {
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                              Navigator.of(context).pushNamed(
-                                PageRoute.Page.loginScreen.route,
-                                arguments: {
-                                  "returnToPageWithArgs": {
-                                    "currentPageName": "wallet",
-                                    "arguments": null
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.only(
+                          bottom: 24, left: 24, right: 24, top: 24),
+                      child: TextField(
+                        maxLines: commentStore.isLoading ? 1 : null,
+                        minLines: 1,
+                        focusNode:
+                            authStore.currentUser == null ? FocusNode() : null,
+                        onTap: authStore.currentUser == null
+                            ? () {
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                Navigator.of(context).pushNamed(
+                                  PageRoute.Page.loginScreen.route,
+                                  arguments: {
+                                    "returnToPageWithArgs": {
+                                      "currentPageName": "wallet",
+                                      "arguments": null
+                                    }
+                                  },
+                                );
+                              }
+                            : null,
+                        style: TextStyle(color: Colors.black),
+                        controller: _inputController,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: LightColors.grey, width: 0.25),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: LightColors.grey, width: 0.25),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: LightColors.grey, width: 0.25),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          labelText:
+                              AppLocalizations.of(context)!.writeYourComment,
+                          hintStyle: TextStyle(color: Colors.black),
+                          suffixIcon: Observer(builder: (context) {
+                            if (commentStore.isLoading) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 14.0),
+                                    child: SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return IconButton(
+                                icon: Icon(Icons.send),
+                                onPressed: () async {
+                                  if (_inputController.text.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                AppLocalizations.of(context)!
+                                                    .writeYourComment)));
+                                  } else {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    commentStore.isLoading = true;
+                                    commentStore.currentPage = 1;
+
+                                    await commentStore.createComment(
+                                        postId, _inputController.text);
+                                    _inputController.clear();
+                                    commentStore.listComments.clear();
+                                    _getData();
+                                    commentStore.isLoading = false;
                                   }
                                 },
                               );
                             }
-                          : null,
-                      style: TextStyle(color: Colors.black),
-                      controller: _inputController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: LightColors.grey, width: 0.25),
-                          borderRadius: BorderRadius.circular(5),
+                          }),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: LightColors.grey, width: 0.25),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: LightColors.grey, width: 0.25),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        labelText:
-                            AppLocalizations.of(context)!.writeYourComment,
-                        hintStyle: TextStyle(color: Colors.black),
-                        suffixIcon: Observer(builder: (context) {
-                          if (commentStore.isLoading) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 14.0),
-                                  child: SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              ],
-                            );
-                          } else {
-                            return IconButton(
-                              icon: Icon(Icons.send),
-                              onPressed: () async {
-                                if (_inputController.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              AppLocalizations.of(context)!
-                                                  .writeYourComment)));
-                                } else {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  commentStore.isLoading = true;
-                                  commentStore.currentPage = 1;
-
-                                  await commentStore.createComment(
-                                      postId, _inputController.text);
-                                  _inputController.clear();
-                                  commentStore.listComments.clear();
-                                  _getData();
-                                  commentStore.isLoading = false;
-                                }
-                              },
-                            );
-                          }
-                        }),
                       ),
                     ),
                   ),
