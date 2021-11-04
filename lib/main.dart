@@ -81,8 +81,7 @@ Future main() async {
 
   await SentryFlutter.init(
     (options) {
-      options.dsn =
-          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+      options.dsn = dotenv.env['SENTRY_DSN']!;
       options.debug = false;
       options.environment = "staging";
       options.attachStacktrace = true;
