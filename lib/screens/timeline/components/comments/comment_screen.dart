@@ -26,7 +26,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   CommentStore commentStore = CommentStore();
   late HomeStore homeStore;
   late AuthStore authStore;
-  int currentPage = 1;
+  int currentPage = 2;
   int postCommentsCount = 0;
   String postId = '';
 

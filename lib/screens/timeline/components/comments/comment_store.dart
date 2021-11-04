@@ -18,8 +18,10 @@ abstract class CommentStoreBase with Store {
   @action
   Future<List<Comment>> getComments(String postId, int page) async {
     try {
+      print(page);
       isLoading = true;
       var response = await commentRepository.getComments(postId, page);
+      print(response);
       listComments.addAll(response);
       isLoading = false;
 
