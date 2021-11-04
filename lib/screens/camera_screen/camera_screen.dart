@@ -34,7 +34,7 @@ class _CameraAppState extends State<CameraApp>
   late XFile imageFile;
   late XFile videoFile;
   bool permissionsIsNeeded = true;
-  late AssetEntity lastVideoThumbnail;
+  AssetEntity? lastVideoThumbnail;
   final picker = ImagePicker();
   bool flashIsOff = true;
 
@@ -66,8 +66,9 @@ class _CameraAppState extends State<CameraApp>
 
   getLastVideoThumbnail() async {
     try {
-      var albums = await PhotoManager.getAssetPathList(type: RequestType.video);
-      final recentAlbum = albums.first;
+      List<AssetPathEntity> albums =
+          await PhotoManager.getAssetPathList(type: RequestType.video);
+      final AssetPathEntity recentAlbum = albums.first;
       final recentAssets = await recentAlbum.getAssetListRange(
         start: 0, // start at index 0
         end: 1, // end at a very big index (to get all the assets)
@@ -544,7 +545,7 @@ class _CameraAppState extends State<CameraApp>
                               width: 30,
                               height: 30,
                               child: FutureBuilder<Uint8List?>(
-                                future: lastVideoThumbnail.thumbData,
+                                future: lastVideoThumbnail?.thumbData,
                                 builder: (_, snapshot) {
                                   final bytes = snapshot.data;
                                   // If we have no data, display a spinner
