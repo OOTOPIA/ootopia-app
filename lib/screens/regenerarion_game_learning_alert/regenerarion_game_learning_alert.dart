@@ -76,10 +76,7 @@ class _RegenerarionGameLearningAlertState
     super.initState();
   }
 
-  isSmallPhone(double value) {
-    if (MediaQuery.of(context).size.width < 380) return value * 0.7;
-    return value;
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +131,7 @@ class _RegenerarionGameLearningAlertState
                               .subtitle1!
                               .copyWith(
                                   color: Colors.white,
-                                  fontSize: isSmallPhone(22),
+                                  fontSize: 22,
                                   fontWeight: FontWeight.w400)
                               .copyWith(
                             shadows: [
@@ -153,8 +150,8 @@ class _RegenerarionGameLearningAlertState
                           height: 24,
                         ),
                         Container(
-                          width: isSmallPhone(160),
-                          height: isSmallPhone(160),
+                          width: 160,
+                          height: 160,
                           decoration: BoxDecoration(
                               color: _backgroundColorIcon,
                               borderRadius: BorderRadius.circular(100)),
@@ -172,7 +169,7 @@ class _RegenerarionGameLearningAlertState
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(
-                                    fontSize: isSmallPhone(40),
+                                    fontSize: 40,
                                     color: Colors.white)
                                 .copyWith(
                               shadows: [
@@ -194,7 +191,7 @@ class _RegenerarionGameLearningAlertState
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(
-                                    fontSize: isSmallPhone(18),
+                                    fontSize: 18,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400)
                                 .copyWith(shadows: [
@@ -216,7 +213,7 @@ class _RegenerarionGameLearningAlertState
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(
-                                    fontSize: isSmallPhone(24),
+                                    fontSize: 23,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500)
                                 .copyWith(
@@ -238,7 +235,7 @@ class _RegenerarionGameLearningAlertState
                                     .textTheme
                                     .subtitle1!
                                     .copyWith(
-                                        fontSize: isSmallPhone(24),
+                                        fontSize: 23,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500)
                                     .copyWith(
