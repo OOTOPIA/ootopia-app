@@ -191,6 +191,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       children: [
                                                         Text(
                                                           comment.username!,
@@ -207,7 +210,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                                       context)
                                                                   .size
                                                                   .width *
-                                                              0.65,
+                                                              0.60,
                                                           child: Text(
                                                             comment.text,
                                                             maxLines: 10,
@@ -404,13 +407,16 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                               AppLocalizations.of(context)!
                                                   .writeYourComment)));
                                 } else {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  commentStore.isLoading = true;
                                   commentStore.currentPage = 1;
 
                                   await commentStore.createComment(
                                       postId, _inputController.text);
                                   _inputController.clear();
-
+                                  commentStore.listComments.clear();
                                   _getData();
+                                  commentStore.isLoading = false;
                                 }
                               },
                             );
