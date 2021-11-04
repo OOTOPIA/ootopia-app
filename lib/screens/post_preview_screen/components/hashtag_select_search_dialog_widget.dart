@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/hashtage_widget.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 
 class HashtagSelectSearchDialogWidget extends StatefulWidget {
   final List<MultiSelectItem<InterestsTagsModel>> items;
@@ -54,7 +55,7 @@ class _HashtagSelectSearchDialogWidgetState
                   child: Text(
                     AppLocalizations.of(context)!.selectAtLeast1Tag,
                     style: GoogleFonts.roboto(
-                        fontSize: 22, fontWeight: FontWeight.w600),
+                        fontSize: 22, fontWeight: FontWeight.w400),
                     textAlign: TextAlign.start,
                   ),
                 ),
@@ -64,9 +65,12 @@ class _HashtagSelectSearchDialogWidgetState
                   },
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.searchForAtag,
-                    hintStyle: TextStyle(color: Colors.black.withOpacity(0.2)),
+                    hintStyle: GoogleFonts.roboto(
+                        color: Colors.black.withOpacity(0.2),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16),
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
+                        borderRadius: BorderRadius.circular(5),
                         borderSide:
                             BorderSide(color: Color(0xff707070), width: 0.25)),
                     focusedBorder: OutlineInputBorder(
@@ -85,14 +89,19 @@ class _HashtagSelectSearchDialogWidgetState
                 Observer(
                   builder: (context) => Container(
                     height: MediaQuery.of(context).size.height * 0.6,
-                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: SingleChildScrollView(
                       child: Wrap(
-                        children:
-                            widget.postPreviewScreenStore.filterValue.isEmpty
-                                ? allTags
-                                : widget.postPreviewScreenStore
-                                    .filterTagsPerName(allTags),
+                        spacing: GlobalConstants.of(context).spacingSmall,
+                        children: [
+                          SizedBox(
+                            height: 10,
+                            width: double.infinity,
+                          ),
+                          ...widget.postPreviewScreenStore.filterValue.isEmpty
+                              ? allTags
+                              : widget.postPreviewScreenStore
+                                  .filterTagsPerName(allTags)
+                        ],
                       ),
                     ),
                   ),

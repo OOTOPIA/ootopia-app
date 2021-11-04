@@ -53,6 +53,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
       await authStore.recoverPassword(_emailController.text, lang);
       setState(() {
         isLoading = false;
+        snackBarActive = false;
       });
 
       showModalBottomSheet(
@@ -73,12 +74,43 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
     } catch (error) {
       setState(() {
         isLoading = false;
+        snackBarActive = false;
       });
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.toString()),
-        ),
+
+      showModalBottomSheet(
+        context: context,
+        barrierColor: Colors.black.withAlpha(1),
+        backgroundColor: Colors.black.withAlpha(1),
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+            color: Color(0xff018F9C),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: Text(
+                  error.toString(),
+                  style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                )),
+                IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 28,
+                    )),
+              ],
+            ),
+          );
+        },
       );
+      
     }
   }
 
@@ -351,6 +383,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                           ),
                         ),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           if (_formKey.currentState!.validate()) {
                             _submit();
                           }

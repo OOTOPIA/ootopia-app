@@ -43,12 +43,8 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
       return 'isUserNotOwnsPost';
     }
 
-    switch (optionSelected) {
-      case 'Excluir':
-        widget.callbackReturnPopupMenu(optionSelected);
-
-        break;
-      default:
+    if (optionSelected == 'Excluir' || optionSelected == 'Delete') {
+      widget.callbackReturnPopupMenu(optionSelected);
     }
   }
 

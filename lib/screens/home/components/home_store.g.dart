@@ -199,6 +199,38 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  final _$seeCrispAtom = Atom(name: 'HomeStoreBase.seeCrisp');
+
+  @override
+  bool get seeCrisp {
+    _$seeCrispAtom.reportRead();
+    return super.seeCrisp;
+  }
+
+  @override
+  set seeCrisp(bool value) {
+    _$seeCrispAtom.reportWrite(value, super.seeCrisp, () {
+      super.seeCrisp = value;
+    });
+  }
+
+  final _$resizeToAvoidBottomInsetAtom =
+      Atom(name: 'HomeStoreBase.resizeToAvoidBottomInset');
+
+  @override
+  bool get resizeToAvoidBottomInset {
+    _$resizeToAvoidBottomInsetAtom.reportRead();
+    return super.resizeToAvoidBottomInset;
+  }
+
+  @override
+  set resizeToAvoidBottomInset(bool value) {
+    _$resizeToAvoidBottomInsetAtom
+        .reportWrite(value, super.resizeToAvoidBottomInset, () {
+      super.resizeToAvoidBottomInset = value;
+    });
+  }
+
   final _$startDailyGoalTimerAsyncAction =
       AsyncAction('HomeStoreBase.startDailyGoalTimer');
 
@@ -301,6 +333,28 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  void setSeeCrip(bool setSeeCrips) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.setSeeCrip');
+    try {
+      return super.setSeeCrip(setSeeCrips);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setResizeToAvoidBottomInset(bool resizeToAvoidBottomInset) {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.setResizeToAvoidBottomInset');
+    try {
+      return super.setResizeToAvoidBottomInset(resizeToAvoidBottomInset);
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 currentPageIndex: ${currentPageIndex},
@@ -314,7 +368,9 @@ totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar},
 showCreatedPostAlert: ${showCreatedPostAlert},
 createdPostAlertAlreadyShowed: ${createdPostAlertAlreadyShowed},
 userLogged: ${userLogged},
-iphoneHasNotch: ${iphoneHasNotch}
+iphoneHasNotch: ${iphoneHasNotch},
+seeCrisp: ${seeCrisp},
+resizeToAvoidBottomInset: ${resizeToAvoidBottomInset}
     ''';
   }
 }

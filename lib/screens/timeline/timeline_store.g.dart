@@ -55,6 +55,21 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
+  final _$_sendingToApiAtom = Atom(name: 'TimelineStoreBase._sendingToApi');
+
+  @override
+  bool get _sendingToApi {
+    _$_sendingToApiAtom.reportRead();
+    return super._sendingToApi;
+  }
+
+  @override
+  set _sendingToApi(bool value) {
+    _$_sendingToApiAtom.reportWrite(value, super._sendingToApi, () {
+      super._sendingToApi = value;
+    });
+  }
+
   final _$dailyGoalStatsAtom = Atom(name: 'TimelineStoreBase.dailyGoalStats');
 
   @override

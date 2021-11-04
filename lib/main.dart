@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
@@ -50,7 +49,7 @@ import 'package:ootopia_app/screens/recover_password/recover_password_screen.dar
 import 'package:ootopia_app/screens/reset_password/reset_password_screen.dart';
 import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/celebrate_component.dart';
-import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -62,7 +61,6 @@ import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
-import 'data/repositories/comment_repository.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -151,11 +149,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (BuildContext context) => TimelinePostBloc(
             PostRepositoryImpl(),
-          ),
-        ),
-        BlocProvider(
-          create: (BuildContext context) => CommentBloc(
-            CommentRepositoryImpl(),
           ),
         ),
         BlocProvider(
