@@ -1,16 +1,18 @@
-import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'comment_post_model.g.dart';
 
-class Comment extends Equatable {
-  String id;
-  String postId;
-  String userId;
-  String text;
-  String? photoUrl;
-  String? username;
-  bool deleted = false;
-  bool selected = false;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+@JsonSerializable()
+class Comment {
+  final String id;
+  final String postId;
+  final String userId;
+  final String text;
+  final String? photoUrl;
+  final String? username;
+  final bool deleted = false;
+  final bool selected = false;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Comment({
     required this.id,
@@ -19,36 +21,10 @@ class Comment extends Equatable {
     required this.text,
     this.photoUrl,
     required this.username,
-    required this.deleted,
     this.createdAt,
     this.updatedAt,
   });
-
-  factory Comment.fromJson(Map<String, dynamic> json) {
-    return Comment(
-      id: json['id'],
-      postId: json['postId'],
-      userId: json['userId'],
-      text: json['text'],
-      photoUrl: json['photoUrl'],
-      username: json['username'],
-      deleted: (json['deleted'] == null ? false : json['deleted']),
-      //createdAt: DateTime(json['createdAt']),
-      //updatedAt: DateTime(json['updatedAt']),
-    );
-  }
-
-  @override
-  List<dynamic> get props => [
-        id,
-        postId,
-        userId,
-        text,
-        photoUrl,
-        username,
-        deleted,
-        selected,
-        createdAt,
-        updatedAt,
-      ];
+  factory Comment.fromJson(Map<String, dynamic> json) =>
+      _$CommentFromJson(json);
+  Map<String, dynamic> toJson() => _$CommentToJson(this);
 }
