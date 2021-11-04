@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         child: Observer(builder: (_) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: homeStore!.resizeToAvoidBottomInset,
             key: _scaffoldKey,
             appBar: currentAppBar(),
             drawer: controller.currentBottomIndex ==
@@ -203,17 +203,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 SmartPageNavigation(
                   controller: controller,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    iconSize: 40,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.chatWithUsersScreen.route,
-                      );
-                    },
-                    icon: Image.asset('assets/icons/crisp_icon.png'),
+                Visibility(
+                  visible: homeStore!.seeCrisp,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      iconSize: 40,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.chatWithUsersScreen.route,
+                        );
+                      },
+                      icon: Image.asset('assets/icons/crisp_icon.png'),
+                    ),
                   ),
                 ),
                 Align(

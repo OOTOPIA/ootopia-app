@@ -24,10 +24,15 @@ class _CreateCategoriesScreenState extends State<CreateCategoriesScreen> {
       child: Scaffold(
         body: Container(
           height: double.infinity,
-          decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/seed.png',),fit: BoxFit.cover,)),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage(
+              'assets/images/seed.png',
+            ),
+            fit: BoxFit.cover,
+          )),
           child: SingleChildScrollView(
-            child:
-            Stack(
+            child: Stack(
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 26),
@@ -53,7 +58,8 @@ class _CreateCategoriesScreenState extends State<CreateCategoriesScreen> {
                                 height: 62,
                                 color: Colors.white,
                               ))),
-                      SizedBox(height: GlobalConstants.of(context).spacingMedium),
+                      SizedBox(
+                          height: GlobalConstants.of(context).spacingMedium),
                       Text(
                         AppLocalizations.of(context)!
                             .createYourOwnCategories
@@ -64,15 +70,15 @@ class _CreateCategoriesScreenState extends State<CreateCategoriesScreen> {
                               color: Colors.black.withOpacity(0.25),
                               spreadRadius: 0,
                               blurRadius: 3,
-                              offset: Offset(
-                                  0, 5), // changes position of shadow
+                              offset:
+                                  Offset(0, 5), // changes position of shadow
                             ),
                             BoxShadow(
                               color: Colors.black.withOpacity(0.25),
                               spreadRadius: 0,
                               blurRadius: 3,
-                              offset: Offset(
-                                  1, 5), // changes position of shadow
+                              offset:
+                                  Offset(1, 5), // changes position of shadow
                             ),
                           ],
                           color: Colors.white,
@@ -82,48 +88,51 @@ class _CreateCategoriesScreenState extends State<CreateCategoriesScreen> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                          height:
-                          GlobalConstants.of(context).screenHorizontalSpace),
+                          height: GlobalConstants.of(context)
+                              .screenHorizontalSpace),
                       Text(
-                        AppLocalizations.of(context)!.textForNextFeatureCategories,
-                        style: TextStyle(color: Colors.white, fontSize: 18,
+                        AppLocalizations.of(context)!
+                            .textForNextFeatureCategories,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
                           shadows: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.25),
                               spreadRadius: 0,
                               blurRadius: 3,
-                              offset: Offset(
-                                  0, 5), // changes position of shadow
+                              offset:
+                                  Offset(0, 5), // changes position of shadow
                             ),
                             BoxShadow(
                               color: Colors.black.withOpacity(0.25),
                               spreadRadius: 0,
                               blurRadius: 3,
-                              offset: Offset(
-                                  1, 5), // changes position of shadow
+                              offset:
+                                  Offset(1, 5), // changes position of shadow
                             ),
-                          ],),
+                          ],
+                        ),
                         textAlign: TextAlign.left,
                       ),
                       SizedBox(
                         height: 50,
                       ),
-
                       Container(
                         padding: const EdgeInsets.only(bottom: 28.0),
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
                             style: ButtonStyle(
-                              fixedSize:
-                              MaterialStateProperty.all<Size>(Size(104, 53)),
-                              shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              fixedSize: MaterialStateProperty.all<Size>(
+                                  Size(104, 53)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25.0),
                                     side: BorderSide.none),
                               ),
-                              backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
                               padding: MaterialStateProperty.all<EdgeInsets>(
                                   EdgeInsets.all(15)),
                             ),
@@ -150,16 +159,14 @@ class _CreateCategoriesScreenState extends State<CreateCategoriesScreen> {
                       quarterTurns: -1,
                       child: RichText(
                         text: TextSpan(
-                          text: AppLocalizations.of(context)!.pictureByEttyFidele,
+                          text:
+                              AppLocalizations.of(context)!.pictureByEttyFidele,
                           style: TextStyle(color: Colors.white, fontSize: 10),
                         ),
                       ),
                     ),
                   ),
                 ),
-
-
-
               ],
             ),
           ),
