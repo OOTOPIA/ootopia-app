@@ -130,7 +130,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         about: AppLocalizations.of(context)!
                                             .learnMore,
                                         marginBottom: true,
-                                        onTouchAbout: () {
+                                        onTapAbout: () {
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                             PageRoute.Page.homeScreen.route,

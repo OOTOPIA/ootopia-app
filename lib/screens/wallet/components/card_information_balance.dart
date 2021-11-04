@@ -216,7 +216,7 @@ class CardInformationBalance extends StatelessWidget {
                                       .aboutRegenerationGame,
                                   about:
                                       AppLocalizations.of(context)!.learnMore,
-                                  onTouchAbout: () {
+                                  onTapAbout: () {
                                     Navigator.of(context)
                                         .pushNamedAndRemoveUntil(
                                       PageRoute.Page.homeScreen.route,

@@ -274,7 +274,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
                                       marginBottom: true,
-                                      onTouchAbout: () {
+                                      onTapAbout: () {
                                         Navigator.of(context)
                                             .pushNamedAndRemoveUntil(
                                           PageRoute.Page.homeScreen.route,
