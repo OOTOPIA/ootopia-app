@@ -273,7 +273,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       ],
                     ),
                     leading: Image.asset(
-                      'assets/icons/ozz-black.png',
+                      'assets/icons/ooz-black.png',
                       width: 24,
                     ),
                     trailing: Icon(
