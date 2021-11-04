@@ -444,7 +444,7 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
                           height: 18.99,
                         ),
                         SizedBox(
-                          width: 16,
+                          width: 24,
                         ),
                         Column(
                           mainAxisSize: MainAxisSize.min,
