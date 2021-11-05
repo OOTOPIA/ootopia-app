@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,6 +31,18 @@ class _RegenerarionGameLearningAlertState
   String? _secondTextPt2;
 
   String? _imageRights;
+
+  void setStatusBar(bool getOutScreen) {
+    if (getOutScreen) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle());
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ));
+    }
+  }
 
   @override
   void initState() {
@@ -75,6 +88,9 @@ class _RegenerarionGameLearningAlertState
         break;
     }
     super.initState();
+    Future.delayed(Duration(milliseconds: 350), () {
+      this.setStatusBar(false);
+    });
   }
 
   @override
