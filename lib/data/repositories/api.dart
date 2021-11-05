@@ -17,9 +17,9 @@ class ApiClient {
   static Dio api() {
     if (_options == null) {
       _options = BaseOptions(
-          baseUrl: dotenv.env['API_URL']!,
-          connectTimeout: 30 * 1000,
-          headers: {'user-agent': '0.0.0'});
+        baseUrl: dotenv.env['API_URL']!,
+        connectTimeout: 30 * 1000,
+      );
     }
 
     _dioInstance = (_dioInstance == null ? Dio(_options) : _dioInstance);
