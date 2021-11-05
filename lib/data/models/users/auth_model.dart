@@ -32,6 +32,7 @@ class Auth {
   int? globalTrophyQuantity;
   int? totalTrophyQuantity;
   String? countryCode;
+  String? dialCode;
   int? registerPhase;
   String? createdAt;
   String? updatedAt;
@@ -65,6 +66,7 @@ class Auth {
       this.globalTrophyQuantity,
       this.totalTrophyQuantity,
       this.countryCode,
+      this.dialCode,
       this.registerPhase,
       this.createdAt,
       this.updatedAt,

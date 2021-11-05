@@ -224,6 +224,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           setState(() {
                             editProfileStore.countryCode =
                                 number.isoCode.toString();
+                            editProfileStore.dialCode =
+                                number.dialCode.toString();
                             editProfileStore.getPhoneNumber(
                                 number.toString(), number.isoCode.toString());
                           });

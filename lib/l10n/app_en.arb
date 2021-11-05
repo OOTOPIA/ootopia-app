@@ -81,7 +81,7 @@
     "privacy": "privacy.",
     "youNeedToAcceptTheTermsOfUseToContinue": "You need to accept the Terms of Use to continue",
 
-    "weRespectAndProtectThePrivacyofYourData":"We respect and protect the privacy of your data. \nCheck out our ethical and transparency precepts here.",
+    "weRespectAndProtectThePrivacyofYourData":"We respect and protect the privacy of your data.\nCheck out our ethical and transparency precepts in terms of use and privacy.",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "You need to enable some \npermissions to allow full \nuse of the camera.",
 
@@ -150,7 +150,7 @@
     "writeYourComment": "Write your comment",
     "noComment": "No comment",
     "caution": "Caution",
-    "commentsWillBePermanentlyRemoved": "Comments will be permanently removed.",
+    "commentsWillBePermanentlyRemoved": "Comment will be permanently removed.",
     "cancel": "Cancel",
     "doYouReallyWantToDeleteYourPost": "Do you really want to delete your post?",
     "slideToGiveAGratitudeReward": "Swipe to reward",
@@ -243,6 +243,7 @@
     
     "congratulations": "Congratulations!",
     "youMetYourDailyGoalToHelpRegenerateThePlanet": "You met your daily goal to help\nregenerate the planet",
+    "youMetYourDailyGoalToHelpRegenerateThePlanetWithoutParagraphs": "You met your daily goal to help regenerate the planet",
     "totalBalance": "Total Balance",
     "nextStepIsToHelpMeetYourCityGoal": "Next step is to help meet your city goal.",
     "nextStepIsToHelpMeetYourGlobalGoal": "Next step is to help meet your global goal.",
@@ -256,6 +257,7 @@
     "cropButton":"Crop image",
 
     "textExplainWallet" : "This is your OOz wallet. Here you can check your total \n balance and all incoming and outcoming transactions",
+    "textExplainWalletWithoutParagraph":"This is your OOz wallet. Here you can check your total balance and all incoming and outcoming transactions",
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
     "youDontNothing": "You don't have nothing",
@@ -275,15 +277,15 @@
     "back":"Back",
     "close": "Close",
     "personalLevel": "Personal level",
-    "personalLevelText1": "Every person and every action counts! So by using the OOTOPIA app to learn and share regenerative stories, you contribute to change and receive OOz credits in return.",
+    "personalLevelText1": "Every person and every action counts!\nSo by using the OOTOPIA app to learn and share regenerative stories, you contribute to change and receive OOz credits in return.",
     "personalLevelText2": "Set your daily goal and start living OOTOPIA now!",
 
     "cityLevel": "City level",
-    "cityLevelText1": "When we collaborate with our community we amplify the positive impact! The City Level goal is the sum of goals of all people using the app in your city.",
+    "cityLevelText1": "When we collaborate with our community we amplify the positive impact!\nThe City Level goal is the sum of goals of all people using the app in your city.",
     "cityLevelText2": "Keep engaged to help your city meet its daily goal!",
 
     "planetaryLevel": "Planetary level",
-    "planetaryLevelText1": "Together we can change the world! The Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
+    "planetaryLevelText1": "Together we can change the world!\nThe Planetary Level goal is the sum of goals of all people collaborating to create the beautiful world we want to live in!",
     "planetaryLevelText2pt1": "We are almost there!",
     "planetaryLevelText2pt2": "Let's meet the planetary goal today!",
     
@@ -291,7 +293,7 @@
     
     "sendYourFeedback":"send your feedback",
     "questions":"questions",
-    "suggestions": "Suggestions",
+    "suggestions": "suggestions",
     "checkYourTransactions":"check your transactions",
     "earn":"earn",
     "whenTheySignup":"when they signup",

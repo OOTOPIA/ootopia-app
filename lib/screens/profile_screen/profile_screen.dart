@@ -171,6 +171,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     about:
                                         AppLocalizations.of(context)!.learnMore,
                                     marginBottom: true,
+                                    onTapAbout: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
                                     contact: {
                                       "text": AppLocalizations.of(context)!
                                           .areYouAChangeMakerProToo,
@@ -238,6 +250,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         about: AppLocalizations.of(context)!
                                             .learnMore,
                                         marginBottom: true,
+                                        onTapAbout: () {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                            PageRoute.Page.homeScreen.route,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              "returnToPageWithArgs": {
+                                                'currentPageName':
+                                                    "learning_tracks"
+                                              }
+                                            },
+                                          );
+                                        },
                                       );
                                     },
                                   );
@@ -252,9 +277,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           fontSize: 16, color: Colors.black87),
                                     ),
                                     TextSpan(
-                                      //text:
-                                      //"${authStore.currentUser!.dailyLearningGoalInMinutes}m",
-                                      text: "10m",
+                                      text:
+                                          "${authStore.currentUser?.dailyLearningGoalInMinutes ?? 00}m",
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.black87,
@@ -295,6 +319,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               about:
                                                   AppLocalizations.of(context)!
                                                       .learnMore,
+                                              onTapAbout: () {
+                                                Navigator.of(context)
+                                                    .pushNamedAndRemoveUntil(
+                                                  PageRoute
+                                                      .Page.homeScreen.route,
+                                                  (Route<dynamic> route) =>
+                                                      false,
+                                                  arguments: {
+                                                    "returnToPageWithArgs": {
+                                                      'currentPageName':
+                                                          "learning_tracks"
+                                                    }
+                                                  },
+                                                );
+                                              },
                                               marginBottom: true);
                                         },
                                       );

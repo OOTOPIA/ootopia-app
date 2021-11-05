@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegenerarionGameLearningAlert extends StatefulWidget {
   Map<String, dynamic> args;
@@ -78,6 +79,7 @@ class _RegenerarionGameLearningAlertState
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
         child: Stack(
@@ -321,7 +323,19 @@ class _RegenerarionGameLearningAlertState
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        onPressed: () => {},
+                                        onPressed: () => {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                            PageRoute.Page.homeScreen.route,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              "returnToPageWithArgs": {
+                                                'currentPageName':
+                                                    "learning_tracks"
+                                              }
+                                            },
+                                          )
+                                        },
                                       ),
                                     ),
                                   ),
