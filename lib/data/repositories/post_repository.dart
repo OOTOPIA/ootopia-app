@@ -59,14 +59,10 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         queryParams['userId'] = userId;
       }
 
-      String queryString = Uri(queryParameters: queryParams).query;
-
-      final response = await http.get(
-        Uri.parse(dotenv.env['API_URL']! + "posts?" + queryString),
-        headers: await this.getHeaders(),
-      );
+      final response = await ApiClient.api()
+          .get(dotenv.env['API_URL']! + "posts?", queryParameters: queryParams);
       if (response.statusCode == 200) {
-        return (json.decode(response.body) as List)
+        return (response.data as List)
             .map((i) => TimelinePost.fromJson(i))
             .toList();
       } else {
