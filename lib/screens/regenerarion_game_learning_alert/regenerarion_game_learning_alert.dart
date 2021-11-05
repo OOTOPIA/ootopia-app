@@ -77,10 +77,9 @@ class _RegenerarionGameLearningAlertState
     super.initState();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
         child: Stack(
@@ -132,7 +131,7 @@ class _RegenerarionGameLearningAlertState
                               .subtitle1!
                               .copyWith(
                                   color: Colors.white,
-                                  fontSize: 22,
+                                  fontSize: screenWidth <= 320 ? 18 : 22,
                                   fontWeight: FontWeight.w400)
                               .copyWith(
                             shadows: [
@@ -151,8 +150,8 @@ class _RegenerarionGameLearningAlertState
                           height: 24,
                         ),
                         Container(
-                          width: 160,
-                          height: 160,
+                          width: screenWidth <= 320 ? 120 : 160,
+                          height: screenWidth <= 320 ? 120 : 160,
                           decoration: BoxDecoration(
                               color: _backgroundColorIcon,
                               borderRadius: BorderRadius.circular(100)),
@@ -170,7 +169,7 @@ class _RegenerarionGameLearningAlertState
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(
-                                    fontSize: 40,
+                                    fontSize: screenWidth <= 320 ? 32 : 40,
                                     color: Colors.white)
                                 .copyWith(
                               shadows: [
@@ -192,7 +191,7 @@ class _RegenerarionGameLearningAlertState
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(
-                                    fontSize: 18,
+                                    fontSize: screenWidth <= 320 ? 14 : 18,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400)
                                 .copyWith(shadows: [
@@ -214,7 +213,7 @@ class _RegenerarionGameLearningAlertState
                                 .textTheme
                                 .subtitle1!
                                 .copyWith(
-                                    fontSize: 23,
+                                    fontSize: screenWidth <= 320 ? 20 : 23,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500)
                                 .copyWith(
@@ -236,7 +235,7 @@ class _RegenerarionGameLearningAlertState
                                     .textTheme
                                     .subtitle1!
                                     .copyWith(
-                                        fontSize: 23,
+                                        fontSize: screenWidth <= 320 ? 20 : 23,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500)
                                     .copyWith(
