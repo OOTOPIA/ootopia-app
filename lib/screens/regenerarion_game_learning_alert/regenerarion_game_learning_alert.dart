@@ -152,7 +152,7 @@ class _RegenerarionGameLearningAlertState
                                     .subtitle1!
                                     .copyWith(
                                         color: Colors.white,
-                                        fontSize: 22,
+                                        fontSize: screenWidth <= 320 ? 20 : 22,
                                         fontWeight: FontWeight.w400)
                                     .copyWith(
                                   shadows: [
@@ -171,8 +171,8 @@ class _RegenerarionGameLearningAlertState
                                 height: 24,
                               ),
                               Container(
-                                width: 160,
-                                height: 160,
+                                width: screenWidth <= 320 ? 120 : 160,
+                                height: screenWidth <= 320 ? 120 : 160,
                                 decoration: BoxDecoration(
                                     color: _backgroundColorIcon,
                                     borderRadius: BorderRadius.circular(100)),
@@ -190,7 +190,9 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: 40, color: Colors.white)
+                                          fontSize:
+                                              screenWidth <= 320 ? 34 : 40,
+                                          color: Colors.white)
                                       .copyWith(
                                     shadows: [
                                       Shadow(
@@ -211,7 +213,8 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: 18,
+                                          fontSize:
+                                              screenWidth <= 320 ? 16 : 18,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w400)
                                       .copyWith(shadows: [
@@ -233,7 +236,8 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: 23,
+                                          fontSize:
+                                              screenWidth <= 320 ? 18 : 23,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500)
                                       .copyWith(
@@ -255,7 +259,8 @@ class _RegenerarionGameLearningAlertState
                                           .textTheme
                                           .subtitle1!
                                           .copyWith(
-                                              fontSize: 23,
+                                              fontSize:
+                                                  screenWidth <= 320 ? 18 : 23,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500)
                                           .copyWith(
@@ -275,7 +280,9 @@ class _RegenerarionGameLearningAlertState
                             ],
                           ),
                           SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.1),
+                              height: screenWidth <= 320
+                                  ? 20
+                                  : MediaQuery.of(context).size.height * 0.1),
                           Column(
                             children: [
                               Row(
