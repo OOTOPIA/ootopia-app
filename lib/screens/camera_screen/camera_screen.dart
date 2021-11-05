@@ -262,7 +262,7 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future getImageFromGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     indexCamera = 1;
     setCamera();
 
