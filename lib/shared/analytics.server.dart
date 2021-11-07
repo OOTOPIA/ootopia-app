@@ -2,6 +2,7 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:package_info/package_info.dart';
 
 class AnalyticsTracking {
   final Amplitude analytics = Amplitude.getInstance(instanceName: "OOTOPIA");
@@ -19,7 +20,9 @@ class AnalyticsTracking {
     return instance;
   }
 
-  trackingDataUser(Identify identify) {
+  trackingDataUser(Identify identify) async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    identify.set("AppVersion", "${info.version}+${info.buildNumber}");
     analytics.identify(identify);
   }
 

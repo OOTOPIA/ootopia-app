@@ -15,9 +15,8 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
-import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
@@ -37,6 +36,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'dart:math' as math;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class PhotoTimeline extends StatefulWidget {
   final int? index;
   final TimelinePost post;
@@ -89,8 +89,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   bool dragging = false;
 
-  bool _isPlayerReady = false;
-
   bool _isDragging = false;
   double _draggablePositionX = 0;
   late Timer _onDragCanceledTimer;
@@ -110,7 +108,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
-  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -154,15 +151,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _popupMenuReturn(String selectedOption) {
-    switch (selectedOption) {
-      case 'Excluir':
-        _showMyDialog();
-        break;
-
-      case 'isUserNotOwnsPost':
-        // renderSnackBar();
-        break;
-      default:
+    if (selectedOption == 'Excluir' || selectedOption == 'Delete') {
+      _showMyDialog();
     }
   }
 
@@ -284,6 +274,18 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                       about: AppLocalizations.of(context)!
                                           .learnMore,
                                       marginBottom: true,
+                                      onTapAbout: () {
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                          PageRoute.Page.homeScreen.route,
+                                          (Route<dynamic> route) => false,
+                                          arguments: {
+                                            "returnToPageWithArgs": {
+                                              'currentPageName': "learning_tracks"
+                                            }
+                                          },
+                                        );
+                                      },
                                       contact: {
                                         "text": AppLocalizations.of(context)!
                                             .areYouAChangeMakerProToo,
@@ -875,10 +877,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     }
     return SizedBox(
       height: 25,
-      
       child: TextButton(
         style: TextButton.styleFrom(
-          
           primary: Colors.black87,
           padding: EdgeInsets.only(left: 12),
           shape: const RoundedRectangleBorder(
