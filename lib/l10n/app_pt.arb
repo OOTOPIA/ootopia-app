@@ -407,5 +407,7 @@
      "nextAboutCreateOffer":"Na próxima atualização do aplicativo, todos poderão criar ofertas, produtos, serviços e experiências. Até lá, que tal nos dizer o que você gostaria de vender ou adquirir?\n\nSuas sugestões e dúvidas são muito bem vindas!",
      "aboutYourOfferHere":"SERÁ ÓTIMO VER SUA OFERTA AQUI",
      "giveSuggestion":"Dar sugestão",
-     "supportCenter":"Central de Suporte"
+     "supportCenter":"Central de Suporte",
+     "invalidEmailOrPassword": "Email e/ou senha inválida",
+     "errorLogin": "Erro de acesso"
 }

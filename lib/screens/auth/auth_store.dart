@@ -75,12 +75,7 @@ abstract class AuthStoreBase with Store {
         this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
       }
     } catch (e) {
-      String errorMessage = e.toString();
-      if (errorMessage == "INVALID_PASSWORD") {
-        throw ("Invalid email and/or password");
-      } else {
-        throw ("Error on login");
-      }
+      throw ("Error on login");
     }
   }
 
