@@ -145,11 +145,7 @@ abstract class AuthStoreBase with Store {
     } catch (e) {
       String errorMessage = e.toString();
 
-      if (errorMessage == "USER_NOT_FOUND") {
-        throw ("Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.");
-      } else {
-        throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
-      }
+      throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
     }
   }
 }
