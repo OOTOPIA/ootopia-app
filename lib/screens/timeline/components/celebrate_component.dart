@@ -18,6 +18,7 @@ class CelebrationStates extends State<Celebration> {
   late VideoPlayerController _controller;
   bool videoIsFinished = false;
   late Future<void> _initializeVideoPlayerFuture;
+  bool loadingVideo = false;
 
   void _backButton(BuildContext context) {
     videoIsFinished = false;
@@ -37,37 +38,44 @@ class CelebrationStates extends State<Celebration> {
     }
   }
 
+  isolateLoadingVideo() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      _controller = VideoPlayerController.asset(
+          'assets/videos/ootopia_celebration_cutter.mp4')
+        ..initialize().then((_) {
+          Timer(Duration(milliseconds: 300), () {
+            _controller.play();
+            loadingVideo = true;
+          // Initialize the controller and store the Future for later use.
+          _initializeVideoPlayerFuture = _controller.initialize();
+
+          // Use the controller to loop the video.
+          _controller.setLooping(false);
+          });
+          
+        })
+        ..addListener(() {
+          setState(() {
+            if (_controller.value.isInitialized &&
+                2 == _controller.value.position.inSeconds) {
+              videoIsFinished = true;
+            } else {
+              videoIsFinished = false;
+            }
+            if (_controller.value.isPlaying &&
+                _controller.value.isInitialized &&
+                2 == _controller.value.position.inSeconds) {
+              _controller.pause();
+            }
+          });
+        });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
-    _controller = VideoPlayerController.asset(
-        'assets/videos/ootopia_celebration_cutter.mp4')
-      ..initialize().then(
-          (_) => Timer(Duration(milliseconds: 300), () => _controller.play()))
-      ..addListener(() {
-        setState(() {
-          if (_controller.value.isInitialized &&
-              2 == _controller.value.position.inSeconds) {
-            videoIsFinished = true;
-          } else {
-            videoIsFinished = false;
-          }
-          if (_controller.value.isPlaying &&
-              _controller.value.isInitialized &&
-              2 == _controller.value.position.inSeconds) {
-            _controller.pause();
-          }
-        });
-      });
-    // 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-
-    // Initialize the controller and store the Future for later use.
-    _initializeVideoPlayerFuture = _controller.initialize();
-
-    // Use the controller to loop the video.
-    _controller.setLooping(false);
-
+    isolateLoadingVideo();
     setState(() {});
   }
 
@@ -87,11 +95,16 @@ class CelebrationStates extends State<Celebration> {
             SizedBox.expand(
               child: FittedBox(
                 fit: BoxFit.cover,
-                child: Container(
-                  height: _controller.value.size.height,
-                  width: _controller.value.size.width,
-                  child: VideoPlayer(_controller),
-                ),
+                child: loadingVideo
+                    ? Container(
+                        height: _controller.value.size.height,
+                        width: _controller.value.size.width,
+                        child: VideoPlayer(_controller),
+                      )
+                    : Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      ),
               ),
             ),
             if (videoIsFinished)
@@ -122,6 +135,8 @@ class CelebrationStates extends State<Celebration> {
                                       : AppLocalizations.of(context)!
                                           .letIsCelebrate
                                           .toUpperCase(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: screenWidth < 360 ? 26 : 32,
