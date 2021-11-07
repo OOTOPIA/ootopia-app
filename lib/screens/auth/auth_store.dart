@@ -143,8 +143,6 @@ abstract class AuthStoreBase with Store {
       await this.authRepository.recoverPassword(email, lang);
       this.trackingEvents.userRecoverPassword();
     } catch (e) {
-      String errorMessage = e.toString();
-
       throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
     }
   }
