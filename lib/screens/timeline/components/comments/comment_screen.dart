@@ -429,7 +429,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                         ?.unfocus();
                                     commentStore.isLoading = true;
                                     commentStore.currentPage = 1;
-
+                                    isIconBlue = false;
                                     await commentStore.createComment(
                                         postId, _inputController.text);
                                     _inputController.clear();
