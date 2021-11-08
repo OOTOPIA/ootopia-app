@@ -82,6 +82,10 @@ class AnalyticsTracking {
     this.trackingEvent("Signup - Completed step IV of signup II", property);
   }
 
+  signupConcludeButton(property) {
+    this.trackingEvent("Signup - Clicked at Conclude button", property);
+  }
+
   signupWatchedTheTutorial(eventName, property) {
     this.trackingEvent(eventName, property);
   }
