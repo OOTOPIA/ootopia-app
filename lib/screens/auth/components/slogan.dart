@@ -7,7 +7,6 @@ class Slogan extends StatelessWidget {
   Widget build(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    print(screenWidth);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
