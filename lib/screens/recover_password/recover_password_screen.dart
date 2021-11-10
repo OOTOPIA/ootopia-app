@@ -90,7 +90,10 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
               children: [
                 Expanded(
                     child: Text(
-                  error.toString(),
+                  error.toString() == 'USER_NOT_FOUND'
+                      ? AppLocalizations.of(context)!.recoveryMessageError
+                      : AppLocalizations.of(context)!
+                          .thereWasAProblemPleaseTryAgain,
                   style: GoogleFonts.roboto(
                       color: Colors.white,
                       fontSize: 16,
@@ -110,7 +113,6 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
           );
         },
       );
-      
     }
   }
 

@@ -409,5 +409,6 @@
      "giveSuggestion":"Dar sugestão",
      "supportCenter":"Central de Suporte",
      "invalidEmailOrPassword": "Email e/ou senha inválida",
-     "errorLogin": "Erro de acesso"
+     "errorLogin": "Erro de acesso",
+     "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha."
 }

@@ -75,7 +75,12 @@ abstract class AuthStoreBase with Store {
         this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
       }
     } catch (e) {
-      throw ("Error on login");
+      String errorMessage = e.toString();
+      if (errorMessage == "INVALID_PASSWORD") {
+        throw (errorMessage);
+      } else {
+        throw ("Error on login");
+      }
     }
   }
 
@@ -139,10 +144,11 @@ abstract class AuthStoreBase with Store {
       this.trackingEvents.userRecoverPassword();
     } catch (e) {
       String errorMessage = e.toString();
-      if (errorMessage == "INVALID_PASSWORD") {
-        throw ("emailOrPassword");
+
+      if (errorMessage == "USER_NOT_FOUND") {
+        throw (errorMessage);
       } else {
-        throw ("Error on login");
+        throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
       }
     }
   }
