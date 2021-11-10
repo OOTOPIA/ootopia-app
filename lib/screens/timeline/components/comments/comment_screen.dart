@@ -418,27 +418,31 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                           width: 22,
                                         ),
                                 ),
-                                onTap: () async {
-                                  if (_inputController.text.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                AppLocalizations.of(context)!
-                                                    .writeYourComment)));
-                                  } else {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    commentStore.isLoading = true;
-                                    commentStore.currentPage = 1;
-                                    isIconBlue = false;
-                                    await commentStore.createComment(
-                                        postId, _inputController.text.trim());
-                                    _inputController.clear();
-                                    commentStore.listComments.clear();
-                                    _getData();
-                                    commentStore.isLoading = false;
-                                  }
-                                },
+                                onTap: isIconBlue
+                                    ? () async {
+                                        if (_inputController.text.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .writeYourComment)));
+                                        } else {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                          commentStore.isLoading = true;
+                                          commentStore.currentPage = 1;
+                                          isIconBlue = false;
+                                          await commentStore.createComment(
+                                              postId,
+                                              _inputController.text.trim());
+                                          _inputController.clear();
+                                          commentStore.listComments.clear();
+                                          _getData();
+                                          commentStore.isLoading = false;
+                                        }
+                                      }
+                                    : () {},
                               );
                             }
                           }),
