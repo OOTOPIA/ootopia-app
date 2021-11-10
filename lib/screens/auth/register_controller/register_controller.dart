@@ -233,15 +233,15 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   Future registerUser() async {
     Auth _user = Auth(
-      fullname: nameController.text,
-      email: emailController.text,
-      password: passwordController.text,
+      fullname: nameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
       countryCode: user!.countryCode,
       dialCode: dialCode,
-      bio: bioController.text,
+      bio: bioController.text.trim(),
       phone: cellPhoneController.text,
       birthdate: user!.birthdate,
-      invitationCode: codeController.text,
+      invitationCode: codeController.text.trim(),
       dailyLearningGoalInMinutes: currentSliderValue.toInt(),
       addressCountryCode: user!.addressCountryCode,
       addressState: user!.addressState,
