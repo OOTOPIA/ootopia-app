@@ -1,17 +1,14 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegenerarionGameLearningAlert extends StatefulWidget {
-  Map<String, dynamic> args;
+  final Map<String, dynamic> args;
 
   RegenerarionGameLearningAlert(this.args, {Key? key}) : super(key: key);
 

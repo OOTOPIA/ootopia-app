@@ -25,7 +25,6 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: implement initState
 
     if (widget.args['list_chapters'] != null ||
         widget.args['learning_tracks'] != null) {

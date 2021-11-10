@@ -17,6 +17,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'components/crop_widget.dart';
 
@@ -77,7 +78,7 @@ class _CameraAppState extends State<CameraApp>
         lastVideoThumbnail = recentAssets[0];
       });
     } catch (err) {
-      print("DEU ERRO AO PEGAR A PARADA");
+      Sentry.captureException(err);
     }
   }
 
@@ -106,8 +107,6 @@ class _CameraAppState extends State<CameraApp>
           permissionsIsNeeded = false;
         });
       }
-      print(statuses[
-          Permission.storage]); // it should print PermissionStatus.granted
     } else {
       setState(() {
         permissionsIsNeeded = false;
@@ -124,7 +123,7 @@ class _CameraAppState extends State<CameraApp>
 
       setCamera();
     } on CameraException catch (e) {
-      logError(e.code, e.description == null ? "" : e.description!);
+      Sentry.captureException(e);
     }
   }
 
@@ -215,7 +214,6 @@ class _CameraAppState extends State<CameraApp>
     try {
       return controller!.stopVideoRecording();
     } on CameraException catch (e) {
-      print(e);
       return null;
     }
   }
@@ -224,9 +222,6 @@ class _CameraAppState extends State<CameraApp>
     _scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void logError(String code, String message) =>
-      print('Error: $code\nError Message: $message');
-
   void onSetFlashModeButtonPressed(FlashMode mode) {
     setFlashMode(mode).then((_) {
       if (mounted) setState(() {});
@@ -234,12 +229,10 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future<void> setFlashMode(FlashMode mode) async {
-    print('Hello $mode');
-
     try {
       await controller!.setFlashMode(mode);
     } on CameraException catch (e) {
-      print('Erro da camera $e');
+      Sentry.captureException(e);
       rethrow;
     }
   }
@@ -414,7 +407,6 @@ class _CameraAppState extends State<CameraApp>
       setState(() {});
 
       _animController.forward();
-      print("take photo");
     }
   }
 
@@ -422,13 +414,11 @@ class _CameraAppState extends State<CameraApp>
     if (!controller!.value.isRecordingVideo) {
       startVideoRecording();
       _animController.forward();
-      print("START RECORD");
     }
   }
 
   void _tapUp(context) {
     if (controller!.value.isRecordingVideo) {
-      print("ON STOP HERE");
       onStopButtonPressed(context);
       _animController.reverse();
     }
@@ -531,45 +521,36 @@ class _CameraAppState extends State<CameraApp>
                         _selectImageOrVideo();
                       }
                     },
-                    child: lastVideoThumbnail == null
-                        ? IconButton(
-                            icon: Icon(Icons.insert_photo),
-                            iconSize: 30,
-                            color: Colors.white,
-                            onPressed: () {},
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(
-                                left: GlobalConstants.of(context).spacingSmall),
-                            child: SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: FutureBuilder<Uint8List?>(
-                                future: lastVideoThumbnail?.thumbData,
-                                builder: (_, snapshot) {
-                                  final bytes = snapshot.data;
-                                  // If we have no data, display a spinner
-                                  if (bytes == null)
-                                    return CircularProgressIndicator();
-                                  // If there's data, display it as an image
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(6),
-                                      ),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(6)),
-                                      child: Image.memory(bytes,
-                                          fit: BoxFit.cover),
-                                    ),
-                                  );
-                                },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: GlobalConstants.of(context).spacingSmall),
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: FutureBuilder<Uint8List?>(
+                          future: lastVideoThumbnail?.thumbData,
+                          builder: (_, snapshot) {
+                            final bytes = snapshot.data;
+                            // If we have no data, display a spinner
+                            if (bytes == null) return Icon(Icons.insert_photo);
+                            // If there's data, display it as an image
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(6),
+                                ),
                               ),
-                            ),
-                          ),
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(6)),
+                                child: Image.memory(bytes, fit: BoxFit.cover),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

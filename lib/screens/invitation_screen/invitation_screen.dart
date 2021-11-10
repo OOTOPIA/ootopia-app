@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
 import 'package:ootopia_app/screens/invitation_screen/components/default_invatition_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/components/sower_invitation_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';

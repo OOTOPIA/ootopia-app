@@ -1,10 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
 
 class GeneralConfig extends Equatable {
-  String name;
-  String value;
+  final String name;
+  final String value;
 
   GeneralConfig({required this.name, required this.value});
 

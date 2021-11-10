@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:crisp/crisp.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/app_config.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
