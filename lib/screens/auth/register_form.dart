@@ -372,8 +372,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                       ),
                                     ),
                                 validator: (value) {
-                                  value = value!.trim();
-                                  if (value.isEmpty) {
+                                  if (value == null || value.isEmpty) {
                                     setState(() {
                                       passIsValid = false;
                                     });

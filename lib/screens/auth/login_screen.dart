@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await authStore.login(
-          _emailController.text.trim(), _passwordController.text.trim());
+          _emailController.text.trim(), _passwordController.text);
       authStore.setUserIsLogged();
       controller.resetNavigation();
 
@@ -294,8 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                           ),
                                       validator: (value) {
-                                        value = value!.trim();
-                                        if (value.isEmpty) {
+                                        if (value == null || value.isEmpty) {
                                           setState(() {
                                             passIsValid = false;
                                           });

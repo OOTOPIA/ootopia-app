@@ -235,7 +235,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     Auth _user = Auth(
       fullname: nameController.text.trim(),
       email: emailController.text.trim(),
-      password: passwordController.text.trim(),
+      password: passwordController.text,
       countryCode: user!.countryCode,
       dialCode: dialCode,
       bio: bioController.text.trim(),
