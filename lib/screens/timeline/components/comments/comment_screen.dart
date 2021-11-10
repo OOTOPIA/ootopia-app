@@ -355,6 +355,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                               }
                             : null,
                         onChanged: (value) {
+                          value = value.trim();
                           setState(() {
                             if (value.length > 0) {
                               isIconBlue = true;
@@ -431,7 +432,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     commentStore.currentPage = 1;
                                     isIconBlue = false;
                                     await commentStore.createComment(
-                                        postId, _inputController.text);
+                                        postId, _inputController.text.trim());
                                     _inputController.clear();
                                     commentStore.listComments.clear();
                                     _getData();
