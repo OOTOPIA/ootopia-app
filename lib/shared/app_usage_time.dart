@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppUsageTime {
+class AppUsageTime with SecureStoreMixin {
   static AppUsageTime? _instance;
 
   Stopwatch _watch = Stopwatch();
@@ -41,7 +43,15 @@ class AppUsageTime {
         prefs = await SharedPreferences.getInstance();
       }
       //A cada segundo armazenamos no storage o tempo cronometrado
-      prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
+      if (await getUserIsLoggedIn()) {
+        prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
+        if (await FlutterBackgroundService().isServiceRunning()) {
+          FlutterBackgroundService().sendData({
+            "action": "ON_UPDATE_USAGE_TIME",
+            "value": new DateTime.now().millisecondsSinceEpoch,
+          });
+        }
+      }
     }
   }
 
