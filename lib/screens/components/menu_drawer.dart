@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
@@ -10,7 +9,6 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';

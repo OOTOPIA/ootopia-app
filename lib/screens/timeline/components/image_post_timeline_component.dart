@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ImagePostTimeline extends StatefulWidget {
   const ImagePostTimeline({
@@ -42,10 +41,11 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
-
         decoration: BoxDecoration(
             color: Color(0xff000000),
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20)),
             image: DecorationImage(
               fit: BoxFit.cover,
               alignment: FractionalOffset.center,

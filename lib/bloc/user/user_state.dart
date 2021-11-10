@@ -17,7 +17,7 @@ class LoadingState extends UserState {
 }
 
 class LoadedPostsProfileSucessState extends UserState {
-  List<TimelinePost> posts;
+  final List<TimelinePost> posts;
   LoadedPostsProfileSucessState(this.posts);
   @override
   List<Object> get props => [posts];
@@ -37,7 +37,7 @@ class GetProfileInitialState extends UserState {
 }
 
 class GetProfileLoadedSucessState extends UserState {
-  Profile profile;
+  final Profile profile;
   GetProfileLoadedSucessState({required this.profile});
   @override
   List<Object> get props => [this.profile];

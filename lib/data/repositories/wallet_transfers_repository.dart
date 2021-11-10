@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'dart:convert';
 

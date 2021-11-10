@@ -9,14 +9,13 @@ abstract class TimelinePostEvent extends Equatable {
 
 class LoadingTimelinePostEvent extends TimelinePostEvent {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
 class GetTimelinePostsEvent extends TimelinePostEvent {
   final int limit;
   final int offset;
-  String? userId;
+  final String? userId;
   GetTimelinePostsEvent(this.limit, this.offset, [this.userId]);
   @override
   List<dynamic> get props => [this.limit, this.offset, this.userId];

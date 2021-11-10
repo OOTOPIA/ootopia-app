@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class GamingDataWidget extends StatefulWidget {
-  String title;
-  int amount;
-  IconData icon;
-  Color colorIcon;
+  final String title;
+  final int amount;
+  final IconData icon;
+  final Color colorIcon;
   GamingDataWidget({
     Key? key,
     required this.title,

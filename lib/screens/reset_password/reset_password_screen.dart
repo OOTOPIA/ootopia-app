@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/auth/components/slogan.dart';
@@ -12,7 +11,7 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
   ResetPasswordPage([this.args]);
 

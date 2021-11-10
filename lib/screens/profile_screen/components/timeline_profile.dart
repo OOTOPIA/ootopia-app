@@ -9,7 +9,6 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
-import 'package:ootopia_app/screens/components/navigator_bar.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -70,11 +69,11 @@ class _TimelineScreenProfileScreenState
 }
 
 class ListPostProfileComponent extends StatefulWidget {
-  List<TimelinePost> posts;
-  bool loggedIn = false;
-  int postSelected;
-  String userId;
-  String? postId;
+  final List<TimelinePost> posts;
+  final bool loggedIn = false;
+  final int postSelected;
+  final String userId;
+  final String? postId;
 
   ListPostProfileComponent({
     required this.userId,

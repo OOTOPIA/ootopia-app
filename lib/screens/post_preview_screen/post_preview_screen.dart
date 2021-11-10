@@ -5,10 +5,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -697,8 +695,8 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                     Row(
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 10 ),
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
                                           child: Image.asset(
                                             "assets/icons/add_icon.png",
                                             height: 24,

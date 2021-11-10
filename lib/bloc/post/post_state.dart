@@ -6,7 +6,6 @@ abstract class PostState extends Equatable {
 
 class EmptyState extends PostState {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
@@ -28,7 +27,7 @@ class LoadingCreatePostState extends PostState {
 }
 
 class SuccessCreatePostState extends PostState {
-  double oozToReward;
+  final double oozToReward;
   SuccessCreatePostState({required this.oozToReward});
   @override
   List<Object> get props => [];

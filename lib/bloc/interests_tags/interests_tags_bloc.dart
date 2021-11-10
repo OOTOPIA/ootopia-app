@@ -11,7 +11,6 @@ class InterestsTagsBloc extends Bloc<InterestsTagsEvent, InterestsTagsState> {
 
   InterestsTagsBloc(this.repository) : super(LoadingState());
 
-  @override
   InterestsTagsState get initialState => InitialState();
 
   @override

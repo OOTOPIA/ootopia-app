@@ -10,7 +10,7 @@ class VideoPlayerLearningTracks extends StatefulWidget {
   final String videoUrl;
   final String thumbVideo;
   final Widget viewQuiz;
-  Function updateStatusVideo;
+  final Function updateStatusVideo;
 
   VideoPlayerLearningTracks({
     required this.videoUrl,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AvatarPhotoWidget extends StatefulWidget {
-  String? photoUrl;
-  bool isBadges;
-  VoidCallback onTap;
-  double? sizePhotoUrl;
+  final String? photoUrl;
+  final bool isBadges;
+  final VoidCallback onTap;
+  final double? sizePhotoUrl;
 
   AvatarPhotoWidget(
       {Key? key,
@@ -53,7 +53,6 @@ class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
               child: InkWell(
                 onTap: widget.onTap,
                 child: Image.asset(
-                  //TODO verificar nome do icone
                   "assets/icons_profile/badges_icon.png",
                   width: 33,
                   height: 33,

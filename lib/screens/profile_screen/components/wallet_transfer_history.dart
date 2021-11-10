@@ -3,6 +3,7 @@ import 'package:ootopia_app/data/models/wallets/wallet_transfer_group_model.dart
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class WalletTransferHistory extends StatelessWidget {
   List<WalletTransferGroup> walletTransferGroup;
 
