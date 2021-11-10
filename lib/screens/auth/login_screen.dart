@@ -106,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
         builder: (BuildContext context) {
           return SnackBarWidget(
             menu: AppLocalizations.of(context)!.errorLogin,
-            text: AppLocalizations.of(context)!.invalidEmailOrPassword,
+            text: error.toString() == 'emailOrPassword'
+                ? AppLocalizations.of(context)!.invalidEmailOrPassword
+                : AppLocalizations.of(context)!.thereWasAProblemPleaseTryAgain,
             about: "",
           );
         },
