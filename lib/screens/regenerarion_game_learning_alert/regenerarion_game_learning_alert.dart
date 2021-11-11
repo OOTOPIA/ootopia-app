@@ -149,7 +149,7 @@ class _RegenerarionGameLearningAlertState
                                     .subtitle1!
                                     .copyWith(
                                         color: Colors.white,
-                                        fontSize: screenWidth < 375 ? 18 : 22,
+                                        fontSize: screenWidth <= 375 ? 18 : 22,
                                         fontWeight: FontWeight.w400)
                                     .copyWith(
                                   shadows: [
@@ -168,8 +168,8 @@ class _RegenerarionGameLearningAlertState
                                 height: 24,
                               ),
                               Container(
-                                width: screenWidth < 375 ? 100 : 160,
-                                height: screenWidth < 375 ? 100 : 160,
+                                width: screenWidth <= 375 ? 100 : 160,
+                                height: screenWidth <= 375 ? 100 : 160,
                                 decoration: BoxDecoration(
                                     color: _backgroundColorIcon,
                                     borderRadius: BorderRadius.circular(100)),
@@ -187,7 +187,7 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: screenWidth < 375 ? 28 : 40,
+                                          fontSize: screenWidth <= 375 ? 28 : 40,
                                           color: Colors.white)
                                       .copyWith(
                                     shadows: [
@@ -209,7 +209,7 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: screenWidth < 375 ? 14 : 18,
+                                          fontSize: screenWidth <= 375 ? 14 : 18,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w400)
                                       .copyWith(shadows: [
@@ -231,7 +231,7 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: screenWidth < 375 ? 16 : 23,
+                                          fontSize: screenWidth <= 375 ? 16 : 23,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500)
                                       .copyWith(
@@ -254,7 +254,7 @@ class _RegenerarionGameLearningAlertState
                                           .subtitle1!
                                           .copyWith(
                                               fontSize:
-                                                  screenWidth < 375 ? 16 : 23,
+                                                  screenWidth <= 375 ? 16 : 23,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500)
                                           .copyWith(
@@ -274,7 +274,7 @@ class _RegenerarionGameLearningAlertState
                             ],
                           ),
                           SizedBox(
-                              height: screenWidth < 375
+                              height: screenWidth <= 375
                                   ? 18
                                   : MediaQuery.of(context).size.height * 0.1),
                           Column(
@@ -285,7 +285,7 @@ class _RegenerarionGameLearningAlertState
                                   Expanded(
                                     flex: 2,
                                     child: Container(
-                                      height: screenWidth < 375 ? 45 : 53,
+                                      height: screenWidth <= 375 ? 45 : 53,
                                       child: TextButton(
                                         style: ButtonStyle(
                                           alignment: Alignment.center,
@@ -306,7 +306,7 @@ class _RegenerarionGameLearningAlertState
                                               color: Colors.black87
                                                   .withOpacity(.6),
                                               fontSize:
-                                                  screenWidth < 375 ? 14 : 16,
+                                                  screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         onPressed: () =>
@@ -320,7 +320,7 @@ class _RegenerarionGameLearningAlertState
                                   Expanded(
                                     flex: 3,
                                     child: Container(
-                                      height: screenWidth < 375 ? 45 : 53,
+                                      height: screenWidth <= 375 ? 45 : 53,
                                       child: TextButton(
                                         style: ButtonStyle(
                                             alignment: Alignment.center,
@@ -339,7 +339,7 @@ class _RegenerarionGameLearningAlertState
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize:
-                                                  screenWidth < 375 ? 14 : 16,
+                                                  screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         onPressed: () => {
