@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PhotoEdit extends StatefulWidget {
-  String? photoUrl;
-  String? photoPath;
-  Function updatePhoto;
+  final String? photoUrl;
+  final String? photoPath;
+  final Function updatePhoto;
 
   PhotoEdit({
     this.photoUrl,
@@ -19,13 +19,15 @@ class PhotoEdit extends StatefulWidget {
 }
 
 class _PhotoEditState extends State<PhotoEdit> {
-  File? filePath;
+  XFile? file;
+  String? filePath;
   final picker = ImagePicker();
 
   @override
   void initState() {
     if (widget.photoPath != null) {
-      filePath = File(widget.photoPath!);
+      file = XFile(widget.photoPath!);
+      filePath = file!.path;
     }
     super.initState();
   }
@@ -38,7 +40,7 @@ class _PhotoEditState extends State<PhotoEdit> {
           height: 140,
           child: Column(
             children: [
-              filePath == null
+              file == null
                   ? widget.photoUrl == null
                       ? CircleAvatar(
                           radius: 55,
@@ -89,7 +91,7 @@ class _PhotoEditState extends State<PhotoEdit> {
                       child: CircleAvatar(
                         radius: 55,
                         backgroundImage: Image.file(
-                          filePath!,
+                          File(filePath!),
                           fit: BoxFit.cover,
                         ).image,
                       ),
@@ -99,7 +101,7 @@ class _PhotoEditState extends State<PhotoEdit> {
         ),
         Positioned(
           bottom: 5,
-          right: filePath == null
+          right: file == null
               ? widget.photoUrl == null
                   ? 29
                   : 33
@@ -107,13 +109,14 @@ class _PhotoEditState extends State<PhotoEdit> {
           child: InkWell(
             onTap: () async {
               // Pick an image
-              final image = await picker.getImage(source: ImageSource.gallery);
+              final image = await picker.pickImage(source: ImageSource.gallery);
 
-              final File file = File(image!.path);
+              final XFile xfile = XFile(image!.path);
 
               setState(() {
-                filePath = file;
-                widget.updatePhoto(filePath!.path);
+                file = xfile;
+                filePath = xfile.path;
+                widget.updatePhoto(file!.path);
               });
             },
             child: Container(

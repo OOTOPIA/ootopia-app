@@ -5,14 +5,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -24,14 +22,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   UserBloc(this.userRepository, this.postRepository) : super(InitialState());
 
-  @override
   UserState get initialState => LoadingState();
 
   @override
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
-    // TODO: implement mapEventToState
     LoadingState();
     if (event is GetPostsProfileEvent) {
       yield LoadingState();
@@ -91,7 +87,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   void backgroundHandler() {
     WidgetsFlutterBinding.ensureInitialized();
-    FlutterUploader uploader = FlutterUploader();
   }
 
   FutureOr<dynamic> updateUser(User user, tagsIds, subscription) async {

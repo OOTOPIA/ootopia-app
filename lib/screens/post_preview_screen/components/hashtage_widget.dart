@@ -6,9 +6,10 @@ import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
+// ignore: must_be_immutable
 class HashtagWidget extends StatefulWidget {
-  MultiSelectItem<InterestsTagsModel> item;
-  PostPreviewScreenStore postPreviewScreenStore;
+  final MultiSelectItem<InterestsTagsModel> item;
+  final PostPreviewScreenStore postPreviewScreenStore;
   bool tagExists;
 
   HashtagWidget(

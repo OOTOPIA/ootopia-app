@@ -1,4 +1,3 @@
-import 'package:ootopia_app/data/BD/database.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_provider.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';

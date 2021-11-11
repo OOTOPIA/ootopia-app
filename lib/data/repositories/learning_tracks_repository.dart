@@ -5,16 +5,20 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class ILearningTracks {
   Future<List<LearningTracksModel>> listLearningTracks(
       {int? limit, int? offset, required String locale});
-  Future<LearningTracksModel> lastLearningTracks({required String locale});
+  Future<LearningTracksModel?> lastLearningTracks({required String locale});
 }
 
 class LearningTracksRepositoryImpl
     with SecureStoreMixin
     implements ILearningTracks {
   @override
-  Future<LearningTracksModel> lastLearningTracks(
+  Future<LearningTracksModel?> lastLearningTracks(
       {required String locale}) async {
     try {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        return null;
+      }
       var response =
           await ApiClient.api().get("learning-tracks/last", queryParameters: {
         'locale': locale,

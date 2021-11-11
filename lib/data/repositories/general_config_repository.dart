@@ -1,8 +1,5 @@
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
-import 'dart:convert';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -33,7 +30,7 @@ class GeneralConfigRepositoryImpl
 
   Future<bool> getIosHasNotch(int iosScreenSize) async {
     bool result = false;
-     try {
+    try {
       final response = await ApiClient.api().get(
           'general-config/check-ios-has-notch?iosScreenSize=$iosScreenSize');
       if (response.statusCode == 200) {

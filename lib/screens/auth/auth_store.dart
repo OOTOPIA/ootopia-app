@@ -96,7 +96,6 @@ abstract class AuthStoreBase with Store {
     });
   }
 
-  //TODO colocar criar controller para a register_first_phase
   @action
   Future<bool> registerUser(
       {required String name,

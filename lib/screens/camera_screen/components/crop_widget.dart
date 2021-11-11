@@ -6,8 +6,8 @@ import 'package:image_crop/image_crop.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CropWidget extends StatefulWidget {
-  File imageFile;
-  bool? mirroredPhoto;
+  final File imageFile;
+  final bool? mirroredPhoto;
 
   CropWidget({
     Key? key,

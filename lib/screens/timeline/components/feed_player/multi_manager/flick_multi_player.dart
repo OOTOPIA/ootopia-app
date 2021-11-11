@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/portrait_controls.dart';
-import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 import './flick_multi_manager.dart';

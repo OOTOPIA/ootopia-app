@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class MessageOptionalWidget extends StatelessWidget {
   TextEditingController messageController = TextEditingController();
   final Function() onTap;
