@@ -12,7 +12,7 @@ import '../../../data/repositories/learning_tracks_repository.dart';
 class WatchVideoLeaningTracks extends StatefulWidget {
   final ChaptersModel chapter;
   final LearningTracksModel? learningTrack;
-  Function updateStatusVideoChapter;
+  final Function updateStatusVideoChapter;
 
   WatchVideoLeaningTracks({
     required this.chapter,

@@ -27,6 +27,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   late AuthStore authStore;
   int postCommentsCount = 0;
   String postId = '';
+  bool isIconBlue = false;
 
   @override
   void initState() {
@@ -353,6 +354,16 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 );
                               }
                             : null,
+                        onChanged: (value) {
+                          value = value.trim();
+                          setState(() {
+                            if (value.length > 0) {
+                              isIconBlue = true;
+                            } else {
+                              isIconBlue = false;
+                            }
+                          });
+                        },
                         style: TextStyle(color: Colors.black),
                         controller: _inputController,
                         decoration: InputDecoration(
@@ -372,7 +383,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 color: LightColors.grey, width: 0.25),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          labelText:
+                          contentPadding: EdgeInsets.all(16),
+                          hintText:
                               AppLocalizations.of(context)!.writeYourComment,
                           hintStyle: TextStyle(color: Colors.black),
                           suffixIcon: Observer(builder: (context) {
@@ -391,27 +403,42 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 ],
                               );
                             } else {
-                              return IconButton(
-                                icon: Icon(Icons.send),
-                                onPressed: () async {
-                                  if (_inputController.text.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                AppLocalizations.of(context)!
-                                                    .writeYourComment)));
-                                  } else {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    commentStore.isLoading = true;
-                                    commentStore.currentPage = 1;
-
-                                    await commentStore.createComment(
-                                        postId, _inputController.text);
-                                    _inputController.clear();
-                                    commentStore.listComments.clear();
-                                    _getData();
-                                    commentStore.isLoading = false;
+                              return GestureDetector(
+                                child: Container(
+                                  padding: EdgeInsets.only(right: 16),
+                                  child: isIconBlue
+                                      ? Image.asset(
+                                          'assets/icons/icon-send-blue.png',
+                                          height: 22,
+                                          width: 22,
+                                        )
+                                      : Image.asset(
+                                          'assets/icons/icon-send-grey.png',
+                                          height: 22,
+                                          width: 22,
+                                        ),
+                                ),
+                                onTap: () async {
+                                  if (isIconBlue) {
+                                    if (_inputController.text.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .writeYourComment)));
+                                    } else {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                      commentStore.isLoading = true;
+                                      commentStore.currentPage = 1;
+                                      isIconBlue = false;
+                                      await commentStore.createComment(
+                                          postId, _inputController.text.trim());
+                                      _inputController.clear();
+                                      commentStore.listComments.clear();
+                                      _getData();
+                                      commentStore.isLoading = false;
+                                    }
                                   }
                                 },
                               );

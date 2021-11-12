@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
-import 'dart:math';
 
 import 'package:ootopia_app/shared/ooz_distribution/ooz_distribution_service.dart';
 

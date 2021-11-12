@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -26,10 +27,12 @@ import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'dart:ui' as ui;
+import 'package:ootopia_app/main.dart' as main;
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -40,7 +43,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen>
+    with WidgetsBindingObserver, SecureStoreMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
@@ -76,9 +80,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (mounted) setState(() {});
     });
 
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 1000), () async {
       _checkStores();
       _checkPageParams();
+      FlutterBackgroundService().sendData(
+        {
+          "action": "START_SYNC",
+          "message":
+              AppLocalizations.of(context)!.updatingRegenerationGameStatus,
+        },
+      );
+      if (await FlutterBackgroundService().isServiceRunning() &&
+          !await getUserIsLoggedIn()) {
+        FlutterBackgroundService().sendData(
+          {"action": "stopService"},
+        );
+      }
     });
   }
 
@@ -106,6 +123,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    FlutterBackgroundService.initialize(main.onStartService);
+    FlutterBackgroundService().sendData(
+      {
+        "action": "START_SYNC",
+        "message": AppLocalizations.of(context)!.updatingRegenerationGameStatus,
+      },
+    );
     homeStore?.stopDailyGoalTimer();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();

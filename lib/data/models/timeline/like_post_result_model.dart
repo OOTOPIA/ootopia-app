@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class LikePostResult extends Equatable {
-  int count;
+  final int count;
   bool liked = false;
 
   LikePostResult({required this.count, required this.liked});

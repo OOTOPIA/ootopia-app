@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -262,7 +260,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                       ),
                                     ),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  value = value!.trim();
+                                  if (value.isEmpty) {
                                     setState(() {
                                       nameIsValid = false;
                                     });
@@ -301,7 +300,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                           size: 20,
                                         )),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  value = value!.trim();
+                                  if (value.isEmpty) {
                                     setState(() {
                                       mailIsValid = false;
                                     });
@@ -432,7 +432,8 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                       ),
                                     ),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  value = value!.trim();
+                                  if (value.isEmpty) {
                                     setState(() {
                                       pass2IsValid = false;
                                     });

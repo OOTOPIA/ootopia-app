@@ -22,6 +22,5 @@ class DeletePostEvent extends PostEvent {
 
   DeletePostEvent(this.postId, this.isProfile);
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }

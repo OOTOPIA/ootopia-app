@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 
@@ -15,7 +14,6 @@ class WalletTransferBloc
 
   WalletTransferBloc(this.repository) : super(EmptyState());
 
-  @override
   WalletTransferState get initialState => EmptyState();
 
   @override

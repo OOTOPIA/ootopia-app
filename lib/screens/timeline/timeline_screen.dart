@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
-import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
@@ -124,8 +123,6 @@ class _TimelinePageState extends State<TimelinePage>
     });
   }
 
-  
-
   void _handleIncomingLinks() {
     _sub = getLinksStream().listen((link) {
       if (!mounted || link == null) return;
@@ -228,8 +225,8 @@ class _TimelinePageState extends State<TimelinePage>
           .getConfig(GeneralConfigName.transferOOZToPostLimit);
       setTransferOOZToPostLimit(transferOozToPostLimitConfig.value);
       //Recuperamos os posts apenas após a configuração inicial para evitar problema com o limite de transferência de OOZ
-      timelineBloc.add(GetTimelinePostsEvent(
-          _itemsPerPageCount, (timelineStore.currentPage - 1) * _itemsPerPageCount));
+      timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
+          (timelineStore.currentPage - 1) * _itemsPerPageCount));
     } catch (e) {
       //error
       print("Erro! ${e.toString()}");
@@ -413,7 +410,9 @@ class _TimelinePageState extends State<TimelinePage>
                                 ? 1
                                 : 0), //Adicionei +1 manualmente devido à POC do youtube
                         itemBuilder: (context, index) {
-                          if (index == timelineStore.allPosts.length - _nextPageThreshold &&
+                          if (index ==
+                                  timelineStore.allPosts.length -
+                                      _nextPageThreshold &&
                               _hasMoreItems) {
                             timelineStore.currentPage++;
                             _getData();
@@ -526,7 +525,7 @@ class _TimelinePageState extends State<TimelinePage>
   //     );
 
   Future<void> _getData() async {
-    timelineBloc.add(GetTimelinePostsEvent(
-        _itemsPerPageCount, (timelineStore.currentPage - 1) * _itemsPerPageCount));
+    timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
+        (timelineStore.currentPage - 1) * _itemsPerPageCount));
   }
 }

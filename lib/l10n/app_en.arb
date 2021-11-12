@@ -418,5 +418,9 @@
     "supportCenter":"Support Center",
     "invalidEmailOrPassword": "Invalid email and/or password",
     "errorLogin": "Access error",
-    "recoveryMessageError": "If this is your email, a link should be in your inbox so you can update your password."
+    "recoveryMessageError": "If this is your email, a link should be in your inbox so you can update your password.",
+     "giveSuggestion":"Give suggestion",
+     "supportCenter":"Support Center",
+     "updatingRegenerationGameStatus":"Updating your stat in the regeneration game..."
+
 }
