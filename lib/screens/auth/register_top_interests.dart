@@ -431,7 +431,7 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                             "name": registerController
                                                 .nameController.text,
                                             "goal": "invitationCode",
-                                            "balance": "15,00",
+                                            "balance": "10,00",
                                           },
                                         );
                                       } else {

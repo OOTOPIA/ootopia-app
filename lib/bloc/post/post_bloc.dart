@@ -38,10 +38,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       await this.createPost(event.post, resultSubscription);
       resultSubscription?.cancel();
       double oozToReward = 0;
-      double oozToRewardForVideo = 25;
-      double oozToRewardForImage = 15;
+      double oozToRewardForVideo = 10;
+      double oozToRewardForImage = 5;
       if (event.post.durationInSecs != null && event.post.type == "video") {
-        oozToReward = oozToRewardForVideo * (event.post.durationInSecs! / 60);
+        oozToReward = oozToRewardForVideo;
       } else if (event.post.type == "image") {
         oozToReward = oozToRewardForImage;
       }
