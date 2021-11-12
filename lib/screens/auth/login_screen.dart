@@ -75,7 +75,8 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      await authStore.login(_emailController.text, _passwordController.text);
+      await authStore.login(
+          _emailController.text.trim(), _passwordController.text);
       authStore.setUserIsLogged();
       controller.resetNavigation();
 
@@ -194,7 +195,8 @@ class _LoginPageState extends State<LoginPage> {
                                                   color: LightColors.errorRed,
                                                   fontWeight: FontWeight.w500)),
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
+                                    value = value!.trim();
+                                    if (value.isEmpty) {
                                       setState(() {
                                         mailIsValid = false;
                                       });

@@ -24,8 +24,8 @@ class LoadingState extends TimelinePostState {
 }
 
 class LoadedSucessState extends TimelinePostState {
-  List<TimelinePost> posts;
-  bool
+  final List<TimelinePost> posts;
+  final bool
       onlyForRefreshCurrentList; //workaround for refresh list without put new posts to timeline
   LoadedSucessState(this.posts, this.onlyForRefreshCurrentList);
   @override

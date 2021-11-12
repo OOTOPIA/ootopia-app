@@ -4,9 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PhotoEdit extends StatefulWidget {
-  String? photoUrl;
-  String? photoPath;
-  Function updatePhoto;
+  final String? photoUrl;
+  final String? photoPath;
+  final Function updatePhoto;
 
   PhotoEdit({
     this.photoUrl,

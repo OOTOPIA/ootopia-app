@@ -1,17 +1,14 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class RegenerarionGameLearningAlert extends StatefulWidget {
-  Map<String, dynamic> args;
+  final Map<String, dynamic> args;
 
   RegenerarionGameLearningAlert(this.args, {Key? key}) : super(key: key);
 
@@ -152,7 +149,7 @@ class _RegenerarionGameLearningAlertState
                                     .subtitle1!
                                     .copyWith(
                                         color: Colors.white,
-                                        fontSize: screenWidth <= 320 ? 20 : 22,
+                                        fontSize: screenWidth <= 375 ? 18 : 22,
                                         fontWeight: FontWeight.w400)
                                     .copyWith(
                                   shadows: [
@@ -171,8 +168,8 @@ class _RegenerarionGameLearningAlertState
                                 height: 24,
                               ),
                               Container(
-                                width: screenWidth <= 320 ? 120 : 160,
-                                height: screenWidth <= 320 ? 120 : 160,
+                                width: screenWidth <= 375 ? 100 : 160,
+                                height: screenWidth <= 375 ? 100 : 160,
                                 decoration: BoxDecoration(
                                     color: _backgroundColorIcon,
                                     borderRadius: BorderRadius.circular(100)),
@@ -190,8 +187,7 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize:
-                                              screenWidth <= 320 ? 34 : 40,
+                                          fontSize: screenWidth <= 375 ? 28 : 40,
                                           color: Colors.white)
                                       .copyWith(
                                     shadows: [
@@ -213,8 +209,7 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize:
-                                              screenWidth <= 320 ? 16 : 18,
+                                          fontSize: screenWidth <= 375 ? 14 : 18,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w400)
                                       .copyWith(shadows: [
@@ -236,8 +231,7 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize:
-                                              screenWidth <= 320 ? 18 : 23,
+                                          fontSize: screenWidth <= 375 ? 16 : 23,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500)
                                       .copyWith(
@@ -260,7 +254,7 @@ class _RegenerarionGameLearningAlertState
                                           .subtitle1!
                                           .copyWith(
                                               fontSize:
-                                                  screenWidth <= 320 ? 18 : 23,
+                                                  screenWidth <= 375 ? 16 : 23,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w500)
                                           .copyWith(
@@ -280,8 +274,8 @@ class _RegenerarionGameLearningAlertState
                             ],
                           ),
                           SizedBox(
-                              height: screenWidth <= 320
-                                  ? 20
+                              height: screenWidth <= 375
+                                  ? 18
                                   : MediaQuery.of(context).size.height * 0.1),
                           Column(
                             children: [
@@ -291,7 +285,7 @@ class _RegenerarionGameLearningAlertState
                                   Expanded(
                                     flex: 2,
                                     child: Container(
-                                      height: 53,
+                                      height: screenWidth <= 375 ? 45 : 53,
                                       child: TextButton(
                                         style: ButtonStyle(
                                           alignment: Alignment.center,
@@ -311,7 +305,8 @@ class _RegenerarionGameLearningAlertState
                                           style: TextStyle(
                                               color: Colors.black87
                                                   .withOpacity(.6),
-                                              fontSize: 16,
+                                              fontSize:
+                                                  screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         onPressed: () =>
@@ -325,7 +320,7 @@ class _RegenerarionGameLearningAlertState
                                   Expanded(
                                     flex: 3,
                                     child: Container(
-                                      height: 53,
+                                      height: screenWidth <= 375 ? 45 : 53,
                                       child: TextButton(
                                         style: ButtonStyle(
                                             alignment: Alignment.center,
@@ -343,7 +338,8 @@ class _RegenerarionGameLearningAlertState
                                               .learnMore,
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 16,
+                                              fontSize:
+                                                  screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         onPressed: () => {

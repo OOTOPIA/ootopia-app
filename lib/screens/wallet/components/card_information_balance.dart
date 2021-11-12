@@ -9,6 +9,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
+// ignore: must_be_immutable
 class CardInformationBalance extends StatelessWidget {
   final String iconForeground;
   final String iconBackground;
@@ -21,9 +22,9 @@ class CardInformationBalance extends StatelessWidget {
   final String? description;
   final String? origin;
   final String? learningTrackId;
-  Function? updateCardInformationBalance;
+  final Function? updateCardInformationBalance;
 
-  SmartPageController controller = SmartPageController.getInstance();
+  final SmartPageController controller = SmartPageController.getInstance();
 
   CardInformationBalance({
     required this.balanceOfTransactions,

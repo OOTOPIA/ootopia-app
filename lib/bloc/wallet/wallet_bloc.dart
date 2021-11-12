@@ -14,7 +14,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   WalletBloc(this.repository) : super(LoadingWalletState());
 
-  @override
   WalletState get initialState => LoadingWalletState();
 
   @override

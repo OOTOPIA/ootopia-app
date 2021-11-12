@@ -1,5 +1,3 @@
-import 'package:camera/camera.dart';
-
 class PostCreated {
   String? id;
   String? userId;
