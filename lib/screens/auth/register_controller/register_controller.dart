@@ -149,8 +149,14 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   setBirthDateAndCountryCode() {
     if (validationBirthDate()) {
-      user!.birthdate =
-          "${yearController.text}/${monthController.text}/${dayController.text}";
+      if (dayController.text.isEmpty &&
+          yearController.text.isEmpty &&
+          monthController.text.isEmpty) {
+        user!.birthdate = "";
+      } else {
+        user!.birthdate =
+            "${yearController.text}/${monthController.text}/${dayController.text}";
+      }
     }
     user!.countryCode = countryCode!.isNotEmpty ? countryCode : null;
   }
