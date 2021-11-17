@@ -111,7 +111,7 @@ abstract class _PostPreviewScreenStoreBase with Store {
     try {
       uploadIsLoading = true;
       var result = await this._createPost(post);
-      double oozToRewardForVideo = 25;
+      double oozToRewardForVideo = 10;
       double oozToRewardForImage = 5;
       if (post.durationInSecs != null && post.type == "video") {
         oozToReward = oozToRewardForVideo * (post.durationInSecs! / 60);
