@@ -86,8 +86,9 @@ abstract class _PostPreviewScreenStoreBase with Store {
     List<HashtagWidget> filteredtagsList = [];
 
     filteredtagsList = allTags
-        .where(
-            (hashtagWidget) => hashtagWidget.item.label.toLowerCase().contains(filterValue.toLowerCase()))
+        .where((hashtagWidget) => hashtagWidget.item.label
+            .toLowerCase()
+            .contains(filterValue.toLowerCase()))
         .toList();
     filteredtagsList.map((item) => item).toList();
 
@@ -110,8 +111,8 @@ abstract class _PostPreviewScreenStoreBase with Store {
     try {
       uploadIsLoading = true;
       var result = await this._createPost(post);
-      double oozToRewardForVideo = 25;
-      double oozToRewardForImage = 15;
+      double oozToRewardForVideo = 10;
+      double oozToRewardForImage = 5;
       if (post.durationInSecs != null && post.type == "video") {
         oozToReward = oozToRewardForVideo * (post.durationInSecs! / 60);
       } else if (post.type == "image") {
