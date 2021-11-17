@@ -38,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.args);
 
     Timer(Duration(milliseconds: 1000), () {
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {

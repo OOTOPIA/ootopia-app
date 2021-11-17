@@ -50,7 +50,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       setState(() {
         isLoading = false;
       });
-      print('here');
       Navigator.of(context).pushNamedAndRemoveUntil(
         PageRoute.Page.loginScreen.route,
         ModalRoute.withName('/'),
