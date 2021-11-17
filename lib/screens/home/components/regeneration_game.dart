@@ -419,13 +419,11 @@ class _RegenerationGameState extends State<RegenerationGame>
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).pushNamed(
-                                          PageRoute.Page.aboutOOzCurrentScreen
-                                              .route);
+                                      Navigator.of(context).pushNamed(PageRoute
+                                          .Page.aboutOOzCurrentScreen.route);
                                     },
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
