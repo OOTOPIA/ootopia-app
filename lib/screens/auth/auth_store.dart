@@ -124,7 +124,7 @@ abstract class AuthStoreBase with Store {
   Future resetPassword(String newPassword) async {
     try {
       await this.authRepository.resetPassword(newPassword);
-      this.trackingEvents.userResetPassword()();
+      this.trackingEvents.userResetPassword();
     } catch (e) {
       String errorMessage = e.toString();
 

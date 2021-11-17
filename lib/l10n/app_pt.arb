@@ -165,6 +165,7 @@
     "changePassword": "Alterar senha",
     "enterNewPassword": "Informe a nova senha",
     "pleaseEnterYourPassword": "Por favor, informe sua senha",
+    "yourPasswordHasBeenChangedSuccessfully":"Sua senha foi alterada com sucesso",
     "passwordsDontMatch": "Senhas não combinam",
 
     "locationServicesAreDisabled": "Os serviços de localização estão desativados.",
