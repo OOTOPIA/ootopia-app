@@ -497,6 +497,7 @@ class _RegenerationGameState extends State<RegenerationGame>
             } else if (detailedGoalType == 'global') {
               _goToRegenerationGameAlert(type);
             } else {
+              homeStore.getDailyGoalStats();
               // if (authStore.currentUser!.personalDialogOpened == null ||
               //     authStore.currentUser!.personalDialogOpened == false) {
               //   authStore.currentUser!.personalDialogOpened = true;
