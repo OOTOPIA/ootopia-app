@@ -47,7 +47,21 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     });
-
+    Future.delayed(Duration.zero, () async {
+      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+        if (widget.args!['returnToPageWithArgs']
+            ['visibleSnackBarResetPassword']) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: Duration(seconds: 2),
+              backgroundColor: Color(0xff018F9C),
+              content: Text(AppLocalizations.of(context)!
+                  .yourPasswordHasBeenChangedSuccessfully),
+            ),
+          );
+        }
+      }
+    });
     isLoading = false;
   }
 

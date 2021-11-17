@@ -22,6 +22,7 @@
     "dontHaveAnAccountYet": "Don't have an account yet?",
     "forgotMyPass": "Forgot password?",
     "recoverPassItsAllRight": "It's all right",
+    "yourPasswordHasBeenChangedSuccessfully":"Your password has been changed successfully",
     "creatingANewAccountPassword": "Create a new account password in order to access your Ootopia account.",
     "creatingANewPassword": "Creating a new password",
     "createNewPassword":"Create new password",

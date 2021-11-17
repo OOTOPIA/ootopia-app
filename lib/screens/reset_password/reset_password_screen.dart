@@ -50,13 +50,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       setState(() {
         isLoading = false;
       });
-
       Navigator.of(context).pushNamedAndRemoveUntil(
         PageRoute.Page.loginScreen.route,
         ModalRoute.withName('/'),
         arguments: {
           "returnToPageWithArgs": {
             "newPassword": _passwordController.text,
+            "visibleSnackBarResetPassword": true
           }
         },
       );
@@ -65,7 +65,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         isLoading = false;
       });
 
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
         ),
