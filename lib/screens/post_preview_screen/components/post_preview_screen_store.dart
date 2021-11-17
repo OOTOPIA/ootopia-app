@@ -114,7 +114,7 @@ abstract class _PostPreviewScreenStoreBase with Store {
       double oozToRewardForVideo = 10;
       double oozToRewardForImage = 5;
       if (post.durationInSecs != null && post.type == "video") {
-        oozToReward = oozToRewardForVideo * (post.durationInSecs! / 60);
+        oozToReward = oozToRewardForVideo;
       } else if (post.type == "image") {
         oozToReward = oozToRewardForImage;
       }
