@@ -5,6 +5,7 @@ import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart'
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -50,11 +51,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     await authStore!.logout();
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
-    controller.resetNavigation();
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      PageRoute.Page.homeScreen.route,
-      (Route<dynamic> route) => false,
-    );
+    AppUsageTime.instance.sendToApi();
+    //Adicionei esse delayed para dar tempo de enviar o tempo de uso do app
+    Future.delayed(Duration(milliseconds: 100), () {
+      controller.resetNavigation();
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        (Route<dynamic> route) => false,
+      );
+    });
   }
 
   @override
