@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen>
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-          statusBarBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
         child: Observer(builder: (_) {
           return Scaffold(

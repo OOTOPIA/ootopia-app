@@ -47,11 +47,11 @@ dependencies:
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   percent_indicator: ^3.0.1
   shimmer: ^2.0.0
-  geolocator: ^7.2.0+1
+  geolocator: 7.6.2
   geocoding: ^2.0.0
   image_picker: ^0.8.4+4
   flutter_hooks: ^0.18.0
-  video_player: ^2.1.10
+  video_player: 2.2.6
   provider: ^5.0.0
   flick_video_player: ^0.3.1
   visibility_detector: ^0.2.0

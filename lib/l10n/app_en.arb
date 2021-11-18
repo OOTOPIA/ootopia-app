@@ -415,6 +415,11 @@
     "pictureByClemOnojeghuo":"Picture by Clem Onojeghuo",
     "nextAboutCreateOffer":"In the next app update, everyone will be able to create offers, products, services and experiences.Until then, how about telling us what you would like to sell or purchase?\n\nYour suggestions and questions are very welcome!",
     "aboutYourOfferHere":"IT WILL BE GREAT TO SEE YOUR OFFER HERE",
+    "giveSuggestion":"Give suggestion",
+    "supportCenter":"Support Center",
+    "invalidEmailOrPassword": "Invalid email and/or password",
+    "errorLogin": "Access error",
+    "recoveryMessageError": "If this is your email, a link should be in your inbox so you can update your password.",
      "giveSuggestion":"Give suggestion",
      "supportCenter":"Support Center",
      "updatingRegenerationGameStatus":"Updating your stat in the regeneration game..."

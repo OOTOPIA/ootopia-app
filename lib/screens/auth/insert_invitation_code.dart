@@ -79,6 +79,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Scaffold(
       body: LoadingOverlay(
         isLoading: isLoading,
@@ -87,9 +89,10 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: SingleChildScrollView(
-              child: ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+            physics: isKeyboardOpen ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(

@@ -77,7 +77,7 @@ abstract class AuthStoreBase with Store {
     } catch (e) {
       String errorMessage = e.toString();
       if (errorMessage == "INVALID_PASSWORD") {
-        throw ("Invalid email and/or password");
+        throw (errorMessage);
       } else {
         throw ("Error on login");
       }
@@ -145,7 +145,7 @@ abstract class AuthStoreBase with Store {
       String errorMessage = e.toString();
 
       if (errorMessage == "USER_NOT_FOUND") {
-        throw ("Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.");
+        throw (errorMessage);
       } else {
         throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
       }
