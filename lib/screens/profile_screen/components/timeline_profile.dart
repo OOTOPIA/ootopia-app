@@ -187,14 +187,17 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
         itemScrollController: this.itemScrollController,
         itemPositionsListener: this.itemPositionsListener,
         itemBuilder: (context, index) {
-          return PhotoTimeline(
-            key: ObjectKey(_allPosts[index]),
-            post: _allPosts[index],
-            timelineBloc: this.timelineBloc,
-            loggedIn: this.loggedIn,
-            flickMultiManager: flickMultiManager,
-            isProfile: true,
-            user: this.user,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: PhotoTimeline(
+              key: ObjectKey(_allPosts[index]),
+              post: _allPosts[index],
+              timelineBloc: this.timelineBloc,
+              loggedIn: this.loggedIn,
+              flickMultiManager: flickMultiManager,
+              isProfile: true,
+              user: this.user,
+            ),
           );
         },
       );
@@ -209,7 +212,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           return Center(child: CircularProgressIndicator());
         } else if (state is LoadedSucessState) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24),
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -249,14 +252,17 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                               ),
                             );
                           }
-                          return PhotoTimeline(
-                            key: ObjectKey(_allPosts[index]),
-                            post: _allPosts[index],
-                            timelineBloc: this.timelineBloc,
-                            loggedIn: this.loggedIn,
-                            flickMultiManager: flickMultiManager,
-                            isProfile: true,
-                            user: this.user,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: PhotoTimeline(
+                              key: ObjectKey(_allPosts[index]),
+                              post: _allPosts[index],
+                              timelineBloc: this.timelineBloc,
+                              loggedIn: this.loggedIn,
+                              flickMultiManager: flickMultiManager,
+                              isProfile: true,
+                              user: this.user,
+                            ),
                           );
                         },
                       ),

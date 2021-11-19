@@ -106,7 +106,7 @@ class _NavigatorBarState extends State<NavigatorBar> with SecureStoreMixin {
               }
 
               final resultCamera = await Navigator.of(context)
-                  .pushNamed(PageRoute.Page.profile.route);
+                  .pushNamed(PageRoute.Page.walletPage.route);
 
               if (resultCamera != null) {
                 renderSnackBar(context);
