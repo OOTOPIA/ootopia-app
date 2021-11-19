@@ -43,6 +43,9 @@
 				</array>
 			</dict>
 		</array>
+		<array>
+    		<string>UIInterfaceOrientationPortrait</string>
+		</array>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>FUMaximumConnectionsPerHost</key>
