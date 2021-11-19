@@ -17,6 +17,7 @@ import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
@@ -104,6 +105,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   GlobalKey _oozInfoKey = GlobalKey();
   bool _dontAskToConfirmGratitudeReward = false;
 
+  PostTimelineComponentController postTimelineComponentController =
+      PostTimelineComponentController();
+
   late PostTimelineController postTimelineController;
   bool _bigLikeShowAnimation = false;
   bool _bigLikeShowAnimationEnd = false;
@@ -126,6 +130,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           user!.dontAskAgainToConfirmGratitudeReward == null
               ? false
               : user!.dontAskAgainToConfirmGratitudeReward!;
+      postTimelineComponentController
+          .setAskToConfirmGratitude(_dontAskToConfirmGratitudeReward);
       if (this.mounted) {
         setState(() {});
       }
@@ -281,7 +287,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                           (Route<dynamic> route) => false,
                                           arguments: {
                                             "returnToPageWithArgs": {
-                                              'currentPageName': "learning_tracks"
+                                              'currentPageName':
+                                                  "learning_tracks"
                                             }
                                           },
                                         );
@@ -836,6 +843,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           },
           onClickPositiveButton: () {
             this._dontAskToConfirmGratitudeReward = dontAskIsChecked;
+            postTimelineComponentController
+                .setAskToConfirmGratitude(_dontAskToConfirmGratitudeReward);
             sendOOZ();
             Navigator.of(context).pop();
           },
@@ -894,7 +903,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               PageRoute.Page.loginScreen.route,
             );
           } else if (!_sendOOZIsLoading) {
-            if (_dontAskToConfirmGratitudeReward) {
+            if (postTimelineComponentController.askToConfirmGratitude) {
               sendOOZ();
             } else {
               _showConfirmGratitudeReward();
