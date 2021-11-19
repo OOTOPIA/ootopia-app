@@ -5,10 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
+// ignore: must_be_immutable
 class CardInformationBalance extends StatelessWidget {
   final String iconForeground;
   final String iconBackground;
@@ -21,9 +25,9 @@ class CardInformationBalance extends StatelessWidget {
   final String? description;
   final String? origin;
   final String? learningTrackId;
-  Function? updateCardInformationBalance;
+  final Function? updateCardInformationBalance;
 
-  SmartPageController controller = SmartPageController.getInstance();
+  final SmartPageController controller = SmartPageController.getInstance();
 
   CardInformationBalance({
     required this.balanceOfTransactions,
@@ -109,7 +113,7 @@ class CardInformationBalance extends StatelessWidget {
   int colorOfBalance = 0xff003694;
   String typeActionFromOrTo = '';
 
-  void _goToLearningTracks() async {
+  void _goToLearningTracks() {
     controller.insertPage(ViewLearningTracksScreen({
       'id': this.learningTrackId,
       'updateLearningTrack': this.updateCardInformationBalance!,
@@ -135,11 +139,12 @@ class CardInformationBalance extends StatelessWidget {
     }
 
     void _goToProfile() async {
-      Navigator.of(context).pushNamed(
-        PageRoute.Page.profileScreen.route,
-        arguments: {
-          "id": this.otherUserId,
-        },
+      controller.insertPage(
+        ProfileScreen(
+          {
+            "id": this.otherUserId,
+          },
+        ),
       );
     }
 
@@ -192,14 +197,13 @@ class CardInformationBalance extends StatelessWidget {
                     onTap: () {
                       if (this.otherUserId != null) {
                         if (this.originTransaction == 'gratitude_reward') {
-                          Navigator.of(context).pushNamed(
-                            PageRoute.Page.timelineProfileScreen.route,
-                            arguments: {
+                          controller.insertPage(TimelineScreenProfileScreen(
+                            {
                               "userId": this.otherUserId,
                               "postId": this.postId,
                               "postSelected": 0,
                             },
-                          );
+                          ));
                         } else if (this.originTransaction ==
                                 "total_game_completed" ||
                             this.originTransaction ==
@@ -216,6 +220,18 @@ class CardInformationBalance extends StatelessWidget {
                                       .aboutRegenerationGame,
                                   about:
                                       AppLocalizations.of(context)!.learnMore,
+                                  onTapAbout: () {
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                      PageRoute.Page.homeScreen.route,
+                                      (Route<dynamic> route) => false,
+                                      arguments: {
+                                        "returnToPageWithArgs": {
+                                          'currentPageName': "learning_tracks"
+                                        }
+                                      },
+                                    );
+                                  },
                                   marginBottom: true,
                                 );
                               });

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/bloc/comment/comment_bloc.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
@@ -50,7 +50,7 @@ import 'package:ootopia_app/screens/recover_password/recover_password_screen.dar
 import 'package:ootopia_app/screens/reset_password/reset_password_screen.dart';
 import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/celebrate_component.dart';
-import 'package:ootopia_app/screens/timeline/components/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -60,9 +60,9 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
-import 'data/repositories/comment_repository.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -72,6 +72,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/l10n.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterBackgroundService.initialize(onStartService);
   await dotenv.load(fileName: ".env");
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
@@ -83,8 +85,7 @@ Future main() async {
 
   await SentryFlutter.init(
     (options) {
-      options.dsn =
-          'https://5a5d45bd48bd4a159f2b00f343408ab9@o566687.ingest.sentry.io/5743561';
+      options.dsn = dotenv.env['SENTRY_DSN']!;
       options.debug = false;
       options.environment = "staging";
       options.attachStacktrace = true;
@@ -97,6 +98,63 @@ Future main() async {
       ),
     ),
   );
+}
+
+void onStartService() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final service = FlutterBackgroundService();
+  int lastUpdateUsageTimeInMs = 0;
+  const int maxAttempts = 5;
+  int currentAttempt = 1;
+  service.onDataReceived.listen((event) {
+    if (event!["action"] == "setAsForeground") {
+      service.setForegroundMode(true);
+      return;
+    }
+
+    if (event["action"] == "setAsBackground") {
+      service.setForegroundMode(false);
+    }
+
+    if (event["action"] == "stopService") {
+      service.stopBackgroundService();
+    }
+
+    if (event["action"] == "START_SYNC") {
+      service.setNotificationInfo(
+        title: "OOTOPIA",
+        content: event["message"],
+      );
+    }
+
+    if (event["action"] == "ON_UPDATE_USAGE_TIME") {
+      lastUpdateUsageTimeInMs = event["value"];
+    }
+  });
+  service.setForegroundMode(true);
+  //Quando o aplicativo fechar, iremos verificar se a ultima atualização do
+  //tempo de visualização da timeline foi há mais de 30 segundos atrás
+  //Se for, enviamos o tempo de visualização para a api, pois esse tempo será convertido em OOZ
+  //Se não for, isso indica que o app ainda está aberto, então ainda pode estar contando tempo
+  Timer.periodic(Duration(seconds: 30), (timer) async {
+    int timeInMs = new DateTime.now().millisecondsSinceEpoch;
+    if (timeInMs - lastUpdateUsageTimeInMs >= 30000 &&
+        lastUpdateUsageTimeInMs > 0) {
+      await dotenv.load(fileName: ".env");
+      AppUsageTime.instance;
+      try {
+        await AppUsageTime.instance.sendToApi();
+        timer.cancel();
+        service.stopBackgroundService();
+      } catch (err) {
+        currentAttempt++;
+        if (currentAttempt >= maxAttempts) {
+          timer.cancel();
+          service.stopBackgroundService();
+        }
+      }
+    }
+  });
 }
 
 class ExpensesApp extends StatefulWidget {
@@ -122,6 +180,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    print('DISPOSED');
     trackingEvents.trackingClosedApp();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
@@ -152,11 +211,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (BuildContext context) => TimelinePostBloc(
             PostRepositoryImpl(),
-          ),
-        ),
-        BlocProvider(
-          create: (BuildContext context) => CommentBloc(
-            CommentRepositoryImpl(),
           ),
         ),
         BlocProvider(
@@ -255,7 +309,7 @@ class MainPage extends HookWidget {
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
-    PageRoute.Page.profile: (args) => WalletPage(),
+    PageRoute.Page.walletPage: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
     PageRoute.Page.regenerarionGameLearningAlert: (args) =>
         RegenerarionGameLearningAlert(args),

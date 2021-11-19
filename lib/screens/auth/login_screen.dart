@@ -8,6 +8,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -47,7 +48,21 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     });
-
+    Future.delayed(Duration.zero, () async {
+      if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
+        if (widget.args!['returnToPageWithArgs']
+            ['visibleSnackBarResetPassword']) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: Duration(seconds: 2),
+              backgroundColor: Color(0xff018F9C),
+              content: Text(AppLocalizations.of(context)!
+                  .yourPasswordHasBeenChangedSuccessfully),
+            ),
+          );
+        }
+      }
+    });
     isLoading = false;
   }
 
@@ -75,7 +90,8 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      await authStore.login(_emailController.text, _passwordController.text);
+      await authStore.login(
+          _emailController.text.trim(), _passwordController.text);
       authStore.setUserIsLogged();
       controller.resetNavigation();
 
@@ -98,10 +114,19 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.toString()),
-        ),
+      showModalBottomSheet(
+        context: context,
+        barrierColor: Colors.black.withAlpha(1),
+        backgroundColor: Colors.black.withAlpha(1),
+        builder: (BuildContext context) {
+          return SnackBarWidget(
+            menu: AppLocalizations.of(context)!.errorLogin,
+            text: error.toString() == 'INVALID_PASSWORD'
+                ? AppLocalizations.of(context)!.invalidEmailOrPassword
+                : AppLocalizations.of(context)!.thereWasAProblemPleaseTryAgain,
+            about: "",
+          );
+        },
       );
       setState(() {
         isLoading = false;
@@ -194,7 +219,8 @@ class _LoginPageState extends State<LoginPage> {
                                                   color: LightColors.errorRed,
                                                   fontWeight: FontWeight.w500)),
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
+                                    value = value!.trim();
+                                    if (value.isEmpty) {
                                       setState(() {
                                         mailIsValid = false;
                                       });

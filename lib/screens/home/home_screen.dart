@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -26,10 +27,13 @@ import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'dart:ui' as ui;
+import 'package:ootopia_app/main.dart' as main;
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -40,7 +44,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen>
+    with WidgetsBindingObserver, SecureStoreMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late AuthStore authStore;
   HomeStore? homeStore;
@@ -76,9 +81,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (mounted) setState(() {});
     });
 
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 1000), () async {
       _checkStores();
       _checkPageParams();
+      FlutterBackgroundService().sendData(
+        {
+          "action": "START_SYNC",
+          "message":
+              AppLocalizations.of(context)!.updatingRegenerationGameStatus,
+        },
+      );
+      if (await FlutterBackgroundService().isServiceRunning() &&
+          !await getUserIsLoggedIn()) {
+        FlutterBackgroundService().sendData(
+          {"action": "stopService"},
+        );
+      }
     });
   }
 
@@ -106,6 +124,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    FlutterBackgroundService.initialize(main.onStartService);
+    FlutterBackgroundService().sendData(
+      {
+        "action": "START_SYNC",
+        "message": AppLocalizations.of(context)!.updatingRegenerationGameStatus,
+      },
+    );
     homeStore?.stopDailyGoalTimer();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
@@ -155,7 +180,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   TextButton(
                     child:
                         Text(AppLocalizations.of(context)!.shareMyExperience),
-                    onPressed: () => Navigator.of(context).pop(false),
+                    onPressed: () async {
+                      await launch("https://forms.gle/6qWokM6ipf7ac4fL8");
+                      Navigator.of(context).pop();
+                    },
                   ),
                   TextButton(
                     child: Text(AppLocalizations.of(context)!.notNow),
@@ -176,11 +204,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
           statusBarColor: Theme.of(context).scaffoldBackgroundColor,
-          statusBarBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
         child: Observer(builder: (_) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: homeStore!.resizeToAvoidBottomInset,
             key: _scaffoldKey,
             appBar: currentAppBar(),
             drawer: controller.currentBottomIndex ==
@@ -203,17 +231,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 SmartPageNavigation(
                   controller: controller,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    iconSize: 40,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.chatWithUsersScreen.route,
-                      );
-                    },
-                    icon: Image.asset('assets/icons/crisp_icon.png'),
+                Visibility(
+                  visible: homeStore!.seeCrisp,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      iconSize: 40,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.chatWithUsersScreen.route,
+                        );
+                      },
+                      icon: Image.asset('assets/icons/crisp_icon.png'),
+                    ),
                   ),
                 ),
                 Align(

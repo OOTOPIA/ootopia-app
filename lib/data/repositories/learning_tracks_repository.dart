@@ -5,16 +5,20 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 abstract class ILearningTracks {
   Future<List<LearningTracksModel>> listLearningTracks(
       {int? limit, int? offset, required String locale});
-  Future<LearningTracksModel> lastLearningTracks({required String locale});
+  Future<LearningTracksModel?> lastLearningTracks({required String locale});
 }
 
 class LearningTracksRepositoryImpl
     with SecureStoreMixin
     implements ILearningTracks {
   @override
-  Future<LearningTracksModel> lastLearningTracks(
+  Future<LearningTracksModel?> lastLearningTracks(
       {required String locale}) async {
     try {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (!loggedIn) {
+        return null;
+      }
       var response =
           await ApiClient.api().get("learning-tracks/last", queryParameters: {
         'locale': locale,
@@ -38,7 +42,6 @@ class LearningTracksRepositoryImpl
         'offset': offset,
         'locale': locale,
       });
-      print(response);
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((i) => LearningTracksModel.fromJson(i))
@@ -50,11 +53,10 @@ class LearningTracksRepositoryImpl
     }
   }
 
-  @override
   updateStatusVideoLearningTrack(String learningTrackId, int chapterId) async {
     try {
       await ApiClient.api()
-          .post("learning-tracks/${learningTrackId}/chapter/${chapterId}");
+          .post("learning-tracks/$learningTrackId/chapter/$chapterId");
 
       return 'sucess';
     } catch (e) {
@@ -62,12 +64,11 @@ class LearningTracksRepositoryImpl
     }
   }
 
-  @override
   Future<LearningTracksModel> getLearningTracksById(
       String learningTrackId) async {
     try {
       var response =
-          await ApiClient.api().get("learning-tracks/${learningTrackId}");
+          await ApiClient.api().get("learning-tracks/$learningTrackId");
 
       if (response.statusCode == 200) {
         return LearningTracksModel.fromJson(response.data);

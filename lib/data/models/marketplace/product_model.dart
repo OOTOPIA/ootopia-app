@@ -6,7 +6,7 @@ part 'product_model.g.dart';
 class ProductModel {
   final String id;
   final String strapiId;
-  final String userId;
+  String? userId;
   final String title;
   final String description;
   final String locale;
@@ -23,15 +23,15 @@ class ProductModel {
   ProductModel({
     required this.id,
     required this.strapiId,
-    required this.userId,
+    this.userId,
     required this.title,
     required this.description,
     required this.locale,
     required this.imageUrl,
-    required this.imageUpdatedAt,
+    this.imageUpdatedAt,
     required this.price,
     required this.location,
-    required this.deletedAt,
+    this.deletedAt,
     required this.createdAt,
     required this.updatedAt,
     required this.userName,

@@ -2,9 +2,12 @@
 /// Created by Claudio
 ///
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:package_info/package_info.dart';
 
 class ApiClient {
   static Dio? _dioInstance;
@@ -34,7 +37,11 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
   @override
   Future onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    options.headers = await this.getHeaders();
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    var headers = await this.getHeaders();
+    headers['User-Agent'] =
+        "${Platform.operatingSystem}+${Platform.operatingSystemVersion}/${info.version}+${info.buildNumber}";
+    options.headers = headers;
     return super.onRequest(options, handler);
   }
 

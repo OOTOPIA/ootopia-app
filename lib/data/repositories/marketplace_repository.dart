@@ -52,5 +52,6 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
       return throw e;
     }
   }
+
   String getLocale() => Platform.localeName == 'pt_BR' ? 'pt-BR' : 'en';
 }

@@ -73,4 +73,20 @@ abstract class _WalletStoreBase with Store {
     this.wallet = await walletRepositoryImpl.getWallet(authId!.id.toString());
     return this.wallet!;
   }
+
+  double getTabBarHeight(double screenHeight) {
+    if (screenHeight < 600) {
+      return screenHeight * 0.48;
+    } else if (screenHeight <= 800) {
+      return screenHeight * 0.58;
+    } else if (screenHeight <= 812) {
+      return screenHeight * 0.6;
+    } else if (screenHeight <= 896) {
+      return screenHeight * 0.65;
+    } else if (screenHeight <= 1080) {
+      return screenHeight * 0.73;
+    } else {
+      return screenHeight * 0.78;
+    }
+  }
 }

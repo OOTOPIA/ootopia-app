@@ -130,6 +130,19 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         about: AppLocalizations.of(context)!
                                             .learnMore,
                                         marginBottom: true,
+                                        onTapAbout: () {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                            PageRoute.Page.homeScreen.route,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              "returnToPageWithArgs": {
+                                                'currentPageName':
+                                                    "learning_tracks"
+                                              }
+                                            },
+                                          );
+                                        },
                                       );
                                     });
                               }
@@ -156,11 +169,25 @@ class _RegenerationGameState extends State<RegenerationGame>
                                               .color,
                                         ),
                                   ),
-                                  Text(
-                                    AppLocalizations.of(context)!.learnMore,
-                                    style: Theme.of(context)
-                                        .accentTextTheme
-                                        .bodyText2!,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.learnMore,
+                                      style: Theme.of(context)
+                                          .accentTextTheme
+                                          .bodyText2!,
+                                    ),
                                   )
                                 ],
                               ),
@@ -390,43 +417,38 @@ class _RegenerationGameState extends State<RegenerationGame>
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 3),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).pushNamed(
-                                            PageRoute.Page.aboutOOzCurrentScreen
-                                                .route);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/icons/ooz_mini_blue.svg',
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(PageRoute
+                                          .Page.aboutOOzCurrentScreen.route);
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/ooz_mini_blue.svg',
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 6),
+                                          child: Text(
+                                            homeStore.dailyGoalStats != null
+                                                ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
+                                                : "0,00",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2!
+                                                .copyWith(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context)
+                                                      .accentColor,
+                                                ),
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 6),
-                                            child: Text(
-                                              homeStore.dailyGoalStats != null
-                                                  ? "${currencyFormatter.format(homeStore.dailyGoalStats!.accumulatedOOZ)}"
-                                                  : "0,00",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle2!
-                                                  .copyWith(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context)
-                                                        .accentColor,
-                                                  ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
                                   )
                                 ],
@@ -475,6 +497,7 @@ class _RegenerationGameState extends State<RegenerationGame>
             } else if (detailedGoalType == 'global') {
               _goToRegenerationGameAlert(type);
             } else {
+              homeStore.getDailyGoalStats();
               // if (authStore.currentUser!.personalDialogOpened == null ||
               //     authStore.currentUser!.personalDialogOpened == false) {
               //   authStore.currentUser!.personalDialogOpened = true;

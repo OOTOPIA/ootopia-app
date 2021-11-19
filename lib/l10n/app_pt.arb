@@ -76,7 +76,7 @@
     "privacy": "privacidade.",
     "youNeedToAcceptTheTermsOfUseToContinue": "Você precisa aceitar os Termos de Uso para continuar",
 
-    "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados. \nConfira aqui nossos preceitos éticos e de transparência.",
+    "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados.\nConheça nossos preceitos éticos e de transparência quanto ao uso e privacidade",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "Você precisa habilitar algumas \npermissões para permitir o uso completo \n da câmera.",
     
@@ -141,7 +141,7 @@
     "writeYourComment": "Escreva seu comentário",
     "noComment": "Nenhum comentário",
     "caution": "Atenção",
-    "commentsWillBePermanentlyRemoved": "Os comentários serão removidos permanentemente.",
+    "commentsWillBePermanentlyRemoved": "O comentário será removido permanentemente.",
     "cancel": "Cancelar",
 
     "doYouReallyWantToDeleteYourPost": "Deseja realmente deletar seu post ?",
@@ -165,6 +165,7 @@
     "changePassword": "Alterar senha",
     "enterNewPassword": "Informe a nova senha",
     "pleaseEnterYourPassword": "Por favor, informe sua senha",
+    "yourPasswordHasBeenChangedSuccessfully":"Sua senha foi alterada com sucesso",
     "passwordsDontMatch": "Senhas não combinam",
 
     "locationServicesAreDisabled": "Os serviços de localização estão desativados.",
@@ -230,7 +231,8 @@
     "yourCommitmentsEighteenth": "You agree that we can download and install updates to the Service on your device.",
     
     "congratulations": "Parabéns!",
-    "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar\n a regenerar o planeta",    
+    "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar\n a regenerar o planeta", 
+    "youMetYourDailyGoalToHelpRegenerateThePlanetWithoutParagraphs": "Você cumpriu sua meta diária de ajudar a regenerar o planeta", 
     "totalBalance": "Total Somado",
     "nextStepIsToHelpMeetYourCityGoal": "O próximo passo é ajudar a atingir o objetivo da sua cidade.",
     "keepMakingOOTOPIAAlive": "Continue fazendo OOTOPIA vivo!",
@@ -254,6 +256,7 @@
     "youDontNothing": "Você não tem nada",
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
+    "textExplainWalletWithoutParagraph":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     
     "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
     "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O emblema de Change Maker Pro é dado a indivíduos e organizações que estão liderando profissionalmente projetos para regenerar o planeta e criando amplo impacto positivo.",
@@ -261,20 +264,19 @@
     "getInContact": "Entre em contato!",
     "yourPublicationIsBeingProcessed": "Sua publicação está sendo processada. Ao finalizar, você receberá % OOz.",
 
-    "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
 
     "close": "Fechar",
 
     "personalLevel": "Nível pessoal",
-    "personalLevelText1": "Cada pessoa e cada ação conta! No jogo regenerativo, você recebe créditos em moeda OOz como recompensa por seu envolvimento com o aplicativo.",
+    "personalLevelText1": "Cada pessoa e cada ação conta!\nNo jogo regenerativo, você recebe créditos em moeda OOz como recompensa por seu envolvimento com o aplicativo.",
     "personalLevelText2": "Defina sua meta diária e comece a viver OOTOPIA agora!",
 
     "cityLevel": "Nível da cidade",
-    "cityLevelText1": "Quando colaboramos com nossa comunidade, amplificamos o impacto positivo! O objetivo do nível de cidade é a soma dos objetivos de todas as pessoas que usam o aplicativo em sua cidade.",
+    "cityLevelText1": "Quando colaboramos com nossa comunidade, amplificamos o impacto positivo!\nO objetivo do nível de cidade é a soma dos objetivos de todas as pessoas que usam o aplicativo em sua cidade.",
     "cityLevelText2": "Continue empenhado em ajudar sua cidade a cumprir suas metas diárias!",
 
     "planetaryLevel": "Nível planetário",
-    "planetaryLevelText1": "Juntos podemos mudar o mundo! O objetivo do Nível Planetário é a soma dos objetivos de todas as pessoas colaborando para criar o mundo maravilhoso em que queremos viver!",
+    "planetaryLevelText1": "Juntos podemos mudar o mundo!\nO objetivo do Nível Planetário é a soma dos objetivos de todas as pessoas colaborando para criar o mundo maravilhoso em que queremos viver!",
     "planetaryLevelText2pt1": "Estamos quase lá!",
     "planetaryLevelText2pt2": "Vamos cumprir a meta planetária hoje!",
     "invitationCode": "Código de convite",
@@ -289,7 +291,7 @@
     "questions":"perguntas",
     "suggestions": "sugestões",
     "checkYourTransactions":"confira suas transações",
-    "earn":"ganham",
+    "earn":"ganhe",
     "whenTheySignup":"quando eles se inscrevem",
     "inviteYourFriends":"Convide seus amigos",
     "enterToOotopia": "entre no OOTOPIA",
@@ -309,8 +311,8 @@
     "sendChangeMakerProInvitationCode":"Envie este código para convidar pessoas que estão liderando projetos para regenerar o planeta de forma profissional e criando amplo impacto.",
     "sendWelcomeInvitationCode": "Envie este código para convidar seus amigos e receba",
     "forEachNewcomer": "para cada recém-chegado.\nSeu amigo receberá",
-   "ooz15":" 15,00 OOz.",
-    "ooz25":" 25,00 OOz ",
+    "ooz15":" 10,00 OOz.",
+    "ooz25":" 2,50 OOz ", 
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
     "joinToOOTOPIA":"Convite para se juntar a mim no OOTOPIA\nExperimente o movimento que está regenerando o planeta Terra! \nBaixe o aplicativo e registre-se com este código: %USER_CODE%\nVocê também receberá 15,00 OOz de crédito.\nVIVA A OOTOPIA AGORA! ✨ 🌎 ❤️",
     "continueAccess":"Continuar",
@@ -380,7 +382,11 @@
     "messageOptional": "Mensagem - Opcional",
     "purchaseNow": "Adquirir Agora",
 
+    "appBetaTest": "App Teste Beta",
+    "sendYourFeedback":"envie seu comentário",
+
     "seeAll":"Veja todos",
+    "receive":"Receba",
      "dontExistLearningTracks":"Não existem learning tracks",
      "lessons":"lições",
      "respondQuiz":"Responda ao questionário para confirmar o que você aprendeu e receba OOz para cada resposta correta.",
@@ -406,5 +412,9 @@
      "nextAboutCreateOffer":"Na próxima atualização do aplicativo, todos poderão criar ofertas, produtos, serviços e experiências. Até lá, que tal nos dizer o que você gostaria de vender ou adquirir?\n\nSuas sugestões e dúvidas são muito bem vindas!",
      "aboutYourOfferHere":"SERÁ ÓTIMO VER SUA OFERTA AQUI",
      "giveSuggestion":"Dar sugestão",
-     "supportCenter":"Centro de Suporte"
+     "supportCenter":"Central de Suporte",
+     "invalidEmailOrPassword": "Email e/ou senha inválida",
+     "errorLogin": "Erro de acesso",
+     "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.",
+     "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração..."
 }

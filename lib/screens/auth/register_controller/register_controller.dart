@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RegisterSecondPhaseController with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
@@ -70,6 +72,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   final picker = ImagePicker();
 
   String? countryCode;
+  String? dialCode;
   bool validCellPhone = false;
   bool exibTextError = false;
   String? birthdateValidationErrorMessage = '';
@@ -122,6 +125,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     photoFilePath = null;
     image = null;
     user = User();
+    dialCode = '';
   }
 
   void birthdateIsValid(BuildContext context, VoidCallback update) {
@@ -135,11 +139,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         birthdateValidationErrorMessage =
             AppLocalizations.of(context)!.pleaseEnterAValidBirthdate;
       }
-
       update();
     } else {
       exibTextError = false;
-
       birthdateValidationErrorMessage = '';
       update();
     }
@@ -147,8 +149,14 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   setBirthDateAndCountryCode() {
     if (validationBirthDate()) {
-      user!.birthdate =
-          "${yearController.text}/${monthController.text}/${dayController.text}";
+      if (dayController.text.isEmpty &&
+          yearController.text.isEmpty &&
+          monthController.text.isEmpty) {
+        user!.birthdate = "";
+      } else {
+        user!.birthdate =
+            "${yearController.text}/${monthController.text}/${dayController.text}";
+      }
     }
     user!.countryCode = countryCode!.isNotEmpty ? countryCode : null;
   }
@@ -162,7 +170,9 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   bool firstStepIsValid() {
-    return !validCellPhone && validationBirthDate();
+    return validCellPhone &&
+        validationBirthDate() &&
+        cellPhoneController.text.isNotEmpty;
   }
 
   getLocation(BuildContext context) async {
@@ -229,14 +239,15 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
   Future registerUser() async {
     Auth _user = Auth(
-      fullname: nameController.text,
-      email: emailController.text,
+      fullname: nameController.text.trim(),
+      email: emailController.text.trim(),
       password: passwordController.text,
       countryCode: user!.countryCode,
-      bio: bioController.text,
+      dialCode: dialCode,
+      bio: bioController.text.trim(),
       phone: cellPhoneController.text,
       birthdate: user!.birthdate,
-      invitationCode: codeController.text,
+      invitationCode: codeController.text.trim(),
       dailyLearningGoalInMinutes: currentSliderValue.toInt(),
       addressCountryCode: user!.addressCountryCode,
       addressState: user!.addressState,
@@ -246,6 +257,12 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       photoFilePath: photoFilePath,
       registerPhase: 2,
     );
+
+    try {
+      this
+          .trackingEvents
+          .signupConcludeButton({'userData': json.encode(_user.toJson())});
+    } catch (err) {}
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
@@ -257,7 +274,11 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         await this.authRepository.register(_user, tagsIds, null);
         await authRepository.login(_user.email!, _user.password!);
       }
-    } catch (err) {
+    } catch (err, stackTrace) {
+      await Sentry.captureException(
+        err,
+        stackTrace: stackTrace,
+      );
       throw (err);
     }
   }

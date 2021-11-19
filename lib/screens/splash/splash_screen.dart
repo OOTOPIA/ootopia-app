@@ -5,7 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class SplashScreen extends StatefulWidget {
-  Map<String, dynamic>? args;
+  final Map<String, dynamic>? args;
 
   SplashScreen(
     this.args, {

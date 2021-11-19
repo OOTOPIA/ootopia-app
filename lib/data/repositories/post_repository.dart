@@ -1,14 +1,12 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
-import 'package:ootopia_app/data/models/post/post_created_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'dart:convert';
-import 'package:path/path.dart';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -59,14 +57,10 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         queryParams['userId'] = userId;
       }
 
-      String queryString = Uri(queryParameters: queryParams).query;
-
-      final response = await http.get(
-        Uri.parse(dotenv.env['API_URL']! + "posts?" + queryString),
-        headers: await this.getHeaders(),
-      );
+      final response = await ApiClient.api()
+          .get(dotenv.env['API_URL']! + "posts?", queryParameters: queryParams);
       if (response.statusCode == 200) {
-        return (json.decode(response.body) as List)
+        return (response.data as List)
             .map((i) => TimelinePost.fromJson(i))
             .toList();
       } else {

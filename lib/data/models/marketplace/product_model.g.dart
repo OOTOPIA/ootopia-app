@@ -10,7 +10,7 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
   return ProductModel(
     id: json['id'] as String,
     strapiId: json['strapiId'] as String,
-    userId: json['userId'] as String,
+    userId: json['userId'] as String?,
     title: json['title'] as String,
     description: json['description'] as String,
     locale: json['locale'] as String,

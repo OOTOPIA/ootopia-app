@@ -224,7 +224,7 @@ class _LastLearningTrackComponentsState
                                   width: 8,
                                 ),
                                 Text(
-                                  '${currencyFormatter.format(lastLearningTracks!.ooz)}',
+                                  '${AppLocalizations.of(context)!.receive} ${currencyFormatter.format(lastLearningTracks!.ooz)}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,

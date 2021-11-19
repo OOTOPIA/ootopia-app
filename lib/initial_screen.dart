@@ -5,6 +5,7 @@ import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class InitialScreen extends StatelessWidget {
   SharedPreferences? sharedPreferences;
   HomeStore? homeStore;
