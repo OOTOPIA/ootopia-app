@@ -105,8 +105,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   GlobalKey _oozInfoKey = GlobalKey();
   bool _dontAskToConfirmGratitudeReward = false;
 
-  PostTimelineComponentController postTimelineComponentController =
-      PostTimelineComponentController();
+  late PostTimelineComponentController postTimelineComponentController;
 
   late PostTimelineController postTimelineController;
   bool _bigLikeShowAnimation = false;
@@ -130,8 +129,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           user!.dontAskAgainToConfirmGratitudeReward == null
               ? false
               : user!.dontAskAgainToConfirmGratitudeReward!;
-      postTimelineComponentController
-          .setAskToConfirmGratitude(_dontAskToConfirmGratitudeReward);
+      if (postTimelineComponentController!.askToConfirmGratitude == false)
+        postTimelineComponentController
+            .setAskToConfirmGratitude(_dontAskToConfirmGratitudeReward);
       if (this.mounted) {
         setState(() {});
       }
@@ -183,6 +183,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
+    postTimelineComponentController =
+        Provider.of<PostTimelineComponentController>(context);
     return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if (state is SuccessDeletePostState) {
@@ -884,52 +886,55 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         ),
       );
     }
-    return SizedBox(
-      height: 25,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          primary: Colors.black87,
-          padding: EdgeInsets.only(left: 12),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-          ),
-          backgroundColor: Color(0xFF03DAC5),
-          alignment:
-              showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
-        ),
-        onPressed: () {
-          if (!loggedIn) {
-            Navigator.of(context).pushNamed(
-              PageRoute.Page.loginScreen.route,
-            );
-          } else if (!_sendOOZIsLoading) {
-            if (postTimelineComponentController.askToConfirmGratitude) {
-              sendOOZ();
-            } else {
-              _showConfirmGratitudeReward();
-            }
-          }
-        },
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 6,
-          ),
-          child: !_sendOOZIsLoading
-              ? Text(
-                  AppLocalizations.of(context)!.send,
-                  style: TextStyle(color: Colors.black, fontSize: 12),
-                )
-              : SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.transparent,
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+    return Observer(
+        builder: (_) => SizedBox(
+              height: 25,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.black87,
+                  padding: EdgeInsets.only(left: 12),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
                   ),
+                  backgroundColor: Color(0xFF03DAC5),
+                  alignment: showOozToTransfer()
+                      ? Alignment.centerLeft
+                      : Alignment.center,
                 ),
-        ),
-      ),
-    );
+                onPressed: () {
+                  if (!loggedIn) {
+                    Navigator.of(context).pushNamed(
+                      PageRoute.Page.loginScreen.route,
+                    );
+                  } else if (!_sendOOZIsLoading) {
+                    if (postTimelineComponentController.askToConfirmGratitude) {
+                      sendOOZ();
+                    } else {
+                      _showConfirmGratitudeReward();
+                    }
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: 6,
+                  ),
+                  child: !_sendOOZIsLoading
+                      ? Text(
+                          AppLocalizations.of(context)!.send,
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        )
+                      : SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.transparent,
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                ),
+              ),
+            ));
   }
 
   void sendOOZ() async {
