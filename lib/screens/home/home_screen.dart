@@ -33,6 +33,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'dart:ui' as ui;
 import 'package:ootopia_app/main.dart' as main;
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -179,7 +180,10 @@ class _HomeScreenState extends State<HomeScreen>
                   TextButton(
                     child:
                         Text(AppLocalizations.of(context)!.shareMyExperience),
-                    onPressed: () => Navigator.of(context).pop(false),
+                    onPressed: () async {
+                      await launch("https://forms.gle/6qWokM6ipf7ac4fL8");
+                      Navigator.of(context).pop();
+                    },
                   ),
                   TextButton(
                     child: Text(AppLocalizations.of(context)!.notNow),

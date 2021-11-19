@@ -37,7 +37,7 @@ class _RegisterDailyLearningGoalScreenState
   void initState() {
     super.initState();
     _videoPlayerController =
-        VideoPlayerController.asset('assets/videos/ootopia_learning.mp4')
+        VideoPlayerController.network('https://videodelivery.net/1a802774c1b694c0554143d69519c598/manifest/video.m3u8')
           ..initialize().then((value) {
             _videoPlayerController.play();
             setState(() {});
