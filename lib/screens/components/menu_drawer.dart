@@ -14,6 +14,7 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuDrawer extends StatefulWidget {
   final Function? onTapProfileItem;
@@ -289,6 +290,42 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                         widget.onTapWalletItem!();
                       }
                       Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 1.0,
+                  ))),
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.appBetaTest}',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          '${AppLocalizations.of(context)!.sendYourFeedback}',
+                          style:
+                              TextStyle(color: LightColors.grey, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    leading: Image.asset(
+                      'assets/icons/icon_appbetatest.png',
+                      width: 24,
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    onTap: () async{
+                      await launch("https://forms.gle/6qWokM6ipf7ac4fL8");
                     },
                   ),
                 ),
