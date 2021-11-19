@@ -21,7 +21,7 @@ enum Page {
   resetPasswordScreen,
   splashScreen,
   celebration,
-  profile,
+  walletPage,
   regenerarionGameLearningAlert,
   chatWithUsersScreen,
   invitationScreen,
