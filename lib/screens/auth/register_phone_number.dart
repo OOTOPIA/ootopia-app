@@ -117,7 +117,17 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                               },
                             ),
                             SizedBox(
-                              height: 24,
+                              height: 6,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)!.optional,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xffd7d7d7),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 18,
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
@@ -236,14 +246,26 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                             SizedBox(
                               height: 24,
                             ),
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    AppLocalizations.of(context)!.dateOfBirth,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(AppLocalizations.of(context)!.dateOfBirth,
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xff7F7F7F),
-                                        fontWeight: FontWeight.w500))),
+                                        fontWeight: FontWeight.w500)),
+                                Expanded(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.optional,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color(0xffd7d7d7),
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ],
+                            ),
                             SizedBox(
                               height: 16,
                             ),
