@@ -116,23 +116,6 @@ mixin _$AuthStore on AuthStoreBase, Store {
     return _$logoutAsyncAction.run(() => super.logout());
   }
 
-  final _$registerUserAsyncAction = AsyncAction('AuthStoreBase.registerUser');
-
-  @override
-  Future<bool> registerUser(
-      {required String name,
-      required String password,
-      required String email,
-      String? invitationCode,
-      required BuildContext context}) {
-    return _$registerUserAsyncAction.run(() => super.registerUser(
-        name: name,
-        password: password,
-        email: email,
-        invitationCode: invitationCode,
-        context: context));
-  }
-
   final _$resetPasswordAsyncAction = AsyncAction('AuthStoreBase.resetPassword');
 
   @override

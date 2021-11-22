@@ -45,24 +45,8 @@ abstract class _PostPreviewScreenStoreBase with Store {
   @observable
   bool isSelected = false;
 
-  Future<dynamic> _createPost(PostCreate post) async {
-    //FlutterUploader().setBackgroundHandler(_backgroundHandler);
-    var completer = new Completer();
-    var uploader = FlutterUploader();
-
-    await this._repository.createPost(uploader, post);
-    uploader.progress.listen((event) {
-      if (event.progress != null &&
-          event.progress! >= 100 &&
-          !completer.isCompleted) {
-        completer.complete();
-      }
-    });
-    uploader.result.listen((result) {}, onDone: () {}, onError: (error) {
-      completer.completeError(error);
-    });
-
-    return completer.future;
+  _createPost(PostCreate post) async {
+    return await this._repository.createPost(post);
   }
 
   @action
@@ -107,10 +91,10 @@ abstract class _PostPreviewScreenStoreBase with Store {
   }
 
   @action
-  Future<dynamic> createPost(PostCreate post) async {
+  createPost(PostCreate post) async {
     try {
       uploadIsLoading = true;
-      var result = await this._createPost(post);
+      await this._createPost(post);
       double oozToRewardForVideo = 10;
       double oozToRewardForImage = 5;
       if (post.durationInSecs != null && post.type == "video") {
@@ -121,8 +105,8 @@ abstract class _PostPreviewScreenStoreBase with Store {
       this._trackingEvents.timelineCreatedAPost(post.type!);
       uploadIsLoading = false;
       successOnUpload = true;
-      return result;
     } catch (err) {
+      print("erro aqui $err");
       errorOnUpload = true;
       uploadIsLoading = false;
     }

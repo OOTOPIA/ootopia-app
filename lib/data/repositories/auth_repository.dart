@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -5,13 +6,15 @@ import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'dart:convert';
 
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 abstract class AuthRepository {
   Future<User> login(String email, String password);
-  Future register(Auth user, List<String>? tagsIds, FlutterUploader? uploader);
+  Future register(Auth user, List<String>? tagsIds);
   Future recoverPassword(String email, String lang);
   Future resetPassword(String newPassword);
   Future<bool> emailExist(String email);
@@ -58,10 +61,9 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   }
 
   @override
-  Future register(
-      Auth user, List<String>? tagsIds, FlutterUploader? uploader) async {
+  Future register(Auth user, List<String>? tagsIds) async {
     try {
-      Map<String, String> data = {
+      Map<String, dynamic> data = {
         "fullname": user.fullname.toString(),
         "email": user.email.toString(),
         "password": user.password.toString(),
@@ -89,34 +91,31 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "registerPhase": user.registerPhase.toString(),
       };
 
-      if (user.photoFilePath != null && uploader != null) {
-        var result = await uploader.enqueue(
-          MultipartFormDataUpload(
-            url: dotenv.env['API_URL']! + "users",
-            files: [
-              FileItem(
-                path: user.photoFilePath!,
-                field: "file",
-              )
-            ], // required: list of files that you want to upload
-            method: UploadMethod.POST, // HTTP method  (POST or PUT or PATCH)
-            headers: {'Content-Type': 'application/json; charset=UTF-8'},
-            data: data, // any data you want to send in upload request
-            tag: "Uploading user photo",
-          ),
+      if (user.photoFilePath != null) {
+        String fileName = user.photoFilePath!.split('/').last;
+        data['file'] = await MultipartFile.fromFile(
+          user.photoFilePath!,
+          filename: fileName,
         );
-        return result;
+        FormData formData = FormData.fromMap(data);
+        final response = await ApiClient.api().post(
+          dotenv.env['API_URL']! + "users",
+          data: formData,
+          options: Options(headers: {}),
+        );
+        if (response.statusCode != 201) {
+          Sentry.captureMessage("ERROR_ON_REGISTER_1 >>> " + jsonEncode(data));
+          throw Exception('Failed to create user #1');
+        }
       } else {
-        final response = await http.post(
-          Uri.parse(
-            dotenv.env['API_URL']! + "users",
-          ),
-          headers: {'Content-Type': 'application/json; charset=UTF-8'},
-          body: jsonEncode(data),
+        final response = await ApiClient.api().post(
+          dotenv.env['API_URL']! + "users",
+          data: data,
         );
 
         if (response.statusCode != 201) {
-          throw Exception('Failed to create user');
+          Sentry.captureMessage("ERROR_ON_REGISTER_2 >>> " + jsonEncode(data));
+          throw Exception('Failed to create user #2');
         }
       }
     } catch (error) {
