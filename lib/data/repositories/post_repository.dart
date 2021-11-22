@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
@@ -14,7 +15,7 @@ abstract class PostRepository {
   Future<List<TimelinePost>> getPosts(
       [int? limit, int? offset, String? userId]);
   Future<LikePostResult> likePost(String id);
-  Future<void> createPost(FlutterUploader uploader, PostCreate post);
+  Future<void> createPost(PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
   Future recordTimelineWatched(int timeInMilliseconds);
   Future<TimelinePost> getPostById(String id);
@@ -90,22 +91,22 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   }
 
   @override
-  Future<String> createPost(FlutterUploader uploader, PostCreate post) async {
-    return await uploader.enqueue(
-      MultipartFormDataUpload(
-        url: dotenv.env['API_URL']! + "posts",
-        files: [
-          FileItem(
-            path: post.filePath!,
-            field: "file",
-          )
-        ],
-        method: UploadMethod.POST,
-        headers: await getHeaders("multipart/form-data"),
-        data: {
-          "metadata": jsonEncode(post),
-        },
-        tag: "upload 1",
+  Future createPost(PostCreate post) async {
+    String fileName = post.filePath!.split('/').last;
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        post.filePath!,
+        filename: fileName,
+      ),
+      "metadata": jsonEncode(post)
+    });
+    await ApiClient.api().post(
+      dotenv.env['API_URL']! + "posts",
+      data: formData,
+      options: Options(
+        followRedirects: false,
+        // will not throw errors
+        validateStatus: (status) => true,
       ),
     );
   }

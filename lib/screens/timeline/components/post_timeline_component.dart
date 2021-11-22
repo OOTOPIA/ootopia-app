@@ -129,7 +129,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           user!.dontAskAgainToConfirmGratitudeReward == null
               ? false
               : user!.dontAskAgainToConfirmGratitudeReward!;
-      if (postTimelineComponentController!.askToConfirmGratitude == false)
+      if (postTimelineComponentController.askToConfirmGratitude == false)
         postTimelineComponentController
             .setAskToConfirmGratitude(_dontAskToConfirmGratitudeReward);
       if (this.mounted) {
