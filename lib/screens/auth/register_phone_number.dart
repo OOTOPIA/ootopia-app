@@ -117,17 +117,17 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                               },
                             ),
                             SizedBox(
-                              height: 6,
+                              height: 4,
                             ),
                             Text(
                               AppLocalizations.of(context)!.optional,
                               style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   color: Color(0xffd7d7d7),
                                   fontWeight: FontWeight.w500),
                             ),
                             SizedBox(
-                              height: 18,
+                              height: 20,
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
@@ -158,14 +158,26 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                             SizedBox(
                               height: 24,
                             ),
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    AppLocalizations.of(context)!.mobilePhone,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(AppLocalizations.of(context)!.mobilePhone,
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xff7F7F7F),
-                                        fontWeight: FontWeight.w500))),
+                                        fontWeight: FontWeight.w500)),
+                                         SizedBox(
+                                  width: 6,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.required,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xffd7d7d7),
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
                             SizedBox(
                               height: 16,
                             ),
@@ -247,22 +259,22 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                               height: 24,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(AppLocalizations.of(context)!.dateOfBirth,
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Color(0xff7F7F7F),
                                         fontWeight: FontWeight.w500)),
-                                Expanded(
-                                  child: Text(
-                                    AppLocalizations.of(context)!.optional,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Color(0xffd7d7d7),
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.right,
-                                  ),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.optional,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xffd7d7d7),
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
