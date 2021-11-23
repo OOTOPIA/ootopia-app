@@ -273,39 +273,14 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
     try {
-      if (_user.photoFilePath != null) {
-        await registerUserWithPhoto(_user, tagsIds);
-        await authRepository.login(_user.email!, _user.password!);
-      } else {
-        await this.authRepository.register(_user, tagsIds, null);
-        await authRepository.login(_user.email!, _user.password!);
-      }
+      await this.authRepository.register(_user, tagsIds);
+      await authRepository.login(_user.email!, _user.password!);
     } catch (err, stackTrace) {
       await Sentry.captureException(
         err,
         stackTrace: stackTrace,
       );
-      throw (err);
+      throw err;
     }
-  }
-
-  Future<String> registerUserWithPhoto(_user, tagsIds) async {
-    var completer = new Completer<String>();
-    var uploader = FlutterUploader();
-
-    var taskId = await this.authRepository.register(_user, tagsIds, uploader);
-    uploader.result.listen(
-      (result) {
-        if (result.statusCode == 201 && result.taskId == taskId) {
-          completer.complete('completed');
-        }
-      },
-      onDone: () {},
-      onError: (error) {
-        completer.completeError(error);
-      },
-    );
-
-    return completer.future;
   }
 }

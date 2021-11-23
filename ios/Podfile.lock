@@ -1,35 +1,14 @@
 PODS:
   - Alamofire (5.2.2)
-  - Amplitude (7.2.0)
+  - Amplitude (8.5.0)
   - amplitude_flutter (0.0.1):
-    - Amplitude (= 7.2.0)
+    - Amplitude (= 8.5.0)
     - Flutter
   - camera (0.0.1):
     - Flutter
-  - Firebase/CoreOnly (8.6.0):
-    - FirebaseCore (= 8.6.0)
-  - Firebase/DynamicLinks (8.6.0):
-    - Firebase/CoreOnly
-    - FirebaseDynamicLinks (~> 8.6.0)
-  - firebase_core (1.6.0):
-    - Firebase/CoreOnly (= 8.6.0)
-    - Flutter
-  - firebase_dynamic_links (2.0.9):
-    - Firebase/DynamicLinks (= 8.6.0)
-    - firebase_core
-    - Flutter
-  - FirebaseCore (8.6.0):
-    - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.7.0):
-    - GoogleDataTransport (~> 9.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Logger (~> 7.4)
-    - nanopb (~> 2.30908.0)
-  - FirebaseDynamicLinks (8.6.0):
-    - FirebaseCore (~> 8.0)
   - Flutter (1.0.0)
+  - flutter_background_service (0.0.1):
+    - Flutter
   - flutter_ffmpeg/https-lts (0.4.2):
     - Flutter
     - mobile-ffmpeg-https (= 4.4.LTS)
@@ -54,14 +33,6 @@ PODS:
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
-  - GoogleDataTransport (9.1.0):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Environment (7.5.2):
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.5.2):
-    - GoogleUtilities/Environment
   - image_crop (0.0.1):
     - Flutter
   - image_picker (0.0.1):
@@ -75,36 +46,30 @@ PODS:
     - libphonenumber
     - libPhoneNumber-iOS
   - mobile-ffmpeg-https (4.4.LTS)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
   - OrderedSet (5.0.0)
   - package_info (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider (0.0.1):
+  - path_provider_ios (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
   - photo_manager (1.0.0):
     - Flutter
     - FlutterMacOS
-  - PromisesObjC (2.0.0)
   - receive_sharing_intent (0.0.1):
     - Flutter
-  - Sentry (7.3.0):
-    - Sentry/Core (= 7.3.0)
-  - Sentry/Core (7.3.0)
+  - Sentry (7.5.2):
+    - Sentry/Core (= 7.5.2)
+  - Sentry/Core (7.5.2)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry (~> 7.3.0)
+    - Sentry (~> 7.5.1)
   - share_extend (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
@@ -117,13 +82,14 @@ PODS:
     - Flutter
   - wakelock (0.0.1):
     - Flutter
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - Flutter (from `Flutter`)
+  - flutter_background_service (from `.symlinks/plugins/flutter_background_service/ios`)
   - flutter_ffmpeg/https-lts (from `.symlinks/plugins/flutter_ffmpeg/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
@@ -137,35 +103,28 @@ DEPENDENCIES:
   - libphonenumber_plugin (from `.symlinks/plugins/libphonenumber_plugin/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share_extend (from `.symlinks/plugins/share_extend/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - Amplitude
-    - Firebase
-    - FirebaseCore
-    - FirebaseCoreDiagnostics
-    - FirebaseDynamicLinks
     - FMDB
-    - GoogleDataTransport
-    - GoogleUtilities
     - libPhoneNumber-iOS
     - mobile-ffmpeg-https
-    - nanopb
     - OrderedSet
-    - PromisesObjC
     - Sentry
 
 EXTERNAL SOURCES:
@@ -173,12 +132,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
-  firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_dynamic_links:
-    :path: ".symlinks/plugins/firebase_dynamic_links/ios"
   Flutter:
     :path: Flutter
+  flutter_background_service:
+    :path: ".symlinks/plugins/flutter_background_service/ios"
   flutter_ffmpeg:
     :path: ".symlinks/plugins/flutter_ffmpeg/ios"
   flutter_inappwebview:
@@ -205,8 +162,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   photo_manager:
@@ -217,8 +174,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sentry_flutter/ios"
   share_extend:
     :path: ".symlinks/plugins/share_extend/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   uni_links:
@@ -229,19 +186,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  Amplitude: c948c6f99c7f798c196523b2a5584367401d910f
-  amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
-  camera: 3164201dc344383e62282964016528c4f5a9ad50
-  Firebase: 21ac9f28b09a8bdfc005f34c984fca84e7e8786d
-  firebase_core: c21ac09a8d23afd3594b56ed786bad12e5266bba
-  firebase_dynamic_links: ef0989cdc7e7d2aaed5814a81f7ca0ec7a6028ee
-  FirebaseCore: 620b677f70f5470a8e59cb77f3ddc666f6f09785
-  FirebaseCoreDiagnostics: b63732f581a1c6a453ec7241f9ab60b3a5bd3450
-  FirebaseDynamicLinks: 406d67290fd123e133641f93a333b4957af22c09
+  Amplitude: ef9ed339ddd33c9183edf63fa4bbaa86cf873321
+  amplitude_flutter: 8ddb231989e68ed8c005c838d7fc59edbca09833
+  camera: fe33292aff715a981eb34d7ce7b35b54337ff34c
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_background_service: a4644870cc76287aaa6147b47107e52680b79c90
   flutter_ffmpeg: 3ec3912c74649851e6c3b1885511eef78142ac4f
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
@@ -250,33 +204,30 @@ SPEC CHECKSUMS:
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
   geolocator_apple: b741765c55dc21950e3e106e8b3584e55cf81ce5
-  GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
-  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
   image_crop: e0a67085d3ebf3cf46ca46d61c53a082507b0bc3
-  image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
+  image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   libphonenumber: bd14d5abfc5939ab0b0767234e2d8e2593af258e
   libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
   libphonenumber_plugin: 7cf755ad1656145935d6c208173a476bd3f12898
   mobile-ffmpeg-https: 7ec3461d626f2d86be1e904bcfb29ed0be8cad7a
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   photo_manager: 84fa94fbeb82e607333ea9a13c43b58e0903a463
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
-  Sentry: 9a4e621430e2dae4477d791f2f7e905720b6efbf
-  sentry_flutter: 08fadaed464f44e1233d3fbb0c72b10cebd79487
+  Sentry: 95788d2baa9cc904151c9ac41101c67d9f25e09e
+  sentry_flutter: 4cd99764f9fe01c9415790d1f3fb1c7fd3a5cbe9
   share_extend: b6748dc53695587891126a89533b862b92548c7b
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
-  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
+  url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
+  video_player: ecd305f42e9044793efd34846e1ce64c31ea6fcb
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
+  webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
-PODFILE CHECKSUM: 0a65be79d19d6c921541326a53fdc60da64c623f
+PODFILE CHECKSUM: 22981239c68cd1591740a44ce70609f3b24efdf1
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

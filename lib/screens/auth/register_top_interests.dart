@@ -402,7 +402,7 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                                   .fontSize,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                            )))),
+                                            ),),),),
                                 onPressed: () async {
                                   try {
                                     if (registerController
