@@ -11,6 +11,7 @@ import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
 import 'package:ootopia_app/bloc/wallet_transfer/wallet_transfer_bloc.dart';
+import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -164,6 +165,8 @@ class ExpensesApp extends StatefulWidget {
 
 class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  GeneralConfigRepositoryImpl generalConfigRepository =
+      GeneralConfigRepositoryImpl();
 
   @override
   void initState() {
@@ -171,6 +174,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
     AppUsageTime.instance.startTimer();
+    generalConfigRepository.getGeneralConfig();
     AppTheme.instance(context).addListener(() {
       setState(() {}); //To update theme if user toggle
     });

@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'dart:convert';
 
@@ -15,6 +16,11 @@ class SecureStoreMixin {
     return true;
   }
 
+  Future<bool> setGeneralConfig(String value) async {
+    await this.setSecureStore("general_config", value);
+    return true;
+  }
+
   void setTimelineVideosMuted() async {
     await this.setSecureStore("timeline_muted", "true");
   }
@@ -23,8 +29,8 @@ class SecureStoreMixin {
     await this.setSecureStore("timeline_muted", "false");
   }
 
-  void setTransferOOZToPostLimit(String limit) async {
-    await this.setSecureStore("transfer_ooz_to_post_limit", limit);
+  void setTransferOOZToPostLimit(double limit) async {
+    await this.setSecureStore("transfer_ooz_to_post_limit", limit.toString());
   }
 
   void updateUserDontAskToConfirmGratitudeReward(bool value) async {
@@ -65,6 +71,19 @@ class SecureStoreMixin {
 
   Future<String> getRecoverPasswordToken() async {
     return await this.getSecureStore("recover_password_token");
+  }
+
+  Future<List<GeneralConfigModel>> getGeneralConfig() async {
+    var generalConfigJSON = await this.getSecureStore("general_config");
+
+    return (jsonDecode(generalConfigJSON) as List)
+        .map((e) => GeneralConfigModel.fromJson(e))
+        .toList();
+  }
+
+  Future<GeneralConfigModel> getGeneralConfigByName(String name) async {
+    List<GeneralConfigModel> generalConfigModel = await getGeneralConfig();
+    return generalConfigModel.firstWhere((element) => element.name == name);
   }
 
   Future<double> getTransferOOZToPostLimit() async {

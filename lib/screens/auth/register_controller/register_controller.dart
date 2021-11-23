@@ -8,6 +8,7 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -147,6 +148,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     }
   }
 
+  formatNumber(double number, String locale) {
+    return NumberFormat('###0.00', locale).format(number);
+  }
+
   setBirthDateAndCountryCode() {
     if (validationBirthDate()) {
       if (dayController.text.isEmpty &&
@@ -222,7 +227,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   }
 
   updateLocalName() async {
-    if (currentLocaleName != Platform.localeName.substring(0, 2)) {
+    if (currentLocaleName != Platform.localeName.substring(0, 2) ||
+        allTags.length == 0) {
       currentLocaleName = Platform.localeName.substring(0, 2);
       await getTags(currentLocaleName);
       selectedTags = [];

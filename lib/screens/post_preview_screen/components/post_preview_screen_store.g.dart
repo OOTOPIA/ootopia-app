@@ -156,8 +156,10 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
       AsyncAction('_PostPreviewScreenStoreBase.createPost');
 
   @override
-  Future<dynamic> createPost(PostCreate post) {
-    return _$createPostAsyncAction.run(() => super.createPost(post));
+  Future<dynamic> createPost(
+      PostCreate post, double oozToRewardForVideo, double oozToRewardForImage) {
+    return _$createPostAsyncAction.run(
+        () => super.createPost(post, oozToRewardForVideo, oozToRewardForImage));
   }
 
   final _$_PostPreviewScreenStoreBaseActionController =

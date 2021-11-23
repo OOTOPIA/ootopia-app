@@ -11,6 +11,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
@@ -70,6 +71,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   String currenLocalization = '';
   String conditional = "";
   List filteredList = [];
+  SecureStoreMixin secureStoreMixin = SecureStoreMixin();
   final pageController = SmartPageController.getInstance();
 
   PostCreate postData = PostCreate();
@@ -232,9 +234,15 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
     print("ready to start upload");
 
-    await this.postPreviewStore.createPost(postData);
+    GeneralConfigModel oozToRewardForVideo = await this
+        .secureStoreMixin
+        .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
+    GeneralConfigModel oozToRewardForImage = await this
+        .secureStoreMixin
+        .getGeneralConfigByName("creator_reward_for_posted_photo");
 
-    print("end of upload");
+    await this.postPreviewStore.createPost(
+        postData, oozToRewardForVideo.value, oozToRewardForImage.value);
 
     if (this.postPreviewStore.successOnUpload) {
       Navigator.of(context).pushNamedAndRemoveUntil(
