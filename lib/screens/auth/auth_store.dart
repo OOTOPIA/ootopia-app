@@ -97,30 +97,6 @@ abstract class AuthStoreBase with Store {
   }
 
   @action
-  Future<bool> registerUser(
-      {required String name,
-      required String password,
-      required String email,
-      String? invitationCode,
-      required BuildContext context}) async {
-    try {
-      Auth user = Auth(
-          fullname: name,
-          email: email,
-          password: password,
-          invitationCode: invitationCode);
-
-      var result = await authRepository.register(user, [], null);
-      this
-          .trackingEvents
-          .trackingSignupCompletedSignup(result.id!, result.fullname!);
-      return true;
-    } catch (e) {
-      return Future.error(e);
-    }
-  }
-
-  @action
   Future resetPassword(String newPassword) async {
     try {
       await this.authRepository.resetPassword(newPassword);
