@@ -56,8 +56,11 @@
 		<true/>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
 		<key>NSCameraUsageDescription</key>
 		<string>Can I use the camera please?</string>
 		<key>NSLocationAlwaysUsageDescription</key>
