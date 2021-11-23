@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 
 import 'package:ootopia_app/screens/components/interests_tags_modal/interests_tags_controller.dart';
@@ -31,6 +34,7 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
   SmartPageController navigationController = SmartPageController.getInstance();
+  SecureStoreMixin secureStoreMixin = SecureStoreMixin();
   bool isloading = false;
 
   @override
@@ -420,6 +424,10 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                           '') {
                                         registerController
                                             .cleanTextEditingControllers();
+                                        GeneralConfigModel generalConfigMode =
+                                            await secureStoreMixin
+                                                .getGeneralConfigByName(
+                                                    "user_received_sower_invitation_code_ooz");
                                         Navigator.of(context).pushNamed(
                                           PageRoute.Page.celebration.route,
                                           arguments: {
@@ -431,7 +439,10 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                             "name": registerController
                                                 .nameController.text,
                                             "goal": "invitationCode",
-                                            "balance": "10,00",
+                                            "balance":
+                                                registerController.formatNumber(
+                                                    generalConfigMode.value,
+                                                    Platform.localeName),
                                           },
                                         );
                                       } else {

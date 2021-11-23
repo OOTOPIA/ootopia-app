@@ -1,23 +1,17 @@
-import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class GeneralConfig extends Equatable {
+part 'general_config_model.g.dart';
+
+@JsonSerializable()
+class GeneralConfigModel {
   final String name;
-  final String value;
+  final double value;
 
-  GeneralConfig({required this.name, required this.value});
+  GeneralConfigModel({required this.name, required this.value});
 
-  factory GeneralConfig.fromJson(Map<String, dynamic> parsedJson) {
-    return GeneralConfig(
-      name: parsedJson['name'],
-      value: parsedJson['value'],
-    );
-  }
-
-  @override
-  List<Object> get props => [
-        name,
-        value,
-      ];
+  factory GeneralConfigModel.fromJson(Map<String, dynamic> json) =>
+      _$GeneralConfigModelFromJson(json);
+  Map<String, dynamic> toJson() => _$GeneralConfigModelToJson(this);
 }
 
 class GeneralConfigName {
