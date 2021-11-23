@@ -43,9 +43,6 @@
 				</array>
 			</dict>
 		</array>
-		<array>
-    		<string>UIInterfaceOrientationPortrait</string>
-		</array>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>FUMaximumConnectionsPerHost</key>
@@ -89,8 +86,6 @@
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
