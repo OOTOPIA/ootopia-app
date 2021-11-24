@@ -390,19 +390,21 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                             GlobalConstants.of(context)
                                                 .spacingNormal))),
                                 child: SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Center(
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .conclude,
-                                            style: TextStyle(
-                                              fontSize: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!
-                                                  .fontSize,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),),),),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(context)!.conclude,
+                                      style: TextStyle(
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1!
+                                            .fontSize,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 onPressed: () async {
                                   try {
                                     if (registerController
@@ -424,7 +426,7 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                           '') {
                                         registerController
                                             .cleanTextEditingControllers();
-                                        GeneralConfigModel generalConfigMode =
+                                        GeneralConfigModel? generalConfigMode =
                                             await secureStoreMixin
                                                 .getGeneralConfigByName(
                                                     "user_received_sower_invitation_code_ooz");
@@ -441,7 +443,8 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
                                             "goal": "invitationCode",
                                             "balance":
                                                 registerController.formatNumber(
-                                                    generalConfigMode.value,
+                                                    generalConfigMode?.value ??
+                                                        0,
                                                     Platform.localeName),
                                           },
                                         );

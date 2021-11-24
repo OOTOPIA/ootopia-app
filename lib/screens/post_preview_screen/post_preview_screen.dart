@@ -234,15 +234,15 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
     print("ready to start upload");
 
-    GeneralConfigModel oozToRewardForVideo = await this
+    GeneralConfigModel? oozToRewardForVideo = await this
         .secureStoreMixin
         .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
-    GeneralConfigModel oozToRewardForImage = await this
+    GeneralConfigModel? oozToRewardForImage = await this
         .secureStoreMixin
         .getGeneralConfigByName("creator_reward_for_posted_photo");
 
-    await this.postPreviewStore.createPost(
-        postData, oozToRewardForVideo.value, oozToRewardForImage.value);
+    await this.postPreviewStore.createPost(postData,
+        oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
 
     if (this.postPreviewStore.successOnUpload) {
       Navigator.of(context).pushNamedAndRemoveUntil(
