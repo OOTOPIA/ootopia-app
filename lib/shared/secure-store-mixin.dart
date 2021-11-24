@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:collection/collection.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'dart:convert';
@@ -76,14 +77,19 @@ class SecureStoreMixin {
   Future<List<GeneralConfigModel>> getGeneralConfig() async {
     var generalConfigJSON = await this.getSecureStore("general_config");
 
+    if (generalConfigJSON == null || generalConfigJSON == '') {
+      return [];
+    }
+
     return (jsonDecode(generalConfigJSON) as List)
         .map((e) => GeneralConfigModel.fromJson(e))
         .toList();
   }
 
-  Future<GeneralConfigModel> getGeneralConfigByName(String name) async {
+  Future<GeneralConfigModel?> getGeneralConfigByName(String name) async {
     List<GeneralConfigModel> generalConfigModel = await getGeneralConfig();
-    return generalConfigModel.firstWhere((element) => element.name == name);
+    return generalConfigModel
+        .singleWhereOrNull((element) => element.name == name);
   }
 
   Future<double> getTransferOOZToPostLimit() async {

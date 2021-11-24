@@ -220,10 +220,10 @@ class _TimelinePageState extends State<TimelinePage>
 
   void _getTransferOozToPostLimitConfig() async {
     try {
-      GeneralConfigModel transferOozToPostLimitConfig = await this
+      GeneralConfigModel? transferOozToPostLimitConfig = await this
           .secureStoreMixin
           .getGeneralConfigByName("transfer_ooz_to_post_limit");
-      setTransferOOZToPostLimit(transferOozToPostLimitConfig.value);
+      setTransferOOZToPostLimit(transferOozToPostLimitConfig?.value ?? 0);
       //Recuperamos os posts apenas após a configuração inicial para evitar problema com o limite de transferência de OOZ
       timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
           (timelineStore.currentPage - 1) * _itemsPerPageCount));
