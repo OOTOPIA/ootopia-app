@@ -74,7 +74,7 @@ class SecureStoreMixin {
     return await this.getSecureStore("recover_password_token");
   }
 
-  Future<List<GeneralConfigModel?>> getGeneralConfig() async {
+  Future<List<GeneralConfigModel>> getGeneralConfig() async {
     var generalConfigJSON = await this.getSecureStore("general_config");
 
     if (generalConfigJSON == null || generalConfigJSON == '') {
@@ -87,9 +87,9 @@ class SecureStoreMixin {
   }
 
   Future<GeneralConfigModel?> getGeneralConfigByName(String name) async {
-    List<GeneralConfigModel?> generalConfigModel = await getGeneralConfig();
+    List<GeneralConfigModel> generalConfigModel = await getGeneralConfig();
     return generalConfigModel
-        .singleWhereOrNull((element) => element?.name == name);
+        .singleWhereOrNull((element) => element.name == name);
   }
 
   Future<double> getTransferOOZToPostLimit() async {
