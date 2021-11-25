@@ -27,7 +27,7 @@ class MarketplaceBarWidget extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                'Ethical Marketplace',
+                AppLocalizations.of(context)!.marketPlaceTransfer,
                 style: GoogleFonts.roboto(
                   fontSize: 16,
                   color: Color(0xff000000),

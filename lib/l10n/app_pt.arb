@@ -374,10 +374,10 @@
 
     "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
-    "learningTracks":"Learning Tracks",
+    "learningTracks":"Trilhas de Aprendizagem",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
-    "ethicalMarketplace": "MARKETPLACE ÉTICO",
+    "ethicalMarketplace": "MERCADO ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
     "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
@@ -402,7 +402,7 @@
      "emailAlreadyRegistered": "Email já cadastrado, por favor insira outro",
 
 
-     "marketPlaceTransfer": "Marketplace Ético",
+     "marketPlaceTransfer": "Mercado Ético",
      "insufficientBalance": "Não foi possível finalizar a compra, pois seu saldo é insuficiente",
      "generalError": "Não foi possível realizar a operação.",
      "selecteds": "selecionadas",
