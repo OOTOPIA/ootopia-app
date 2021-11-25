@@ -5,8 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_player_learning_tracks.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:provider/provider.dart';
 import '../../../data/repositories/learning_tracks_repository.dart';
 
 class WatchVideoLeaningTracks extends StatefulWidget {
@@ -27,19 +29,22 @@ class WatchVideoLeaningTracks extends StatefulWidget {
 class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
   LearningTracksRepositoryImpl learningTracksRepositoryImpl =
       LearningTracksRepositoryImpl();
+  late WalletStore walletStore;
+
   @override
   void dispose() {
     super.dispose();
   }
 
-  updateStatusVideo() {
+  updateStatusVideo() async {
     if (widget.chapter.completed != true) {
-      setState(() async {
-        widget.chapter.completed = true;
-        await learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
-          widget.learningTrack!.id,
-          widget.chapter.id,
-        );
+      widget.chapter.completed = true;
+      await learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
+        widget.learningTrack!.id,
+        widget.chapter.id,
+      );
+      await this.walletStore.getWallet();
+      setState(() {
         widget.updateStatusVideoChapter();
       });
     }
@@ -47,6 +52,7 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
 
   @override
   Widget build(BuildContext context) {
+    walletStore = Provider.of<WalletStore>(context);
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       appBar: isPortrait

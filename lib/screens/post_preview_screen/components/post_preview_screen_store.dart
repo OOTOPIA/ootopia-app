@@ -91,12 +91,11 @@ abstract class _PostPreviewScreenStoreBase with Store {
   }
 
   @action
-  createPost(PostCreate post) async {
+  Future<dynamic> createPost(PostCreate post, double oozToRewardForVideo,
+      double oozToRewardForImage) async {
     try {
       uploadIsLoading = true;
-      await this._createPost(post);
-      double oozToRewardForVideo = 10;
-      double oozToRewardForImage = 5;
+      var result = await this._createPost(post);
       if (post.durationInSecs != null && post.type == "video") {
         oozToReward = oozToRewardForVideo;
       } else if (post.type == "image") {

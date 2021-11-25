@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -88,6 +89,11 @@ class _RegenerarionGameLearningAlertState
     Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
+  }
+
+  isSmallPhone(double value) {
+    if (MediaQuery.of(context).size.width < 380) return value * 0.7;
+    return value;
   }
 
   @override
@@ -187,7 +193,8 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: screenWidth <= 375 ? 28 : 40,
+                                          fontSize:
+                                              screenWidth <= 375 ? 28 : 40,
                                           color: Colors.white)
                                       .copyWith(
                                     shadows: [
@@ -209,7 +216,8 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: screenWidth <= 375 ? 14 : 18,
+                                          fontSize:
+                                              screenWidth <= 375 ? 14 : 18,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w400)
                                       .copyWith(shadows: [
@@ -231,7 +239,8 @@ class _RegenerarionGameLearningAlertState
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize: screenWidth <= 375 ? 16 : 23,
+                                          fontSize:
+                                              screenWidth <= 375 ? 16 : 23,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500)
                                       .copyWith(

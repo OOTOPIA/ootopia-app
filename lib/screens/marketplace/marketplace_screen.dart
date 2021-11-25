@@ -18,26 +18,32 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final marketplaceStore = MarketplaceStore();
-  final walletStore = WalletStore();
+  late WalletStore walletStore;
   late SmartPageController pageController;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    walletStore.getWallet();
     marketplaceStore.getProductList(
         limit: marketplaceStore.itemsPerPageCount, offset: 0);
     pageController = SmartPageController.getInstance();
     _scrollController.addListener(
       () => marketplaceStore.updateOnScroll(_scrollController),
     );
+    Future.delayed(Duration.zero).then((value) {
+      walletStore.getWallet();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    walletStore = Provider.of<WalletStore>(context);
     return RefreshIndicator(
-      onRefresh: () async => marketplaceStore.refreshData(),
+      onRefresh: () async {
+        await walletStore.getWallet();
+        await marketplaceStore.refreshData();
+      },
       child: Scaffold(
         body: Observer(
           builder: (context) {
