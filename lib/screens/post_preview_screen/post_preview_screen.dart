@@ -21,6 +21,7 @@ import 'package:ootopia_app/screens/post_preview_screen/components/confirm_post_
 import 'package:ootopia_app/screens/post_preview_screen/components/hashtag_select_search_dialog_widget.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -54,6 +55,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       TextEditingController();
   double mirror = 0;
   late HomeStore homeStore;
+  late WalletStore walletStore;
   late PostPreviewScreenStore postPreviewStore;
 
   bool _isLoading = true;
@@ -243,6 +245,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
     await this.postPreviewStore.createPost(postData,
         oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
+    await this.walletStore.getWallet();
 
     if (this.postPreviewStore.successOnUpload) {
       Navigator.of(context).pushNamedAndRemoveUntil(
@@ -386,6 +389,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   @override
   Widget build(BuildContext context) {
+    walletStore = Provider.of<WalletStore>(context);
     postPreviewStore = Provider.of<PostPreviewScreenStore>(context);
     return new WillPopScope(
       onWillPop: () => _onWillPop(true),

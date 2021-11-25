@@ -20,6 +20,7 @@ import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -73,6 +74,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   WalletTransfersRepositoryImpl walletTransferRepositoryImpl =
       WalletTransfersRepositoryImpl();
 
+  late WalletStore walletStore;
   late PostBloc postBloc;
   bool loggedIn = false;
   User? user;
@@ -183,6 +185,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
+    walletStore = Provider.of<WalletStore>(context);
     postTimelineComponentController =
         Provider.of<PostTimelineComponentController>(context);
     return BlocListener<PostBloc, PostState>(
@@ -945,6 +948,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       await this.walletTransferRepositoryImpl.transferOOZToPost(this.post.id,
           this.post.oozToTransfer, this._dontAskToConfirmGratitudeReward);
       this.trackingEvents.timelineDonatedOOZ();
+      await this.walletStore.getWallet();
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
