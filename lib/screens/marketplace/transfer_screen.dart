@@ -10,6 +10,8 @@ import 'package:ootopia_app/screens/marketplace/components/purchase_button_widge
 import 'package:ootopia_app/screens/marketplace/components/rounded_thumbnail_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_store.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
+import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:provider/provider.dart';
 
 class TransferScreen extends StatefulWidget {
   final ProductModel productModel;
@@ -25,10 +27,13 @@ class _TransferScreenState extends State<TransferScreen> {
   final messageOptional = TextEditingController();
   final marketplaceRepositoryImpl = MarketplaceRepositoryImpl();
   final transferStore = TransferStore();
+  late WalletStore walletStore;
   bool hasFocus = false;
 
   @override
   Widget build(BuildContext context) {
+    walletStore = Provider.of<WalletStore>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
@@ -164,9 +169,11 @@ class _TransferScreenState extends State<TransferScreen> {
       final response = await transferStore.makePurchase(
           productId: widget.productModel.id,
           optionalMessage: messageOptional.text);
-      if (response)
+      if (response) {
+        await walletStore.getWallet();
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => TransferSuccessScreen()));
+      }
     } catch (e) {
       transferStore.showSnackbarMessage(
           context: context, message: e.toString());
