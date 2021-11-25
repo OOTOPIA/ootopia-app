@@ -4,6 +4,7 @@
         "description": "The current language"
     },
     "helloWIfNotNowThenWhenorld": "If not now, then when?\r\nIf not us, then who?\r\n\r\nWelcome to the movement to \r\nheal planet Earth!",
+    "welcomeToTheRegenerativeWorldInWhich": "Welcome to the Regenerative World\nin which we all want to live.",
     "liveOotopiaNowMessage": "LIVE OOTOPIA NOW!",
     "email": "e-mail",
     "pleaseEnterYourEmail": "Please enter your e-mail",
@@ -321,6 +322,7 @@
     "continueAccess":"Continue",
     "conclude":"Conclude",
     "enterYourInvitationCode":"Enter your invitation code",
+    "ifYouHaveAnInvitationCodeTypeHere":"If you have an invitation code type here:",
     "yourAccessChannel":"Your access channel to the regenerative movement and the beautiful world that is emerging thanks to people like you!",
     "skip":"Skip",
     "access":"Access",
