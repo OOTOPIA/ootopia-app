@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,7 +25,7 @@ class InsertInvitationCode extends StatefulWidget {
 
 class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   bool visibleValidStatusCode = false;
-  bool exibleText = false;
+  bool showValidationErrorText = false;
   bool isLoading = false;
   FocusNode focus = FocusNode();
   RegisterSecondPhaseController registerController =
@@ -32,6 +34,8 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   SmartPageController pageController = SmartPageController.getInstance();
+
+  Timer? _debounce;
 
   void setStatusBar(bool getOutScreen) {
     if (getOutScreen) {
@@ -74,7 +78,33 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   @override
   void dispose() {
     this.setStatusBar(true);
+    _debounce?.cancel();
     super.dispose();
+  }
+
+  void onInsertInvitationCode() async {
+    if (registerController.codeController.text.isEmpty) {
+      setState(() {
+        visibleValidStatusCode = true;
+        showValidationErrorText = false;
+      });
+    } else {
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 300), () async {
+        var statusCode = await insertInvitationCodeStore
+            .verifyCodes(registerController.codeController.text);
+
+        setState(() {
+          if (statusCode == 'valid') {
+            visibleValidStatusCode = true;
+            showValidationErrorText = false;
+          } else if(statusCode != "") {
+            visibleValidStatusCode = false;
+            showValidationErrorText = true;
+          }
+        });
+      });
+    }
   }
 
   @override
@@ -142,7 +172,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                     .ifYouHaveAnInvitationCodeTypeHere,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18),
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             SizedBox(
@@ -158,7 +188,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                       color: Colors.grey, width: 0.30),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                focusedBorder: exibleText
+                                focusedBorder: showValidationErrorText
                                     ? OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xff8E1816), width: 1),
@@ -169,7 +199,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                             color: Colors.grey, width: 0.30),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                enabledBorder: exibleText
+                                enabledBorder: showValidationErrorText
                                     ? OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xff8E1816), width: 1),
@@ -186,7 +216,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                     .invitationCode,
                                 hintStyle: TextStyle(color: Colors.grey),
                               ),
-                              style: exibleText
+                              style: showValidationErrorText
                                   ? GoogleFonts.roboto(
                                       color: Color(0xff8E1816),
                                       fontWeight: FontWeight.w500,
@@ -195,26 +225,25 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                       color: Colors.black,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16),
-                              onChanged: (value) async {
-                                var statusCode = await insertInvitationCodeStore
-                                    .verifyCodes(value);
-
-                                setState(() {
-                                  if (statusCode == 'valid') {
+                              onEditingComplete: () {
+                                if (registerController
+                                    .codeController.text.isEmpty) {
+                                  print('valor vazio2');
+                                  setState(() {
                                     visibleValidStatusCode = true;
-                                    exibleText = false;
-                                  } else {
-                                    visibleValidStatusCode = false;
-                                    exibleText = true;
-                                  }
-                                });
+                                    showValidationErrorText = false;
+                                  });
+                                }
+                              },
+                              onChanged: (value) async {
+                                onInsertInvitationCode();
                               },
                             ),
                             SizedBox(
                               height: 8,
                             ),
                             Visibility(
-                              visible: exibleText,
+                              visible: showValidationErrorText,
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -265,14 +294,10 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if (registerController
-                                            .codeController.text ==
-                                        "") {
+                                    if (!visibleValidStatusCode) {
                                       registerController.codeController.clear();
-                                      goToRegisterPhase();
-                                    } else {
-                                      goToRegisterPhase();
                                     }
+                                    goToRegisterPhase();
                                   },
                                 ),
                               ),
