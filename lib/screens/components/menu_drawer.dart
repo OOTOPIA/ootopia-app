@@ -63,6 +63,24 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     });
   }
 
+  openTermsOfUse() async {
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.termsOfUseScreen.route,
+      arguments: {
+        'filename': 'terms_of_use',
+      },
+    );
+  }
+
+  openPrivacyPolicy() async {
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.termsOfUseScreen.route,
+      arguments: {
+        'filename': 'privacy_policy',
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
@@ -324,7 +342,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       size: 15,
                       color: Colors.black,
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       await launch("https://forms.gle/6qWokM6ipf7ac4fL8");
                     },
                   ),
@@ -403,6 +421,85 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           ),
                         )
                       ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: TextButton(
+                      style: TextButton.styleFrom(primary: Colors.black),
+                      onPressed: () {
+                        openPrivacyPolicy();
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/lock.png',
+                            width: 18.22,
+                            height: 19.05,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .yourPrivacyInformation,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: TextButton(
+                      style: TextButton.styleFrom(primary: Colors.black),
+                      onPressed: () {
+                        openTermsOfUse();
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/lock.png',
+                            width: 18.22,
+                            height: 19.05,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.termsOfUseDrawer,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.and,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.privacy,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Align(
