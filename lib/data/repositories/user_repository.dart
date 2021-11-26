@@ -280,6 +280,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   @override
   Future<String> verifyCodes(String code) async {
     try {
+      if(code.isEmpty) return "";
       Response res = await ApiClient.api().get(
         "users/invitation-code/$code",
       );
