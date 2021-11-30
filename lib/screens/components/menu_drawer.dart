@@ -63,20 +63,39 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     });
   }
 
-  openTermsOfUse() async {
+  openTermsOfUse(
+      BuildContext context, bool next, bool privacyInformation) async {
     Navigator.of(context).pushNamed(
       PageRoute.Page.termsOfUseScreen.route,
       arguments: {
         'filename': 'terms_of_use',
+        'onAccept': () {
+          setState(() {
+            if (next) {
+              openPrivacyPolicy(context, true);
+            }
+          });
+        },
+        'buttonText': next
+            ? AppLocalizations.of(context)!.next
+            : AppLocalizations.of(context)!.close,
+        'fileSuffix':
+            privacyInformation ? 'privacyinformation' : 'informationdrawer'
       },
     );
   }
 
-  openPrivacyPolicy() async {
+  openPrivacyPolicy(BuildContext context, bool privacyInformation) async {
     Navigator.of(context).pushNamed(
       PageRoute.Page.termsOfUseScreen.route,
       arguments: {
         'filename': 'privacy_policy',
+        'onAccept': () {
+          setState(() {});
+        },
+        'buttonText': AppLocalizations.of(context)!.close,
+        'fileSuffix':
+            privacyInformation ? 'privacyinformation' : 'informationdrawer'
       },
     );
   }
@@ -428,12 +447,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     child: TextButton(
                       style: TextButton.styleFrom(primary: Colors.black),
                       onPressed: () {
-                        openPrivacyPolicy();
+                        openTermsOfUse(context, true, true);
                       },
                       child: Row(
                         children: [
                           Image.asset(
-                            'assets/icons/lock.png',
+                            'assets/icons/icon_lock.png',
                             width: 18.22,
                             height: 19.05,
                           ),
@@ -456,25 +475,28 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                     alignment: Alignment.bottomLeft,
                     child: TextButton(
                       style: TextButton.styleFrom(primary: Colors.black),
-                      onPressed: () {
-                        openTermsOfUse();
-                      },
+                      onPressed: () {},
                       child: Row(
                         children: [
                           Image.asset(
-                            'assets/icons/lock.png',
+                            'assets/icons/icon_info.png',
                             width: 18.22,
                             height: 19.05,
                           ),
                           SizedBox(
                             width: 16,
                           ),
-                          Text(
-                            AppLocalizations.of(context)!.termsOfUseDrawer,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline,
+                          GestureDetector(
+                            onTap: () {
+                              openTermsOfUse(context, false, false);
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.termsOfUseDrawer,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -490,12 +512,17 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           SizedBox(
                             width: 1,
                           ),
-                          Text(
-                            AppLocalizations.of(context)!.privacy,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline,
+                          GestureDetector(
+                            onTap: () {
+                              openPrivacyPolicy(context, false);
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.privacy,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                         ],

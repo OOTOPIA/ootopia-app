@@ -327,10 +327,14 @@ class MainPage extends HookWidget {
     PageRoute.Page.termsOfUseScreen: (args) => PolicyAndTermsScreen(
           filename: args['filename'],
           onAccept: args['onAccept'],
+          buttonText: args['buttonText'],
+          fileSuffix: args['fileSuffix'],
         ),
     PageRoute.Page.privacyPolicyScreen: (args) => PolicyAndTermsScreen(
           filename: args['filename'],
           onAccept: args['onAccept'],
+          buttonText: args['buttonText'],
+          fileSuffix: args['fileSuffix'],
         ),
     PageRoute.Page.editProfileScreen: (args) => EditProfileScreen(),
     PageRoute.Page.newFutureCategories: (args) => CreateCategoriesScreen(),
