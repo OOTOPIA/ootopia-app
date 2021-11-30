@@ -103,7 +103,6 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
                       onPressed: () {
                         close();
                         widget.onAccept();
-                        
                       },
                     ).defaultButton(
                       context,
@@ -125,10 +124,7 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
     setState(() {
       showWebViewTrick = false;
     });
-     Navigator.of(context).pop();
-    // Timer(Duration(milliseconds: 200), () {
-     
-    // });
+    Navigator.of(context).pop();
   }
 
   get appBar => AppBar(
