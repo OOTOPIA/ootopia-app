@@ -1,0 +1,699 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" />
+    <style type="text/css">
+        @import url('https://themes.googleusercontent.com/fonts/css?kit=dpiI8CyVsrzWsJLBFKehGpLhv3qFjX7dUn1mYxfCXhI');
+
+        ol {
+            margin: 0;
+            padding: 0
+        }
+
+        table td,
+        table th {
+            padding: 0
+        }
+
+        .c6 {
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Arial";
+            font-style: italic
+        }
+
+        .c1 {
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Arial";
+            font-style: normal
+        }
+
+        .c3 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            orphans: 2;
+            widows: 2;
+            text-align: left;
+            height: 11pt
+        }
+
+        .c15 {
+            font-weight: 400;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Arial";
+            font-style: normal
+        }
+
+        .c5 {
+            color: #000000;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Arial";
+            font-style: normal
+        }
+
+        .c9 {
+            color: #000000;
+            font-weight: 400;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-family: "Arial";
+            font-style: normal
+        }
+
+        .c4 {
+            padding-top: 0pt;
+            padding-bottom: 0pt;
+            line-height: 1.0;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .c14 {
+            color: #3c4043;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-style: normal
+        }
+
+        .c12 {
+            color: #000000;
+            text-decoration: none;
+            vertical-align: baseline;
+            font-size: 11pt;
+            font-style: normal
+        }
+
+        .c11 {
+            background-color: #ffffff;
+            padding: 8pt 8pt 8pt 8pt
+        }
+
+        .c7 {
+            background-color: #ffffff;
+            font-family: "Roboto";
+            font-weight: 400
+        }
+
+        .c0 {
+            text-decoration-skip-ink: none;
+            -webkit-text-decoration-skip: none;
+            text-decoration: underline
+        }
+
+        .c10 {
+            background-color: #ffffff;
+            font-family: "Roboto"
+        }
+
+        .c17 {
+            font-size: 10.5pt
+        }
+
+        .c2 {
+            font-weight: 700
+        }
+
+        .c8 {
+            font-style: italic
+        }
+
+        .c13 {
+            color: #0000ff
+        }
+
+        .c16 {
+            color: #3c4043
+        }
+
+        .title {
+            padding-top: 0pt;
+            color: #000000;
+            font-size: 26pt;
+            padding-bottom: 3pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        .subtitle {
+            padding-top: 0pt;
+            color: #666666;
+            font-size: 15pt;
+            padding-bottom: 16pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        li {
+            color: #000000;
+            font-size: 11pt;
+            font-family: "Arial"
+        }
+
+        p {
+            margin: 0;
+            color: #000000;
+            font-size: 11pt;
+            font-family: "Arial"
+        }
+
+        h1 {
+            padding-top: 20pt;
+            color: #000000;
+            font-size: 20pt;
+            padding-bottom: 6pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h2 {
+            padding-top: 18pt;
+            color: #000000;
+            font-size: 16pt;
+            padding-bottom: 6pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h3 {
+            padding-top: 16pt;
+            color: #434343;
+            font-size: 14pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h4 {
+            padding-top: 14pt;
+            color: #666666;
+            font-size: 12pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h5 {
+            padding-top: 12pt;
+            color: #666666;
+            font-size: 11pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+
+        h6 {
+            padding-top: 12pt;
+            color: #666666;
+            font-size: 11pt;
+            padding-bottom: 4pt;
+            font-family: "Arial";
+            line-height: 1.15;
+            page-break-after: avoid;
+            font-style: italic;
+            orphans: 2;
+            widows: 2;
+            text-align: left
+        }
+    </style>
+</head>
+
+<body class="c11">
+    <p class="c4"><span class="c5 c2">TERMO DE USO ESPECIAL</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>O presente </span><span class="c2">TERMO DE USO ESPECIAL</span><span
+            class="c1">&nbsp;regulamenta as condi&ccedil;&otilde;es gerais de postagem de</span></p>
+    <p class="c4"><span>conte&uacute;dos diversos e testes de funcionalidades </span><span>do aplicativo</span><span
+            class="c2">&nbsp;</span><span>beta da </span><span class="c2">OOTOPIA </span><span>&nbsp;em todas
+            as</span><span class="c2">&nbsp;plataformas de acesso</span><span>&nbsp;e </span><span class="c2">canais de
+            visibiliza&ccedil;&atilde;o</span><span class="c1">. &nbsp;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>A instala&ccedil;&atilde;o do</span><span>&nbsp;aplicativo beta OOTOPIA (</span><span
+            class="c2">app beta OO</span><span>) </span><span>aufere a voc&ecirc; a especial oportunidade de testar sua
+        </span><span class="c2">vers&atilde;o beta </span><span>com conte&uacute;dos seus pr&oacute;prios j&aacute;
+            existentes, exclusivos ou diferenciados </span><span>(</span><span class="c2">&nbsp;regen
+            stories</span><span>)</span><span>&nbsp; ligados ao emergente </span><span class="c2">movimento regenerativo
+            planet&aacute;rio</span><span>&nbsp;e desta forma n&atilde;o apenas contribuir substancialmente para seu
+            desenvolvimento tecnol&oacute;gico mapeando falhas de c&oacute;digo (</span><span
+            class="c2">bugs</span><span>), como para a melhoria da sua </span><span
+            class="c0">interface</span><span>&nbsp;e </span><span class="c0">experi&ecirc;ncia de
+            uso</span><span>&nbsp;(</span><span class="c2">UI/UX</span><span class="c1">). </span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c2">P</span><span class="c2">ar&aacute;grafo</span><span
+            class="c2">&nbsp;&uacute;nico</span><span>: </span><span class="c7">sempre que houver
+            atualiza&ccedil;&atilde;</span><span class="c7">o d</span><span class="c7">este documento ser&aacute;
+            publicada uma notifica&ccedil;&atilde;o para que voc&ecirc; tenha ci&ecirc;ncia das
+            modifica&ccedil;&otilde;es e possa decidir se concorda com as mesmas ou n&atilde;o.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c5 c2">1. Defini&ccedil;&otilde;es</span></p>
+    <p class="c3"><span class="c5 c2"></span></p>
+    <p class="c4"><span>1.1. &nbsp;</span><span class="c2">OOTOPIA</span><span>: um empreendimento em rede, P2P
+        </span><span>(Pessoa &agrave; Pessoa),</span><span>&nbsp;ou seja, por entre, para e com pessoas), ligado ao
+            emergente movimento regenerativo planet&aacute;rio focado em servir de meio para transi&ccedil;&otilde;es
+            diversas do corrente paradigma </span><span class="c7">do crescimento infinito, do hiperconsumismo e da
+            escassez para o do cuidado com a vida e simbiose com sua natural
+            abund&acirc;ncia</span><span>&nbsp;atrav&eacute;s de experi&ecirc;ncias culturais
+        </span><span>descentralizantes</span><span class="c1">&nbsp;ligadas a produ&ccedil;&atilde;o de conte&uacute;dos
+            e a nascente web 3.0, tendo como meio para se gerar converg&ecirc;ncia um aplicativo m&oacute;vel que
+            combina m&iacute;dia social, plataforma de aprendizagem, mercado &eacute;tico e moeda social dentro de um
+            jogo regenerativista; </span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.2. </span><span class="c2">Vers&atilde;o Beta</span><span>: &eacute; o equivalente a sua
+            vers&atilde;o 1.0, onde apenas as funcionalidades mais b&aacute;sicas foram </span><span>codadas</span><span
+            class="c1">&nbsp;(programadas).</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.3. </span><span class="c2">&nbsp;Plataformas de Acesso</span><span>: come&ccedil;ando pelos
+            smartphones, refere-se a todas as presentes e futuras plataformas de acesso aos conte&uacute;dos e
+            servi&ccedil;os do</span><span class="c2">&nbsp;app beta OO</span><span class="c1">, como, por exemplo, PCs,
+            tablets, smart TVs e quaisquer outros dispositivos eletr&ocirc;nicos conectados via Internet das Coisas (IoT
+            - Internet of Things).</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.4. </span><span class="c2">&nbsp;Canais de Visibiliza&ccedil;&atilde;o</span><span
+            class="c1">: sites ou plataformas da pr&oacute;pria OOTOPIA, ou de</span></p>
+    <p class="c4"><span>empreendimentos em rede sinergizados com prop&oacute;sito regenerativo /descentralizante
+            semelhantes, bem como dos perfis dos pr&oacute;prios </span><span class="c2">oo-testadores </span><span>nas
+            populares m&iacute;dias sociais corporativas da web 2.0</span><span>, que com o intuito de proporcionar
+            visibilidade do atual beta-teste,repliquem conte&uacute;dos exclusivos </span><span>ou
+            diferenciados</span><span>&nbsp;que foram veiculados no </span><span class="c2">app beta OO</span><span
+            class="c1">.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.5. </span><span class="c2">Regen Stories</span><span>: conte&uacute;dos existentes j&aacute;
+            veiculados nas correntes m&iacute;dias sociais corporativas web 2.0 (Facebook, Instagram, Youtube, TikTok,
+            Twitter&hellip;), considerado pelo </span><span class="c2">oo-testador</span><span>&nbsp;como de cunho
+            regenerativo ou ainda conte&uacute;dos exclusivos e/ou diferenciados especialmente realizados para serem
+            veiculados no </span><span class="c2">app beta OO</span><span class="c1">. </span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.6. </span><span class="c2">Movimento Regenerativo Planet&aacute;rio</span><span>: trata-se de
+            um complexo, diversificado e emergente movimento que vem ganhando massa cr&iacute;tica em todas as
+            sociedades, em especial com o advento da global pandemia covid 19, &nbsp;ligado n&atilde;o apenas com a
+            cr&iacute;tica ruptura e transi&ccedil;&atilde;o do atual status quo hiper consumista, tecno-industrialista
+            e extremamente poluidor do chamado antropoceno para uma exist&ecirc;ncia </span><span class="c7 c17 c16">que
+        </span><span class="c7">privilegia o cuidado com vida planet&aacute;ria em todos os n&iacute;veis, de forma
+            simbi&oacute;tica e regenerativamente relacional</span><span class="c1">, levando-se em conta nossas
+            diferentes vis&otilde;es de mundo.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.7. </span><span class="c2">OO-Testador:</span><span>&nbsp;pessoas diversas conectadas ou
+            n&atilde;o ao movimento regenerativo que receberam o convite especial para fazer parte da comunidade inicial
+            de testadores do </span><span class="c2">app beta OO</span><span class="c1">.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.8. &nbsp;</span><span class="c2">Informa&ccedil;&otilde;es Pessoais
+            Identific&aacute;veis:</span><span>&nbsp;informa&ccedil;&otilde;es b&aacute;sicas que o </span><span
+            class="c2">oo-testador </span><span>disponibiliza </span><span class="c7 c16">quando decide criar sua
+            conta/perfil no aplicativo OOTOPIA e</span><span>&nbsp;que podem ser usadas pelos cocriadores da OOTOPIA
+            para identificar, contatar ou </span><span>geolocalizar</span><span>&nbsp;(</span><span class="c6">ex.:
+            nome, endere&ccedil;o, e-mail, telefone, n&ordm; de documentos, endere&ccedil;o IP, fotos, data de
+            nascimento,</span></p>
+    <p class="c4"><span class="c6">n&uacute;mero de cart&atilde;o de cr&eacute;dito, informa&ccedil;&otilde;es sobre o
+            interesse no uso de v&aacute;rios</span></p>
+    <p class="c4"><span class="c8">produtos, programas e servi&ccedil;os etc</span><span class="c1">.).</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.9. </span><span class="c2">UI / UX</span><span>: </span><span class="c7">refere-se &agrave;s
+            funcionalidades do aplicativo, a todas representa&ccedil;&otilde;es gr&aacute;ficas/sonoras da interface (UI
+            - Interface com o Usu&aacute;rio) destas funcionalidades e a forma como o usu&aacute;rio interage com elas
+            (UX - eXperi&ecirc;ncia do Usu&aacute;rio) do</span><span>&nbsp;</span><span class="c2">app beta
+            OO</span><span class="c1">&nbsp;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.10. </span><span class="c2">Bug</span><span class="c1">: erros de c&oacute;digo que podem
+            travar ou n&atilde;o habilitar funcionalidades do aplicativo ou mesmo impedir o acesso ao mesmo.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.11.</span><span class="c2">&nbsp;Learning Tracks</span><span>: tratam-se de trilhas ligadas ao
+            paradigma da livre aprendizagem que neste primeiro momento do </span><span class="c2">app beta
+            OO</span><span class="c1">&nbsp;foram elaboradas pelos cocriadores da OOTOPIA, sendo que nas vers&otilde;es
+            futuras estima-se que grande parte das mesmas sejam cocriadas pela comunidade do aplicativo.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.12.</span><span class="c2">&nbsp;OO</span><span>&nbsp;</span><span
+            class="c2">Wallet</span><span>: carteira digital onde os token OOz </span><span class="c12 c7">s&atilde;o
+            creditados, ficam hospedados e de onde s&atilde;o transferidos.</span></p>
+    <p class="c3"><span class="c12 c7"></span></p>
+    <p class="c4"><span>1.13.</span><span class="c2">&nbsp;</span><span class="c2">token OOz</span><span>:</span><span
+            class="c2">&nbsp;</span><span class="c1">moeda social da OOTOPIA que valora a capacidade de cada pessoa de
+            materializar para si, para os outros e com os outros &nbsp;no ecossistema no qual habita &nbsp;seus impactos
+            regenerativos &nbsp;desde o n&iacute;vel local, regional at&eacute; o n&iacute;vel planet&aacute;rio.
+        </span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>1.14.</span><span class="c2">&nbsp;</span><span class="c2">Beta Ethical
+            Marketplace</span><span>: mercado &eacute;tico beta da OOTOPIA &nbsp;no qual os tokens OOz podem ser
+            utilizados como moeda de troca para a </span><span class="c0">aquisi&ccedil;&atilde;o</span><span
+            class="c1">&nbsp;de produtos,servi&ccedil;os e experi&ecirc;ncias regenerativas.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c2">2.</span><span>&nbsp; &nbsp;</span><span class="c5 c2">Premissas b&aacute;sicas para
+            poder fazer parte do beta-teste do aplicativo OOTOPIA</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>2.1. Cadastro completo do </span><span class="c2">oo-testador</span><span>, sendo que neste
+            caso, a </span><span>OOTOPIA</span><span>&nbsp; tratar&aacute; as informa&ccedil;&otilde;es prestadas de
+            acordo com sua </span><span class="c0">Pol&iacute;tica de Privacidade</span><span class="c1">&nbsp;</span>
+    </p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>2.2. &nbsp;No caso de o </span><span class="c2">oo-testador</span><span class="c1">&nbsp;ser
+            menor de 18 (dezoito) anos, ou n&atilde;o ser plenamente capaz para os atos da vida civil, nos termos
+            previstos no C&oacute;digo Civil Brasileiro, dever&aacute;, necessariamente, obter a permiss&atilde;o de seu
+            representante legal (pais ou tutores), o qual ser&aacute; considerado o &uacute;nico respons&aacute;vel
+            pelos seus atos.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c5 c2">3. &nbsp; Papel dos OO-Testadores para a evolu&ccedil;&atilde;o do beta app
+            OO</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>3.1. Devido a natureza cr&iacute;tica de qualquer beta-teste, os cocriadores da OOTOPIA em
+            geral, bem como os desenvolvedores tecnol&oacute;gicos do </span><span class="c2">app beta OO</span><span>,
+            depositam total confian&ccedil;a nos </span><span class="c2">oo-testadores</span><span
+            class="c1">&nbsp;convidados, conferindo aos mesmos total liberdade de teste, desde que os mesmos atentem ao
+            disposto neste Termo, respeitando, ainda, os padr&otilde;es &eacute;ticos e morais vigentes.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>3.2. &nbsp;Vai ser atrav&eacute;s do uso cr&iacute;tico e atento do </span><span
+            class="c2">oo-testador</span><span class="c1">&nbsp;que os desenvolvedores tecnol&oacute;gicos e de design
+            v&atilde;o ter condi&ccedil;&otilde;es de corrigir bugs, criar ou desativar funcionalidades, bem como
+            lan&ccedil;ar novas vers&otilde;es. &nbsp;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>3.4. Com o intuito de gerar real proximidade entre os </span><span
+            class="c2">oo-testadores</span><span>&nbsp;com os </span><span class="c2">desenvolvedores
+            tecnol&oacute;gicos</span><span>&nbsp;da OOTOPIA, os mesmos, junto com o convite para instalar o
+        </span><span class="c2">app beta OO</span><span>, receberam um segundo convite para baixar o aplicativo
+        </span><span class="c0">discord</span><span>, plataforma onde se encontrar o atual ambiente relacional digital
+            da OOTOPIA. Este ambiente disp&otilde;e de um canal de texto chamado </span><span
+            class="c2">beta-mode</span><span class="c1">&nbsp;e de &aacute;udio/videoconfer&ecirc;ncia - cujo acesso
+            ocorre atrav&eacute;s de um convite e para poder compartilhar suas impress&otilde;es, cr&iacute;ticas,
+            d&uacute;vidas e insights.<br></span></p>
+    <p class="c4"><span>Al&eacute;m deste canal, os </span><span
+            class="c2">oo-testadores</span><span>&nbsp;tamb&eacute;m ter&atilde;o acesso no aplicativo a um canal de
+            suporte via chat e ser&atilde;o convidados para responder perguntas via question&aacute;rio.</span></p>
+    <p class="c4"><span class="c1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></p>
+    <p class="c3"><span class="c5 c2"></span></p>
+    <p class="c4"><span class="c5 c2">4. &nbsp; Compromisso dos Desenvolvedores Tecnol&oacute;gicos do app beta
+            OO</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>4.1 </span><span>: Os desenvolvedores tecnol&oacute;gicos do </span><span class="c2">beta app
+            OO</span><span>&nbsp;se comprometem junto aos </span><span class="c2">oo-testadores</span><span>, a
+            n&atilde;o apenas respeitar o sigilo da sua privacidade, como prover o suporte que for para as demandas de
+        </span><span class="c2">UI/UX</span><span class="c1">&nbsp;que forem aparecendo durante o beta-teste do
+            aplicativo da OOTOPIA.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>4.2 </span><span class="c1">: Toda e qualquer feedback e/ou atualiza&ccedil;&atilde;o
+            ser&aacute; previamente anunciada no canal beta-mode no ambiente relacional digital da OOTOPIA no
+            discord.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c2">Paragr&aacute;fo &uacute;nico</span><span>: &nbsp;A OOTOPIA, atrav&eacute;s da equipe
+            de desenvolvedores tecnol&oacute;gicos, atesta de antem&atilde;o a confiabilidade do </span><span
+            class="c2">app beta OO </span><span class="c1">para se fazer o download no smartphone do beta-testador,
+            colocando-se &agrave; disposi&ccedil;&atilde;o para dirimir quaisquer d&uacute;vidas ou impedimentos ligados
+            a sua instala&ccedil;&atilde;o.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c5 c2"></span></p>
+    <p class="c4"><span class="c5 c2">5. Sobre a veicula&ccedil;&atilde;o de conte&uacute;dos de cunho regenerativo
+            diversos (regen stories)</span></p>
+    <p class="c3"><span class="c5 c2"></span></p>
+    <p class="c4"><span>5.1. Todo e qualquer conte&uacute;do que j&aacute; tenha sido produzido e veiculado nas
+            m&iacute;dias sociais corporativas da web 2.0 ( Facebook, Instagram, Youtube, Twitter, TikTok ..), &eacute;
+            mais que bem-vindo para ser replicado no </span><span class="c2">app beta OO</span><span>, desde que os
+            mesmos de fato, conversem minimamente com as filosofias e o amplo espectro de pr&aacute;ticas do movimento
+        </span><span>regenerativista</span><span class="c1">.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>5.2. Neste sentido, para tanto, o </span><span class="c2">oo-testador</span><span
+            class="c1">&nbsp;disp&otilde;e de um conjunto de hashtags que serviram como marcadores para especificar com
+            qual campo e pr&aacute;tica regenerativa o conte&uacute;do em quest&atilde;o est&aacute; inserido.</span>
+    </p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>5.3. Pede-se para escolher pelo menos 01 hashtag para cada postagem, mas caso a tem&aacute;tica
+            em quest&atilde;o, suscite em utilizar outras, o </span><span class="c2">oo-testador</span><span
+            class="c1">&nbsp;est&aacute; convidado a faz&ecirc;-lo, uma vez que o uso das mesmas gerar&aacute; dados
+            estat&iacute;sticos relevantes de como cada um entende e percebe a regenera&ccedil;&atilde;o na sua
+            pr&oacute;pria din&acirc;mica de vida.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>5.4. </span><span class="c8">No que tange o formato em si do conte&uacute;do, pede-se para se
+            testar todo tipo em termos de qualidade de defini&ccedil;&atilde;o e sonoriza&ccedil;&atilde;o,
+        </span><span>mas </span><span class="c7">n&atilde;o podendo exceder a dura&ccedil;&atilde;o de 10
+            minutos.</span><span class="c1">&nbsp; </span></p>
+    <p class="c3"><span class="c6"></span></p>
+    <p class="c4"><span>5</span><span>.5. &nbsp;Embora o foco prim&aacute;rio do </span><span
+            class="c2">beta-teste</span><span>&nbsp;do aplicativo OOTOPIA seja testar as funcionalidades que foram
+            consideradas b&aacute;sicas, bem como a </span><span>intuitividade</span><span>&nbsp;e navegabilidade do
+            layout do design proposto, ser&aacute; por demais apreciado &agrave;queles </span><span
+            class="c2">oo-testadores</span><span>&nbsp;que imbu&iacute;dos do esp&iacute;rito de disrup&ccedil;&atilde;o
+            com o corrente padr&atilde;o de produ&ccedil;&atilde;o e hiper consumo informacional, que criarem
+            conte&uacute;dos exclusivos e/ou diferenciados que </span><span>r</span><span>essoem a ess&ecirc;ncia de um
+            modo-de-vida </span><span>r</span><span class="c1">egenerativista &nbsp;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c5 c2">6. Sobre o token OOz e sua fun&ccedil;&atilde;o no app beta OO</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>6.1. O </span><span class="c2">token OOz</span><span>&nbsp;&eacute; a moeda social do nascente
+            ecossistema da OOTOPIA que valoriza sua abertura e interesse de n&atilde;o apenas aprender a levar uma vida
+            regenerativa, mas tamb&eacute;m de compartilhar seus conhecimentos ligados a regenera&ccedil;&atilde;o
+            atrav&eacute;s </span><span class="c7">de postagens de fotos e v&iacute;deos no Social-feed,
+            coment&aacute;rios em postagens de terceiros e cria&ccedil;&atilde;o de </span><span class="c2 c10">Learning
+            Tracks</span><span class="c7 c16 c17">.</span><span>.Foi desenhado para rodar inicialmente atrav&eacute;s do
+            aplicativo e forma pela qual cada um recebe </span><span class="c2">token OOz</span><span>&nbsp;pode ser
+            conferida neste link</span><span>&nbsp;</span><span class="c0">aqui</span></p>
+    <p class="c4"><span>&nbsp;</span></p>
+    <p class="c4"><span>6.2. A fun&ccedil;&atilde;o do </span><span class="c2">token OOz</span><span>&nbsp;no
+        </span><span class="c2">app beta OO</span><span>&nbsp;ser&aacute; a de testar o </span><span
+            class="c2">bot&atilde;o gratitude</span><span>&nbsp;e a </span><span class="c2">OO wallet
+        </span><span>(carteira) que cada </span><span class="c2">oo-testador </span><span>tem acesso quando cria sua
+            conta</span><span>, bem como adquirir </span><span class="c8">produtos</span><span>, </span><span
+            class="c8">servi&ccedil;os </span><span>e </span><span
+            class="c8">experi&ecirc;ncias</span><span>&nbsp;diretamente com quem disponibilizou ( </span><span
+            class="c8">via email / whatsapp</span><span>) &nbsp;que v&atilde;o estar dispon&iacute;veis no </span><span
+            class="c0">mercado &eacute;tico beta</span><span>&nbsp; (</span><span
+            class="c2">beta</span><span>&nbsp;</span><span class="c2">ethical market) </span><span class="c1">da
+            OOTOPIA.</span></p>
+    <p class="c4"><span class="c1">&nbsp;</span></p>
+    <p class="c4"><span>6</span><span>.3. O </span><span class="c2">oo-testador</span><span>&nbsp;por sua
+            disposi&ccedil;&atilde;o em cocriar o </span><span class="c2">app beta OO</span><span>, recebe no ato da
+            abertura da conta um cr&eacute;dito em moeda &nbsp;</span><span class="c2">token</span><span
+            class="c2">&nbsp;OOz</span><span>&nbsp;(</span><span class="c8">ainda a ser determinado</span><span>), que
+            servir&aacute; sim para fazer os testes de transfer&ecirc;ncia de quantitativos diversos entre contas, mas
+            tamb&eacute;m representar&aacute; valor real para ser trocado por </span><span class="c8">produtos,
+            servi&ccedil;os</span><span>&nbsp;e </span><span class="c8">experi&ecirc;ncias</span><span>&nbsp;no mercado
+            &eacute;tico beta. </span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>6</span><span>.4. O </span><span class="c2">oo-testador</span><span>&nbsp;que se dispuser a
+            criar e postar </span><span class="c2">regen stories </span><span>exclusivas e/ou diferenciadas no
+        </span><span class="c2">app beta OO </span><span>usando a hashtag </span><span
+            class="c2">#beta_original</span><span>&nbsp;, poder&aacute; vir a ser convidado para bater um papo sobre a
+            experi&ecirc;ncia do</span><span class="c2">&nbsp;beta-teste </span><span>no</span><span class="c2">&nbsp;20
+            minutos para mudar o mundo</span><span>, programa de entrevistas da</span><span
+            class="c2">&nbsp;</span><span>OOTOPIA</span><span class="c2">.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c2">7</span><span class="c2">. Den&uacute;ncia de Conte&uacute;do</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>7.1. Na hip&oacute;tese do </span><span class="c2">oo-testador </span><span
+            class="c1">considerar que existem informa&ccedil;&otilde;es, fatos ou</span></p>
+    <p class="c4"><span>circunst&acirc;ncias que constituem atividade il&iacute;cita ou contr&aacute;ria aos presentes
+        </span><span class="c8">Termo de Uso Especial</span><span>, dever&aacute; efetuar den&uacute;ncia do
+            conte&uacute;do, atrav&eacute;s de envio de email para o </span><span
+            class="c2">contact@ootopia.org,</span><span class="c1">&nbsp;contendo todas as informa&ccedil;&otilde;es
+            necess&aacute;rias para que os cocriadores da OOTOPIA adotem as medidas cab&iacute;veis.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>7</span><span>.2. A den&uacute;ncia de conte&uacute;do n&atilde;o necessariamente garante que o
+            conte&uacute;do seja removido.</span><span>e que</span><span class="c13">&nbsp;</span><span
+            class="c7">o</span><span class="c10 c2">&nbsp;oo-testador(a) </span><span class="c12 c7">denunciado seja
+            excluido(a) da plataforma.</span></p>
+    <p class="c3"><span class="c12 c7"></span></p>
+    <p class="c4"><span class="c7 c12">7.3. conte&uacute;dos considerados n&atilde;o regenerativos: &nbsp;apelo
+            puramente comercial, incita&ccedil;&atilde;o ou cenas de violencia, &nbsp;apologia a pol&iacute;ticos e/ou
+            ideologias pol&iacute;tico-partid&aacute;rias, discrimina&ccedil;&atilde;o etnica, preconceito de
+            g&ecirc;nero, ofensas gratuitas e exo explicito.</span></p>
+    <p class="c3"><span class="c7 c14"></span></p>
+    <p class="c3"><span class="c13 c15"></span></p>
+    <p class="c4"><span class="c2">8</span><span class="c5 c2">.Termos de Aceite</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>8.1. Ao aceitar os presentes Termos, o </span><span class="c2">oo-testador </span><span
+            class="c1">concorda que a OOTOPIA, e todos os seus cocriadores, s&atilde;o isentos de qualquer
+            responsabilidade legal sobre qualquer</span></p>
+    <p class="c4"><span class="c1">conte&uacute;do enviado, e especial &agrave;queles que representem conduta
+            difamat&oacute;ria,</span></p>
+    <p class="c4"><span class="c1">ofensiva ou ilegal de qualquer terceiro;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>8.2 O </span><span class="c2">oo-testador</span><span class="c1">&nbsp;compreende e
+            expressamente concorda que a OOTOPIA, atrav&eacute;s da equipe de desenvolvedores tecnol&oacute;gicos,
+            poder&aacute; monitorar todos os testes para fazer cumprir estes Termos de Uso Especial ou outras regras que
+            possam ser publicadas, bem como poder&aacute; excluir ou editar qualquer conte&uacute;do que viole os
+            presentes Termos de Uso Especial;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c1">8.3. Em nenhuma circunst&acirc;ncia os cocriadores da OOTOPIA e sua equipe de
+            desenvolvedores tecnol&oacute;gicos ser&atilde;o legalmente respons&aacute;veis por quaisquer danos diretos,
+            indiretos, acidentais, especiais, ou punitivos resultantes de:</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c1">a) Quaisquer erros, enganos ou imprecis&otilde;es de conte&uacute;do;</span></p>
+    <p class="c4"><span class="c1">b) Dano pessoal ou de propriedade de qualquer natureza resultante do</span></p>
+    <p class="c4"><span>seu acesso e uso especial do </span><span class="c2">app beta OO</span><span class="c1">;</span>
+    </p>
+    <p class="c4"><span class="c1">c) Qualquer uso n&atilde;o caracterizado neste Termo de Uso Especial e/ou qualquer
+            e</span></p>
+    <p class="c4"><span class="c1">toda informa&ccedil;&atilde;o pessoal armazenada ou ainda qualquer erro, perda,
+            ou</span></p>
+    <p class="c4"><span class="c1">instabilidade de dados, problemas no servidor de hospedagem ou</span></p>
+    <p class="c4"><span class="c1">corrup&ccedil;&atilde;o de qualquer material;</span></p>
+    <p class="c4"><span>d)</span><span class="c1">&nbsp;Qualquer interrup&ccedil;&atilde;o ou cessa&ccedil;&atilde;o
+            de;</span></p>
+    <p class="c4"><span class="c1">e) Quaisquer bugs, v&iacute;rus ou semelhantes que possam ser transmitidos</span></p>
+    <p class="c4"><span>para ou atrav&eacute;s do </span><span class="c2">app beta OO </span><span class="c1">por
+            quaisquer terceiros;</span></p>
+    <p class="c4"><span class="c1">f) Quaisquer erros ou omiss&otilde;es de qualquer conte&uacute;do ou por perda
+            ou</span></p>
+    <p class="c4"><span>dano de qualquer tipo resultante de qualquer conte&uacute;do carregado no </span><span
+            class="c5 c2">app beta OO</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>8.4. O </span><span class="c2">oo-testador</span><span class="c1">&nbsp;entende que
+            dever&aacute; defender, indenizar e manter a OOTOPIA e</span></p>
+    <p class="c4"><span class="c1">sua equipe de desenvolvedores tecnol&oacute;gicos, contra qualquer pedido de
+            indeniza&ccedil;&atilde;o, danos, obriga&ccedil;&otilde;es, perdas, responsabilidades, custos ou
+            d&iacute;vidas e despesas (incluindo, mas n&atilde;o limitado a honor&aacute;rios de advogados e despesas
+            legais) que advenham de:</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>a) Uso indevido e de acesso ao </span><span class="c2">app beta OO</span><span
+            class="c1">;</span></p>
+    <p class="c4"><span class="c1">b) A viola&ccedil;&atilde;o de qualquer item dos Termos de Uso Especial;</span></p>
+    <p class="c4"><span class="c1">c) A viola&ccedil;&atilde;o de qualquer direito de terceiros, incluindo mas
+            n&atilde;o se</span></p>
+    <p class="c4"><span class="c1">limitando a qualquer copyright, direito autoral, propriedade ou direito de</span></p>
+    <p class="c4"><span class="c1">privacidade.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c1">8.5. Ainda que qualquer dos itens dos presentes Termos de Uso Especial seja</span>
+    </p>
+    <p class="c4"><span class="c1">declarada ilegal, inv&aacute;lida ou n&atilde;o puder ser aplicada em sua
+            integralidade, o</span></p>
+    <p class="c4"><span class="c1">restante dos Termos de Uso Especial permanecem com plena aplicabilidade e
+            efic&aacute;cia;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c1">8.6. O exerc&iacute;cio parcial, o atraso ou mesmo a falha da OOTOPIA no
+            exerc&iacute;cio de</span></p>
+    <p class="c4"><span class="c1">seus direitos contidos ou n&atilde;o nos presentes Termos de Uso Especial n&atilde;o
+            implica em</span></p>
+    <p class="c4"><span class="c1">sua ren&uacute;ncia.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c5 c2">9. Tipos de Restri&ccedil;&otilde;es </span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>9.1. As informa&ccedil;&otilde;es fornecidas no ato de cadastro no </span><span class="c2">app
+            beta OO </span><span class="c1">n&atilde;o podem ser</span></p>
+    <p class="c4"><span class="c1">distribu&iacute;das ou usadas por nenhuma pessoa ou entidade que esteja em</span></p>
+    <p class="c4"><span class="c1">jurisdi&ccedil;&atilde;o ou pa&iacute;s que pro&iacute;ba tais condutas, bem como
+            naqueles pa&iacute;ses ou</span></p>
+    <p class="c4"><span class="c1">jurisdi&ccedil;&otilde;es que exijam que a OOTOPIA proceda a algum tipo de registro.
+            &Eacute;</span></p>
+    <p class="c4"><span>reservado &agrave; OOTOPIA o direito de limitar a disponibilidade total ou parcial do
+        </span><span class="c5 c2">app beta OO</span></p>
+    <p class="c4"><span class="c1">para qualquer pessoa, &aacute;rea ou jurisdi&ccedil;&atilde;o a qualquer momento e
+            sem justificativas.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>9.2. O </span><span class="c2">oo-testador</span><span>&nbsp;que instala e acessa o </span><span
+            class="c2">app beta OO </span><span class="c1">do estrangeiro o faz por iniciativa pr&oacute;pria e &eacute;
+            inteiramente respons&aacute;vel por eventuais infring&ecirc;ncias &agrave; legisla&ccedil;&atilde;o de onde
+            reside. Os cocriadores da OOTOPIA poder&atilde;o limitar o acesso aos n&atilde;o residentes no Brasil,
+            caso-a-caso, sem a necessidade de aviso-pr&eacute;vio.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c2 c5">10. Disposi&ccedil;&otilde;es Gerais</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.1. Os presentes </span><span class="c8">Termos de Uso Especial </span><span>consistem no
+            acordo total e pleno entre os cocriadores da OOTOPIA e o </span><span class="c2">oo-testador</span><span
+            class="c1">&nbsp;e substituem qualquer acordo pr&eacute;vio, oral ou escrito realizado entre ambos.</span>
+    </p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.2. Os cocriadores da OOTOPIA e o </span><span class="c2">oo-testador</span><span
+            class="c1">&nbsp;concordam que, antes mesmo de submeter eventual conflito &agrave; aprecia&ccedil;&atilde;o
+            de &aacute;rbitro ou tribunal, dever&atilde;o notificar-se reciprocamente.</span></p>
+    <p class="c4"><span>A OOTOPIA enviar&aacute; a notifica&ccedil;&atilde;o para o &uacute;ltimo endere&ccedil;o
+            cadastrado do </span><span class="c2">oo-testador</span><span class="c1">&nbsp;e,</span></p>
+    <p class="c4"><span>se a</span><span>&nbsp;entrega for n&atilde;o exitosa, eximir-se-&aacute; da
+            obriga&ccedil;&atilde;o de notificar novamente o </span><span class="c2">oo-testador, </span><span>cabendo
+            neste caso ao pr&oacute;prio</span><span class="c1">&nbsp;enviar notifica&ccedil;&atilde;o para qualquer
+            endere&ccedil;o de refer&ecirc;ncia da OOTOPIA;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.3. Todas as disputas ou reivindica&ccedil;&otilde;es decorrentes da rela&ccedil;&atilde;o
+            entre os cocriadores da OOTOPIA e o </span><span class="c2">oo-testador</span><span class="c1">, ainda que
+            n&atilde;o contratuais, ser&atilde;o regidas pela legisla&ccedil;&atilde;o brasileira;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.4. Fica eleita e estabelecida a comarca de S&atilde;o Paulo</span><span>,</span><span
+            class="c1">&nbsp;Brasil para dirimir quaisquer conflitos judiciais;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.5. Os presentes </span><span class="c8">Termos de Uso Especial</span><span
+            class="c1">&nbsp;n&atilde;o impedem que a OOTOPIA se submeta</span></p>
+    <p class="c4"><span>eventual lide &agrave; aprecia&ccedil;&atilde;o judicial, </span><span>nem</span><span
+            class="c1">&nbsp;conferem nenhum tipo de direito a</span></p>
+    <p class="c4"><span class="c1">terceiros benefici&aacute;rios;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.6. Os cocriadores da OOTOPIA reservam-se o direito de modificar os presentes </span><span
+            class="c8">Termos de Uso Especial</span><span class="c1">&nbsp;a qualquer momento e sem
+            justificativa;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.7. Cabe ao </span><span class="c2">oo-testador</span><span>&nbsp;manter-se atualizado sempre
+            que notificado acerca das altera&ccedil;&otilde;es dos </span><span class="c8">Termos de Uso
+            Especial</span><span class="c1">;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span class="c1">10.8. Qualquer eventual toler&acirc;ncia da OOTOPIA com rela&ccedil;&atilde;o ao
+            descumprimento do</span></p>
+    <p class="c4"><span class="c1">disposto nestes termos n&atilde;o constituir&aacute;, em hip&oacute;tese alguma,
+            ren&uacute;ncia ou</span></p>
+    <p class="c4"><span class="c1">nova&ccedil;&atilde;o, nem impedir&aacute; &agrave; OOTOPIA de fazer valer quaisquer
+            direitos estabelecidos</span></p>
+    <p class="c4"><span class="c1">no presente instrumento;</span></p>
+    <p class="c3"><span class="c1"></span></p>
+    <p class="c4"><span>10.9. Em caso de diverg&ecirc;ncia entre os</span><span class="c8">&nbsp;Termos de Uso
+            Especial</span><span>&nbsp;e a </span><span class="c6">Pol&iacute;tica de</span></p>
+    <p class="c4"><span class="c8">Privacidade</span><span class="c1">, ou outros documentos, prevalecer&aacute; o
+            disposto nestes Termos.</span></p>
+    <p class="c3"><span class="c1"></span></p>
+</body>
+
+</html>

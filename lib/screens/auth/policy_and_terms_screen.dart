@@ -13,9 +13,13 @@ import 'package:ootopia_app/shared/design_guide/buttons.dart';
 class PolicyAndTermsScreen extends StatefulWidget {
   final String filename;
   final Function onAccept;
+  String? buttonText = "";
+  String? fileSuffix = "";
   PolicyAndTermsScreen({
     required this.filename,
     required this.onAccept,
+    this.buttonText,
+    this.fileSuffix,
     Key? key,
   }) : super(key: key);
 
@@ -36,8 +40,14 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
   }
 
   _loadHtmlFromAssets() async {
-    String fileText = await rootBundle
-        .loadString('assets/docs/${widget.filename}_$languageSuffix.html');
+    String fileText = "";
+    if (widget.fileSuffix != null && widget.fileSuffix!.isNotEmpty) {
+      fileText = await rootBundle.loadString(
+          'assets/docs/${widget.filename}_${languageSuffix}_${widget.fileSuffix}.html');
+    } else {
+      fileText = await rootBundle
+          .loadString('assets/docs/${widget.filename}_$languageSuffix.html');
+    }
     _controller.loadUrl(Uri.dataFromString(
       fileText,
       mimeType: 'text/html',
@@ -78,7 +88,10 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
                         GlobalConstants.of(context).screenHorizontalSpace + 2),
                     child: ElevatedButton(
                       child: Text(
-                        AppLocalizations.of(context)!.iAccept,
+                        widget.buttonText != null &&
+                                widget.buttonText!.isNotEmpty
+                            ? widget.buttonText as String
+                            : AppLocalizations.of(context)!.iAccept,
                         style: Theme.of(context)
                             .inputDecorationTheme
                             .hintStyle!
@@ -88,8 +101,8 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
                             ),
                       ),
                       onPressed: () {
-                        widget.onAccept();
                         close();
+                        widget.onAccept();
                       },
                     ).defaultButton(
                       context,
@@ -111,9 +124,7 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
     setState(() {
       showWebViewTrick = false;
     });
-    Timer(Duration(milliseconds: 200), () {
-      Navigator.of(context).pop();
-    });
+    Navigator.of(context).pop();
   }
 
   get appBar => AppBar(

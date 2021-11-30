@@ -63,6 +63,43 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     });
   }
 
+  openTermsOfUse(
+      BuildContext context, bool next, bool privacyInformation) async {
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.termsOfUseScreen.route,
+      arguments: {
+        'filename': 'terms_of_use',
+        'onAccept': () {
+          setState(() {
+            if (next) {
+              openPrivacyPolicy(context, true);
+            }
+          });
+        },
+        'buttonText': next
+            ? AppLocalizations.of(context)!.next
+            : AppLocalizations.of(context)!.close,
+        'fileSuffix':
+            privacyInformation ? 'privacyinformation' : 'informationdrawer'
+      },
+    );
+  }
+
+  openPrivacyPolicy(BuildContext context, bool privacyInformation) async {
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.termsOfUseScreen.route,
+      arguments: {
+        'filename': 'privacy_policy',
+        'onAccept': () {
+          setState(() {});
+        },
+        'buttonText': AppLocalizations.of(context)!.close,
+        'fileSuffix':
+            privacyInformation ? 'privacyinformation' : 'informationdrawer'
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
@@ -324,7 +361,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                       size: 15,
                       color: Colors.black,
                     ),
-                    onTap: () async{
+                    onTap: () async {
                       await launch("https://forms.gle/6qWokM6ipf7ac4fL8");
                     },
                   ),
@@ -403,6 +440,93 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                           ),
                         )
                       ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: TextButton(
+                      style: TextButton.styleFrom(primary: Colors.black),
+                      onPressed: () {
+                        openTermsOfUse(context, true, true);
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/icon_lock.png',
+                            width: 18.22,
+                            height: 19.05,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .yourPrivacyInformation,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: TextButton(
+                      style: TextButton.styleFrom(primary: Colors.black),
+                      onPressed: () {},
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/icon_info.png',
+                            width: 18.22,
+                            height: 19.05,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              openTermsOfUse(context, false, false);
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.termsOfUseDrawer,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.and,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 1,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              openPrivacyPolicy(context, false);
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.privacy,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Align(

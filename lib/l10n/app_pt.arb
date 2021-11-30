@@ -73,9 +73,12 @@
 
     "iAcceptThe": "Eu aceito o ",
     "useTerms": "termos de uso",
+    "termsOfUseDrawer":"Termos de uso",
     "and": " e ",
     "privacy": "privacidade.",
     "youNeedToAcceptTheTermsOfUseToContinue": "Você precisa aceitar os Termos de Uso para continuar",
+
+    "next": "Próximo",
 
     "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados.\nConheça nossos preceitos éticos e de transparência quanto ao uso e privacidade",
 
@@ -347,6 +350,8 @@
     "theChangeMakerPro": "O emblema Change Maker Pro é concedido a indivíduos e organizações que estão liderando um trabalho consistente para ajudar a regenerar o planeta Terra.",
     "theRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. O número de minutos representa a meta diária que a pessoa definiu para sua participação no jogo.",
 
+
+    "yourPrivacyInformation":"Suas informações de privacidade",
 
     "personal": "Pessoal",
     "city": "Cidade",
