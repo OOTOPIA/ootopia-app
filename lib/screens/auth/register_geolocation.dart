@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 
 import 'package:ootopia_app/shared/geolocation.dart';
@@ -9,6 +11,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -26,15 +29,17 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
   bool isLoading = false;
+  bool isLoadingLocation = true;
+  SecureStoreMixin secureStoreMixin = SecureStoreMixin();
   SmartPageController navigationController = SmartPageController.getInstance();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      setState(() async {
-        await registerController.getLocation(context);
-      });
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      await registerController.getLocation(context);
+      isLoadingLocation = false;
+      setState(() {});
     });
   }
 
@@ -94,6 +99,8 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
       registerController.currentLocaleName = '';
 
       if (registerController.codeController.text != '') {
+        GeneralConfigModel? generalConfigMode = await secureStoreMixin
+            .getGeneralConfigByName("user_received_sower_invitation_code_ooz");
         registerController.cleanTextEditingControllers();
         Navigator.of(context).pushNamed(
           PageRoute.Page.celebration.route,
@@ -103,7 +110,8 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
             },
             "name": registerController.nameController.text,
             "goal": "invitationCode",
-            "balance": "10,00",
+            "balance": registerController.formatNumber(
+                generalConfigMode?.value ?? 0, Platform.localeName),
           },
         );
       } else {
@@ -212,8 +220,32 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: registerController
-                                        .geolocationErrorMessage.isNotEmpty,
+                                    visible: !isLoadingLocation &&
+                                        registerController
+                                            .geolocationErrorMessage.isNotEmpty,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          top: GlobalConstants.of(context)
+                                              .spacingNormal,
+                                          bottom: GlobalConstants.of(context)
+                                              .spacingSmall,
+                                        ),
+                                        child: Text(
+                                          registerController
+                                                  .geolocationErrorMessage +
+                                              AppLocalizations.of(context)!
+                                                  .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.redAccent,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: isLoadingLocation,
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                         top: GlobalConstants.of(context)
@@ -221,16 +253,7 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                         bottom: GlobalConstants.of(context)
                                             .spacingSmall,
                                       ),
-                                      child: Text(
-                                        registerController
-                                                .geolocationErrorMessage +
-                                            AppLocalizations.of(context)!
-                                                .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.redAccent,
-                                        ),
-                                      ),
+                                      child: CircularProgressIndicator(),
                                     ),
                                   ),
                                   SizedBox(
@@ -260,11 +283,13 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () {
-                                        setState(() async {
-                                          await registerController
-                                              .getLocation(context);
-                                        });
+                                      onPressed: () async {
+                                        isLoadingLocation = true;
+                                        setState(() {});
+                                        await registerController
+                                            .getLocation(context);
+                                        isLoadingLocation = false;
+                                        setState(() {});
                                       },
                                       splashColor: Colors.black54,
                                       shape: RoundedRectangleBorder(
@@ -305,7 +330,9 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                         MaterialStateProperty.all<double>(0.0),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Color(0xff003694)),
+                                            isLoadingLocation
+                                                ? Color(0xff5d7fbb)
+                                                : Color(0xff003694)),
                                     padding:
                                         MaterialStateProperty.all<EdgeInsets>(
                                             EdgeInsets.all(
@@ -320,7 +347,11 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  onPressed: () => _register(),
+                                  onPressed: () {
+                                    if (!isLoadingLocation) {
+                                      _register();
+                                    }
+                                  },
                                 ),
                               ),
                             ],
