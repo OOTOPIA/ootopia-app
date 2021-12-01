@@ -180,7 +180,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
         cellPhoneController.text.isNotEmpty;
   }
 
-  getLocation(BuildContext context) async {
+  Future getLocation(BuildContext context) async {
     try {
       geolocationErrorMessage = "";
       geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
@@ -188,26 +188,37 @@ class RegisterSecondPhaseController with SecureStoreMixin {
 
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
-      if (placemarks.length > 0) {
-        var placemark = placemarks[0];
-        geolocationController.text =
-            "${placemark.subAdministrativeArea != '' ? placemark.subAdministrativeArea : placemark.locality}, ${placemark.administrativeArea} - ${placemark.country}";
-
-        user!.addressCity = placemark.subAdministrativeArea != ''
-            ? placemark.subAdministrativeArea
-            : placemark.locality;
-        user!.addressState = placemark.administrativeArea;
-        user!.addressCountryCode = placemark.isoCountryCode;
-        user!.addressLatitude = position.latitude;
-        user!.addressLongitude = position.longitude;
-
-        this.trackingEvents.signupCompletedStepIIIOfSignupII({
-          "addressCity": user!.addressCity,
-          "addressState": user!.addressState,
-          "addressCountryCode": user!.addressCountryCode,
-        });
+      if (placemarks.isNotEmpty) {
         geolocationErrorMessage = "";
         geolocationMessage = "";
+        var placemark = placemarks.first;
+
+        if (placemark.administrativeArea != null ||
+            placemark.subAdministrativeArea != null ||
+            placemark.locality != null ||
+            placemark.country != null ||
+            placemark.isoCountryCode != null) {
+          geolocationController.text =
+              "${placemark.subAdministrativeArea != '' ? placemark.subAdministrativeArea : placemark.locality}, ${placemark.administrativeArea} - ${placemark.country}";
+          user!.addressCity = placemark.subAdministrativeArea != ''
+              ? placemark.subAdministrativeArea
+              : placemark.locality;
+          user!.addressState = placemark.administrativeArea;
+          user!.addressCountryCode = placemark.isoCountryCode;
+          user!.addressLatitude = position.latitude;
+          user!.addressLongitude = position.longitude;
+
+          this.trackingEvents.signupCompletedStepIIIOfSignupII({
+            "addressCity": user!.addressCity,
+            "addressState": user!.addressState,
+            "addressCountryCode": user!.addressCountryCode,
+          });
+        } else {
+          geolocationMessage =
+              AppLocalizations.of(context)!.failedToGetCurrentLocation;
+          geolocationErrorMessage =
+              AppLocalizations.of(context)!.weCouldntGetYourLocation;
+        }
       } else {
         geolocationMessage =
             AppLocalizations.of(context)!.failedToGetCurrentLocation;
