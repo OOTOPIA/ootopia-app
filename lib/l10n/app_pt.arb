@@ -41,6 +41,7 @@
     "failedToGetCurrentLocation": "Falha ao obter localização atual",
     "weCouldntGetYourLocation2": "Não foi possível obter sua localização.",
     "weCouldntGetYourLocation": "Não foi possível obter sua localização. Mas não se preocupe, você pode informá-lo em outro momento.",
+    "dontWorryYouCanSetYourLocationLater": "Não se preocupe, você pode definir sua localização mais tarde.",
     "thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts": "O lugar onde você mora é onde seu impacto positivo conta.",
     "tryToRetrieveYourCurrentLocationClickingByGetLocationAgain": "\nTente recuperar sua localização atual clicando em \" Obter localização novamente \"",
     "getCurrentLocation": "Obtenha a localização atual",

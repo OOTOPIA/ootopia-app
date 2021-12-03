@@ -228,7 +228,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     } catch (error) {
       geolocationMessage =
           AppLocalizations.of(context)!.failedToGetCurrentLocation;
-      geolocationErrorMessage = error.toString();
+      geolocationErrorMessage =
+          AppLocalizations.of(context)!.dontWorryYouCanSetYourLocationLater;
     }
   }
 
