@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/auth/components/slogan.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
@@ -31,6 +32,7 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
 
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   GlobalKey<FormState> formRegister = GlobalKey<FormState>();
 
   bool nameIsValid = true;
@@ -185,6 +187,11 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
                                     if (formRegister.currentState!.validate() &&
                                         !registerController
                                             .authStore.emailExist) {
+                                      this.trackingEvents.signupCompletedEmail({
+                                        "email": registerController
+                                            .emailController.text
+                                            .trim(),
+                                      });
                                       Navigator.of(context).pushNamed(
                                         PageRoute.Page.registerPhoneNumberScreen
                                             .route,

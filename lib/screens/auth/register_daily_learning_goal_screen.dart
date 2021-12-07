@@ -36,12 +36,12 @@ class _RegisterDailyLearningGoalScreenState
   @override
   void initState() {
     super.initState();
-    _videoPlayerController =
-        VideoPlayerController.network('https://videodelivery.net/1a802774c1b694c0554143d69519c598/manifest/video.m3u8')
-          ..initialize().then((value) {
-            _videoPlayerController.play();
-            setState(() {});
-          });
+    _videoPlayerController = VideoPlayerController.network(
+        'https://videodelivery.net/1a802774c1b694c0554143d69519c598/manifest/video.m3u8')
+      ..initialize().then((value) {
+        _videoPlayerController.play();
+        setState(() {});
+      });
     setState(() {
       if (registerController.user!.dailyLearningGoalInMinutes != null &&
           registerController.user!.dailyLearningGoalInMinutes! >= 10) {
@@ -401,9 +401,7 @@ class _RegisterDailyLearningGoalScreenState
                               registerController
                                       .user!.dailyLearningGoalInMinutes =
                                   _learningGoalRating.round();
-                              this
-                                  .trackingEvents
-                                  .signupCompletedStepIIOfSignupII({
+                              this.trackingEvents.signupCompletedDailyLearning({
                                 "dailyLearningGoalInMinutes": registerController
                                     .user!.dailyLearningGoalInMinutes
                               });

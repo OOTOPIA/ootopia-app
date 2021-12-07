@@ -84,7 +84,7 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
         ),
       );
 
-  Future _register() async {
+  Future _register(context) async {
     try {
       setState(() {
         isLoading = true;
@@ -349,7 +349,7 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                   ),
                                   onPressed: () {
                                     if (!isLoadingLocation) {
-                                      _register();
+                                      _register(context);
                                     }
                                   },
                                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,6 +24,7 @@ class RegisterPhoneNumberScreen extends StatefulWidget {
 class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
   RegisterSecondPhaseController registerController =
       RegisterSecondPhaseController.getInstance();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   SmartPageController pageController = SmartPageController.getInstance();
 
   @override
@@ -166,7 +168,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                         fontSize: 18,
                                         color: Color(0xff7F7F7F),
                                         fontWeight: FontWeight.w500)),
-                                         SizedBox(
+                                SizedBox(
                                   width: 6,
                                 ),
                                 Text(
@@ -454,7 +456,12 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   ? () {
                                       registerController
                                           .setBirthDateAndCountryCode();
-
+                                      this
+                                          .trackingEvents
+                                          .signupCompletedPhoneNumber({
+                                        "phoneNumber": registerController
+                                            .cellPhoneController.text
+                                      });
                                       Navigator.of(context).pushNamed(
                                         PageRoute
                                             .Page

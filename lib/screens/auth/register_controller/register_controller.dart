@@ -208,7 +208,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
           user!.addressLatitude = position.latitude;
           user!.addressLongitude = position.longitude;
 
-          this.trackingEvents.signupCompletedStepIIIOfSignupII({
+          this.trackingEvents.signupCompletedGeolocation({
             "addressCity": user!.addressCity,
             "addressState": user!.addressState,
             "addressCountryCode": user!.addressCountryCode,
@@ -275,17 +275,14 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       registerPhase: 2,
     );
 
-    try {
-      this
-          .trackingEvents
-          .signupConcludeButton({'userData': json.encode(_user.toJson())});
-    } catch (err) {}
+    this.trackingEvents.signupConcludeButton();
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
     try {
       await this.authRepository.register(_user, tagsIds);
-      await authRepository.login(_user.email!, _user.password!);
+      User login = await authRepository.login(_user.email!, _user.password!);
+      this.trackingEvents.trackingLoggedIn(login.id!, login.fullname!);
     } catch (err, stackTrace) {
       await Sentry.captureException(
         err,
