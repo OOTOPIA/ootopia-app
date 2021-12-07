@@ -47,6 +47,7 @@
     "failedToGetCurrentLocation": "Failed to get current location",
     "weCouldntGetYourLocation2": "We couldn't get your location.",
     "weCouldntGetYourLocation": "We couldn't get your location. But don't worry, you can inform it at another time.",
+    "dontWorryYouCanSetYourLocationLater": "Don't worry, you can set your location later.",
     "thePlaceWhereYouLiveIsTheWhereYourPositiveImpactCounts": "The place where you live is the where your positive impact counts.",
     "tryToRetrieveYourCurrentLocationClickingByGetLocationAgain": "\nTry to retrieve your current location clicking by \"Get location again\"",
     "getCurrentLocation": "Get current location",
@@ -81,7 +82,7 @@
     "useTerms": "terms of use",
     "termsOfUseDrawer":"Terms of use",
     "and": " and ",
-    "privacy": "privacy.",
+    "privacy": "privacy",
     "youNeedToAcceptTheTermsOfUseToContinue": "You need to accept the Terms of Use to continue",
 
     "next": "Next",

@@ -233,9 +233,7 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                         ),
                                         child: Text(
                                           registerController
-                                                  .geolocationErrorMessage +
-                                              AppLocalizations.of(context)!
-                                                  .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
+                                              .geolocationErrorMessage,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: Colors.redAccent,
@@ -340,7 +338,8 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                                     .spacingNormal)),
                                   ),
                                   child: Text(
-                                    AppLocalizations.of(context)!.conclude,
+                                    AppLocalizations.of(context)!
+                                        .continueAccess,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

@@ -13,8 +13,8 @@ class Geolocation {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.deniedForever) {
         // Permissions are denied forever, handle appropriately.
-        return Future.error(AppLocalizations.of(context)!
-            .locationPermissionsArePermanentlyDeniedWeCannotRequestPermissionsGoToSettingsToEnableIt);
+        return Future.error(
+            AppLocalizations.of(context)!.dontWorryYouCanSetYourLocationLater);
       }
 
       if (permission == LocationPermission.denied) {
@@ -24,7 +24,7 @@ class Geolocation {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         return Future.error(
-            AppLocalizations.of(context)!.locationPermissionsAreDenied);
+            AppLocalizations.of(context)!.dontWorryYouCanSetYourLocationLater);
       }
     }
 
@@ -36,7 +36,7 @@ class Geolocation {
       // accessing the position and request users of the
       // App to enable the location services.
       return Future.error(
-          AppLocalizations.of(context)!.locationServicesAreDisabled);
+          AppLocalizations.of(context)!.dontWorryYouCanSetYourLocationLater);
     }
 
     // When we reach here, permissions are granted and we can

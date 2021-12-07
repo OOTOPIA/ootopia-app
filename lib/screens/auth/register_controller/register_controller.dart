@@ -52,7 +52,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   TextEditingController geolocationController = TextEditingController();
   FocusNode inputFocusNode = new FocusNode();
   String geolocationErrorMessage = "";
-  String geolocationMessage = "Please, wait...";
+  String geolocationMessage = "";
 
   //Step 05
   List<InterestsTagsModel> selectedTags = [];
@@ -228,7 +228,8 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     } catch (error) {
       geolocationMessage =
           AppLocalizations.of(context)!.failedToGetCurrentLocation;
-      geolocationErrorMessage = error.toString();
+      geolocationErrorMessage =
+          AppLocalizations.of(context)!.dontWorryYouCanSetYourLocationLater;
     }
   }
 
