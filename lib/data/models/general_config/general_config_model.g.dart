@@ -9,7 +9,7 @@ part of 'general_config_model.dart';
 GeneralConfigModel _$GeneralConfigModelFromJson(Map<String, dynamic> json) {
   return GeneralConfigModel(
     name: json['name'] as String,
-    value: num.tryParse(json['value'])?.toDouble() as double,
+    value: (json['value'] as num).toDouble(),
   );
 }
 
