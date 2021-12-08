@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -89,8 +90,6 @@ class ListPostProfileComponent extends StatefulWidget {
 
 class _ListPostProfileComponentState extends State<ListPostProfileComponent>
     with SecureStoreMixin {
-  late TimelinePostBloc timelineBloc;
-
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -99,23 +98,19 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
 
   late FlickMultiManager flickMultiManager;
 
+  TimelineStore timelineStore = TimelineStore();
+
   bool loggedIn = false;
   User? user;
-
-  int currentPage = 1;
-  final int _itemsPerPageCount = 10;
-  bool _hasMoreItems = true;
-  List<TimelinePost> _allPosts = [];
 
   @override
   void initState() {
     super.initState();
     _checkUserIsLoggedIn();
-    timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     flickMultiManager = FlickMultiManager();
-    _allPosts = widget.posts;
 
     if (widget.postId == null) {
+      timelineStore.setProfilePosts(widget.posts);
       Timer(
         Duration(milliseconds: 300),
         () {
@@ -132,7 +127,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   _performAllRequests() {
     Future.delayed(Duration.zero, () async {
       var post = await store.getPostById(widget.postId!);
-      _allPosts.add(post);
+      timelineStore.allPosts.add(post);
       setState(() {});
     });
   }
@@ -147,136 +142,40 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
   @override
   Widget build(BuildContext context) {
     store = Provider.of<TimelineProfileStore>(context);
-    return BlocListener<TimelinePostBloc, TimelinePostState>(
-      listener: (context, state) {
-        if (state is ErrorState) {
-          Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
-        } else if (state is LoadedSucessState) {
-          _hasMoreItems = state.posts.length == _itemsPerPageCount;
-          _allPosts.addAll(state.posts);
-          print("PAGINATION ${state.posts.length} ${_allPosts.length}");
-        } else if (state is OnDeletedPostState) {
-          var indexPost =
-              _allPosts.indexWhere((post) => post.id == state.postId);
-
-          if (indexPost >= 0) {
-            _allPosts.remove(_allPosts[indexPost]);
-          }
-
-          // if (_allPosts.length <= 0) {
-          //   Navigator.pop(context, true);
-          // }
-        } else if (state is OnUpdatePostCommentsCountState) {
-          _allPosts
-              .firstWhere((post) => post.id == state.postId)
-              .commentsCount = state.commentsCount;
-        }
-      },
-      child: _blocBuilder(),
-    );
-  }
-
-  _blocBuilder() {
-    if (widget.postId != null && _allPosts.length > 0) {
-      return ScrollablePositionedList.builder(
-        itemCount: 1,
-        itemScrollController: this.itemScrollController,
-        itemPositionsListener: this.itemPositionsListener,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: PhotoTimeline(
-              key: ObjectKey(_allPosts[index]),
-              post: _allPosts[index],
-              timelineBloc: this.timelineBloc,
-              loggedIn: this.loggedIn,
-              flickMultiManager: flickMultiManager,
-              isProfile: true,
-              user: this.user,
-            ),
-          );
-        },
-      );
-    }
-    return BlocBuilder<TimelinePostBloc, TimelinePostState>(
-      builder: (context, state) {
-        if (state is InitialState) {
-          return Center(
-            child: Text(AppLocalizations.of(context)!.initial),
-          );
-        } else if (state is LoadingState) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is LoadedSucessState) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: VisibilityDetector(
-                    key: ObjectKey(flickMultiManager),
-                    onVisibilityChanged: (visibility) {
-                      if (visibility.visibleFraction == 0 && this.mounted) {
-                        flickMultiManager.pause();
-                      }
-                    },
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        setState(() {
-                          _allPosts = [];
-                          currentPage = 1;
-                        });
-                        _getData();
-                      },
-                      child: ScrollablePositionedList.builder(
-                        itemCount: _allPosts.length + (_hasMoreItems ? 1 : 0),
-                        itemScrollController: this.itemScrollController,
-                        itemPositionsListener: this.itemPositionsListener,
-                        itemBuilder: (context, index) {
-                          /*if (index == _allPosts.length - _nextPageThreshold &&
-                              _hasMoreItems) {}*/
-                          if (index == _allPosts.length) {
-                            if (_hasMoreItems) {
-                              currentPage++;
-                              _getData();
-                            }
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: _hasMoreItems
-                                    ? CircularProgressIndicator()
-                                    : Container(),
-                              ),
-                            );
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: PhotoTimeline(
-                              key: ObjectKey(_allPosts[index]),
-                              post: _allPosts[index],
-                              timelineBloc: this.timelineBloc,
-                              loggedIn: this.loggedIn,
-                              flickMultiManager: flickMultiManager,
-                              isProfile: true,
-                              user: this.user,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (state is ErrorState) {
-          return TryAgain(
-            _getData,
-          );
-        }
+    return Observer(builder: (_) {
+      if (widget.postId != null && timelineStore.allPosts.length > 0) {
+        return ScrollablePositionedList.builder(
+          itemCount: 1,
+          itemScrollController: this.itemScrollController,
+          itemPositionsListener: this.itemPositionsListener,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: PhotoTimeline(
+                key: ObjectKey(timelineStore.allPosts[index]),
+                post: timelineStore.allPosts[index],
+                timelineStore: this.timelineStore,
+                loggedIn: this.loggedIn,
+                flickMultiManager: flickMultiManager,
+                isProfile: true,
+                user: this.user,
+                onDelete: () => setState(() {}),
+              ),
+            );
+          },
+        );
+      }
+      if (timelineStore.viewState == TimelineViewState.loading) {
+        return Center(child: CircularProgressIndicator());
+      } else if (timelineStore.viewState == TimelineViewState.error) {
+        return TryAgain(
+          () => timelineStore.getTimelinePosts(
+            null,
+            null,
+          ),
+        );
+      } else if (timelineStore.viewState == TimelineViewState.ok &&
+          timelineStore.allPosts.length == 0) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -287,14 +186,86 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
             ],
           ),
         );
-      },
-    );
-  }
-
-  Future<void> _getData() async {
-    if (widget.postId == null) {
-      timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
-          (currentPage - 1) * _itemsPerPageCount, widget.userId));
-    }
+      }
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: GlobalConstants.of(context).screenHorizontalSpace,
+          vertical: 24,
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: VisibilityDetector(
+                key: ObjectKey(flickMultiManager),
+                onVisibilityChanged: (visibility) {
+                  if (visibility.visibleFraction == 0 && this.mounted) {
+                    flickMultiManager.pause();
+                  }
+                },
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    if (!timelineStore.loadingMorePosts &&
+                        timelineStore.viewState != TimelineViewState.loading &&
+                        scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent &&
+                        timelineStore.hasMorePosts) {
+                      timelineStore.getTimelinePosts();
+                    }
+                    return true;
+                  },
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      timelineStore.reloadPosts(widget.userId);
+                    },
+                    child: ScrollablePositionedList.builder(
+                      itemCount: timelineStore.allPosts.length,
+                      itemScrollController: this.itemScrollController,
+                      itemPositionsListener: this.itemPositionsListener,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              child: PhotoTimeline(
+                                key: ObjectKey(timelineStore.allPosts[index]),
+                                post: timelineStore.allPosts[index],
+                                timelineStore: this.timelineStore,
+                                loggedIn: this.loggedIn,
+                                flickMultiManager: flickMultiManager,
+                                isProfile: true,
+                                user: this.user,
+                                onDelete: () => setState(() {}),
+                              ),
+                            ),
+                            Observer(
+                              builder: (_) => (timelineStore.loadingMorePosts &&
+                                      index == timelineStore.allPosts.length - 1
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      height: 90,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : Container(
+                                      padding: index ==
+                                              timelineStore.allPosts.length - 1
+                                          ? EdgeInsets.only(bottom: 90)
+                                          : null,
+                                    )),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

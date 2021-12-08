@@ -75,6 +75,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   List filteredList = [];
   SecureStoreMixin secureStoreMixin = SecureStoreMixin();
   final pageController = SmartPageController.getInstance();
+  bool sendingPost = false;
 
   PostCreate postData = PostCreate();
 
@@ -218,6 +219,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       return;
     }
 
+    if (sendingPost) {
+      return;
+    }
+
     if (_processingVideoInBackground) {
       _readyToSendPost = true;
       postPreviewStore.uploadIsLoading = true;
@@ -242,37 +247,37 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     GeneralConfigModel? oozToRewardForImage = await this
         .secureStoreMixin
         .getGeneralConfigByName("creator_reward_for_posted_photo");
+    sendingPost = true;
 
-    await this.postPreviewStore.createPost(postData,
-        oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
-    await this.walletStore.getWallet();
+    try {
+      await this.postPreviewStore.createPost(postData,
+          oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
+      sendingPost = false;
+      await this.walletStore.getWallet();
 
-    if (this.postPreviewStore.successOnUpload) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        PageRoute.Page.homeScreen.route,
-        ModalRoute.withName('/'),
-        arguments: {
-          "createdPost": true,
-          "oozToReward": this.postPreviewStore.oozToReward
-        },
-      );
-    } else if (this.postPreviewStore.errorOnUpload) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
-              .replaceAll("video", postData.type!)),
-        ),
-      );
+      if (this.postPreviewStore.successOnUpload) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          PageRoute.Page.homeScreen.route,
+          ModalRoute.withName('/'),
+          arguments: {
+            "createdPost": true,
+            "oozToReward": this.postPreviewStore.oozToReward
+          },
+        );
+      } else if (this.postPreviewStore.errorOnUpload) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
+                .replaceAll("video", postData.type!)),
+          ),
+        );
+      }
+
+      postPreviewStore.clearhashtags();
+    } catch (err) {
+      sendingPost = false;
     }
-
-    /*postBloc.add(
-      CreatePostEvent(
-        post: postData,
-      ),
-    );*/
-
-    postPreviewStore.clearhashtags();
   }
 
   @override

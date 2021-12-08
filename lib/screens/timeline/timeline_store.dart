@@ -14,8 +14,11 @@ part "timeline_store.g.dart";
 
 class TimelineStore = TimelineStoreBase with _$TimelineStore;
 
+enum TimelineViewState { ok, loading, error, loadingMorePosts }
+
 abstract class TimelineStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  final PostRepositoryImpl postRepository = PostRepositoryImpl();
 
   @observable
   ScrollController scrollController =
@@ -25,10 +28,30 @@ abstract class TimelineStoreBase with Store {
   List<TimelinePost> allPosts = [];
 
   @observable
-  int currentPage = 1;
+  bool _hasMorePosts = false;
+
+  @observable
+  bool _loadingMorePosts = false;
+
+  @computed
+  bool get hasMorePosts => _hasMorePosts;
+
+  @computed
+  bool get loadingMorePosts => _loadingMorePosts;
 
   @observable
   bool _sendingToApi = false;
+
+  @observable
+  int _postsOffset = 0;
+
+  @computed
+  int get postsOffset => _postsOffset;
+
+  @observable
+  TimelineViewState viewState = TimelineViewState.loading;
+
+  int get maxPostsPerPage => 10;
 
   @action
   void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
@@ -40,9 +63,7 @@ abstract class TimelineStoreBase with Store {
       );
 
     Future.delayed(Duration(milliseconds: 500)).then((value) {
-      allPosts.clear();
-      currentPage = 1;
-      timelinePostBloc.add(GetTimelinePostsEvent(10, 0));
+      reloadPosts();
     });
   }
 
@@ -104,6 +125,59 @@ abstract class TimelineStoreBase with Store {
       _watch.stop();
     }
     _timelineViewTimer = null;
+  }
+
+  @action
+  void setProfilePosts(List<TimelinePost> posts) {
+    allPosts = posts;
+    viewState = TimelineViewState.ok;
+  }
+
+  @action
+  Future<void> getTimelinePosts([
+    int? limit,
+    int? offset,
+    String? userId,
+  ]) async {
+    if (allPosts.length == 0) {
+      viewState = TimelineViewState.loading;
+    } else {
+      _loadingMorePosts = true;
+    }
+
+    print("CHAMOU ESSE");
+
+    try {
+      if ((offset == null || offset == 0) && _loadingMorePosts == false) {
+        allPosts.clear();
+      }
+      var response = await postRepository.getPosts(
+        (limit != null ? limit : maxPostsPerPage),
+        (offset != null ? offset : _postsOffset),
+        userId,
+      );
+      _hasMorePosts = response.length == maxPostsPerPage;
+      _postsOffset = _postsOffset + maxPostsPerPage;
+      allPosts.addAll(response);
+      viewState = TimelineViewState.ok;
+      //_loadingMorePosts = false;
+    } catch (err) {
+      viewState = TimelineViewState.error;
+      //_loadingMorePosts = false;
+    }
+  }
+
+  @action
+  Future removePost(TimelinePost post) async {
+    await this.postRepository.deletePost(post.id);
+    allPosts = allPosts.where((element) => element.id != post.id).toList();
+  }
+
+  @action
+  Future reloadPosts([String? userId]) async {
+    _postsOffset = 0;
+    allPosts.clear();
+    getTimelinePosts(null, null, userId);
   }
 
   _sendToApi() async {

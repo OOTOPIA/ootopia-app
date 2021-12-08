@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -20,6 +19,7 @@ import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -42,27 +42,29 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class PhotoTimeline extends StatefulWidget {
   final int? index;
   final TimelinePost post;
-  final TimelinePostBloc timelineBloc;
+  final TimelineStore timelineStore;
   final User? user;
   bool loggedIn = false;
   final FlickMultiManager flickMultiManager;
   bool isProfile;
+  Function onDelete;
 
   PhotoTimeline({
     required Key key,
     this.index,
     required this.post,
-    required this.timelineBloc,
+    required this.timelineStore,
     required this.loggedIn,
     this.user,
     required this.flickMultiManager,
     required this.isProfile,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
   _PhotoTimelineState createState() => _PhotoTimelineState(
         post: this.post,
-        timelineBloc: this.timelineBloc,
+        timelineStore: this.timelineStore,
         loggedIn: this.loggedIn,
         user: this.user,
       );
@@ -70,7 +72,7 @@ class PhotoTimeline extends StatefulWidget {
 
 class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   TimelinePost post;
-  final TimelinePostBloc timelineBloc;
+  final TimelineStore timelineStore;
   WalletTransfersRepositoryImpl walletTransferRepositoryImpl =
       WalletTransfersRepositoryImpl();
 
@@ -85,7 +87,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   _PhotoTimelineState({
     required this.post,
-    required this.timelineBloc,
+    required this.timelineStore,
     required this.loggedIn,
     this.user,
   });
@@ -178,8 +180,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     );
   }
 
-  _deletePost() {
-    postBloc.add(DeletePostEvent(widget.post.id, widget.isProfile));
+  _deletePost() async {
+    //postBloc.add(DeletePostEvent(widget.post.id, widget.isProfile));
+    await timelineStore.removePost(widget.post);
+    widget.onDelete();
   }
 
   @override
@@ -188,646 +192,625 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     walletStore = Provider.of<WalletStore>(context);
     postTimelineComponentController =
         Provider.of<PostTimelineComponentController>(context);
-    return BlocListener<PostBloc, PostState>(
-      listener: (context, state) {
-        if (state is SuccessDeletePostState) {
-          this.timelineBloc.add(
-                OnDeletePostFromTimelineEvent(state.postId, state.isProfile),
-              );
-        }
-      },
-      child: _blocBuilder(),
-    );
-  }
-
-  _blocBuilder() {
-    return BlocBuilder<TimelinePostBloc, TimelinePostState>(
-        builder: (context, state) {
-      return Observer(builder: (_) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () => _goToProfile(),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 6.0,
-                          right: 6.0,
-                          bottom: 6.0,
-                        ),
-                        child: this.post.photoUrl != null
-                            ? CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage("${this.post.photoUrl}"),
-                                radius: 16,
-                              )
-                            : CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/icons/user.png"),
-                                radius: 16,
-                              ),
+    return Observer(builder: (_) {
+      return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => _goToProfile(),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 6.0,
+                        right: 6.0,
+                        bottom: 6.0,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            this.post.username,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                      child: this.post.photoUrl != null
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage("${this.post.photoUrl}"),
+                              radius: 16,
+                            )
+                          : CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("assets/icons/user.png"),
+                              radius: 16,
                             ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          this.post.username,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                          Visibility(
-                            visible: (this.post.city != null &&
-                                    this.post.city!.isNotEmpty) ||
+                        ),
+                        Visibility(
+                          visible: (this.post.city != null &&
+                                  this.post.city!.isNotEmpty) ||
+                              (this.post.state != null &&
+                                  this.post.state!.isNotEmpty),
+                          child: Text(
+                            '${this.post.city}' +
                                 (this.post.state != null &&
-                                    this.post.state!.isNotEmpty),
-                            child: Text(
-                              '${this.post.city}' +
-                                  (this.post.state != null &&
-                                          this.post.state!.isNotEmpty
-                                      ? ', ${this.post.state}'
-                                      : ''),
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 12),
+                                        this.post.state!.isNotEmpty
+                                    ? ', ${this.post.state}'
+                                    : ''),
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (this.post.badges!.length > 0)
+                    GestureDetector(
+                        child: Container(
+                            width: 25,
+                            height: 25,
+                            child: Image.network(
+                                this.post.badges?[0].icon as String)),
+                        onTap: () {
+                          showModalBottomSheet(
+                              barrierColor: Colors.black.withAlpha(1),
+                              context: context,
+                              backgroundColor: Colors.black.withAlpha(1),
+                              builder: (BuildContext context) {
+                                return SnackBarWidget(
+                                    menu: AppLocalizations.of(context)!
+                                        .badgeChangeMakerPro,
+                                    text: AppLocalizations.of(context)!
+                                        .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
+                                    about:
+                                        AppLocalizations.of(context)!.learnMore,
+                                    marginBottom: true,
+                                    onTapAbout: () {
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                        PageRoute.Page.homeScreen.route,
+                                        (Route<dynamic> route) => false,
+                                        arguments: {
+                                          "returnToPageWithArgs": {
+                                            'currentPageName': "learning_tracks"
+                                          }
+                                        },
+                                      );
+                                    },
+                                    contact: {
+                                      "text": AppLocalizations.of(context)!
+                                          .areYouAChangeMakerProToo,
+                                      "textLink": AppLocalizations.of(context)!
+                                          .getInContact,
+                                    });
+                              });
+                        }),
+                  PopupMenuPost(
+                    isAnabled: isUserOwnsPost,
+                    callbackReturnPopupMenu: _popupMenuReturn,
+                    post: post,
+                  ),
+                ],
+              )
+            ],
+          ),
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 32,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  color: Color(0xff1A4188),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ScrollConfiguration(
+                          behavior: const ScrollBehavior()
+                              .copyWith(overscroll: false),
+                          child: MyScrollbar(
+                            thumbColor: Color(0xff03145C),
+                            trackColor: Color(0xff4D7BC9),
+                            thickness: 4,
+                            builder: (context, scrollController) =>
+                                ListView.builder(
+                              controller: scrollController,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.only(left: 15),
+                              physics: ClampingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: this.post.tags.length,
+                              itemBuilder: (ctx, index) {
+                                return Opacity(
+                                  opacity: 0.8,
+                                  child: HashtagName(
+                                    hashtagName: this.post.tags[index],
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (this.post.badges!.length > 0)
-                      GestureDetector(
-                          child: Container(
-                              width: 25,
-                              height: 25,
-                              child: Image.network(
-                                  this.post.badges?[0].icon as String)),
-                          onTap: () {
-                            showModalBottomSheet(
-                                barrierColor: Colors.black.withAlpha(1),
-                                context: context,
-                                backgroundColor: Colors.black.withAlpha(1),
-                                builder: (BuildContext context) {
-                                  return SnackBarWidget(
-                                      menu: AppLocalizations.of(context)!
-                                          .badgeChangeMakerPro,
-                                      text: AppLocalizations.of(context)!
-                                          .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                      about: AppLocalizations.of(context)!
-                                          .learnMore,
-                                      marginBottom: true,
-                                      onTapAbout: () {
-                                        Navigator.of(context)
-                                            .pushNamedAndRemoveUntil(
-                                          PageRoute.Page.homeScreen.route,
-                                          (Route<dynamic> route) => false,
-                                          arguments: {
-                                            "returnToPageWithArgs": {
-                                              'currentPageName':
-                                                  "learning_tracks"
-                                            }
-                                          },
-                                        );
-                                      },
-                                      contact: {
-                                        "text": AppLocalizations.of(context)!
-                                            .areYouAChangeMakerProToo,
-                                        "textLink":
-                                            AppLocalizations.of(context)!
-                                                .getInContact,
-                                      });
-                                });
-                          }),
-                    PopupMenuPost(
-                      isAnabled: isUserOwnsPost,
-                      callbackReturnPopupMenu: _popupMenuReturn,
-                      post: post,
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 32,
+              ),
+              Positioned(
+                left: 0.2,
+                top: 4,
+                child: Container(
+                  height: 20,
+                  width: 20.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                      topLeft: Radius.circular(15),
                     ),
                     color: Color(0xff1A4188),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: ScrollConfiguration(
-                            behavior: const ScrollBehavior()
-                                .copyWith(overscroll: false),
-                            child: MyScrollbar(
-                              thumbColor: Color(0xff03145C),
-                              trackColor: Color(0xff4D7BC9),
-                              thickness: 4,
-                              builder: (context, scrollController) =>
-                                  ListView.builder(
-                                controller: scrollController,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.only(left: 15),
-                                physics: ClampingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: this.post.tags.length,
-                                itemBuilder: (ctx, index) {
-                                  return Opacity(
-                                    opacity: 0.8,
-                                    child: HashtagName(
-                                      hashtagName: this.post.tags[index],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0.2,
-                  top: 4,
-                  child: Container(
-                    height: 20,
-                    width: 20.5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                      ),
-                      color: Color(0xff1A4188),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0.2,
-                  top: 4,
-                  child: Container(
-                    height: 20,
-                    width: 20.5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15),
-                      ),
-                      color: Color(0xff1A4188),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Color(0xff1A4188),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20)),
-                  ),
-                  child: this.post.type == "image"
-                      ? ImagePostTimeline(
-                          image: this.post.imageUrl as String,
-                          //onDoubleTapVideo: () => this._likePost(false, true),
-                        )
-                      : FlickMultiPlayer(
-                          userId: (user != null ? user!.id : null),
-                          postId: this.post.id,
-                          url: this.post.videoUrl!,
-                          flickMultiManager: widget.flickMultiManager,
-                          image: this.post.thumbnailUrl,
-                          //onDoubleTapVideo: () => this._likePost(false, true),
-                        ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: AnimatedOpacity(
-                    opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 0.8
-                        : 0.0,
-                    duration: Duration(milliseconds: 500),
-                    child: Visibility(
-                      visible: _bigLikeShowAnimation,
-                      child: Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * .6,
-                        child: Image.asset(
-                          'assets/icons_profile/woow_active.png',
-                          width: 90,
-                          height: 90,
-                        ),
-                      ),
-                    ),
-                    onEnd: () {
-                      Timer(Duration(milliseconds: 300), () {
-                        setState(() => _bigLikeShowAnimationEnd = true);
-                        Timer(Duration(milliseconds: 500), () {
-                          setState(() => _bigLikeShowAnimation = false);
-                        });
-                      });
-                      //appState.setSplashFinished();
-                    },
-                  ),
-                )
-              ],
-            ),
-            Container(
-              height: 32,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(
-                  vertical: GlobalConstants.of(context).spacingSmall),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                border: Border.all(
-                  color: Colors.grey.shade300,
-                  width: 1,
                 ),
               ),
-              child: Stack(
-                key: _slideButtonKey,
-                children: [
-                  Positioned(
-                    left: 54,
-                    child: Opacity(
-                      opacity: (1.2 -
-                                  ((((_draggablePositionX * 100) / 300) /
-                                      100)) -
-                                  0.2) >
-                              0
-                          ? 1.2 -
-                              ((((_draggablePositionX * 100) / 300) / 100)) -
-                              0.2
-                          : 0,
-                      child: Container(
-                        height: 32,
-                        padding: EdgeInsets.only(bottom: 2),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          AppLocalizations.of(context)!
-                              .slideToGiveAGratitudeReward,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(
-                              0xffBEBDBD,
-                            ),
+              Positioned(
+                right: 0.2,
+                top: 4,
+                child: Container(
+                  height: 20,
+                  width: 20.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                    ),
+                    color: Color(0xff1A4188),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Color(0xff1A4188),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20)),
+                ),
+                child: this.post.type == "image"
+                    ? ImagePostTimeline(
+                        image: this.post.imageUrl as String,
+                        //onDoubleTapVideo: () => this._likePost(false, true),
+                      )
+                    : FlickMultiPlayer(
+                        userId: (user != null ? user!.id : null),
+                        postId: this.post.id,
+                        url: this.post.videoUrl!,
+                        flickMultiManager: widget.flickMultiManager,
+                        image: this.post.thumbnailUrl,
+                        //onDoubleTapVideo: () => this._likePost(false, true),
+                      ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: AnimatedOpacity(
+                  opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                      ? 0.8
+                      : 0.0,
+                  duration: Duration(milliseconds: 500),
+                  child: Visibility(
+                    visible: _bigLikeShowAnimation,
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * .6,
+                      child: Image.asset(
+                        'assets/icons_profile/woow_active.png',
+                        width: 90,
+                        height: 90,
+                      ),
+                    ),
+                  ),
+                  onEnd: () {
+                    Timer(Duration(milliseconds: 300), () {
+                      setState(() => _bigLikeShowAnimationEnd = true);
+                      Timer(Duration(milliseconds: 500), () {
+                        setState(() => _bigLikeShowAnimation = false);
+                      });
+                    });
+                    //appState.setSplashFinished();
+                  },
+                ),
+              )
+            ],
+          ),
+          Container(
+            height: 32,
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(
+                vertical: GlobalConstants.of(context).spacingSmall),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: Colors.grey.shade300,
+                width: 1,
+              ),
+            ),
+            child: Stack(
+              key: _slideButtonKey,
+              children: [
+                Positioned(
+                  left: 54,
+                  child: Opacity(
+                    opacity: (1.2 -
+                                ((((_draggablePositionX * 100) / 300) / 100)) -
+                                0.2) >
+                            0
+                        ? 1.2 -
+                            ((((_draggablePositionX * 100) / 300) / 100)) -
+                            0.2
+                        : 0,
+                    child: Container(
+                      height: 32,
+                      padding: EdgeInsets.only(bottom: 2),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppLocalizations.of(context)!
+                            .slideToGiveAGratitudeReward,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(
+                            0xffBEBDBD,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  Positioned(
-                    key: _oozInfoKey,
-                    width: 150,
-                    right: 0,
-                    child: Container(
-                      height: 36,
-                      margin: EdgeInsets.all(2),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            width: 96,
-                            right: showOozToTransfer() ? 50 : 0,
-                            child: this.post.oozToTransfer > 0 &&
-                                    (_isDragging || _oozIsSent || _oozError) &&
-                                    !_oozSlidingOut
-                                ? Container(
-                                    margin: EdgeInsets.only(bottom: 5),
-                                    child: renderRewardStatus(),
-                                  )
-                                : Container(),
-                          ),
-                          Visibility(
-                            visible: showOozToTransfer(),
-                            child: Positioned(
-                              height: 26,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(PageRoute
-                                      .Page.aboutOOzCurrentScreen.route);
-                                },
-                                child: Container(
-                                    width: 80,
-                                    padding: EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(100),
-                                      border: Border.all(
-                                        color: Colors.grey.shade300,
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 3),
-                                          child: this.post.oozToTransfer == 0
-                                              ? Image(
-                                                  image: AssetImage(
-                                                    'assets/icons/ooz_only.png',
-                                                  ),
-                                                  width: 16,
-                                                )
-                                              : Image(
-                                                  image: AssetImage(
-                                                    'assets/icons/ooz_only_active.png',
-                                                  ),
-                                                  width: 16,
-                                                ),
-                                        ),
-                                        this.post.oozToTransfer > 0
-                                            ? Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 4),
-                                                child: Text(
-                                                  "+ " +
-                                                      currencyFormatter.format(
-                                                          this
-                                                              .post
-                                                              .oozToTransfer),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Color(0xFF003694),
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              )
-                                            : Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 4),
-                                                child: Text(
-                                                  currencyFormatter.format(this
-                                                      .post
-                                                      .oozTotalCollected),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              )
-                                      ],
-                                    )),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: _isDragging ? _draggablePositionX : 64,
+                ),
+                Positioned(
+                  key: _oozInfoKey,
+                  width: 150,
+                  right: 0,
+                  child: Container(
                     height: 36,
-                    decoration: _draggablePositionX > 36
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.white,
-                                Color(0xFF003286),
-                              ],
-                            ),
-                          )
-                        : BoxDecoration(),
-                  ),
-                  Container(
-                    width: _isDragging
-                        ? (_draggablePositionX >= 36
-                            ? _draggablePositionX + 36
-                            : 80)
-                        : 64,
-                    height: 30,
+                    margin: EdgeInsets.all(2),
                     child: Stack(
                       children: [
-                        Container(
-                          width: double.infinity,
-                          child: SizedBox(),
-                        ),
-                        CustomPaint(
-                          painter: CustomContainerShapeBorder(
-                            x: _draggablePositionX,
-                          ),
-                        ),
                         Positioned(
-                          top: 6,
-                          left: _draggablePositionX >= 36
-                              ? _draggablePositionX - 22
-                              : 12,
-                          child: Visibility(
-                            visible: _isDragging,
-                            child: Image(
-                              image: AssetImage(
-                                !this.postTimelineController.post.liked
-                                    ? 'assets/icons_profile/woow.png'
-                                    : 'assets/icons_profile/woow_active.png',
-                              ),
+                          top: 0,
+                          width: 96,
+                          right: showOozToTransfer() ? 50 : 0,
+                          child: this.post.oozToTransfer > 0 &&
+                                  (_isDragging || _oozIsSent || _oozError) &&
+                                  !_oozSlidingOut
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  child: renderRewardStatus(),
+                                )
+                              : Container(),
+                        ),
+                        Visibility(
+                          visible: showOozToTransfer(),
+                          child: Positioned(
+                            height: 26,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                    PageRoute.Page.aboutOOzCurrentScreen.route);
+                              },
+                              child: Container(
+                                  width: 80,
+                                  padding: EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 3),
+                                        child: this.post.oozToTransfer == 0
+                                            ? Image(
+                                                image: AssetImage(
+                                                  'assets/icons/ooz_only.png',
+                                                ),
+                                                width: 16,
+                                              )
+                                            : Image(
+                                                image: AssetImage(
+                                                  'assets/icons/ooz_only_active.png',
+                                                ),
+                                                width: 16,
+                                              ),
+                                      ),
+                                      this.post.oozToTransfer > 0
+                                          ? Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 4),
+                                              child: Text(
+                                                "+ " +
+                                                    currencyFormatter.format(
+                                                        this
+                                                            .post
+                                                            .oozToTransfer),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Color(0xFF003694),
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 4),
+                                              child: Text(
+                                                currencyFormatter.format(this
+                                                    .post
+                                                    .oozTotalCollected),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            )
+                                    ],
+                                  )),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Positioned(
-                    left: _draggablePositionX >= 36
-                        ? _draggablePositionX - 36
-                        : 0,
-                    child: Draggable(
-                      onDragStarted: () {
-                        setState(() {
-                          _isDragging = true;
-                        });
-                      },
-                      onDraggableCanceled: (velocity, offset) {},
-                      onDragUpdate: (details) {
-                        if (this.mounted) {
-                          setState(() {
-                            if (details.localPosition.dx <=
-                                getMaxSlideWidth()) {
-                              _draggablePositionX = details.localPosition.dx;
-                            } else {
-                              if (details.localPosition.dx <= 36) {
-                                _draggablePositionX = 36;
-                              } else {
-                                _draggablePositionX = getMaxSlideWidth();
-                              }
-                            }
-                            onSlideButton();
-                          });
-                        }
-                      },
-                      axis: Axis.horizontal,
-                      child: Container(
-                        padding: const EdgeInsets.all(1),
-                        height: 30.0, // you can adjust the width as you need
-                        child: Opacity(
-                          opacity: 1.0,
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: RotatedBox(
-                                quarterTurns: 1,
-                                child: IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  icon: Image(
-                                    image: AssetImage(
-                                        'assets/icons_profile/woow.png'),
-                                  ),
-                                  onPressed: () => {},
-                                  //this._likePost(true)
-                                )),
+                ),
+                Container(
+                  width: _isDragging ? _draggablePositionX : 64,
+                  height: 36,
+                  decoration: _draggablePositionX > 36
+                      ? BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white,
+                              Color(0xFF003286),
+                            ],
+                          ),
+                        )
+                      : BoxDecoration(),
+                ),
+                Container(
+                  width: _isDragging
+                      ? (_draggablePositionX >= 36
+                          ? _draggablePositionX + 36
+                          : 80)
+                      : 64,
+                  height: 30,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        child: SizedBox(),
+                      ),
+                      CustomPaint(
+                        painter: CustomContainerShapeBorder(
+                          x: _draggablePositionX,
+                        ),
+                      ),
+                      Positioned(
+                        top: 6,
+                        left: _draggablePositionX >= 36
+                            ? _draggablePositionX - 22
+                            : 12,
+                        child: Visibility(
+                          visible: _isDragging,
+                          child: Image(
+                            image: AssetImage(
+                              !this.postTimelineController.post.liked
+                                  ? 'assets/icons_profile/woow.png'
+                                  : 'assets/icons_profile/woow_active.png',
+                            ),
                           ),
                         ),
                       ),
-                      feedback: Container(),
-                    ),
+                    ],
                   ),
-                  Visibility(
-                    visible:
-                        this.post.userId == (authStore.currentUser?.id ?? ""),
-                    child: GestureDetector(
-                      onHorizontalDragEnd: (_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          CustomSnackbars(context).defaultSnackbar(
-                            text: AppLocalizations.of(context)!
-                                .tooltipBlockedField,
-                            backgroundColor: Color(0xff03DAC5),
-                            iconColor: Colors.white,
-                            suffixIcon: Icons.info_outline_rounded,
-                            textColor: Colors.white,
-                          ),
-                        );
-                      },
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          CustomSnackbars(context).defaultSnackbar(
-                            text: AppLocalizations.of(context)!
-                                .tooltipBlockedField,
-                            backgroundColor: Color(0xff03DAC5),
-                            iconColor: Colors.white,
-                            suffixIcon: Icons.info_outline_rounded,
-                            textColor: Colors.white,
-                          ),
-                        );
-                      },
-                      child: Container(
-                          height: 36,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: Colors.white.withOpacity(0.5),
-                          )),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Visibility(
-              visible: this.post.description != null &&
-                  this.post.description.isNotEmpty,
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: 3, left: 12, bottom: 12, right: 12),
-                      child: Text(this.post.description),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                controller.insertPage(
-                  CommentScreen({
-                    "post": this.post,
-                  }),
-                );
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 8),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 12, left: 12),
-                          child: Text(
-                            this.post.commentsCount.toString() +
-                                " ${AppLocalizations.of(context)!.comments}",
-                            style:
-                                TextStyle(color: Colors.black.withOpacity(0.4)),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 8),
-                          child: widget.user?.photoUrl != null
-                              ? CircleAvatar(
-                                  radius: 16,
-                                  backgroundColor: Colors.white,
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        "${widget.user?.photoUrl}"),
-                                    radius: 14,
-                                  ),
-                                )
-                              : CircleAvatar(
-                                  radius: 16,
-                                  backgroundColor: Colors.white,
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage("assets/icons/user.png"),
-                                    radius: 14,
-                                  ),
-                                ),
-                        ),
-                        Opacity(
-                          opacity: .4,
-                          child: Text(
-                            AppLocalizations.of(context)!.addAComment,
-                            style: TextStyle(),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
                 ),
+                Positioned(
+                  left:
+                      _draggablePositionX >= 36 ? _draggablePositionX - 36 : 0,
+                  child: Draggable(
+                    onDragStarted: () {
+                      setState(() {
+                        _isDragging = true;
+                      });
+                    },
+                    onDraggableCanceled: (velocity, offset) {},
+                    onDragUpdate: (details) {
+                      if (this.mounted) {
+                        setState(() {
+                          if (details.localPosition.dx <= getMaxSlideWidth()) {
+                            _draggablePositionX = details.localPosition.dx;
+                          } else {
+                            if (details.localPosition.dx <= 36) {
+                              _draggablePositionX = 36;
+                            } else {
+                              _draggablePositionX = getMaxSlideWidth();
+                            }
+                          }
+                          onSlideButton();
+                        });
+                      }
+                    },
+                    axis: Axis.horizontal,
+                    child: Container(
+                      padding: const EdgeInsets.all(1),
+                      height: 30.0, // you can adjust the width as you need
+                      child: Opacity(
+                        opacity: 1.0,
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: RotatedBox(
+                              quarterTurns: 1,
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                icon: Image(
+                                  image: AssetImage(
+                                      'assets/icons_profile/woow.png'),
+                                ),
+                                onPressed: () => {},
+                                //this._likePost(true)
+                              )),
+                        ),
+                      ),
+                    ),
+                    feedback: Container(),
+                  ),
+                ),
+                Visibility(
+                  visible:
+                      this.post.userId == (authStore.currentUser?.id ?? ""),
+                  child: GestureDetector(
+                    onHorizontalDragEnd: (_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        CustomSnackbars(context).defaultSnackbar(
+                          text:
+                              AppLocalizations.of(context)!.tooltipBlockedField,
+                          backgroundColor: Color(0xff03DAC5),
+                          iconColor: Colors.white,
+                          suffixIcon: Icons.info_outline_rounded,
+                          textColor: Colors.white,
+                        ),
+                      );
+                    },
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        CustomSnackbars(context).defaultSnackbar(
+                          text:
+                              AppLocalizations.of(context)!.tooltipBlockedField,
+                          backgroundColor: Color(0xff03DAC5),
+                          iconColor: Colors.white,
+                          suffixIcon: Icons.info_outline_rounded,
+                          textColor: Colors.white,
+                        ),
+                      );
+                    },
+                    child: Container(
+                        height: 36,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.white.withOpacity(0.5),
+                        )),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Visibility(
+            visible: this.post.description != null &&
+                this.post.description.isNotEmpty,
+            child: Row(
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: 3, left: 12, bottom: 12, right: 12),
+                    child: Text(this.post.description),
+                  ),
+                )
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              controller.insertPage(
+                CommentScreen({
+                  "post": this.post,
+                }),
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 12, left: 12),
+                        child: Text(
+                          this.post.commentsCount.toString() +
+                              " ${AppLocalizations.of(context)!.comments}",
+                          style:
+                              TextStyle(color: Colors.black.withOpacity(0.4)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 8),
+                        child: widget.user?.photoUrl != null
+                            ? CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage("${widget.user?.photoUrl}"),
+                                  radius: 14,
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage("assets/icons/user.png"),
+                                  radius: 14,
+                                ),
+                              ),
+                      ),
+                      Opacity(
+                        opacity: .4,
+                        child: Text(
+                          AppLocalizations.of(context)!.addAComment,
+                          style: TextStyle(),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
-          ],
-        );
-      });
+          ),
+        ],
+      );
     });
   }
 
