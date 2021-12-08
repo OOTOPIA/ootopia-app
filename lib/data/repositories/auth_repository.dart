@@ -90,7 +90,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "tagsIds": tagsIds!.join(","),
         "registerPhase": user.registerPhase.toString(),
       };
-
+      final response;
       if (user.photoFilePath != null) {
         String fileName = user.photoFilePath!.split('/').last;
         data['file'] = await MultipartFile.fromFile(
@@ -98,7 +98,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           filename: fileName,
         );
         FormData formData = FormData.fromMap(data);
-        final response = await ApiClient.api().post(
+        response = await ApiClient.api().post(
           dotenv.env['API_URL']! + "users",
           data: formData,
           options: Options(headers: {}),
@@ -108,7 +108,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           throw Exception('Failed to create user #1');
         }
       } else {
-        final response = await ApiClient.api().post(
+        response = await ApiClient.api().post(
           dotenv.env['API_URL']! + "users",
           data: data,
         );
@@ -117,6 +117,11 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           Sentry.captureMessage("ERROR_ON_REGISTER_2 >>> " + jsonEncode(data));
           throw Exception('Failed to create user #2');
         }
+      }
+      if (response.statusCode == 201) {
+        this
+            .trackingEvents
+            .trackingSignupCompletedSignup(response.id!, response.fullname!);
       }
     } catch (error) {
       throw Exception('Failed to create user ' + error.toString());

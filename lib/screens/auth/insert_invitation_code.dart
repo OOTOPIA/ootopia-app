@@ -34,7 +34,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
 
   SmartPageController pageController = SmartPageController.getInstance();
-
+  bool trackingIsActive = true;
   Timer? _debounce;
 
   void setStatusBar(bool getOutScreen) {
@@ -90,7 +90,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
       });
     } else {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(const Duration(milliseconds: 300), () async {
+      _debounce = Timer(const Duration(milliseconds: 500), () async {
         var statusCode = await insertInvitationCodeStore
             .verifyCodes(registerController.codeController.text);
 
@@ -98,7 +98,13 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
           if (statusCode == 'valid') {
             visibleValidStatusCode = true;
             showValidationErrorText = false;
-          } else if(statusCode != "") {
+            if (trackingIsActive) {
+              this.trackingEvents.signupCompletedInvitationCode({
+                "inivitationCode": registerController.codeController.text,
+              });
+              trackingIsActive = false;
+            }
+          } else if (statusCode != "") {
             visibleValidStatusCode = false;
             showValidationErrorText = true;
           }

@@ -62,28 +62,32 @@ class AnalyticsTracking {
     this.trackingEvent("Signup - Completed signup", null);
   }
 
-  signupStartedSignupPartII() {
-    this.trackingEvent("Signup - Started signup part II", null);
+  signupCompletedInvitationCode(property) {
+    this.trackingEvent("Signup - Completed Invitation Code", property);
   }
 
-  signupCompletedStepIOfSignupII(property) {
-    this.trackingEvent("Signup - Completed step I of signup II", property);
+  signupCompletedEmail(property) {
+    this.trackingEvent("Signup - Completed Email", property);
   }
 
-  signupCompletedStepIIOfSignupII(property) {
-    this.trackingEvent("Signup - Completed step II of signup II", property);
+  signupCompletedPhoneNumber(property) {
+    this.trackingEvent("Signup - Completed Phone Number", property);
   }
 
-  signupCompletedStepIIIOfSignupII(property) {
-    this.trackingEvent("Signup - Completed step III of signup II", property);
+  signupCompletedDailyLearning(property) {
+    this.trackingEvent("Signup - Completed Daily Learning", property);
+  }
+
+  signupCompletedGeolocation(property) {
+    this.trackingEvent("Signup - Completed Geolocation", property);
   }
 
   signupCompletedStepIVOfSignupII(property) {
     this.trackingEvent("Signup - Completed step IV of signup II", property);
   }
 
-  signupConcludeButton(property) {
-    this.trackingEvent("Signup - Clicked at Conclude button", property);
+  signupConcludeButton() {
+    this.trackingEvent("Signup - Clicked at Conclude button", null);
   }
 
   signupWatchedTheTutorial(eventName, property) {
