@@ -21,10 +21,10 @@ class GeneralConfigRepositoryImpl implements GeneralConfigRepository {
         print("GENERAL CONFIG RESPONSE ${response.data}");
         await secureStoreMixin.setGeneralConfig(jsonEncode(response.data));
       } else {
-        throw Exception('Failed to load wallet');
+        throw Exception('Failed to load general config');
       }
     } catch (error) {
-      throw Exception('Failed to load wallet. Error: $error');
+      throw Exception('Failed to load general config. Error: $error');
     }
   }
 

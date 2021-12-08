@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
-import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -23,12 +21,9 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'components/feed_player/multi_manager/flick_multi_manager.dart';
-
 import 'package:uni_links/uni_links.dart';
 import 'package:flutter/services.dart';
-
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 bool _initialUriIsHandled = false;
@@ -48,12 +43,8 @@ class _TimelinePageState extends State<TimelinePage>
         WidgetsBindingObserver {
   late StreamSubscription _intentDataStreamSubscription;
   late List<SharedMediaFile> _sharedFiles;
-  late TimelinePostBloc timelineBloc;
   bool loggedIn = false;
   User? user;
-  final int _itemsPerPageCount = 10;
-  int _nextPageThreshold = 5;
-  bool _hasMoreItems = true;
   bool showUploadedVideoMessage = false;
   GeneralConfigRepositoryImpl generalConfigRepositoryImpl =
       GeneralConfigRepositoryImpl();
@@ -67,7 +58,6 @@ class _TimelinePageState extends State<TimelinePage>
   late AuthStore authStore;
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
-  DailyGoalStatsModel? dailyGoalStats;
   SmartPageController controller = SmartPageController.getInstance();
 
   @override
@@ -92,7 +82,6 @@ class _TimelinePageState extends State<TimelinePage>
     });
     setTimelineVideosMuted();
 
-    timelineBloc = BlocProvider.of<TimelinePostBloc>(context);
     performAllRequests();
     flickMultiManager = FlickMultiManager();
 
@@ -139,50 +128,6 @@ class _TimelinePageState extends State<TimelinePage>
     });
   }
 
-  // void initDynamicLinks() async {
-  //   print("Token first");
-
-  //   FirebaseDynamicLinks.instance.onLink(
-  //       onSuccess: (PendingDynamicLinkData? dynamicLink) async {
-  //     final Uri? deepLink = dynamicLink?.link;
-  //     print("Token second");
-
-  //     // final uri = await getInitialUri();
-  //     // var linkSplit = uri.toString().split("resetPasswordToken=");
-  //     // var token = linkSplit[linkSplit.length - 1];
-
-  //     // print("Token $uri");
-  //     // print("Token $linkSplit");
-  //     // print("Token $token");
-
-  //     if (deepLink != null) {
-  //       void _goToProfile() async {
-  //         PageViewController.instance.addPage(ProfileScreen(
-  //           {
-  //             "id": user != null && timelineStore.allPosts[0].userId == user!.id
-  //                 ? null
-  //                 : timelineStore.allPosts[0].userId,
-  //           },
-  //         ));
-  //       }
-  //       // setRecoverPasswordToken(token);
-  //       // goToResetPassword();
-  //       // Navigator.pushNamed(context, deepLink.path);
-  //     }
-  //   }, onError: (OnLinkErrorException e) async {
-  //     print('onLinkError');
-  //     print(e.message);
-  //   });
-
-  //   final PendingDynamicLinkData? data =
-  //       await FirebaseDynamicLinks.instance.getInitialLink();
-  //   final Uri? deepLink = data?.link;
-
-  //   if (deepLink != null) {
-  //     Navigator.pushNamed(context, deepLink.path);
-  //   }
-  // }
-
   Future<void> _handleInitialUri() async {
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
@@ -214,7 +159,6 @@ class _TimelinePageState extends State<TimelinePage>
     print("PERFORM ALL BEFORE");
     await _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
-    //dailyGoalStats = await store.getDailyGoalStats();
     print("PERFORM ALL AFTER");
   }
 
@@ -224,18 +168,16 @@ class _TimelinePageState extends State<TimelinePage>
           .secureStoreMixin
           .getGeneralConfigByName("transfer_ooz_to_post_limit");
       setTransferOOZToPostLimit(transferOozToPostLimitConfig?.value ?? 0);
-      //Recuperamos os posts apenas após a configuração inicial para evitar problema com o limite de transferência de OOZ
-      timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
-          (timelineStore.currentPage - 1) * _itemsPerPageCount));
+      timelineStore.getTimelinePosts();
     } catch (e) {
       //error
-      print("Erro! ${e.toString()}");
+      print("Erro!!! ${e.toString()}");
     }
   }
 
   void onReceiveVideoFromAnotherApp(List<SharedMediaFile> value) async {
     await _checkUserIsLoggedIn();
-    if (value != null && value.length > 0) {
+    if (value.length > 0) {
       _sharedFiles = value;
       var videoFile = _sharedFiles[0];
 
@@ -332,31 +274,7 @@ class _TimelinePageState extends State<TimelinePage>
                 RegenerationGame(),
                 Expanded(
                   child: Center(
-                    child: BlocListener<TimelinePostBloc, TimelinePostState>(
-                      listener: (context, state) {
-                        if (state is ErrorState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(state.message),
-                            ),
-                          );
-                        } else if (state is LoadedSucessState) {
-                          if (!state.onlyForRefreshCurrentList) {
-                            _hasMoreItems =
-                                state.posts.length == _itemsPerPageCount;
-                            timelineStore.allPosts.addAll(state.posts);
-                          }
-                        } else if (state is OnDeletedPostState) {
-                          timelineStore.allPosts
-                              .removeWhere((post) => post.id == state.postId);
-                        } else if (state is OnUpdatePostCommentsCountState) {
-                          timelineStore.allPosts
-                              .firstWhere((post) => post.id == state.postId)
-                              .commentsCount = state.commentsCount;
-                        }
-                      },
-                      child: _blocBuilder(),
-                    ),
+                    child: body(),
                   ),
                 ),
               ],
@@ -367,94 +285,16 @@ class _TimelinePageState extends State<TimelinePage>
     );
   }
 
-  _blocBuilder() {
-    return BlocBuilder<TimelinePostBloc, TimelinePostState>(
-      builder: (context, state) {
-        if (state is InitialState) {
-          return Center(
-            child: Text(AppLocalizations.of(context)!.initial),
-          );
-        } else if (state is LoadingState) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is LoadedSucessState) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: GlobalConstants.of(context).screenHorizontalSpace,
-            ),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: VisibilityDetector(
-                    key: ObjectKey(flickMultiManager),
-                    onVisibilityChanged: (visibility) {
-                      if (visibility.visibleFraction == 0 && this.mounted) {
-                        flickMultiManager.pause();
-                      }
-                    },
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        setState(() {
-                          timelineStore.allPosts = [];
-                          timelineStore.currentPage = 1;
-                        });
-                        performAllRequests();
-                      },
-                      child: ListView.separated(
-                        controller: timelineStore.scrollController,
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                        shrinkWrap: true,
-                        cacheExtent: 1000,
-                        itemCount: timelineStore.allPosts.length +
-                            (_hasMoreItems
-                                ? 1
-                                : 0), //Adicionei +1 manualmente devido à POC do youtube
-                        itemBuilder: (context, index) {
-                          if (index ==
-                                  timelineStore.allPosts.length -
-                                      _nextPageThreshold &&
-                              _hasMoreItems) {
-                            timelineStore.currentPage++;
-                            _getData();
-                          }
-                          if (index == timelineStore.allPosts.length) {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: _hasMoreItems
-                                    ? CircularProgressIndicator()
-                                    : Container(),
-                              ),
-                            );
-                          }
-                          return Column(
-                            children: [
-                              if (index == 0) LastLearningTrackComponents(),
-                              PhotoTimeline(
-                                key: ObjectKey(timelineStore.allPosts[index]),
-                                index: index,
-                                post: timelineStore.allPosts[index],
-                                timelineBloc: this.timelineBloc,
-                                loggedIn: this.loggedIn,
-                                user: user,
-                                flickMultiManager: flickMultiManager,
-                                isProfile: false,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (state is ErrorState) {
-          return TryAgain(
-            _getData,
-          );
-        }
+  body() {
+    return Observer(builder: (_) {
+      if (timelineStore.viewState == TimelineViewState.loading) {
+        return Center(child: CircularProgressIndicator());
+      } else if (timelineStore.viewState == TimelineViewState.error) {
+        return TryAgain(
+          () => timelineStore.getTimelinePosts(),
+        );
+      } else if (timelineStore.viewState == TimelineViewState.ok &&
+          timelineStore.allPosts.length == 0) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -465,8 +305,84 @@ class _TimelinePageState extends State<TimelinePage>
             ],
           ),
         );
-      },
-    );
+      }
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: GlobalConstants.of(context).screenHorizontalSpace,
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: VisibilityDetector(
+                key: ObjectKey(flickMultiManager),
+                onVisibilityChanged: (visibility) {
+                  if (visibility.visibleFraction == 0 && this.mounted) {
+                    flickMultiManager.pause();
+                  }
+                },
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    if (!timelineStore.loadingMorePosts &&
+                        timelineStore.viewState != TimelineViewState.loading &&
+                        scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent &&
+                        timelineStore.hasMorePosts) {
+                      timelineStore.getTimelinePosts();
+                    }
+                    return true;
+                  },
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      timelineStore.reloadPosts();
+                    },
+                    child: ListView.separated(
+                      itemCount: timelineStore.allPosts.length,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            if (index == 0) LastLearningTrackComponents(),
+                            PhotoTimeline(
+                              key: ObjectKey(timelineStore.allPosts[index]),
+                              index: index,
+                              post: timelineStore.allPosts[index],
+                              timelineStore: this.timelineStore,
+                              loggedIn: this.loggedIn,
+                              user: user,
+                              flickMultiManager: flickMultiManager,
+                              isProfile: false,
+                              onDelete: () => setState(() {}),
+                            ),
+                            Observer(
+                              builder: (_) => (timelineStore.loadingMorePosts &&
+                                      index == timelineStore.allPosts.length - 1
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      height: 90,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : Container(
+                                      padding: index ==
+                                              timelineStore.allPosts.length - 1
+                                          ? EdgeInsets.only(bottom: 90)
+                                          : null,
+                                    )),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   // Widget get remainingTime => Padding(
@@ -524,8 +440,4 @@ class _TimelinePageState extends State<TimelinePage>
   //       ),
   //     );
 
-  Future<void> _getData() async {
-    timelineBloc.add(GetTimelinePostsEvent(_itemsPerPageCount,
-        (timelineStore.currentPage - 1) * _itemsPerPageCount));
-  }
 }
