@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/models/users/auth_model.dart';
@@ -90,7 +89,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "tagsIds": tagsIds!.join(","),
         "registerPhase": user.registerPhase.toString(),
       };
-      final response;
+      final jsonData;
       if (user.photoFilePath != null) {
         String fileName = user.photoFilePath!.split('/').last;
         data['file'] = await MultipartFile.fromFile(
@@ -98,7 +97,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           filename: fileName,
         );
         FormData formData = FormData.fromMap(data);
-        response = await ApiClient.api().post(
+        final response = await ApiClient.api().post(
           dotenv.env['API_URL']! + "users",
           data: formData,
           options: Options(headers: {}),
@@ -107,8 +106,9 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           Sentry.captureMessage("ERROR_ON_REGISTER_1 >>> " + jsonEncode(data));
           throw Exception('Failed to create user #1');
         }
+        jsonData = json.decode(response.toString());
       } else {
-        response = await ApiClient.api().post(
+        final response = await ApiClient.api().post(
           dotenv.env['API_URL']! + "users",
           data: data,
         );
@@ -117,12 +117,11 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           Sentry.captureMessage("ERROR_ON_REGISTER_2 >>> " + jsonEncode(data));
           throw Exception('Failed to create user #2');
         }
+        jsonData = json.decode(response.toString());
       }
-      if (response.statusCode == 201) {
-        this
-            .trackingEvents
-            .trackingSignupCompletedSignup(response.id!, response.fullname!);
-      }
+      this
+          .trackingEvents
+          .trackingSignupCompletedSignup(jsonData["id"], jsonData["fullname"]);
     } catch (error) {
       throw Exception('Failed to create user ' + error.toString());
     }

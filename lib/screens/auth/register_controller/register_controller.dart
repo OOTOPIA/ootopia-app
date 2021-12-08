@@ -276,8 +276,6 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       registerPhase: 2,
     );
 
-    this.trackingEvents.signupConcludeButton();
-
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
     try {
