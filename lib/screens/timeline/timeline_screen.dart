@@ -356,7 +356,9 @@ class _TimelinePageState extends State<TimelinePage>
                             ),
                             Observer(
                               builder: (_) => (timelineStore.loadingMorePosts &&
-                                      index == timelineStore.allPosts.length - 1
+                                      index ==
+                                          timelineStore.allPosts.length - 1 &&
+                                      timelineStore.hasMorePosts
                                   ? SizedBox(
                                       width: double.infinity,
                                       height: 90,

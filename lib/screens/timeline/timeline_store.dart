@@ -145,8 +145,6 @@ abstract class TimelineStoreBase with Store {
       _loadingMorePosts = true;
     }
 
-    print("CHAMOU ESSE");
-
     try {
       if ((offset == null || offset == 0) && _loadingMorePosts == false) {
         allPosts.clear();
@@ -160,10 +158,10 @@ abstract class TimelineStoreBase with Store {
       _postsOffset = _postsOffset + maxPostsPerPage;
       allPosts.addAll(response);
       viewState = TimelineViewState.ok;
-      //_loadingMorePosts = false;
+      _loadingMorePosts = false;
     } catch (err) {
       viewState = TimelineViewState.error;
-      //_loadingMorePosts = false;
+      _loadingMorePosts = false;
     }
   }
 
@@ -176,6 +174,7 @@ abstract class TimelineStoreBase with Store {
   @action
   Future reloadPosts([String? userId]) async {
     _postsOffset = 0;
+    _hasMorePosts = true;
     allPosts.clear();
     getTimelinePosts(null, null, userId);
   }
