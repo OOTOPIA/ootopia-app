@@ -77,7 +77,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                   padding: EdgeInsets.all(9),
                   child: Center(
                     child: Text(
-                      '${widget.defaultCode}',
+                      AppLocalizations.of(context)!.sendCode,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -89,7 +89,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
               Container(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  AppLocalizations.of(context)!.shareThisCode,
+                  "${AppLocalizations.of(context)!.code}: ${widget.defaultCode}",
                   textAlign: TextAlign.center,
                   softWrap: true,
                   style: TextStyle(

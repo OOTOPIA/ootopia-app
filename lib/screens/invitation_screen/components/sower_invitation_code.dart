@@ -64,7 +64,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                   padding: EdgeInsets.all(9),
                   child: Center(
                     child: Text(
-                      '${widget.sowerCode}',
+                      AppLocalizations.of(context)!.sendCode,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -76,7 +76,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  AppLocalizations.of(context)!.shareThisCode,
+                  "${AppLocalizations.of(context)!.code}: ${widget.sowerCode}",
                   textAlign: TextAlign.center,
                   softWrap: true,
                   style: TextStyle(
