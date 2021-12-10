@@ -15,10 +15,6 @@ class LearningTracksRepositoryImpl
   Future<LearningTracksModel?> lastLearningTracks(
       {required String locale}) async {
     try {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (!loggedIn) {
-        return null;
-      }
       var response =
           await ApiClient.api().get("learning-tracks/last", queryParameters: {
         'locale': locale,

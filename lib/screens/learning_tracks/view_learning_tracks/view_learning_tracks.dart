@@ -5,7 +5,10 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
+import 'package:provider/provider.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLearningTracksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -21,6 +24,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   LearningTracksRepositoryImpl learningTracksRepositoryImpl =
       LearningTracksRepositoryImpl();
   bool loading = true;
+  late AuthStore authStore;
 
   @override
   void initState() {
@@ -61,6 +65,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return Scaffold(
       body: LoadingOverlay(
         isLoading: this.loading,
@@ -128,16 +133,29 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                         highlightColor: Colors.transparent,
                                         splashColor: Colors.transparent,
                                         onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return WatchVideoLeaningTracks(
-                                              learningTrack: learningTracks,
-                                              chapter: chapter,
-                                              updateStatusVideoChapter:
-                                                  updateStatusVideoChapter,
+                                          if (authStore.currentUser == null) {
+                                            Navigator.of(context).pushNamed(
+                                              PageRoute.Page.loginScreen.route,
+                                              arguments: {
+                                                "returnToPageWithArgs": {
+                                                  "currentPageName":
+                                                      "learning_tracks",
+                                                  "arguments": null
+                                                }
+                                              },
                                             );
-                                          }));
+                                          } else {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return WatchVideoLeaningTracks(
+                                                learningTrack: learningTracks,
+                                                chapter: chapter,
+                                                updateStatusVideoChapter:
+                                                    updateStatusVideoChapter,
+                                              );
+                                            }));
+                                          }
                                         },
                                         child: Column(
                                           children: [

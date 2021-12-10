@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
@@ -82,19 +81,7 @@ class _LastLearningTrackComponentsState
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onTap: () {
-                      if (authStore.currentUser == null) {
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.loginScreen.route,
-                          arguments: {
-                            "returnToPageWithArgs": {
-                              "currentPageName": "wallet",
-                              "arguments": null
-                            }
-                          },
-                        );
-                      } else {
-                        controller.selectBottomTab(1);
-                      }
+                      controller.selectBottomTab(1);
                     },
                     child: Row(
                       children: [
@@ -128,24 +115,12 @@ class _LastLearningTrackComponentsState
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onTap: () {
-                      if (authStore.currentUser == null) {
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.loginScreen.route,
-                          arguments: {
-                            "returnToPageWithArgs": {
-                              "currentPageName": "wallet",
-                              "arguments": null
-                            }
-                          },
-                        );
-                      } else {
-                        controller.insertPage(ViewLearningTracksScreen({
-                          'list_chapters': learningTracksStore
-                              .getLastLearningTracks!.chapters,
-                          'learning_tracks':
-                              learningTracksStore.getLastLearningTracks,
-                        }));
-                      }
+                      controller.insertPage(ViewLearningTracksScreen({
+                        'list_chapters':
+                            learningTracksStore.getLastLearningTracks!.chapters,
+                        'learning_tracks':
+                            learningTracksStore.getLastLearningTracks,
+                      }));
                     },
                     child: Row(
                       children: [
