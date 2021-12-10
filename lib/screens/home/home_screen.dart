@@ -373,18 +373,18 @@ class _HomeScreenState extends State<HomeScreen>
                       controller.resetNavigation();
                       break;
                     case PageViewController.TAB_INDEX_LEARNING_TRACKS:
-                      if (authStore.currentUser == null) {
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.loginScreen.route,
-                          arguments: {
-                            "returnToPageWithArgs": {
-                              "currentPageName": "learning_tracks",
-                              "arguments": null
-                            }
-                          },
-                        );
-                        result = false;
-                      }
+                      // if (authStore.currentUser == null) {
+                      //   Navigator.of(context).pushNamed(
+                      //     PageRoute.Page.loginScreen.route,
+                      //     arguments: {
+                      //       "returnToPageWithArgs": {
+                      //         "currentPageName": "learning_tracks",
+                      //         "arguments": null
+                      //       }
+                      //     },
+                      //   );
+                      //   result = false;
+                      // }
                       break;
                     case PageViewController.TAB_INDEX_CAMERA:
                       if (authStore.currentUser == null) {
@@ -404,18 +404,18 @@ class _HomeScreenState extends State<HomeScreen>
                       result = false;
                       break;
                     case PageViewController.TAB_INDEX_MARKETPLACE:
-                      if (authStore.currentUser == null) {
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.loginScreen.route,
-                          arguments: {
-                            "returnToPageWithArgs": {
-                              "currentPageName": "marketplace",
-                              "arguments": null
-                            }
-                          },
-                        );
-                        result = false;
-                      }
+                      // if (authStore.currentUser == null) {
+                      //   Navigator.of(context).pushNamed(
+                      //     PageRoute.Page.loginScreen.route,
+                      //     arguments: {
+                      //       "returnToPageWithArgs": {
+                      //         "currentPageName": "marketplace",
+                      //         "arguments": null
+                      //       }
+                      //     },
+                      //   );
+                      //   result = false;
+                      // }
                       break;
                     case PageViewController.TAB_INDEX_PROFILE:
                       result = openProfile();

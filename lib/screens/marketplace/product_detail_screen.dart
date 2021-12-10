@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/marketplace/components/horizontal_expanded_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/profile_name_location_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/purchase_button_widget.dart';
 import 'package:ootopia_app/screens/marketplace/transfer_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductModel productModel;
@@ -18,8 +21,10 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final pageController = SmartPageController.getInstance();
+  late AuthStore authStore;
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
     return Scaffold(
       body: SafeArea(
         child: LayoutBuilder(
@@ -55,30 +60,40 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ),
                       Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 24),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: PurchaseButtonWidget(
-                                  content: Text(
-                                    AppLocalizations.of(context)!
-                                        .purchaseNow,
-                                    style: GoogleFonts.roboto(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  marginBottom: 24,
-                                  onPressed: () {
-                                    pageController
-                                        .insertPage(TransferScreen(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: PurchaseButtonWidget(
+                                content: Text(
+                                  AppLocalizations.of(context)!.purchaseNow,
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                marginBottom: 24,
+                                onPressed: () {
+                                  if (authStore.currentUser == null) {
+                                    Navigator.of(context).pushNamed(
+                                      PageRoute.Page.loginScreen.route,
+                                      arguments: {
+                                        "returnToPageWithArgs": {
+                                          "currentPageName": "marketplace",
+                                          "arguments": null
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    pageController.insertPage(TransferScreen(
                                       productModel: widget.productModel,
                                     ));
-                                  },
-                                ),
+                                  }
+                                },
                               ),
-                            ],
-                          )),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
