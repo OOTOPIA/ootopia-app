@@ -7,6 +7,7 @@ class InvitationCodeModel {
   String id;
   String type;
   bool active;
+  int invitationCode;
   //String userId;
   String createdAt;
   String updatedAt;
@@ -15,6 +16,7 @@ class InvitationCodeModel {
   InvitationCodeModel({
     required this.id,
     required this.type,
+    required this.invitationCode,
     required this.active,
     //required this.userId,
     required this.createdAt,
