@@ -88,12 +88,17 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
         visibleValidStatusCode = true;
         showValidationErrorText = false;
       });
+    } else if (registerController.codeController.text.length < 4 ||
+        !(int.tryParse(registerController.codeController.text) is int)) {
+      setState(() {
+        visibleValidStatusCode = true;
+        showValidationErrorText = true;
+      });
     } else {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(const Duration(milliseconds: 500), () async {
         var statusCode = await insertInvitationCodeStore
             .verifyCodes(registerController.codeController.text);
-
         setState(() {
           if (statusCode == 'valid') {
             visibleValidStatusCode = true;
@@ -188,6 +193,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                               autocorrect: false,
                               autofocus: false,
                               controller: registerController.codeController,
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(
