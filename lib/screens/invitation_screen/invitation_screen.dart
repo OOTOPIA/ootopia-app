@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/screens/invitation_screen/components/default_invatition_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/components/sower_invitation_code.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class InvitationScreen extends StatefulWidget {
   const InvitationScreen({Key? key}) : super(key: key);
@@ -14,11 +18,16 @@ class InvitationScreen extends StatefulWidget {
 
 class _InvitationScreenState extends State<InvitationScreen> {
   InvitationStore invitationStore = InvitationStore();
+  SecureStoreMixin secureStoreMixin = SecureStoreMixin();
+  List<GeneralConfigModel>? generalConfigModel;
 
   @override
   void initState() {
     super.initState();
     invitationStore.getCodes();
+    Future.delayed(Duration.zero).then((value) async {
+      generalConfigModel = await this.secureStoreMixin.getGeneralConfig();
+    });
   }
 
   @override
@@ -110,9 +119,15 @@ class _InvitationScreenState extends State<InvitationScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: invitationStore.listInvitationCode.map((invitationCode) {
         if (invitationCode.type == 'sower') {
-          return SowerInvitationCode(sowerCode: '${invitationCode.code}');
+          return SowerInvitationCode(
+              sowerCode: NumberFormat('###0000', Platform.localeName)
+                  .format(invitationCode.invitationCode),
+              generalConfigModel: generalConfigModel!);
         }
-        return DefaultInvitationCode(defaultCode: '${invitationCode.code}');
+        return DefaultInvitationCode(
+            defaultCode: NumberFormat('###0000', Platform.localeName)
+                .format(invitationCode.invitationCode),
+            generalConfigModel: generalConfigModel!);
       }).toList(),
     );
   }

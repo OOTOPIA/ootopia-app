@@ -1,16 +1,47 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:collection/collection.dart';
 import 'package:share_extend/share_extend.dart';
 
 class SowerInvitationCode extends StatefulWidget {
   final String sowerCode;
-  const SowerInvitationCode({required this.sowerCode});
+  final List<GeneralConfigModel> generalConfigModel;
+  const SowerInvitationCode(
+      {required this.sowerCode, required this.generalConfigModel});
 
   @override
   _SowerInvitationCodeState createState() => _SowerInvitationCodeState();
 }
 
 class _SowerInvitationCodeState extends State<SowerInvitationCode> {
+  SecureStoreMixin secureStoreMixin = SecureStoreMixin();
+  late String sentSowerInvitationCode;
+  late String receivedSowerInvitationCode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    GeneralConfigModel? sentSowerInvitation = widget.generalConfigModel
+        .singleWhereOrNull(
+            (element) => element.name == "user_sent_sower_invitation_code_ooz");
+
+    GeneralConfigModel? receivedSowerInvitation = widget.generalConfigModel
+        .singleWhereOrNull((element) =>
+            element.name == "user_received_sower_invitation_code_ooz");
+
+    sentSowerInvitationCode = NumberFormat('###0.00', Platform.localeName)
+        .format(sentSowerInvitation?.value ?? 0);
+
+    receivedSowerInvitationCode = NumberFormat('###0.00', Platform.localeName)
+        .format(receivedSowerInvitation?.value ?? 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +67,8 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
         ),
         Center(
           child: Text(
-            AppLocalizations.of(context)!.sendChangeMakerProInvitationCode,
+            AppLocalizations.of(context)!
+                .sendTheCodeBelowToInviteYourFriendsSower,
             textAlign: TextAlign.center,
           ),
         ),
@@ -49,7 +81,9 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                   await ShareExtend.share(
                       AppLocalizations.of(context)!
                           .joinToOOTOPIA
-                          .replaceAll('%USER_CODE%', '${widget.sowerCode}'),
+                          .replaceAll('%AMOUNT_OF_MONEY%',
+                              '$receivedSowerInvitationCode OOz')
+                          .replaceAll('%USER_CODE%', widget.sowerCode),
                       'text');
                 },
                 child: Container(
@@ -64,7 +98,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                   padding: EdgeInsets.all(9),
                   child: Center(
                     child: Text(
-                      '${widget.sowerCode}',
+                      AppLocalizations.of(context)!.sendCode,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -76,7 +110,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  AppLocalizations.of(context)!.shareThisCode,
+                  "${AppLocalizations.of(context)!.code}: ${widget.sowerCode}",
                   textAlign: TextAlign.center,
                   softWrap: true,
                   style: TextStyle(
