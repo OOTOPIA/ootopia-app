@@ -67,7 +67,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "email": user.email.toString(),
         "password": user.password.toString(),
         "acceptedTerms": true.toString(),
-        "invitationCodeAcceptedNumber":
+        "invitationCode":
             user.invitationCode == null ? "" : user.invitationCode.toString(),
         "countryCode":
             user.countryCode == null ? "" : user.countryCode.toString(),
