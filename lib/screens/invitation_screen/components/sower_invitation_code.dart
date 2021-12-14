@@ -20,8 +20,8 @@ class SowerInvitationCode extends StatefulWidget {
 
 class _SowerInvitationCodeState extends State<SowerInvitationCode> {
   SecureStoreMixin secureStoreMixin = SecureStoreMixin();
-  String? sentSowerInvitationCode;
-  String? receivedSowerInvitationCode;
+  late String sentSowerInvitationCode;
+  late String receivedSowerInvitationCode;
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _SowerInvitationCodeState extends State<SowerInvitationCode> {
                       AppLocalizations.of(context)!
                           .joinToOOTOPIA
                           .replaceAll('%AMOUNT_OF_MONEY%',
-                              '${receivedSowerInvitationCode!} OOz')
+                              '$receivedSowerInvitationCode OOz')
                           .replaceAll('%USER_CODE%', widget.sowerCode),
                       'text');
                 },

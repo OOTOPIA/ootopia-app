@@ -19,8 +19,8 @@ class DefaultInvitationCode extends StatefulWidget {
 
 class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
   SecureStoreMixin secureStoreMixin = SecureStoreMixin();
-  String? sentDefaultInvitationCode;
-  String? receivedDefaultInvitationCode;
+  late String sentDefaultInvitationCode;
+  late String receivedDefaultInvitationCode;
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
             style: TextStyle(color: Colors.black),
             children: [
               TextSpan(
-                text: " ${sentDefaultInvitationCode!} OOz ",
+                text: " $sentDefaultInvitationCode OOz ",
                 style: TextStyle(
                     color: Color(0Xff003694), fontWeight: FontWeight.bold),
               ),
@@ -78,7 +78,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                   text: AppLocalizations.of(context)!
                       .forEachNewcomerYourFriendWillReceive),
               TextSpan(
-                text: " ${receivedDefaultInvitationCode!} OOz ",
+                text: " $receivedDefaultInvitationCode OOz ",
                 style: TextStyle(
                     color: Color(0Xff003694), fontWeight: FontWeight.bold),
               ),
@@ -95,7 +95,7 @@ class _DefaultInvitationCodeState extends State<DefaultInvitationCode> {
                       AppLocalizations.of(context)!
                           .joinToOOTOPIA
                           .replaceAll('%AMOUNT_OF_MONEY%',
-                              '${receivedDefaultInvitationCode!} OOz')
+                              '$receivedDefaultInvitationCode OOz')
                           .replaceAll('%USER_CODE%', widget.defaultCode),
                       'text');
                 },
