@@ -59,17 +59,17 @@
 			<true/>
 		</dict>
 		<key>NSCameraUsageDescription</key>
-		<string>Can I use the camera please?</string>
+		<string>We need access to your camera so you can post videos and photos.</string>
 		<key>NSLocationAlwaysUsageDescription</key>
 		<string>This app needs access to location when in the background.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open.</string>
-		<key>NSMicrophoneUsageDescription</key>
-		<string>Can I use the mic please?</string>
+		<!-- <key>NSMicrophoneUsageDescription</key>
+		<string>Can I use the mic please?</string> -->
 		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>describe why your app needs access to write photo library</string>
+		<string>We need permission to save the photos you take in your gallery.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Can I access your gallery?</string>
+		<string>We need to access your photo gallery so you can upload photos from there.</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>processing</string>
