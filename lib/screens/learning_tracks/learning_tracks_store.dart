@@ -22,6 +22,7 @@ abstract class LearningTracksStoreBase with Store {
   Future<void> listLearningTracks({
     int? limit,
     int? offset,
+    bool? showAtTimeline,
     required String locale,
   }) async {
     isLoading = true;
@@ -31,7 +32,10 @@ abstract class LearningTracksStoreBase with Store {
     }
 
     var response = await _learningTracksRepositoryImpl.listLearningTracks(
-        limit: limit, offset: offset, locale: lang);
+        limit: limit,
+        offset: offset,
+        locale: lang,
+        showAtTimeline: showAtTimeline);
     allLearningTracks.addAll(response);
     isLoading = false;
   }

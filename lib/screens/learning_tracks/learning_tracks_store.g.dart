@@ -62,9 +62,12 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
 
   @override
   Future<void> listLearningTracks(
-      {int? limit, int? offset, required String locale}) {
-    return _$listLearningTracksAsyncAction.run(() =>
-        super.listLearningTracks(limit: limit, offset: offset, locale: locale));
+      {int? limit, int? offset, bool? showAtTimeline, required String locale}) {
+    return _$listLearningTracksAsyncAction.run(() => super.listLearningTracks(
+        limit: limit,
+        offset: offset,
+        showAtTimeline: showAtTimeline,
+        locale: locale));
   }
 
   final _$lastLearningTracksAsyncAction =

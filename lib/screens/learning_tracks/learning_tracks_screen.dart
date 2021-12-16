@@ -32,7 +32,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
     Future.delayed(Duration.zero, () async {
       await learningTracksStore
           .listLearningTracks(
-              limit: _itemsPerPageCount, offset: 0, locale: Platform.localeName)
+              limit: _itemsPerPageCount,
+              offset: 0,
+              locale: Platform.localeName,
+              showAtTimeline: true)
           .onError((error, stackTrace) {
         setState(() {
           hasError = true;
@@ -56,7 +59,8 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
         .listLearningTracks(
             limit: _itemsPerPageCount,
             offset: (currentPage - 1) * _itemsPerPageCount,
-            locale: Platform.localeName)
+            locale: Platform.localeName,
+            showAtTimeline: true)
         .onError((error, stackTrace) {
       setState(() {
         hasError = true;

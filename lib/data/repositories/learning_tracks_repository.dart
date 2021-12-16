@@ -30,13 +30,17 @@ class LearningTracksRepositoryImpl
 
   @override
   Future<List<LearningTracksModel>> listLearningTracks(
-      {int? limit, int? offset, required String locale}) async {
+      {int? limit,
+      int? offset,
+      required String locale,
+      bool? showAtTimeline}) async {
     try {
       var response =
           await ApiClient.api().get("learning-tracks", queryParameters: {
         'limit': limit,
         'offset': offset,
         'locale': locale,
+        'showAtTimeline': showAtTimeline,
       });
       if (response.statusCode == 200) {
         return (response.data as List)
