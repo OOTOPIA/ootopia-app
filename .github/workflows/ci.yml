@@ -22,7 +22,7 @@ jobs:
           envkey_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - name: Update build version
         shell: bash
-        run: 'sed -i "s/version: 0.1.10+16/version: 0.1.10+$GITHUB_RUN_NUMBER/1" pubspec.yaml'
+        run: 'sed -i "s/version: 0.1.11+18/version: 0.1.11+$GITHUB_RUN_NUMBER/1" pubspec.yaml'
       - uses: subosito/flutter-action@v1
         with:
           channel: "stable"
