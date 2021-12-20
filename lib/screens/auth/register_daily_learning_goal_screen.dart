@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -51,47 +52,13 @@ class _RegisterDailyLearningGoalScreenState
     });
   }
 
-  get appBar => AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
-          ),
-        ),
-        toolbarHeight: 45,
-        elevation: 2,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        brightness: Brightness.light,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
-          ),
-          child: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 3.0),
-              child: Row(
-                children: [
-                  Icon(
-                    FeatherIcons.arrowLeft,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.back,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+  get appBar => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+        ],
+        onTapLeading: () {
+          Navigator.of(context).pop();
+        },
       );
 
   @override

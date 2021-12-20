@@ -15,6 +15,7 @@ import 'package:ootopia_app/data/models/general_config/general_config_model.dart
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/confirm_post_button_widget.dart';
@@ -407,53 +408,18 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     );
   }
 
-  AppBar appbar() => AppBar(
-        backgroundColor: Colors.white,
-        leading: Row(
-          children: [
-            IconButton(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              constraints: BoxConstraints(),
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                postPreviewStore.clearhashtags();
-                Navigator.pop(context);
-              },
-              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            ),
-            Text(
-              AppLocalizations.of(context)!.back,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        title: Center(
-          child: Padding(
-            padding: EdgeInsets.all(3),
-            child: Image.asset(
-              'assets/images/logo.png',
-              height: 34,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              postPreviewStore.clearhashtags();
-              Navigator.popUntil(context, (route) => route.isFirst);
-            },
-          )
+  PreferredSizeWidget appbar() => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.close,
         ],
+        onTapLeading: () {
+          _onWillPop(false);
+        },
+        onTapAction: () {
+          postPreviewStore.clearhashtags();
+          Navigator.popUntil(context, (route) => route.isFirst);
+        },
       );
 
   Widget body() {

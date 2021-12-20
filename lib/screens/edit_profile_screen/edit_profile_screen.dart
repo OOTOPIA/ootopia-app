@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -50,80 +51,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return LoadingOverlay(
         isLoading: editProfileStore.isloading,
         child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size(double.infinity, 45),
-            child: SafeArea(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: GlobalConstants.of(context).intermediateSpacing,
-                    vertical: 14),
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 1.0,
-                ))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        controller.back();
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            FeatherIcons.arrowLeft,
-                            color: Color(0xff03145C),
-                            size: 17,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.editProfile,
-                            style: GoogleFonts.roboto(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        if (formKey.currentState!.validate()) {
-                          await editProfileStore.updateUser();
-                          await profileStore.getProfileDetails(
-                              editProfileStore.currentUser!.id!);
-                          authStore.setUserIsLogged();
-                          controller.back();
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/Icon-feather-check.svg',
-                            width: 10,
-                            height: 12,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.save,
-                            style: GoogleFonts.roboto(
-                                color: Color(0xff018f9c),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          appBar: DefaultAppBar(
+            components: [
+              AppBarComponents.back,
+              AppBarComponents.save,
+            ],
+            onTapLeading: () {
+              controller.back();
+            },
+            onTapAction: () async {
+              if (formKey.currentState!.validate()) {
+                await editProfileStore.updateUser();
+                await profileStore
+                    .getProfileDetails(editProfileStore.currentUser!.id!);
+                authStore.setUserIsLogged();
+                controller.back();
+              }
+            },
           ),
           body: SafeArea(
             child: GestureDetector(
