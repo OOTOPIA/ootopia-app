@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -127,46 +128,12 @@ class _PolicyAndTermsScreenState extends State<PolicyAndTermsScreen> {
     Navigator.of(context).pop();
   }
 
-  get appBar => AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
-          ),
-        ),
-        toolbarHeight: 45,
-        elevation: 2,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        brightness: Brightness.light,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
-          ),
-          child: InkWell(
-            onTap: () => close(),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 3.0),
-              child: Row(
-                children: [
-                  Icon(
-                    FeatherIcons.arrowLeft,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.back,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+  get appBar => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+        ],
+        onTapLeading: () {
+          close();
+        },
       );
 }

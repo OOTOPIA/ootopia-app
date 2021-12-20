@@ -13,12 +13,14 @@ import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -520,195 +522,71 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  Widget get currentPage => controller.pages[controller.currentPageIndex];
+  bool get hasNavigation =>
+      controller.pages.length > controller.initialPages.length;
+
   PreferredSizeWidget? currentAppBar() {
-    return (controller.pages[controller.currentPageIndex]
-                is EditProfileScreen &&
-            controller.pages.length > controller.initialPages.length)
+    return (currentPage is EditProfileScreen && hasNavigation)
         ? null
         : controller.currentBottomIndex ==
                     PageViewController.TAB_INDEX_PROFILE &&
-                controller.pages[controller.currentPageIndex] is ProfileScreen
+                currentPage is ProfileScreen
             ? appBarProfile
             : controller.currentBottomIndex ==
                         PageViewController.TAB_INDEX_MARKETPLACE &&
-                    controller.pages[controller.currentPageIndex]
-                        is MarketplaceScreen
+                    currentPage is MarketplaceScreen
                 ? appBarMarketplace
-                : appBar;
+                : controller.currentBottomIndex ==
+                            PageViewController.TAB_INDEX_LEARNING_TRACKS &&
+                        currentPage is LearningTracksScreen
+                    ? appBarLearningTracks
+                    : appBar;
   }
 
-  get appBarMarketplace => AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
-          ),
-        ),
-        toolbarHeight: 45,
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        brightness: Brightness.light,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
-          ),
-          child: InkWell(
-            onTap: () => controller.back(),
-            child: Padding(
-                padding: const EdgeInsets.only(left: 3.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      FeatherIcons.arrowLeft,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.back,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
-                )),
-          ),
-        ),
+  get appBarLearningTracks => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.ooz,
+        ],
+        onTapLeading: () => controller.back(),
       );
 
-  get appBarProfile => PreferredSize(
-        preferredSize: Size(double.infinity, 45),
-        child: SafeArea(
-          child: Container(
-            height: 45,
-            padding: EdgeInsets.symmetric(
-                horizontal: GlobalConstants.of(context).intermediateSpacing),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-              color: Colors.grey.shade300,
-              width: 1.0,
-            ))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 70,
-                  child: Text(
-                    AppLocalizations.of(context)!.profile,
-                    style: GoogleFonts.roboto(
-                        color: Theme.of(context).textTheme.subtitle1!.color,
-                        fontSize:
-                            Theme.of(context).textTheme.subtitle1!.fontSize,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                Image.asset(
-                  'assets/images/logo.png',
-                  height: 34,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    controller.insertPage(
-                      EditProfileScreen(),
-                    );
-                  },
-                  child: Container(
-                    width: 70,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: Image.asset(
-                            'assets/icons_profile/feather-edit-2.png',
-                            width: 16,
-                          ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.edit,
-                          style: GoogleFonts.roboto(
-                            color: Theme.of(context).textTheme.subtitle1!.color,
-                            fontSize:
-                                Theme.of(context).textTheme.subtitle1!.fontSize,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+  get appBarMarketplace => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.ooz,
+        ],
+        onTapLeading: () => controller.back(),
       );
 
-  get appBar => AppBar(
-        centerTitle: true,
-        title: GestureDetector(
-          onTap: controller.currentBottomIndex ==
-                  PageViewController.TAB_INDEX_TIMELINE
-              ? () {
-                  timelineStore.goToTopTimeline(timelinePostBloc);
-                }
-              : null,
-          child: Padding(
-            padding: EdgeInsets.all(3),
-            child: Image.asset(
-              'assets/images/logo.png',
-              height: 34,
-            ),
-          ),
-        ),
-        toolbarHeight: 45,
-        elevation: controller.currentBottomIndex ==
-                PageViewController.TAB_INDEX_TIMELINE
-            ? 0
-            : 0.5,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        brightness: Brightness.light,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).screenHorizontalSpace - 9,
-          ),
-          child: controller.pages.length <= 5
-              ? IconButton(
-                  icon: Icon(
-                    FeatherIcons.menu,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
-                  onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-                )
-              : InkWell(
-                  onTap: () => controller.back(),
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 3.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            FeatherIcons.arrowLeft,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.back,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        ],
-                      )),
-                ),
-        ),
-        // actions: [
-        //   if (controller.pages.length <= 5) remainingTime,
-        // ],
+  get appBarProfile => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.edit,
+        ],
+        onTapAction: () => controller.insertPage(EditProfileScreen()),
+      );
+
+  get appBar => DefaultAppBar(
+        components: [
+          if (hasNavigation) AppBarComponents.back,
+          if (!hasNavigation) AppBarComponents.menu,
+          if (authStore.currentUser != null) AppBarComponents.ooz,
+        ],
+        onTapLeading: () {
+          if (!hasNavigation) {
+            _scaffoldKey.currentState!.openDrawer();
+          } else {
+            controller.back();
+          }
+        },
+        onTapTitle: () {
+          if (controller.currentBottomIndex ==
+              PageViewController.TAB_INDEX_TIMELINE) {
+            timelineStore.goToTopTimeline(timelinePostBloc);
+          }
+        },
       );
 
   Widget get remainingTime => Observer(

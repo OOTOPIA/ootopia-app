@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 
 import 'package:ootopia_app/screens/components/interests_tags_modal/interests_tags_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -57,47 +58,13 @@ class _RegisterTopInterestsScreenState extends State<RegisterTopInterestsScreen>
     }
   }
 
-  get appBar => AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(3),
-          child: Image.asset(
-            'assets/images/logo.png',
-            height: 34,
-          ),
-        ),
-        toolbarHeight: 45,
-        elevation: 2,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        brightness: Brightness.light,
-        leading: Padding(
-          padding: EdgeInsets.only(
-            left: GlobalConstants.of(context).smallIntermediateSpacing,
-          ),
-          child: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 3.0),
-              child: Row(
-                children: [
-                  Icon(
-                    FeatherIcons.arrowLeft,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.back,
-                    style: GoogleFonts.roboto(
-                      fontSize: Theme.of(context).textTheme.subtitle1!.fontSize,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+  get appBar => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+        ],
+        onTapLeading: () {
+          Navigator.of(context).pop();
+        },
       );
 
   @override
