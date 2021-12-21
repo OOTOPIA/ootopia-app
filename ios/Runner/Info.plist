@@ -64,8 +64,8 @@
 		<string>This app needs access to location when in the background.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open.</string>
-		<!-- <key>NSMicrophoneUsageDescription</key>
-		<string>Can I use the mic please?</string> -->
+		<key>NSMicrophoneUsageDescription</key>
+		<string>We need to use your microphone for video recording</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
 		<string>We need permission to save the photos you take in your gallery.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
