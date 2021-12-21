@@ -547,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen>
   get appBarLearningTracks => DefaultAppBar(
         components: [
           AppBarComponents.back,
-          AppBarComponents.ooz,
+          if (authStore.currentUser != null) AppBarComponents.ooz,
         ],
         onTapLeading: () => controller.back(),
       );
@@ -555,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen>
   get appBarMarketplace => DefaultAppBar(
         components: [
           AppBarComponents.back,
-          AppBarComponents.ooz,
+          if (authStore.currentUser != null) AppBarComponents.ooz,
         ],
         onTapLeading: () => controller.back(),
       );
