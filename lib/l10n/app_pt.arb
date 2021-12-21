@@ -311,7 +311,7 @@
     "code": "Código",
     "sendCode": "Enviar código",
 
-    "inviteYourFriendsToJoinOOTOPIA": "Convide seus amigos para experimentar a versão Beta teste do app OOTOPIA.\nTodos são bem vindos ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️",
+    "inviteYourFriendsToJoinOOTOPIA": "Convide seus amigos para experimentar o app OOTOPIA.\nTodos são bem vindos ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️",
     "changeMakerProInvitationCode":"CÓDIGO CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO CONVITE DE BOAS-VINDAS",
@@ -324,7 +324,7 @@
     "sendTheCodeBelowToInviteYourFriendsSower":"Envie o código abaixo para convidar pessoas que estão liderando projetos e/ou organizações que geram amplo impacto positivo para o meio ambiente e/ou para a sociedade.",
     "forEachNewcomerYourFriendWillReceive":"para cada recém-chegado. Seu amigo vai receber",
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
-    "joinToOOTOPIA":">>Quero te convidar para experimentar comigo a versão Beta teste do app OOTOPIA<<\nSeja bem vindo ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️ \n-App para celulares Android. Baixe aqui >> https://bit.ly/ootopiaappbetaandroid \n-App para celulares Iphone. Baixe aqui >> https://bit.ly/ootopiaappbetaiphone \nCadastre-se com o código abaixo e receba %AMOUNT_OF_MONEY%: %USER_CODE%",
+    "joinToOOTOPIA":">>Quero te convidar para experimentar comigo o app OOTOPIA<<\nSeja bem vindo ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️ \n-App para celulares Android. Baixe aqui >> https://bit.ly/ootopiaappbetaandroid \n-App para celulares Iphone. Baixe aqui >> https://bit.ly/ootopiaappbetaiphone \nCadastre-se com o código abaixo e receba %AMOUNT_OF_MONEY%: %USER_CODE%",
     "continueAccess":"Continuar",
     "conclude":"Concluir",
     "enterYourInvitationCode":"Digite seu código de acesso",
@@ -395,7 +395,7 @@
     "messageOptional": "Mensagem - Opcional",
     "purchaseNow": "Adquirir Agora",
 
-    "appBetaTest": "App Teste Beta",
+    "appTest": "Feedback",
     "sendYourFeedback":"envie seu comentário",
 
     "required": "Obrigatório",

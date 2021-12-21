@@ -313,7 +313,7 @@
     "code": "Code",
     "sendCode": "Send code",
 
-    "inviteYourFriendsToJoinOOTOPIA":"Invite your friends to test the Beta version of the OOTOPIA app.\nEveryone is welcome to the regenerative world in which we all want to live. ✨ 🌎 ❤️",
+    "inviteYourFriendsToJoinOOTOPIA":"Invite your friends to test the OOTOPIA app.\nEveryone is welcome to the regenerative world in which we all want to live. ✨ 🌎 ❤️",
     "changeMakerProInvitationCode":"CHANGE MAKER PRO INVITATION CODE",
     "shareThisCode":"share this code",
     "welcomeInvitationCode":"WELCOME INVITATION CODE",
@@ -326,7 +326,7 @@
     "sendTheCodeBelowToInviteYourFriendsSower":"Send the code below to invite people who are leading projects and/or organizations that generate a wide positive impact for the environment and/or society.",
     "forEachNewcomerYourFriendWillReceive":"for each newcomer. Your friend will receive",
     "pictureByRommelDiaz":"Picture by Rommel Diaz",
-    "joinToOOTOPIA": ">>I want to invite you to try the Beta test version of the OOTOPIA app with me<<\nWelcome to the regenerative world we all want to live in.✨ 🌎 ❤️ \n-App for Android phones. Download here >> https://bit.ly/ootopiaappbetaandroid\n-App for Iphone cell phones. Download here >> https://bit.ly/ootopiaappbetaiphone \nRegister with the code below and receive %AMOUNT_OF_MONEY%: %USER_CODE%",
+    "joinToOOTOPIA": ">>I want to invite you to try the OOTOPIA app with me<<\nWelcome to the regenerative world we all want to live in.✨ 🌎 ❤️ \n-App for Android phones. Download here >> https://bit.ly/ootopiaappbetaandroid\n-App for Iphone cell phones. Download here >> https://bit.ly/ootopiaappbetaiphone \nRegister with the code below and receive %AMOUNT_OF_MONEY%: %USER_CODE%",
     "continueAccess":"Continue",
     "conclude":"Conclude",
     "enterYourInvitationCode":"Enter your invitation code",
@@ -383,7 +383,7 @@
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
 
-    "appBetaTest": "App Beta Test",
+    "appTest": "Feedback",
     "sendYourFeedback":"send your feedback",
 
     "required": "Required",
