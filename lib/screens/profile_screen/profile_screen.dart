@@ -168,21 +168,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         .changeMakerPro,
                                     text: AppLocalizations.of(context)!
                                         .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                    about:
-                                        AppLocalizations.of(context)!.learnMore,
-                                    marginBottom: true,
-                                    onTapAbout: () {
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                        PageRoute.Page.homeScreen.route,
-                                        (Route<dynamic> route) => false,
-                                        arguments: {
-                                          "returnToPageWithArgs": {
-                                            'currentPageName': "learning_tracks"
-                                          }
+                                    abouts: [
+                                      {
+                                        'text': AppLocalizations.of(context)!
+                                            .learnMore,
+                                        'onTapAbout': () {
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil(
+                                            PageRoute.Page.homeScreen.route,
+                                            (Route<dynamic> route) => false,
+                                            arguments: {
+                                              "returnToPageWithArgs": {
+                                                'currentPageName':
+                                                    "learning_tracks"
+                                              }
+                                            },
+                                          );
                                         },
-                                      );
-                                    },
+                                      },
+                                    ],
+                                    marginBottom: true,
                                     contact: {
                                       "text": AppLocalizations.of(context)!
                                           .areYouAChangeMakerProToo,
@@ -247,22 +252,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             .regenerationGame,
                                         text: AppLocalizations.of(context)!
                                             .theRegenerationGame,
-                                        about: AppLocalizations.of(context)!
-                                            .learnMore,
-                                        marginBottom: true,
-                                        onTapAbout: () {
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                            PageRoute.Page.homeScreen.route,
-                                            (Route<dynamic> route) => false,
-                                            arguments: {
-                                              "returnToPageWithArgs": {
-                                                'currentPageName':
-                                                    "learning_tracks"
-                                              }
+                                        abouts: [
+                                          {
+                                            'text':
+                                                AppLocalizations.of(context)!
+                                                    .learnMore,
+                                            'onTapAbout': () {
+                                              Navigator.of(context)
+                                                  .pushNamedAndRemoveUntil(
+                                                PageRoute.Page.homeScreen.route,
+                                                (Route<dynamic> route) => false,
+                                                arguments: {
+                                                  "returnToPageWithArgs": {
+                                                    'currentPageName':
+                                                        "learning_tracks"
+                                                  }
+                                                },
+                                              );
                                             },
-                                          );
-                                        },
+                                          },
+                                        ],
+                                        marginBottom: true,
                                       );
                                     },
                                   );
@@ -316,24 +326,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               text: AppLocalizations.of(
                                                       context)!
                                                   .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
-                                              about:
-                                                  AppLocalizations.of(context)!
+                                              abouts: [
+                                                {
+                                                  'text': AppLocalizations.of(
+                                                          context)!
                                                       .learnMore,
-                                              onTapAbout: () {
-                                                Navigator.of(context)
-                                                    .pushNamedAndRemoveUntil(
-                                                  PageRoute
-                                                      .Page.homeScreen.route,
-                                                  (Route<dynamic> route) =>
-                                                      false,
-                                                  arguments: {
-                                                    "returnToPageWithArgs": {
-                                                      'currentPageName':
-                                                          "learning_tracks"
-                                                    }
+                                                  'onTapAbout': () {
+                                                    Navigator.of(context)
+                                                        .pushNamedAndRemoveUntil(
+                                                      PageRoute.Page.homeScreen
+                                                          .route,
+                                                      (Route<dynamic> route) =>
+                                                          false,
+                                                      arguments: {
+                                                        "returnToPageWithArgs":
+                                                            {
+                                                          'currentPageName':
+                                                              "learning_tracks"
+                                                        }
+                                                      },
+                                                    );
                                                   },
-                                                );
-                                              },
+                                                },
+                                              ],
                                               marginBottom: true);
                                         },
                                       );

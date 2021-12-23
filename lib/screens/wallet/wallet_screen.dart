@@ -188,24 +188,31 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                                                 text: AppLocalizations.of(
                                                         context)!
                                                     .aboutRegenerationGame,
-                                                about: AppLocalizations.of(
-                                                        context)!
-                                                    .learnMore,
-                                                onTapAbout: () {
-                                                  Navigator.of(context)
-                                                      .pushNamedAndRemoveUntil(
-                                                    PageRoute
-                                                        .Page.homeScreen.route,
-                                                    (Route<dynamic> route) =>
-                                                        false,
-                                                    arguments: {
-                                                      "returnToPageWithArgs": {
-                                                        'currentPageName':
-                                                            "learning_tracks"
-                                                      }
-                                                    },
-                                                  );
-                                                },
+                                                abouts: [
+                                                  {
+                                                    'text': AppLocalizations.of(
+                                                            context)!
+                                                        .learnMore,
+                                                    'onTapAbout': () {
+                                                      Navigator.of(context)
+                                                          .pushNamedAndRemoveUntil(
+                                                              PageRoute
+                                                                  .Page
+                                                                  .homeScreen
+                                                                  .route,
+                                                              (Route<dynamic>
+                                                                      route) =>
+                                                                  false,
+                                                              arguments: {
+                                                            "returnToPageWithArgs":
+                                                                {
+                                                              'currentPageName':
+                                                                  "learning_tracks"
+                                                            }
+                                                          });
+                                                    }
+                                                  }
+                                                ],
                                                 marginBottom: true,
                                               );
                                             },

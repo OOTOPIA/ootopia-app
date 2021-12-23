@@ -431,5 +431,9 @@
      "invalidEmailOrPassword": "Email e/ou senha inválida",
      "errorLogin": "Erro de acesso",
      "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.",
-     "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração..."
+     "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração...",
+     
+     "areYouEnjoyingTheOotopiaApp": "Você está gostando\ndo app OOTOPIA?",
+     "weWantYourExperienceToBeTheBestItCanBe": "Queremos que sua experiência seja a melhor possível. Por isso sua opinião sincera e suas sugestões são muito importantes!\nCo-crie o OOTOPIA conosco.",
+    "shareMyOpinion" : "Compartilhar minha opinião"
 }

@@ -63,7 +63,6 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
             text: AppLocalizations.of(context)!
                 .weSentYouALinkToCreateANewPassword,
             emailToConcatenate: _emailController.text,
-            about: "",
             onClose: () => onCloseSnackbar(),
           );
         },

@@ -124,7 +124,6 @@ class _LoginPageState extends State<LoginPage> {
             text: error.toString() == 'INVALID_PASSWORD'
                 ? AppLocalizations.of(context)!.invalidEmailOrPassword
                 : AppLocalizations.of(context)!.thereWasAProblemPleaseTryAgain,
-            about: "",
           );
         },
       );

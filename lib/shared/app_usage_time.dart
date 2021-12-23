@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppUsageTime with SecureStoreMixin {
@@ -12,12 +13,22 @@ class AppUsageTime with SecureStoreMixin {
   Timer? _timer;
   int usageTimeSoFarInMilliseconds = 0;
   String _prefsKey = "last_usage_time";
+  String _prefsKeytime = "feedback_time";
+  String _prefsKeyToday = "feedback_today";
+  String _prefsKeydate = "feedback_last_usage_date";
   String _prefsPendingTimeKey = "last_pending_usage_time";
   SharedPreferences? prefs;
+  SharedExperienceService sharedExperienceService =
+      SharedExperienceService.getInstace();
 
   AppUsageTime() {
     SharedPreferences.getInstance().then((_prefs) async {
       prefs = _prefs;
+
+      if (prefs!.getBool(_prefsKeyToday) ?? false) {
+        sharedExperienceService.displayedToday = true;
+      }
+
       if (prefs!.getInt(_prefsPendingTimeKey) != null) {
         usageTimeSoFarInMilliseconds = prefs!.getInt(_prefsPendingTimeKey)!;
         if (usageTimeSoFarInMilliseconds > 0) {
@@ -45,6 +56,27 @@ class AppUsageTime with SecureStoreMixin {
       //A cada segundo armazenamos no storage o tempo cronometrado
       if (await getUserIsLoggedIn()) {
         prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
+        int lastTime = prefs!.getInt(_prefsKeytime) ?? 0;
+        bool displayedToday = prefs!.getBool(_prefsKeyToday) ?? false;
+        String? displayedDate = prefs!.getString(_prefsKeydate);
+        DateTime date = new DateTime.now();
+        String today = "${date.day}/${date.month}/${date.year}";
+
+        if (displayedDate == null || displayedDate != today) {
+          prefs!.setString(_prefsKeydate, today);
+          prefs!.setBool(_prefsKeyToday, false);
+          sharedExperienceService.displayedToday = false;
+          lastTime = 0;
+          displayedToday = false;
+        }
+        if (lastTime >= 600000 && !displayedToday) {
+          try {
+            prefs!.setBool(_prefsKeyToday, true);
+            sharedExperienceService.displayedToday = true;
+            sharedExperienceService.notify();
+          } catch (e) {}
+        }
+        prefs!.setInt(_prefsKeytime, lastTime + 1000);
         if (await FlutterBackgroundService().isServiceRunning()) {
           FlutterBackgroundService().sendData({
             "action": "ON_UPDATE_USAGE_TIME",

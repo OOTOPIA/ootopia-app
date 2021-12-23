@@ -10,20 +10,22 @@ class SnackBarWidget extends StatefulWidget {
   String text;
   String? emailToConcatenate;
   Map<String, dynamic>? contact;
-  String about;
+  List<Map<String, dynamic>>? abouts;
   bool? marginBottom = false;
   Function? onTapAbout;
   Function? onClose;
+  bool? automaticClosing = true;
 
   SnackBarWidget(
       {required this.menu,
       required this.text,
       this.contact,
-      required this.about,
+      this.abouts,
       this.marginBottom,
       this.emailToConcatenate,
       this.onClose,
-      this.onTapAbout});
+      this.onTapAbout,
+      this.automaticClosing});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -36,11 +38,14 @@ class _SnackbarStates extends State<SnackBarWidget> {
 
   @override
   void initState() {
-    Timer(Duration(milliseconds: 5000), () {
-      setState(() {
-        Navigator.of(context).pop();
+    super.initState();
+    if (widget.automaticClosing!) {
+      Timer(Duration(milliseconds: 5000), () {
+        setState(() {
+          Navigator.of(context).pop();
+        });
       });
-    });
+    }
   }
 
   @override
@@ -54,6 +59,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.menu,
@@ -128,18 +134,28 @@ class _SnackbarStates extends State<SnackBarWidget> {
               ])),
             SizedBox(height: 16),
             Visibility(
-              visible: widget.about.isNotEmpty,
-              child: GestureDetector(
-                onTap: () {
-                  if (widget.onTapAbout != null) widget.onTapAbout!();
-                },
-                child: Text(
-                  widget.about.toUpperCase(),
-                  style: GoogleFonts.roboto(
-                    color: Color(0xff03DAC5),
-                    fontSize: 16,
-                  ),
-                ),
+              visible: widget.abouts != null,
+              child: Row(
+                children: widget.abouts!
+                    .map(
+                      (about) => Container(
+                        margin: EdgeInsets.only(right: 32),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (about['onTapAbout'] != null)
+                              about['onTapAbout']!();
+                          },
+                          child: Text(
+                            about['text'].toUpperCase(),
+                            style: GoogleFonts.roboto(
+                              color: Color(0xff03DAC5),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],

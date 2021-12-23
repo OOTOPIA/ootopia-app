@@ -440,6 +440,9 @@
     "recoveryMessageError": "If this is your email, a link should be in your inbox so you can update your password.",
      "giveSuggestion":"Give suggestion",
      "supportCenter":"Support Center",
-     "updatingRegenerationGameStatus":"Updating your stat in the regeneration game..."
+     "updatingRegenerationGameStatus":"Updating your stat in the regeneration game...",
 
+    "areYouEnjoyingTheOotopiaApp": "Are you enjoying\nthe OOTOPIA app?",
+    "weWantYourExperienceToBeTheBestItCanBe": "We want your experience to be the best it can be. That's why your sincere opinion and your suggestions are very important!\nCo-create OOTOPIA with us.",
+    "shareMyOpinion" : "Share my opinion"
 }
