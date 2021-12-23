@@ -127,22 +127,26 @@ class _RegenerationGameState extends State<RegenerationGame>
                                             .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
                                             .replaceAll('%GOAL_CHOSEN%',
                                                 '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
-                                        about: AppLocalizations.of(context)!
-                                            .learnMore,
-                                        marginBottom: true,
-                                        onTapAbout: () {
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                            PageRoute.Page.homeScreen.route,
-                                            (Route<dynamic> route) => false,
-                                            arguments: {
-                                              "returnToPageWithArgs": {
-                                                'currentPageName':
-                                                    "learning_tracks"
-                                              }
+                                        buttons: [
+                                          ButtonSnackBar(
+                                            text: AppLocalizations.of(context)!
+                                                .learnMore,
+                                            onTapAbout: () {
+                                              Navigator.of(context)
+                                                  .pushNamedAndRemoveUntil(
+                                                PageRoute.Page.homeScreen.route,
+                                                (Route<dynamic> route) => false,
+                                                arguments: {
+                                                  "returnToPageWithArgs": {
+                                                    'currentPageName':
+                                                        "learning_tracks"
+                                                  }
+                                                },
+                                              );
                                             },
-                                          );
-                                        },
+                                          )
+                                        ],
+                                        marginBottom: true,
                                       );
                                     });
                               }

@@ -435,5 +435,9 @@
      "errorLogin": "Erro de acesso",
      "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.",
      "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração...",
-     "offers":"Ofertas"
+     "offers":"Ofertas",
+     
+     "areYouEnjoyingTheOotopiaApp": "Você está gostando\ndo app OOTOPIA?",
+     "weWantYourExperienceToBeTheBestItCanBe": "Queremos que sua experiência seja a melhor possível. Por isso sua opinião sincera e suas sugestões são muito importantes!\nCo-crie o OOTOPIA conosco.",
+    "shareMyOpinion" : "Compartilhar minha opinião"
 }

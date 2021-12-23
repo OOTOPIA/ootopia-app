@@ -59,6 +59,9 @@ import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -291,7 +294,14 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
   }
 }
 
-class MainPage extends HookWidget {
+class MainPage extends StatefulWidget {
+  MainPage({Key? key}) : super(key: key);
+
+  @override
+  _mainPageState createState() => _mainPageState();
+}
+
+class _mainPageState extends State<MainPage> {
   final Map<PageRoute.Page, Widget Function(dynamic)> _fragments = {
     PageRoute.Page.homeScreen: (args) => HomeScreen(args: args),
     PageRoute.Page.timelineScreen: (args) => TimelinePage(args),
@@ -343,6 +353,51 @@ class MainPage extends HookWidget {
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
   };
+
+  SharedExperienceService sharedExperienceService =
+      SharedExperienceService.getInstace();
+
+  showSharedExperience(context) {
+    Future.delayed(Duration.zero, () {
+      showModalBottomSheet(
+        context: context,
+        barrierColor: Colors.black.withAlpha(1),
+        backgroundColor: Colors.black.withAlpha(1),
+        builder: (BuildContext context) {
+          return SnackBarWidget(
+            menu: AppLocalizations.of(context)!.areYouEnjoyingTheOotopiaApp,
+            automaticClosing: false,
+            text: AppLocalizations.of(context)!
+                .weWantYourExperienceToBeTheBestItCanBe,
+            buttons: [
+              ButtonSnackBar(
+                text: AppLocalizations.of(context)!.shareMyOpinion,
+                onTapAbout: () async {
+                  await launch(
+                      "https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform");
+                },
+              ),
+              ButtonSnackBar(
+                text: AppLocalizations.of(context)!.notNow,
+                onTapAbout: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+            marginBottom: true,
+          );
+        },
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    sharedExperienceService.addListener(() {
+      showSharedExperience(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

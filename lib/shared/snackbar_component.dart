@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,20 +11,22 @@ class SnackBarWidget extends StatefulWidget {
   String text;
   String? emailToConcatenate;
   Map<String, dynamic>? contact;
-  String about;
+  List<ButtonSnackBar>? buttons;
   bool? marginBottom = false;
   Function? onTapAbout;
   Function? onClose;
+  bool? automaticClosing = true;
 
   SnackBarWidget(
       {required this.menu,
       required this.text,
       this.contact,
-      required this.about,
+      this.buttons,
       this.marginBottom,
       this.emailToConcatenate,
       this.onClose,
-      this.onTapAbout});
+      this.onTapAbout,
+      this.automaticClosing});
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -36,11 +39,12 @@ class _SnackbarStates extends State<SnackBarWidget> {
 
   @override
   void initState() {
-    Timer(Duration(milliseconds: 5000), () {
-      setState(() {
+    super.initState();
+    if (widget.automaticClosing == null || widget.automaticClosing!) {
+      Timer(Duration(milliseconds: 5000), () {
         Navigator.of(context).pop();
       });
-    });
+    }
   }
 
   @override
@@ -54,6 +58,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.menu,
@@ -127,21 +132,28 @@ class _SnackbarStates extends State<SnackBarWidget> {
                 ),
               ])),
             SizedBox(height: 16),
-            Visibility(
-              visible: widget.about.isNotEmpty,
-              child: GestureDetector(
-                onTap: () {
-                  if (widget.onTapAbout != null) widget.onTapAbout!();
-                },
-                child: Text(
-                  widget.about.toUpperCase(),
-                  style: GoogleFonts.roboto(
-                    color: Color(0xff03DAC5),
-                    fontSize: 16,
-                  ),
-                ),
+            if (widget.buttons != null)
+              Row(
+                children: widget.buttons!
+                    .map(
+                      (about) => Container(
+                        margin: EdgeInsets.only(right: 32),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (about.onTapAbout() != null) about.onTapAbout();
+                          },
+                          child: Text(
+                            about.text.toUpperCase(),
+                            style: GoogleFonts.roboto(
+                              color: Color(0xff03DAC5),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
-            ),
           ],
         ),
       ),
@@ -152,4 +164,20 @@ class _SnackbarStates extends State<SnackBarWidget> {
         )
     ]);
   }
+}
+
+class ButtonSnackBar extends Equatable {
+  String text;
+  Function onTapAbout;
+
+  ButtonSnackBar({
+    required this.text,
+    required this.onTapAbout,
+  });
+
+  @override
+  List<Object> get props => [
+        text,
+        onTapAbout,
+      ];
 }
