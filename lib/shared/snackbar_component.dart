@@ -133,9 +133,8 @@ class _SnackbarStates extends State<SnackBarWidget> {
                 ),
               ])),
             SizedBox(height: 16),
-            Visibility(
-              visible: widget.abouts != null,
-              child: Row(
+            if (widget.abouts != null)
+              Row(
                 children: widget.abouts!
                     .map(
                       (about) => Container(
@@ -157,7 +156,6 @@ class _SnackbarStates extends State<SnackBarWidget> {
                     )
                     .toList(),
               ),
-            ),
           ],
         ),
       ),
