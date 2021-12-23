@@ -39,7 +39,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
   @override
   void initState() {
     super.initState();
-    if (widget.automaticClosing!) {
+    if (widget.automaticClosing == null || widget.automaticClosing!) {
       Timer(Duration(milliseconds: 5000), () {
         setState(() {
           Navigator.of(context).pop();
