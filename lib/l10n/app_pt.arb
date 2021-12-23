@@ -129,6 +129,7 @@
 
     "posts": "Postagens",
     "wallet": "Carteira",
+    "walletDescription": "A Carteira é onde você pode verificar seu saldo na moeda OOz e todas as transações de recebimento e de envio de OOz.",
     "errorOnGetPosts": "Erro ao obter postagens",
     "addMoney": "Adicionar dinheiro",
     "sendMoney": "Enviar dinheiro",
@@ -311,7 +312,7 @@
     "code": "Código",
     "sendCode": "Enviar código",
 
-    "inviteYourFriendsToJoinOOTOPIA": "Convide seus amigos para experimentar a versão Beta teste do app OOTOPIA.\nTodos são bem vindos ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️",
+    "inviteYourFriendsToJoinOOTOPIA": "Convide seus amigos para experimentar o app OOTOPIA.\nTodos são bem vindos ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️",
     "changeMakerProInvitationCode":"CÓDIGO CONVITE CHANGE MAKER PRO",
     "shareThisCode": "compartilhe este código",
     "welcomeInvitationCode":"CÓDIGO CONVITE DE BOAS-VINDAS",
@@ -324,7 +325,7 @@
     "sendTheCodeBelowToInviteYourFriendsSower":"Envie o código abaixo para convidar pessoas que estão liderando projetos e/ou organizações que geram amplo impacto positivo para o meio ambiente e/ou para a sociedade.",
     "forEachNewcomerYourFriendWillReceive":"para cada recém-chegado. Seu amigo vai receber",
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
-    "joinToOOTOPIA":">>Quero te convidar para experimentar comigo a versão Beta teste do app OOTOPIA<<\nSeja bem vindo ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️ \n-App para celulares Android. Baixe aqui >> https://bit.ly/ootopiaappbetaandroid \n-App para celulares Iphone. Baixe aqui >> https://bit.ly/ootopiaappbetaiphone \nCadastre-se com o código abaixo e receba %AMOUNT_OF_MONEY%: %USER_CODE%",
+    "joinToOOTOPIA":">>Quero te convidar para experimentar comigo o app OOTOPIA<<\nSeja bem vindo ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️ \n-App para celulares Android. Baixe aqui >> https://bit.ly/ootopiaappbetaandroid \n-App para celulares Iphone. Baixe aqui >> https://bit.ly/ootopiaappbetaiphone \nCadastre-se com o código abaixo e receba %AMOUNT_OF_MONEY%: %USER_CODE%",
     "continueAccess":"Continuar",
     "conclude":"Concluir",
     "enterYourInvitationCode":"Digite seu código de acesso",
@@ -386,16 +387,18 @@
     "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Trilhas de Aprendizagem",
+    "learningTracksDescription":"Aqui você encontrará pequenas vídeo-aulas onde obterá uma compreensão prática das práticas regenerativas. Assista, responda aos quizzez e receba mais OOz.",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
     "ethicalMarketplace": "MERCADO ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
+    "ethicalMarketplaceHeaderDescription": "Aqui você pode usar seus créditos OOz para comprar produtos e serviços que contribuem para um mundo melhor.",
     "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
     "messageOptional": "Mensagem - Opcional",
     "purchaseNow": "Adquirir Agora",
 
-    "appBetaTest": "App Teste Beta",
+    "appTest": "Feedback",
     "sendYourFeedback":"envie seu comentário",
 
     "required": "Obrigatório",
@@ -432,6 +435,7 @@
      "errorLogin": "Erro de acesso",
      "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.",
      "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração...",
+     "offers":"Ofertas",
      
      "areYouEnjoyingTheOotopiaApp": "Você está gostando\ndo app OOTOPIA?",
      "weWantYourExperienceToBeTheBestItCanBe": "Queremos que sua experiência seja a melhor possível. Por isso sua opinião sincera e suas sugestões são muito importantes!\nCo-crie o OOTOPIA conosco.",

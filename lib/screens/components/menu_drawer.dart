@@ -373,7 +373,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${AppLocalizations.of(context)!.appBetaTest}',
+                                          '${AppLocalizations.of(context)!.appTest}',
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
@@ -385,7 +385,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                       ],
                                     ),
                                     leading: Image.asset(
-                                      'assets/icons/icon_appbetatest.png',
+                                      'assets/icons/icon_apptest.png',
                                       width: 24,
                                     ),
                                     trailing: Icon(

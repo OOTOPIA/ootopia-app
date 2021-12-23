@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
-import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
-import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MarketplaceScreen extends StatefulWidget {
   @override
@@ -21,19 +24,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   late WalletStore walletStore;
   late SmartPageController pageController;
   final ScrollController _scrollController = ScrollController();
+  LearningTracksStore learningTracksStore = LearningTracksStore();
+  LearningTracksModel? welcomeGuideLearningTrack;
 
   @override
   void initState() {
+    super.initState();
     marketplaceStore.getProductList(
         limit: marketplaceStore.itemsPerPageCount, offset: 0);
     pageController = SmartPageController.getInstance();
     _scrollController.addListener(
       () => marketplaceStore.updateOnScroll(_scrollController),
     );
-    Future.delayed(Duration.zero).then((value) {
+    Future.delayed(Duration.zero).then((value) async {
       walletStore.getWallet();
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     });
-    super.initState();
   }
 
   @override
@@ -58,11 +64,30 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 create: (_) => marketplaceStore,
                 child: Column(
                   children: [
-                    WalletBarWidget(
-                        totalBalance: walletStore.wallet != null
-                            ? '${marketplaceStore.currencyFormatter.format(walletStore.wallet!.totalBalance)}'
-                            : '0,00',
-                        onTap: () => pageController.insertPage(WalletPage())),
+                    InformationWidget(
+                      icon: Image.asset(
+                        "assets/icons/ooz-coin-small.png",
+                        width: 24,
+                      ),
+                      title: AppLocalizations.of(context)!.ethicalMarketplace,
+                      text: AppLocalizations.of(context)!
+                          .ethicalMarketplaceHeaderDescription,
+                      onTap: () async {
+                        if (welcomeGuideLearningTrack == null) {
+                          welcomeGuideLearningTrack =
+                              await learningTracksStore.getWelcomeGuide();
+                        }
+                        if (welcomeGuideLearningTrack != null) {
+                          openLearningTrack(welcomeGuideLearningTrack!);
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                    ),
                     MarketplaceBarWidget(),
                     Expanded(
                       child: SingleChildScrollView(
@@ -114,4 +139,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   List<Widget> productList(List<dynamic> list) =>
       list.map((product) => ProductItem(productModel: product)).toList();
+
+  void openLearningTrack(LearningTracksModel learningTrack) =>
+      pageController.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': () {
+            setState(() {});
+          },
+        },
+      ));
 }
