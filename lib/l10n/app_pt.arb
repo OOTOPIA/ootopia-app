@@ -129,6 +129,7 @@
 
     "posts": "Postagens",
     "wallet": "Carteira",
+    "walletDescription": "A Carteira é onde você pode verificar seu saldo na moeda OOz e todas as transações de recebimento e de envio de OOz.",
     "errorOnGetPosts": "Erro ao obter postagens",
     "addMoney": "Adicionar dinheiro",
     "sendMoney": "Enviar dinheiro",
@@ -386,11 +387,13 @@
     "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
     "learningTracks":"Trilhas de Aprendizagem",
+    "learningTracksDescription":"Aqui você encontrará pequenas vídeo-aulas onde obterá uma compreensão prática das práticas regenerativas. Assista, responda aos quizzez e receba mais OOz.",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
     "ethicalMarketplace": "MERCADO ÉTICO",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
+    "ethicalMarketplaceHeaderDescription": "Aqui você pode usar seus créditos OOz para comprar produtos e serviços que contribuem para um mundo melhor.",
     "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
     "messageOptional": "Mensagem - Opcional",
     "purchaseNow": "Adquirir Agora",
@@ -431,5 +434,6 @@
      "invalidEmailOrPassword": "Email e/ou senha inválida",
      "errorLogin": "Erro de acesso",
      "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.",
-     "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração..."
+     "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração...",
+     "offers":"Ofertas"
 }
