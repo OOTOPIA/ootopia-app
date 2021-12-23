@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
@@ -11,7 +13,7 @@ abstract class LearningTracksStoreBase with Store {
       LearningTracksRepositoryImpl();
 
   @observable
-  var allLearningTracks = <LearningTracksModel>[];
+  List<LearningTracksModel> allLearningTracks = [];
 
   @observable
   bool isLoading = false;
@@ -45,5 +47,14 @@ abstract class LearningTracksStoreBase with Store {
     var response =
         await _learningTracksRepositoryImpl.lastLearningTracks(locale: lang);
     getLastLearningTracks = response;
+  }
+
+  @action
+  Future<LearningTracksModel> getWelcomeGuide() async {
+    String lang = "en";
+    if (Platform.localeName.startsWith('pt')) {
+      lang = 'pt-BR';
+    }
+    return await _learningTracksRepositoryImpl.getWelcomeGuide(lang);
   }
 }

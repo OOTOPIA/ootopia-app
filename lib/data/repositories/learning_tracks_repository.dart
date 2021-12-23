@@ -75,4 +75,19 @@ class LearningTracksRepositoryImpl
       return throw Exception('failed to get learning track $e');
     }
   }
+
+  Future<LearningTracksModel> getWelcomeGuide(String locale) async {
+    try {
+      var response =
+          await ApiClient.api().get("learning-tracks/welcome-guide/$locale");
+
+      if (response.statusCode == 200) {
+        return LearningTracksModel.fromJson(response.data);
+      }
+
+      return throw Exception('Something went wrong');
+    } catch (e) {
+      return throw Exception('failed to get welcome guide $e');
+    }
+  }
 }

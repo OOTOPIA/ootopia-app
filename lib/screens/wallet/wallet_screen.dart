@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/wallet/components/tab_history.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:flutter/gestures.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -27,6 +32,8 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
   late TabController _tabController;
   int _activeTabIndex = 0;
   SmartPageController controller = SmartPageController.getInstance();
+  LearningTracksStore learningTracksStore = LearningTracksStore();
+  LearningTracksModel? welcomeGuideLearningTrack;
 
   @override
   void initState() {
@@ -35,7 +42,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_setActiveTabIndex);
 
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       walletStore.getWallet();
       controller.addOnBottomNavigationBarChanged((index) {
         if (mounted) {
@@ -45,6 +52,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
           setState(() {});
         }
       });
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     });
   }
 
@@ -84,16 +92,35 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
         builder: (_) {
           return Scaffold(
             body: Container(
-              padding: EdgeInsets.only(top: 16),
               child: RefreshIndicator(
                 onRefresh: () async {
                   await _performAllRequests();
                 },
                 child: ListView(
                   children: [
+                    InformationWidget(
+                      icon: Image.asset(
+                        "assets/icons/ooz-coin-small.png",
+                        width: 24,
+                      ),
+                      title: AppLocalizations.of(context)!.wallet,
+                      text: AppLocalizations.of(context)!.walletDescription,
+                      onTap: () async {
+                        if (welcomeGuideLearningTrack == null) {
+                          welcomeGuideLearningTrack =
+                              await learningTracksStore.getWelcomeGuide();
+                        }
+                        if (welcomeGuideLearningTrack != null) {
+                          openLearningTrack(welcomeGuideLearningTrack!);
+                        }
+                      },
+                    ),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            GlobalConstants.of(context).intermediateSpacing,
+                        vertical: GlobalConstants.of(context).spacingNormal,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -270,4 +297,15 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
       ),
     );
   }
+
+  void openLearningTrack(LearningTracksModel learningTrack) =>
+      controller.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': () {
+            setState(() {});
+          },
+        },
+      ));
 }

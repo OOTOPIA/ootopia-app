@@ -21,13 +21,8 @@ class MarketplaceBarWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(
-                "assets/icons/marketplace_black_icon.png",
-                height: 22,
-              ),
-              const SizedBox(width: 4),
               Text(
-                AppLocalizations.of(context)!.marketPlaceTransfer,
+                AppLocalizations.of(context)!.offers,
                 style: GoogleFonts.roboto(
                   fontSize: 16,
                   color: Color(0xff000000),

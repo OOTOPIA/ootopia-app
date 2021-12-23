@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
@@ -26,18 +28,24 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
+  LearningTracksModel? welcomeGuideLearningTrack;
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await learningTracksStore
           .listLearningTracks(
-              limit: _itemsPerPageCount, offset: 0, locale: Platform.localeName)
+        limit: _itemsPerPageCount,
+        offset: 0,
+        locale: Platform.localeName,
+      )
           .onError((error, stackTrace) {
         setState(() {
           hasError = true;
         });
       });
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
       setState(() {
         _hasMoreItems =
             learningTracksStore.allLearningTracks.length == _itemsPerPageCount;
@@ -102,37 +110,22 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
         child: Container(
           child: ListView(
             children: [
-              SizedBox(
-                height: 17,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      AppLocalizations.of(context)!.learningTracks,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      AppLocalizations.of(context)!.aboutLearningTracks,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
+              InformationWidget(
+                icon: Image.asset(
+                  "assets/icons/ooz-coin-small.png",
+                  width: 24,
+                ),
+                title: AppLocalizations.of(context)!.learningTracks,
+                text: AppLocalizations.of(context)!.learningTracksDescription,
+                onTap: () async {
+                  if (welcomeGuideLearningTrack == null) {
+                    welcomeGuideLearningTrack =
+                        await learningTracksStore.getWelcomeGuide();
+                  }
+                  if (welcomeGuideLearningTrack != null) {
+                    openLearningTrack(welcomeGuideLearningTrack!);
+                  }
+                },
               ),
               SizedBox(
                 height: 8,
@@ -176,11 +169,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         onTap: () {
-                          controller.insertPage(ViewLearningTracksScreen({
-                            'list_chapters': learningTrack.chapters,
-                            'learning_tracks': learningTrack,
-                            'updateLearningTrack': updateWidget,
-                          }));
+                          openLearningTrack(learningTrack);
                         },
                         child: Column(
                           children: [
@@ -322,6 +311,19 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     SizedBox(
                                       width: 8,
                                     ),
+                                    if (!learningTrack.completed)
+                                      Text(
+                                        AppLocalizations.of(context)!.receive,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    if (!learningTrack.completed)
+                                      SizedBox(
+                                        width: 8,
+                                      ),
                                     SvgPicture.asset(
                                       'assets/icons/ooz_mini_blue.svg',
                                       height: 10,
@@ -380,4 +382,13 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
       );
     }
   }
+
+  void openLearningTrack(LearningTracksModel learningTrack) =>
+      controller.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': updateWidget,
+        },
+      ));
 }

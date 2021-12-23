@@ -9,6 +9,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ViewLearningTracksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -227,6 +228,9 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                                 ),
                                                 Expanded(
                                                   child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Align(
                                                         alignment: Alignment
@@ -265,6 +269,28 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                                           SizedBox(
                                                             width: 8,
                                                           ),
+                                                          if (learningTracks
+                                                                  ?.completed !=
+                                                              true)
+                                                            Text(
+                                                              AppLocalizations.of(
+                                                                      context)!
+                                                                  .receive,
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                          if (learningTracks
+                                                                  ?.completed !=
+                                                              true)
+                                                            SizedBox(
+                                                              width: 8,
+                                                            ),
                                                           SvgPicture.asset(
                                                             'assets/icons/ooz_mini_blue.svg',
                                                             height: 10,
