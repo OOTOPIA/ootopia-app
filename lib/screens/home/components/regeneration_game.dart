@@ -127,12 +127,11 @@ class _RegenerationGameState extends State<RegenerationGame>
                                             .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
                                             .replaceAll('%GOAL_CHOSEN%',
                                                 '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
-                                        abouts: [
-                                          {
-                                            'text':
-                                                AppLocalizations.of(context)!
-                                                    .learnMore,
-                                            'onTapAbout': () {
+                                        buttons: [
+                                          ButtonSnackBar(
+                                            text: AppLocalizations.of(context)!
+                                                .learnMore,
+                                            onTapAbout: () {
                                               Navigator.of(context)
                                                   .pushNamedAndRemoveUntil(
                                                 PageRoute.Page.homeScreen.route,
@@ -145,7 +144,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                                 },
                                               );
                                             },
-                                          }
+                                          )
                                         ],
                                         marginBottom: true,
                                       );

@@ -218,11 +218,11 @@ class CardInformationBalance extends StatelessWidget {
                                       .regenerationGame,
                                   text: AppLocalizations.of(context)!
                                       .aboutRegenerationGame,
-                                  abouts: [
-                                    {
-                                      'text': AppLocalizations.of(context)!
+                                  buttons: [
+                                    ButtonSnackBar(
+                                      text: AppLocalizations.of(context)!
                                           .learnMore,
-                                      'onTapAbout': () {
+                                      onTapAbout: () {
                                         Navigator.of(context)
                                             .pushNamedAndRemoveUntil(
                                           PageRoute.Page.homeScreen.route,
@@ -235,7 +235,7 @@ class CardInformationBalance extends StatelessWidget {
                                           },
                                         );
                                       },
-                                    }
+                                    )
                                   ],
                                   marginBottom: true,
                                 );

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +11,7 @@ class SnackBarWidget extends StatefulWidget {
   String text;
   String? emailToConcatenate;
   Map<String, dynamic>? contact;
-  List<Map<String, dynamic>>? abouts;
+  List<ButtonSnackBar>? buttons;
   bool? marginBottom = false;
   Function? onTapAbout;
   Function? onClose;
@@ -20,7 +21,7 @@ class SnackBarWidget extends StatefulWidget {
       {required this.menu,
       required this.text,
       this.contact,
-      this.abouts,
+      this.buttons,
       this.marginBottom,
       this.emailToConcatenate,
       this.onClose,
@@ -41,9 +42,7 @@ class _SnackbarStates extends State<SnackBarWidget> {
     super.initState();
     if (widget.automaticClosing == null || widget.automaticClosing!) {
       Timer(Duration(milliseconds: 5000), () {
-        setState(() {
-          Navigator.of(context).pop();
-        });
+        Navigator.of(context).pop();
       });
     }
   }
@@ -133,19 +132,18 @@ class _SnackbarStates extends State<SnackBarWidget> {
                 ),
               ])),
             SizedBox(height: 16),
-            if (widget.abouts != null)
+            if (widget.buttons != null)
               Row(
-                children: widget.abouts!
+                children: widget.buttons!
                     .map(
                       (about) => Container(
                         margin: EdgeInsets.only(right: 32),
                         child: GestureDetector(
                           onTap: () {
-                            if (about['onTapAbout'] != null)
-                              about['onTapAbout']!();
+                            if (about.onTapAbout() != null) about.onTapAbout();
                           },
                           child: Text(
-                            about['text'].toUpperCase(),
+                            about.text.toUpperCase(),
                             style: GoogleFonts.roboto(
                               color: Color(0xff03DAC5),
                               fontSize: 16,
@@ -166,4 +164,20 @@ class _SnackbarStates extends State<SnackBarWidget> {
         )
     ]);
   }
+}
+
+class ButtonSnackBar extends Equatable {
+  String text;
+  Function onTapAbout;
+
+  ButtonSnackBar({
+    required this.text,
+    required this.onTapAbout,
+  });
+
+  @override
+  List<Object> get props => [
+        text,
+        onTapAbout,
+      ];
 }

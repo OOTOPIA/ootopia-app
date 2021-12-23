@@ -168,11 +168,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         .changeMakerPro,
                                     text: AppLocalizations.of(context)!
                                         .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                    abouts: [
-                                      {
-                                        'text': AppLocalizations.of(context)!
+                                    buttons: [
+                                      ButtonSnackBar(
+                                        text: AppLocalizations.of(context)!
                                             .learnMore,
-                                        'onTapAbout': () {
+                                        onTapAbout: () {
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                             PageRoute.Page.homeScreen.route,
@@ -185,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             },
                                           );
                                         },
-                                      },
+                                      )
                                     ],
                                     marginBottom: true,
                                     contact: {
@@ -252,12 +252,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             .regenerationGame,
                                         text: AppLocalizations.of(context)!
                                             .theRegenerationGame,
-                                        abouts: [
-                                          {
-                                            'text':
-                                                AppLocalizations.of(context)!
-                                                    .learnMore,
-                                            'onTapAbout': () {
+                                        buttons: [
+                                          ButtonSnackBar(
+                                            text: AppLocalizations.of(context)!
+                                                .learnMore,
+                                            onTapAbout: () {
                                               Navigator.of(context)
                                                   .pushNamedAndRemoveUntil(
                                                 PageRoute.Page.homeScreen.route,
@@ -270,7 +269,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 },
                                               );
                                             },
-                                          },
+                                          )
                                         ],
                                         marginBottom: true,
                                       );
@@ -326,12 +325,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               text: AppLocalizations.of(
                                                       context)!
                                                   .laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame,
-                                              abouts: [
-                                                {
-                                                  'text': AppLocalizations.of(
+                                              buttons: [
+                                                ButtonSnackBar(
+                                                  text: AppLocalizations.of(
                                                           context)!
                                                       .learnMore,
-                                                  'onTapAbout': () {
+                                                  onTapAbout: () {
                                                     Navigator.of(context)
                                                         .pushNamedAndRemoveUntil(
                                                       PageRoute.Page.homeScreen
@@ -347,7 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       },
                                                     );
                                                   },
-                                                },
+                                                )
                                               ],
                                               marginBottom: true);
                                         },

@@ -215,12 +215,12 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                                                 text: AppLocalizations.of(
                                                         context)!
                                                     .aboutRegenerationGame,
-                                                abouts: [
-                                                  {
-                                                    'text': AppLocalizations.of(
+                                                buttons: [
+                                                  ButtonSnackBar(
+                                                    text: AppLocalizations.of(
                                                             context)!
                                                         .learnMore,
-                                                    'onTapAbout': () {
+                                                    onTapAbout: () {
                                                       Navigator.of(context)
                                                           .pushNamedAndRemoveUntil(
                                                               PageRoute
@@ -237,8 +237,8 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                                                                   "learning_tracks"
                                                             }
                                                           });
-                                                    }
-                                                  }
+                                                    },
+                                                  )
                                                 ],
                                                 marginBottom: true,
                                               );

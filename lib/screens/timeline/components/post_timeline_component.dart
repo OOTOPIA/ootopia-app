@@ -271,11 +271,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                         .badgeChangeMakerPro,
                                     text: AppLocalizations.of(context)!
                                         .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                    abouts: [
-                                      {
-                                        'text': AppLocalizations.of(context)!
+                                    buttons: [
+                                      ButtonSnackBar(
+                                        text: AppLocalizations.of(context)!
                                             .learnMore,
-                                        'onTapAbout': () {
+                                        onTapAbout: () {
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
                                             PageRoute.Page.homeScreen.route,
@@ -288,7 +288,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                             },
                                           );
                                         },
-                                      },
+                                      )
                                     ],
                                     marginBottom: true,
                                     contact: {

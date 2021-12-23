@@ -369,20 +369,20 @@ class _mainPageState extends State<MainPage> {
             automaticClosing: false,
             text: AppLocalizations.of(context)!
                 .weWantYourExperienceToBeTheBestItCanBe,
-            abouts: [
-              {
-                'text': AppLocalizations.of(context)!.shareMyOpinion,
-                'onTapAbout': () async {
+            buttons: [
+              ButtonSnackBar(
+                text: AppLocalizations.of(context)!.shareMyOpinion,
+                onTapAbout: () async {
                   await launch(
                       "https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform");
-                }
-              },
-              {
-                'text': AppLocalizations.of(context)!.notNow,
-                'onTapAbout': () {
+                },
+              ),
+              ButtonSnackBar(
+                text: AppLocalizations.of(context)!.notNow,
+                onTapAbout: () {
                   Navigator.of(context).pop();
-                }
-              }
+                },
+              )
             ],
             marginBottom: true,
           );
