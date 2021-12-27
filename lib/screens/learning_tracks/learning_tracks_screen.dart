@@ -9,6 +9,7 @@ import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -111,9 +112,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
           child: ListView(
             children: [
               InformationWidget(
-                icon: Image.asset(
-                  "assets/icons/ooz-coin-small.png",
+                icon: SvgPicture.asset(
+                  "assets/icons/compass.svg",
                   width: 24,
+                  color: LightColors.blue,
                 ),
                 title: AppLocalizations.of(context)!.learningTracks,
                 text: AppLocalizations.of(context)!.learningTracksDescription,
