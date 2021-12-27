@@ -525,6 +525,8 @@ class _HomeScreenState extends State<HomeScreen>
   Widget get currentPage => controller.pages[controller.currentPageIndex];
   bool get hasNavigation =>
       controller.pages.length > controller.initialPages.length;
+  bool get isNotWallet =>
+      authStore.currentUser != null && !(currentPage is WalletPage);
 
   PreferredSizeWidget? currentAppBar() {
     return (currentPage is EditProfileScreen && hasNavigation)
@@ -566,13 +568,14 @@ class _HomeScreenState extends State<HomeScreen>
           AppBarComponents.edit,
         ],
         onTapAction: () => controller.insertPage(EditProfileScreen()),
+        onTapLeading: () => controller.back(),
       );
 
   get appBar => DefaultAppBar(
         components: [
           if (hasNavigation) AppBarComponents.back,
           if (!hasNavigation) AppBarComponents.menu,
-          if (authStore.currentUser != null) AppBarComponents.ooz,
+          if (isNotWallet) AppBarComponents.ooz,
         ],
         onTapLeading: () {
           if (!hasNavigation) {

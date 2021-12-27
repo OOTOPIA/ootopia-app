@@ -46,7 +46,7 @@ class PostPreviewPage extends StatefulWidget {
 
 class _PostPreviewPageState extends State<PostPreviewPage>
     with SecureStoreMixin, WidgetsBindingObserver {
-  late FlickManager flickManager;
+  FlickManager? flickManager;
   late VideoPlayerController videoPlayer;
   late FlickMultiManager flickMultiManager;
   InterestsTagsRepositoryImpl _tagsRepository = InterestsTagsRepositoryImpl();
@@ -153,8 +153,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     if (_createdPost) {
       return true;
     }
-    if (flickManager.flickControlManager!.isFullscreen) {
-      flickManager.flickControlManager!.toggleFullscreen();
+    if (flickManager != null &&
+        flickManager!.flickControlManager!.isFullscreen) {
+      flickManager!.flickControlManager!.toggleFullscreen();
       return false;
     }
     bool returnDialog = await showDialog(
@@ -234,7 +235,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     postData.description = _descriptionInputController.text;
 
     if (postData.type == "video") {
-      postData.durationInSecs = (flickManager.flickVideoManager!
+      postData.durationInSecs = (flickManager!.flickVideoManager!
                   .videoPlayerValue!.duration.inMilliseconds %
               60000) /
           1000;
@@ -300,9 +301,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
         videoPlayerController: videoPlayer,
       );
 
-      flickMultiManager.init(flickManager);
+      flickMultiManager.init(flickManager!);
 
-      flickManager.flickControlManager!.mute();
+      flickManager!.flickControlManager!.mute();
     }
 
     if (widget.args["mirrored"] == "true") {
@@ -364,8 +365,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   @override
   void dispose() {
-    flickMultiManager.remove(flickManager);
-    flickManager.dispose();
+    if (flickManager != null) {
+      flickMultiManager.remove(flickManager!);
+      flickManager!.dispose();
+    }
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
@@ -457,7 +460,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                       alignment: Alignment.center,
                                       child: FlickVideoPlayer(
                                         preferredDeviceOrientationFullscreen: [],
-                                        flickManager: flickManager,
+                                        flickManager: flickManager!,
                                         flickVideoWithControls:
                                             FlickVideoWithControls(
                                           controls: null,
@@ -507,7 +510,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                         child: IconButton(
                                           padding: EdgeInsets.all(0),
                                           icon: Icon(
-                                              flickManager.flickControlManager!
+                                              flickManager!.flickControlManager!
                                                       .isMute
                                                   ? Icons.volume_off
                                                   : Icons.volume_up,
