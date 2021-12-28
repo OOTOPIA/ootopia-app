@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:wakelock/wakelock.dart';
 
 class VideoPlayerLearningTracks extends StatefulWidget {
   final String videoUrl;
@@ -35,6 +36,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   var widthVideo = 1.0;
   var heightVideo = 1.0;
   bool isLoading = false;
+  bool isWakelock = false;
 
   String timeVideo(Duration time) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -64,6 +66,15 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
             widthVideo = videoPlayerController.value.size.width;
             heightVideo = videoPlayerController.value.size.height;
           });
+          if (!isWakelock && videoPlayerController.value.isPlaying) {
+            Wakelock.enable();
+            isWakelock = true;
+          } else {
+            if (!videoPlayerController.value.isPlaying) {
+              Wakelock.disable();
+              isWakelock = false;
+            }
+          }
         }
       })
       ..initialize().then((value) {
@@ -94,8 +105,9 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
 
   @override
   void dispose() {
-    super.dispose();
     videoPlayerController.dispose();
+    Wakelock.disable();
+    super.dispose();
   }
 
   bool onClickSlider = false;
