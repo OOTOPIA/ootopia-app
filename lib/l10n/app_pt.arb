@@ -325,7 +325,7 @@
     "sendTheCodeBelowToInviteYourFriendsSower":"Envie o código abaixo para convidar pessoas que estão liderando projetos e/ou organizações que geram amplo impacto positivo para o meio ambiente e/ou para a sociedade.",
     "forEachNewcomerYourFriendWillReceive":"para cada recém-chegado. Seu amigo vai receber",
     "pictureByRommelDiaz":"Foto de Rommel Diaz",
-    "joinToOOTOPIA":">>Quero te convidar para experimentar comigo o app OOTOPIA<<\nSeja bem vindo ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️ \n-App para celulares Android. Baixe aqui >> https://bit.ly/ootopiaappbetaandroid \n-App para celulares Iphone. Baixe aqui >> https://bit.ly/ootopiaappbetaiphone \nCadastre-se com o código abaixo e receba %AMOUNT_OF_MONEY%: %USER_CODE%",
+    "joinToOOTOPIA":">>Quero te convidar para experimentar comigo o app OOTOPIA<<\nSeja bem vindo ao mundo regenerativo no qual todos queremos viver.✨ 🌎 ❤️ \n-App para celulares Android. Baixe aqui >> https://bit.ly/ootopiaappbetaandroid \n-App para celulares Iphone. Baixe aqui >> https://bit.ly/ootopiaappbetaiphone \nReceba um crédito de %AMOUNT_OF_MONEY% ao se cadastrar com o código abaixo:\n%USER_CODE%",
     "continueAccess":"Continuar",
     "conclude":"Concluir",
     "enterYourInvitationCode":"Digite seu código de acesso",
@@ -439,5 +439,8 @@
      
      "areYouEnjoyingTheOotopiaApp": "Você está gostando\ndo app OOTOPIA?",
      "weWantYourExperienceToBeTheBestItCanBe": "Queremos que sua experiência seja a melhor possível. Por isso sua opinião sincera e suas sugestões são muito importantes!\nCo-crie o OOTOPIA conosco.",
-    "shareMyOpinion" : "Compartilhar minha opinião"
+    "shareMyOpinion" : "Compartilhar minha opinião",
+    "yourOOZWallet" : "Sua carteira de OOz",
+    "giveYourOpinion" : "Dê sua opinião sobre o app",
+    "itIsVeryImportant" : "Ela é muito importante para nós!"
 }

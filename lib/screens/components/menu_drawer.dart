@@ -332,7 +332,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'OOz ${AppLocalizations.of(context)!.wallet}',
+                                          '${AppLocalizations.of(context)!.yourOOZWallet}',
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
@@ -373,11 +373,11 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${AppLocalizations.of(context)!.appTest}',
+                                          '${AppLocalizations.of(context)!.giveYourOpinion}',
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
-                                          '${AppLocalizations.of(context)!.sendYourFeedback}',
+                                          '${AppLocalizations.of(context)!.itIsVeryImportant}',
                                           style: TextStyle(
                                               color: LightColors.grey,
                                               fontSize: 10),
