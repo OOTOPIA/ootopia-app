@@ -243,7 +243,7 @@ class _CameraAppState extends State<CameraApp>
     setCamera();
 
     setState(() async {
-      await controller!.dispose();
+      //await controller!.dispose();
 
       if (pickedFile != null) {
         await Navigator.of(context).pushNamed(
@@ -260,7 +260,7 @@ class _CameraAppState extends State<CameraApp>
     setCamera();
 
     setState(() async {
-      await controller!.dispose();
+      //await controller!.dispose();
 
       if (pickedFile != null) {
         await Navigator.push(
