@@ -134,10 +134,11 @@ class _SnackbarStates extends State<SnackBarWidget> {
             SizedBox(height: 16),
             if (widget.buttons != null)
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: widget.buttons!
                     .map(
                       (about) => Container(
-                        margin: EdgeInsets.only(right: 32),
                         child: GestureDetector(
                           onTap: () {
                             if (about.onTapAbout() != null) about.onTapAbout();

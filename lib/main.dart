@@ -357,6 +357,16 @@ class _mainPageState extends State<MainPage> {
   SharedExperienceService sharedExperienceService =
       SharedExperienceService.getInstace();
 
+  String get shareMyOpinion {
+    if (MediaQuery.of(context).size.width < 416 &&
+        AppLocalizations.of(context)!.localeName == 'pt') {
+      return AppLocalizations.of(context)!
+          .shareMyOpinion
+          .replaceFirst(" ", "\n");
+    }
+    return AppLocalizations.of(context)!.shareMyOpinion;
+  }
+
   showSharedExperience(context) {
     Future.delayed(Duration.zero, () {
       showModalBottomSheet(
@@ -371,7 +381,7 @@ class _mainPageState extends State<MainPage> {
                 .weWantYourExperienceToBeTheBestItCanBe,
             buttons: [
               ButtonSnackBar(
-                text: AppLocalizations.of(context)!.shareMyOpinion,
+                text: shareMyOpinion,
                 onTapAbout: () async {
                   await launch(
                       "https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform");
