@@ -83,25 +83,33 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                         fit: BoxFit.cover,
                       ),
                       Container(
+                        width: double.infinity,
+                        height: 100,
+                        margin: EdgeInsets.only(top: 62),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withOpacity(0),
+                              Colors.black.withOpacity(.66),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
                         margin: EdgeInsets.only(top: 120),
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(24),
-                                topRight: Radius.circular(24),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.66),
-                                  spreadRadius: 8,
-                                  blurRadius: 14,
-                                  offset: Offset(0, 1),
-                                ),
-                              ]),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(24),
+                              topRight: Radius.circular(24),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                            ),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 18.0, right: 18, bottom: 16),
