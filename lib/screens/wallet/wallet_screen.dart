@@ -100,7 +100,7 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                   children: [
                     InformationWidget(
                       icon: Image.asset(
-                        "assets/icons/ooz-coin-large.png",
+                        "assets/icons/ooz_coin_bottomless.png",
                         width: 24,
                       ),
                       title: AppLocalizations.of(context)!.wallet,

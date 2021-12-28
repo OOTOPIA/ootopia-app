@@ -66,7 +66,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   children: [
                     InformationWidget(
                       icon: Image.asset(
-                        "assets/icons/marketplace_selected_icon.png",
+                        "assets/icons/marketplace_icon_bottomless.png",
                         width: 24,
                       ),
                       title: AppLocalizations.of(context)!.ethicalMarketplace,
