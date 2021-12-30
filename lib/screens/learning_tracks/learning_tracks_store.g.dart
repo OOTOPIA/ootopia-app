@@ -76,6 +76,14 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
         .run(() => super.lastLearningTracks(locale: locale));
   }
 
+  final _$getWelcomeGuideAsyncAction =
+      AsyncAction('LearningTracksStoreBase.getWelcomeGuide');
+
+  @override
+  Future<LearningTracksModel> getWelcomeGuide() {
+    return _$getWelcomeGuideAsyncAction.run(() => super.getWelcomeGuide());
+  }
+
   @override
   String toString() {
     return '''

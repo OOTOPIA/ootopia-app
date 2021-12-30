@@ -122,7 +122,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
     postBloc = BlocProvider.of<PostBloc>(context);
-    postTimelineController = PostTimelineController(post: widget.post);
+    if (this.post.oozToTransfer == null) {
+      this.post.oozToTransfer = 0;
+    }
+    postTimelineController = PostTimelineController(post: this.post);
   }
 
   void _checkUserIsLoggedIn() async {
@@ -181,8 +184,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _deletePost() async {
-    //postBloc.add(DeletePostEvent(widget.post.id, widget.isProfile));
-    await timelineStore.removePost(widget.post);
+    //postBloc.add(DeletePostEvent(this.post.id, widget.isProfile));
+    await timelineStore.removePost(this.post);
     widget.onDelete();
   }
 
@@ -499,7 +502,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                           top: 0,
                           width: 96,
                           right: showOozToTransfer() ? 50 : 0,
-                          child: this.post.oozToTransfer > 0 &&
+                          child: this.post.oozToTransfer! > 0 &&
                                   (_isDragging || _oozIsSent || _oozError) &&
                                   !_oozSlidingOut
                               ? Container(
@@ -540,7 +543,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                         child: this.post.oozToTransfer == 0
                                             ? Image(
                                                 image: AssetImage(
-                                                  'assets/icons/ooz_only.png',
+                                                  this.post.oozRewarded ==
+                                                              null ||
+                                                          this
+                                                                  .post
+                                                                  .oozRewarded ==
+                                                              0
+                                                      ? 'assets/icons/ooz_only.png'
+                                                      : 'assets/icons/ooz_only_active.png',
                                                 ),
                                                 width: 16,
                                               )
@@ -551,7 +561,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                 width: 16,
                                               ),
                                       ),
-                                      this.post.oozToTransfer > 0
+                                      this.post.oozToTransfer! > 0
                                           ? Padding(
                                               padding:
                                                   EdgeInsets.only(right: 4),
@@ -578,10 +588,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                                     .oozTotalCollected),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                  color: this.post.oozRewarded ==
+                                                              null ||
+                                                          this
+                                                                  .post
+                                                                  .oozRewarded ==
+                                                              0
+                                                      ? Colors.black
+                                                      : Color(0xFF003694),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             )
                                     ],
@@ -828,7 +845,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         return GratitudeRewardDialog(
           title: AppLocalizations.of(context)!.gratitudeReward,
           message:
-              '${AppLocalizations.of(context)!.doYouConfirmSending} ${this.post.oozToTransfer.toStringAsFixed(2)} OOZ ${AppLocalizations.of(context)!.fromYourAccontToTheCreatorOfThisPost}',
+              '${AppLocalizations.of(context)!.doYouConfirmSending} ${this.post.oozToTransfer!.toStringAsFixed(2)} OOZ ${AppLocalizations.of(context)!.fromYourAccontToTheCreatorOfThisPost}',
           onCheckChanged: (bool isChecked) {
             setState(() {
               dontAskIsChecked = isChecked;
@@ -877,55 +894,52 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         ),
       );
     }
-    return Observer(
-        builder: (_) => SizedBox(
-              height: 25,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.black87,
-                  padding: EdgeInsets.only(left: 12),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
+    return SizedBox(
+      height: 25,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          primary: Colors.black87,
+          padding: EdgeInsets.only(left: 12),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+          ),
+          backgroundColor: Color(0xFF03DAC5),
+          alignment:
+              showOozToTransfer() ? Alignment.centerLeft : Alignment.center,
+        ),
+        onPressed: () {
+          if (!loggedIn) {
+            Navigator.of(context).pushNamed(
+              PageRoute.Page.loginScreen.route,
+            );
+          } else if (!_sendOOZIsLoading) {
+            if (postTimelineComponentController.askToConfirmGratitude) {
+              sendOOZ();
+            } else {
+              _showConfirmGratitudeReward();
+            }
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: 6,
+          ),
+          child: !_sendOOZIsLoading
+              ? Text(
+                  AppLocalizations.of(context)!.send,
+                  style: TextStyle(color: Colors.black, fontSize: 12),
+                )
+              : SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
-                  backgroundColor: Color(0xFF03DAC5),
-                  alignment: showOozToTransfer()
-                      ? Alignment.centerLeft
-                      : Alignment.center,
                 ),
-                onPressed: () {
-                  if (!loggedIn) {
-                    Navigator.of(context).pushNamed(
-                      PageRoute.Page.loginScreen.route,
-                    );
-                  } else if (!_sendOOZIsLoading) {
-                    if (postTimelineComponentController.askToConfirmGratitude) {
-                      sendOOZ();
-                    } else {
-                      _showConfirmGratitudeReward();
-                    }
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 6,
-                  ),
-                  child: !_sendOOZIsLoading
-                      ? Text(
-                          AppLocalizations.of(context)!.send,
-                          style: TextStyle(color: Colors.black, fontSize: 12),
-                        )
-                      : SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.transparent,
-                            valueColor:
-                                new AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        ),
-                ),
-              ),
-            ));
+        ),
+      ),
+    );
   }
 
   void sendOOZ() async {
@@ -934,13 +948,19 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     });
     try {
       await this.walletTransferRepositoryImpl.transferOOZToPost(this.post.id,
-          this.post.oozToTransfer, this._dontAskToConfirmGratitudeReward);
+          this.post.oozToTransfer!, this._dontAskToConfirmGratitudeReward);
       this.trackingEvents.timelineDonatedOOZ();
       await this.walletStore.getWallet();
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
-            this.post.oozTotalCollected + this.post.oozToTransfer;
+            this.post.oozTotalCollected + this.post.oozToTransfer!;
+        if (this.post.oozRewarded == null || this.post.oozRewarded == 0) {
+          this.post.oozRewarded = this.post.oozToTransfer;
+        } else {
+          this.post.oozRewarded =
+              this.post.oozRewarded! + this.post.oozToTransfer!;
+        }
       });
       _showOOZIsSent();
     } on FetchDataException catch (e) {
