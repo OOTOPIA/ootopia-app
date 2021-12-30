@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_details.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
@@ -14,7 +15,6 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/page-enum.dart';
 // import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
-import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 
 //Files
@@ -24,7 +24,6 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'components/album_profile_widget.dart';
-import 'components/avatar_photo_widget.dart';
 import 'components/empty_posts_widget.dart';
 import 'components/gaming_data_widget.dart';
 import 'components/timeline_profile.dart';
@@ -149,59 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: GlobalConstants.of(context).spacingNormal,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AvatarPhotoWidget(
-                            photoUrl: store?.profile!.photoUrl,
-                            sizePhotoUrl: 114,
-                            isBadges: store == null
-                                ? false
-                                : store!.profile!.badges!.length > 0,
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                barrierColor: Colors.black.withAlpha(1),
-                                backgroundColor: Colors.black.withAlpha(1),
-                                builder: (BuildContext context) {
-                                  return SnackBarWidget(
-                                    menu: AppLocalizations.of(context)!
-                                        .changeMakerPro,
-                                    text: AppLocalizations.of(context)!
-                                        .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                    buttons: [
-                                      ButtonSnackBar(
-                                        text: AppLocalizations.of(context)!
-                                            .learnMore,
-                                        onTapAbout: () {
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                            PageRoute.Page.homeScreen.route,
-                                            (Route<dynamic> route) => false,
-                                            arguments: {
-                                              "returnToPageWithArgs": {
-                                                'currentPageName':
-                                                    "learning_tracks"
-                                              }
-                                            },
-                                          );
-                                        },
-                                      )
-                                    ],
-                                    marginBottom: true,
-                                    contact: {
-                                      "text": AppLocalizations.of(context)!
-                                          .areYouAChangeMakerProToo,
-                                      "textLink": AppLocalizations.of(context)!
-                                          .getInContact,
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                      ProfileAvatarWidget(profileScreenStore: store),
                       SizedBox(
                           height: GlobalConstants.of(context).spacingSmall),
                       Text(
