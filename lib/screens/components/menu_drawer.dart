@@ -209,7 +209,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 Text(
-                                  '${authStore!.currentUser!.dailyLearningGoalInMinutes}m',
+                                  '${authStore!.currentUser!.dailyLearningGoalInMinutes}min',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text('|'),

@@ -287,7 +287,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     TextSpan(
                                       text:
-                                          "${authStore.currentUser?.dailyLearningGoalInMinutes ?? 00}m",
+                                          "${authStore.currentUser?.dailyLearningGoalInMinutes ?? 00}min",
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.black87,

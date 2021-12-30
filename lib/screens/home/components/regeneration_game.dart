@@ -333,7 +333,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                           TextSpan(
                                             text: (authStore.currentUser == null
                                                 ? ""
-                                                : "${authStore.currentUser!.dailyLearningGoalInMinutes}m"),
+                                                : "${authStore.currentUser!.dailyLearningGoalInMinutes}min"),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .subtitle2!
@@ -373,7 +373,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         TextSpan(
                                           text: homeStore.totalAppUsageTimeSoFar
                                                   .isEmpty
-                                              ? "0h 0m 0s"
+                                              ? "0h 0min 0s"
                                               : homeStore
                                                   .totalAppUsageTimeSoFar,
                                           style: Theme.of(context)
