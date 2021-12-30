@@ -6,13 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_details.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-import 'package:ootopia_app/shared/page-enum.dart';
 // import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:provider/provider.dart';
@@ -23,11 +23,9 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'components/album_profile_widget.dart';
 import 'components/empty_posts_widget.dart';
 import 'components/timeline_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -201,8 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () => controller.insertPage(WalletPage()))
                           : Container(),
                       SizedBox(
-                        height: GlobalConstants.of(context).spacingNormal,
-                      ),
+                          height: GlobalConstants.of(context).spacingNormal),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: GlobalConstants.of(context)
@@ -214,35 +211,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       if (store != null && store!.postsList.length > 0)
                         SizedBox(
-                          height: GlobalConstants.of(context).spacingNormal,
-                        ),
+                            height: GlobalConstants.of(context).spacingNormal),
                       if (store != null && store!.postsList.length > 0)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: GlobalConstants.of(context)
-                                      .screenHorizontalSpace -
-                                  6),
-                          child: Row(
-                            children: [
-                              AlbumProfileWidget(
-                                onTap: () {},
-                                albumName: AppLocalizations.of(context)!.all2,
-                                photoAlbumUrl: "",
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                      PageRoute.Page.newFutureCategories.route);
-                                },
-                                child: AlbumProfileWidget(
-                                  onTap: () {},
-                                  albumName:
-                                      AppLocalizations.of(context)!.album,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        ProfileAlbumListWidget(),
                       if (store != null && store!.postsList.length > 0)
                         SizedBox(
                           height: GlobalConstants.of(context).spacingNormal,
