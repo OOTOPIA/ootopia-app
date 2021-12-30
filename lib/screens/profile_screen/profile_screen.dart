@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_details.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -215,8 +215,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .fontWeight),
                       ),
                       SizedBox(
-                          height:
-                              GlobalConstants.of(context).intermediateSpacing),
+                          height: GlobalConstants.of(context).spacingNormal),
+                      ProfileBioWidget(bio: store?.profile?.bio),
                       Text(
                         AppLocalizations.of(context)!
                             .regenerationGame
@@ -292,30 +292,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ))
                             : SizedBox(),
-                      ),
-                      Visibility(
-                        visible: store?.profile?.bio != null &&
-                            store?.profile?.bio != '',
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: GlobalConstants.of(context)
-                                      .screenHorizontalSpace),
-                              child: Text(
-                                store?.profile!.bio != null
-                                    ? store!.profile!.bio!
-                                    : "",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w400),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            SizedBox(
-                              height: GlobalConstants.of(context).spacingNormal,
-                            )
-                          ],
-                        ),
                       ),
                       isLoggedInUserProfile
                           ? WalletBarWidget(
