@@ -97,6 +97,9 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       initialData: deviceOrientation,
       builder: (context, orientation) {
         if (!fullScreenVideo) {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+          ]);
           if (MediaQuery.of(context).orientation == Orientation.portrait) {
             if (widthVideo > heightVideo) {
               heightPlayerVideo = MediaQuery.of(context).size.width /
@@ -195,7 +198,6 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                               alignment: Alignment.bottomCenter,
                               child: VideoBar(
                                 videoPlayerController: videoPlayerController,
-                                isWakelock: false,
                                 fullScreenVideo: fullScreenVideo,
                                 fullScreenEvent: () {
                                   fullScreenVideo = !fullScreenVideo;

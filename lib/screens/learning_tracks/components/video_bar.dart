@@ -11,13 +11,11 @@ class VideoBar extends StatefulWidget {
   Function loadingTimeLineVideo;
   Function fullScreenEvent;
   bool fullScreenVideo;
-  bool isWakelock;
 
   VideoBar({
     Key? key,
     required this.videoPlayerController,
     required this.loadingTimeLineVideo,
-    required this.isWakelock,
     required this.fullScreenEvent,
     required this.fullScreenVideo,
     this.timerOpacity,
@@ -32,9 +30,9 @@ class _VideoBarState extends State<VideoBar> {
   String positionVideoText = '';
   int currentPosition = 0;
   double maxDurationVideo = 0;
+  bool isWakelock = false;
   var widthVideo = 1.0;
   var heightVideo = 1.0;
-  bool isLoading = false;
 
   String timeVideo(Duration time) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -65,14 +63,13 @@ class _VideoBarState extends State<VideoBar> {
             widthVideo = widget.videoPlayerController.value.size.width;
             heightVideo = widget.videoPlayerController.value.size.height;
           });
-          if (!widget.isWakelock &&
-              widget.videoPlayerController.value.isPlaying) {
+          if (!isWakelock && widget.videoPlayerController.value.isPlaying) {
             Wakelock.enable();
-            widget.isWakelock = true;
+            isWakelock = true;
           } else {
             if (!widget.videoPlayerController.value.isPlaying) {
               Wakelock.disable();
-              widget.isWakelock = false;
+              isWakelock = false;
             }
           }
         }
