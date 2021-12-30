@@ -3,6 +3,8 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 part 'profile_screen_store.g.dart';
 
 class ProfileScreenStore = _ProfileScreenStoreBase with _$ProfileScreenStore;
@@ -62,5 +64,21 @@ abstract class _ProfileScreenStoreBase with Store {
       loadingPosts = false;
       loadingPostsError = true;
     }
+  }
+
+  goToTimelinePost(
+      {required ObservableList<TimelinePost> posts,
+      required postSelected,
+      required String userId,
+      required SmartPageController controller}) {
+    controller.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": userId,
+          "posts": posts,
+          "postSelected": postSelected,
+        },
+      ),
+    );
   }
 }

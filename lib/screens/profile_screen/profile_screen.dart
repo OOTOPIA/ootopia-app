@@ -100,18 +100,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  _goToTimelinePost(posts, postSelected) {
-    controller.insertPage(
-      TimelineScreenProfileScreen(
-        {
-          "userId": _getUserId(),
-          "posts": posts,
-          "postSelected": postSelected,
-        },
-      ),
-    );
-  }
-
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   bool get isLoggedInUserProfile {
@@ -255,8 +243,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           columnsCount: 4,
                                           type: post.type,
                                           onTap: () {
-                                            _goToTimelinePost(
-                                                store!.postsList, index);
+                                            store!.goToTimelinePost(
+                                              controller: controller,
+                                              userId: _getUserId(),
+                                              posts: store!.postsList,
+                                              postSelected: index,
+                                            );
                                           },
                                         ),
                                       ),
@@ -267,8 +259,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )
                           : EmptyPostsWidget(),
                       SizedBox(
-                        height: GlobalConstants.of(context).intermediateSpacing,
-                      ),
+                          height:
+                              GlobalConstants.of(context).intermediateSpacing),
                     ],
                   ),
                 ),
