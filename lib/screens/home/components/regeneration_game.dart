@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -13,6 +16,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerationGame extends StatefulWidget {
   RegenerationGame({Key? key}) : super(key: key);
@@ -45,11 +49,18 @@ class _RegenerationGameState extends State<RegenerationGame>
 
   bool clickedInPersonalDialogOpened = false;
 
+  SmartPageController controller = SmartPageController.getInstance();
+  LearningTracksModel? welcomeGuideLearningTrack;
+  LearningTracksStore learningTracksStore = LearningTracksStore();
+
   @override
   void initState() {
     super.initState();
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
     editProfileStore.getUser();
+    Future.delayed(Duration.zero, () async {
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+    });
     Future.delayed(Duration(milliseconds: 300), () {
       _resetDetailedIconPosition();
     });
@@ -174,17 +185,16 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         ),
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                        PageRoute.Page.homeScreen.route,
-                                        (Route<dynamic> route) => false,
-                                        arguments: {
-                                          "returnToPageWithArgs": {
-                                            'currentPageName': "learning_tracks"
-                                          }
-                                        },
-                                      );
+                                    onTap: () async {
+                                      if (welcomeGuideLearningTrack == null) {
+                                        welcomeGuideLearningTrack =
+                                            await learningTracksStore
+                                                .getWelcomeGuide();
+                                      }
+                                      if (welcomeGuideLearningTrack != null) {
+                                        openLearningTrack(
+                                            welcomeGuideLearningTrack!);
+                                      }
                                     },
                                     child: Text(
                                       AppLocalizations.of(context)!.learnMore,
@@ -222,6 +232,19 @@ class _RegenerationGameState extends State<RegenerationGame>
   isSmallPhone(double value) {
     if (MediaQuery.of(context).size.width < 380) return value / 2;
     return value;
+  }
+
+  void openLearningTrack(LearningTracksModel learningTrack) =>
+      controller.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': updateWidget,
+        },
+      ));
+
+  updateWidget() {
+    setState(() {});
   }
 
   Widget get detailedGoal => InkWell(
