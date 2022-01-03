@@ -403,7 +403,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 child: this.post.type == "image"
                     ? ImagePostTimeline(
                         image: this.post.imageUrl as String,
-                        //onDoubleTapVideo: () => this._likePost(false, true),
+                        onDoubleTapVideo: () => this._likePost(false, true),
                       )
                     : FlickMultiPlayer(
                         userId: (user != null ? user!.id : null),
@@ -411,37 +411,51 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         url: this.post.videoUrl!,
                         flickMultiManager: widget.flickMultiManager,
                         image: this.post.thumbnailUrl,
-                        //onDoubleTapVideo: () => this._likePost(false, true),
+                        onDoubleTapVideo: () => this._likePost(false, true),
                       ),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: AnimatedOpacity(
-                  opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                      ? 0.8
-                      : 0.0,
-                  duration: Duration(milliseconds: 500),
-                  child: Visibility(
-                    visible: _bigLikeShowAnimation,
-                    child: Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * .6,
-                      child: Image.asset(
-                        'assets/icons_profile/woow_active.png',
-                        width: 90,
-                        height: 90,
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: AnimatedContainer(
+                    height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                    ? 100 : 0.0,
+                    width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                    ? 100 : 0.0,
+                    curve: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd ? Curves.easeOutBack : Curves.easeIn,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    duration: const Duration(milliseconds: 400),
+                    child: AnimatedOpacity(
+                      opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                          ? 0.8
+                          : 0.3,
+                      duration: Duration(milliseconds: 400),
+                      child: Visibility(
+                        visible: _bigLikeShowAnimation,
+                        child: Image.asset(
+                          'assets/icons_profile/woow_90_deg.png',
+                          width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                              ? 100 : 0.0,
+                          height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                              ? 100 : 0.0,
+
+                        ),
                       ),
+                      onEnd: () {
+                        Timer(Duration(milliseconds: 450), () {
+                          setState(() => _bigLikeShowAnimationEnd = true);
+                          Timer(Duration(milliseconds: 500), () {
+                            setState(() => _bigLikeShowAnimation = false);
+                          });
+                        });
+                        //appState.setSplashFinished();
+                      },
                     ),
                   ),
-                  onEnd: () {
-                    Timer(Duration(milliseconds: 300), () {
-                      setState(() => _bigLikeShowAnimationEnd = true);
-                      Timer(Duration(milliseconds: 500), () {
-                        setState(() => _bigLikeShowAnimation = false);
-                      });
-                    });
-                    //appState.setSplashFinished();
-                  },
                 ),
               )
             ],
@@ -705,8 +719,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                   image: AssetImage(
                                       'assets/icons_profile/woow.png'),
                                 ),
-                                onPressed: () => {},
-                                //this._likePost(true)
+                                onPressed:  () => incrementOozToTransfer(),
                               )),
                         ),
                       ),
@@ -833,6 +846,23 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           ),
         ],
       );
+    });
+  }
+
+  void incrementOozToTransfer(){
+    if(this.post.oozToTransfer == null){
+      this.post.oozToTransfer = 0;
+    }
+    double maxValue  = ((oozGoal * (100 - 30)) / 70).roundToDouble();
+    if(this.post.oozToTransfer!<maxValue - 5 ) {
+      this.post.oozToTransfer = this.post.oozToTransfer! + 5;
+    }else{
+      this.post.oozToTransfer = maxValue;
+    }
+    double perc = ((this.post.oozToTransfer!*70)/oozGoal)+30;
+    setState(() {
+      _isDragging = true;
+      _draggablePositionX = (perc*getMaxSlideWidth())/100;
     });
   }
 
@@ -1087,6 +1117,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   void _likePost(bool dislikeIfIsLiked, [bool? showAnimation]) async {
+    incrementOozToTransfer();
     if (!loggedIn) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.loginScreen.route,
