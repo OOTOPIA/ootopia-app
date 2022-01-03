@@ -17,16 +17,17 @@ class SnackBarWidget extends StatefulWidget {
   Function? onClose;
   bool? automaticClosing = true;
 
-  SnackBarWidget(
-      {required this.menu,
-      required this.text,
-      this.contact,
-      this.buttons,
-      this.marginBottom,
-      this.emailToConcatenate,
-      this.onClose,
-      this.onTapAbout,
-      this.automaticClosing});
+  SnackBarWidget({
+    required this.menu,
+    required this.text,
+    this.contact,
+    this.buttons,
+    this.marginBottom,
+    this.emailToConcatenate,
+    this.onClose,
+    this.onTapAbout,
+    this.automaticClosing,
+  });
 
   @override
   _SnackbarStates createState() => _SnackbarStates();
@@ -141,7 +142,12 @@ class _SnackbarStates extends State<SnackBarWidget> {
                       (about) => Container(
                         child: GestureDetector(
                           onTap: () {
-                            if (about.onTapAbout() != null) about.onTapAbout();
+                            if (about.onTapAbout() != null) {
+                              about.onTapAbout();
+                              if (about.closeOnTapAbout == true) {
+                                Navigator.of(context).pop();
+                              }
+                            }
                           },
                           child: Text(
                             about.text.toUpperCase(),
@@ -167,18 +173,14 @@ class _SnackbarStates extends State<SnackBarWidget> {
   }
 }
 
-class ButtonSnackBar extends Equatable {
+class ButtonSnackBar {
   String text;
   Function onTapAbout;
+  bool? closeOnTapAbout;
 
   ButtonSnackBar({
     required this.text,
     required this.onTapAbout,
+    this.closeOnTapAbout,
   });
-
-  @override
-  List<Object> get props => [
-        text,
-        onTapAbout,
-      ];
 }
