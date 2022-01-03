@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
@@ -57,6 +59,14 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       if (userId != null) {
         queryParams['userId'] = userId;
       }
+
+      String lang = "en";
+
+      if (Platform.localeName.startsWith('pt')) {
+        lang = 'pt-BR';
+      }
+
+      queryParams['locale'] = lang;
 
       final response = await ApiClient.api()
           .get(dotenv.env['API_URL']! + "posts?", queryParameters: queryParams);
