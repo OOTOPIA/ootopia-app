@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../data/repositories/learning_tracks_repository.dart';
 
 class WatchVideoLeaningTracks extends StatefulWidget {
+  List<ChaptersModel>? listChapters;
   final ChaptersModel chapter;
   final LearningTracksModel? learningTrack;
   final Function updateStatusVideoChapter;
@@ -17,6 +18,7 @@ class WatchVideoLeaningTracks extends StatefulWidget {
   WatchVideoLeaningTracks({
     required this.chapter,
     this.learningTrack,
+    this.listChapters,
     required this.updateStatusVideoChapter,
   });
   @override
@@ -29,18 +31,25 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
       LearningTracksRepositoryImpl();
   late WalletStore walletStore;
   bool playerVideoFullscreen = false;
+  late ChaptersModel currentChapter;
 
   @override
   void dispose() {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    currentChapter = widget.chapter;
+  }
+
   updateStatusVideo() async {
-    if (widget.chapter.completed != true) {
-      widget.chapter.completed = true;
+    if (currentChapter.completed != true) {
+      currentChapter.completed = true;
       await learningTracksRepositoryImpl.updateStatusVideoLearningTrack(
         widget.learningTrack!.id,
-        widget.chapter.id,
+        currentChapter.id,
       );
       await this.walletStore.getWallet();
       setState(() {
@@ -65,10 +74,10 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
             )
           : null,
       body: VideoPlayerLearningTracks(
-          videoUrl: widget.chapter.videoUrl,
-          thumbVideo: widget.chapter.videoThumbUrl,
+          chapter: currentChapter,
           viewQuiz: viewButtonQuiz(isPortrait),
           updateStatusVideo: updateStatusVideo,
+          listChapters: widget.listChapters,
           eventFullScreen: () {
             setState(() {
               playerVideoFullscreen = !playerVideoFullscreen;

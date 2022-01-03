@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayAndPause extends StatefulWidget {
-  VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
   Timer? timerOpacity;
   bool onClickSlider;
   bool disablePreviusVideo;
@@ -45,16 +45,11 @@ class _VideoPlayPauseState extends State<VideoPlayAndPause> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      widget.videoPlayerController.value.isPlaying
-                          ? widget.videoPlayerController.pause()
-                          : widget.videoPlayerController.play();
-                    });
+                    widget.eventPreviusVideo();
                   },
                   child: Opacity(
                     opacity: widget.disablePreviusVideo ? .40 : 1,
-                    child: Text(""),
-                    //   child: SvgPicture.asset("assets/icons/previus_video.svg"),
+                    child: SvgPicture.asset("assets/icons/previus_video.svg"),
                   ),
                 ),
                 SizedBox(
@@ -62,13 +57,20 @@ class _VideoPlayPauseState extends State<VideoPlayAndPause> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    widget.eventPreviusVideo();
+                    setState(() {
+                      if (widget.videoPlayerController != null) {
+                        widget.videoPlayerController!.value.isPlaying
+                            ? widget.videoPlayerController!.pause()
+                            : widget.videoPlayerController!.play();
+                      }
+                    });
                   },
                   child: CircleAvatar(
                     backgroundColor: Color(0xff35AD6C),
                     radius: 28.5,
                     child: Icon(
-                      (widget.videoPlayerController.value.isPlaying
+                      (widget.videoPlayerController != null &&
+                              widget.videoPlayerController!.value.isPlaying
                           ? Icons.pause
                           : Icons.play_arrow),
                       size: 23,
@@ -83,12 +85,10 @@ class _VideoPlayPauseState extends State<VideoPlayAndPause> {
                   onTap: () {
                     widget.eventNextVideo();
                   },
-                  child: Text(""),
-
-                  // child: Opacity(
-                  //   opacity: widget.disableNextVideo ? .40 : 1,
-                  //   child: SvgPicture.asset("assets/icons/next_video.svg"),
-                  // ),
+                  child: Opacity(
+                    opacity: widget.disableNextVideo ? .40 : 1,
+                    child: SvgPicture.asset("assets/icons/next_video.svg"),
+                  ),
                 ),
               ],
             ),

@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:wakelock/wakelock.dart';
+import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_bar.dart';
 import 'package:device_orientation/device_orientation.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_play_and_pause.dart';
@@ -11,17 +13,23 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPlayerLearningTracks extends StatefulWidget {
-  final String videoUrl;
-  final String thumbVideo;
   final Widget viewQuiz;
+  ChaptersModel chapter;
   final Function updateStatusVideo;
   final Function eventFullScreen;
-  VideoPlayerLearningTracks(
-      {required this.videoUrl,
-      required this.thumbVideo,
-      required this.viewQuiz,
-      required this.updateStatusVideo,
-      required this.eventFullScreen});
+  final Function? eventNextVideo;
+  final Function? eventPreviusVideo;
+  List<ChaptersModel>? listChapters;
+
+  VideoPlayerLearningTracks({
+    required this.chapter,
+    required this.viewQuiz,
+    required this.updateStatusVideo,
+    required this.eventFullScreen,
+    this.eventNextVideo,
+    this.eventPreviusVideo,
+    this.listChapters,
+  });
 
   @override
   _VideoPlayerLearningTracksState createState() =>
@@ -29,58 +37,97 @@ class VideoPlayerLearningTracks extends StatefulWidget {
 }
 
 class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
-  late VideoPlayerController videoPlayerController;
+  late VideoPlayerController? videoPlayerController;
+  late ChaptersModel currentChapter;
   Timer? timerOpacity;
   var widthVideo = 1.0;
   var heightVideo = 1.0;
   bool isLoading = false;
   bool fullScreenVideo = false;
 
+  String totalTimeVideoText = '';
+  String positionVideoText = '';
+  int currentPosition = 0;
+  double maxDurationVideo = 0;
+  bool isWakelock = false;
+
+  String timeVideo(Duration time) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitHours =
+        time.inHours == 0 ? '' : twoDigits(time.inHours.remainder(60)) + ':';
+    String twoDigitMinutes = twoDigits(time.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(time.inSeconds.remainder(60));
+    return "$twoDigitHours$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   @override
   void initState() {
     super.initState();
+    currentChapter = widget.chapter;
+    startVideFirst();
+  }
+
+  startVideFirst() {
     setState(() {
       isLoading = true;
     });
-
-    videoPlayerController = VideoPlayerController.network(widget.videoUrl)
-      ..addListener(() {
-        if (mounted) {
-          setState(() {
-            widthVideo = videoPlayerController.value.size.width;
-            heightVideo = videoPlayerController.value.size.height;
+    videoPlayerController =
+        VideoPlayerController.network(currentChapter.videoUrl)
+          ..addListener(startVideo)
+          ..initialize().then((value) {
+            setState(() {
+              timerOpacity?.cancel();
+              timerOpacity = Timer(
+                Duration(seconds: 1),
+                () => setState(() => timerOpacity = null),
+              );
+              isLoading = false;
+            });
+            videoPlayerController!.play();
           });
+  }
+
+  startVideo() {
+    if (mounted) {
+      setState(() {
+        if (videoPlayerController != null) {
+          widthVideo = videoPlayerController!.value.size.width;
+          heightVideo = videoPlayerController!.value.size.height;
+          maxDurationVideo =
+              videoPlayerController!.value.duration.inSeconds.toDouble();
+          totalTimeVideoText = timeVideo(videoPlayerController!.value.duration);
+          positionVideoText = timeVideo(videoPlayerController!.value.position);
+          currentPosition = videoPlayerController!.value.position.inSeconds;
+          widthVideo = videoPlayerController!.value.size.width;
+          heightVideo = videoPlayerController!.value.size.height;
         }
-      })
-      ..initialize().then((value) {
-        setState(() {
-          timerOpacity?.cancel();
-          timerOpacity = Timer(
-            Duration(seconds: 1),
-            () => setState(() => timerOpacity = null),
-          );
-          isLoading = false;
-        });
-        videoPlayerController.play();
-
-        videoPlayerController.addListener(() {
-          //custom Listner
-          setState(() {
-            if (videoPlayerController.value.isInitialized &&
-                (videoPlayerController.value.duration ==
-                    videoPlayerController.value.position)) {
-              //checking the duration and position every time
-              //Video Completed//
-              widget.updateStatusVideo();
-            }
-          });
-        });
       });
+    }
+
+    setState(() {
+      if (videoPlayerController!.value.isInitialized &&
+          (videoPlayerController!.value.duration ==
+              videoPlayerController!.value.position)) {
+        //checking the duration and position every time
+        //Video Completed//
+        widget.updateStatusVideo();
+      }
+    });
+
+    if (!isWakelock && videoPlayerController!.value.isPlaying) {
+      Wakelock.enable();
+      isWakelock = true;
+    } else {
+      if (videoPlayerController!.value.isPlaying) {
+        Wakelock.disable();
+        isWakelock = false;
+      }
+    }
   }
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
+    videoPlayerController!.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -137,10 +184,12 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
         return LoadingOverlay(
           isLoading: isLoading,
           child: VisibilityDetector(
-            key: Key('${videoPlayerController.dataSource}'),
+            key: Key('video'),
             onVisibilityChanged: (visibility) {
-              if (visibility.visibleFraction == 0 && this.mounted) {
-                videoPlayerController.pause();
+              if (visibility.visibleFraction == 0 &&
+                  this.mounted &&
+                  videoPlayerController != null) {
+                videoPlayerController!.pause();
               }
             },
             child: SingleChildScrollView(
@@ -157,68 +206,161 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                       });
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: heightPlayerVideo,
-                      child: Container(
-                        child: Stack(
-                          children: [
-                            Image.network(
-                              widget.thumbVideo,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                            ClipRect(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(
-                                  sigmaX: 40,
-                                  sigmaY: 40,
+                        width: MediaQuery.of(context).size.width,
+                        height: heightPlayerVideo,
+                        child: videoPlayerController != null
+                            ? Container(
+                                child: Stack(
+                                  children: [
+                                    Image.network(
+                                      widget.chapter.videoThumbUrl,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                    ClipRect(
+                                      child: BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                          sigmaX: 40,
+                                          sigmaY: 40,
+                                        ),
+                                        child: Container(
+                                          color: Colors.black.withOpacity(0.4),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      height: heightPlayerVideo,
+                                      child: AspectRatio(
+                                        aspectRatio: widthVideo / heightVideo,
+                                        child:
+                                            VideoPlayer(videoPlayerController!),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: VideoPlayAndPause(
+                                        disableNextVideo:
+                                            !(widget.listChapters != null &&
+                                                widget.listChapters!.indexWhere(
+                                                        (_chapter) =>
+                                                            _chapter.id ==
+                                                            currentChapter.id) <
+                                                    (widget.listChapters!
+                                                            .length -
+                                                        1)),
+                                        disablePreviusVideo:
+                                            !(widget.listChapters != null &&
+                                                widget.listChapters!.indexWhere(
+                                                        (_chapter) =>
+                                                            _chapter.id ==
+                                                            currentChapter.id) >
+                                                    0),
+                                        eventNextVideo: () {
+                                          if (widget.listChapters != null &&
+                                              widget.listChapters!.indexWhere(
+                                                      (_chapter) =>
+                                                          _chapter.id ==
+                                                          currentChapter.id) <
+                                                  (widget.listChapters!.length -
+                                                      1)) {
+                                            videoPlayerController!.pause();
+                                            int currentIndex = widget
+                                                .listChapters!
+                                                .indexWhere((_chapter) =>
+                                                    _chapter.id ==
+                                                    currentChapter.id);
+
+                                            currentChapter =
+                                                widget.listChapters![
+                                                    currentIndex + 1];
+                                            videoPlayerController!
+                                                .removeListener(startVideo);
+                                            videoPlayerController!.dispose();
+                                            startVideFirst();
+                                          }
+                                        },
+                                        eventPreviusVideo: () {
+                                          if (widget.listChapters != null &&
+                                              widget.listChapters!.indexWhere(
+                                                      (_chapter) =>
+                                                          _chapter.id ==
+                                                          currentChapter.id) >
+                                                  0) {
+                                            videoPlayerController!.pause();
+                                            int currentIndex = widget
+                                                .listChapters!
+                                                .indexWhere((_chapter) =>
+                                                    _chapter.id ==
+                                                    currentChapter.id);
+
+                                            currentChapter =
+                                                widget.listChapters![
+                                                    currentIndex - 1];
+
+                                            videoPlayerController!
+                                                .removeListener(startVideo);
+                                            videoPlayerController!.dispose();
+                                            startVideFirst();
+                                          }
+                                        },
+                                        onClickSlider: onClickSlider,
+                                        videoPlayerController:
+                                            videoPlayerController,
+                                        timerOpacity: timerOpacity,
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: VideoBar(
+                                        onChangeStart: (value) async {
+                                          await videoPlayerController!.pause();
+                                          setState(() {
+                                            onClickSlider = true;
+                                            Future.delayed(
+                                                Duration(milliseconds: 300),
+                                                () {
+                                              onClickSlider = false;
+                                            });
+                                          });
+                                        },
+                                        onChanged: (value) async {
+                                          setState(() {
+                                            totalTimeVideoText = timeVideo(
+                                                videoPlayerController!
+                                                    .value.duration);
+
+                                            positionVideoText = timeVideo(
+                                                videoPlayerController!
+                                                    .value.position);
+                                            currentPosition = value.toInt();
+                                            onClickSlider = false;
+                                          });
+                                          await videoPlayerController!.seekTo(
+                                              Duration(seconds: value.toInt()));
+                                        },
+                                        onChangeEnd: (value) async {
+                                          setState(() {
+                                            onClickSlider = false;
+                                          });
+                                          await videoPlayerController!.play();
+                                        },
+                                        fullScreenVideo: fullScreenVideo,
+                                        fullScreenEvent: () {
+                                          fullScreenVideo = !fullScreenVideo;
+                                          widget.eventFullScreen();
+                                        },
+                                        timerOpacity: timerOpacity,
+                                        currentPosition: currentPosition,
+                                        maxDurationVideo: maxDurationVideo,
+                                        positionVideoText: positionVideoText,
+                                        totalTimeVideoText: totalTimeVideoText,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                child: Container(
-                                  color: Colors.black.withOpacity(0.4),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              height: heightPlayerVideo,
-                              child: AspectRatio(
-                                aspectRatio: widthVideo / heightVideo,
-                                child: VideoPlayer(videoPlayerController),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: VideoPlayAndPause(
-                                disableNextVideo: false,
-                                disablePreviusVideo: false,
-                                eventNextVideo: () {},
-                                eventPreviusVideo: () {},
-                                onClickSlider: onClickSlider,
-                                videoPlayerController: videoPlayerController,
-                                timerOpacity: timerOpacity,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: VideoBar(
-                                videoPlayerController: videoPlayerController,
-                                fullScreenVideo: fullScreenVideo,
-                                fullScreenEvent: () {
-                                  fullScreenVideo = !fullScreenVideo;
-                                  widget.eventFullScreen();
-                                },
-                                loadingTimeLineVideo: (bool value) {
-                                  setState(() {
-                                    onClickSlider = value;
-                                  });
-                                },
-                                timerOpacity: timerOpacity,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                              )
+                            : Container()),
                   ),
                   if (!fullScreenVideo) widget.viewQuiz,
                 ],
