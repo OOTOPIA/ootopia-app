@@ -189,6 +189,10 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                             Align(
                               alignment: Alignment.center,
                               child: VideoPlayAndPause(
+                                disableNextVideo: false,
+                                disablePreviusVideo: false,
+                                eventNextVideo: () {},
+                                eventPreviusVideo: () {},
                                 onClickSlider: onClickSlider,
                                 videoPlayerController: videoPlayerController,
                                 timerOpacity: timerOpacity,
