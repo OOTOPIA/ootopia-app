@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerarionGameLearningAlert extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -29,6 +33,10 @@ class _RegenerarionGameLearningAlertState
   String? _secondTextPt2;
 
   String? _imageRights;
+
+  SmartPageController controller = SmartPageController.getInstance();
+  LearningTracksModel? welcomeGuideLearningTrack;
+  LearningTracksStore learningTracksStore = LearningTracksStore();
 
   void setStatusBar(bool getOutScreen) {
     if (getOutScreen) {
@@ -86,6 +94,9 @@ class _RegenerarionGameLearningAlertState
         break;
     }
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+    });
     Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
@@ -351,18 +362,20 @@ class _RegenerarionGameLearningAlertState
                                                   screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        onPressed: () => {
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                            PageRoute.Page.homeScreen.route,
-                                            (Route<dynamic> route) => false,
-                                            arguments: {
-                                              "returnToPageWithArgs": {
-                                                'currentPageName':
-                                                    "learning_tracks"
-                                              }
-                                            },
-                                          )
+                                        onPressed: () async => {
+                                          Navigator.of(context).pop(),
+                                          if (welcomeGuideLearningTrack == null)
+                                            {
+                                              welcomeGuideLearningTrack =
+                                                  await learningTracksStore
+                                                      .getWelcomeGuide()
+                                            }
+                                          else if (welcomeGuideLearningTrack !=
+                                              null)
+                                            {
+                                              openLearningTrack(
+                                                  welcomeGuideLearningTrack!)
+                                            }
                                         },
                                       ),
                                     ),
@@ -402,5 +415,18 @@ class _RegenerarionGameLearningAlertState
         ),
       ),
     );
+  }
+
+  void openLearningTrack(LearningTracksModel learningTrack) =>
+      controller.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': updateWidget,
+        },
+      ));
+
+  updateWidget() {
+    setState(() {});
   }
 }
