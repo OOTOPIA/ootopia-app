@@ -705,7 +705,22 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                   image: AssetImage(
                                       'assets/icons_profile/woow.png'),
                                 ),
-                                onPressed: () => {},
+                                onPressed: () {
+                                  if(this.post.oozToTransfer == null){
+                                    this.post.oozToTransfer = 0;
+                                  }
+                                  double maxValue  = ((oozGoal * (100 - 30)) / 70).roundToDouble();
+                                  if(this.post.oozToTransfer!<maxValue - 5 ) {
+                                    this.post.oozToTransfer = this.post.oozToTransfer! + 5;
+                                  }else{
+                                    this.post.oozToTransfer = maxValue;
+                                  }
+                                  double perc = ((this.post.oozToTransfer!*70)/oozGoal)+30;
+                                  setState(() {
+                                    _isDragging = true;
+                                    _draggablePositionX = (perc*getMaxSlideWidth())/100;
+                                  });
+                                },
                                 //this._likePost(true)
                               )),
                         ),
