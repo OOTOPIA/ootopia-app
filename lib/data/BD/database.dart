@@ -2,6 +2,7 @@ import 'package:ootopia_app/data/BD/base_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import './watch_video/watch_video_model.dart';
+import './splash_screen/splash_screen_model.dart';
 import 'package:path/path.dart';
 
 class OOTOPIADatabase {
@@ -12,6 +13,7 @@ class OOTOPIADatabase {
   String _databaseName = 'ootopia.db';
   List<BaseModel> tables = [
     WatchVideoModel(),
+    SplashScreenModel(),
   ];
 
   OOTOPIADatabase.init();
