@@ -220,24 +220,19 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                                                     text: AppLocalizations.of(
                                                             context)!
                                                         .learnMore,
-                                                    onTapAbout: () {
-                                                      Navigator.of(context)
-                                                          .pushNamedAndRemoveUntil(
-                                                              PageRoute
-                                                                  .Page
-                                                                  .homeScreen
-                                                                  .route,
-                                                              (Route<dynamic>
-                                                                      route) =>
-                                                                  false,
-                                                              arguments: {
-                                                            "returnToPageWithArgs":
-                                                                {
-                                                              'currentPageName':
-                                                                  "learning_tracks"
-                                                            }
-                                                          });
+                                                    onTapAbout: () async {
+                                                      if (welcomeGuideLearningTrack ==
+                                                          null) {
+                                                        welcomeGuideLearningTrack =
+                                                            await learningTracksStore
+                                                                .getWelcomeGuide();
+                                                      } else if (welcomeGuideLearningTrack !=
+                                                          null) {
+                                                        openLearningTrack(
+                                                            welcomeGuideLearningTrack!);
+                                                      }
                                                     },
+                                                    closeOnTapAbout: true,
                                                   )
                                                 ],
                                                 marginBottom: true,
@@ -274,9 +269,6 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                             Tab(
                               text: AppLocalizations.of(context)!.received,
                             ),
-                            Tab(
-                              text: AppLocalizations.of(context)!.sent,
-                            ),
                           ],
                         ),
                       ),
@@ -287,8 +279,8 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                         controller: _tabController,
                         children: [
                           TabHistory(walletStore, "all"),
-                          TabHistory(walletStore, "received"),
                           TabHistory(walletStore, "sent"),
+                          TabHistory(walletStore, "received"),
                         ],
                       ),
                     ),

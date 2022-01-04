@@ -7,7 +7,6 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_bar.dart';
-import 'package:device_orientation/device_orientation.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_play_and_pause.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -139,9 +138,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DeviceOrientation>(
-      stream: deviceOrientation$,
-      initialData: deviceOrientation,
+    return OrientationBuilder(
       builder: (context, orientation) {
         if (!fullScreenVideo) {
           SystemChrome.setPreferredOrientations([
@@ -159,27 +156,12 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
           }
         } else {
           heightPlayerVideo = MediaQuery.of(context).size.height;
-          switch (orientation.data) {
-            case DeviceOrientation.portraitUp:
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-              ]);
-              break;
-            case DeviceOrientation.portraitDown:
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitDown,
-              ]);
-              break;
-            case DeviceOrientation.landscapeLeft:
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.landscapeRight,
-              ]);
-              break;
-            default:
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.landscapeLeft,
-              ]);
-          }
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+            DeviceOrientation.landscapeRight,
+            DeviceOrientation.landscapeLeft,
+          ]);
         }
         return LoadingOverlay(
           isLoading: isLoading,

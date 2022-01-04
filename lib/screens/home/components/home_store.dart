@@ -215,7 +215,7 @@ abstract class HomeStoreBase with Store {
 
       return (strHours != "00" ? strHours + "h " : "") +
           strMinutes +
-          "m " +
+          "min " +
           (showSeconds == true && strHours == "00" ? strSeconds + "s" : "");
     } catch (err) {
       return "error";
