@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -28,6 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       await _videoPlayerController?.dispose();
 
+
+      AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
+      await appUsageSplashScreen.updateLastSplashScreenOpening();
       // Initing new controller
       _initController();
     });
