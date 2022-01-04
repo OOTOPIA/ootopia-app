@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
@@ -13,30 +16,25 @@ import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/dialog_confirm.dart';
 import 'package:ootopia_app/screens/components/popup_menu_post.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
+import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
-import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:ootopia_app/shared/snackbar_component.dart';
-import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'image_post_timeline_component.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
 import 'feed_player/multi_manager/flick_multi_player.dart';
-
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
-
-import 'dart:math' as math;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'image_post_timeline_component.dart';
 
 // ignore: must_be_immutable
 class PhotoTimeline extends StatefulWidget {
@@ -113,7 +111,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
   late PostTimelineController postTimelineController;
   bool _bigLikeShowAnimation = false;
-  bool _bigLikeShowAnimationEnd = false;
+  bool _bigLikeShowAnimationEnd = true;
+  bool canDoubleClick = true;
   SmartPageController controller = SmartPageController.getInstance();
 
   @override
@@ -424,16 +423,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ? 100 : 0.0,
                     width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
                     ? 100 : 0.0,
-                    curve: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd ? Curves.easeOutBack : Curves.easeIn,
+                    curve: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                        && canDoubleClick ? Curves.easeOutBack : Curves.easeIn,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 300),
                     child: AnimatedOpacity(
-                      opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                          ? 0.8
-                          : 0.3,
-                      duration: Duration(milliseconds: 400),
+                      opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd ? 0.8 : 0.0,
+                      duration: Duration(milliseconds: 300),
                       child: Visibility(
                         visible: _bigLikeShowAnimation,
                         child: Image.asset(
@@ -445,15 +443,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 
                         ),
                       ),
-                      onEnd: () {
-                        Timer(Duration(milliseconds: 450), () {
-                          setState(() => _bigLikeShowAnimationEnd = true);
-                          Timer(Duration(milliseconds: 500), () {
-                            setState(() => _bigLikeShowAnimation = false);
-                          });
-                        });
-                        //appState.setSplashFinished();
-                      },
                     ),
                   ),
                 ),
@@ -735,7 +724,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       ScaffoldMessenger.of(context).showSnackBar(
                         CustomSnackbars(context).defaultSnackbar(
                           text:
-                              AppLocalizations.of(context)!.tooltipBlockedField,
+                          AppLocalizations.of(context)!.tooltipBlockedField,
                           backgroundColor: Color(0xff03DAC5),
                           iconColor: Colors.white,
                           suffixIcon: Icons.info_outline_rounded,
@@ -747,7 +736,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       ScaffoldMessenger.of(context).showSnackBar(
                         CustomSnackbars(context).defaultSnackbar(
                           text:
-                              AppLocalizations.of(context)!.tooltipBlockedField,
+                          AppLocalizations.of(context)!.tooltipBlockedField,
                           backgroundColor: Color(0xff03DAC5),
                           iconColor: Colors.white,
                           suffixIcon: Icons.info_outline_rounded,
@@ -1117,36 +1106,53 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   void _likePost(bool dislikeIfIsLiked, [bool? showAnimation]) async {
-    incrementOozToTransfer();
-    if (!loggedIn) {
-      Navigator.of(context).pushNamed(
-        PageRoute.Page.loginScreen.route,
-      );
-    } else {
-      if (showAnimation == true) {
-        this._showBigLike();
-      }
-      if (dislikeIfIsLiked ||
-          (!this.postTimelineController.post.liked && !dislikeIfIsLiked)) {
-        LikePostResult likePostResult =
-            await this.postTimelineController.likePost();
-        setState(
-          () {
-            if (likePostResult.liked) {
-              this.trackingEvents.timelineGaveALike(
-                {
-                  "userId": this.post.userId,
-                },
-              );
-            } else if (this.post.likesCount > 0) {
-              this.trackingEvents.timelineGaveADislike(
-                {
-                  "userId": this.post.userId,
-                },
-              );
-            }
-          },
+
+    if(canDoubleClick) {
+      incrementOozToTransfer();
+      setState(() {
+        canDoubleClick = false;
+      });
+      Future.delayed(Duration(milliseconds: 450),(){
+        setState(() {
+          _bigLikeShowAnimationEnd = true;
+        });
+      });
+      Future.delayed(Duration(milliseconds: 600),(){
+        setState(() {
+          canDoubleClick = true;
+        });
+      });
+
+      if (!loggedIn) {
+        Navigator.of(context).pushNamed(
+          PageRoute.Page.loginScreen.route,
         );
+      } else {
+        if (showAnimation == true) {
+          this._showBigLike();
+        }
+        if (dislikeIfIsLiked ||
+            (!this.postTimelineController.post.liked && !dislikeIfIsLiked)) {
+          LikePostResult likePostResult =
+          await this.postTimelineController.likePost();
+          setState(
+                () {
+              if (likePostResult.liked) {
+                this.trackingEvents.timelineGaveALike(
+                  {
+                    "userId": this.post.userId,
+                  },
+                );
+              } else if (this.post.likesCount > 0) {
+                this.trackingEvents.timelineGaveADislike(
+                  {
+                    "userId": this.post.userId,
+                  },
+                );
+              }
+            },
+          );
+        }
       }
     }
   }
