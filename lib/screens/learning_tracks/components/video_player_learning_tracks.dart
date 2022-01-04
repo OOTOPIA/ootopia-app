@@ -140,7 +140,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       Wakelock.enable();
       isWakelock = true;
     } else {
-      if (videoPlayerController!.value.isPlaying) {
+      if (!videoPlayerController!.value.isPlaying) {
         Wakelock.disable();
         isWakelock = false;
       }
