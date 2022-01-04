@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/page-enum.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +11,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerativeGameDetails extends StatefulWidget {
   final void Function()? onArrowTap;
@@ -25,6 +29,18 @@ class RegenerativeGameDetails extends StatefulWidget {
 }
 
 class _RegenerativeGameDetailsState extends State<RegenerativeGameDetails> {
+  SmartPageController controller = SmartPageController.getInstance();
+  LearningTracksModel? welcomeGuideLearningTrack;
+  LearningTracksStore learningTracksStore = LearningTracksStore();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthStore authStore = Provider.of<AuthStore>(context);
@@ -54,17 +70,15 @@ class _RegenerativeGameDetailsState extends State<RegenerativeGameDetails> {
                       buttons: [
                         ButtonSnackBar(
                           text: AppLocalizations.of(context)!.learnMore,
-                          onTapAbout: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              PageRoute.Page.homeScreen.route,
-                              (Route<dynamic> route) => false,
-                              arguments: {
-                                "returnToPageWithArgs": {
-                                  'currentPageName': "learning_tracks"
-                                }
-                              },
-                            );
+                          onTapAbout: () async {
+                            if (welcomeGuideLearningTrack == null) {
+                              welcomeGuideLearningTrack =
+                                  await learningTracksStore.getWelcomeGuide();
+                            } else if (welcomeGuideLearningTrack != null) {
+                              openLearningTrack(welcomeGuideLearningTrack!);
+                            }
                           },
+                          closeOnTapAbout: true,
                         )
                       ],
                       marginBottom: true,
@@ -176,5 +190,18 @@ class _RegenerativeGameDetailsState extends State<RegenerativeGameDetails> {
         ),
       ),
     );
+  }
+
+  void openLearningTrack(LearningTracksModel learningTrack) =>
+      controller.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': updateWidget,
+        },
+      ));
+
+  updateWidget() {
+    setState(() {});
   }
 }
