@@ -10,8 +10,6 @@ class PersonaLevel extends StatefulWidget {
 
 class _PersonaLevelState extends State<PersonaLevel> {
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +20,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
             image: AssetImage(
               'assets/images/map.png',
             ),
-            fit: BoxFit.cover,
+            //fit: BoxFit.cover,
           )),
       child: Stack(
         children: [
