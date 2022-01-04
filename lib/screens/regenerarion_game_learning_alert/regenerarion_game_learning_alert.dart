@@ -2,14 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerarionGameLearningAlert extends StatefulWidget {
@@ -31,8 +30,10 @@ class _RegenerarionGameLearningAlertState
   String? _firstText;
   String? _secondText;
   String? _secondTextPt2;
+  SharedPreferences? prefs;
 
   String? _imageRights;
+  bool dontShowAgainRegenerationGamePega = false;
 
   SmartPageController controller = SmartPageController.getInstance();
   LearningTracksModel? welcomeGuideLearningTrack;
@@ -96,6 +97,7 @@ class _RegenerarionGameLearningAlertState
     super.initState();
     Future.delayed(Duration.zero, () async {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+      prefs = await SharedPreferences.getInstance();
     });
     Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
@@ -299,6 +301,49 @@ class _RegenerarionGameLearningAlertState
                                   : MediaQuery.of(context).size.height * 0.1),
                           Column(
                             children: [
+
+                              //CHECKBOX dont show again page if type == person
+                              if(widget.args["type"] == 'personal')...[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Checkbox(
+                                        side: BorderSide(color: Colors.white),
+                                        value: dontShowAgainRegenerationGamePega,
+                                        checkColor: Colors.white,
+                                        fillColor:  MaterialStateProperty.all(Colors.transparent),
+                                        activeColor: Colors.white,
+                                        onChanged: (value) {
+                                          prefs!.setBool('dontShowAgainRegenerationGamePega', !dontShowAgainRegenerationGamePega);
+                                          setState(() {
+                                            dontShowAgainRegenerationGamePega = !dontShowAgainRegenerationGamePega;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Flexible(
+                                      child: Text(
+                                        AppLocalizations.of(context)!.dontShowThisMessageAgain,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                              ],
+
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -329,8 +374,13 @@ class _RegenerarionGameLearningAlertState
                                                   screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          if(widget.args["type"] == 'personal'){
+
+                                          }
+                                        }
+
                                       ),
                                     ),
                                   ),
@@ -362,20 +412,29 @@ class _RegenerarionGameLearningAlertState
                                                   screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        onPressed: () async => {
-                                          Navigator.of(context).pop(),
-                                          if (welcomeGuideLearningTrack == null)
-                                            {
-                                              welcomeGuideLearningTrack =
-                                                  await learningTracksStore
-                                                      .getWelcomeGuide()
-                                            }
-                                          else if (welcomeGuideLearningTrack !=
-                                              null)
-                                            {
-                                              openLearningTrack(
-                                                  welcomeGuideLearningTrack!)
-                                            }
+                                        onPressed: () async {
+
+                                         // if(widget.args["type"] == 'personal'){
+                                            Navigator.of(context).pop();
+                                            SmartPageController controller = SmartPageController.getInstance();
+                                            controller.selectBottomTab(1);
+                                          // }else{
+                                          //   Navigator.of(context).pop();
+                                          //   if (welcomeGuideLearningTrack == null)
+                                          //   {
+                                          //     welcomeGuideLearningTrack =
+                                          //     await learningTracksStore
+                                          //         .getWelcomeGuide();
+                                          //   }
+                                          //   else if (welcomeGuideLearningTrack !=
+                                          //       null)
+                                          //   {
+                                          //     openLearningTrack(
+                                          //         welcomeGuideLearningTrack!);
+                                          //   }
+                                          // }
+
+
                                         },
                                       ),
                                     ),

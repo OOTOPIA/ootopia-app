@@ -35,7 +35,8 @@ enum Page {
   videoLearningTracksScreen,
   initialScreen,
   aboutOOzCurrentScreen,
-  aboutEthicalMarketPlace
+  aboutEthicalMarketPlace,
+  personaLevel
 }
 
 extension PageRoute on Page {
