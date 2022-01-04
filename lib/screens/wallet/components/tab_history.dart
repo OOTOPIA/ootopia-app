@@ -62,109 +62,106 @@ class TabHistoryState extends State<TabHistory> {
         break;
     }
 
-    return Observer(
-      builder: (_) => RefreshIndicator(
-        onRefresh: () => _performRequest(),
-        child: ListView(
-          children: groupedTransfersByDate == null
-              ? [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.62,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                ]
-              : groupedTransfersByDate!.isEmpty
-                  ? [
-                      Opacity(
-                        opacity: 0.5,
-                        child: Container(
-                            height: MediaQuery.of(context).size.height * 0.62,
-                            color: Colors.white,
-                            child: Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/icons/ooz-coin-medium.png',
-                                    width: 28,
-                                    height: 28,
-                                    color: Theme.of(context)
+    return RefreshIndicator(
+      onRefresh: () => _performRequest(),
+      child: ListView(
+        children: groupedTransfersByDate == null
+            ? [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.62,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              ]
+            : groupedTransfersByDate!.isEmpty
+                ? [
+                    Opacity(
+                      opacity: 0.5,
+                      child: Container(
+                          height: MediaQuery.of(context).size.height * 0.62,
+                          color: Colors.white,
+                          child: Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/icons/ooz-coin-medium.png',
+                                  width: 28,
+                                  height: 28,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2!
+                                      .color),
+                              Padding(
+                                padding: EdgeInsets.only(top: 16),
+                                child: Text(
+                                    AppLocalizations.of(context)!
+                                        .thereAreNoWalletRecords,
+                                    style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
-                                        .color),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 16),
-                                  child: Text(
-                                      AppLocalizations.of(context)!
-                                          .thereAreNoWalletRecords,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(
-                                            fontSize: 16,
-                                          )),
+                                        .copyWith(
+                                          fontSize: 16,
+                                        )),
+                              ),
+                            ],
+                          ))),
+                    )
+                  ]
+                : groupedTransfersByDate!.entries.map((e) {
+                    final f = new NumberFormat("0.00");
+                    String sumFormated = '';
+                    int lengthItemMapSumOfDayTransfer = 0;
+                    sumFormated =
+                        f.format(widget.store.mapSumDaysTransfer[e.key]);
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: 24,
+                        right: 24,
+                        top: 16,
+                        bottom: 0,
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 16,
+                            ),
+                            child: ChipSumForDate(
+                              date: e.key,
+                              lengthItemMapSumOfDayTransfer:
+                                  lengthItemMapSumOfDayTransfer,
+                              sumFormated: sumFormated,
+                            ),
+                          ),
+                          Column(
+                            children: e.value.map((_e) {
+                              return Container(
+                                padding: EdgeInsets.only(
+                                  bottom: 19,
                                 ),
-                              ],
-                            ))),
-                      )
-                    ]
-                  : groupedTransfersByDate!.entries.map((e) {
-                      final f = new NumberFormat("0.00");
-                      String sumFormated = '';
-                      int lengthItemMapSumOfDayTransfer = 0;
-                      sumFormated =
-                          f.format(widget.store.mapSumDaysTransfer[e.key]);
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 24,
-                          right: 24,
-                          top: 16,
-                          bottom: 0,
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: 16,
-                              ),
-                              child: ChipSumForDate(
-                                date: e.key,
-                                lengthItemMapSumOfDayTransfer:
-                                    lengthItemMapSumOfDayTransfer,
-                                sumFormated: sumFormated,
-                              ),
-                            ),
-                            Column(
-                              children: e.value.map((_e) {
-                                return Container(
-                                  padding: EdgeInsets.only(
-                                    bottom: 19,
-                                  ),
-                                  child: CardInformationBalance(
-                                    balanceOfTransactions:
-                                        '${_e.balance.toStringAsFixed(2)}',
-                                    iconForeground: _e.photoUrl ?? "",
-                                    iconBackground: _e.icon ?? '',
-                                    toOrFrom: _e.otherUsername ?? '',
-                                    originTransaction: '${_e.origin}',
-                                    action: '${_e.action}',
-                                    otherUserId: '${_e.otherUserId}',
-                                    postId: _e.postId,
-                                    description: _e.description,
-                                    origin: _e.origin,
-                                    learningTrackId: _e.learningTrackId ?? '',
-                                    updateCardInformationBalance:
-                                        _performRequest,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-        ),
+                                child: CardInformationBalance(
+                                  balanceOfTransactions:
+                                      '${_e.balance.toStringAsFixed(2)}',
+                                  iconForeground: _e.photoUrl ?? "",
+                                  iconBackground: _e.icon ?? '',
+                                  toOrFrom: _e.otherUsername ?? '',
+                                  originTransaction: '${_e.origin}',
+                                  action: '${_e.action}',
+                                  otherUserId: '${_e.otherUserId}',
+                                  postId: _e.postId,
+                                  description: _e.description,
+                                  origin: _e.origin,
+                                  learningTrackId: _e.learningTrackId ?? '',
+                                  updateCardInformationBalance: _performRequest,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
       ),
     );
   }
