@@ -267,6 +267,14 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                               text: AppLocalizations.of(context)!.all,
                             ),
                             Tab(
+                              child: Text(
+                                AppLocalizations.of(context)!.shared,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Tab(
                               text: AppLocalizations.of(context)!.received,
                             ),
                           ],
