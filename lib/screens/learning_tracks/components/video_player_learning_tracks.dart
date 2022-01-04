@@ -115,6 +115,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   @override
   void dispose() {
     videoPlayerController.dispose();
+    Wakelock.disable();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
