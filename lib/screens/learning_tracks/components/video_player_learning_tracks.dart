@@ -110,8 +110,8 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   }
 
   startVideo() {
-    setState(() {
-      if (mounted) {
+    if (mounted) {
+      setState(() {
         if (videoPlayerController != null) {
           widthVideo = videoPlayerController!.value.size.width;
           heightVideo = videoPlayerController!.value.size.height;
@@ -123,16 +123,16 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
           widthVideo = videoPlayerController!.value.size.width;
           heightVideo = videoPlayerController!.value.size.height;
         }
-      }
 
-      if (videoPlayerController!.value.isInitialized &&
-          (videoPlayerController!.value.duration ==
-              videoPlayerController!.value.position)) {
-        //checking the duration and position every time
-        //Video Completed//
-        widget.updateStatusVideo();
-      }
-    });
+        if (videoPlayerController!.value.isInitialized &&
+            (videoPlayerController!.value.duration ==
+                videoPlayerController!.value.position)) {
+          //checking the duration and position every time
+          //Video Completed//
+          widget.updateStatusVideo();
+        }
+      });
+    }
 
     if (!isWakelock && videoPlayerController!.value.isPlaying) {
       Wakelock.enable();
