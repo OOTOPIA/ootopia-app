@@ -932,6 +932,7 @@ class _RegenerationGameState extends State<RegenerationGame>
       authStore.updateUserRegenerarionGameLearningAlert(type);
     }
 
+    SmartPageController controller = SmartPageController.getInstance();
     bool clickInPerson = type == 'personal';
     bool dontShowAgainRegenerationGamePega = prefs!.getBool('dontShowAgainRegenerationGamePega') ?? false;
     if(dontShowAgainRegenerationGamePega && clickInPerson){
