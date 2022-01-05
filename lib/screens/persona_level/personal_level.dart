@@ -13,14 +13,14 @@ class _PersonaLevelState extends State<PersonaLevel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 180,
+      height: MediaQuery.of(context).size.height - (180 + 59 + 6),
       width: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
               'assets/images/map.png',
             ),
-            //fit: BoxFit.cover,
+            fit: BoxFit.cover,
           )),
       child: Stack(
         children: [

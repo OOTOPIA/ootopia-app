@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
@@ -10,13 +12,11 @@ import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/persona_level/personal_level.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -114,7 +114,7 @@ class _RegenerationGameState extends State<RegenerationGame>
           ),
           Container(
             width: double.infinity,
-            height: showDetailedGoal ? 59*2 : 59,
+            height: 59,
             decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
             padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width < 380 ? 10
@@ -236,17 +236,23 @@ class _RegenerationGameState extends State<RegenerationGame>
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: showDetailedGoal,
-                  child: Container(
-                    width: double.infinity,
-                    height: 59,
-                    child: newDetailedGoal,
-                  ),
-                ),
               ],
             ),
           ),
+          Visibility(
+            visible: false,
+            child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+            child: detailedGoal,
+          ),),
+          Visibility(
+            visible: showDetailedGoal,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+              child: newDetailedGoal,
+            ),),
           if(showMap)...[
             PersonaLevel()
           ]
@@ -285,6 +291,7 @@ class _RegenerationGameState extends State<RegenerationGame>
           });
         },
         child: Container(
+          height: 59,
           margin: EdgeInsets.only(top: 6),
           child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -531,127 +538,149 @@ class _RegenerationGameState extends State<RegenerationGame>
       });
     },
     child: Container(
-      margin: EdgeInsets.only(top: 6),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      height: 66,
+      child: Column(
         children: [
-          SizedBox(
-            width: screenWidth -
-                isSmallPhone(
-                    GlobalConstants.of(context).screenHorizontalSpace * 2),
-            child: Stack(
-              children: [
-                AnimatedPositioned(
-                  left: detailedGoalIconPosition,
-                  duration: Duration(milliseconds: 300),
-                  child: AnimatedOpacity(
+          Container(
+            height: 0.6,
+            color: Color(0xff707070),
+            width: MediaQuery.of(context).size.width,
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width < 380 ? 10
+                  : GlobalConstants.of(context).screenHorizontalSpace,
+              right: MediaQuery.of(context).size.width < 380
+                  ? 10 : GlobalConstants.of(context).screenHorizontalSpace,
+            ),
+            margin: EdgeInsets.only(top: 2),
+            height: 59,
+            width: MediaQuery.of(context).size.width,
+            child: SizedBox(
+              width: screenWidth - isSmallPhone(GlobalConstants.of(context).screenHorizontalSpace * 2),
+              child: Stack(
+                children: [
+                  // AnimatedPositioned(
+                  //   left: detailedGoalIconPosition,
+                  //   duration: Duration(milliseconds: 300),
+                  //   child: AnimatedOpacity(
+                  //     opacity: detailedGoalIconPosition > 0 ? 0 : 1,
+                  //     duration: Duration(milliseconds: 150),
+                  //     child: Stack(
+                  //       children: [
+                  //         Container(
+                  //           width: 46,
+                  //           height: 46,
+                  //           decoration: BoxDecoration(
+                  //             color: Theme.of(context)
+                  //                 .primaryColor
+                  //                 .withOpacity(0.3),
+                  //             borderRadius:
+                  //             BorderRadius.all(Radius.circular(100)),
+                  //           ),
+                  //           child: Center(
+                  //             child: Icon(
+                  //               gameProgress[detailedGoalType],
+                  //               size: 20,
+                  //               color: Theme.of(context).backgroundColor,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         Positioned(
+                  //           top: 1,
+                  //           left: 1,
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.all(2),
+                  //             child: CircularPercentIndicator(
+                  //               radius: gameProgressIconSize,
+                  //               lineWidth: 2,
+                  //               backgroundColor:
+                  //               Theme.of(context).backgroundColor,
+                  //               percent: detailedGoalType == "personal" &&
+                  //                   homeStore.dailyGoalStats != null
+                  //                   ? (homeStore
+                  //                   .percentageOfDailyGoalAchieved /
+                  //                   100)
+                  //                   : 0,
+                  //               progressColor: Theme.of(context).primaryColor,
+                  //             ),
+                  //           ),
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  AnimatedOpacity(
                     opacity: detailedGoalIconPosition > 0 ? 0 : 1,
                     duration: Duration(milliseconds: 150),
-                    child: Stack(
+                    child: Row(
                       children: [
-                        Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .primaryColor
-                                .withOpacity(0.3),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(100)),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 6,
                           ),
-                          child: Center(
-                            child: Icon(
-                              gameProgress[detailedGoalType],
-                              size: 20,
-                              color: Theme.of(context).backgroundColor,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 1,
-                          left: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: CircularPercentIndicator(
-                              radius: gameProgressIconSize,
-                              lineWidth: 2,
-                              backgroundColor:
-                              Theme.of(context).backgroundColor,
-                              percent: detailedGoalType == "personal" &&
-                                  homeStore.dailyGoalStats != null
-                                  ? (homeStore
-                                  .percentageOfDailyGoalAchieved /
-                                  100)
-                                  : 0,
-                              progressColor: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                AnimatedOpacity(
-                  opacity: detailedGoalIconPosition > 0 ? 0 : 1,
-                  duration: Duration(milliseconds: 150),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: gameProgressIconSize + 12,
-                          top: 6,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                    text: AppLocalizations.of(context)!
-                                        .personalGoal +
-                                        ": ",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(
-                                      fontSize: MediaQuery.of(context)
-                                          .size
-                                          .width <
-                                          380
-                                          ? 12
-                                          : 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: (authStore.currentUser == null
-                                            ? ""
-                                            : "${authStore.currentUser!.dailyLearningGoalInMinutes}min"),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2!
-                                            .copyWith(
-                                          fontSize:
-                                          MediaQuery.of(context)
-                                              .size
-                                              .width <
-                                              380
-                                              ? 12
-                                              : 14,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                    ]),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .yourDailyGoal,
+                                  style: Theme.of(context)
+                                      .textTheme.subtitle2!.copyWith(
+                                    fontSize: MediaQuery.of(context).size.width < 380 ? 12 : 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                            ),
-                            Flexible(
-                              child: RichText(
-                                text: TextSpan(
-                                  text: AppLocalizations.of(context)!
-                                      .accomplished +
-                                      ": ",
+                              Flexible(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .achieved,
+                                  style: Theme.of(context)
+                                      .textTheme.subtitle2!.copyWith(
+                                    fontSize: MediaQuery.of(context).size.width < 380 ? 12 : 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .oozCreditsYouWillReceive,
+                                  style: Theme.of(context)
+                                      .textTheme.subtitle2!.copyWith(
+                                    fontSize: MediaQuery.of(context).size.width < 380 ? 12 : 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top : 6.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  (authStore.currentUser == null
+                                      ? ""
+                                      : "${authStore.currentUser!.dailyLearningGoalInMinutes}min"),
+                                  style: Theme.of(context)
+                                      .textTheme.subtitle2!.copyWith(
+                                    fontSize: MediaQuery.of(context).size.width < 380 ? 12 : 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Text(
+                                  homeStore.totalAppUsageTimeSoFar
+                                      .isEmpty
+                                      ? "0h 0min 0s"
+                                      : homeStore
+                                      .totalAppUsageTimeSoFar,
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle2!
@@ -662,69 +691,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         380
                                         ? 12
                                         : 14,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                  children: [
-                                    TextSpan(
-                                      text: homeStore.totalAppUsageTimeSoFar
-                                          .isEmpty
-                                          ? "0h 0min 0s"
-                                          : homeStore
-                                          .totalAppUsageTimeSoFar,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(
-                                        fontSize: MediaQuery.of(context)
-                                            .size
-                                            .width <
-                                            380
-                                            ? 12
-                                            : 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    )
-                                  ],
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 7,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!
-                                    .oozPartialBalance,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
-                                  fontSize: MediaQuery.of(context)
-                                      .size
-                                      .width <
-                                      380
-                                      ? 12
-                                      : 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(PageRoute
-                                      .Page.aboutOOzCurrentScreen.route);
-                                },
-                                child: Row(
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
                                       'assets/icons/ooz_mini_blue.svg',
@@ -748,16 +720,16 @@ class _RegenerationGameState extends State<RegenerationGame>
                                       ),
                                     )
                                   ],
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ],
