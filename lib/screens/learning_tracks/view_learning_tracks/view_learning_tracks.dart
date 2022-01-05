@@ -173,11 +173,11 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
                                                 MaterialPageRoute(
                                                     builder: (context) {
                                               return WatchVideoLeaningTracks(
-                                                learningTrack: learningTracks,
-                                                chapter: chapter,
-                                                updateStatusVideoChapter:
-                                                    updateStatusVideoChapter,
-                                              );
+                                                  learningTrack: learningTracks,
+                                                  chapter: chapter,
+                                                  updateStatusVideoChapter:
+                                                      updateStatusVideoChapter,
+                                                  listChapters: listChapters);
                                             }));
                                           }
                                         },
