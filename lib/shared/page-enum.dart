@@ -36,7 +36,6 @@ enum Page {
   initialScreen,
   aboutOOzCurrentScreen,
   aboutEthicalMarketPlace,
-  personaLevel
 }
 
 extension PageRoute on Page {

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/persona_level/ripple_animation.dart';
 import 'package:ootopia_app/screens/persona_level/ripple_animationA.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class PersonaLevel extends StatefulWidget {
+  final double percent;
+
+  const PersonaLevel({ required this.percent});
 
   @override
   _PersonaLevelState createState() => _PersonaLevelState();
@@ -47,26 +50,40 @@ class _PersonaLevelState extends State<PersonaLevel> {
               height: MediaQuery.of(context).size.width/3,
               width: MediaQuery.of(context).size.width/3,
               color: Colors.transparent,
-              child: RipplesAnimation(
-                color: Color(0xffB1E3FD),
-                size: MediaQuery.of(context).size.width/3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: urlImage.isEmpty
-                      ? Image.asset(
-                    'assets/icons/user.png',
-                    height: MediaQuery.of(context).size.width/3 - MediaQuery
-                        .of(context).size.width/9,
-                    fit: BoxFit.cover,
-                  )
-                      : Image.network(
-                    urlImage,
-                    fit: BoxFit.cover,
+              child: Stack(
+                children: [
+                  RipplesAnimation(
+                    color: Color(0xffB1E3FD),
+                    size: MediaQuery.of(context).size.width/3,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: urlImage.isEmpty
+                          ? Image.asset(
+                        'assets/icons/user.png',
+                        height: MediaQuery.of(context).size.width/3 - MediaQuery
+                            .of(context).size.width/9,
+                        fit: BoxFit.cover,
+                      )
+                          : Image.network(
+                        urlImage,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircularPercentIndicator(
+                        radius: MediaQuery.of(context).size.width/3 - MediaQuery.of(context).size.width/9,
+                        lineWidth: 6,
+                        backgroundColor: Color(0xffFAFAFA),
+                        percent:   widget.percent,
+                        linearGradient: LinearGradient(colors: [Color(0xff3ABBFE), Color(0xff002E7D)],)),
+                  )
+                ],
               ),
             ),
-          )
+          ),
+
         ],
       ),
     );

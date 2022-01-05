@@ -357,7 +357,6 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.initialScreen: (args) => InitialScreen(),
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
-    PageRoute.Page.personaLevel: (args) => PersonaLevel(),
   };
 
   SharedExperienceService sharedExperienceService =
