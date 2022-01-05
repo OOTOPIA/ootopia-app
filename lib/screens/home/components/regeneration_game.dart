@@ -58,7 +58,6 @@ class _RegenerationGameState extends State<RegenerationGame>
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SharedPreferences? prefs;
   bool showMap = false;
-  bool showWidget = false;
 
 
   late LinearGradient userLinear;
@@ -115,135 +114,134 @@ class _RegenerationGameState extends State<RegenerationGame>
           ),
           Container(
             width: double.infinity,
-            height: 59,
-            decoration:
-                BoxDecoration(color: Theme.of(context).primaryColorLight),
+            height: showDetailedGoal ? 59*2 : 59,
+            decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
             padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width < 380
-                  ? 10
+              left: MediaQuery.of(context).size.width < 380 ? 10
                   : GlobalConstants.of(context).screenHorizontalSpace,
               right: MediaQuery.of(context).size.width < 380
-                  ? 10
-                  : GlobalConstants.of(context).screenHorizontalSpace,
+                  ? 10 : GlobalConstants.of(context).screenHorizontalSpace,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Container(
+                  width: double.infinity,
+                  height: 59,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            if (editProfileStore.currentUser != null) {
+                              showModalBottomSheet(
+                                  barrierColor: Colors.black.withAlpha(1),
+                                  context: context,
+                                  backgroundColor: Colors.black.withAlpha(1),
+                                  builder: (BuildContext context) {
+                                    return SnackBarWidget(
+                                      menu: AppLocalizations.of(context)!
+                                          .regenerationGame,
+                                      text: AppLocalizations.of(context)!
+                                          .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                          .replaceAll('%GOAL_CHOSEN%',
+                                              '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
+                                      buttons: [
+                                        ButtonSnackBar(
+                                          text: AppLocalizations.of(context)!
+                                              .learnMore,
+                                          onTapAbout: () {
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                              PageRoute.Page.homeScreen.route,
+                                              (Route<dynamic> route) => false,
+                                              arguments: {
+                                                "returnToPageWithArgs": {
+                                                  'currentPageName':
+                                                      "learning_tracks"
+                                                }
+                                              },
+                                            );
+                                          },
+                                        )
+                                      ],
+                                      marginBottom: true,
+                                    );
+                                  });
+                            }
+                          }, //Saiba mais
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              right:
+                                  GlobalConstants.of(context).spacingNormal,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .regenerationGame,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2!
+                                      .copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                      ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (welcomeGuideLearningTrack == null) {
+                                      welcomeGuideLearningTrack =
+                                          await learningTracksStore
+                                              .getWelcomeGuide();
+                                    }
+                                    if (welcomeGuideLearningTrack != null) {
+                                      openLearningTrack(
+                                          welcomeGuideLearningTrack!);
+                                    }
+                                  },
+                                  child: Text(
+                                      showMap ? AppLocalizations.of(context)!
+                                          .personalLevel.toUpperCase() :
+                                      AppLocalizations.of
+                                        (context)!.learnMore,
+                                    style: showMap ? Theme.of(context)
+                                        .accentTextTheme
+                                        .bodyText1!:  Theme.of(context)
+                                        .accentTextTheme
+                                        .bodyText2!,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          gameIconProgress("personal"),
+                          gameIconProgress("city"),
+                          gameIconProgress("global"),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
                 Visibility(
                   visible: showDetailedGoal,
                   child: Container(
                     width: double.infinity,
                     height: 59,
-                    child: detailedGoal,
-                  ),
-                ),
-                Visibility(
-                  visible: !showDetailedGoal,
-                  child: Container(
-                    width: double.infinity,
-                    height: 59,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              if (editProfileStore.currentUser != null) {
-                                showModalBottomSheet(
-                                    barrierColor: Colors.black.withAlpha(1),
-                                    context: context,
-                                    backgroundColor: Colors.black.withAlpha(1),
-                                    builder: (BuildContext context) {
-                                      return SnackBarWidget(
-                                        menu: AppLocalizations.of(context)!
-                                            .regenerationGame,
-                                        text: AppLocalizations.of(context)!
-                                            .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
-                                            .replaceAll('%GOAL_CHOSEN%',
-                                                '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
-                                        buttons: [
-                                          ButtonSnackBar(
-                                            text: AppLocalizations.of(context)!
-                                                .learnMore,
-                                            onTapAbout: () {
-                                              Navigator.of(context)
-                                                  .pushNamedAndRemoveUntil(
-                                                PageRoute.Page.homeScreen.route,
-                                                (Route<dynamic> route) => false,
-                                                arguments: {
-                                                  "returnToPageWithArgs": {
-                                                    'currentPageName':
-                                                        "learning_tracks"
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          )
-                                        ],
-                                        marginBottom: true,
-                                      );
-                                    });
-                              }
-                            }, //Saiba mais
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                right:
-                                    GlobalConstants.of(context).spacingNormal,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .regenerationGame,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                        ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (welcomeGuideLearningTrack == null) {
-                                        welcomeGuideLearningTrack =
-                                            await learningTracksStore
-                                                .getWelcomeGuide();
-                                      }
-                                      if (welcomeGuideLearningTrack != null) {
-                                        openLearningTrack(
-                                            welcomeGuideLearningTrack!);
-                                      }
-                                    },
-                                    child: Text(
-                                      AppLocalizations.of(context)!.learnMore,
-                                      style: Theme.of(context)
-                                          .accentTextTheme
-                                          .bodyText2!,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            gameIconProgress("personal"),
-                            gameIconProgress("city"),
-                            gameIconProgress("global"),
-                          ],
-                        )
-                      ],
-                    ),
+                    child: newDetailedGoal,
                   ),
                 ),
               ],
@@ -768,6 +766,8 @@ class _RegenerationGameState extends State<RegenerationGame>
   );
 
   Widget gameIconProgress(String type) {
+    bool isPersonSelected = (type == 'personal' && showMap) ;
+    Color colorSelected = Color(0xff00A5FC);
     return GestureDetector(
       onTap: () {
         //TODO refatorar esse codigo em algum momento
@@ -823,27 +823,33 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
+                color: isPersonSelected ? colorSelected :  Theme.of(context)
+                    .backgroundColor,
                 borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
               child: Center(
                 child: Icon(
                   gameProgress[type],
                   size: 20,
+                  color: isPersonSelected ? Colors.white :  Theme.of
+                    (context).iconTheme.color ,
                 ),
               ),
             ),
-            Positioned(
-              //alignment: Alignment.center,
-              top: 0,
-              child: CircularPercentIndicator(
-                radius: gameProgressIconSize,
-                lineWidth: 2,
-                backgroundColor: Theme.of(context).primaryColorDark,
-                percent:  homeStore.dailyGoalStats != null
-                    ? (homeStore.percentageOfDailyGoalAchieved / 100)
-                    : 0,
-                linearGradient: gameProgressColors[type]),
+            Visibility(
+              visible: !isPersonSelected,
+              child: Positioned(
+                //alignment: Alignment.center,
+                top: 0,
+                child: CircularPercentIndicator(
+                  radius: gameProgressIconSize,
+                  lineWidth: 2,
+                  backgroundColor: Theme.of(context).primaryColorDark,
+                  percent:  homeStore.dailyGoalStats != null
+                      ? (homeStore.percentageOfDailyGoalAchieved / 100)
+                      : 0,
+                  linearGradient: gameProgressColors[type]),
+              ),
             )
           ],
         ),
