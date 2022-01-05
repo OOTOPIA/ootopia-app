@@ -29,11 +29,16 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       await _videoPlayerController?.dispose();
 
-
       AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
       await appUsageSplashScreen.updateLastSplashScreenOpening();
-      // Initing new controller
-      _initController();
+
+      if (appUsageSplashScreen.displayedToday)
+        Navigator.of(context).pushReplacementNamed(
+          PageRoute.Page.homeScreen.route,
+        );
+      else
+        // Initing new controller
+        _initController();
     });
 
     // Making sure that controller is not used by setting it to null
