@@ -59,9 +59,15 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
     return "$twoDigitHours$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  setOrientationVideo(context) {
+  setOrientationVideo(Orientation orientation) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     if (!fullScreenVideo) {
-      if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      if (orientation == Orientation.portrait) {
         if (widthVideo > heightVideo) {
           heightPlayerVideo =
               MediaQuery.of(context).size.width / (widthVideo / heightVideo);
@@ -79,12 +85,6 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
     currentChapter = widget.chapter;
     startVideFirst();
   }
@@ -123,18 +123,16 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
           widthVideo = videoPlayerController!.value.size.width;
           heightVideo = videoPlayerController!.value.size.height;
         }
+
+        if (videoPlayerController!.value.isInitialized &&
+            (videoPlayerController!.value.duration ==
+                videoPlayerController!.value.position)) {
+          //checking the duration and position every time
+          //Video Completed//
+          widget.updateStatusVideo();
+        }
       });
     }
-
-    setState(() {
-      if (videoPlayerController!.value.isInitialized &&
-          (videoPlayerController!.value.duration ==
-              videoPlayerController!.value.position)) {
-        //checking the duration and position every time
-        //Video Completed//
-        widget.updateStatusVideo();
-      }
-    });
 
     if (!isWakelock && videoPlayerController!.value.isPlaying) {
       Wakelock.enable();
@@ -162,18 +160,10 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
 
   @override
   Widget build(BuildContext context) {
-    setOrientationVideo(context);
-    return LoadingOverlay(
-      isLoading: isLoading,
-      child: VisibilityDetector(
-        key: Key('video'),
-        onVisibilityChanged: (visibility) {
-          if (visibility.visibleFraction == 0 &&
-              this.mounted &&
-              videoPlayerController != null) {
-            videoPlayerController!.pause();
-          }
-        },
+    return OrientationBuilder(builder: (context, orientation) {
+      setOrientationVideo(orientation);
+      return LoadingOverlay(
+        isLoading: isLoading,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -340,7 +330,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
             ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
