@@ -842,6 +842,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     if(this.post.oozToTransfer == null){
       this.post.oozToTransfer = 0;
     }
+    if(this.post.oozToTransfer! < 0){
+      this.post.oozToTransfer = 0;
+    }
     double maxValue  = ((oozGoal * (100 - 30)) / 70).roundToDouble();
     if(this.post.oozToTransfer!<maxValue - 5 ) {
       this.post.oozToTransfer = this.post.oozToTransfer! + 5;
