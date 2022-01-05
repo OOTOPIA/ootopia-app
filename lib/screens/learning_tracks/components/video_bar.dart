@@ -124,14 +124,6 @@ class _VideoBarState extends State<VideoBar> {
                         color: Color(0xFFCDCDCD),
                         size: 16),
               ),
-              Text(
-                '${widget.totalTimeVideoText}',
-                style: TextStyle(
-                  color: Color(0xffCDCDCD),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
             ],
           ),
         ),
