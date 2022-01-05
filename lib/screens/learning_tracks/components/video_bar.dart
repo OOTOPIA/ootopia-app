@@ -1,24 +1,31 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/screens/learning_tracks/components/video_player_learning_tracks.dart';
-import 'package:video_player/video_player.dart';
-import 'package:wakelock/wakelock.dart';
 
 class VideoBar extends StatefulWidget {
-  VideoPlayerController videoPlayerController;
+  String totalTimeVideoText;
+  String positionVideoText;
+  int currentPosition;
+  double maxDurationVideo;
   Timer? timerOpacity;
-  Function loadingTimeLineVideo;
+  Function onChangeStart;
+  Function onChanged;
+  Function onChangeEnd;
   Function fullScreenEvent;
   bool fullScreenVideo;
 
   VideoBar({
     Key? key,
-    required this.videoPlayerController,
-    required this.loadingTimeLineVideo,
-    required this.fullScreenEvent,
-    required this.fullScreenVideo,
+    required this.totalTimeVideoText,
+    required this.positionVideoText,
+    required this.currentPosition,
+    required this.maxDurationVideo,
     this.timerOpacity,
+    required this.fullScreenEvent,
+    required this.onChangeStart,
+    required this.onChanged,
+    required this.onChangeEnd,
+    required this.fullScreenVideo,
   }) : super(key: key);
 
   @override
@@ -26,68 +33,13 @@ class VideoBar extends StatefulWidget {
 }
 
 class _VideoBarState extends State<VideoBar> {
-  String totalTimeVideoText = '';
-  String positionVideoText = '';
-  int currentPosition = 0;
-  double maxDurationVideo = 0;
-  bool isWakelock = false;
-  var widthVideo = 1.0;
-  var heightVideo = 1.0;
-
-  String timeVideo(Duration time) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitHours =
-        time.inHours == 0 ? '' : twoDigits(time.inHours.remainder(60)) + ':';
-    String twoDigitMinutes = twoDigits(time.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(time.inSeconds.remainder(60));
-    return "$twoDigitHours$twoDigitMinutes:$twoDigitSeconds";
-  }
-
   @override
   void initState() {
     super.initState();
-
-    widget.videoPlayerController
-      ..addListener(() {
-        if (mounted) {
-          setState(() {
-            maxDurationVideo = widget
-                .videoPlayerController.value.duration.inSeconds
-                .toDouble();
-            totalTimeVideoText =
-                timeVideo(widget.videoPlayerController.value.duration);
-            positionVideoText =
-                timeVideo(widget.videoPlayerController.value.position);
-            currentPosition =
-                widget.videoPlayerController.value.position.inSeconds;
-            widthVideo = widget.videoPlayerController.value.size.width;
-            heightVideo = widget.videoPlayerController.value.size.height;
-          });
-          if (!isWakelock && widget.videoPlayerController.value.isPlaying) {
-            Wakelock.enable();
-            isWakelock = true;
-          } else {
-            if (!widget.videoPlayerController.value.isPlaying) {
-              Wakelock.disable();
-              isWakelock = false;
-            }
-          }
-        }
-      })
-      ..initialize().then((value) {
-        setState(() {
-          widget.timerOpacity?.cancel();
-          widget.timerOpacity = Timer(
-            Duration(seconds: 1),
-            () => setState(() => widget.timerOpacity = null),
-          );
-        });
-      });
   }
 
   @override
   void dispose() {
-    Wakelock.disable();
     super.dispose();
   }
 
@@ -114,7 +66,7 @@ class _VideoBarState extends State<VideoBar> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '$positionVideoText',
+                '${widget.positionVideoText}',
                 style: TextStyle(
                   color: Color(0xffCDCDCD),
                   fontSize: 12,
@@ -136,36 +88,11 @@ class _VideoBarState extends State<VideoBar> {
                     activeColor: Color(0xff35ad6c),
                     thumbColor: Color(0xff35ad6c),
                     min: 0,
-                    max: maxDurationVideo,
-                    value: currentPosition.toDouble(),
-                    onChangeStart: (value) async {
-                      await widget.videoPlayerController.pause();
-                      setState(() {
-                        widget.loadingTimeLineVideo(true);
-                        Future.delayed(Duration(milliseconds: 300), () {
-                          widget.loadingTimeLineVideo(false);
-                        });
-                      });
-                    },
-                    onChanged: (value) async {
-                      setState(() {
-                        totalTimeVideoText = timeVideo(
-                            widget.videoPlayerController.value.duration);
-
-                        positionVideoText = timeVideo(
-                            widget.videoPlayerController.value.position);
-                        currentPosition = value.toInt();
-                        widget.loadingTimeLineVideo(false);
-                      });
-                      await widget.videoPlayerController
-                          .seekTo(Duration(seconds: value.toInt()));
-                    },
-                    onChangeEnd: (value) async {
-                      setState(() {
-                        widget.loadingTimeLineVideo(false);
-                      });
-                      await widget.videoPlayerController.play();
-                    },
+                    max: widget.maxDurationVideo,
+                    value: widget.currentPosition.toDouble(),
+                    onChangeStart: (value) => widget.onChangeStart(value),
+                    onChanged: (value) => widget.onChanged(value),
+                    onChangeEnd: (value) => widget.onChangeEnd(value),
                   ),
                 ),
               ),
@@ -173,7 +100,7 @@ class _VideoBarState extends State<VideoBar> {
                 width: 10,
               ),
               Text(
-                '$totalTimeVideoText',
+                '${widget.totalTimeVideoText}',
                 style: TextStyle(
                   color: Color(0xffCDCDCD),
                   fontSize: 12,
@@ -198,7 +125,7 @@ class _VideoBarState extends State<VideoBar> {
                         size: 16),
               ),
               Text(
-                '$totalTimeVideoText',
+                '${widget.totalTimeVideoText}',
                 style: TextStyle(
                   color: Color(0xffCDCDCD),
                   fontSize: 12,
@@ -210,5 +137,22 @@ class _VideoBarState extends State<VideoBar> {
         ),
       ),
     );
+  }
+}
+
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight!;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }

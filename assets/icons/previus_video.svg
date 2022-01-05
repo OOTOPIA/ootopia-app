@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49.148" height="51.067" viewBox="0 0 49.148 51.067">
+  <defs>
+    <filter id="Icon_feather-play" x="7.652" y="0.19" width="41.496" height="50.876" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Linha_614" x="0" y="0" width="21" height="51.067" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Grupo_6508" data-name="Grupo 6508" transform="translate(40.148 39.067) rotate(180)">
+    <g transform="matrix(-1, 0, 0, -1, 40.15, 39.07)" filter="url(#Icon_feather-play)">
+      <path id="Icon_feather-play-2" data-name="Icon feather-play" d="M0,0,23.5,16.438,0,32.876Z" transform="translate(40.15 39.07) rotate(180)" fill="#fff"/>
+    </g>
+    <g transform="matrix(-1, 0, 0, -1, 40.15, 39.07)" filter="url(#Linha_614)">
+      <line id="Linha_614-2" data-name="Linha 614" y2="33.067" transform="translate(10.5 39.07) rotate(180)" fill="none" stroke="#fff" stroke-width="3"/>
+    </g>
+  </g>
+</svg>
