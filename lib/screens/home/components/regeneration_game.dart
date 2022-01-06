@@ -9,6 +9,7 @@ import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.da
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/persona_level/personal_level.dart';
@@ -97,7 +98,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     });
 
     controller.addListener(() {
-      showMap = controller.currentBottomIndex == 30;
+      showMap = controller.currentBottomIndex == PageViewController.TAB_UNSELECTED;
       if(showPersonal || showLocal || showGlobo){
         showPersonal = false;
         showLocal = false;
@@ -260,13 +261,6 @@ class _RegenerationGameState extends State<RegenerationGame>
               ],
             ),
           ),
-          // Visibility(
-          //   visible: false,
-          //   child: Container(
-          //   width: double.infinity,
-          //   decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
-          //   child: detailedGoal,
-          // ),),
           Visibility(
             visible: showMap,
             child: Container(
@@ -542,7 +536,7 @@ class _RegenerationGameState extends State<RegenerationGame>
       );
 
   Widget newDetailedGoal() {
-    int? minutes = authStore.currentUser?.dailyLearningGoalInMinutes ?? 0;
+    int minutes = authStore.currentUser?.dailyLearningGoalInMinutes ?? 0;
     double amountOzzWillReceive = valueOoz * minutes;
     return InkWell(
       onTap: () {
@@ -597,56 +591,6 @@ class _RegenerationGameState extends State<RegenerationGame>
                     .screenHorizontalSpace * 2),
                 child: Stack(
                   children: [
-                    // AnimatedPositioned(
-                    //   left: detailedGoalIconPosition,
-                    //   duration: Duration(milliseconds: 300),
-                    //   child: AnimatedOpacity(
-                    //     opacity: detailedGoalIconPosition > 0 ? 0 : 1,
-                    //     duration: Duration(milliseconds: 150),
-                    //     child: Stack(
-                    //       children: [
-                    //         Container(
-                    //           width: 46,
-                    //           height: 46,
-                    //           decoration: BoxDecoration(
-                    //             color: Theme.of(context)
-                    //                 .primaryColor
-                    //                 .withOpacity(0.3),
-                    //             borderRadius:
-                    //             BorderRadius.all(Radius.circular(100)),
-                    //           ),
-                    //           child: Center(
-                    //             child: Icon(
-                    //               gameProgress[detailedGoalType],
-                    //               size: 20,
-                    //               color: Theme.of(context).backgroundColor,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         Positioned(
-                    //           top: 1,
-                    //           left: 1,
-                    //           child: Padding(
-                    //             padding: const EdgeInsets.all(2),
-                    //             child: CircularPercentIndicator(
-                    //               radius: gameProgressIconSize,
-                    //               lineWidth: 2,
-                    //               backgroundColor:
-                    //               Theme.of(context).backgroundColor,
-                    //               percent: detailedGoalType == "personal" &&
-                    //                   homeStore.dailyGoalStats != null
-                    //                   ? (homeStore
-                    //                   .percentageOfDailyGoalAchieved /
-                    //                   100)
-                    //                   : 0,
-                    //               progressColor: Theme.of(context).primaryColor,
-                    //             ),
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     AnimatedOpacity(
                       opacity: showMap ? 1.0 : 0.0,
                       duration: Duration(milliseconds: 150),
@@ -822,14 +766,14 @@ class _RegenerationGameState extends State<RegenerationGame>
             if(dontShowAgainRegenerationGamePega){
 
               if(showMap){
-                controller.currentBottomIndex = 0;
+                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
                 controller.showBottomNavigationBar();
                 showMap = false;
                 setState(() {});
               }else{
                 setState(() {
-                  controller.currentBottomIndex = 30;
+                  controller.currentBottomIndex = PageViewController.TAB_UNSELECTED;
                   controller.showBottomNavigationBar();
                   controller.refreshViews();
                   showGlobo = false;
@@ -848,14 +792,14 @@ class _RegenerationGameState extends State<RegenerationGame>
 
             else{
               if(showPersonal){
-                controller.currentBottomIndex = 0;
+                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
                 controller.showBottomNavigationBar();
                 showPersonal = false;
                 setState(() {});
               }else{
                 setState(() {
-                  controller.currentBottomIndex = 31;
+                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                   controller.hideBottomNavigationBar();
                   controller.refreshViews();
                   showGlobo = false;
@@ -864,13 +808,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                   typeSelected ={"type": type, "context": context};
                 });
                 Future.delayed(Duration(milliseconds: 10),(){
-                  // controller.currentBottomIndex = 31;
-                  // controller.refreshViews();
-                  // controller.hideBottomNavigationBar();
                   setState(() {
-                    // controller.currentBottomIndex = 31;
-                    // controller.refreshViews();
-                    // controller.hideBottomNavigationBar();
                     showPersonal = true;
                   });
                 });
@@ -882,14 +820,14 @@ class _RegenerationGameState extends State<RegenerationGame>
 
           else if(type == 'city'){
             if(showLocal){
-              controller.currentBottomIndex = 0;
+              controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
               controller.refreshViews();
               controller.showBottomNavigationBar();
               showLocal = false;
               setState(() {});
             }else{
               setState(() {
-                controller.currentBottomIndex = 35;
+                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 showGlobo = false;
                 showMap = false;
@@ -897,11 +835,11 @@ class _RegenerationGameState extends State<RegenerationGame>
                 typeSelected ={"type": type, "context": context};
               });
               Future.delayed(Duration(milliseconds: 10),(){
-                controller.currentBottomIndex = 35;
+                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 controller.hideBottomNavigationBar();
                 setState(() {
-                  controller.currentBottomIndex = 35;
+                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                   controller.refreshViews();
                   controller.hideBottomNavigationBar();
                   showLocal = true;
@@ -913,14 +851,14 @@ class _RegenerationGameState extends State<RegenerationGame>
 
           else if(type == 'global'){
             if(showGlobo){
-              controller.currentBottomIndex = 0;
+              controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
               controller.refreshViews();
               controller.showBottomNavigationBar();
               showGlobo = false;
               setState(() {});
             }else{
               setState(() {
-                controller.currentBottomIndex = 35;
+                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
                 showLocal  = false;
                 showMap = false;
@@ -928,11 +866,11 @@ class _RegenerationGameState extends State<RegenerationGame>
                 typeSelected ={"type": type, "context": context};
               });
               Future.delayed(Duration(milliseconds: 10),(){
-                controller.currentBottomIndex = 35;
+                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 controller.hideBottomNavigationBar();
                 setState(() {
-                  controller.currentBottomIndex = 35;
+                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                   controller.refreshViews();
                   controller.hideBottomNavigationBar();
                   showGlobo = true;
@@ -943,51 +881,6 @@ class _RegenerationGameState extends State<RegenerationGame>
 
         }
 
-        //TODO refatorar esse codigo em algum momento
-        // setState(() {
-        //   if (homeStore.dailyGoalStats == null) {
-        //     homeStore.getDailyGoalStats();
-        //   }
-        //
-        //   if (authStore.currentUser == null && type == 'city' || type == 'global') {
-        //     _goToRegenerationGameAlert(type);
-        //     return;
-        //   }
-        //
-        //   if (authStore.currentUser == null && !this.clickedInPersonalDialogOpened && type == 'personal') {
-        //     this.clickedInPersonalDialogOpened = true;
-        //     _goToRegenerationGameAlert(type);
-        //     return;
-        //   }
-        //
-        //   if (authStore.currentUser != null) {
-        //     detailedGoalType = type;
-        //     if (detailedGoalType == 'city') {
-        //       _goToRegenerationGameAlert(type);
-        //     } else if (detailedGoalType == 'global') {
-        //       _goToRegenerationGameAlert(type);
-        //     } else {
-        //       homeStore.getDailyGoalStats();
-        //       // if (authStore.currentUser!.personalDialogOpened == null ||
-        //       //     authStore.currentUser!.personalDialogOpened == false) {
-        //       //   authStore.currentUser!.personalDialogOpened = true;
-        //
-        //       _goToRegenerationGameAlert(type);
-        //       // }
-        //
-        //       setState(() {
-        //         showDetailedGoal = true;
-        //       });
-        //       Future.delayed(Duration(milliseconds: 100), () {
-        //         setState(() {
-        //           detailedGoalIconPosition = 0;
-        //         });
-        //       });
-        //     }
-        //   } else {
-        //     Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
-        //   }
-        // });
       },
       child: Container(
         margin: EdgeInsets.only(top: 10, left: 6),
@@ -1013,7 +906,6 @@ class _RegenerationGameState extends State<RegenerationGame>
             Visibility(
               visible: !selected,
               child: Positioned(
-                //alignment: Alignment.center,
                 top: 0,
                 child: CircularPercentIndicator(
                   radius: gameProgressIconSize,
@@ -1089,9 +981,6 @@ class _RegenerationGameState extends State<RegenerationGame>
   }
 
   double percentTimeCompleted() {
-    // return homeStore.dailyGoalStats != null
-    //     ? (homeStore.percentageOfDailyGoalAchieved / 100)
-    //     : 0;
     if(homeStore.dailyGoalStats != null){
       return(homeStore.percentageOfDailyGoalAchieved / 100);
     }else{
@@ -1102,7 +991,6 @@ class _RegenerationGameState extends State<RegenerationGame>
   String timeAchieved(time) {
 
     bool withSec = time.indexOf('s') != -1;
-    print('withSec $withSec ${time.indexOf('s')}');
     if(time.isEmpty){
       return "0h 0min 0s";
     } else if(withSec){
@@ -1112,47 +1000,6 @@ class _RegenerationGameState extends State<RegenerationGame>
     }
   }
 
-  // _goToRegenerationGameAlert(String type) async {
-  //
-  //   if (authStore.currentUser != null) {
-  //     authStore.updateUserRegenerarionGameLearningAlert(type);
-  //   }
-  //
-  //
-  //   bool clickInPerson = type == 'personal';
-  //   bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
-  //
-  //   if(dontShowAgainRegenerationGamePega && clickInPerson){
-  //     controller.currentBottomIndex = 30;
-  //     showMap = true;
-  //
-  //   }else {
-  //     Navigator.of(context).pushNamed(
-  //       PageRoute.Page.regenerarionGameLearningAlert.route,
-  //       arguments: {"type": type, "context": context},
-  //     );
-  //   }
-  // }
-  //
-  // _goToCelebrationCity() async {
-  //   //for tests
-  //   await Navigator.of(context).pushNamed(
-  //     PageRoute.Page.celebration.route,
-  //     arguments: {
-  //       "name": "Belo Horizonte!",
-  //       "goal": "city",
-  //       "balance": "17,25"
-  //     },
-  //   );
-  // }
-  //
-  // _goToCelebrationGlobal() async {
-  //   //for tests
-  //   await Navigator.of(context).pushNamed(
-  //     PageRoute.Page.celebration.route,
-  //     arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
-  //   );
-  // }
 }
 
 
