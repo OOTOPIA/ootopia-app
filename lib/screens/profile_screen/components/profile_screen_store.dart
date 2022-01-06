@@ -31,6 +31,20 @@ abstract class _ProfileScreenStoreBase with Store {
   @observable
   ObservableList<TimelinePost> postsList = ObservableList();
 
+  @observable
+  int _postsOffset = 0;
+
+  @computed
+  int get postsOffset => _postsOffset;
+
+  int get maxPostsPerPage => 10;
+
+    @observable
+  bool _hasMorePosts = false;
+
+  @computed
+  bool get hasMorePosts => _hasMorePosts;
+
   @action
   Future<Profile?> getProfileDetails(String userId) async {
     loadingProfile = true;
@@ -52,11 +66,18 @@ abstract class _ProfileScreenStoreBase with Store {
     loadingPosts = true;
     loadingPostsError = false;
     try {
-      if (limit == null && offset == null) {
-        postsList.clear();
-      }
-      List<TimelinePost> posts =
-          await postsRepository.getPosts(limit, offset, userId);
+      // if ((limit == null && offset == null) && _loadingMorePosts == false) {
+      //   print("limite e offset nulos");
+      //   postsList.clear();
+      // }
+      List<TimelinePost> posts = await postsRepository.getPosts(
+          (limit != null ? limit : maxPostsPerPage),
+          (offset != null ? offset : _postsOffset),
+          userId);
+      print("posts length: ${posts.length}");
+      print("posts max: $maxPostsPerPage");
+      _hasMorePosts = posts.length == maxPostsPerPage;
+       _postsOffset = _postsOffset + maxPostsPerPage;
       postsList.addAll(posts);
       loadingPosts = false;
       return this.postsList;

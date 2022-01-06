@@ -48,9 +48,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isVisible = false;
   SmartPageController controller = SmartPageController.getInstance();
 
+  ScrollController _scrollController = ScrollController();
+
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        if (store!.hasMorePosts) {
+          print("Ainda temos posts");
+          Future.delayed(Duration.zero, () async {
+            await store?.getUserPosts(profileUserId);
+          });
+        }
+        else{
+          print("sem posts amigão");
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_scrollListener);
     if (store != null && profileUserIsLoggedUser) {
       store!.profile = null;
     }
@@ -127,6 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: MediaQuery.of(context).size.height,
                 )
               : SingleChildScrollView(
+                  controller: _scrollController,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
