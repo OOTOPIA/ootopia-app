@@ -276,6 +276,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             )
                           : EmptyPostsWidget(),
+                      Observer(
+                          builder: (_) =>
+                              (store!.loadingPosts && store!.hasMorePosts)
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      height: 90,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : Container()),
                       SizedBox(
                           height:
                               GlobalConstants.of(context).intermediateSpacing),

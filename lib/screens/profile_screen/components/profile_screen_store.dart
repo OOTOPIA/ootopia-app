@@ -20,7 +20,7 @@ abstract class _ProfileScreenStoreBase with Store {
   bool loadingProfileError = false;
 
   @observable
-  bool loadingPosts = false;
+  bool _loadingPosts = false;
 
   @observable
   bool loadingPostsError = false;
@@ -43,7 +43,8 @@ abstract class _ProfileScreenStoreBase with Store {
   @computed
   bool get hasMorePosts => _hasMorePosts;
 
-  bool _loadingMorePosts = false;
+  @computed
+  bool get loadingPosts => _loadingPosts;
 
   int get maxPostsPerPage => 10;
 
@@ -65,13 +66,12 @@ abstract class _ProfileScreenStoreBase with Store {
   @action
   Future<List<TimelinePost>?> getUserPosts(String userId,
       {int? limit, int? offset}) async {
-    loadingPosts = true;
     loadingPostsError = false;
     try {
       if (postsList.length != 0) {
-        _loadingMorePosts = true;
+        _loadingPosts = true;
       }
-      if ((limit == null && offset == null) && _loadingMorePosts == false) {
+      if ((limit == null && offset == null) && _loadingPosts == false) {
         postsList.clear();
       }
 
@@ -84,12 +84,11 @@ abstract class _ProfileScreenStoreBase with Store {
       _postsOffset = _postsOffset + maxPostsPerPage;
 
       postsList.addAll(posts);
-      loadingPosts = false;
+      _loadingPosts = false;
       return this.postsList;
     } catch (err) {
-      loadingPosts = false;
+      _loadingPosts = false;
       loadingPostsError = true;
-      _loadingMorePosts = false;
     }
   }
 
