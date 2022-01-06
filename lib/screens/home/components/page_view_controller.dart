@@ -27,6 +27,8 @@ class PageViewController {
   static const int TAB_INDEX_CAMERA = 2;
   static const int TAB_INDEX_MARKETPLACE = 3;
   static const int TAB_INDEX_PROFILE = 4;
+  static const int TAB_UNSELECTED = 30;
+  static const int HIDE_BOTTOMBAR = 35;
 
   PageViewController() {
     controller = PageController(initialPage: 0, keepPage: true);
