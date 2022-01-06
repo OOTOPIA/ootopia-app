@@ -279,15 +279,15 @@ class _RegenerationGameState extends State<RegenerationGame>
           ]else if(showPersonal)...[
             Container(
                 height: MediaQuery.of(context).size.height-130,
-                child: RegenerarionGameLearningAlert(typeSelected)),
+                child: RegenerationGameLearningAlert(typeSelected)),
           ]else if(showLocal)...[
             Container(
               height: MediaQuery.of(context).size.height-130,
-                child: RegenerarionGameLearningAlert(typeSelected)),
+                child: RegenerationGameLearningAlert(typeSelected)),
           ]else if(showGlobo)...[
             Container(
                 height: MediaQuery.of(context).size.height-130,
-                child: RegenerarionGameLearningAlert(typeSelected)),
+                child: RegenerationGameLearningAlert(typeSelected)),
           ]
         ],
       ),

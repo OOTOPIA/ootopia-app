@@ -19,22 +19,19 @@ class _PersonaLevelState extends State<PersonaLevel> {
   late String urlImage;
   late String name;
 
-
-
-  _init(BuildContext context){
+  void _init(BuildContext context){
     authStore = Provider.of<AuthStore>(context);
     urlImage = authStore?.currentUser?.photoUrl ?? '';
     name = authStore?.currentUser?.fullname ?? '';
   }
 
-
   @override
   Widget build(BuildContext context) {
     _init(context);
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      //physics: NeverScrollableScrollPhysics(),
       child: Container(
-        height: MediaQuery.of(context).size.height - (180 + 59 + 8),
+        height: MediaQuery.of(context).size.height - (247),
         width: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
             image: DecorationImage(

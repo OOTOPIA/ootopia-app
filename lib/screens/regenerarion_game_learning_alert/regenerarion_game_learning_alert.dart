@@ -9,29 +9,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class RegenerarionGameLearningAlert extends StatefulWidget {
+class RegenerationGameLearningAlert extends StatefulWidget {
   final Map<String, dynamic> args;
 
 
-  RegenerarionGameLearningAlert(this.args);
+  RegenerationGameLearningAlert(this.args);
 
   @override
-  _RegenerarionGameLearningAlertState createState() =>
-      _RegenerarionGameLearningAlertState();
+  _RegenerationGameLearningAlertState createState() =>
+      _RegenerationGameLearningAlertState();
 }
 
-class _RegenerarionGameLearningAlertState
-    extends State<RegenerarionGameLearningAlert> {
-  String? _imagePath;
-  Color? _backgroundColorIcon;
-  String? _icon;
-  String? _title;
-  String? _firstText;
-  String? _secondText;
+class _RegenerationGameLearningAlertState
+    extends State<RegenerationGameLearningAlert> {
+  late String _imagePath;
+  late Color _backgroundColorIcon;
+  late String _icon;
+  late String _title;
+  late String _firstText;
+  late String _secondText;
+  late String _imageRights;
   String? _secondTextPt2;
   SharedPreferences? prefs;
-
-  String? _imageRights;
   bool dontShowAgainRegenerationGamePega = false;
 
   SmartPageController controller = SmartPageController.getInstance();
@@ -103,10 +102,10 @@ class _RegenerarionGameLearningAlertState
     });
   }
 
-  isSmallPhone(double value) {
-    if (MediaQuery.of(context).size.width < 380) return value * 0.7;
-    return value;
-  }
+  // isSmallPhone(double value) {
+  //   if (MediaQuery.of(context).size.width < 380) return value * 0.7;
+  //   return value;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +121,7 @@ class _RegenerarionGameLearningAlertState
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(_imagePath as String),
+                    image: AssetImage(_imagePath),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -199,14 +198,14 @@ class _RegenerarionGameLearningAlertState
                                       borderRadius: BorderRadius.circular(100)),
                                   padding: EdgeInsets.all(28),
                                   child: SvgPicture.asset(
-                                    _icon as String,
+                                    _icon,
                                   ),
                                 ),
                                 SizedBox(
                                   height: 20,
                                 ),
 
-                                Text(_title!,
+                                Text(_title,
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context)
                                         .textTheme
@@ -234,7 +233,7 @@ class _RegenerarionGameLearningAlertState
                                 Container(
                                   height: MediaQuery.of(context).size.height *
                                       0.13,
-                                  child: AutoSizeText(_firstText!,
+                                  child: AutoSizeText(_firstText,
                                       maxLines: 4,
                                       style: Theme.of(context).textTheme.subtitle1!
                                           .copyWith(
@@ -261,7 +260,7 @@ class _RegenerarionGameLearningAlertState
                                 if(_secondTextPt2 == null)...[
                                   Container(
                                     height: MediaQuery.of(context).size.height * 0.1,
-                                    child: AutoSizeText(_secondText!,
+                                    child: AutoSizeText(_secondText,
                                         maxLines: 2,
                                         maxFontSize: 18,
                                         textAlign: TextAlign.center,
@@ -399,7 +398,6 @@ class _RegenerarionGameLearningAlertState
                                           ),
                                           onPressed: () {
                                             if(widget.args["type"] == 'personal'){
-                                              SmartPageController controller = SmartPageController.getInstance();
                                               controller.showBottomNavigationBar();
                                               setState(() {
                                                 controller.currentBottomIndex = 30;
@@ -407,7 +405,6 @@ class _RegenerarionGameLearningAlertState
                                               });
 
                                             }else{
-                                              SmartPageController controller = SmartPageController.getInstance();
                                               controller.currentBottomIndex = 0;
                                               controller
                                                   .showBottomNavigationBar();
@@ -495,7 +492,7 @@ class _RegenerarionGameLearningAlertState
                   child: RotatedBox(
                     quarterTurns: 3,
                     child: Text(
-                      _imageRights as String,
+                      _imageRights,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             fontSize: 10,
                             color: Colors.white,

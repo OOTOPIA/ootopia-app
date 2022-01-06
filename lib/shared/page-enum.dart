@@ -22,7 +22,7 @@ enum Page {
   splashScreen,
   celebration,
   walletPage,
-  regenerarionGameLearningAlert,
+  regenerationGameLearningAlert,
   chatWithUsersScreen,
   invitationScreen,
   insertInvitationCode,

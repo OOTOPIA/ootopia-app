@@ -334,8 +334,7 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
     PageRoute.Page.walletPage: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
-    PageRoute.Page.regenerarionGameLearningAlert: (args) =>
-        RegenerarionGameLearningAlert(args),
+    PageRoute.Page.regenerationGameLearningAlert: (args) => RegenerationGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
