@@ -87,7 +87,6 @@ dependencies:
   dotted_border: ^2.0.0+1
   flutter_background_service: ^0.1.5
   wakelock: ^0.5.6
-  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
