@@ -82,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     controller.addListener(() {
       //TODO ADD
-      //|| controller.currentBottomIndex == 30
-      if (mounted || controller.currentBottomIndex == 30) setState(() {});
+       //|| controller.currentBottomIndex == 30
+      if (mounted || controller.currentBottomIndex >= 30) setState(() {});
     });
 
     Future.delayed(Duration(milliseconds: 1000), () async {
@@ -237,7 +237,8 @@ class _HomeScreenState extends State<HomeScreen>
                   controller: controller,
                 ),
                 Visibility(
-                  visible: homeStore!.seeCrisp,
+                  visible: homeStore!.seeCrisp && controller
+                      .currentBottomIndex != 35,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton(
@@ -245,6 +246,7 @@ class _HomeScreenState extends State<HomeScreen>
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       onPressed: () {
+                        print("aaaa ${controller.currentBottomIndex} ${controller.currentBottomIndex != 35}");
                         Navigator.of(context).pushNamed(
                           PageRoute.Page.chatWithUsersScreen.route,
                         );
@@ -277,8 +279,9 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            bottomNavigationBar: Padding(
-              padding: homeStore!.iphoneHasNotch
+            bottomNavigationBar: controller.currentBottomIndex == 35 ? null :
+            Padding(
+              padding:  homeStore!.iphoneHasNotch
                   ? EdgeInsets.only(bottom: 16)
                   : EdgeInsets.only(bottom: 0),
               child: new SmartPageBottomNavigationBar(
@@ -531,9 +534,9 @@ class _HomeScreenState extends State<HomeScreen>
   bool get isNotWallet =>
       authStore.currentUser != null && !(currentPage is WalletPage);
 
-  PreferredSizeWidget? currentAppBar() {
-    //TODO ADD
-    if(controller.currentBottomIndex == 30){
+  PreferredSizeWidget? currentAppBar(){
+     //USADO MUDAR O STATUS CASO O MAP DO JOGO DA REGERENAÇÃO SEJA TRUE
+    if(controller.currentBottomIndex == 30 ){
       return appBarBackFromMap;
     }
 
@@ -580,7 +583,7 @@ class _HomeScreenState extends State<HomeScreen>
       );
 
 
-  //TODO ADD
+   //TODO ADD
   get appBarBackFromMap => DefaultAppBar(
       components: [
         AppBarComponents.back,

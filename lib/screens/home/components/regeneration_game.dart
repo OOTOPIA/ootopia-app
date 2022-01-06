@@ -13,6 +13,7 @@ import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/persona_level/personal_level.dart';
+import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -39,7 +40,6 @@ class _RegenerationGameState extends State<RegenerationGame>
 
 
 
-  bool showDetailedGoal = false;
   String detailedGoalType = "";
 
   late HomeStore homeStore;
@@ -60,6 +60,10 @@ class _RegenerationGameState extends State<RegenerationGame>
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SharedPreferences? prefs;
   bool showMap = false;
+  bool showPersonal = false;
+  bool showLocal = false;
+  bool showGlobo = false;
+  var typeSelected;
 
 
   late LinearGradient userLinear;
@@ -68,6 +72,7 @@ class _RegenerationGameState extends State<RegenerationGame>
 
   late Map<String, LinearGradient> gameProgressColors ;
   double valueOoz = 0;
+  bool aaaaaaaaa = false;
 
   @override
   void initState() {
@@ -93,10 +98,15 @@ class _RegenerationGameState extends State<RegenerationGame>
       _resetDetailedIconPosition();
     });
 
+    print('fim addListener');
     controller.addListener(() {
       showMap = controller.currentBottomIndex == 30;
-      showDetailedGoal = controller.currentBottomIndex == 30;
       print('\nchange:> ${controller.currentBottomIndex}');
+      if(showPersonal || showLocal || showGlobo){
+        showPersonal = false;
+        showLocal = false;
+        showGlobo = false;
+      }
       if (mounted || controller.currentBottomIndex == 0) setState(() {});
     });
 
@@ -113,7 +123,6 @@ class _RegenerationGameState extends State<RegenerationGame>
 
     valueOoz = transferOozToPostLimitConfig?.value ?? 0;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +249,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                       showMap ? AppLocalizations.of(context)!
                                           .personalLevel.toUpperCase() :
                                       AppLocalizations.of
-                                        (context)!.learnMore,
+                                        (context)!.learnMore +   aaaaaaaaa.toString(),
                                     style: showMap ? Theme.of(context)
                                         .accentTextTheme
                                         .bodyText1!:  Theme.of(context)
@@ -257,9 +266,11 @@ class _RegenerationGameState extends State<RegenerationGame>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          gameIconProgress("personal"),
-                          gameIconProgress("city"),
-                          gameIconProgress("global"),
+                          gameIconProgress("personal", (showPersonal
+                              || showMap), Color
+                            (0xff00A5FC)),
+                          gameIconProgress("city", showLocal, Color(0xff0072C5)),
+                          gameIconProgress("global", showGlobo, Color(0xff012588)),
                         ],
                       )
                     ],
@@ -276,7 +287,7 @@ class _RegenerationGameState extends State<RegenerationGame>
             child: detailedGoal,
           ),),
           Visibility(
-            visible: showDetailedGoal,
+            visible: showMap,
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
@@ -288,6 +299,18 @@ class _RegenerationGameState extends State<RegenerationGame>
                 .percentageOfDailyGoalAchieved /
                 100)
                 : 0,)
+          ]else if(showPersonal && !aaaaaaaaa)...[
+            Container(
+                height: MediaQuery.of(context).size.height-130,
+                child: RegenerarionGameLearningAlert(typeSelected)),
+          ]else if(showLocal)...[
+            Container(
+              height: MediaQuery.of(context).size.height-130,
+                child: RegenerarionGameLearningAlert(typeSelected)),
+          ]else if(showGlobo)...[
+            Container(
+                height: MediaQuery.of(context).size.height-130,
+                child: RegenerarionGameLearningAlert(typeSelected)),
           ]
         ],
       ),
@@ -319,7 +342,7 @@ class _RegenerationGameState extends State<RegenerationGame>
           });
           Future.delayed(Duration(milliseconds: 100), () {
             setState(() {
-              showDetailedGoal = false;
+              showGlobo = false;
             });
           });
         },
@@ -571,7 +594,7 @@ class _RegenerationGameState extends State<RegenerationGame>
         });
         Future.delayed(Duration(milliseconds: 100), () {
           setState(() {
-            showDetailedGoal = false;
+            showGlobo = false;
           });
         });
       },
@@ -825,55 +848,187 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 
-  Widget gameIconProgress(String type) {
-    bool isPersonSelected = (type == 'personal' && showMap) ;
-    Color colorSelected = Color(0xff00A5FC);
+  Widget gameIconProgress(String type, selected, colorSelected) {
     return GestureDetector(
       onTap: () {
-        //TODO refatorar esse codigo em algum momento
-        setState(() {
-          if (homeStore.dailyGoalStats == null) {
-            homeStore.getDailyGoalStats();
-          }
+        if(authStore.currentUser == null){
+          Navigator.of(context).pushNamed(
+              PageRoute.Page.loginScreen.route);
+        }else{
+          if(type == 'personal'){
+            bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
+            if(!dontShowAgainRegenerationGamePega){
 
-          if (authStore.currentUser == null && type == 'city' || type == 'global') {
-            _goToRegenerationGameAlert(type);
-            return;
-          }
-
-          if (authStore.currentUser == null && !this.clickedInPersonalDialogOpened && type == 'personal') {
-            this.clickedInPersonalDialogOpened = true;
-            _goToRegenerationGameAlert(type);
-            return;
-          }
-
-          if (authStore.currentUser != null) {detailedGoalType = type;
-            if (detailedGoalType == 'city') {
-              _goToRegenerationGameAlert(type);
-            } else if (detailedGoalType == 'global') {
-              _goToRegenerationGameAlert(type);
-            } else {
-              homeStore.getDailyGoalStats();
-              // if (authStore.currentUser!.personalDialogOpened == null ||
-              //     authStore.currentUser!.personalDialogOpened == false) {
-              //   authStore.currentUser!.personalDialogOpened = true;
-
-              _goToRegenerationGameAlert(type);
-              // }
-
-              setState(() {
-                showDetailedGoal = true;
-              });
-              Future.delayed(Duration(milliseconds: 100), () {
+              if(showMap){
+                controller.currentBottomIndex = 0;
+                controller.refreshViews();
+                controller.showBottomNavigationBar();
+                showMap = false;
+                setState(() {});
+              }else{
                 setState(() {
-                  detailedGoalIconPosition = 0;
+                  controller.currentBottomIndex = 30;
+                  controller.refreshViews();
+                  showLocal  = false;
+                  showGlobo = false;
+                  showPersonal = false;
+                  typeSelected ={"type": type, "context": context};
+                });
+                Future.delayed(Duration(milliseconds: 10),(){
+                  controller.currentBottomIndex = 30;
+                  controller.refreshViews();
+                  controller.showBottomNavigationBar();
+                  setState(() {
+                    controller.currentBottomIndex = 30;
+                    controller.refreshViews();
+                    controller.showBottomNavigationBar();
+                    showMap  = true;
+                  });
+                });
+              }
+
+            }
+
+            else{
+              if(showPersonal){
+                controller.currentBottomIndex = 0;
+                controller.refreshViews();
+                controller.showBottomNavigationBar();
+                showPersonal = false;
+                setState(() {});
+              }else{
+                setState(() {
+                  controller.currentBottomIndex = 35;
+                  controller.refreshViews();
+                  showLocal  = false;
+                  showGlobo = false;
+                  typeSelected ={"type": type, "context": context};
+                });
+                Future.delayed(Duration(milliseconds: 10),(){
+                  controller.currentBottomIndex = 35;
+                  controller.refreshViews();
+                  controller.showBottomNavigationBar();
+                  setState(() {
+                    controller.currentBottomIndex = 35;
+                    controller.refreshViews();
+                    controller.showBottomNavigationBar();
+                    showPersonal  = true;
+                  });
+                });
+              }
+
+
+            }
+          }
+
+          else if(type == 'city'){
+            if(showLocal){
+              controller.currentBottomIndex = 0;
+              controller.refreshViews();
+              controller.showBottomNavigationBar();
+              showLocal = false;
+              setState(() {});
+            }else{
+              setState(() {
+                controller.currentBottomIndex = 35;
+                controller.refreshViews();
+                showGlobo = false;
+                showMap = false;
+                showPersonal = false;
+                typeSelected ={"type": type, "context": context};
+              });
+              Future.delayed(Duration(milliseconds: 10),(){
+                controller.currentBottomIndex = 35;
+                controller.refreshViews();
+                controller.hideBottomNavigationBar();
+                setState(() {
+                  controller.currentBottomIndex = 35;
+                  controller.refreshViews();
+                  controller.hideBottomNavigationBar();
+                  showLocal = true;
                 });
               });
             }
-          } else {
-            Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+
           }
-        });
+
+          else if(type == 'global'){
+            if(showGlobo){
+              controller.currentBottomIndex = 0;
+              controller.refreshViews();
+              controller.showBottomNavigationBar();
+              showGlobo = false;
+              setState(() {});
+            }else{
+              setState(() {
+                controller.currentBottomIndex = 35;
+                controller.refreshViews();
+                showLocal  = false;
+                showMap = false;
+                showPersonal = false;
+                typeSelected ={"type": type, "context": context};
+              });
+              Future.delayed(Duration(milliseconds: 10),(){
+                controller.currentBottomIndex = 35;
+                controller.refreshViews();
+                controller.hideBottomNavigationBar();
+                setState(() {
+                  controller.currentBottomIndex = 35;
+                  controller.refreshViews();
+                  controller.hideBottomNavigationBar();
+                  showGlobo = true;
+                });
+              });
+            }
+          }
+
+        }
+
+        //TODO refatorar esse codigo em algum momento
+        // setState(() {
+        //   if (homeStore.dailyGoalStats == null) {
+        //     homeStore.getDailyGoalStats();
+        //   }
+        //
+        //   if (authStore.currentUser == null && type == 'city' || type == 'global') {
+        //     _goToRegenerationGameAlert(type);
+        //     return;
+        //   }
+        //
+        //   if (authStore.currentUser == null && !this.clickedInPersonalDialogOpened && type == 'personal') {
+        //     this.clickedInPersonalDialogOpened = true;
+        //     _goToRegenerationGameAlert(type);
+        //     return;
+        //   }
+        //
+        //   if (authStore.currentUser != null) {
+        //     detailedGoalType = type;
+        //     if (detailedGoalType == 'city') {
+        //       _goToRegenerationGameAlert(type);
+        //     } else if (detailedGoalType == 'global') {
+        //       _goToRegenerationGameAlert(type);
+        //     } else {
+        //       homeStore.getDailyGoalStats();
+        //       // if (authStore.currentUser!.personalDialogOpened == null ||
+        //       //     authStore.currentUser!.personalDialogOpened == false) {
+        //       //   authStore.currentUser!.personalDialogOpened = true;
+        //
+        //       _goToRegenerationGameAlert(type);
+        //       // }
+        //
+        //       setState(() {
+        //         showDetailedGoal = true;
+        //       });
+        //       Future.delayed(Duration(milliseconds: 100), () {
+        //         setState(() {
+        //           detailedGoalIconPosition = 0;
+        //         });
+        //       });
+        //     }
+        //   } else {
+        //     Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+        //   }
+        // });
       },
       child: Container(
         margin: EdgeInsets.only(top: 10, left: 6),
@@ -883,7 +1038,7 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: isPersonSelected ? colorSelected :  Theme.of(context)
+                color: selected ? colorSelected :  Theme.of(context)
                     .backgroundColor,
                 borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
@@ -891,13 +1046,13 @@ class _RegenerationGameState extends State<RegenerationGame>
                 child: Icon(
                   gameProgress[type],
                   size: 20,
-                  color: isPersonSelected ? Colors.white :  Theme.of
+                  color: selected ? Colors.white :  Theme.of
                     (context).iconTheme.color ,
                 ),
               ),
             ),
             Visibility(
-              visible: !isPersonSelected,
+              visible: !selected,
               child: Positioned(
                 //alignment: Alignment.center,
                 top: 0,
@@ -946,6 +1101,7 @@ class _RegenerationGameState extends State<RegenerationGame>
   }
 
   _goToRegenerationGameAlert(String type) async {
+    //feito
     if (authStore.currentUser != null) {
       authStore.updateUserRegenerarionGameLearningAlert(type);
     }
@@ -986,3 +1142,5 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 }
+
+
