@@ -738,11 +738,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                     ),
                                   ),
                                   Text(
-                                    homeStore.totalAppUsageTimeSoFar
-                                        .isEmpty
-                                        ? "0h 0min 0s"
-                                        : homeStore
-                                        .totalAppUsageTimeSoFar,
+                                    timeAchieved(homeStore.totalAppUsageTimeSoFar),
                                     style: Theme
                                         .of(context)
                                         .textTheme
@@ -765,6 +761,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                     children: [
                                       SvgPicture.asset(
                                         'assets/icons/ooz_mini_blue.svg',
+                                        width: 18,
                                       ),
                                       Padding(
                                         padding:
@@ -779,7 +776,13 @@ class _RegenerationGameState extends State<RegenerationGame>
                                               .textTheme
                                               .subtitle2!
                                               .copyWith(
-                                            fontSize: 12,
+                                            fontSize: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width <
+                                                380
+                                                ? 12
+                                                : 14,
                                             fontWeight: FontWeight.bold,
                                             color: Theme
                                                 .of(context)
@@ -1096,8 +1099,21 @@ class _RegenerationGameState extends State<RegenerationGame>
     }
   }
 
+  String timeAchieved(time) {
+
+    bool withSec = time.indexOf('s') != -1;
+    print('withSec $withSec ${time.indexOf('s')}');
+    if(time.isEmpty){
+      return "0h 0min 0s";
+    } else if(withSec){
+      return time;
+    }else{
+      return time.substring(0 , (time.lastIndexOf('')-1) );
+    }
+  }
+
   // _goToRegenerationGameAlert(String type) async {
-  //   //feito
+  //
   //   if (authStore.currentUser != null) {
   //     authStore.updateUserRegenerarionGameLearningAlert(type);
   //   }

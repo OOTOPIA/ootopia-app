@@ -28,94 +28,90 @@ class _PersonaLevelState extends State<PersonaLevel> {
   @override
   Widget build(BuildContext context) {
     _init(context);
-    return SingleChildScrollView(
-      //physics: NeverScrollableScrollPhysics(),
-      child: Container(
-        height: MediaQuery.of(context).size.height - (247),
-        width: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                'assets/images/map.png',
-              ),
+    return Container(
+      height: MediaQuery.of(context).size.height - (246.2),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              'assets/images/map2.png',
+            ),
 
-              alignment: Alignment(-0.6, -1),
-              fit: BoxFit.cover,
-              scale: 1/20,
-              //alignment: Alignment.centerLeft,
-            )),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.2),
-                height: MediaQuery.of(context).size.width/3,
-                width: MediaQuery.of(context).size.width*0.4,
-                color: Colors.transparent,
-                child: Stack(
-                  children: [
-                    RipplesAnimation(
-                      color: Color(0xffB1E3FD),
-                      size: MediaQuery.of(context).size.width*0.4,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: urlImage.isEmpty
-                            ? Image.asset(
-                          'assets/icons/user.png',
-                          height: MediaQuery.of(context).size.width/3 - MediaQuery
-                              .of(context).size.width/9,
-                          fit: BoxFit.cover,
-                        )
-                            : Image.network(
-                          urlImage,
-                          fit: BoxFit.cover,
-                        ),
+            alignment: Alignment(-0.6, -1),
+            fit: BoxFit.cover,
+            //alignment: Alignment.centerLeft,
+          )),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.2),
+              height: MediaQuery.of(context).size.width/3,
+              width: MediaQuery.of(context).size.width*0.4,
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  RipplesAnimation(
+                    color: Color(0xffB1E3FD),
+                    size: MediaQuery.of(context).size.width*0.4,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: urlImage.isEmpty
+                          ? Image.asset(
+                        'assets/icons/user.png',
+                        height: MediaQuery.of(context).size.width/3 - MediaQuery
+                            .of(context).size.width/9,
+                        fit: BoxFit.cover,
+                      )
+                          : Image.network(
+                        urlImage,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: CircularPercentIndicator(
-                          radius: MediaQuery.of(context).size.width/3 - MediaQuery.of(context).size.width/9,
-                          lineWidth: 5,
-                          backgroundColor: Color(0xffFAFAFA),
-                          percent:   widget.percent,
-                          linearGradient: LinearGradient(colors: [Color(0xff3ABBFE), Color(0xff002E7D)],)),
-                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircularPercentIndicator(
+                        radius: MediaQuery.of(context).size.width/3 - MediaQuery.of(context).size.width/9,
+                        lineWidth: 5,
+                        backgroundColor: Color(0xffFAFAFA),
+                        percent:   widget.percent,
+                        linearGradient: LinearGradient(colors: [Color(0xff3ABBFE), Color(0xff002E7D)],)),
+                  ),
 
-                  ],
-                ),
+                ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: MediaQuery.of(context).size.width*0.2,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.width*0.2,
 
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Color(0xff00A5FC), width: 2)
-                      ),
-                      child: Text(
-                        name,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .subtitle2!.copyWith(fontWeight: FontWeight.bold),
-                      ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Color(0xff00A5FC), width: 2)
                     ),
-                  ],
-                ),
+                    child: Text(
+                      name,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
+          )
 
-          ],
-        ),
+        ],
       ),
     );
   }
