@@ -72,7 +72,6 @@ class _RegenerationGameState extends State<RegenerationGame>
 
   late Map<String, LinearGradient> gameProgressColors ;
   double valueOoz = 0;
-  bool aaaaaaaaa = false;
 
   @override
   void initState() {
@@ -249,7 +248,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                       showMap ? AppLocalizations.of(context)!
                                           .personalLevel.toUpperCase() :
                                       AppLocalizations.of
-                                        (context)!.learnMore +   aaaaaaaaa.toString(),
+                                        (context)!.learnMore,
                                     style: showMap ? Theme.of(context)
                                         .accentTextTheme
                                         .bodyText1!:  Theme.of(context)
@@ -279,13 +278,13 @@ class _RegenerationGameState extends State<RegenerationGame>
               ],
             ),
           ),
-          Visibility(
-            visible: false,
-            child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
-            child: detailedGoal,
-          ),),
+          // Visibility(
+          //   visible: false,
+          //   child: Container(
+          //   width: double.infinity,
+          //   decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+          //   child: detailedGoal,
+          // ),),
           Visibility(
             visible: showMap,
             child: Container(
@@ -299,7 +298,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                 .percentageOfDailyGoalAchieved /
                 100)
                 : 0,)
-          ]else if(showPersonal && !aaaaaaaaa)...[
+          ]else if(showPersonal)...[
             Container(
                 height: MediaQuery.of(context).size.height-130,
                 child: RegenerarionGameLearningAlert(typeSelected)),
@@ -690,7 +689,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                     //   ),
                     // ),
                     AnimatedOpacity(
-                      opacity: detailedGoalIconPosition > 0 ? 0 : 1,
+                      opacity: showMap ? 1.0 : 0.0,
                       duration: Duration(milliseconds: 150),
                       child: Row(
                         children: [
@@ -857,7 +856,7 @@ class _RegenerationGameState extends State<RegenerationGame>
         }else{
           if(type == 'personal'){
             bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
-            if(!dontShowAgainRegenerationGamePega){
+            if(dontShowAgainRegenerationGamePega){
 
               if(showMap){
                 controller.currentBottomIndex = 0;
@@ -868,21 +867,16 @@ class _RegenerationGameState extends State<RegenerationGame>
               }else{
                 setState(() {
                   controller.currentBottomIndex = 30;
+                  controller.showBottomNavigationBar();
                   controller.refreshViews();
-                  showLocal  = false;
                   showGlobo = false;
                   showPersonal = false;
+                  showLocal = false;
                   typeSelected ={"type": type, "context": context};
                 });
                 Future.delayed(Duration(milliseconds: 10),(){
-                  controller.currentBottomIndex = 30;
-                  controller.refreshViews();
-                  controller.showBottomNavigationBar();
                   setState(() {
-                    controller.currentBottomIndex = 30;
-                    controller.refreshViews();
-                    controller.showBottomNavigationBar();
-                    showMap  = true;
+                    showMap = true;
                   });
                 });
               }
@@ -898,21 +892,23 @@ class _RegenerationGameState extends State<RegenerationGame>
                 setState(() {});
               }else{
                 setState(() {
-                  controller.currentBottomIndex = 35;
+                  controller.currentBottomIndex = 31;
+                  controller.hideBottomNavigationBar();
                   controller.refreshViews();
-                  showLocal  = false;
                   showGlobo = false;
+                  showMap = false;
+                  showLocal = false;
                   typeSelected ={"type": type, "context": context};
                 });
                 Future.delayed(Duration(milliseconds: 10),(){
-                  controller.currentBottomIndex = 35;
-                  controller.refreshViews();
-                  controller.showBottomNavigationBar();
+                  // controller.currentBottomIndex = 31;
+                  // controller.refreshViews();
+                  // controller.hideBottomNavigationBar();
                   setState(() {
-                    controller.currentBottomIndex = 35;
-                    controller.refreshViews();
-                    controller.showBottomNavigationBar();
-                    showPersonal  = true;
+                    // controller.currentBottomIndex = 31;
+                    // controller.refreshViews();
+                    // controller.hideBottomNavigationBar();
+                    showPersonal = true;
                   });
                 });
               }

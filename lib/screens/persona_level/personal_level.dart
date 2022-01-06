@@ -17,12 +17,14 @@ class PersonaLevel extends StatefulWidget {
 class _PersonaLevelState extends State<PersonaLevel> {
   late AuthStore? authStore;
   late String urlImage;
+  late String name;
 
 
 
   _init(BuildContext context){
     authStore = Provider.of<AuthStore>(context);
     urlImage = authStore?.currentUser?.photoUrl ?? '';
+    name = authStore?.currentUser?.fullname ?? '';
   }
 
 
@@ -39,24 +41,26 @@ class _PersonaLevelState extends State<PersonaLevel> {
               image: AssetImage(
                 'assets/images/map.png',
               ),
-              //alignment: Alignment.centerLeft,
-              alignment: Alignment(-0.5, -1.0),
+
+              alignment: Alignment(-0.6, -1),
               fit: BoxFit.cover,
+              scale: 1/20,
+              //alignment: Alignment.centerLeft,
             )),
         child: Stack(
           children: [
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width/3),
+                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.2),
                 height: MediaQuery.of(context).size.width/3,
-                width: MediaQuery.of(context).size.width/3,
+                width: MediaQuery.of(context).size.width*0.4,
                 color: Colors.transparent,
                 child: Stack(
                   children: [
                     RipplesAnimation(
                       color: Color(0xffB1E3FD),
-                      size: MediaQuery.of(context).size.width/3,
+                      size: MediaQuery.of(context).size.width*0.4,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: urlImage.isEmpty
@@ -76,15 +80,42 @@ class _PersonaLevelState extends State<PersonaLevel> {
                       alignment: Alignment.center,
                       child: CircularPercentIndicator(
                           radius: MediaQuery.of(context).size.width/3 - MediaQuery.of(context).size.width/9,
-                          lineWidth: 6,
+                          lineWidth: 5,
                           backgroundColor: Color(0xffFAFAFA),
                           percent:   widget.percent,
                           linearGradient: LinearGradient(colors: [Color(0xff3ABBFE), Color(0xff002E7D)],)),
-                    )
+                    ),
+
                   ],
                 ),
               ),
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: MediaQuery.of(context).size.width*0.2,
+
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Color(0xff00A5FC), width: 2)
+                      ),
+                      child: Text(
+                        name,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
 
           ],
         ),

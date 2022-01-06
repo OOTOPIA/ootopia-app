@@ -82,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen>
 
     controller.addListener(() {
       //TODO ADD
-       //|| controller.currentBottomIndex == 30
-      if (mounted || controller.currentBottomIndex >= 30) setState(() {});
+       //|| controller.currentBottomIndex >= 30
+      if (mounted) setState(() {});
     });
 
     Future.delayed(Duration(milliseconds: 1000), () async {
@@ -238,7 +238,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 Visibility(
                   visible: homeStore!.seeCrisp && controller
-                      .currentBottomIndex != 35,
+                      .currentBottomIndex != 35 && controller
+                      .currentBottomIndex != 31,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton(
@@ -279,7 +280,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            bottomNavigationBar: controller.currentBottomIndex == 35 ? null :
+            bottomNavigationBar: controller.currentBottomIndex == 35 ||
+                controller.currentBottomIndex == 31 ? null :
             Padding(
               padding:  homeStore!.iphoneHasNotch
                   ? EdgeInsets.only(bottom: 16)
@@ -536,9 +538,15 @@ class _HomeScreenState extends State<HomeScreen>
 
   PreferredSizeWidget? currentAppBar(){
      //USADO MUDAR O STATUS CASO O MAP DO JOGO DA REGERENAÇÃO SEJA TRUE
-    if(controller.currentBottomIndex == 30 ){
+    if(controller.currentBottomIndex >= 30){
       return appBarBackFromMap;
     }
+    // if(controller.currentBottomIndex == 30  || controller.currentBottomIndex == 35){
+    //   return appBarBackFromMap;
+    // }
+    // if(controller.currentBottomIndex == 31 ){
+    //   return appBarBackFromPersonal;
+    // }
 
     return (currentPage is EditProfileScreen && hasNavigation)
         ? null
@@ -591,14 +599,30 @@ class _HomeScreenState extends State<HomeScreen>
       ],
 
       onTapLeading: () {
-        print('click aaaaaaaaaa');
         setState(() {
           controller.currentBottomIndex = 0;
+          controller.showBottomNavigationBar();
           controller.resetNavigation();
         });
 
       },
     );
+
+  get appBarBackFromPersonal => DefaultAppBar(
+    components: [
+      AppBarComponents.back,
+      if (authStore.currentUser != null) AppBarComponents.ooz,
+    ],
+
+    onTapLeading: () {
+      setState(() {
+        controller.currentBottomIndex = 30;
+        controller.showBottomNavigationBar();
+        controller.refreshViews();
+      });
+
+    },
+  );
 
 
   get appBar => DefaultAppBar(

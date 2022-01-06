@@ -401,21 +401,29 @@ class _RegenerarionGameLearningAlertState
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           onPressed: () {
-                                            //Navigator.of(context).pop();
-
                                             if(widget.args["type"] == 'personal'){
                                               print('widget.chang');
+                                              SmartPageController controller = SmartPageController.getInstance();
+                                              //controller.selectBottomTab(0);
+                                              controller
+                                                  .showBottomNavigationBar();
                                               setState(() {
-                                                //widget.change = true;
+                                                controller.currentBottomIndex
+                                                = 30;
+                                                print('widget.changaaaaaa');
+                                                controller.refreshViews();
                                               });
 
                                             }else{
                                               SmartPageController controller = SmartPageController.getInstance();
-                                              controller.selectBottomTab(0);
-
-                                              setState(() {
-                                                controller.currentBottomIndex = 0;
-                                              });
+                                              //controller.selectBottomTab(0);
+                                              controller.currentBottomIndex = 0;
+                                              controller
+                                                  .showBottomNavigationBar();
+                                              controller.refreshViews();
+                                              // setState(() {
+                                              //   controller.currentBottomIndex = 0;
+                                              // });
                                             }
                                           }
 
