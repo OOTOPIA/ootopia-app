@@ -531,7 +531,7 @@ class _HomeScreenState extends State<HomeScreen>
       authStore.currentUser != null && !(currentPage is WalletPage);
 
   PreferredSizeWidget? currentAppBar(){
-     //USADO MUDAR O STATUS CASO O MAP DO JOGO DA REGERENAÇÃO SEJA TRUE
+     //USADO MUDAR O STATUS CASO O showMap DO JOGO DA REGERENAÇÃO SEJA TRUE
     if(controller.currentBottomIndex >= 30){
       return appBarBackFromMap;
     }

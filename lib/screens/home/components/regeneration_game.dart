@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
@@ -97,30 +96,16 @@ class _RegenerationGameState extends State<RegenerationGame>
       _resetDetailedIconPosition();
     });
 
-    print('fim addListener');
     controller.addListener(() {
       showMap = controller.currentBottomIndex == 30;
-      print('\nchange:> ${controller.currentBottomIndex}');
       if(showPersonal || showLocal || showGlobo){
         showPersonal = false;
         showLocal = false;
         showGlobo = false;
       }
-      if (mounted || controller.currentBottomIndex == 0) setState(() {});
+      if (mounted) setState(() {});
     });
 
-  }
-
-  _resetDetailedIconPosition() {
-    detailedGoalIconPosition = screenWidth - ((gameProgressIconSize + 6) * 4);
-  }
-
-  void getOozPerMinute () async{
-    SecureStoreMixin secureStoreMixin = SecureStoreMixin();
-    GeneralConfigModel? transferOozToPostLimitConfig = await secureStoreMixin
-        .getGeneralConfigByName("user_reward_per_minute_of_timeline_view_time");
-
-    valueOoz = transferOozToPostLimitConfig?.value ?? 0;
   }
 
   @override
@@ -235,13 +220,10 @@ class _RegenerationGameState extends State<RegenerationGame>
                                 GestureDetector(
                                   onTap: () async {
                                     if (welcomeGuideLearningTrack == null) {
-                                      welcomeGuideLearningTrack =
-                                          await learningTracksStore
-                                              .getWelcomeGuide();
+                                      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
                                     }
                                     if (welcomeGuideLearningTrack != null) {
-                                      openLearningTrack(
-                                          welcomeGuideLearningTrack!);
+                                      openLearningTrack(welcomeGuideLearningTrack!);
                                     }
                                   },
                                   child: Text(
@@ -293,11 +275,7 @@ class _RegenerationGameState extends State<RegenerationGame>
               child: newDetailedGoal(),
             ),),
           if(showMap)...[
-            PersonaLevel(percent: homeStore.dailyGoalStats != null
-                ? (homeStore
-                .percentageOfDailyGoalAchieved /
-                100)
-                : 0,)
+            PersonaLevel(percent: percentTimeCompleted()),
           ]else if(showPersonal)...[
             Container(
                 height: MediaQuery.of(context).size.height-130,
@@ -314,24 +292,6 @@ class _RegenerationGameState extends State<RegenerationGame>
         ],
       ),
     );
-  }
-
-  isSmallPhone(double value) {
-    if (MediaQuery.of(context).size.width < 380) return value / 2;
-    return value;
-  }
-
-  void openLearningTrack(LearningTracksModel learningTrack) =>
-      controller.insertPage(ViewLearningTracksScreen(
-        {
-          'list_chapters': learningTrack.chapters,
-          'learning_tracks': learningTrack,
-          'updateLearningTrack': updateWidget,
-        },
-      ));
-
-  updateWidget() {
-    setState(() {});
   }
 
   Widget get detailedGoal => InkWell(
@@ -584,7 +544,6 @@ class _RegenerationGameState extends State<RegenerationGame>
   Widget newDetailedGoal() {
     int? minutes = authStore.currentUser?.dailyLearningGoalInMinutes ?? 0;
     double amountOzzWillReceive = valueOoz * minutes;
-
     return InkWell(
       onTap: () {
         setState(() {
@@ -850,6 +809,7 @@ class _RegenerationGameState extends State<RegenerationGame>
   Widget gameIconProgress(String type, selected, colorSelected) {
     return GestureDetector(
       onTap: () {
+        //REFATORADO
         if(authStore.currentUser == null){
           Navigator.of(context).pushNamed(
               PageRoute.Page.loginScreen.route);
@@ -1056,9 +1016,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                   radius: gameProgressIconSize,
                   lineWidth: 2,
                   backgroundColor: Theme.of(context).primaryColorDark,
-                  percent:  homeStore.dailyGoalStats != null
-                      ? (homeStore.percentageOfDailyGoalAchieved / 100)
-                      : 0,
+                  percent:  percentTimeCompleted(),
                   linearGradient: gameProgressColors[type]),
               ),
             )
@@ -1068,7 +1026,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 
-  _checkShowCelebratePage() {
+  void _checkShowCelebratePage() {
     homeStore.readyToShowCelebratePage().then((bool ready) {
       if (ready) {
         setState(() {
@@ -1080,7 +1038,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     });
   }
 
-  _goToCelebrationPersonal() async {
+  void _goToCelebrationPersonal() async {
     //for tests
     await Navigator.of(context).pushNamed(
       PageRoute.Page.celebration.route,
@@ -1096,47 +1054,89 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 
-  _goToRegenerationGameAlert(String type) async {
-    //feito
-    if (authStore.currentUser != null) {
-      authStore.updateUserRegenerarionGameLearningAlert(type);
-    }
-
-
-    bool clickInPerson = type == 'personal';
-    bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
-
-    if(dontShowAgainRegenerationGamePega && clickInPerson){
-      controller.currentBottomIndex = 30;
-      showMap = true;
-
-    }else {
-      Navigator.of(context).pushNamed(
-        PageRoute.Page.regenerarionGameLearningAlert.route,
-        arguments: {"type": type, "context": context},
-      );
-    }
+  void _resetDetailedIconPosition() {
+    detailedGoalIconPosition = screenWidth - ((gameProgressIconSize + 6) * 4);
   }
 
-  _goToCelebrationCity() async {
-    //for tests
-    await Navigator.of(context).pushNamed(
-      PageRoute.Page.celebration.route,
-      arguments: {
-        "name": "Belo Horizonte!",
-        "goal": "city",
-        "balance": "17,25"
+  void getOozPerMinute () async{
+    SecureStoreMixin secureStoreMixin = SecureStoreMixin();
+    GeneralConfigModel? transferOozToPostLimitConfig = await secureStoreMixin
+        .getGeneralConfigByName("user_reward_per_minute_of_timeline_view_time");
+
+    valueOoz = transferOozToPostLimitConfig?.value ?? 0;
+  }
+
+  void  openLearningTrack(LearningTracksModel learningTrack){
+    controller.insertPage(ViewLearningTracksScreen(
+      {
+        'list_chapters': learningTrack.chapters,
+        'learning_tracks': learningTrack,
+        'updateLearningTrack': updateWidget,
       },
-    );
+    ));
   }
 
-  _goToCelebrationGlobal() async {
-    //for tests
-    await Navigator.of(context).pushNamed(
-      PageRoute.Page.celebration.route,
-      arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
-    );
+  void updateWidget() {
+    setState(() {});
   }
+
+  double isSmallPhone(double value) {
+    if (MediaQuery.of(context).size.width < 380) return value / 2;
+    return value;
+  }
+
+  double percentTimeCompleted() {
+    // return homeStore.dailyGoalStats != null
+    //     ? (homeStore.percentageOfDailyGoalAchieved / 100)
+    //     : 0;
+    if(homeStore.dailyGoalStats != null){
+      return(homeStore.percentageOfDailyGoalAchieved / 100);
+    }else{
+      return 0;
+    }
+  }
+
+  // _goToRegenerationGameAlert(String type) async {
+  //   //feito
+  //   if (authStore.currentUser != null) {
+  //     authStore.updateUserRegenerarionGameLearningAlert(type);
+  //   }
+  //
+  //
+  //   bool clickInPerson = type == 'personal';
+  //   bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
+  //
+  //   if(dontShowAgainRegenerationGamePega && clickInPerson){
+  //     controller.currentBottomIndex = 30;
+  //     showMap = true;
+  //
+  //   }else {
+  //     Navigator.of(context).pushNamed(
+  //       PageRoute.Page.regenerarionGameLearningAlert.route,
+  //       arguments: {"type": type, "context": context},
+  //     );
+  //   }
+  // }
+  //
+  // _goToCelebrationCity() async {
+  //   //for tests
+  //   await Navigator.of(context).pushNamed(
+  //     PageRoute.Page.celebration.route,
+  //     arguments: {
+  //       "name": "Belo Horizonte!",
+  //       "goal": "city",
+  //       "balance": "17,25"
+  //     },
+  //   );
+  // }
+  //
+  // _goToCelebrationGlobal() async {
+  //   //for tests
+  //   await Navigator.of(context).pushNamed(
+  //     PageRoute.Page.celebration.route,
+  //     arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
+  //   );
+  // }
 }
 
 

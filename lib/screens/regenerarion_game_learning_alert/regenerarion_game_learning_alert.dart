@@ -1,12 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
-import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -402,28 +399,19 @@ class _RegenerarionGameLearningAlertState
                                           ),
                                           onPressed: () {
                                             if(widget.args["type"] == 'personal'){
-                                              print('widget.chang');
                                               SmartPageController controller = SmartPageController.getInstance();
-                                              //controller.selectBottomTab(0);
-                                              controller
-                                                  .showBottomNavigationBar();
+                                              controller.showBottomNavigationBar();
                                               setState(() {
-                                                controller.currentBottomIndex
-                                                = 30;
-                                                print('widget.changaaaaaa');
+                                                controller.currentBottomIndex = 30;
                                                 controller.refreshViews();
                                               });
 
                                             }else{
                                               SmartPageController controller = SmartPageController.getInstance();
-                                              //controller.selectBottomTab(0);
                                               controller.currentBottomIndex = 0;
                                               controller
                                                   .showBottomNavigationBar();
                                               controller.refreshViews();
-                                              // setState(() {
-                                              //   controller.currentBottomIndex = 0;
-                                              // });
                                             }
                                           }
 
@@ -459,11 +447,11 @@ class _RegenerarionGameLearningAlertState
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           onPressed: () async {
-
-                                           // if(widget.args["type"] == 'personal'){
-                                              //Navigator.of(context).pop();
-                                              SmartPageController controller = SmartPageController.getInstance();
-                                              controller.selectBottomTab(1);
+                                            SmartPageController controller = SmartPageController.getInstance();
+                                            controller.selectBottomTab(1);
+                                            // if(widget.args["type"] == 'per
+                                            // sonal'){
+                                            //Navigator.of(context).pop();
                                             // }else{
                                             //   Navigator.of(context).pop();
                                             //   if (welcomeGuideLearningTrack == null)
