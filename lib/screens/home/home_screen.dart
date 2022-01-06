@@ -231,9 +231,7 @@ class _HomeScreenState extends State<HomeScreen>
                   controller: controller,
                 ),
                 Visibility(
-                  visible: homeStore!.seeCrisp && controller
-                      .currentBottomIndex != 35 && controller
-                      .currentBottomIndex != 31,
+                  visible: homeStore!.seeCrisp && controller.currentBottomIndex != PageViewController.HIDE_BOTTOMBAR,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton(
@@ -241,7 +239,6 @@ class _HomeScreenState extends State<HomeScreen>
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       onPressed: () {
-                        print("aaaa ${controller.currentBottomIndex} ${controller.currentBottomIndex != 35}");
                         Navigator.of(context).pushNamed(
                           PageRoute.Page.chatWithUsersScreen.route,
                         );
@@ -274,8 +271,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            bottomNavigationBar: controller.currentBottomIndex == 35 ||
-                controller.currentBottomIndex == 31 ? null :
+            bottomNavigationBar: controller.currentBottomIndex ==
+                PageViewController.HIDE_BOTTOMBAR  ? null :
             Padding(
               padding:  homeStore!.iphoneHasNotch
                   ? EdgeInsets.only(bottom: 16)
@@ -531,8 +528,8 @@ class _HomeScreenState extends State<HomeScreen>
       authStore.currentUser != null && !(currentPage is WalletPage);
 
   PreferredSizeWidget? currentAppBar(){
-     //USADO MUDAR O STATUS CASO O showMap DO JOGO DA REGERENAÇÃO SEJA TRUE
-    if(controller.currentBottomIndex >= 30){
+
+    if(controller.currentBottomIndex >= PageViewController.TAB_UNSELECTED){
       return appBarBackFromMap;
     }
 
