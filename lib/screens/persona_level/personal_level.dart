@@ -66,6 +66,8 @@ class _PersonaLevelState extends State<PersonaLevel> {
                       )
                           : Image.network(
                         urlImage,
+                        height: MediaQuery.of(context).size.width/3 - MediaQuery
+                            .of(context).size.width/9,
                         fit: BoxFit.cover,
                       ),
                     ),
