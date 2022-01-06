@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class RegenerationGameLearningAlert extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -31,7 +31,7 @@ class _RegenerationGameLearningAlertState
   late String _imageRights;
   String? _secondTextPt2;
   SharedPreferences? prefs;
-  bool dontShowAgainRegenerationGamePega = false;
+  bool dontShowAgain = false;
 
   SmartPageController controller = SmartPageController.getInstance();
   LearningTracksModel? welcomeGuideLearningTrack;
@@ -102,10 +102,6 @@ class _RegenerationGameLearningAlertState
     });
   }
 
-  // isSmallPhone(double value) {
-  //   if (MediaQuery.of(context).size.width < 380) return value * 0.7;
-  //   return value;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,22 +122,6 @@ class _RegenerationGameLearningAlertState
                   ),
                 ),
               ),
-              // Positioned(
-              //   top: 90,
-              //   right: -36,
-              //   child: Transform.rotate(
-              //       angle: 3 * pi / 2,
-              //       child: Container(
-              //         child: Text(
-              //           _imageRights as String,
-              //           textAlign: TextAlign.right,
-              //           style: Theme.of(context).textTheme.bodyText1!.copyWith(
-              //                 fontSize: 10,
-              //                 color: Colors.white,
-              //               ),
-              //         ),
-              //       )),
-              // ),
               CustomScrollView(
                 scrollDirection: Axis.vertical,
                 physics: NeverScrollableScrollPhysics(),
@@ -233,7 +213,7 @@ class _RegenerationGameLearningAlertState
                                 Container(
                                   height: MediaQuery.of(context).size.height *
                                       0.13,
-                                  child: AutoSizeText(_firstText,
+                                  child: Text(_firstText,
                                       maxLines: 4,
                                       style: Theme.of(context).textTheme.subtitle1!
                                           .copyWith(
@@ -260,9 +240,8 @@ class _RegenerationGameLearningAlertState
                                 if(_secondTextPt2 == null)...[
                                   Container(
                                     height: MediaQuery.of(context).size.height * 0.1,
-                                    child: AutoSizeText(_secondText,
+                                    child: Text(_secondText,
                                         maxLines: 2,
-                                        maxFontSize: 18,
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
@@ -289,9 +268,8 @@ class _RegenerationGameLearningAlertState
                                   Container(
                                     height: MediaQuery.of(context).size.height
                                         * 0.08,
-                                    child: AutoSizeText("$_secondText\n$_secondTextPt2",
+                                    child: Text("$_secondText\n$_secondTextPt2",
                                         maxLines: 2,
-                                        maxFontSize: 18,
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
@@ -324,7 +302,7 @@ class _RegenerationGameLearningAlertState
                             Column(
                               children: [
 
-                                //CHECKBOX dont show again page if type == person
+                                //CHECKBOX
                                 if(widget.args["type"] == 'personal')...[
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -338,14 +316,14 @@ class _RegenerationGameLearningAlertState
                                         ),
                                         child: Checkbox(
                                           side: BorderSide(color: Colors.white),
-                                          value: dontShowAgainRegenerationGamePega,
+                                          value: dontShowAgain,
                                           checkColor: Colors.white,
                                           fillColor:  MaterialStateProperty.all(Colors.transparent),
                                           activeColor: Colors.white,
                                           onChanged: (value) {
-                                            prefs!.setBool('dontShowAgainRegenerationGamePega', !dontShowAgainRegenerationGamePega);
+                                            prefs!.setBool('dontShowAgainRegenerationGamePega', !dontShowAgain);
                                             setState(() {
-                                              dontShowAgainRegenerationGamePega = !dontShowAgainRegenerationGamePega;
+                                              dontShowAgain = !dontShowAgain;
                                             });
                                           },
                                         ),
@@ -400,12 +378,12 @@ class _RegenerationGameLearningAlertState
                                             if(widget.args["type"] == 'personal'){
                                               controller.showBottomNavigationBar();
                                               setState(() {
-                                                controller.currentBottomIndex = 30;
+                                                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
                                                 controller.refreshViews();
                                               });
 
                                             }else{
-                                              controller.currentBottomIndex = 0;
+                                              controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                                               controller
                                                   .showBottomNavigationBar();
                                               controller.refreshViews();
@@ -446,27 +424,7 @@ class _RegenerationGameLearningAlertState
                                           onPressed: () async {
                                             SmartPageController controller = SmartPageController.getInstance();
                                             controller.selectBottomTab(1);
-                                            // if(widget.args["type"] == 'per
-                                            // sonal'){
-                                            //Navigator.of(context).pop();
-                                            // }else{
-                                            //   Navigator.of(context).pop();
-                                            //   if (welcomeGuideLearningTrack == null)
-                                            //   {
-                                            //     welcomeGuideLearningTrack =
-                                            //     await learningTracksStore
-                                            //         .getWelcomeGuide();
-                                            //   }
-                                            //   else if (welcomeGuideLearningTrack !=
-                                            //       null)
-                                            //   {
-                                            //     openLearningTrack(
-                                            //         welcomeGuideLearningTrack!);
-                                            //   }
-                                            // }
-
-
-                                          },
+                                            },
                                         ),
                                       ),
                                     ),
@@ -508,16 +466,5 @@ class _RegenerationGameLearningAlertState
     );
   }
 
-  // void openLearningTrack(LearningTracksModel learningTrack) =>
-  //     controller.insertPage(ViewLearningTracksScreen(
-  //       {
-  //         'list_chapters': learningTrack.chapters,
-  //         'learning_tracks': learningTrack,
-  //         'updateLearningTrack': updateWidget,
-  //       },
-  //     ));
-  //
-  // updateWidget() {
-  //   setState(() {});
-  // }
+
 }
