@@ -34,16 +34,18 @@ abstract class _ProfileScreenStoreBase with Store {
   @observable
   int _postsOffset = 0;
 
-  @computed
-  int get postsOffset => _postsOffset;
-
-  int get maxPostsPerPage => 10;
-
-    @observable
+  @observable
   bool _hasMorePosts = false;
 
   @computed
+  int get postsOffset => _postsOffset;
+
+  @computed
   bool get hasMorePosts => _hasMorePosts;
+
+  bool _loadingMorePosts = false;
+
+  int get maxPostsPerPage => 10;
 
   @action
   Future<Profile?> getProfileDetails(String userId) async {
@@ -66,24 +68,28 @@ abstract class _ProfileScreenStoreBase with Store {
     loadingPosts = true;
     loadingPostsError = false;
     try {
-      // if ((limit == null && offset == null) && _loadingMorePosts == false) {
-      //   print("limite e offset nulos");
-      //   postsList.clear();
-      // }
+      if (postsList.length != 0) {
+        _loadingMorePosts = true;
+      }
+      if ((limit == null && offset == null) && _loadingMorePosts == false) {
+        postsList.clear();
+      }
+
       List<TimelinePost> posts = await postsRepository.getPosts(
           (limit != null ? limit : maxPostsPerPage),
           (offset != null ? offset : _postsOffset),
           userId);
-      print("posts length: ${posts.length}");
-      print("posts max: $maxPostsPerPage");
+
       _hasMorePosts = posts.length == maxPostsPerPage;
-       _postsOffset = _postsOffset + maxPostsPerPage;
+      _postsOffset = _postsOffset + maxPostsPerPage;
+
       postsList.addAll(posts);
       loadingPosts = false;
       return this.postsList;
     } catch (err) {
       loadingPosts = false;
       loadingPostsError = true;
+      _loadingMorePosts = false;
     }
   }
 
