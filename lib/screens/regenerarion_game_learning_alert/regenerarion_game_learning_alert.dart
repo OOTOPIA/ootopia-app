@@ -210,230 +210,211 @@ class _RegenerationGameLearningAlertState
                                   height: 20,
                                 ),
 
-                                Container(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.13,
-                                  child: Text(_firstText,
-                                      maxLines: 4,
-                                      style: Theme.of(context).textTheme.subtitle1!
-                                          .copyWith(
-                                              fontSize:
-                                                  screenWidth <= 375 ? 14 : 18,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400)
-                                          .copyWith(shadows: [
-                                        Shadow(
-                                          blurRadius: 3.0,
-                                          color: Colors.black.withOpacity(.25),
-                                          offset: Offset(
-                                            0,
-                                            5.0,
-                                          ),
+                                Text(_firstText,
+                                    style: Theme.of(context).textTheme.subtitle1!
+                                        .copyWith(
+                                            fontSize:
+                                                screenWidth <= 375 ? 14 : 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400)
+                                        .copyWith(shadows: [
+                                      Shadow(
+                                        blurRadius: 3.0,
+                                        color: Colors.black.withOpacity(.25),
+                                        offset: Offset(
+                                          0,
+                                          5.0,
                                         ),
-                                      ])),
-                                ),
+                                      ),
+                                    ])),
 
                                 SizedBox(
                                   height: 20,
                                 ),
 
                                 if(_secondTextPt2 == null)...[
-                                  Container(
-                                    height: MediaQuery.of(context).size.height * 0.1,
-                                    child: Text(_secondText,
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                            fontSize:
-                                            screenWidth <= 375 ? 16 : 23,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500)
-                                            .copyWith(
-                                          shadows: [
-                                            Shadow(
-                                              blurRadius: 3.0,
-                                              color: Colors.black.withOpacity(.25),
-                                              offset: Offset(
-                                                0,
-                                                5.0,
-                                              ),
+                                  Text(_secondText,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                          fontSize:
+                                          screenWidth <= 375 ? 16 : 23,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500)
+                                          .copyWith(
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 3.0,
+                                            color: Colors.black.withOpacity(.25),
+                                            offset: Offset(
+                                              0,
+                                              5.0,
                                             ),
-                                          ],
-                                        )),
-                                  ),
+                                          ),
+                                        ],
+                                      )),
                                 ]else if(_secondTextPt2 != null)...[
-                                  Container(
-                                    height: MediaQuery.of(context).size.height
-                                        * 0.08,
-                                    child: Text("$_secondText\n$_secondTextPt2",
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                            fontSize:
-                                            screenWidth <= 375 ? 16 : 23,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500)
-                                            .copyWith(
-                                          shadows: [
-                                            Shadow(
-                                              blurRadius: 3.0,
-                                              color: Colors.black.withOpacity(.25),
-                                              offset: Offset(
-                                                0,
-                                                5.0,
-                                              ),
+                                  Text("$_secondText\n$_secondTextPt2",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                          fontSize:
+                                          screenWidth <= 375 ? 16 : 23,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500)
+                                          .copyWith(
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 3.0,
+                                            color: Colors.black.withOpacity(.25),
+                                            offset: Offset(
+                                              0,
+                                              5.0,
                                             ),
-                                          ],
-                                        )),
-                                  ),
+                                          ),
+                                        ],
+                                      )),
                                 ]
                               ],
                             ),
                             SizedBox(
                                 height: MediaQuery.of(context).size.height > 850
                                     ? MediaQuery.of(context).size.height * 0.1
-                                    : 0),
-                            Column(
-                              children: [
+                                    : 35),
 
-                                //CHECKBOX
-                                if(widget.args["type"] == 'personal')...[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: Checkbox(
-                                          side: BorderSide(color: Colors.white),
-                                          value: dontShowAgain,
-                                          checkColor: Colors.white,
-                                          fillColor:  MaterialStateProperty.all(Colors.transparent),
-                                          activeColor: Colors.white,
-                                          onChanged: (value) {
-                                            prefs!.setBool('dontShowAgainRegenerationGamePega', !dontShowAgain);
-                                            setState(() {
-                                              dontShowAgain = !dontShowAgain;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Flexible(
-                                        child: Text(
-                                          AppLocalizations.of(context)!.dontShowThisMessageAgain,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                            if(widget.args["type"] == 'personal')...[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Checkbox(
+                                      side: BorderSide(color: Colors.white),
+                                      value: dontShowAgain,
+                                      checkColor: Colors.white,
+                                      fillColor:  MaterialStateProperty.all(Colors.transparent),
+                                      activeColor: Colors.white,
+                                      onChanged: (value) {
+                                        prefs!.setBool('dontShowAgainRegenerationGamePega', !dontShowAgain);
+                                        setState(() {
+                                          dontShowAgain = !dontShowAgain;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                  SizedBox(height: 10),
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    child: Text(
+                                      AppLocalizations.of(context)!.dontShowThisMessageAgain,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        height: screenWidth <= 375 ? 45 : 53,
-                                        child: TextButton(
-                                          style: ButtonStyle(
-                                            alignment: Alignment.center,
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(40.0),
-                                              ),
-                                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: screenWidth <= 375 ? 45 : 53,
+                                    child: TextButton(
+                                      style: ButtonStyle(
+                                        alignment: Alignment.center,
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.white),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
                                           ),
-                                          child: Text(
-                                            AppLocalizations.of(context)!.close,
-                                            style: TextStyle(
-                                                color: Colors.black87
-                                                    .withOpacity(.6),
-                                                fontSize:
-                                                    screenWidth <= 375 ? 14 : 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () {
-                                            if(widget.args["type"] == 'personal'){
-                                              controller.showBottomNavigationBar();
-                                              setState(() {
-                                                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
-                                                controller.refreshViews();
-                                              });
-
-                                            }else{
-                                              controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
-                                              controller
-                                                  .showBottomNavigationBar();
-                                              controller.refreshViews();
-                                            }
-                                          }
-
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 28,
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        height: screenWidth <= 375 ? 45 : 53,
-                                        child: TextButton(
-                                          style: ButtonStyle(
-                                              alignment: Alignment.center,
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Color(0xFF003694)),
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(40.0),
-                                              ))),
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .learnMore,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    screenWidth <= 375 ? 14 : 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () async {
-                                            SmartPageController controller = SmartPageController.getInstance();
-                                            controller.selectBottomTab(1);
-                                            },
-                                        ),
+                                      child: Text(
+                                        AppLocalizations.of(context)!.close,
+                                        style: TextStyle(
+                                            color: Colors.black87
+                                                .withOpacity(.6),
+                                            fontSize:
+                                                screenWidth <= 375 ? 14 : 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
+                                      onPressed: () {
+                                        if(widget.args["type"] == 'personal'){
+                                          controller.showBottomNavigationBar();
+                                          setState(() {
+                                            controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+                                            controller.refreshViews();
+                                          });
+
+                                        }else{
+                                          controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                                          controller
+                                              .showBottomNavigationBar();
+                                          controller.refreshViews();
+                                        }
+                                      }
+
                                     ),
-                                  ],
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: 25,
-                                )
+                                  width: 28,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    height: screenWidth <= 375 ? 45 : 53,
+                                    child: TextButton(
+                                      style: ButtonStyle(
+                                          alignment: Alignment.center,
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Color(0xFF003694)),
+                                          shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ))),
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .learnMore,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                screenWidth <= 375 ? 14 : 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      onPressed: () async {
+                                        SmartPageController controller = SmartPageController.getInstance();
+                                        controller.selectBottomTab(1);
+                                        },
+                                    ),
+                                  ),
+                                ),
                               ],
+                            ),
+                            SizedBox(
+                              height: 25,
                             )
                           ],
                         ),
