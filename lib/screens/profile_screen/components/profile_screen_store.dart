@@ -46,7 +46,7 @@ abstract class _ProfileScreenStoreBase with Store {
   @computed
   bool get loadingPosts => _loadingPosts;
 
-  int get maxPostsPerPage => 10;
+  int get maxPostsPerPage => 12;
 
   @action
   Future<Profile?> getProfileDetails(String userId) async {
