@@ -19,6 +19,7 @@ import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/components/menu_drawer.dart';
+import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
@@ -80,7 +81,9 @@ class _HomeScreenState extends State<HomeScreen>
     );
 
     controller.addListener(() {
-      if (mounted) setState(() {});
+      //TODO ADD
+      //|| controller.currentBottomIndex == 30
+      if (mounted || controller.currentBottomIndex == 30) setState(() {});
     });
 
     Future.delayed(Duration(milliseconds: 1000), () async {
@@ -529,6 +532,11 @@ class _HomeScreenState extends State<HomeScreen>
       authStore.currentUser != null && !(currentPage is WalletPage);
 
   PreferredSizeWidget? currentAppBar() {
+    //TODO ADD
+    if(controller.currentBottomIndex == 30){
+      return appBarBackFromMap;
+    }
+
     return (currentPage is EditProfileScreen && hasNavigation)
         ? null
         : controller.currentBottomIndex ==
@@ -570,6 +578,25 @@ class _HomeScreenState extends State<HomeScreen>
         onTapAction: () => controller.insertPage(EditProfileScreen()),
         onTapLeading: () => controller.back(),
       );
+
+
+  //TODO ADD
+  get appBarBackFromMap => DefaultAppBar(
+      components: [
+        AppBarComponents.back,
+        if (authStore.currentUser != null) AppBarComponents.ooz,
+      ],
+
+      onTapLeading: () {
+        print('click aaaaaaaaaa');
+        setState(() {
+          controller.currentBottomIndex = 0;
+          controller.resetNavigation();
+        });
+
+      },
+    );
+
 
   get appBar => DefaultAppBar(
         components: [

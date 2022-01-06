@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
@@ -66,7 +67,7 @@ class _RegenerationGameState extends State<RegenerationGame>
   late LinearGradient globoLinear;
 
   late Map<String, LinearGradient> gameProgressColors ;
-  late double valueOoz;
+  double valueOoz = 0;
 
   @override
   void initState() {
@@ -85,12 +86,20 @@ class _RegenerationGameState extends State<RegenerationGame>
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
     editProfileStore.getUser();
     Future.delayed(Duration.zero, () async {
-      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
       prefs = await SharedPreferences.getInstance();
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     });
     Future.delayed(Duration(milliseconds: 300), () {
       _resetDetailedIconPosition();
     });
+
+    controller.addListener(() {
+      showMap = controller.currentBottomIndex == 30;
+      showDetailedGoal = controller.currentBottomIndex == 30;
+      print('\nchange:> ${controller.currentBottomIndex}');
+      if (mounted || controller.currentBottomIndex == 0) setState(() {});
+    });
+
   }
 
   _resetDetailedIconPosition() {
@@ -105,6 +114,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     valueOoz = transferOozToPostLimitConfig?.value ?? 0;
   }
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -117,6 +127,13 @@ class _RegenerationGameState extends State<RegenerationGame>
     return Observer(
       builder: (_) => Column(
         children: [
+          Container(
+            width: double.infinity,
+            height: 1,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorDark,
+            ),
+          ),
           Container(
             width: double.infinity,
             height: 1,
@@ -549,6 +566,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     return InkWell(
       onTap: () {
         setState(() {
+          showMap = false;
           _resetDetailedIconPosition();
         });
         Future.delayed(Duration(milliseconds: 100), () {
@@ -932,13 +950,13 @@ class _RegenerationGameState extends State<RegenerationGame>
       authStore.updateUserRegenerarionGameLearningAlert(type);
     }
 
-    SmartPageController controller = SmartPageController.getInstance();
+
     bool clickInPerson = type == 'personal';
-    bool dontShowAgainRegenerationGamePega = prefs!.getBool('dontShowAgainRegenerationGamePega') ?? false;
+    bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
+
     if(dontShowAgainRegenerationGamePega && clickInPerson){
-      setState(() {
-        showMap = true;
-      });
+      controller.currentBottomIndex = 30;
+      showMap = true;
 
     }else {
       Navigator.of(context).pushNamed(
