@@ -1,41 +1,37 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/main.dart' as main;
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
+import 'package:ootopia_app/screens/components/menu_drawer.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
-import 'package:ootopia_app/screens/components/menu_drawer.dart';
-import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
-import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'dart:ui' as ui;
-import 'package:ootopia_app/main.dart' as main;
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -81,8 +77,6 @@ class _HomeScreenState extends State<HomeScreen>
     );
 
     controller.addListener(() {
-      //TODO ADD
-       //|| controller.currentBottomIndex >= 30
       if (mounted) setState(() {});
     });
 
@@ -541,12 +535,6 @@ class _HomeScreenState extends State<HomeScreen>
     if(controller.currentBottomIndex >= 30){
       return appBarBackFromMap;
     }
-    // if(controller.currentBottomIndex == 30  || controller.currentBottomIndex == 35){
-    //   return appBarBackFromMap;
-    // }
-    // if(controller.currentBottomIndex == 31 ){
-    //   return appBarBackFromPersonal;
-    // }
 
     return (currentPage is EditProfileScreen && hasNavigation)
         ? null
@@ -591,7 +579,7 @@ class _HomeScreenState extends State<HomeScreen>
       );
 
 
-   //TODO ADD
+
   get appBarBackFromMap => DefaultAppBar(
       components: [
         AppBarComponents.back,
@@ -607,23 +595,6 @@ class _HomeScreenState extends State<HomeScreen>
 
       },
     );
-
-  get appBarBackFromPersonal => DefaultAppBar(
-    components: [
-      AppBarComponents.back,
-      if (authStore.currentUser != null) AppBarComponents.ooz,
-    ],
-
-    onTapLeading: () {
-      setState(() {
-        controller.currentBottomIndex = 30;
-        controller.showBottomNavigationBar();
-        controller.refreshViews();
-      });
-
-    },
-  );
-
 
   get appBar => DefaultAppBar(
         components: [
