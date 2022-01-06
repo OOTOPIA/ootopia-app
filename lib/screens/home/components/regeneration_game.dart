@@ -781,7 +781,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                   showLocal = false;
                   typeSelected ={"type": type, "context": context};
                 });
-                Future.delayed(Duration(milliseconds: 10),(){
+                Future.delayed(Duration(milliseconds: 25),(){
                   setState(() {
                     showMap = true;
                   });
@@ -791,7 +791,7 @@ class _RegenerationGameState extends State<RegenerationGame>
             }
 
             else{
-              if(showPersonal){
+              if(showPersonal || showMap){
                 controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
                 controller.showBottomNavigationBar();
@@ -807,7 +807,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                   showLocal = false;
                   typeSelected ={"type": type, "context": context};
                 });
-                Future.delayed(Duration(milliseconds: 10),(){
+                Future.delayed(Duration(milliseconds: 25),(){
                   setState(() {
                     showPersonal = true;
                   });
@@ -834,7 +834,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                 showPersonal = false;
                 typeSelected ={"type": type, "context": context};
               });
-              Future.delayed(Duration(milliseconds: 10),(){
+              Future.delayed(Duration(milliseconds: 25),(){
                 controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 controller.hideBottomNavigationBar();

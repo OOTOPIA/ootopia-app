@@ -582,12 +582,12 @@ class _HomeScreenState extends State<HomeScreen>
         AppBarComponents.back,
         if (authStore.currentUser != null) AppBarComponents.ooz,
       ],
-
       onTapLeading: () {
         setState(() {
-          controller.currentBottomIndex = 0;
+          controller.currentBottomIndex =PageViewController.TAB_INDEX_TIMELINE;
+          controller.refreshViews();
           controller.showBottomNavigationBar();
-          controller.resetNavigation();
+          controller.goToPage(PageViewController.TAB_INDEX_TIMELINE);
         });
 
       },

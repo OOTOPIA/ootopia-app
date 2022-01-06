@@ -361,15 +361,15 @@ class _RegenerationGameLearningAlertState
                                         if(widget.args["type"] == 'personal'){
                                           controller.showBottomNavigationBar();
                                           setState(() {
-                                            controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+                                            controller.currentBottomIndex = PageViewController.TAB_UNSELECTED;
                                             controller.refreshViews();
                                           });
 
                                         }else{
-                                          controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
-                                          controller
-                                              .showBottomNavigationBar();
+                                          controller.currentBottomIndex =PageViewController.TAB_INDEX_TIMELINE;
                                           controller.refreshViews();
+                                          controller.showBottomNavigationBar();
+                                          controller.goToPage(PageViewController.TAB_INDEX_TIMELINE);
                                         }
                                       }
 
@@ -405,8 +405,10 @@ class _RegenerationGameLearningAlertState
                                             fontWeight: FontWeight.bold),
                                       ),
                                       onPressed: () async {
-                                        SmartPageController controller = SmartPageController.getInstance();
-                                        controller.selectBottomTab(1);
+                                        controller.currentBottomIndex =PageViewController.TAB_INDEX_LEARNING_TRACKS;
+                                        controller.showBottomNavigationBar();
+                                        controller.refreshViews();
+                                        controller.goToPage(PageViewController.TAB_INDEX_LEARNING_TRACKS);
                                         },
                                     ),
                                   ),
