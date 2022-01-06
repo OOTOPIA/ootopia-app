@@ -15,6 +15,11 @@ ThemeData lightTheme(BuildContext context) => ThemeData.light().copyWith(
           fontSize: 14.0,
           color: LightColors.highlightText,
         ),
+        bodyText1: TextStyle(
+          fontSize: 14.0,
+          color: LightColors.highlightText,
+          fontWeight: FontWeight.w600
+        ),
       ),
       primaryColorDark: LightColors.grey.withOpacity(0.20),
       primaryColorLight: LightColors.grey.withOpacity(0.05),

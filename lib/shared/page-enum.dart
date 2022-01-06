@@ -22,7 +22,7 @@ enum Page {
   splashScreen,
   celebration,
   walletPage,
-  regenerarionGameLearningAlert,
+  regenerationGameLearningAlert,
   chatWithUsersScreen,
   invitationScreen,
   insertInvitationCode,
@@ -35,7 +35,7 @@ enum Page {
   videoLearningTracksScreen,
   initialScreen,
   aboutOOzCurrentScreen,
-  aboutEthicalMarketPlace
+  aboutEthicalMarketPlace,
 }
 
 extension PageRoute on Page {

@@ -67,6 +67,7 @@ import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/persona_level/personal_level.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -333,8 +334,7 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
     PageRoute.Page.walletPage: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
-    PageRoute.Page.regenerarionGameLearningAlert: (args) =>
-        RegenerarionGameLearningAlert(args),
+    PageRoute.Page.regenerationGameLearningAlert: (args) => RegenerationGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
