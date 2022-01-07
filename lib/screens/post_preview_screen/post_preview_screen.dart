@@ -439,7 +439,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       constraints: BoxConstraints(
                         maxHeight: widget.args["type"] == "video"
                             ? MediaQuery.of(context).size.height * .6
-                            : MediaQuery.of(context).size.height * .5,
+                            : MediaQuery.of(context).size.width + GlobalConstants.of(context).spacingNormal*2,
                       ),
                       child: Stack(
                         alignment: AlignmentDirectional.bottomCenter,
