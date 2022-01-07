@@ -62,40 +62,7 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
               image: NetworkImage(widget.image),
             )
         ),
-        // child: Stack(
-        //   children: [
-        //     //BLUR
-        //     ClipRRect(
-        //       borderRadius: BorderRadius.only(
-        //           bottomLeft: Radius.circular(20),
-        //           bottomRight: Radius.circular(20)),
-        //       child: BackdropFilter(
-        //           filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        //           child: Container(
-        //             width: MediaQuery.of(context).size.width,
-        //             height: MediaQuery.of(context).size.width,
-        //           )),
-        //     ),
-        //
-        //     //IMAGE
-        //     Align(
-        //       alignment: Alignment.center,
-        //       child:  ClipRRect(
-        //         borderRadius: BorderRadius.only(
-        //             bottomLeft: Radius.circular(20),
-        //             bottomRight: Radius.circular(20)),
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: MediaQuery.of(context).size.width,
-        //           child: Image.network(
-        //               widget.image,
-        //               fit: boxFit,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
+
       ),
     );
   }
