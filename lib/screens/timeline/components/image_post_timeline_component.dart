@@ -30,10 +30,10 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
     image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
       (ImageInfo image, bool synchronousCall) {
         imageSize = Size(image.image.width.toDouble(), image.image.height.toDouble());
-        if(imageSize.height <= imageSize.width){
-          boxFit = BoxFit.fitWidth;
-        }else{
+        if(imageSize.height > imageSize.width){
           boxFit = BoxFit.fitHeight;
+        }else{
+          boxFit = BoxFit.fitWidth;
         }
         if (mounted) setState(() {});
         completer.complete(image.image);
@@ -52,50 +52,50 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            color: Color(0xff000000).withOpacity(1),
+            color: Color(0xff000000),
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20)),
             image: DecorationImage(
-              fit: BoxFit.cover,
+              fit: boxFit,
               alignment: FractionalOffset.center,
               image: NetworkImage(widget.image),
             )
         ),
-        child: Stack(
-          children: [
-            //BLUR
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20)),
-              child: BackdropFilter(
-                  filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                  )),
-            ),
-
-            //IMAGE
-            Align(
-              alignment: Alignment.center,
-              child:  ClipRRect(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20)),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
-                  child: Image.network(
-                      widget.image,
-                      fit: boxFit,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // child: Stack(
+        //   children: [
+        //     //BLUR
+        //     ClipRRect(
+        //       borderRadius: BorderRadius.only(
+        //           bottomLeft: Radius.circular(20),
+        //           bottomRight: Radius.circular(20)),
+        //       child: BackdropFilter(
+        //           filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        //           child: Container(
+        //             width: MediaQuery.of(context).size.width,
+        //             height: MediaQuery.of(context).size.width,
+        //           )),
+        //     ),
+        //
+        //     //IMAGE
+        //     Align(
+        //       alignment: Alignment.center,
+        //       child:  ClipRRect(
+        //         borderRadius: BorderRadius.only(
+        //             bottomLeft: Radius.circular(20),
+        //             bottomRight: Radius.circular(20)),
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width,
+        //           height: MediaQuery.of(context).size.width,
+        //           child: Image.network(
+        //               widget.image,
+        //               fit: boxFit,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }
