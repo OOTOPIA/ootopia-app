@@ -90,7 +90,7 @@ class _CropWidgetState extends State<CropWidget> {
                   children: <Widget>[
                     TextButton(
                       child: Text(
-                        AppLocalizations.of(context)!.cropButton,
+                        AppLocalizations.of(context)?.cropButton ?? "",
                         style: Theme.of(context).textTheme.button,
                       ),
                       onPressed: () => _cropImage(),
