@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_crop/image_crop.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
@@ -89,7 +90,7 @@ class _CropWidgetState extends State<CropWidget> {
                   children: <Widget>[
                     TextButton(
                       child: Text(
-                        'Crop Image',
+                        AppLocalizations.of(context)!.cropButton,
                         style: Theme.of(context).textTheme.button,
                       ),
                       onPressed: () => _cropImage(),
