@@ -4,6 +4,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +21,7 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
-  TextEditingController _inputController = TextEditingController();
+  late RichTextController _inputController;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   CommentStore commentStore = CommentStore();
   late HomeStore homeStore;
@@ -32,6 +33,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   @override
   void initState() {
     super.initState();
+
+    _inputController = RichTextController(
+      deleteOnBack: false,
+      patternMatchMap: {
+        RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?"):
+            const TextStyle(
+          color: LightColors.linkText,
+        ),
+      },
+      onMatch: (List<String> matches) {},
+    );
 
     postId = widget.args['post'].id;
     Future.delayed(Duration.zero, () async {
