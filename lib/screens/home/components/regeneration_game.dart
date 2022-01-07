@@ -142,12 +142,8 @@ class _RegenerationGameState extends State<RegenerationGame>
             decoration:
                 BoxDecoration(color: Theme.of(context).primaryColorLight),
             padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width < 380
-                  ? 10
-                  : GlobalConstants.of(context).screenHorizontalSpace,
-              right: MediaQuery.of(context).size.width < 380
-                  ? 10
-                  : GlobalConstants.of(context).screenHorizontalSpace,
+              left: getEdgeInsetsHorizontalSize,
+              right: getEdgeInsetsHorizontalSize,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -180,19 +176,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         ButtonSnackBar(
                                           text: AppLocalizations.of(context)!
                                               .learnMore,
-                                          onTapAbout: () async {
-                                            if (welcomeGuideLearningTrack ==
-                                                null) {
-                                              welcomeGuideLearningTrack =
-                                                  await learningTracksStore
-                                                      .getWelcomeGuide();
-                                            }
-                                            if (welcomeGuideLearningTrack !=
-                                                null) {
-                                              openLearningTrack(
-                                                  welcomeGuideLearningTrack!);
-                                            }
-                                          },
+                                          onTapAbout: () => onTapLearnMore(),
                                           closeOnTapAbout: true,
                                         )
                                       ],
@@ -223,17 +207,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                                       ),
                                 ),
                                 GestureDetector(
-                                  onTap: () async {
-                                    if (welcomeGuideLearningTrack == null) {
-                                      welcomeGuideLearningTrack =
-                                          await learningTracksStore
-                                              .getWelcomeGuide();
-                                    }
-                                    if (welcomeGuideLearningTrack != null) {
-                                      openLearningTrack(
-                                          welcomeGuideLearningTrack!);
-                                    }
-                                  },
+                                  onTap: () => onTapLearnMore(),
                                   child: Text(
                                     showMap
                                         ? AppLocalizations.of(context)!
@@ -575,12 +549,8 @@ class _RegenerationGameState extends State<RegenerationGame>
             ),
             Container(
               padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width < 380
-                    ? 10
-                    : GlobalConstants.of(context).screenHorizontalSpace,
-                right: MediaQuery.of(context).size.width < 380
-                    ? 10
-                    : GlobalConstants.of(context).screenHorizontalSpace,
+                left: getEdgeInsetsHorizontalSize,
+                right: getEdgeInsetsHorizontalSize,
               ),
               margin: EdgeInsets.only(top: 2),
               height: 59,
@@ -993,6 +963,21 @@ class _RegenerationGameState extends State<RegenerationGame>
       return time;
     } else {
       return time.substring(0, (time.lastIndexOf('') - 1));
+    }
+  }
+
+  double get getEdgeInsetsHorizontalSize {
+    return MediaQuery.of(context).size.width < 380
+        ? 10
+        : GlobalConstants.of(context).screenHorizontalSpace;
+  }
+
+  onTapLearnMore() async {
+    if (welcomeGuideLearningTrack == null) {
+      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+    }
+    if (welcomeGuideLearningTrack != null) {
+      openLearningTrack(welcomeGuideLearningTrack!);
     }
   }
 }
