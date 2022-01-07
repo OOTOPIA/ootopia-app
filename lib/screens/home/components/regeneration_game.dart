@@ -38,8 +38,6 @@ class _RegenerationGameState extends State<RegenerationGame>
     'global': FeatherIcons.globe,
   };
 
-
-
   String detailedGoalType = "";
 
   late HomeStore homeStore;
@@ -65,20 +63,24 @@ class _RegenerationGameState extends State<RegenerationGame>
   bool showGlobo = false;
   var typeSelected;
 
-
   late LinearGradient userLinear;
   late LinearGradient pinLinear;
   late LinearGradient globoLinear;
 
-  late Map<String, LinearGradient> gameProgressColors ;
+  late Map<String, LinearGradient> gameProgressColors;
   double valueOoz = 0;
 
   @override
   void initState() {
-
-    userLinear = LinearGradient(colors: [Color(0xff00A5FC), Color(0xff006FAA)],);
-    pinLinear = LinearGradient(colors: [Color(0xff0072C5),  Color(0xff003963)],);
-    globoLinear = LinearGradient(colors: [Color(0xff3159C7), Color(0xff011344)],);
+    userLinear = LinearGradient(
+      colors: [Color(0xff00A5FC), Color(0xff006FAA)],
+    );
+    pinLinear = LinearGradient(
+      colors: [Color(0xff0072C5), Color(0xff003963)],
+    );
+    globoLinear = LinearGradient(
+      colors: [Color(0xff3159C7), Color(0xff011344)],
+    );
 
     gameProgressColors = {
       'personal': userLinear,
@@ -98,20 +100,19 @@ class _RegenerationGameState extends State<RegenerationGame>
     });
 
     controller.addListener(() {
-      showMap = controller.currentBottomIndex == PageViewController.TAB_UNSELECTED;
-      if(showPersonal || showLocal || showGlobo){
+      showMap =
+          controller.currentBottomIndex == PageViewController.TAB_UNSELECTED;
+      if (showPersonal || showLocal || showGlobo) {
         showPersonal = false;
         showLocal = false;
         showGlobo = false;
       }
       if (mounted) setState(() {});
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     homeStore = Provider.of<HomeStore>(context);
     authStore = Provider.of<AuthStore>(context);
     screenWidth = MediaQuery.of(context).size.width;
@@ -138,12 +139,15 @@ class _RegenerationGameState extends State<RegenerationGame>
           Container(
             width: double.infinity,
             height: 59,
-            decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+            decoration:
+                BoxDecoration(color: Theme.of(context).primaryColorLight),
             padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width < 380 ? 10
+              left: MediaQuery.of(context).size.width < 380
+                  ? 10
                   : GlobalConstants.of(context).screenHorizontalSpace,
               right: MediaQuery.of(context).size.width < 380
-                  ? 10 : GlobalConstants.of(context).screenHorizontalSpace,
+                  ? 10
+                  : GlobalConstants.of(context).screenHorizontalSpace,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -176,19 +180,20 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         ButtonSnackBar(
                                           text: AppLocalizations.of(context)!
                                               .learnMore,
-                                          onTapAbout: () {
-                                            Navigator.of(context)
-                                                .pushNamedAndRemoveUntil(
-                                              PageRoute.Page.homeScreen.route,
-                                              (Route<dynamic> route) => false,
-                                              arguments: {
-                                                "returnToPageWithArgs": {
-                                                  'currentPageName':
-                                                      "learning_tracks"
-                                                }
-                                              },
-                                            );
+                                          onTapAbout: () async {
+                                            if (welcomeGuideLearningTrack ==
+                                                null) {
+                                              welcomeGuideLearningTrack =
+                                                  await learningTracksStore
+                                                      .getWelcomeGuide();
+                                            }
+                                            if (welcomeGuideLearningTrack !=
+                                                null) {
+                                              openLearningTrack(
+                                                  welcomeGuideLearningTrack!);
+                                            }
                                           },
+                                          closeOnTapAbout: true,
                                         )
                                       ],
                                       marginBottom: true,
@@ -199,8 +204,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                           child: Padding(
                             padding: EdgeInsets.only(
                               top: 10,
-                              right:
-                                  GlobalConstants.of(context).spacingNormal,
+                              right: GlobalConstants.of(context).spacingNormal,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,22 +225,29 @@ class _RegenerationGameState extends State<RegenerationGame>
                                 GestureDetector(
                                   onTap: () async {
                                     if (welcomeGuideLearningTrack == null) {
-                                      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+                                      welcomeGuideLearningTrack =
+                                          await learningTracksStore
+                                              .getWelcomeGuide();
                                     }
                                     if (welcomeGuideLearningTrack != null) {
-                                      openLearningTrack(welcomeGuideLearningTrack!);
+                                      openLearningTrack(
+                                          welcomeGuideLearningTrack!);
                                     }
                                   },
                                   child: Text(
-                                      showMap ? AppLocalizations.of(context)!
-                                          .personalLevel.toUpperCase() :
-                                      AppLocalizations.of
-                                        (context)!.learnMore,
-                                    style: showMap ? Theme.of(context)
-                                        .accentTextTheme
-                                        .bodyText1!:  Theme.of(context)
-                                        .accentTextTheme
-                                        .bodyText2!,
+                                    showMap
+                                        ? AppLocalizations.of(context)!
+                                            .personalLevel
+                                            .toUpperCase()
+                                        : AppLocalizations.of(context)!
+                                            .learnMore,
+                                    style: showMap
+                                        ? Theme.of(context)
+                                            .accentTextTheme
+                                            .bodyText1!
+                                        : Theme.of(context)
+                                            .accentTextTheme
+                                            .bodyText2!,
                                   ),
                                 )
                               ],
@@ -248,11 +259,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          gameIconProgress("personal", (showPersonal
-                              || showMap), Color
-                            (0xff00A5FC)),
-                          gameIconProgress("city", showLocal, Color(0xff0072C5)),
-                          gameIconProgress("global", showGlobo, Color(0xff012588)),
+                          gameIconProgress("personal",
+                              (showPersonal || showMap), Color(0xff00A5FC)),
+                          gameIconProgress(
+                              "city", showLocal, Color(0xff0072C5)),
+                          gameIconProgress(
+                              "global", showGlobo, Color(0xff012588)),
                         ],
                       )
                     ],
@@ -265,22 +277,24 @@ class _RegenerationGameState extends State<RegenerationGame>
             visible: showMap,
             child: Container(
               width: double.infinity,
-              decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+              decoration:
+                  BoxDecoration(color: Theme.of(context).primaryColorLight),
               child: newDetailedGoal(),
-            ),),
-          if(showMap)...[
+            ),
+          ),
+          if (showMap) ...[
             PersonaLevel(percent: percentTimeCompleted()),
-          ]else if(showPersonal)...[
+          ] else if (showPersonal) ...[
             Container(
-                height: MediaQuery.of(context).size.height-130,
+                height: MediaQuery.of(context).size.height - 130,
                 child: RegenerationGameLearningAlert(typeSelected)),
-          ]else if(showLocal)...[
+          ] else if (showLocal) ...[
             Container(
-              height: MediaQuery.of(context).size.height-130,
+                height: MediaQuery.of(context).size.height - 130,
                 child: RegenerationGameLearningAlert(typeSelected)),
-          ]else if(showGlobo)...[
+          ] else if (showGlobo) ...[
             Container(
-                height: MediaQuery.of(context).size.height-130,
+                height: MediaQuery.of(context).size.height - 130,
                 child: RegenerationGameLearningAlert(typeSelected)),
           ]
         ],
@@ -557,38 +571,24 @@ class _RegenerationGameState extends State<RegenerationGame>
             Container(
               height: 0.6,
               color: Color(0xff707070),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
             ),
             Container(
               padding: EdgeInsets.only(
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .width < 380 ? 10
-                    : GlobalConstants
-                    .of(context)
-                    .screenHorizontalSpace,
-                right: MediaQuery
-                    .of(context)
-                    .size
-                    .width < 380
-                    ? 10 : GlobalConstants
-                    .of(context)
-                    .screenHorizontalSpace,
+                left: MediaQuery.of(context).size.width < 380
+                    ? 10
+                    : GlobalConstants.of(context).screenHorizontalSpace,
+                right: MediaQuery.of(context).size.width < 380
+                    ? 10
+                    : GlobalConstants.of(context).screenHorizontalSpace,
               ),
               margin: EdgeInsets.only(top: 2),
               height: 59,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               child: SizedBox(
-                width: screenWidth - isSmallPhone(GlobalConstants
-                    .of(context)
-                    .screenHorizontalSpace * 2),
+                width: screenWidth -
+                    isSmallPhone(
+                        GlobalConstants.of(context).screenHorizontalSpace * 2),
                 child: Stack(
                   children: [
                     AnimatedOpacity(
@@ -605,53 +605,54 @@ class _RegenerationGameState extends State<RegenerationGame>
                               children: [
                                 Flexible(
                                   child: Text(
-                                    AppLocalizations.of(context)!
-                                        .yourDailyGoal,
-                                    style: Theme
-                                        .of(context)
+                                    AppLocalizations.of(context)!.yourDailyGoal,
+                                    style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                      fontSize: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width < 380 ? 12 : 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  380
+                                              ? 12
+                                              : 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                   ),
                                 ),
                                 Flexible(
                                   child: Text(
-                                    AppLocalizations.of(context)!
-                                        .achieved,
-                                    style: Theme
-                                        .of(context)
+                                    AppLocalizations.of(context)!.achieved,
+                                    style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                      fontSize: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width < 380 ? 12 : 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  380
+                                              ? 12
+                                              : 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                   ),
                                 ),
                                 Flexible(
                                   child: Text(
                                     AppLocalizations.of(context)!
                                         .oozCreditsYouWillReceive,
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                      fontSize: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width < 380 ? 12 : 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  380
+                                              ? 12
+                                              : 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -667,71 +668,66 @@ class _RegenerationGameState extends State<RegenerationGame>
                                   Text(
                                     (authStore.currentUser == null
                                         ? ""
-                                        : "${authStore.currentUser!
-                                        .dailyLearningGoalInMinutes}min"),
-                                    style: Theme
-                                        .of(context)
+                                        : "${authStore.currentUser!.dailyLearningGoalInMinutes}min"),
+                                    style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                      fontSize: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width < 380 ? 12 : 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  380
+                                              ? 12
+                                              : 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                   ),
                                   Text(
-                                    timeAchieved(homeStore.totalAppUsageTimeSoFar),
-                                    style: Theme
-                                        .of(context)
+                                    timeAchieved(
+                                        homeStore.totalAppUsageTimeSoFar),
+                                    style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                      fontSize: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width <
-                                          380
-                                          ? 12
-                                          : 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  380
+                                              ? 12
+                                              : 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       SvgPicture.asset(
                                         'assets/icons/ooz_mini_blue.svg',
                                         width: 18,
                                       ),
                                       Padding(
-                                        padding:
-                                        const EdgeInsets.only(left: 6),
+                                        padding: const EdgeInsets.only(left: 6),
                                         child: Text(
                                           homeStore.dailyGoalStats != null
                                               ? currencyFormatter
-                                              .format(amountOzzWillReceive)
+                                                  .format(amountOzzWillReceive)
                                               : "0,00",
-                                          style: Theme
-                                              .of(context)
+                                          style: Theme.of(context)
                                               .textTheme
                                               .subtitle2!
                                               .copyWith(
-                                            fontSize: MediaQuery
-                                                .of(context)
-                                                .size
-                                                .width <
-                                                380
-                                                ? 12
-                                                : 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme
-                                                .of(context)
-                                                .accentColor,
-                                          ),
+                                                fontSize: MediaQuery.of(context)
+                                                            .size
+                                                            .width <
+                                                        380
+                                                    ? 12
+                                                    : 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .accentColor,
+                                              ),
                                         ),
                                       )
                                     ],
@@ -757,120 +753,121 @@ class _RegenerationGameState extends State<RegenerationGame>
     return GestureDetector(
       onTap: () {
         //REFATORADO
-        if(authStore.currentUser == null){
-          Navigator.of(context).pushNamed(
-              PageRoute.Page.loginScreen.route);
-        }else{
-          if(type == 'personal'){
-            bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
-            if(dontShowAgainRegenerationGamePega){
-
-              if(showMap){
-                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+        if (authStore.currentUser == null) {
+          Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+        } else {
+          if (type == 'personal') {
+            bool dontShowAgainRegenerationGamePega =
+                prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
+            if (dontShowAgainRegenerationGamePega) {
+              if (showMap) {
+                controller.currentBottomIndex =
+                    PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
                 controller.showBottomNavigationBar();
                 showMap = false;
                 setState(() {});
-              }else{
+              } else {
                 setState(() {
-                  controller.currentBottomIndex = PageViewController.TAB_UNSELECTED;
+                  controller.currentBottomIndex =
+                      PageViewController.TAB_UNSELECTED;
                   controller.showBottomNavigationBar();
                   controller.refreshViews();
                   showGlobo = false;
                   showPersonal = false;
                   showLocal = false;
-                  typeSelected ={"type": type, "context": context};
+                  typeSelected = {"type": type, "context": context};
                 });
-                Future.delayed(Duration(milliseconds: 25),(){
+                Future.delayed(Duration(milliseconds: 25), () {
                   setState(() {
                     showMap = true;
                   });
                 });
               }
-
-            }
-
-            else{
-              if(showPersonal || showMap){
-                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+            } else {
+              if (showPersonal || showMap) {
+                controller.currentBottomIndex =
+                    PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
                 controller.showBottomNavigationBar();
                 showPersonal = false;
                 setState(() {});
-              }else{
+              } else {
                 setState(() {
-                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                  controller.currentBottomIndex =
+                      PageViewController.HIDE_BOTTOMBAR;
                   controller.hideBottomNavigationBar();
                   controller.refreshViews();
                   showGlobo = false;
                   showMap = false;
                   showLocal = false;
-                  typeSelected ={"type": type, "context": context};
+                  typeSelected = {"type": type, "context": context};
                 });
-                Future.delayed(Duration(milliseconds: 25),(){
+                Future.delayed(Duration(milliseconds: 25), () {
                   setState(() {
                     showPersonal = true;
                   });
                 });
               }
-
-
             }
-          }
-
-          else if(type == 'city'){
-            if(showLocal){
-              controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+          } else if (type == 'city') {
+            if (showLocal) {
+              controller.currentBottomIndex =
+                  PageViewController.TAB_INDEX_TIMELINE;
               controller.refreshViews();
               controller.showBottomNavigationBar();
               showLocal = false;
               setState(() {});
-            }else{
+            } else {
               setState(() {
-                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                controller.currentBottomIndex =
+                    PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 showGlobo = false;
                 showMap = false;
                 showPersonal = false;
-                typeSelected ={"type": type, "context": context};
+                typeSelected = {"type": type, "context": context};
               });
-              Future.delayed(Duration(milliseconds: 25),(){
-                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+              Future.delayed(Duration(milliseconds: 25), () {
+                controller.currentBottomIndex =
+                    PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 controller.hideBottomNavigationBar();
                 setState(() {
-                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                  controller.currentBottomIndex =
+                      PageViewController.HIDE_BOTTOMBAR;
                   controller.refreshViews();
                   controller.hideBottomNavigationBar();
                   showLocal = true;
                 });
               });
             }
-
-          }
-
-          else if(type == 'global'){
-            if(showGlobo){
-              controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+          } else if (type == 'global') {
+            if (showGlobo) {
+              controller.currentBottomIndex =
+                  PageViewController.TAB_INDEX_TIMELINE;
               controller.refreshViews();
               controller.showBottomNavigationBar();
               showGlobo = false;
               setState(() {});
-            }else{
+            } else {
               setState(() {
-                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+                controller.currentBottomIndex =
+                    PageViewController.TAB_INDEX_TIMELINE;
                 controller.refreshViews();
-                showLocal  = false;
+                showLocal = false;
                 showMap = false;
                 showPersonal = false;
-                typeSelected ={"type": type, "context": context};
+                typeSelected = {"type": type, "context": context};
               });
-              Future.delayed(Duration(milliseconds: 10),(){
-                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+              Future.delayed(Duration(milliseconds: 10), () {
+                controller.currentBottomIndex =
+                    PageViewController.HIDE_BOTTOMBAR;
                 controller.refreshViews();
                 controller.hideBottomNavigationBar();
                 setState(() {
-                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                  controller.currentBottomIndex =
+                      PageViewController.HIDE_BOTTOMBAR;
                   controller.refreshViews();
                   controller.hideBottomNavigationBar();
                   showGlobo = true;
@@ -878,9 +875,7 @@ class _RegenerationGameState extends State<RegenerationGame>
               });
             }
           }
-
         }
-
       },
       child: Container(
         margin: EdgeInsets.only(top: 10, left: 6),
@@ -890,16 +885,18 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: selected ? colorSelected :  Theme.of(context)
-                    .backgroundColor,
+                color: selected
+                    ? colorSelected
+                    : Theme.of(context).backgroundColor,
                 borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
               child: Center(
                 child: Icon(
                   gameProgress[type],
                   size: 20,
-                  color: selected ? Colors.white :  Theme.of
-                    (context).iconTheme.color ,
+                  color: selected
+                      ? Colors.white
+                      : Theme.of(context).iconTheme.color,
                 ),
               ),
             ),
@@ -908,11 +905,11 @@ class _RegenerationGameState extends State<RegenerationGame>
               child: Positioned(
                 top: 0,
                 child: CircularPercentIndicator(
-                  radius: gameProgressIconSize,
-                  lineWidth: 2,
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  percent:  percentTimeCompleted(),
-                  linearGradient: gameProgressColors[type]),
+                    radius: gameProgressIconSize,
+                    lineWidth: 2,
+                    backgroundColor: Theme.of(context).primaryColorDark,
+                    percent: percentTimeCompleted(),
+                    linearGradient: gameProgressColors[type]),
               ),
             )
           ],
@@ -953,7 +950,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     detailedGoalIconPosition = screenWidth - ((gameProgressIconSize + 6) * 4);
   }
 
-  void getOozPerMinute () async{
+  void getOozPerMinute() async {
     SecureStoreMixin secureStoreMixin = SecureStoreMixin();
     GeneralConfigModel? transferOozToPostLimitConfig = await secureStoreMixin
         .getGeneralConfigByName("user_reward_per_minute_of_timeline_view_time");
@@ -961,7 +958,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     valueOoz = transferOozToPostLimitConfig?.value ?? 0;
   }
 
-  void  openLearningTrack(LearningTracksModel learningTrack){
+  void openLearningTrack(LearningTracksModel learningTrack) {
     controller.insertPage(ViewLearningTracksScreen(
       {
         'list_chapters': learningTrack.chapters,
@@ -981,25 +978,21 @@ class _RegenerationGameState extends State<RegenerationGame>
   }
 
   double percentTimeCompleted() {
-    if(homeStore.dailyGoalStats != null){
-      return(homeStore.percentageOfDailyGoalAchieved / 100);
-    }else{
+    if (homeStore.dailyGoalStats != null) {
+      return (homeStore.percentageOfDailyGoalAchieved / 100);
+    } else {
       return 0;
     }
   }
 
   String timeAchieved(time) {
-
     bool withSec = time.indexOf('s') != -1;
-    if(time.isEmpty){
+    if (time.isEmpty) {
       return "0h 0min 0s";
-    } else if(withSec){
+    } else if (withSec) {
       return time;
-    }else{
-      return time.substring(0 , (time.lastIndexOf('')-1) );
+    } else {
+      return time.substring(0, (time.lastIndexOf('') - 1));
     }
   }
-
 }
-
-
