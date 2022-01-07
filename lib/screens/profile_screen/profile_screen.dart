@@ -48,9 +48,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isVisible = false;
   SmartPageController controller = SmartPageController.getInstance();
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_scrollListener);
     if (store != null && profileUserIsLoggedUser) {
       store!.profile = null;
     }
@@ -110,6 +113,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : widget.args!["id"] == authStore.currentUser!.id);
   }
 
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        if (store!.hasMorePosts) {
+          Future.delayed(Duration.zero, () async {
+            await store?.getUserPosts(profileUserId);
+          });
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
@@ -127,6 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: MediaQuery.of(context).size.height,
                 )
               : SingleChildScrollView(
+                  controller: _scrollController,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -258,6 +276,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             )
                           : EmptyPostsWidget(),
+                      Observer(
+                          builder: (_) =>
+                              (store!.loadingPosts && store!.hasMorePosts)
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      height: 90,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : Container()),
                       SizedBox(
                           height:
                               GlobalConstants.of(context).intermediateSpacing),

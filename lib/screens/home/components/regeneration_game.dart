@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/screens/persona_level/personal_level.dart';
+import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerationGame extends StatefulWidget {
@@ -33,7 +38,8 @@ class _RegenerationGameState extends State<RegenerationGame>
     'global': FeatherIcons.globe,
   };
 
-  bool showDetailedGoal = false;
+
+
   String detailedGoalType = "";
 
   late HomeStore homeStore;
@@ -52,26 +58,60 @@ class _RegenerationGameState extends State<RegenerationGame>
   SmartPageController controller = SmartPageController.getInstance();
   LearningTracksModel? welcomeGuideLearningTrack;
   LearningTracksStore learningTracksStore = LearningTracksStore();
+  SharedPreferences? prefs;
+  bool showMap = false;
+  bool showPersonal = false;
+  bool showLocal = false;
+  bool showGlobo = false;
+  var typeSelected;
+
+
+  late LinearGradient userLinear;
+  late LinearGradient pinLinear;
+  late LinearGradient globoLinear;
+
+  late Map<String, LinearGradient> gameProgressColors ;
+  double valueOoz = 0;
 
   @override
   void initState() {
+
+    userLinear = LinearGradient(colors: [Color(0xff00A5FC), Color(0xff006FAA)],);
+    pinLinear = LinearGradient(colors: [Color(0xff0072C5),  Color(0xff003963)],);
+    globoLinear = LinearGradient(colors: [Color(0xff3159C7), Color(0xff011344)],);
+
+    gameProgressColors = {
+      'personal': userLinear,
+      'city': pinLinear,
+      'global': globoLinear,
+    };
+    getOozPerMinute();
     super.initState();
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
     editProfileStore.getUser();
     Future.delayed(Duration.zero, () async {
+      prefs = await SharedPreferences.getInstance();
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     });
     Future.delayed(Duration(milliseconds: 300), () {
       _resetDetailedIconPosition();
     });
-  }
 
-  _resetDetailedIconPosition() {
-    detailedGoalIconPosition = screenWidth - ((gameProgressIconSize + 6) * 4);
+    controller.addListener(() {
+      showMap = controller.currentBottomIndex == PageViewController.TAB_UNSELECTED;
+      if(showPersonal || showLocal || showGlobo){
+        showPersonal = false;
+        showLocal = false;
+        showGlobo = false;
+      }
+      if (mounted) setState(() {});
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     homeStore = Provider.of<HomeStore>(context);
     authStore = Provider.of<AuthStore>(context);
     screenWidth = MediaQuery.of(context).size.width;
@@ -90,161 +130,162 @@ class _RegenerationGameState extends State<RegenerationGame>
           ),
           Container(
             width: double.infinity,
+            height: 1,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorDark,
+            ),
+          ),
+          Container(
+            width: double.infinity,
             height: 59,
-            decoration:
-                BoxDecoration(color: Theme.of(context).primaryColorLight),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
             padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width < 380
-                  ? 10
+              left: MediaQuery.of(context).size.width < 380 ? 10
                   : GlobalConstants.of(context).screenHorizontalSpace,
               right: MediaQuery.of(context).size.width < 380
-                  ? 10
-                  : GlobalConstants.of(context).screenHorizontalSpace,
+                  ? 10 : GlobalConstants.of(context).screenHorizontalSpace,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Visibility(
-                  visible: showDetailedGoal,
-                  child: Container(
-                    width: double.infinity,
-                    height: 59,
-                    child: detailedGoal,
-                  ),
-                ),
-                Visibility(
-                  visible: !showDetailedGoal,
-                  child: Container(
-                    width: double.infinity,
-                    height: 59,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              if (editProfileStore.currentUser != null) {
-                                showModalBottomSheet(
-                                    barrierColor: Colors.black.withAlpha(1),
-                                    context: context,
-                                    backgroundColor: Colors.black.withAlpha(1),
-                                    builder: (BuildContext context) {
-                                      return SnackBarWidget(
-                                        menu: AppLocalizations.of(context)!
-                                            .regenerationGame,
-                                        text: AppLocalizations.of(context)!
-                                            .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
-                                            .replaceAll('%GOAL_CHOSEN%',
-                                                '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
-                                        buttons: [
-                                          ButtonSnackBar(
-                                            text: AppLocalizations.of(context)!
-                                                .learnMore,
-                                            onTapAbout: () {
-                                              Navigator.of(context)
-                                                  .pushNamedAndRemoveUntil(
-                                                PageRoute.Page.homeScreen.route,
-                                                (Route<dynamic> route) => false,
-                                                arguments: {
-                                                  "returnToPageWithArgs": {
-                                                    'currentPageName':
-                                                        "learning_tracks"
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          )
-                                        ],
-                                        marginBottom: true,
-                                      );
-                                    });
-                              }
-                            }, //Saiba mais
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                right:
-                                    GlobalConstants.of(context).spacingNormal,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .regenerationGame,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                        ),
+                Container(
+                  width: double.infinity,
+                  height: 59,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            if (editProfileStore.currentUser != null) {
+                              showModalBottomSheet(
+                                  barrierColor: Colors.black.withAlpha(1),
+                                  context: context,
+                                  backgroundColor: Colors.black.withAlpha(1),
+                                  builder: (BuildContext context) {
+                                    return SnackBarWidget(
+                                      menu: AppLocalizations.of(context)!
+                                          .regenerationGame,
+                                      text: AppLocalizations.of(context)!
+                                          .theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame
+                                          .replaceAll('%GOAL_CHOSEN%',
+                                              '${editProfileStore.currentUser!.dailyLearningGoalInMinutes!}'),
+                                      buttons: [
+                                        ButtonSnackBar(
+                                          text: AppLocalizations.of(context)!
+                                              .learnMore,
+                                          onTapAbout: () {
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                              PageRoute.Page.homeScreen.route,
+                                              (Route<dynamic> route) => false,
+                                              arguments: {
+                                                "returnToPageWithArgs": {
+                                                  'currentPageName':
+                                                      "learning_tracks"
+                                                }
+                                              },
+                                            );
+                                          },
+                                        )
+                                      ],
+                                      marginBottom: true,
+                                    );
+                                  });
+                            }
+                          }, //Saiba mais
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              right:
+                                  GlobalConstants.of(context).spacingNormal,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .regenerationGame,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2!
+                                      .copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                      ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (welcomeGuideLearningTrack == null) {
+                                      welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+                                    }
+                                    if (welcomeGuideLearningTrack != null) {
+                                      openLearningTrack(welcomeGuideLearningTrack!);
+                                    }
+                                  },
+                                  child: Text(
+                                      showMap ? AppLocalizations.of(context)!
+                                          .personalLevel.toUpperCase() :
+                                      AppLocalizations.of
+                                        (context)!.learnMore,
+                                    style: showMap ? Theme.of(context)
+                                        .accentTextTheme
+                                        .bodyText1!:  Theme.of(context)
+                                        .accentTextTheme
+                                        .bodyText2!,
                                   ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (welcomeGuideLearningTrack == null) {
-                                        welcomeGuideLearningTrack =
-                                            await learningTracksStore
-                                                .getWelcomeGuide();
-                                      }
-                                      if (welcomeGuideLearningTrack != null) {
-                                        openLearningTrack(
-                                            welcomeGuideLearningTrack!);
-                                      }
-                                    },
-                                    child: Text(
-                                      AppLocalizations.of(context)!.learnMore,
-                                      style: Theme.of(context)
-                                          .accentTextTheme
-                                          .bodyText2!,
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            gameIconProgress("personal"),
-                            gameIconProgress("city"),
-                            gameIconProgress("global"),
-                          ],
-                        )
-                      ],
-                    ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          gameIconProgress("personal", (showPersonal
+                              || showMap), Color
+                            (0xff00A5FC)),
+                          gameIconProgress("city", showLocal, Color(0xff0072C5)),
+                          gameIconProgress("global", showGlobo, Color(0xff012588)),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ],
             ),
           ),
+          Visibility(
+            visible: showMap,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
+              child: newDetailedGoal(),
+            ),),
+          if(showMap)...[
+            PersonaLevel(percent: percentTimeCompleted()),
+          ]else if(showPersonal)...[
+            Container(
+                height: MediaQuery.of(context).size.height-130,
+                child: RegenerationGameLearningAlert(typeSelected)),
+          ]else if(showLocal)...[
+            Container(
+              height: MediaQuery.of(context).size.height-130,
+                child: RegenerationGameLearningAlert(typeSelected)),
+          ]else if(showGlobo)...[
+            Container(
+                height: MediaQuery.of(context).size.height-130,
+                child: RegenerationGameLearningAlert(typeSelected)),
+          ]
         ],
       ),
     );
-  }
-
-  isSmallPhone(double value) {
-    if (MediaQuery.of(context).size.width < 380) return value / 2;
-    return value;
-  }
-
-  void openLearningTrack(LearningTracksModel learningTrack) =>
-      controller.insertPage(ViewLearningTracksScreen(
-        {
-          'list_chapters': learningTrack.chapters,
-          'learning_tracks': learningTrack,
-          'updateLearningTrack': updateWidget,
-        },
-      ));
-
-  updateWidget() {
-    setState(() {});
   }
 
   Widget get detailedGoal => InkWell(
@@ -254,11 +295,12 @@ class _RegenerationGameState extends State<RegenerationGame>
           });
           Future.delayed(Duration(milliseconds: 100), () {
             setState(() {
-              showDetailedGoal = false;
+              showGlobo = false;
             });
           });
         },
         child: Container(
+          height: 59,
           margin: EdgeInsets.only(top: 6),
           child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -493,58 +535,352 @@ class _RegenerationGameState extends State<RegenerationGame>
         ),
       );
 
-  Widget gameIconProgress(String type) {
+  Widget newDetailedGoal() {
+    int minutes = authStore.currentUser?.dailyLearningGoalInMinutes ?? 0;
+    double amountOzzWillReceive = valueOoz * minutes;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          showMap = false;
+          _resetDetailedIconPosition();
+        });
+        Future.delayed(Duration(milliseconds: 100), () {
+          setState(() {
+            showGlobo = false;
+          });
+        });
+      },
+      child: Container(
+        height: 66,
+        child: Column(
+          children: [
+            Container(
+              height: 0.6,
+              color: Color(0xff707070),
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                left: MediaQuery
+                    .of(context)
+                    .size
+                    .width < 380 ? 10
+                    : GlobalConstants
+                    .of(context)
+                    .screenHorizontalSpace,
+                right: MediaQuery
+                    .of(context)
+                    .size
+                    .width < 380
+                    ? 10 : GlobalConstants
+                    .of(context)
+                    .screenHorizontalSpace,
+              ),
+              margin: EdgeInsets.only(top: 2),
+              height: 59,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              child: SizedBox(
+                width: screenWidth - isSmallPhone(GlobalConstants
+                    .of(context)
+                    .screenHorizontalSpace * 2),
+                child: Stack(
+                  children: [
+                    AnimatedOpacity(
+                      opacity: showMap ? 1.0 : 0.0,
+                      duration: Duration(milliseconds: 150),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 6,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .yourDailyGoal,
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                      fontSize: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width < 380 ? 12 : 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .achieved,
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                      fontSize: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width < 380 ? 12 : 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .oozCreditsYouWillReceive,
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                      fontSize: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width < 380 ? 12 : 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 6.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    (authStore.currentUser == null
+                                        ? ""
+                                        : "${authStore.currentUser!
+                                        .dailyLearningGoalInMinutes}min"),
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                      fontSize: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width < 380 ? 12 : 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Text(
+                                    timeAchieved(homeStore.totalAppUsageTimeSoFar),
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                      fontSize: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width <
+                                          380
+                                          ? 12
+                                          : 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/ooz_mini_blue.svg',
+                                        width: 18,
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 6),
+                                        child: Text(
+                                          homeStore.dailyGoalStats != null
+                                              ? currencyFormatter
+                                              .format(amountOzzWillReceive)
+                                              : "0,00",
+                                          style: Theme
+                                              .of(context)
+                                              .textTheme
+                                              .subtitle2!
+                                              .copyWith(
+                                            fontSize: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width <
+                                                380
+                                                ? 12
+                                                : 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme
+                                                .of(context)
+                                                .accentColor,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget gameIconProgress(String type, selected, colorSelected) {
     return GestureDetector(
       onTap: () {
-        //TODO refatorar esse codigo em algum momento
-        setState(() {
-          if (homeStore.dailyGoalStats == null) {
-            homeStore.getDailyGoalStats();
-          }
+        //REFATORADO
+        if(authStore.currentUser == null){
+          Navigator.of(context).pushNamed(
+              PageRoute.Page.loginScreen.route);
+        }else{
+          if(type == 'personal'){
+            bool dontShowAgainRegenerationGamePega = prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
+            if(dontShowAgainRegenerationGamePega){
 
-          if (authStore.currentUser == null && type == 'city' ||
-              type == 'global') {
-            _goToRegenerationGameAlert(type);
-            return;
-          }
-
-          if (authStore.currentUser == null &&
-              !this.clickedInPersonalDialogOpened &&
-              type == 'personal') {
-            this.clickedInPersonalDialogOpened = true;
-
-            _goToRegenerationGameAlert(type);
-            return;
-          }
-
-          if (authStore.currentUser != null) {
-            detailedGoalType = type;
-            if (detailedGoalType == 'city') {
-              _goToRegenerationGameAlert(type);
-            } else if (detailedGoalType == 'global') {
-              _goToRegenerationGameAlert(type);
-            } else {
-              homeStore.getDailyGoalStats();
-              // if (authStore.currentUser!.personalDialogOpened == null ||
-              //     authStore.currentUser!.personalDialogOpened == false) {
-              //   authStore.currentUser!.personalDialogOpened = true;
-
-              _goToRegenerationGameAlert(type);
-              // }
-
-              setState(() {
-                showDetailedGoal = true;
-              });
-              Future.delayed(Duration(milliseconds: 100), () {
+              if(showMap){
+                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+                controller.refreshViews();
+                controller.showBottomNavigationBar();
+                showMap = false;
+                setState(() {});
+              }else{
                 setState(() {
-                  detailedGoalIconPosition = 0;
+                  controller.currentBottomIndex = PageViewController.TAB_UNSELECTED;
+                  controller.showBottomNavigationBar();
+                  controller.refreshViews();
+                  showGlobo = false;
+                  showPersonal = false;
+                  showLocal = false;
+                  typeSelected ={"type": type, "context": context};
+                });
+                Future.delayed(Duration(milliseconds: 25),(){
+                  setState(() {
+                    showMap = true;
+                  });
+                });
+              }
+
+            }
+
+            else{
+              if(showPersonal || showMap){
+                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+                controller.refreshViews();
+                controller.showBottomNavigationBar();
+                showPersonal = false;
+                setState(() {});
+              }else{
+                setState(() {
+                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                  controller.hideBottomNavigationBar();
+                  controller.refreshViews();
+                  showGlobo = false;
+                  showMap = false;
+                  showLocal = false;
+                  typeSelected ={"type": type, "context": context};
+                });
+                Future.delayed(Duration(milliseconds: 25),(){
+                  setState(() {
+                    showPersonal = true;
+                  });
+                });
+              }
+
+
+            }
+          }
+
+          else if(type == 'city'){
+            if(showLocal){
+              controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+              controller.refreshViews();
+              controller.showBottomNavigationBar();
+              showLocal = false;
+              setState(() {});
+            }else{
+              setState(() {
+                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                controller.refreshViews();
+                showGlobo = false;
+                showMap = false;
+                showPersonal = false;
+                typeSelected ={"type": type, "context": context};
+              });
+              Future.delayed(Duration(milliseconds: 25),(){
+                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                controller.refreshViews();
+                controller.hideBottomNavigationBar();
+                setState(() {
+                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                  controller.refreshViews();
+                  controller.hideBottomNavigationBar();
+                  showLocal = true;
                 });
               });
             }
-          } else {
-            Navigator.of(context).pushNamed(PageRoute.Page.loginScreen.route);
+
           }
-        });
+
+          else if(type == 'global'){
+            if(showGlobo){
+              controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+              controller.refreshViews();
+              controller.showBottomNavigationBar();
+              showGlobo = false;
+              setState(() {});
+            }else{
+              setState(() {
+                controller.currentBottomIndex = PageViewController.TAB_INDEX_TIMELINE;
+                controller.refreshViews();
+                showLocal  = false;
+                showMap = false;
+                showPersonal = false;
+                typeSelected ={"type": type, "context": context};
+              });
+              Future.delayed(Duration(milliseconds: 10),(){
+                controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                controller.refreshViews();
+                controller.hideBottomNavigationBar();
+                setState(() {
+                  controller.currentBottomIndex = PageViewController.HIDE_BOTTOMBAR;
+                  controller.refreshViews();
+                  controller.hideBottomNavigationBar();
+                  showGlobo = true;
+                });
+              });
+            }
+          }
+
+        }
+
       },
       child: Container(
         margin: EdgeInsets.only(top: 10, left: 6),
@@ -554,27 +890,29 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
+                color: selected ? colorSelected :  Theme.of(context)
+                    .backgroundColor,
                 borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
               child: Center(
                 child: Icon(
                   gameProgress[type],
                   size: 20,
+                  color: selected ? Colors.white :  Theme.of
+                    (context).iconTheme.color ,
                 ),
               ),
             ),
-            Positioned(
-              //alignment: Alignment.center,
-              top: 0,
-              child: CircularPercentIndicator(
-                radius: gameProgressIconSize,
-                lineWidth: 2,
-                backgroundColor: Theme.of(context).primaryColorDark,
-                percent: type == "personal" && homeStore.dailyGoalStats != null
-                    ? (homeStore.percentageOfDailyGoalAchieved / 100)
-                    : 0,
-                progressColor: Theme.of(context).primaryColor,
+            Visibility(
+              visible: !selected,
+              child: Positioned(
+                top: 0,
+                child: CircularPercentIndicator(
+                  radius: gameProgressIconSize,
+                  lineWidth: 2,
+                  backgroundColor: Theme.of(context).primaryColorDark,
+                  percent:  percentTimeCompleted(),
+                  linearGradient: gameProgressColors[type]),
               ),
             )
           ],
@@ -583,7 +921,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 
-  _checkShowCelebratePage() {
+  void _checkShowCelebratePage() {
     homeStore.readyToShowCelebratePage().then((bool ready) {
       if (ready) {
         setState(() {
@@ -595,7 +933,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     });
   }
 
-  _goToCelebrationPersonal() async {
+  void _goToCelebrationPersonal() async {
     //for tests
     await Navigator.of(context).pushNamed(
       PageRoute.Page.celebration.route,
@@ -611,34 +949,57 @@ class _RegenerationGameState extends State<RegenerationGame>
     );
   }
 
-  _goToRegenerationGameAlert(String type) async {
-    if (authStore.currentUser != null) {
-      authStore.updateUserRegenerarionGameLearningAlert(type);
-    }
-
-    Navigator.of(context).pushNamed(
-      PageRoute.Page.regenerarionGameLearningAlert.route,
-      arguments: {"type": type, "context": context},
-    );
+  void _resetDetailedIconPosition() {
+    detailedGoalIconPosition = screenWidth - ((gameProgressIconSize + 6) * 4);
   }
 
-  _goToCelebrationCity() async {
-    //for tests
-    await Navigator.of(context).pushNamed(
-      PageRoute.Page.celebration.route,
-      arguments: {
-        "name": "Belo Horizonte!",
-        "goal": "city",
-        "balance": "17,25"
+  void getOozPerMinute () async{
+    SecureStoreMixin secureStoreMixin = SecureStoreMixin();
+    GeneralConfigModel? transferOozToPostLimitConfig = await secureStoreMixin
+        .getGeneralConfigByName("user_reward_per_minute_of_timeline_view_time");
+
+    valueOoz = transferOozToPostLimitConfig?.value ?? 0;
+  }
+
+  void  openLearningTrack(LearningTracksModel learningTrack){
+    controller.insertPage(ViewLearningTracksScreen(
+      {
+        'list_chapters': learningTrack.chapters,
+        'learning_tracks': learningTrack,
+        'updateLearningTrack': updateWidget,
       },
-    );
+    ));
   }
 
-  _goToCelebrationGlobal() async {
-    //for tests
-    await Navigator.of(context).pushNamed(
-      PageRoute.Page.celebration.route,
-      arguments: {"name": "Luis Reis", "goal": "global", "balance": "17,25"},
-    );
+  void updateWidget() {
+    setState(() {});
   }
+
+  double isSmallPhone(double value) {
+    if (MediaQuery.of(context).size.width < 380) return value / 2;
+    return value;
+  }
+
+  double percentTimeCompleted() {
+    if(homeStore.dailyGoalStats != null){
+      return(homeStore.percentageOfDailyGoalAchieved / 100);
+    }else{
+      return 0;
+    }
+  }
+
+  String timeAchieved(time) {
+
+    bool withSec = time.indexOf('s') != -1;
+    if(time.isEmpty){
+      return "0h 0min 0s";
+    } else if(withSec){
+      return time;
+    }else{
+      return time.substring(0 , (time.lastIndexOf('')-1) );
+    }
+  }
+
 }
+
+
