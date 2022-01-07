@@ -1,6 +1,7 @@
-import 'dart:ui' as ui;
 import 'dart:async';
+import 'dart:ui' as ui;
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class ImagePostTimeline extends StatefulWidget {
@@ -23,15 +24,9 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
     Image image = Image.network(
       widget.image,
     );
-    BoxFit boxFit = BoxFit.cover;
-    Size imageSize = Size(100.0, 100.0);
-
     Completer<ui.Image> completer = Completer<ui.Image>();
     image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
       (ImageInfo image, bool synchronousCall) {
-        imageSize = Size(image.image.width.toDouble(), image.image.height.toDouble());
-        boxFit = imageSize.height > imageSize.width ? BoxFit.fitHeight : BoxFit.fitWidth;
-        if (mounted) setState(() {});
         completer.complete(image.image);
       },
     ));
@@ -53,7 +48,7 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20)),
             image: DecorationImage(
-              fit: boxFit,
+              fit: BoxFit.contain,
               alignment: FractionalOffset.center,
               image: NetworkImage(widget.image),
             )
