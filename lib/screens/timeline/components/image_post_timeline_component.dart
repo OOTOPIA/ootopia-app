@@ -30,11 +30,7 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
     image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
       (ImageInfo image, bool synchronousCall) {
         imageSize = Size(image.image.width.toDouble(), image.image.height.toDouble());
-        if(imageSize.height > imageSize.width){
-          boxFit = BoxFit.fitHeight;
-        }else{
-          boxFit = BoxFit.fitWidth;
-        }
+        boxFit = imageSize.height > imageSize.width ? BoxFit.fitHeight : BoxFit.fitWidth;
         if (mounted) setState(() {});
         completer.complete(image.image);
       },
