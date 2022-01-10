@@ -365,9 +365,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   @override
   void dispose() {
-    if (flickManager != null) {
-      flickMultiManager.remove(flickManager!);
+    if (widget.args["type"] == "video") {
       flickManager!.dispose();
+      flickMultiManager.remove(flickManager!);
+      videoPlayer.dispose();
     }
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
@@ -515,10 +516,15 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                                   ? Icons.volume_off
                                                   : Icons.volume_up,
                                               size: 20),
-                                          onPressed: () => {
+                                          onPressed: () {
                                             setState(() {
-                                              flickMultiManager.toggleMute();
-                                            }),
+                                              //flickMultiManager.toggleMute();
+                                              if(!flickManager!.flickControlManager!.isMute){
+                                                flickManager!.flickControlManager!.mute();
+                                              }else{
+                                                flickManager!.flickControlManager!.unmute();
+                                              }
+                                            });
                                           },
                                           color: Colors.white,
                                         ),
