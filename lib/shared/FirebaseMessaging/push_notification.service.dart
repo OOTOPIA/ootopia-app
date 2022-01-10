@@ -1,4 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -7,6 +9,9 @@ class PushNotification {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   SecureStoreMixin storage = SecureStoreMixin();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
+  late AndroidNotificationChannel channel;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   String? token;
   static PushNotification getInstace() {
@@ -14,6 +19,23 @@ class PushNotification {
       _instance = PushNotification();
     }
     return _instance!;
+  }
+
+  PushNotification() {
+    _firebaseMessaging.getNotificationSettings();
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel',
+      'High Importance Notifications',
+      description: 'This channel is used for important notifications.',
+      importance: Importance.high,
+    );
+
+    Future.delayed(Duration.zero, () async {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+    });
   }
 
   void listenerFirebaseCloudMessagingToken() async {
@@ -37,8 +59,26 @@ class PushNotification {
 
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("Message recieved");
       print("Message ${event.notification?.title} ${event.notification?.body}");
+      print("Message ${event.data}");
+      RemoteNotification? notification = event.notification;
+      AndroidNotification? android = event.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              color: Colors.white,
+              channelDescription: channel.description,
+              //icon: '@mipmap/ic_launcher',
+            ),
+          ),
+        );
+      }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {

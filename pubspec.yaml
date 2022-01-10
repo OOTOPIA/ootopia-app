@@ -70,6 +70,7 @@ dependencies:
   mobx: ^2.0.1
   flutter_mobx: ^2.0.0
   dio: ^4.0.1
+  flutter_local_notifications: ^9.2.0
   flutter_tags:
     git:
       url: https://github.com/OOTOPIA/flutter_tags.git
