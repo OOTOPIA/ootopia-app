@@ -26,11 +26,7 @@ class LinkRichText extends StatelessWidget {
   _hasntLink() {
     textSpanWidget.add(TextSpan(
       text: this.text,
-      style: TextStyle(
-        color: LightColors.black,
-        fontWeight: FontWeight.w400,
-        fontSize: 14,
-      ),
+      style: handleTextStyle(false),
     ));
   }
 
@@ -49,20 +45,12 @@ class LinkRichText extends StatelessWidget {
 
       textSpanWidget.add(TextSpan(
           text: text,
-          style: TextStyle(
-            color: LightColors.linkText,
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-          ),
+          style: handleTextStyle(true),
           recognizer: new TapGestureRecognizer()..onTap = () => launch(url)));
     } else
       textSpanWidget.add(TextSpan(
         text: text,
-        style: TextStyle(
-          color: LightColors.black,
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-        ),
+        style: handleTextStyle(false),
       ));
   }
 
@@ -74,12 +62,26 @@ class LinkRichText extends StatelessWidget {
             : 'http://' + link;
   }
 
+  TextStyle handleTextStyle(bool isLink) {
+    return isLink
+        ? TextStyle(
+            color: LightColors.linkText,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          )
+        : TextStyle(
+            color: LightColors.black,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width * 0.60,
       child: RichText(
         textAlign: TextAlign.start,
-        overflow: TextOverflow.clip,
         maxLines: maxLines,
         text: TextSpan(children: textSpanWidget),
       ),

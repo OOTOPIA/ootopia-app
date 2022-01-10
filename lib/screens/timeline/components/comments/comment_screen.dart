@@ -221,16 +221,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.60,
-                                                          child: LinkRichText(
-                                                            comment.text,
-                                                            maxLines: 10,
-                                                          ),
+                                                        LinkRichText(
+                                                          comment.text,
+                                                          maxLines: 10,
                                                         ),
                                                         Visibility(
                                                           visible:
