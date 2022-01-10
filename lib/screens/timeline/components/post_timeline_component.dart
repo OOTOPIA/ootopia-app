@@ -26,6 +26,7 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -777,7 +778,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   child: Padding(
                     padding: EdgeInsets.only(
                         top: 3, left: 12, bottom: 12, right: 12),
-                    child: Text(this.post.description),
+                    child: LinkRichText(this.post.description),
                   ),
                 )
               ],
