@@ -20,10 +20,7 @@ class LinkRichText extends StatelessWidget {
   }
 
   _initialize() {
-    if (regExp.hasMatch(text!))
-      _hasLink();
-    else
-      _hasntLink();
+    regExp.hasMatch(text!) ? _hasLink() : _hasntLink();
   }
 
   _hasntLink() {
@@ -41,32 +38,40 @@ class LinkRichText extends StatelessWidget {
     final splitedText = text?.split(' ');
 
     splitedText?.forEach((element) {
-      if (regExp.hasMatch(element)) {
-        var url = element.toString().contains('https://')
-            ? element
-            : element.toString().contains('http://')
-                ? element
-                : 'http://' + element;
+      _checkTextStyleType(element);
+      textSpanWidget.add(TextSpan(text: " "));
+    });
+  }
 
-        textSpanWidget.add(TextSpan(
-            text: element,
-            style: TextStyle(
-              color: LightColors.linkText,
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-            ),
-            recognizer: new TapGestureRecognizer()..onTap = () => launch(url)));
-      } else
-        textSpanWidget.add(TextSpan(
-          text: element,
+  _checkTextStyleType(String text) {
+    if (regExp.hasMatch(text)) {
+      var url = _validateLink(text);
+
+      textSpanWidget.add(TextSpan(
+          text: text,
           style: TextStyle(
-            color: LightColors.black,
+            color: LightColors.linkText,
             fontWeight: FontWeight.w400,
             fontSize: 14,
           ),
-        ));
-      textSpanWidget.add(TextSpan(text: " "));
-    });
+          recognizer: new TapGestureRecognizer()..onTap = () => launch(url)));
+    } else
+      textSpanWidget.add(TextSpan(
+        text: text,
+        style: TextStyle(
+          color: LightColors.black,
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+        ),
+      ));
+  }
+
+  _validateLink(String link) {
+    return link.toString().contains('https://')
+        ? link
+        : link.toString().contains('http://')
+            ? link
+            : 'http://' + link;
   }
 
   @override
