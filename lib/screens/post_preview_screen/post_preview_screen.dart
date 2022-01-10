@@ -25,6 +25,7 @@ import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manage
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
@@ -50,8 +51,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   late VideoPlayerController videoPlayer;
   late FlickMultiManager flickMultiManager;
   InterestsTagsRepositoryImpl _tagsRepository = InterestsTagsRepositoryImpl();
-  final TextEditingController _descriptionInputController =
-      TextEditingController();
+  late RichTextController _descriptionInputController;
   final TextEditingController _geolocationInputController =
       TextEditingController();
   double mirror = 0;
@@ -288,6 +288,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       _getLocation(context);
     });
     super.initState();
+
+    _descriptionInputController = RichTextController(
+      deleteOnBack: false,
+      patternMatchMap: {
+        RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?"):
+            const TextStyle(
+          color: LightColors.linkText,
+        ),
+      },
+      onMatch: (List<String> matches) {},
+    );
 
     WidgetsBinding.instance!.addObserver(this);
 
