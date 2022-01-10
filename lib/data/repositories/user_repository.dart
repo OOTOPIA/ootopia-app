@@ -21,6 +21,7 @@ abstract class UserRepository {
   Future<DailyGoalStatsModel?> getDailyGoalStats();
   Future<List<InvitationCodeModel>?> getCodes();
   Future<String> verifyCodes(String code);
+  Future updateTokenDeviceUser(String tokenDevice);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -136,6 +137,23 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     } catch (error) {
       print('$error');
       throw Exception('Failed to update user ' + error.toString());
+    }
+  }
+
+  @override
+  Future updateTokenDeviceUser(String deviceToken) async {
+    try {
+      final response = await http.put(
+        Uri.parse(dotenv.env['API_URL']! + "users/token-device"),
+        headers: await this.getHeaders(),
+        body: jsonEncode({'deviceToken': deviceToken}),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update token device user');
+      }
+    } catch (error) {
+      throw Exception('Failed to update token device user ' + error.toString());
     }
   }
 

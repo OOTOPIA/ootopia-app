@@ -1,50 +1,34 @@
 {
   "project_info": {
-    "project_number": "986493600408",
-    "project_id": "ootopia-e8c63",
-    "storage_bucket": "ootopia-e8c63.appspot.com"
+    "project_number": "181170986810",
+    "project_id": "ootopia-beta-staging",
+    "storage_bucket": "ootopia-beta-staging.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:986493600408:android:500cca3a8253aed1ec06ed",
+        "mobilesdk_app_id": "1:181170986810:android:8509d5b9ef0cf7f5acba03",
         "android_client_info": {
-          "package_name": "com.example.ootopia_app"
+          "package_name": "org.ootopia.beta"
         }
       },
       "oauth_client": [
         {
-          "client_id": "986493600408-19kp10qkp3pd470pv9jl9c9nl7kfj4md.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.ootopia_app",
-            "certificate_hash": "b487ed4bdc203486a4bcc6a8e845b7e2d89eaffc"
-          }
-        },
-        {
-          "client_id": "986493600408-elupl7975pjpeo60m81oi4q5nlafmvts.apps.googleusercontent.com",
+          "client_id": "181170986810-p9pui2jjc7a2tnfuk1uagm204jbc7gn2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzDZlUvi29XcJNDk4yc8Kku3xBagVtqRY"
+          "current_key": "AIzaSyBASo2SDThdbNJAKbQZjuuesJho7XH23Ps"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "986493600408-elupl7975pjpeo60m81oi4q5nlafmvts.apps.googleusercontent.com",
+              "client_id": "181170986810-p9pui2jjc7a2tnfuk1uagm204jbc7gn2.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "986493600408-ofks88dk98lvp3q40o7q6vr9orgh646i.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "org.ootopia",
-                "app_store_id": "1554471120"
-              }
             }
           ]
         }

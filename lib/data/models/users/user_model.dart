@@ -33,114 +33,117 @@ class User extends Equatable {
   int? totalTrophyQuantity;
   String? countryCode;
   String? dialCode;
+  String? deviceToken;
 
-  User({
-    this.id,
-    this.fullname,
-    this.email,
-    this.invitationCode,
-    this.birthdate,
-    this.photoUrl,
-    this.addressCountryCode,
-    this.addressState,
-    this.addressCity,
-    this.addressLatitude,
-    this.addressLongitude,
-    this.dailyLearningGoalInMinutes,
-    this.enableSustainableAds,
-    this.dontAskAgainToConfirmGratitudeReward,
-    this.registerPhase,
-    this.token,
-    this.createdAt,
-    this.updatedAt,
-    this.badges,
-    this.personalDialogOpened,
-    this.cityDialogOpened,
-    this.globalDialogOpened,
-    this.personalTrophyQuantity,
-    this.cityTrophyQuantity,
-    this.globalTrophyQuantity,
-    this.totalTrophyQuantity,
-    this.bio,
-    this.phone,
-    this.countryCode,
-    this.dialCode,
-  });
+  User(
+      {this.id,
+      this.fullname,
+      this.email,
+      this.invitationCode,
+      this.birthdate,
+      this.photoUrl,
+      this.addressCountryCode,
+      this.addressState,
+      this.addressCity,
+      this.addressLatitude,
+      this.addressLongitude,
+      this.dailyLearningGoalInMinutes,
+      this.enableSustainableAds,
+      this.dontAskAgainToConfirmGratitudeReward,
+      this.registerPhase,
+      this.token,
+      this.createdAt,
+      this.updatedAt,
+      this.badges,
+      this.personalDialogOpened,
+      this.cityDialogOpened,
+      this.globalDialogOpened,
+      this.personalTrophyQuantity,
+      this.cityTrophyQuantity,
+      this.globalTrophyQuantity,
+      this.totalTrophyQuantity,
+      this.bio,
+      this.phone,
+      this.countryCode,
+      this.dialCode,
+      this.deviceToken});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['id'],
-        fullname: json['fullname'],
-        email: json['email'],
-        invitationCode: json['invitationCode'],
-        birthdate: json['birthdate'],
-        photoUrl: json['photoUrl'],
-        addressCountryCode: json['addressCountryCode'],
-        addressState: json['addressState'],
-        addressCity: json['addressCity'],
-        addressLatitude: json['addressLatitude'] == null
-            ? 0.0
-            : (json['addressLatitude'] is double
-                ? json['addressLatitude']
-                : double.parse(json['addressLatitude'])),
-        addressLongitude: json['addressLongitude'] == null
-            ? 0.0
-            : (json['addressLongitude'] is double
-                ? json['addressLongitude']
-                : double.parse(json['addressLongitude'])),
-        dailyLearningGoalInMinutes: (json['dailyLearningGoalInMinutes'] is int
-            ? json['dailyLearningGoalInMinutes']
-            : int.parse(json['dailyLearningGoalInMinutes'])),
-        registerPhase: (json['registerPhase'] is int
-            ? json['registerPhase']
-            : int.parse(json['registerPhase'])),
-        enableSustainableAds: (json['enableSustainableAds'] == null
-            ? false
-            : json['enableSustainableAds']),
-        dontAskAgainToConfirmGratitudeReward:
-            (json['dontAskAgainToConfirmGratitudeReward'] == null
-                ? false
-                : json['dontAskAgainToConfirmGratitudeReward']),
-        token: json['token'],
-        createdAt: json['createdAt'],
-        updatedAt: json['updatedAt'],
-        badges: (json['badges'] == null
-            ? []
-            : (json['badges'] as List<dynamic>)
-                .map((e) => Badge.fromJson(e as Map<String, dynamic>))
-                .toList()),
-        personalDialogOpened: json['personalDialogOpened'] == null
-            ? false
-            : json['personalDialogOpened'],
-        cityDialogOpened:
-            json['cityDialogOpened'] == null ? false : json['cityDialogOpened'],
-        globalDialogOpened: json['globalDialogOpened'] == null
-            ? false
-            : json['globalDialogOpened'],
-        personalTrophyQuantity: json['personalTrophyQuantity'] == null
-            ? 0
-            : (json['personalTrophyQuantity'] is int
-                ? json['personalTrophyQuantity']
-                : int.parse(json['personalTrophyQuantity'])),
-        cityTrophyQuantity: json['cityTrophyQuantity'] == null
-            ? 0
-            : (json['cityTrophyQuantity'] is int
-                ? json['cityTrophyQuantity']
-                : int.parse(json['cityTrophyQuantity'])),
-        globalTrophyQuantity: json['globalTrophyQuantity'] == null
-            ? 0
-            : (json['globalTrophyQuantity'] is int
-                ? json['globalTrophyQuantity']
-                : int.parse(json['globalTrophyQuantity'])),
-        totalTrophyQuantity: json['totalTrophyQuantity'] == null
-            ? 0
-            : (json['totalTrophyQuantity'] is int
-                ? json['totalTrophyQuantity']
-                : int.parse(json['totalTrophyQuantity'])),
-        bio: json['bio'],
-        phone: json['phone'],
-        dialCode: json['dialCode'],
-        countryCode: json['countryCode']);
+      id: json['id'],
+      fullname: json['fullname'],
+      email: json['email'],
+      invitationCode: json['invitationCode'],
+      birthdate: json['birthdate'],
+      photoUrl: json['photoUrl'],
+      addressCountryCode: json['addressCountryCode'],
+      addressState: json['addressState'],
+      addressCity: json['addressCity'],
+      addressLatitude: json['addressLatitude'] == null
+          ? 0.0
+          : (json['addressLatitude'] is double
+              ? json['addressLatitude']
+              : double.parse(json['addressLatitude'])),
+      addressLongitude: json['addressLongitude'] == null
+          ? 0.0
+          : (json['addressLongitude'] is double
+              ? json['addressLongitude']
+              : double.parse(json['addressLongitude'])),
+      dailyLearningGoalInMinutes: (json['dailyLearningGoalInMinutes'] is int
+          ? json['dailyLearningGoalInMinutes']
+          : int.parse(json['dailyLearningGoalInMinutes'])),
+      registerPhase: (json['registerPhase'] is int
+          ? json['registerPhase']
+          : int.parse(json['registerPhase'])),
+      enableSustainableAds: (json['enableSustainableAds'] == null
+          ? false
+          : json['enableSustainableAds']),
+      dontAskAgainToConfirmGratitudeReward:
+          (json['dontAskAgainToConfirmGratitudeReward'] == null
+              ? false
+              : json['dontAskAgainToConfirmGratitudeReward']),
+      token: json['token'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      badges: (json['badges'] == null
+          ? []
+          : (json['badges'] as List<dynamic>)
+              .map((e) => Badge.fromJson(e as Map<String, dynamic>))
+              .toList()),
+      personalDialogOpened: json['personalDialogOpened'] == null
+          ? false
+          : json['personalDialogOpened'],
+      cityDialogOpened:
+          json['cityDialogOpened'] == null ? false : json['cityDialogOpened'],
+      globalDialogOpened: json['globalDialogOpened'] == null
+          ? false
+          : json['globalDialogOpened'],
+      personalTrophyQuantity: json['personalTrophyQuantity'] == null
+          ? 0
+          : (json['personalTrophyQuantity'] is int
+              ? json['personalTrophyQuantity']
+              : int.parse(json['personalTrophyQuantity'])),
+      cityTrophyQuantity: json['cityTrophyQuantity'] == null
+          ? 0
+          : (json['cityTrophyQuantity'] is int
+              ? json['cityTrophyQuantity']
+              : int.parse(json['cityTrophyQuantity'])),
+      globalTrophyQuantity: json['globalTrophyQuantity'] == null
+          ? 0
+          : (json['globalTrophyQuantity'] is int
+              ? json['globalTrophyQuantity']
+              : int.parse(json['globalTrophyQuantity'])),
+      totalTrophyQuantity: json['totalTrophyQuantity'] == null
+          ? 0
+          : (json['totalTrophyQuantity'] is int
+              ? json['totalTrophyQuantity']
+              : int.parse(json['totalTrophyQuantity'])),
+      bio: json['bio'],
+      phone: json['phone'],
+      dialCode: json['dialCode'],
+      countryCode: json['countryCode'],
+      deviceToken: json['deviceToken'],
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -171,6 +174,7 @@ class User extends Equatable {
         'phone': phone,
         'countryCode': countryCode,
         'dialCode': dialCode,
+        'deviceToken': deviceToken,
       };
 
   @override
@@ -204,5 +208,6 @@ class User extends Equatable {
         bio,
         phone,
         dialCode,
+        deviceToken,
       ];
 }
