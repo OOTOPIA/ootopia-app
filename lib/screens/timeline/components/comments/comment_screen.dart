@@ -4,6 +4,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -226,17 +227,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                                   .size
                                                                   .width *
                                                               0.60,
-                                                          child: Text(
+                                                          child: LinkRichText(
                                                             comment.text,
                                                             maxLines: 10,
-                                                            style: TextStyle(
-                                                              color: LightColors
-                                                                  .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontSize: 14,
-                                                            ),
                                                           ),
                                                         ),
                                                         Visibility(
