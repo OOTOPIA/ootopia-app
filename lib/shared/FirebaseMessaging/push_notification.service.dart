@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:ootopia_app/data/models/notifications/notification_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -35,6 +36,13 @@ class PushNotification {
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
+
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
     });
   }
 
@@ -59,25 +67,24 @@ class PushNotification {
 
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("Message ${event.notification?.title} ${event.notification?.body}");
       print("Message ${event.data}");
-      RemoteNotification? notification = event.notification;
-      AndroidNotification? android = event.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              color: Colors.white,
-              channelDescription: channel.description,
-              //icon: '@mipmap/ic_launcher',
+      final teste = NotificationModel.fromJson(event.data);
+      print(teste);
+      if (event.data != {} || event.data != null) {
+          flutterLocalNotificationsPlugin.show(
+            teste.hashCode,
+            teste.userName,
+            teste.comments,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                color: Colors.white,
+                channelDescription: channel.description,
+                icon: '@mipmap/ic_launcher',
+              ),
             ),
-          ),
-        );
+          );
       }
     });
 
