@@ -90,6 +90,7 @@ dependencies:
   wakelock: ^0.5.6
   firebase_messaging: ^11.2.4
   firebase_core: ^1.10.6
+  device_info: ^2.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:http/http.dart' as http;
@@ -143,10 +145,26 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   @override
   Future updateTokenDeviceUser(String deviceToken) async {
     try {
+      String? deviceId;
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+      try {
+        if (Platform.isAndroid) {
+          deviceId = (await deviceInfoPlugin.androidInfo).androidId;
+        } else if (Platform.isIOS) {
+          deviceId = (await deviceInfoPlugin.iosInfo).identifierForVendor;
+        }
+      } catch (error) {
+        print("ERROR !updateTokenDeviceUser $error");
+        return;
+      }
+
+      if (deviceId == null) return;
+
       final response = await http.put(
-        Uri.parse(dotenv.env['API_URL']! + "users/token-device"),
+        Uri.parse(dotenv.env['API_URL']! + "users-device-token"),
         headers: await this.getHeaders(),
-        body: jsonEncode({'deviceToken': deviceToken}),
+        body: jsonEncode({'deviceToken': deviceToken, 'deviceId': deviceId}),
       );
 
       if (response.statusCode != 200) {

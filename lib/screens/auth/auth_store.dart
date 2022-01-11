@@ -75,14 +75,9 @@ abstract class AuthStoreBase with Store {
       if (result != null) {
         User user = result;
 
-        if (pushNotification.token != null &&
-            (user.deviceToken == null ||
-                (user.deviceToken != null &&
-                    user.deviceToken != pushNotification.token))) {
-          await this
-              .userRepository
-              .updateTokenDeviceUser(pushNotification.token!);
-        }
+        await this
+            .userRepository
+            .updateTokenDeviceUser(pushNotification.token!);
         this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
       }
     } catch (e) {
