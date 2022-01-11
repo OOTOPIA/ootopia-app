@@ -1,38 +1,37 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class RegenerarionGameLearningAlert extends StatefulWidget {
+class RegenerationGameLearningAlert extends StatefulWidget {
   final Map<String, dynamic> args;
 
-  RegenerarionGameLearningAlert(this.args, {Key? key}) : super(key: key);
+  RegenerationGameLearningAlert(this.args);
 
   @override
-  _RegenerarionGameLearningAlertState createState() =>
-      _RegenerarionGameLearningAlertState();
+  _RegenerationGameLearningAlertState createState() =>
+      _RegenerationGameLearningAlertState();
 }
 
-class _RegenerarionGameLearningAlertState
-    extends State<RegenerarionGameLearningAlert> {
-  String? _imagePath;
-  Color? _backgroundColorIcon;
-  String? _icon;
-  String? _title;
-  String? _firstText;
-  String? _secondText;
+class _RegenerationGameLearningAlertState
+    extends State<RegenerationGameLearningAlert> {
+  late String _imagePath;
+  late Color _backgroundColorIcon;
+  late String _icon;
+  late String _title;
+  late String _firstText;
+  late String _secondText;
+  late String _imageRights;
   String? _secondTextPt2;
-
-  String? _imageRights;
+  SharedPreferences? prefs;
+  bool dontShowAgain = false;
 
   SmartPageController controller = SmartPageController.getInstance();
   LearningTracksModel? welcomeGuideLearningTrack;
@@ -96,164 +95,64 @@ class _RegenerarionGameLearningAlertState
     super.initState();
     Future.delayed(Duration.zero, () async {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
+      prefs = await SharedPreferences.getInstance();
     });
     Future.delayed(Duration(milliseconds: 350), () {
       this.setStatusBar(false);
     });
   }
 
-  isSmallPhone(double value) {
-    if (MediaQuery.of(context).size.width < 380) return value * 0.7;
-    return value;
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Center(
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(_imagePath as String),
-                  fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () {
+        return new Future(() => false);
+      },
+      child: Scaffold(
+        body: Center(
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(_imagePath),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            // Positioned(
-            //   top: 90,
-            //   right: -36,
-            //   child: Transform.rotate(
-            //       angle: 3 * pi / 2,
-            //       child: Container(
-            //         child: Text(
-            //           _imageRights as String,
-            //           textAlign: TextAlign.right,
-            //           style: Theme.of(context).textTheme.bodyText1!.copyWith(
-            //                 fontSize: 10,
-            //                 color: Colors.white,
-            //               ),
-            //         ),
-            //       )),
-            // ),
-            CustomScrollView(
-              scrollDirection: Axis.vertical,
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                              horizontal: GlobalConstants.of(context)
-                                  .screenHorizontalSpace)
-                          .copyWith(top: 32),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!
-                                    .regenerationGame
-                                    .toUpperCase(),
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.white,
-                                        fontSize: screenWidth <= 375 ? 18 : 22,
-                                        fontWeight: FontWeight.w400)
-                                    .copyWith(
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 3.0,
-                                      color: Colors.black.withOpacity(.25),
-                                      offset: Offset(
-                                        0,
-                                        5.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Container(
-                                width: screenWidth <= 375 ? 100 : 160,
-                                height: screenWidth <= 375 ? 100 : 160,
-                                decoration: BoxDecoration(
-                                    color: _backgroundColorIcon,
-                                    borderRadius: BorderRadius.circular(100)),
-                                padding: EdgeInsets.all(28),
-                                child: SvgPicture.asset(
-                                  _icon as String,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Text(_title!,
+              CustomScrollView(
+                scrollDirection: Axis.vertical,
+                physics: NeverScrollableScrollPhysics(),
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                                horizontal: GlobalConstants.of(context)
+                                    .screenHorizontalSpace)
+                            .copyWith(top: 32),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .regenerationGame
+                                      .toUpperCase(),
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle1!
                                       .copyWith(
-                                          fontSize:
-                                              screenWidth <= 375 ? 28 : 40,
-                                          color: Colors.white)
-                                      .copyWith(
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 3.0,
-                                        color: Colors.black.withOpacity(.25),
-                                        offset: Offset(
-                                          0,
-                                          5.0,
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Text(_firstText!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                          fontSize:
-                                              screenWidth <= 375 ? 14 : 18,
                                           color: Colors.white,
+                                          fontSize:
+                                              screenWidth <= 375 ? 18 : 22,
                                           fontWeight: FontWeight.w400)
-                                      .copyWith(shadows: [
-                                    Shadow(
-                                      blurRadius: 3.0,
-                                      color: Colors.black.withOpacity(.25),
-                                      offset: Offset(
-                                        0,
-                                        5.0,
-                                      ),
-                                    ),
-                                  ])),
-                              SizedBox(
-                                height: 24,
-                              ),
-                              Text(_secondText!,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                          fontSize:
-                                              screenWidth <= 375 ? 16 : 23,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500)
                                       .copyWith(
                                     shadows: [
                                       Shadow(
@@ -265,9 +164,73 @@ class _RegenerarionGameLearningAlertState
                                         ),
                                       ),
                                     ],
-                                  )),
-                              _secondTextPt2 != null
-                                  ? Text(_secondTextPt2!,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  width: screenWidth <= 375 ? 80 : 160,
+                                  height: screenWidth <= 375 ? 80 : 160,
+                                  decoration: BoxDecoration(
+                                      color: _backgroundColorIcon,
+                                      borderRadius: BorderRadius.circular(100)),
+                                  padding: EdgeInsets.all(28),
+                                  child: SvgPicture.asset(
+                                    _icon,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(_title,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                            fontSize:
+                                                screenWidth <= 375 ? 28 : 40,
+                                            color: Colors.white)
+                                        .copyWith(
+                                      shadows: [
+                                        Shadow(
+                                          blurRadius: 3.0,
+                                          color: Colors.black.withOpacity(.25),
+                                          offset: Offset(
+                                            0,
+                                            5.0,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(_firstText,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                            fontSize:
+                                                screenWidth <= 375 ? 14 : 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400)
+                                        .copyWith(shadows: [
+                                      Shadow(
+                                        blurRadius: 3.0,
+                                        color: Colors.black.withOpacity(.25),
+                                        offset: Offset(
+                                          0,
+                                          5.0,
+                                        ),
+                                      ),
+                                    ])),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                if (_secondTextPt2 == null) ...[
+                                  Text(_secondText,
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
@@ -289,24 +252,90 @@ class _RegenerarionGameLearningAlertState
                                             ),
                                           ),
                                         ],
-                                      ))
-                                  : SizedBox(),
-                            ],
-                          ),
-                          SizedBox(
-                              height: screenWidth <= 375
-                                  ? 18
-                                  : MediaQuery.of(context).size.height * 0.1),
-                          Column(
-                            children: [
+                                      )),
+                                ] else if (_secondTextPt2 != null) ...[
+                                  Text("$_secondText\n$_secondTextPt2",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                              fontSize:
+                                                  screenWidth <= 375 ? 16 : 23,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500)
+                                          .copyWith(
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 3.0,
+                                            color:
+                                                Colors.black.withOpacity(.25),
+                                            offset: Offset(
+                                              0,
+                                              5.0,
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                ]
+                              ],
+                            ),
+                            SizedBox(
+                                height: MediaQuery.of(context).size.height > 850
+                                    ? MediaQuery.of(context).size.height * 0.1
+                                    : 35),
+                            if (widget.args["type"] == 'personal') ...[
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      height: screenWidth <= 375 ? 45 : 53,
-                                      child: TextButton(
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Checkbox(
+                                      side: BorderSide(color: Colors.white),
+                                      value: dontShowAgain,
+                                      checkColor: Colors.white,
+                                      fillColor: MaterialStateProperty.all(
+                                          Colors.transparent),
+                                      activeColor: Colors.white,
+                                      onChanged: (value) {
+                                        prefs!.setBool(
+                                            'dontShowAgainRegenerationGamePega',
+                                            !dontShowAgain);
+                                        setState(() {
+                                          dontShowAgain = !dontShowAgain;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .dontShowThisMessageAgain,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: screenWidth <= 375 ? 45 : 53,
+                                    child: TextButton(
                                         style: ButtonStyle(
                                           alignment: Alignment.center,
                                           backgroundColor:
@@ -329,89 +358,108 @@ class _RegenerarionGameLearningAlertState
                                                   screenWidth <= 375 ? 14 : 16,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
+                                        onPressed: () {
+                                          if (widget.args["type"] ==
+                                              'personal') {
+                                            controller
+                                                .showBottomNavigationBar();
+                                            setState(() {
+                                              controller.currentBottomIndex =
+                                                  PageViewController
+                                                      .TAB_UNSELECTED;
+                                              controller.refreshViews();
+                                            });
+                                          } else {
+                                            controller.currentBottomIndex =
+                                                PageViewController
+                                                    .TAB_INDEX_TIMELINE;
+                                            controller.refreshViews();
+                                            controller
+                                                .showBottomNavigationBar();
+                                            controller.goToPage(
+                                                PageViewController
+                                                    .TAB_INDEX_TIMELINE);
+                                          }
+                                        }),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 28,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    height: screenWidth <= 375 ? 45 : 53,
+                                    child: TextButton(
+                                      style: ButtonStyle(
+                                          alignment: Alignment.center,
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Color(0xFF003694)),
+                                          shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                          ))),
+                                      child: Text(
+                                        AppLocalizations.of(context)!.learnMore,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                screenWidth <= 375 ? 14 : 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
+                                      onPressed: () async {
+                                        controller.currentBottomIndex =
+                                            PageViewController
+                                                .TAB_INDEX_LEARNING_TRACKS;
+                                        controller.showBottomNavigationBar();
+                                        controller.refreshViews();
+
+                                        if (welcomeGuideLearningTrack == null) {
+                                          welcomeGuideLearningTrack =
+                                              await learningTracksStore
+                                                  .getWelcomeGuide();
+                                        }
+                                        if (welcomeGuideLearningTrack != null) {
+                                          openLearningTrack(
+                                              welcomeGuideLearningTrack!);
+                                        }
+                                      },
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 28,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      height: screenWidth <= 375 ? 45 : 53,
-                                      child: TextButton(
-                                        style: ButtonStyle(
-                                            alignment: Alignment.center,
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Color(0xFF003694)),
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(40.0),
-                                            ))),
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .learnMore,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  screenWidth <= 375 ? 14 : 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        onPressed: () async => {
-                                          Navigator.of(context).pop(),
-                                          if (welcomeGuideLearningTrack == null)
-                                            {
-                                              welcomeGuideLearningTrack =
-                                                  await learningTracksStore
-                                                      .getWelcomeGuide()
-                                            }
-                                          else if (welcomeGuideLearningTrack !=
-                                              null)
-                                            {
-                                              openLearningTrack(
-                                                  welcomeGuideLearningTrack!)
-                                            }
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 25,
-                              )
-                            ],
-                          )
-                        ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 40, right: 16),
-                child: RotatedBox(
-                  quarterTurns: 3,
-                  child: Text(
-                    _imageRights as String,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: 10,
-                          color: Colors.white,
-                        ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40, right: 16),
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      _imageRights,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 10,
+                            color: Colors.white,
+                          ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

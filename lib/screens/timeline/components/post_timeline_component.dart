@@ -26,6 +26,7 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -194,8 +195,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     walletStore = Provider.of<WalletStore>(context);
     postTimelineComponentController =
         Provider.of<PostTimelineComponentController>(context);
-    return Observer(builder: (_) {
-      return Column(
+    return Observer(
+      builder: (_) => Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -420,27 +421,38 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   alignment: Alignment.center,
                   child: AnimatedContainer(
                     height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                    ? 100 : 0.0,
+                        ? 100
+                        : 0.0,
                     width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                    ? 100 : 0.0,
-                    curve: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        && canDoubleClick ? Curves.easeOutBack : Curves.easeIn,
+                        ? 100
+                        : 0.0,
+                    curve: _bigLikeShowAnimation &&
+                            !_bigLikeShowAnimationEnd &&
+                            canDoubleClick
+                        ? Curves.easeOutBack
+                        : Curves.easeIn,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                     ),
                     duration: const Duration(milliseconds: 300),
                     child: AnimatedOpacity(
-                      opacity: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd ? 0.8 : 0.0,
+                      opacity:
+                          _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                              ? 0.8
+                              : 0.0,
                       duration: Duration(milliseconds: 300),
                       child: Visibility(
                         visible: _bigLikeShowAnimation,
                         child: Image.asset(
                           'assets/icons_profile/woow_90_deg.png',
-                          width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                              ? 100 : 0.0,
-                          height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                              ? 100 : 0.0,
-
+                          width:
+                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                                  ? 100
+                                  : 0.0,
+                          height:
+                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
+                                  ? 100
+                                  : 0.0,
                         ),
                       ),
                     ),
@@ -586,9 +598,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                               padding:
                                                   EdgeInsets.only(right: 4),
                                               child: Text(
-                                                currencyFormatter.format(this
-                                                    .post
-                                                    .oozTotalCollected),
+                                                currencyFormatter.format(
+                                                    double.parse(this
+                                                        .post
+                                                        .oozTotalCollected)),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: this.post.oozRewarded ==
@@ -708,7 +721,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                   image: AssetImage(
                                       'assets/icons_profile/woow.png'),
                                 ),
-                                onPressed:  () => incrementOozToTransfer(),
+                                onPressed: () => incrementOozToTransfer(),
                               )),
                         ),
                       ),
@@ -724,7 +737,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       ScaffoldMessenger.of(context).showSnackBar(
                         CustomSnackbars(context).defaultSnackbar(
                           text:
-                          AppLocalizations.of(context)!.tooltipBlockedField,
+                              AppLocalizations.of(context)!.tooltipBlockedField,
                           backgroundColor: Color(0xff03DAC5),
                           iconColor: Colors.white,
                           suffixIcon: Icons.info_outline_rounded,
@@ -736,7 +749,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       ScaffoldMessenger.of(context).showSnackBar(
                         CustomSnackbars(context).defaultSnackbar(
                           text:
-                          AppLocalizations.of(context)!.tooltipBlockedField,
+                              AppLocalizations.of(context)!.tooltipBlockedField,
                           backgroundColor: Color(0xff03DAC5),
                           iconColor: Colors.white,
                           suffixIcon: Icons.info_outline_rounded,
@@ -765,7 +778,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   child: Padding(
                     padding: EdgeInsets.only(
                         top: 3, left: 12, bottom: 12, right: 12),
-                    child: Text(this.post.description),
+                    child: LinkRichText(this.post.description),
                   ),
                 )
               ],
@@ -834,27 +847,27 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
           ),
         ],
-      );
-    });
+      ),
+    );
   }
 
-  void incrementOozToTransfer(){
-    if(this.post.oozToTransfer == null){
+  void incrementOozToTransfer() {
+    if (this.post.oozToTransfer == null) {
       this.post.oozToTransfer = 0;
     }
-    if(this.post.oozToTransfer! < 0){
+    if (this.post.oozToTransfer! < 0) {
       this.post.oozToTransfer = 0;
     }
-    double maxValue  = ((oozGoal * (100 - 30)) / 70).roundToDouble();
-    if(this.post.oozToTransfer!<maxValue - 5 ) {
+    double maxValue = ((oozGoal * (100 - 30)) / 70).roundToDouble();
+    if (this.post.oozToTransfer! < maxValue - 5) {
       this.post.oozToTransfer = this.post.oozToTransfer! + 5;
-    }else{
+    } else {
       this.post.oozToTransfer = maxValue;
     }
-    double perc = ((this.post.oozToTransfer!*70)/oozGoal)+30;
+    double perc = ((this.post.oozToTransfer! * 70) / oozGoal) + 30;
     setState(() {
       _isDragging = true;
-      _draggablePositionX = (perc*getMaxSlideWidth())/100;
+      _draggablePositionX = (perc * getMaxSlideWidth()) / 100;
     });
   }
 
@@ -976,7 +989,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
-            this.post.oozTotalCollected + this.post.oozToTransfer!;
+            "${(double.parse(this.post.oozTotalCollected) + this.post.oozToTransfer!)}";
         if (this.post.oozRewarded == null || this.post.oozRewarded == 0) {
           this.post.oozRewarded = this.post.oozToTransfer;
         } else {
@@ -1109,18 +1122,17 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   void _likePost(bool dislikeIfIsLiked, [bool? showAnimation]) async {
-
-    if(canDoubleClick) {
+    if (canDoubleClick) {
       incrementOozToTransfer();
       setState(() {
         canDoubleClick = false;
       });
-      Future.delayed(Duration(milliseconds: 450),(){
+      Future.delayed(Duration(milliseconds: 450), () {
         setState(() {
           _bigLikeShowAnimationEnd = true;
         });
       });
-      Future.delayed(Duration(milliseconds: 600),(){
+      Future.delayed(Duration(milliseconds: 600), () {
         setState(() {
           canDoubleClick = true;
         });
@@ -1137,9 +1149,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         if (dislikeIfIsLiked ||
             (!this.postTimelineController.post.liked && !dislikeIfIsLiked)) {
           LikePostResult likePostResult =
-          await this.postTimelineController.likePost();
+              await this.postTimelineController.likePost();
           setState(
-                () {
+            () {
               if (likePostResult.liked) {
                 this.trackingEvents.timelineGaveALike(
                   {

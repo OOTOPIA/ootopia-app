@@ -9,6 +9,28 @@ part of 'profile_screen_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
+  Computed<int>? _$postsOffsetComputed;
+
+  @override
+  int get postsOffset =>
+      (_$postsOffsetComputed ??= Computed<int>(() => super.postsOffset,
+              name: '_ProfileScreenStoreBase.postsOffset'))
+          .value;
+  Computed<bool>? _$hasMorePostsComputed;
+
+  @override
+  bool get hasMorePosts =>
+      (_$hasMorePostsComputed ??= Computed<bool>(() => super.hasMorePosts,
+              name: '_ProfileScreenStoreBase.hasMorePosts'))
+          .value;
+  Computed<bool>? _$loadingPostsComputed;
+
+  @override
+  bool get loadingPosts =>
+      (_$loadingPostsComputed ??= Computed<bool>(() => super.loadingPosts,
+              name: '_ProfileScreenStoreBase.loadingPosts'))
+          .value;
+
   final _$loadingProfileAtom =
       Atom(name: '_ProfileScreenStoreBase.loadingProfile');
 
@@ -41,18 +63,19 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
     });
   }
 
-  final _$loadingPostsAtom = Atom(name: '_ProfileScreenStoreBase.loadingPosts');
+  final _$_loadingPostsAtom =
+      Atom(name: '_ProfileScreenStoreBase._loadingPosts');
 
   @override
-  bool get loadingPosts {
-    _$loadingPostsAtom.reportRead();
-    return super.loadingPosts;
+  bool get _loadingPosts {
+    _$_loadingPostsAtom.reportRead();
+    return super._loadingPosts;
   }
 
   @override
-  set loadingPosts(bool value) {
-    _$loadingPostsAtom.reportWrite(value, super.loadingPosts, () {
-      super.loadingPosts = value;
+  set _loadingPosts(bool value) {
+    _$_loadingPostsAtom.reportWrite(value, super._loadingPosts, () {
+      super._loadingPosts = value;
     });
   }
 
@@ -102,6 +125,37 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
     });
   }
 
+  final _$_postsOffsetAtom = Atom(name: '_ProfileScreenStoreBase._postsOffset');
+
+  @override
+  int get _postsOffset {
+    _$_postsOffsetAtom.reportRead();
+    return super._postsOffset;
+  }
+
+  @override
+  set _postsOffset(int value) {
+    _$_postsOffsetAtom.reportWrite(value, super._postsOffset, () {
+      super._postsOffset = value;
+    });
+  }
+
+  final _$_hasMorePostsAtom =
+      Atom(name: '_ProfileScreenStoreBase._hasMorePosts');
+
+  @override
+  bool get _hasMorePosts {
+    _$_hasMorePostsAtom.reportRead();
+    return super._hasMorePosts;
+  }
+
+  @override
+  set _hasMorePosts(bool value) {
+    _$_hasMorePostsAtom.reportWrite(value, super._hasMorePosts, () {
+      super._hasMorePosts = value;
+    });
+  }
+
   final _$getProfileDetailsAsyncAction =
       AsyncAction('_ProfileScreenStoreBase.getProfileDetails');
 
@@ -126,10 +180,12 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
     return '''
 loadingProfile: ${loadingProfile},
 loadingProfileError: ${loadingProfileError},
-loadingPosts: ${loadingPosts},
 loadingPostsError: ${loadingPostsError},
 profile: ${profile},
-postsList: ${postsList}
+postsList: ${postsList},
+postsOffset: ${postsOffset},
+hasMorePosts: ${hasMorePosts},
+loadingPosts: ${loadingPosts}
     ''';
   }
 }

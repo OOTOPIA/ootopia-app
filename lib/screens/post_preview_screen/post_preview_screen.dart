@@ -25,6 +25,7 @@ import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manage
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
@@ -50,8 +51,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   late VideoPlayerController videoPlayer;
   late FlickMultiManager flickMultiManager;
   InterestsTagsRepositoryImpl _tagsRepository = InterestsTagsRepositoryImpl();
-  final TextEditingController _descriptionInputController =
-      TextEditingController();
+  late RichTextController _descriptionInputController;
   final TextEditingController _geolocationInputController =
       TextEditingController();
   double mirror = 0;
@@ -289,6 +289,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     });
     super.initState();
 
+    _descriptionInputController = RichTextController(
+      deleteOnBack: false,
+      patternMatchMap: {
+        RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?"):
+            const TextStyle(
+          color: LightColors.linkText,
+        ),
+      },
+      onMatch: (List<String> matches) {},
+    );
+
     WidgetsBinding.instance!.addObserver(this);
 
     flickMultiManager = FlickMultiManager();
@@ -365,9 +376,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   @override
   void dispose() {
-    if (flickManager != null) {
-      flickMultiManager.remove(flickManager!);
+    if (widget.args["type"] == "video") {
       flickManager!.dispose();
+      flickMultiManager.remove(flickManager!);
+      videoPlayer.dispose();
     }
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
@@ -439,7 +451,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       constraints: BoxConstraints(
                         maxHeight: widget.args["type"] == "video"
                             ? MediaQuery.of(context).size.height * .6
-                            : MediaQuery.of(context).size.height * .5,
+                            : MediaQuery.of(context).size.width + GlobalConstants.of(context).spacingNormal*2,
                       ),
                       child: Stack(
                         alignment: AlignmentDirectional.bottomCenter,
@@ -515,10 +527,15 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                                   ? Icons.volume_off
                                                   : Icons.volume_up,
                                               size: 20),
-                                          onPressed: () => {
+                                          onPressed: () {
                                             setState(() {
-                                              flickMultiManager.toggleMute();
-                                            }),
+                                              //flickMultiManager.toggleMute();
+                                              if(!flickManager!.flickControlManager!.isMute){
+                                                flickManager!.flickControlManager!.mute();
+                                              }else{
+                                                flickManager!.flickControlManager!.unmute();
+                                              }
+                                            });
                                           },
                                           color: Colors.white,
                                         ),

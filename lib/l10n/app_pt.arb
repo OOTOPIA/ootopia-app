@@ -249,6 +249,9 @@
     "learnMore": "Saiba mais",
     "remaining": "restante",
     "personalGoal": "Meta Pessoal",
+    "yourDailyGoal": "Sua meta diária",
+    "achieved": "Alcançada",
+    "oozCreditsYouWillReceive": "Créditos OOz que você receberá",
     "accomplished": "Realizada",
     "oozPartialBalance": "OOz Saldo Parcial",
     "whatWillYouContribute" : "Com o que irá contribuir?",
@@ -385,7 +388,7 @@
     "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "A Coroa de Louros representa quantas vezes uma pessoa atingiu seu objetivo no jogo de regeneração. Ou quantas vezes ela ajudou a alcançar a meta da sua cidade ou a meta planetária!",
 
     "searchForAHashtag" : "Procure por uma hashtag",
-    "errorUpdateProfile": "Erro ao atualizar profile, tente novamente profile",
+    "errorUpdateProfile": "Erro ao atualizar profile, tente novamente",
     "learningTracks":"Trilhas de Aprendizagem",
     "learningTracksDescription":"Aqui você encontrará pequenas vídeo-aulas onde obterá uma compreensão prática das práticas regenerativas. Assista, responda aos quizzez e receba mais OOz.",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",

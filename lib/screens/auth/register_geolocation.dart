@@ -14,6 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegisterGeolocationScreen extends StatefulWidget {
@@ -95,10 +96,14 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
           },
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       setState(() {
         isLoading = false;
       });
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.errorUpdateProfile),
