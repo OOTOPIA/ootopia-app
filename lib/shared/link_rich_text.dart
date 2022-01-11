@@ -82,6 +82,7 @@ class LinkRichText extends StatelessWidget {
       child: RichText(
         textAlign: TextAlign.start,
         maxLines: maxLines,
+        overflow: TextOverflow.ellipsis,
         text: TextSpan(children: textSpanWidget),
       ),
     );
