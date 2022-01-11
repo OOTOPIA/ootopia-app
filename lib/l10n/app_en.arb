@@ -454,5 +454,12 @@
     "shareMyOpinion" : "Share my opinion",
     "yourOOZWallet" : "OOz Wallet",
     "giveYourOpinion" : "Give your opinion about the app",
-    "itIsVeryImportant" : "It is very important to us!"
+    "itIsVeryImportant" : "It is very important to us!",
+
+    "notificationTitleOOzReceived": "You received %OOZ_RECEIVED% OOz!", 
+    "notificationBodyOOzReceivedByOnePerson": "%USER_NAME% sent you a gratitude reward for your post.",
+    "notificationBodyOOzReceivedBySomePeople": "%USER_NAME% and %PEOPLE_AMOUNT% other people sent you a gratitude reward for your post.",
+    "notificationTitleCommentedPost": "Hello, %YOUR_NAME%!",
+    "notificationBodyCommentedPostByOnePerson": "%USER_NAME%, commented your post.",
+    "notificationBodyCommentedPostBySomePeople": "%USER_NAME% AND %PEOPLE_AMOUNT% other people commented your post."
 }

@@ -68,13 +68,13 @@ class PushNotification {
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("Message ${event.data}");
-      final teste = NotificationModel.fromJson(event.data);
-      print(teste);
+      final notification = NotificationModel.fromJson(event.data);
+      print(notification);
       if (event.data != {} || event.data != null) {
           flutterLocalNotificationsPlugin.show(
-            teste.hashCode,
-            teste.userName,
-            teste.comments,
+            notification.hashCode,
+            notification.userName,
+            notification.comments,
             NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
