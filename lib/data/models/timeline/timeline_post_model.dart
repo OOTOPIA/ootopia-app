@@ -18,7 +18,7 @@ class TimelinePost {
   int likesCount;
   int commentsCount;
   double? oozToTransfer;
-  String oozTotalCollected;
+  double oozTotalCollected;
   double? oozRewarded;
   bool liked = false;
   List<String> tags;

@@ -598,10 +598,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                               padding:
                                                   EdgeInsets.only(right: 4),
                                               child: Text(
-                                                currencyFormatter.format(
-                                                    double.parse(this
-                                                        .post
-                                                        .oozTotalCollected)),
+                                                currencyFormatter.format(this
+                                                    .post
+                                                    .oozTotalCollected),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: this.post.oozRewarded ==
@@ -989,7 +988,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
-            "${(double.parse(this.post.oozTotalCollected) + this.post.oozToTransfer!)}";
+            this.post.oozTotalCollected + this.post.oozToTransfer!;
         if (this.post.oozRewarded == null || this.post.oozRewarded == 0) {
           this.post.oozRewarded = this.post.oozToTransfer;
         } else {
