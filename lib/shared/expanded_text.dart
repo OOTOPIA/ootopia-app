@@ -91,7 +91,7 @@ class _ExpandableTextState extends State<ExpandableText>
                       child: Padding(
                         padding: EdgeInsets.only(top: 4),
                         child: Text(
-                          '${AppLocalizations.of(context)!.readMode}...',
+                          '${AppLocalizations.of(context)!.readMore}...',
                           style: TextStyle(
                               fontSize: 16,
                               color: Color(0xffA3A3A3),
