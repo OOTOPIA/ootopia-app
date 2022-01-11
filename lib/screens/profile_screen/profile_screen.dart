@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       setState(() {
-        if (store!.hasMorePosts) {
+        if (store!.hasMorePosts && store!.loadingPosts==false) {
           Future.delayed(Duration.zero, () async {
             await store?.getUserPosts(profileUserId);
           });
