@@ -10,6 +10,7 @@ class LinkRichText extends StatelessWidget {
   final RegExp regExp = RegExp(
       r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
   final List<InlineSpan> textSpanWidget = <TextSpan>[];
+  final List links = <String>[];
 
   LinkRichText(
     this.text, {
@@ -23,6 +24,14 @@ class LinkRichText extends StatelessWidget {
     regExp.hasMatch(text!) ? _hasLink() : _hasntLink();
   }
 
+  setMatchList() {
+    Iterable<RegExpMatch> matches = regExp.allMatches(this.text!);
+
+    matches.forEach((match) {
+      this.links.add(text?.substring(match.start, match.end));
+    });
+  }
+
   _hasntLink() {
     textSpanWidget.add(TextSpan(
       text: this.text,
@@ -31,11 +40,12 @@ class LinkRichText extends StatelessWidget {
   }
 
   _hasLink() {
-    final splitedText = text?.split(' ');
+    setMatchList();
+
+    final splitedText = this.text?.split(RegExp(r"((?<= |\n)|(?= |\n))"));
 
     splitedText?.forEach((element) {
       _checkTextStyleType(element);
-      textSpanWidget.add(TextSpan(text: " "));
     });
   }
 
