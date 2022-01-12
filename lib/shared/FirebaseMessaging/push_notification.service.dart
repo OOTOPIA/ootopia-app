@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,6 +5,7 @@ import 'package:ootopia_app/data/models/notifications/notification_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PushNotification {
   static PushNotification? _instance;
@@ -36,9 +35,8 @@ class PushNotification {
     );
 
     Future.delayed(Duration.zero, () async {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (loggedIn) 
-        user = await getCurrentUser();
+      bool loggedIn = await storage.getUserIsLoggedIn();
+      if (loggedIn) user = await storage.getCurrentUser();
     });
 
     Future.delayed(Duration.zero, () async {
@@ -83,8 +81,8 @@ class PushNotification {
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          notification.userName,
-          notification.comments,
+          getNotificationTitle(notification.type, amount: notification.amount),
+          getNotificationBody(notification.type),
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -103,30 +101,15 @@ class PushNotification {
     });
   }
 
-  String getNotificationTitle(
-    String type,
-  ) {
+  String getNotificationTitle(String type, {int? amount}) {
     return "";
+    // if (type == NotificationType.comments.toString().split(".").last)
+      // return '${AppLocalizations.of(context)!.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user?.fullname?.split(" ").first}')}';
+    // else
+      // return '${AppLocalizations.of(context)!.notificationTitleOOzReceived.replaceAll('%OOZ_RECEIVED%', '${amount!.toString()}')}';
   }
 
-  String getNotificationBody() {
+  String getNotificationBody(String type) {
     return "";
-  }
-
-  Future<bool> getUserIsLoggedIn() async {
-    String? token = await storage.getAuthToken();
-    return token != null;
-  }
-
-  Future<User?> getCurrentUser() async {
-    var userStorage = await this.getSecureStore("user");
-    if (userStorage == null) {
-      return null;
-    }
-    return User.fromJson(json.decode(userStorage));
-  }
-
-  Future<dynamic> getSecureStore(String key) async {
-    return await storage.secureStore.read(key: key);
   }
 }
