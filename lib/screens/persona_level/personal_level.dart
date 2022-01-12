@@ -37,7 +37,6 @@ class _PersonaLevelState extends State<PersonaLevel> {
               'assets/images/map3.png',
             ),
             alignment: Alignment(-0.6, -1),
-            scale: 0.2,
             fit: BoxFit.cover,
             //alignment: Alignment.centerLeft,
           )),
