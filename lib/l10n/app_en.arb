@@ -454,5 +454,7 @@
     "shareMyOpinion" : "Share my opinion",
     "yourOOZWallet" : "OOz Wallet",
     "giveYourOpinion" : "Give your opinion about the app",
-    "itIsVeryImportant" : "It is very important to us!"
+    "itIsVeryImportant" : "It is very important to us!",
+    "hide" : "Hide",
+    "readMore" : "Read more"
 }

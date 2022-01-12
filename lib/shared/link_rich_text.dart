@@ -79,10 +79,10 @@ class LinkRichText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.60,
       child: RichText(
         textAlign: TextAlign.start,
         maxLines: maxLines,
+        overflow: TextOverflow.ellipsis,
         text: TextSpan(children: textSpanWidget),
       ),
     );
