@@ -866,7 +866,7 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: selected ? colorSelected : Theme.of(context).backgroundColor,
+                color: selected ? colorSelected : Theme.of(context).backgroundColor.withOpacity(0.2),
                 borderRadius: BorderRadius.all(Radius.circular(gameProgressIconSize)),
               ),
               alignment: Alignment.center,

@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/components/logo.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -156,26 +158,10 @@ class _LoginPageState extends State<LoginPage> {
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
-            Positioned(
-                top: 0,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Image.asset(
-                      'assets/images/butterfly_top.png',
-                    fit: BoxFit.cover,
-
-                  ),
-                )),
-            Positioned(
-                bottom: 0,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Image.asset(
-                    'assets/images/butterfly_bottom.png',
-                    fit: BoxFit.cover,
-
-                  ),
-                )),
+            BackgroundButterflyTop(),
+            Visibility(
+              visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                child: BackgroundButterflyBottom()),
             Container(
               child: Center(
                 child: SingleChildScrollView(
