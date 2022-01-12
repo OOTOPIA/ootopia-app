@@ -4,7 +4,7 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkRichText extends StatelessWidget {
-  final String? text;
+  final String text;
   final int? maxLines;
   final Key? key;
   final RegExp regExp = RegExp(
@@ -20,8 +20,9 @@ class LinkRichText extends StatelessWidget {
   }
 
   _initialize() {
-    regExp.hasMatch(text!) ? _hasLink() : _hasntLink();
+    regExp.hasMatch(text) ? _hasLink() : _hasntLink();
   }
+
 
   _hasntLink() {
     textSpanWidget.add(TextSpan(
@@ -31,18 +32,18 @@ class LinkRichText extends StatelessWidget {
   }
 
   _hasLink() {
-    final splitedText = text?.split(' ');
 
-    splitedText?.forEach((element) {
+    final splitedText = this.text.split(RegExp(r"((?<= |\n)|(?= |\n))"));
+
+    splitedText.forEach((element) {
       _checkTextStyleType(element);
-      textSpanWidget.add(TextSpan(text: " "));
     });
   }
 
   _checkTextStyleType(String text) {
-    if (regExp.hasMatch(text)) {
+    if (regExp.hasMatch(text) && _checkIfLinkIsAbsolute(_validateLink(text))) {
       var url = _validateLink(text);
-
+      
       textSpanWidget.add(TextSpan(
           text: text,
           style: handleTextStyle(true),
@@ -52,6 +53,15 @@ class LinkRichText extends StatelessWidget {
         text: text,
         style: handleTextStyle(false),
       ));
+  }
+
+  _checkIfLinkIsAbsolute(String link) {
+    try {
+      if (Uri.parse(link).isAbsolute) return true;
+    } catch (err) {
+      return false;
+    }
+    return false;
   }
 
   _validateLink(String link) {
