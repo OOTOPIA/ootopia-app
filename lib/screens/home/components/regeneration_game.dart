@@ -476,7 +476,7 @@ class _RegenerationGameState extends State<RegenerationGame>
           if (type == 'personal') {
             bool dontShowAgainRegenerationGamePega =
                 prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
-            if (!dontShowAgainRegenerationGamePega) {
+            if (dontShowAgainRegenerationGamePega) {
               if (showMap) {
                 controller.currentBottomIndex =
                     PageViewController.TAB_INDEX_TIMELINE;
