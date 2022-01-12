@@ -17,6 +17,7 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -24,6 +25,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RegisterSecondPhaseController with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  PushNotification pushNotification = PushNotification.getInstace();
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
 
@@ -281,6 +283,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     try {
       await this.authRepository.register(_user, tagsIds);
       User login = await authRepository.login(_user.email!, _user.password!);
+      await this.userRepository.updateTokenDeviceUser(pushNotification.token!);
       this.trackingEvents.trackingLoggedIn(login.id!, login.fullname!);
     } catch (err, stackTrace) {
       await Sentry.captureException(
