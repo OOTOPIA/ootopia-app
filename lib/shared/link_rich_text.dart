@@ -4,13 +4,12 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkRichText extends StatelessWidget {
-  final String? text;
+  final String text;
   final int? maxLines;
   final Key? key;
   final RegExp regExp = RegExp(
       r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
   final List<InlineSpan> textSpanWidget = <TextSpan>[];
-  final List links = <String>[];
 
   LinkRichText(
     this.text, {
@@ -21,16 +20,9 @@ class LinkRichText extends StatelessWidget {
   }
 
   _initialize() {
-    regExp.hasMatch(text!) ? _hasLink() : _hasntLink();
+    regExp.hasMatch(text) ? _hasLink() : _hasntLink();
   }
 
-  setMatchList() {
-    Iterable<RegExpMatch> matches = regExp.allMatches(this.text!);
-
-    matches.forEach((match) {
-      this.links.add(text?.substring(match.start, match.end));
-    });
-  }
 
   _hasntLink() {
     textSpanWidget.add(TextSpan(
@@ -40,11 +32,10 @@ class LinkRichText extends StatelessWidget {
   }
 
   _hasLink() {
-    setMatchList();
 
-    final splitedText = this.text?.split(RegExp(r"((?<= |\n)|(?= |\n))"));
+    final splitedText = this.text.split(RegExp(r"((?<= |\n)|(?= |\n))"));
 
-    splitedText?.forEach((element) {
+    splitedText.forEach((element) {
       _checkTextStyleType(element);
     });
   }
@@ -52,6 +43,7 @@ class LinkRichText extends StatelessWidget {
   _checkTextStyleType(String text) {
     if (regExp.hasMatch(text) && _checkIfLinkIsAbsolute(_validateLink(text))) {
       var url = _validateLink(text);
+      
       textSpanWidget.add(TextSpan(
           text: text,
           style: handleTextStyle(true),
