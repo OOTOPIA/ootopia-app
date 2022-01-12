@@ -34,9 +34,9 @@ class RegenerationGame extends StatefulWidget {
 class _RegenerationGameState extends State<RegenerationGame>
     with SecureStoreMixin {
   Map<String, String> gameProgress = {
-    'personal': 'assets/icons/personal_icon.svg',
-    'city': 'assets/icons/city_icon.svg',
-    'global': 'assets/icons/global_icon.svg',
+    'personal': 'assets/icons/user1.svg',
+    'city': 'assets/icons/local1.svg',
+    'global': 'assets/icons/globo1.svg',
   };
 
   String detailedGoalType = "";
