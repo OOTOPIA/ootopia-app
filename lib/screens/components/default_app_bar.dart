@@ -43,6 +43,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
   late WalletStore walletStore;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   SmartPageController controller = SmartPageController.getInstance();
+  Color iconColor = Color(0XFF3A4046);
 
   @override
   void initState() {
@@ -123,7 +124,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
         },
         icon: Icon(
           FeatherIcons.arrowLeft,
-          color: Colors.black,
+          color: iconColor,
           size: 20,
         ),
       );
@@ -136,7 +137,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
         },
         icon: Icon(
           FeatherIcons.menu,
-          color: Theme.of(_buildContext).iconTheme.color,
+          color: iconColor,
         ),
       );
 
@@ -205,7 +206,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
-                          color: Theme.of(context).accentColor,
+                          color: iconColor,
                         ),
                       ],
                     );
@@ -220,7 +221,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
   Widget get closeIcon => IconButton(
         icon: Icon(
           Icons.close,
-          color: Colors.black,
+          color: iconColor,
         ),
         onPressed: () {
           if (widget.onTapAction != null) {
