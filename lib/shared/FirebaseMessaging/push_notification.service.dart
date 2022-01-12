@@ -101,15 +101,15 @@ class PushNotification {
     });
   }
 
-  String getNotificationTitle(String type, {int? amount}) {
+  String getNotificationTitle(NotificationType type, {int? amount}) {
     return "";
     // if (type == NotificationType.comments.toString().split(".").last)
-      // return '${AppLocalizations.of(context)!.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user?.fullname?.split(" ").first}')}';
+    // return '${AppLocalizations.of(context)!.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user?.fullname?.split(" ").first}')}';
     // else
-      // return '${AppLocalizations.of(context)!.notificationTitleOOzReceived.replaceAll('%OOZ_RECEIVED%', '${amount!.toString()}')}';
+    // return '${AppLocalizations.of(context)!.notificationTitleOOzReceived.replaceAll('%OOZ_RECEIVED%', '${amount!.toString()}')}';
   }
 
-  String getNotificationBody(String type) {
+  String getNotificationBody(NotificationType type) {
     return "";
   }
 }

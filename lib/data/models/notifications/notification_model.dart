@@ -16,7 +16,7 @@ class NotificationModel {
   });
 
   final String? photoUrl;
-  final String type;
+  final NotificationType type;
   final String typeId;
   final String userName;
   final String userId;
