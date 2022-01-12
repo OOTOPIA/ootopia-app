@@ -18,6 +18,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -268,7 +269,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                 child: RegenerationGameLearningAlert(typeSelected)),
           ] else if (showGlobo) ...[
             Container(
-                height: MediaQuery.of(context).size.height - 130,
+                height: MediaQuery.of(context).size.height - 120,
                 child: RegenerationGameLearningAlert(typeSelected)),
           ]
         ],
@@ -544,7 +545,7 @@ class _RegenerationGameState extends State<RegenerationGame>
           children: [
             Container(
               height: 0.6,
-              color: Color(0xff707070),
+              color: Color(0xffB0B0B0),
               width: MediaQuery.of(context).size.width,
             ),
             Container(
@@ -720,6 +721,16 @@ class _RegenerationGameState extends State<RegenerationGame>
   }
 
   Widget gameIconProgress(String type, selected, colorSelected) {
+    double size = 20;
+
+    if(type == 'personal' && (showMap || showPersonal)){
+      size = 24;
+    }else if(type == 'global' && showGlobo){
+      size = 24;
+    }else if(type == 'city' && showLocal){
+      size = 24;
+    }
+
     return GestureDetector(
       onTap: () {
         //REFATORADO
@@ -855,23 +866,18 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: selected
-                    ? colorSelected
-                    : Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(100)),
+                color: selected ? colorSelected : Theme.of(context).backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(gameProgressIconSize)),
               ),
-              child: Center(
-                child: Icon(
-                  gameProgress[type],
-                  size: 20,
-                  color: selected
-                      ? Colors.white
-                      : Theme.of(context).iconTheme.color,
-                ),
+              alignment: Alignment.center,
+              child: Icon(
+                gameProgress[type],
+                size:  size,
+                color: selected ? Colors.white : Theme.of(context).iconTheme.color,
               ),
             ),
             Visibility(
-              visible: !selected,
+              visible: !selected && type == 'personal',
               child: Positioned(
                 top: 0,
                 child: CircularPercentIndicator(
@@ -880,6 +886,18 @@ class _RegenerationGameState extends State<RegenerationGame>
                     backgroundColor: Theme.of(context).primaryColorDark,
                     percent: percentTimeCompleted(),
                     linearGradient: gameProgressColors[type]),
+              ),
+            ),
+            Visibility(
+              visible: !selected && type != 'personal',
+              child: Positioned(
+                top: 0,
+                child: CircularPercentIndicator(
+                    radius: gameProgressIconSize,
+                    lineWidth: 2,
+                    backgroundColor: LightColors.silver,
+                    progressColor: LightColors.silver,
+                    percent: 1,),
               ),
             )
           ],
