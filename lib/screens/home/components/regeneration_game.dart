@@ -132,16 +132,10 @@ class _RegenerationGameState extends State<RegenerationGame>
           ),
           Container(
             width: double.infinity,
-            height: 1,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
-            ),
-          ),
-          Container(
-            width: double.infinity,
             height: 59,
-            decoration:
-                BoxDecoration(color: Theme.of(context).primaryColorLight),
+            decoration: BoxDecoration(
+                color: Color(0xffAEAEAE).withOpacity(0.17),
+            ),
             padding: EdgeInsets.only(
               left: getEdgeInsetsHorizontalSize,
               right: getEdgeInsetsHorizontalSize,
