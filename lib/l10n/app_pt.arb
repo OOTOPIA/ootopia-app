@@ -447,10 +447,10 @@
     "giveYourOpinion" : "Dê sua opinião sobre o app",
     "itIsVeryImportant" : "Ela é muito importante para nós!",
 
-    "notificationTitleOOzReceived": "You received %OOZ_RECEIVED% OOz!", 
+    "notificationTitleOOzReceived": "Você recebeu %OOZ_RECEIVED% OOz!", 
     "notificationBodyOOzReceivedByOnePerson": "%USER_NAME% enviou uma recompensa de gratidão por sua publicação.",
     "notificationBodyOOzReceivedBySomePeople": "%USER_NAME% e mais %PEOPLE_AMOUNT% pessoas enviaram uma recompensa de gratidão por sua publicação.",
     "notificationTitleCommentedPost": "Olá, %YOUR_NAME%!",
     "notificationBodyCommentedPostByOnePerson": "%USER_NAME%, comentou sua publicação.",
-    "notificationBodyCommentedPostBySomePeople": "%USER_NAME% e mais %PEOPLE_AMOUNT% pessoas comentaram sua publicação.",
+    "notificationBodyCommentedPostBySomePeople": "%USER_NAME% e mais %PEOPLE_AMOUNT% pessoas comentaram sua publicação."
 }

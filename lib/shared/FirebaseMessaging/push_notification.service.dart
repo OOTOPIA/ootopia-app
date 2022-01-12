@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ootopia_app/data/models/notifications/notification_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -13,6 +16,7 @@ class PushNotification {
   late AndroidNotificationChannel channel;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  User? user;
 
   String? token;
   static PushNotification getInstace() {
@@ -30,6 +34,12 @@ class PushNotification {
       description: 'This channel is used for important notifications.',
       importance: Importance.high,
     );
+
+    Future.delayed(Duration.zero, () async {
+      bool loggedIn = await getUserIsLoggedIn();
+      if (loggedIn) 
+        user = await getCurrentUser();
+    });
 
     Future.delayed(Duration.zero, () async {
       await flutterLocalNotificationsPlugin
@@ -71,25 +81,52 @@ class PushNotification {
       final notification = NotificationModel.fromJson(event.data);
       print(notification);
       if (event.data != {} || event.data != null) {
-          flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.userName,
-            notification.comments,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                color: Colors.white,
-                channelDescription: channel.description,
-                icon: '@mipmap/ic_launcher',
-              ),
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.userName,
+          notification.comments,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              color: Colors.white,
+              channelDescription: channel.description,
+              icon: '@mipmap/ic_launcher',
             ),
-          );
+          ),
+        );
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
+  }
+
+  String getNotificationTitle(
+    String type,
+  ) {
+    return "";
+  }
+
+  String getNotificationBody() {
+    return "";
+  }
+
+  Future<bool> getUserIsLoggedIn() async {
+    String? token = await storage.getAuthToken();
+    return token != null;
+  }
+
+  Future<User?> getCurrentUser() async {
+    var userStorage = await this.getSecureStore("user");
+    if (userStorage == null) {
+      return null;
+    }
+    return User.fromJson(json.decode(userStorage));
+  }
+
+  Future<dynamic> getSecureStore(String key) async {
+    return await storage.secureStore.read(key: key);
   }
 }
