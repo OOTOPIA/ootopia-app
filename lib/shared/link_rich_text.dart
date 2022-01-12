@@ -50,9 +50,8 @@ class LinkRichText extends StatelessWidget {
   }
 
   _checkTextStyleType(String text) {
-    if (regExp.hasMatch(text)) {
+    if (regExp.hasMatch(text) && _checkIfLinkIsAbsolute(_validateLink(text))) {
       var url = _validateLink(text);
-
       textSpanWidget.add(TextSpan(
           text: text,
           style: handleTextStyle(true),
@@ -62,6 +61,15 @@ class LinkRichText extends StatelessWidget {
         text: text,
         style: handleTextStyle(false),
       ));
+  }
+
+  _checkIfLinkIsAbsolute(String link) {
+    try {
+      if (Uri.parse(link).isAbsolute) return true;
+    } catch (err) {
+      return false;
+    }
+    return false;
   }
 
   _validateLink(String link) {
