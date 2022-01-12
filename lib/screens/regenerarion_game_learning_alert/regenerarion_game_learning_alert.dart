@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
@@ -177,9 +177,10 @@ class _RegenerationGameLearningAlertState
                                   decoration: BoxDecoration(
                                       color: _backgroundColorIcon,
                                       borderRadius: BorderRadius.circular(100)),
-                                  padding: EdgeInsets.all(28),
+                                  padding: EdgeInsets.all(25),
                                   child: SvgPicture.asset(
-                                    _icon
+                                    _icon,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 SizedBox(
