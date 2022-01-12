@@ -114,6 +114,8 @@ class _RegenerationGameLearningAlertState
           child: Stack(
             children: [
               Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(_imagePath),
@@ -132,12 +134,12 @@ class _RegenerationGameLearningAlertState
                         padding: EdgeInsets.symmetric(
                                 horizontal: GlobalConstants.of(context)
                                     .screenHorizontalSpace)
-                            .copyWith(top: 32),
+                            .copyWith(top: 30),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
@@ -167,21 +169,21 @@ class _RegenerationGameLearningAlertState
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 24,
                                 ),
                                 Container(
-                                  width: screenWidth <= 375 ? 80 : 160,
-                                  height: screenWidth <= 375 ? 80 : 160,
+                                  width: 130,
+                                  height: 130,
                                   decoration: BoxDecoration(
                                       color: _backgroundColorIcon,
                                       borderRadius: BorderRadius.circular(100)),
                                   padding: EdgeInsets.all(28),
                                   child: SvgPicture.asset(
-                                    _icon,
+                                    _icon
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 24,
                                 ),
                                 Text(_title,
                                     textAlign: TextAlign.center,
@@ -205,7 +207,7 @@ class _RegenerationGameLearningAlertState
                                       ],
                                     )),
                                 SizedBox(
-                                  height: 20,
+                                  height: 24,
                                 ),
                                 Text(_firstText,
                                     style: Theme.of(context)
@@ -227,7 +229,7 @@ class _RegenerationGameLearningAlertState
                                       ),
                                     ])),
                                 SizedBox(
-                                  height: 20,
+                                  height: 24,
                                 ),
                                 if (_secondTextPt2 == null) ...[
                                   Text(_secondText,
@@ -281,9 +283,7 @@ class _RegenerationGameLearningAlertState
                               ],
                             ),
                             SizedBox(
-                                height: MediaQuery.of(context).size.height > 850
-                                    ? MediaQuery.of(context).size.height * 0.1
-                                    : 35),
+                                height: 35),
                             if (widget.args["type"] == 'personal') ...[
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -445,13 +445,14 @@ class _RegenerationGameLearningAlertState
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 40, right: 16),
+                  padding: const EdgeInsets.only(top: 16, right: 14),
                   child: RotatedBox(
                     quarterTurns: 3,
                     child: Text(
                       _imageRights,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             fontSize: 10,
+                            height: 1,
                             color: Colors.white,
                           ),
                     ),

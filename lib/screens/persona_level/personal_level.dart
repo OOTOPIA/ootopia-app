@@ -34,9 +34,8 @@ class _PersonaLevelState extends State<PersonaLevel> {
       decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              'assets/images/map2.png',
+              'assets/images/map3.png',
             ),
-
             alignment: Alignment(-0.6, -1),
             fit: BoxFit.cover,
             //alignment: Alignment.centerLeft,
@@ -46,7 +45,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.2),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.22),
               height: MediaQuery.of(context).size.width/3,
               width: MediaQuery.of(context).size.width*0.4,
               color: Colors.transparent,
@@ -66,8 +65,8 @@ class _PersonaLevelState extends State<PersonaLevel> {
                       )
                           : Image.network(
                         urlImage,
-                        height: MediaQuery.of(context).size.width/3 - MediaQuery
-                            .of(context).size.width/9,
+                        height: MediaQuery.of(context).size.width/3 - MediaQuery.of(context).size.width/9,
+                        width: MediaQuery.of(context).size.width/3 - MediaQuery.of(context).size.width/9,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -89,7 +88,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.width*0.2,
+              height: MediaQuery.of(context).size.width*0.22,
 
               child: Column(
                 children: [
@@ -98,14 +97,15 @@ class _PersonaLevelState extends State<PersonaLevel> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Color(0xff00A5FC), width: 2)
+                        border: Border.all(color: Color(0xff2CB4FB), width: 2)
                     ),
                     child: Text(
                       name,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff707070)
+                      ),
                     ),
                   ),
                 ],

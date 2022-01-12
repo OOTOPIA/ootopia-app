@@ -25,6 +25,7 @@ import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
+import 'package:ootopia_app/shared/expanded_text.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -769,18 +770,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
           ),
           Visibility(
-            visible: this.post.description != null &&
-                this.post.description.isNotEmpty,
-            child: Row(
-              children: [
-                Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: 3, left: 12, bottom: 12, right: 12),
-                    child: LinkRichText(this.post.description),
-                  ),
-                )
-              ],
+            visible: this.post.description.isNotEmpty,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(top: 3,  bottom: 12),
+              child: ExpandableText(this.post.description, 3),
             ),
           ),
           GestureDetector(
