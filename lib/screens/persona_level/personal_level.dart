@@ -45,7 +45,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.2),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.22),
               height: MediaQuery.of(context).size.width/3,
               width: MediaQuery.of(context).size.width*0.4,
               color: Colors.transparent,
@@ -88,7 +88,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: MediaQuery.of(context).size.width*0.2,
+              height: MediaQuery.of(context).size.width*0.22,
 
               child: Column(
                 children: [

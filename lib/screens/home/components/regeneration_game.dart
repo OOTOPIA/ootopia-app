@@ -261,15 +261,15 @@ class _RegenerationGameState extends State<RegenerationGame>
             PersonaLevel(percent: percentTimeCompleted()),
           ] else if (showPersonal) ...[
             Container(
-                height: MediaQuery.of(context).size.height - 130,
+                height: MediaQuery.of(context).size.height - 125,
                 child: RegenerationGameLearningAlert(typeSelected)),
           ] else if (showLocal) ...[
             Container(
-                height: MediaQuery.of(context).size.height - 130,
+                height: MediaQuery.of(context).size.height - 125,
                 child: RegenerationGameLearningAlert(typeSelected)),
           ] else if (showGlobo) ...[
             Container(
-                height: MediaQuery.of(context).size.height - 120,
+                height: MediaQuery.of(context).size.height - 125,
                 child: RegenerationGameLearningAlert(typeSelected)),
           ]
         ],
