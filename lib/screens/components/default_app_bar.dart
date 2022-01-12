@@ -66,6 +66,11 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: leading(),
       actions: actions(),
+      flexibleSpace: Image(
+        image: AssetImage('assets/images/butterfly_top.png',),
+        alignment: Alignment.topCenter,
+        fit: BoxFit.cover,
+      ),
     );
   }
 
