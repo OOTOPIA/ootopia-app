@@ -172,11 +172,9 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                 duration: Duration(milliseconds: 300),
                 child: Visibility(
                   visible: !_oozIsOpened,
-                  child: SvgPicture.asset(
-                    'assets/icons/ooz_circle_icon.svg',
-                    width: 24,
+                  child: Image.asset(
+                    'assets/icons/ooz_arrow.png',
                     height: 24,
-                    color: iconColor,
                   ),
                 ),
               ),

@@ -595,7 +595,7 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: selected ? colorSelected : Theme.of(context).backgroundColor.withOpacity(0.2),
+                color: selected ? colorSelected : Colors.white.withOpacity(0.35),
                 borderRadius: BorderRadius.all(Radius.circular(gameProgressIconSize)),
               ),
               alignment: Alignment.center,
@@ -612,7 +612,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                 child: CircularPercentIndicator(
                     radius: gameProgressIconSize,
                     lineWidth: 2,
-                    backgroundColor: Theme.of(context).primaryColorDark,
+                    backgroundColor: Color(0XFFd4d4d4),
                     percent: percentTimeCompleted(),
                     linearGradient: gameProgressColors[type]),
               ),
@@ -624,8 +624,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                 child: CircularPercentIndicator(
                     radius: gameProgressIconSize,
                     lineWidth: 2,
-                    backgroundColor: LightColors.silver,
-                    progressColor: LightColors.silver,
+                    backgroundColor: Color(0XFFd4d4d4),
+                    progressColor: Color(0XFFd4d4d4),
                     percent: 1,),
               ),
             )
