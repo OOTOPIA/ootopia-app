@@ -97,9 +97,9 @@ class _RegenerationGameLearningAlertState
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
       prefs = await SharedPreferences.getInstance();
     });
-    Future.delayed(Duration(milliseconds: 350), () {
-      this.setStatusBar(false);
-    });
+    // Future.delayed(Duration(milliseconds: 350), () {
+    //   this.setStatusBar(false);
+    // });
   }
 
   @override
