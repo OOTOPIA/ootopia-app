@@ -419,6 +419,8 @@ class _mainPageState extends State<MainPage> {
     sharedExperienceService.addListener(() {
       showSharedExperience(context);
     });
+    PushNotification pushNotification = PushNotification.getInstace();
+    pushNotification.setContext(context);
   }
 
   @override

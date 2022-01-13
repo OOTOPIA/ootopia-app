@@ -17,6 +17,7 @@ class PushNotification {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   User? user;
+  BuildContext? context;
 
   String? token;
   static PushNotification getInstace() {
@@ -55,6 +56,8 @@ class PushNotification {
     });
   }
 
+  setContext(BuildContext context) => this.context = context;
+
   void listenerFirebaseCloudMessagingToken() async {
     token = await _firebaseMessaging.getToken();
     print("object pegou $token");
@@ -84,8 +87,8 @@ class PushNotification {
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          getNotificationTitle(notification.usersName),
-          getNotificationBody(notification.type),
+          getNotificationTitle(notification.usersName[0]),
+          getNotificationBody(notification.type, notification.usersName),
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -104,11 +107,42 @@ class PushNotification {
     });
   }
 
-  String getNotificationTitle(List<String> userName) {
-    return userName[0];
+  String getNotificationTitle(String type, {int? oozReceived}) {
+    print("Title: $type");
+    if (type == "gratitude_reward")
+      return AppLocalizations.of(context!)!
+          .notificationTitleOOzReceived
+          .replaceAll('%OOZ_RECEIVED%', '${oozReceived.toString()}');
+    else
+      return AppLocalizations.of(context!)!
+          .notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
   }
 
-  String getNotificationBody(String type) {
-    return type;
+  String getNotificationBody(String type, List<String> usersName) {
+    print("Body: $type");
+    if (type == "gratitude_reward") {
+      if (usersName.length == 1)
+        return AppLocalizations.of(context!)!
+            .notificationBodyOOzReceivedByOnePerson
+            .replaceAll('%USER_NAME%', '${usersName.first}');
+      else
+        return AppLocalizations.of(context!)!
+            .notificationBodyOOzReceivedBySomePeople
+            .replaceAll('%USER_NAME%', '${usersName.last}')
+            .replaceAll(
+                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+    } else {
+      if (usersName.length == 1)
+        return AppLocalizations.of(context!)!
+            .notificationBodyCommentedPostByOnePerson
+            .replaceAll('%USER_NAME%', '${usersName.first}');
+      else
+        return AppLocalizations.of(context!)!
+            .notificationBodyOOzReceivedBySomePeople
+            .replaceAll('%USER_NAME%', '${usersName.last}')
+            .replaceAll(
+                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+    }
   }
 }
