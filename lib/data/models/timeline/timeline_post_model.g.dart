@@ -19,7 +19,7 @@ TimelinePost _$TimelinePostFromJson(Map<String, dynamic> json) {
     username: json['username'] as String,
     likesCount: json['likesCount'] as int,
     commentsCount: json['commentsCount'] as int,
-    oozTotalCollected: (json['oozTotalCollected'] as num).toDouble(),
+    oozTotalCollected: json['oozTotalCollected'] as String,
     liked: json['liked'] as bool,
     tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
     oozToTransfer: (json['oozToTransfer'] as num?)?.toDouble(),

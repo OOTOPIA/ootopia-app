@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -76,12 +77,14 @@ class PushNotification {
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("Message ${event.data}");
+
+      event.data["usersName"] = jsonDecode(event.data["usersName"]);
       final notification = NotificationModel.fromJson(event.data);
-      print(notification);
+
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          getNotificationTitle(notification.type, amount: notification.amount),
+          getNotificationTitle(notification.usersName),
           getNotificationBody(notification.type),
           NotificationDetails(
             android: AndroidNotificationDetails(
@@ -101,15 +104,11 @@ class PushNotification {
     });
   }
 
-  String getNotificationTitle(NotificationType type, {int? amount}) {
-    return "";
-    // if (type == NotificationType.comments.toString().split(".").last)
-    // return '${AppLocalizations.of(context)!.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user?.fullname?.split(" ").first}')}';
-    // else
-    // return '${AppLocalizations.of(context)!.notificationTitleOOzReceived.replaceAll('%OOZ_RECEIVED%', '${amount!.toString()}')}';
+  String getNotificationTitle(List<String> userName) {
+    return userName[0];
   }
 
-  String getNotificationBody(NotificationType type) {
-    return "";
+  String getNotificationBody(String type) {
+    return type;
   }
 }
