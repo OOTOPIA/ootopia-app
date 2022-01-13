@@ -47,6 +47,7 @@ class _RegenerationGameLearningAlertState
         statusBarBrightness: Brightness.dark,
       ));
     }
+
   }
 
   @override
