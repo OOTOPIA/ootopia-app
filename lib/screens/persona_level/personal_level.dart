@@ -29,7 +29,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
   Widget build(BuildContext context) {
     _init(context);
     return Container(
-      height: MediaQuery.of(context).size.height - (246.2),
+      height: MediaQuery.of(context).size.height - (240),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -93,7 +93,7 @@ class _PersonaLevelState extends State<PersonaLevel> {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(8, 6, 8, 6),
+                    padding: EdgeInsets.fromLTRB(18, 6, 18, 6),
                     decoration: BoxDecoration(
                       color: Colors.white,
                         borderRadius: BorderRadius.circular(20),

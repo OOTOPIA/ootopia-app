@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
@@ -55,7 +55,7 @@ class _RegenerationGameLearningAlertState
       case "personal":
         _imagePath = "assets/images/personal_background.png";
         _backgroundColorIcon = Color(0xff00A5FC);
-        _icon = "assets/icons/personal_icon.svg";
+        _icon = "assets/icons/user1.svg";
         _title = AppLocalizations.of(widget.args["context"])!.personalLevel;
         _firstText =
             AppLocalizations.of(widget.args["context"])!.personalLevelText1;
@@ -67,7 +67,7 @@ class _RegenerationGameLearningAlertState
       case "city":
         _imagePath = "assets/images/city_background.png";
         _backgroundColorIcon = Color(0xff0072C5);
-        _icon = "assets/icons/city_icon.svg";
+        _icon = "assets/icons/local1.svg";
         _title = AppLocalizations.of(widget.args["context"])!.cityLevel;
         _firstText =
             AppLocalizations.of(widget.args["context"])!.cityLevelText1;
@@ -80,7 +80,7 @@ class _RegenerationGameLearningAlertState
       case "global":
         _imagePath = "assets/images/planetary_background.png";
         _backgroundColorIcon = Color(0xff012588);
-        _icon = "assets/icons/global_icon.svg";
+        _icon = "assets/icons/globo1.svg";
         _title = AppLocalizations.of(widget.args["context"])!.planetaryLevel;
         _firstText =
             AppLocalizations.of(widget.args["context"])!.planetaryLevelText1;
@@ -177,9 +177,10 @@ class _RegenerationGameLearningAlertState
                                   decoration: BoxDecoration(
                                       color: _backgroundColorIcon,
                                       borderRadius: BorderRadius.circular(100)),
-                                  padding: EdgeInsets.all(28),
+                                  padding: EdgeInsets.all(25),
                                   child: SvgPicture.asset(
-                                    _icon
+                                    _icon,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 SizedBox(
