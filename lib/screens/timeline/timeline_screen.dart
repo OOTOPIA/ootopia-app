@@ -13,6 +13,7 @@ import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -268,6 +269,7 @@ class _TimelinePageState extends State<TimelinePage>
         body: Stack(
           children: [
             BackgroundButterflyTop(positioned: -59),
+            BackgroundButterflyBottom(positioned: -50),
             SafeArea(
               child: NestedScrollView(
                 headerSliverBuilder: (BuildContext context, bool _) {

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BackgroundButterflyBottom extends StatelessWidget {
-  const BackgroundButterflyBottom({Key? key}) : super(key: key);
+  final double? positioned;
+
+  const BackgroundButterflyBottom({ this.positioned});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        bottom: 0,
+        bottom: positioned ?? 0,
         child: Container(
           width: MediaQuery.of(context).size.width,
           child: Image.asset(

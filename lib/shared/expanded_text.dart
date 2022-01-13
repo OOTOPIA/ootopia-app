@@ -50,6 +50,7 @@ class _ExpandableTextState extends State<ExpandableText>
                 child: Container(
                   alignment: Alignment.topLeft,
                   child: Material(
+                    color: Colors.transparent,
                     child: Ink(
                       width: 75,
                       child: InkWell(
@@ -79,7 +80,7 @@ class _ExpandableTextState extends State<ExpandableText>
               child: Container(
                 alignment: Alignment.topLeft,
                 child: Material(
-                  //color: Colors.blueAccent,
+                  color: Colors.transparent,
                   child: Ink(
                     width: 120,
                     child: InkWell(
