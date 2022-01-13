@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -78,7 +79,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
   Widget get logo => Padding(
         padding: EdgeInsets.all(3),
         child: Image.asset(
-          'assets/images/logo.png',
+          'assets/images/Logo-com-sombra.png',
           height: 34,
         ),
       );
