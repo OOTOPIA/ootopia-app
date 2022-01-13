@@ -648,9 +648,9 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         image: AssetImage(
                           'assets/images/Textura_azul_escuro.png',
                         ),
-                        alignment: Alignment.bottomLeft,
-                        fit: BoxFit.cover,
-                        opacity: 0.2
+                        alignment: Alignment.topRight,
+                        fit: BoxFit.none,
+                        opacity: 0.1
                       )
                         )
                       : BoxDecoration(),
