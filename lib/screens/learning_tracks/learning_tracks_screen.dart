@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -9,9 +10,10 @@ import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LearningTracksScreen extends StatefulWidget {
   @override
@@ -79,6 +81,16 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        BackgroundButterflyTop(positioned: -59),
+        BackgroundButterflyBottom(positioned: -50),
+        body()
+      ],
+    );
+    }
+
+  Widget body(){
     if (hasError) {
       return TryAgain(
         _getData,
