@@ -3,23 +3,32 @@ import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/notifications/notification_model.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
+import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class PushNotification {
   static PushNotification? _instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   SecureStoreMixin storage = SecureStoreMixin();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
+  PostRepositoryImpl postsRepository = PostRepositoryImpl();
+  SmartPageController? controller;
   late AndroidNotificationChannel channel;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   User? user;
   BuildContext? context;
+  String? payload;
 
   String? token;
   static PushNotification getInstace() {
@@ -49,6 +58,23 @@ class PushNotification {
               AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
 
+      AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+
+      var initializationSettings =
+          InitializationSettings(android: initializationSettingsAndroid);
+
+      flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+      final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+          await flutterLocalNotificationsPlugin
+              .getNotificationAppLaunchDetails();
+
+      payload = notificationAppLaunchDetails!.payload;
+
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+          onSelectNotification: selectNotification);
+
       await FirebaseMessaging.instance
           .setForegroundNotificationPresentationOptions(
         alert: true,
@@ -56,6 +82,11 @@ class PushNotification {
         sound: true,
       );
     });
+  }
+
+  Future<void> selectNotification(String? payload) async {
+    if (payload != null) 
+      await getPost(payload);
   }
 
   setContext(BuildContext context) => this.context = context;
@@ -89,7 +120,8 @@ class PushNotification {
       String body =
           getNotificationBody(notification.type, notification.usersName);
 
-      ByteArrayAndroidBitmap? bigIcon = await _turnPhotoURLIntoBitmap(notification.photoURL!);
+      ByteArrayAndroidBitmap? bigIcon =
+          await _turnPhotoURLIntoBitmap(notification.photoURL!);
 
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
@@ -107,6 +139,7 @@ class PushNotification {
               styleInformation: BigTextStyleInformation(body),
             ),
           ),
+          payload: notification.postId,
         );
       }
     });
@@ -162,5 +195,22 @@ class PushNotification {
             .replaceAll(
                 '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
     }
+  }
+
+  goToTimelinePost(List<TimelinePost> posts) {
+    controller?.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": user?.id,
+          "posts": posts,
+          "postSelected": 0,
+        },
+      ),
+    );
+  }
+
+  getPost(String id) async {
+    var post = await postsRepository.getPostById(id);
+    goToTimelinePost([post].toList());
   }
 }
