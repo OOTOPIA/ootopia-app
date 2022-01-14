@@ -4,6 +4,8 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -30,6 +32,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   int postCommentsCount = 0;
   String postId = '';
   bool isIconBlue = false;
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -60,6 +63,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       "postOwnerId": widget.args['post'].userId,
       "commentsCount": widget.args['post'].commentsCount,
     });
+
+    focusNode.addListener(() {
+      setState(() {
+        print(focusNode.hasFocus);
+      });
+    });
   }
 
   Future<void> _getData() async {
@@ -85,15 +94,19 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       return LoadingOverlay(
         isLoading: commentStore.isLoading,
         child: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          onTap: () => focusNode.unfocus(),
           child: Scaffold(
-            body: SingleChildScrollView(
-                child: ConstrainedBox(
-              constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.85),
-              child: Stack(
-                children: [
-                  Column(
+            body: Stack(
+              children: [
+                BackgroundButterflyTop(positioned: -59),
+                Visibility(
+                    visible: !focusNode.hasFocus ,
+                    child: BackgroundButterflyBottom(positioned: -50)),
+                SingleChildScrollView(
+                    child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.85),
+                  child: Column(
                     children: [
                       Container(
                         color: LightColors.grey.withOpacity(0.05),
@@ -126,8 +139,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                               child: NotificationListener<ScrollNotification>(
                                 onNotification:
                                     (ScrollNotification scrollInfo) {
-                                  FocusScope.of(context)
-                                      .requestFocus(new FocusNode());
+                                  //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
                                       scrollInfo.metrics.maxScrollExtent) {
                                     commentStore.currentPage++;
@@ -333,129 +345,127 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                             ),
                     ],
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.only(
-                          bottom: 24, left: 24, right: 24, top: 24),
-                      child: TextField(
-                        maxLines: commentStore.isLoading ? 1 : null,
-                        minLines: 1,
-                        focusNode:
-                            authStore.currentUser == null ? FocusNode() : null,
-                        onTap: authStore.currentUser == null
-                            ? () {
-                                FocusScope.of(context)
-                                    .requestFocus(new FocusNode());
-                                Navigator.of(context).pushNamed(
-                                  PageRoute.Page.loginScreen.route,
-                                  arguments: {
-                                    "returnToPageWithArgs": {
-                                      "currentPageName": "wallet",
-                                      "arguments": null
-                                    }
-                                  },
-                                );
-                              }
-                            : null,
-                        onChanged: (value) {
-                          value = value.trim();
-                          setState(() {
-                            if (value.length > 0) {
-                              isIconBlue = true;
-                            } else {
-                              isIconBlue = false;
+                )),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        bottom: 24, left: 24, right: 24, top: 24),
+                    child: TextField(
+                      maxLines: commentStore.isLoading ? 1 : null,
+                      minLines: 1,
+                      focusNode: focusNode,
+                      onTap: authStore.currentUser == null
+                          ? () {
+                        FocusScope.of(context)
+                            .requestFocus(new FocusNode());
+                        Navigator.of(context).pushNamed(
+                          PageRoute.Page.loginScreen.route,
+                          arguments: {
+                            "returnToPageWithArgs": {
+                              "currentPageName": "wallet",
+                              "arguments": null
                             }
-                          });
-                        },
-                        style: TextStyle(color: Colors.black),
-                        controller: _inputController,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: LightColors.grey, width: 0.25),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: LightColors.grey, width: 0.25),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: LightColors.grey, width: 0.25),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          contentPadding: EdgeInsets.all(16),
-                          hintText:
-                              AppLocalizations.of(context)!.writeYourComment,
-                          hintStyle: TextStyle(color: Colors.black),
-                          suffixIcon: Observer(builder: (context) {
-                            if (commentStore.isLoading) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 14.0),
-                                    child: SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  )
-                                ],
-                              );
-                            } else {
-                              return GestureDetector(
-                                child: Container(
-                                  padding: EdgeInsets.only(right: 16),
-                                  child: isIconBlue
-                                      ? Image.asset(
-                                          'assets/icons/icon-send-blue.png',
-                                          height: 22,
-                                          width: 22,
-                                        )
-                                      : Image.asset(
-                                          'assets/icons/icon-send-grey.png',
-                                          height: 22,
-                                          width: 22,
-                                        ),
-                                ),
-                                onTap: () async {
-                                  if (isIconBlue) {
-                                    if (_inputController.text.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .writeYourComment)));
-                                    } else {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                      commentStore.isLoading = true;
-                                      commentStore.currentPage = 1;
-                                      isIconBlue = false;
-                                      await commentStore.createComment(
-                                          postId, _inputController.text.trim());
-                                      _inputController.clear();
-                                      commentStore.listComments.clear();
-                                      _getData();
-                                      commentStore.isLoading = false;
-                                    }
-                                  }
-                                },
-                              );
-                            }
-                          }),
+                          },
+                        );
+                      }
+                          : null,
+                      onChanged: (value) {
+                        value = value.trim();
+                        setState(() {
+                          if (value.length > 0) {
+                            isIconBlue = true;
+                          } else {
+                            isIconBlue = false;
+                          }
+                        });
+                      },
+                      style: TextStyle(color: Colors.black),
+                      controller: _inputController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: LightColors.grey, width: 0.25),
+                          borderRadius: BorderRadius.circular(5),
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: LightColors.grey, width: 0.25),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: LightColors.grey, width: 0.25),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        contentPadding: EdgeInsets.all(16),
+                        hintText:
+                        AppLocalizations.of(context)!.writeYourComment,
+                        hintStyle: TextStyle(color: Colors.black),
+                        suffixIcon: Observer(builder: (context) {
+                          if (commentStore.isLoading) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 14.0),
+                                  child: SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              ],
+                            );
+                          } else {
+                            return GestureDetector(
+                              child: Container(
+                                padding: EdgeInsets.only(right: 16),
+                                child: isIconBlue
+                                    ? Image.asset(
+                                  'assets/icons/icon-send-blue.png',
+                                  height: 22,
+                                  width: 22,
+                                )
+                                    : Image.asset(
+                                  'assets/icons/icon-send-grey.png',
+                                  height: 22,
+                                  width: 22,
+                                ),
+                              ),
+                              onTap: () async {
+                                if (isIconBlue) {
+                                  if (_inputController.text.isEmpty) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .writeYourComment)));
+                                  } else {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    commentStore.isLoading = true;
+                                    commentStore.currentPage = 1;
+                                    isIconBlue = false;
+                                    await commentStore.createComment(
+                                        postId, _inputController.text.trim());
+                                    _inputController.clear();
+                                    commentStore.listComments.clear();
+                                    _getData();
+                                    commentStore.isLoading = false;
+                                  }
+                                }
+                              },
+                            );
+                          }
+                        }),
                       ),
                     ),
                   ),
-                ],
-              ),
-            )),
+                ),
+              ],
+            ),
           ),
         ),
       );

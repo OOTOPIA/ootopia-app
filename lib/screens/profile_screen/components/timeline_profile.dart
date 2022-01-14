@@ -10,6 +10,8 @@ import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_s
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -53,16 +55,25 @@ class _TimelineScreenProfileScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LoadingOverlay(
-        isLoading: isLoading,
-        child: Visibility(
-          visible: !isLoading,
-          child: ListPostProfileComponent(
-            posts: this.posts,
-            postSelected: this.widget.args["postSelected"],
-            userId: this.widget.args["userId"],
-            postId: this.widget.args["postId"],
-          ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            BackgroundButterflyTop(positioned: -59),
+            BackgroundButterflyBottom(positioned: -50),
+            LoadingOverlay(
+              isLoading: isLoading,
+              child: Visibility(
+                visible: !isLoading,
+                child: ListPostProfileComponent(
+                  posts: this.posts,
+                  postSelected: this.widget.args["postSelected"],
+                  userId: this.widget.args["userId"],
+                  postId: this.widget.args["postId"],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -187,86 +198,80 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           ),
         );
       }
-      return Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: GlobalConstants.of(context).screenHorizontalSpace,
-          vertical: 24,
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: VisibilityDetector(
-                key: ObjectKey(flickMultiManager),
-                onVisibilityChanged: (visibility) {
-                  if (visibility.visibleFraction == 0 && this.mounted) {
-                    flickMultiManager.pause();
+      return Column(
+        children: <Widget>[
+          Expanded(
+            child: VisibilityDetector(
+              key: ObjectKey(flickMultiManager),
+              onVisibilityChanged: (visibility) {
+                if (visibility.visibleFraction == 0 && this.mounted) {
+                  flickMultiManager.pause();
+                }
+              },
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification scrollInfo) {
+                  if (!timelineStore.loadingMorePosts &&
+                      timelineStore.viewState != TimelineViewState.loading &&
+                      scrollInfo.metrics.pixels ==
+                          scrollInfo.metrics.maxScrollExtent &&
+                      timelineStore.hasMorePosts) {
+                    timelineStore.getTimelinePosts();
                   }
+                  return true;
                 },
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (ScrollNotification scrollInfo) {
-                    if (!timelineStore.loadingMorePosts &&
-                        timelineStore.viewState != TimelineViewState.loading &&
-                        scrollInfo.metrics.pixels ==
-                            scrollInfo.metrics.maxScrollExtent &&
-                        timelineStore.hasMorePosts) {
-                      timelineStore.getTimelinePosts();
-                    }
-                    return true;
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    timelineStore.reloadPosts(widget.userId);
                   },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      timelineStore.reloadPosts(widget.userId);
+                  child: ScrollablePositionedList.builder(
+                    itemCount: timelineStore.allPosts.length,
+                    itemScrollController: this.itemScrollController,
+                    itemPositionsListener: this.itemPositionsListener,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 24),
+                            child: PhotoTimeline(
+                              key: ObjectKey(timelineStore.allPosts[index]),
+                              post: timelineStore.allPosts[index],
+                              timelineStore: this.timelineStore,
+                              loggedIn: this.loggedIn,
+                              flickMultiManager: flickMultiManager,
+                              isProfile: true,
+                              user: this.user,
+                              onDelete: () => setState(() {}),
+                            ),
+                          ),
+                          Observer(
+                            builder: (_) => (timelineStore.loadingMorePosts &&
+                                    index ==
+                                        timelineStore.allPosts.length - 1 &&
+                                    timelineStore.hasMorePosts
+                                ? SizedBox(
+                                    width: double.infinity,
+                                    height: 90,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                : Container(
+                                    padding: index ==
+                                            timelineStore.allPosts.length - 1
+                                        ? EdgeInsets.only(bottom: 90)
+                                        : null,
+                                  )),
+                          ),
+                        ],
+                      );
                     },
-                    child: ScrollablePositionedList.builder(
-                      itemCount: timelineStore.allPosts.length,
-                      itemScrollController: this.itemScrollController,
-                      itemPositionsListener: this.itemPositionsListener,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                              child: PhotoTimeline(
-                                key: ObjectKey(timelineStore.allPosts[index]),
-                                post: timelineStore.allPosts[index],
-                                timelineStore: this.timelineStore,
-                                loggedIn: this.loggedIn,
-                                flickMultiManager: flickMultiManager,
-                                isProfile: true,
-                                user: this.user,
-                                onDelete: () => setState(() {}),
-                              ),
-                            ),
-                            Observer(
-                              builder: (_) => (timelineStore.loadingMorePosts &&
-                                      index ==
-                                          timelineStore.allPosts.length - 1 &&
-                                      timelineStore.hasMorePosts
-                                  ? SizedBox(
-                                      width: double.infinity,
-                                      height: 90,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : Container(
-                                      padding: index ==
-                                              timelineStore.allPosts.length - 1
-                                          ? EdgeInsets.only(bottom: 90)
-                                          : null,
-                                    )),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     });
   }

@@ -5,6 +5,7 @@ import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.da
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_player_learning_tracks.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
 import '../../../data/repositories/learning_tracks_repository.dart';
@@ -73,16 +74,23 @@ class _WatchVideoLeaningTracksState extends State<WatchVideoLeaningTracks> {
               },
             )
           : null,
-      body: VideoPlayerLearningTracks(
-          chapter: currentChapter,
-          viewQuiz: viewButtonQuiz(isPortrait),
-          updateStatusVideo: updateStatusVideo,
-          listChapters: widget.listChapters,
-          eventFullScreen: () {
-            setState(() {
-              playerVideoFullscreen = !playerVideoFullscreen;
-            });
-          }),
+      body: Container(
+        child: Stack(
+          children: [
+            BackgroundButterflyBottom(),
+            VideoPlayerLearningTracks(
+                chapter: currentChapter,
+                viewQuiz: viewButtonQuiz(isPortrait),
+                updateStatusVideo: updateStatusVideo,
+                listChapters: widget.listChapters,
+                eventFullScreen: () {
+                  setState(() {
+                    playerVideoFullscreen = !playerVideoFullscreen;
+                  });
+                }),
+          ],
+        ),
+      ),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -43,6 +44,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
   late WalletStore walletStore;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   SmartPageController controller = SmartPageController.getInstance();
+  Color iconColor = Color(0XFF3A4046);
 
   @override
   void initState() {
@@ -66,13 +68,18 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: leading(),
       actions: actions(),
+      flexibleSpace: Image(
+        image: AssetImage('assets/images/butterfly_top.png',),
+        alignment: Alignment.topCenter,
+        fit: BoxFit.cover,
+      ),
     );
   }
 
   Widget get logo => Padding(
         padding: EdgeInsets.all(3),
         child: Image.asset(
-          'assets/images/logo.png',
+          'assets/images/Logo-com-sombra.png',
           height: 34,
         ),
       );
@@ -118,7 +125,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
         },
         icon: Icon(
           FeatherIcons.arrowLeft,
-          color: Colors.black,
+          color: iconColor,
           size: 20,
         ),
       );
@@ -131,7 +138,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
         },
         icon: Icon(
           FeatherIcons.menu,
-          color: Theme.of(_buildContext).iconTheme.color,
+          color: iconColor,
         ),
       );
 
@@ -166,10 +173,8 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                 child: Visibility(
                   visible: !_oozIsOpened,
                   child: Image.asset(
-                    'assets/icons/ooz_circle_icon.png',
-                    width: 24,
+                    'assets/icons/ooz_arrow.png',
                     height: 24,
-                    color: Theme.of(_buildContext).iconTheme.color,
                   ),
                 ),
               ),
@@ -200,7 +205,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
-                          color: Theme.of(context).accentColor,
+                          color: iconColor,
                         ),
                       ],
                     );
@@ -215,7 +220,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
   Widget get closeIcon => IconButton(
         icon: Icon(
           Icons.close,
-          color: Colors.black,
+          color: iconColor,
         ),
         onPressed: () {
           if (widget.onTapAction != null) {

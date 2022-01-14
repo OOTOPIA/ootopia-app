@@ -131,16 +131,10 @@ class _RegenerationGameState extends State<RegenerationGame>
           ),
           Container(
             width: double.infinity,
-            height: 1,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
-            ),
-          ),
-          Container(
-            width: double.infinity,
             height: 59,
-            decoration:
-                BoxDecoration(color: Theme.of(context).primaryColorLight),
+            decoration: BoxDecoration(
+                color: Color(0xffAEAEAE).withOpacity(0.17),
+            ),
             padding: EdgeInsets.only(
               left: getEdgeInsetsHorizontalSize,
               right: getEdgeInsetsHorizontalSize,
@@ -159,7 +153,9 @@ class _RegenerationGameState extends State<RegenerationGame>
                       Expanded(
                         child: InkWell(
                           onTap: () async {
-                            if (editProfileStore.currentUser != null) {
+                            if (editProfileStore.currentUser != null &&
+                                !showPersonal && !showLocal && !showGlobo
+                            ) {
                               showModalBottomSheet(
                                   barrierColor: Colors.black.withAlpha(1),
                                   context: context,
@@ -601,7 +597,7 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: selected ? colorSelected : Theme.of(context).backgroundColor,
+                color: selected ? colorSelected : Colors.white.withOpacity(0.35),
                 borderRadius: BorderRadius.all(Radius.circular(gameProgressIconSize)),
               ),
               alignment: Alignment.center,
@@ -618,7 +614,7 @@ class _RegenerationGameState extends State<RegenerationGame>
                 child: CircularPercentIndicator(
                     radius: gameProgressIconSize,
                     lineWidth: 2,
-                    backgroundColor: Theme.of(context).primaryColorDark,
+                    backgroundColor: Color(0XFFd4d4d4),
                     percent: percentTimeCompleted(),
                     linearGradient: gameProgressColors[type]),
               ),
@@ -630,8 +626,8 @@ class _RegenerationGameState extends State<RegenerationGame>
                 child: CircularPercentIndicator(
                     radius: gameProgressIconSize,
                     lineWidth: 2,
-                    backgroundColor: LightColors.silver,
-                    progressColor: LightColors.silver,
+                    backgroundColor: Color(0XFFd4d4d4),
+                    progressColor: Color(0XFFd4d4d4),
                     percent: 1,),
               ),
             )
@@ -729,7 +725,9 @@ class _RegenerationGameState extends State<RegenerationGame>
     if (welcomeGuideLearningTrack == null) {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     }
-    if (welcomeGuideLearningTrack != null) {
+    if (welcomeGuideLearningTrack != null && !showMap && !showPersonal &&
+    !showPersonal && !showLocal &&
+        !showGlobo) {
       openLearningTrack(welcomeGuideLearningTrack!);
     }
   }

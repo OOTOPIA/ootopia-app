@@ -23,6 +23,8 @@ import 'package:ootopia_app/screens/post_preview_screen/components/hashtag_selec
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
@@ -416,9 +418,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       onWillPop: () => _onWillPop(true),
       child: Scaffold(
         appBar: appbar(),
-        body: GestureDetector(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
-            child: Observer(builder: (_) => body())),
+        body: Stack(
+          children: [
+            BackgroundButterflyTop(positioned: -59),
+            Visibility(
+                visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                child: BackgroundButterflyBottom()),
+            GestureDetector(
+                onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+                child: Observer(builder: (_) => body())),
+          ],
+        ),
       ),
     );
   }
@@ -601,10 +611,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                             horizontal:
                                 GlobalConstants.of(context).spacingNormal),
                         width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+
                         child: FlatButton(
                           height: 57,
                           child: Padding(

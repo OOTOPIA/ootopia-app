@@ -323,6 +323,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     topRight: Radius.circular(20),
                   ),
                   color: Color(0xff1A4188),
+                  image:  DecorationImage(
+                    image: AssetImage(
+                      'assets/images/Textura_azul_escuro.png',
+                    ),
+                    alignment: Alignment.bottomLeft,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -371,7 +378,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                     ),
-                    color: Color(0xff1A4188),
                   ),
                 ),
               ),
@@ -385,7 +391,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(15),
                     ),
-                    color: Color(0xff1A4188),
                   ),
                 ),
               )
@@ -639,6 +644,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               Color(0xFF003286),
                             ],
                           ),
+                      image:  DecorationImage(
+                        image: AssetImage(
+                          'assets/images/Textura_azul_escuro.png',
+                        ),
+                        alignment: Alignment.topRight,
+                        fit: BoxFit.none,
+                        opacity: 0.1
+                      )
                         )
                       : BoxDecoration(),
                 ),
@@ -655,11 +668,22 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         width: double.infinity,
                         child: SizedBox(),
                       ),
-                      CustomPaint(
-                        painter: CustomContainerShapeBorder(
-                          x: _draggablePositionX,
-                        ),
-                      ),
+                      Positioned(
+                        left: _draggablePositionX >= 36 ? _draggablePositionX -36 : 0,
+                          child: Container(
+                            height: 30,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                image:  DecorationImage(
+                                    image: AssetImage(
+                                      'assets/icons/button_rectangular.png',
+                                    ),
+                                    alignment: Alignment.bottomLeft,
+                                    fit: BoxFit.fitHeight,
+                                )
+                            ),
+                          )),
+                      //
                       Positioned(
                         top: 6,
                         left: _draggablePositionX >= 36
