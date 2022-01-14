@@ -4,7 +4,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
@@ -25,6 +27,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'components/empty_posts_widget.dart';
 import 'components/timeline_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -175,6 +178,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                                 height: GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
+
+                            //TODO URLS.ISNOTEMPTY
+                            if(true)...[
+                              //TODO URLS.LENGHT = 1
+                              if(false)...[
+                                TextButton(
+                                  onPressed: () async{
+                                    //TODO PEGAR LINK
+                                    _launchURL('https://www.google.com');
+                                  },
+                                  child: Text('meu site',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 13,
+                                      color: Color(0xff018F9C),
+                                    ),),
+                                ),
+                              ]else...[
+                                TextButton(
+                                  onPressed: (){
+                                    controller.insertPage(ViewLinksScreen(
+                                      {
+                                        'store': store,
+                                        'user_id': 1,
+                                      },
+                                    ));
+                                  },
+                                  child: Text(AppLocalizations.of(context)!.relatedLinks,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 13,
+                                      color: Color(0xff018F9C),
+                                    ),),
+                                ),
+                              ]
+                            ]else...[
+                              SizedBox(
+                                height: GlobalConstants.of(context).spacingNormal,
+                              )
+                            ],
+
                             Text(
                               AppLocalizations.of(context)!
                                   .regenerationGame
@@ -308,4 +352,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void _launchURL(String _url) async =>
+      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+
 }

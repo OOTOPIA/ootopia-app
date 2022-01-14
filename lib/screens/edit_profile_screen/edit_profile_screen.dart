@@ -177,15 +177,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              print('aaa');
                               dynamic list = await  Navigator.of(context)
                                   .pushNamed(
                                 PageRoute.Page.addLink.route,
                               );
                               if(list != null){
+                                //TODO ADD/SHOW LINKS
                                 print('foi ${list.length}');
-                              }else{
-                                print('fuck');
                               }
                             },
                             child: TextFormField(
