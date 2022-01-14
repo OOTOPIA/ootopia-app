@@ -8,6 +8,8 @@ import 'package:ootopia_app/screens/auth/components/slogan.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:ootopia_app/data/utils/circle-painter.dart';
@@ -94,90 +96,98 @@ class _RegisterFormScreenState extends State<RegisterFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: _form(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                        GlobalConstants.of(context).spacingMedium),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                              ),
-                              elevation: MaterialStateProperty.all<double>(0.0),
-                              minimumSize: MaterialStateProperty.all(
-                                Size(60, 58),
-                              ),
-                              backgroundColor: _termsCheckbox
-                                  ? MaterialStateProperty.all(LightColors.blue)
-                                  : MaterialStateProperty.all(
-                                      Color(0xFF5D7FBB)),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!.continueAccess,
-                              style: Theme.of(context)
-                                  .inputDecorationTheme
-                                  .hintStyle!
-                                  .copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+      body: Stack(
+        children: [
+          BackgroundButterflyTop(positioned: -59),
+          Visibility(
+              visible: MediaQuery.of(context).viewInsets.bottom == 0,
+              child: BackgroundButterflyBottom()),
+          GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _form(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(
+                            GlobalConstants.of(context).spacingMedium),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
                                   ),
+                                  elevation: MaterialStateProperty.all<double>(0.0),
+                                  minimumSize: MaterialStateProperty.all(
+                                    Size(60, 58),
+                                  ),
+                                  backgroundColor: _termsCheckbox
+                                      ? MaterialStateProperty.all(LightColors.blue)
+                                      : MaterialStateProperty.all(
+                                          Color(0xFF5D7FBB)),
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)!.continueAccess,
+                                  style: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .hintStyle!
+                                      .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                onPressed: _termsCheckbox
+                                    ? () async {
+                                        if (registerController
+                                                .emailController.text !=
+                                            '') {
+                                          await registerController.authStore
+                                              .checkEmailExist(registerController
+                                                  .emailController.text);
+                                        }
+                                        if (formRegister.currentState!.validate() &&
+                                            !registerController
+                                                .authStore.emailExist) {
+                                          this.trackingEvents.signupCompletedEmail({
+                                            "email": registerController
+                                                .emailController.text
+                                                .trim(),
+                                          });
+                                          Navigator.of(context).pushNamed(
+                                            PageRoute.Page.registerPhoneNumberScreen
+                                                .route,
+                                          );
+                                        }
+                                      }
+                                    : () {},
+                              ),
                             ),
-                            onPressed: _termsCheckbox
-                                ? () async {
-                                    if (registerController
-                                            .emailController.text !=
-                                        '') {
-                                      await registerController.authStore
-                                          .checkEmailExist(registerController
-                                              .emailController.text);
-                                    }
-                                    if (formRegister.currentState!.validate() &&
-                                        !registerController
-                                            .authStore.emailExist) {
-                                      this.trackingEvents.signupCompletedEmail({
-                                        "email": registerController
-                                            .emailController.text
-                                            .trim(),
-                                      });
-                                      Navigator.of(context).pushNamed(
-                                        PageRoute.Page.registerPhoneNumberScreen
-                                            .route,
-                                      );
-                                    }
-                                  }
-                                : () {},
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
