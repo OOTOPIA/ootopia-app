@@ -725,7 +725,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     if (welcomeGuideLearningTrack == null) {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     }
-    if (welcomeGuideLearningTrack != null) {
+    if (welcomeGuideLearningTrack != null && !showPersonal && !showLocal && !showGlobo) {
       openLearningTrack(welcomeGuideLearningTrack!);
     }
   }
