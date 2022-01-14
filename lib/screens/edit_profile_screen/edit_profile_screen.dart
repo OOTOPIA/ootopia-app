@@ -74,7 +74,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           body: Stack(
             children: [
               BackgroundButterflyTop(positioned: -59),
-              BackgroundButterflyBottom(positioned: -50),
+              Visibility(
+                  visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                  child: BackgroundButterflyBottom(positioned: -50)),
               SafeArea(
                 child: GestureDetector(
                   onTap: () {
