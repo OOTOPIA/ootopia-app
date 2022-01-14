@@ -8,7 +8,7 @@ part of 'notification_model.dart';
 
 NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) {
   return NotificationModel(
-    photoUrl: json['photoUrl'] as String?,
+    photoURL: json['photoURL'] as String?,
     type: json['type'] as String,
     usersName:
         (json['usersName'] as List<dynamic>).map((e) => e as String).toList(),
@@ -19,7 +19,7 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
     <String, dynamic>{
-      'photoUrl': instance.photoUrl,
+      'photoURL': instance.photoURL,
       'type': instance.type,
       'usersName': instance.usersName,
       'postId': instance.postId,

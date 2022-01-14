@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,6 +8,7 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 
 class PushNotification {
   static PushNotification? _instance;
@@ -78,19 +80,21 @@ class PushNotification {
   }
 
   void listenerFirebaseCloudMessagingMessages() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
       print("Message ${event.data}");
-
       event.data["usersName"] = jsonDecode(event.data["usersName"]);
       final notification = NotificationModel.fromJson(event.data);
 
-      String longdata = getNotificationBody(notification.type, notification.usersName);
+      String longTextDescription =
+          getNotificationBody(notification.type, notification.usersName);
+
+      ByteArrayAndroidBitmap? bigIcon = await _turnPhotoURLIntoBitmap(notification.photoURL!);
 
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           getNotificationTitle(notification.usersName[0]),
-          getNotificationBody(notification.type, notification.usersName),
+          longTextDescription,
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -98,7 +102,8 @@ class PushNotification {
               color: Colors.white,
               channelDescription: channel.description,
               icon: '@mipmap/ic_launcher',
-              styleInformation: BigTextStyleInformation(longdata),
+              largeIcon: bigIcon!,
+              styleInformation: BigTextStyleInformation(longTextDescription),
             ),
           ),
         );
@@ -108,6 +113,17 @@ class PushNotification {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
+  }
+
+  _turnPhotoURLIntoBitmap(String photoURL) async {
+    final ByteArrayAndroidBitmap largeIcon =
+        ByteArrayAndroidBitmap(await _getByteArrayFromUrl(photoURL));
+    return largeIcon;
+  }
+
+  Future<Uint8List> _getByteArrayFromUrl(String photoUrl) async {
+    final http.Response response = await http.get(Uri.parse(photoUrl));
+    return response.bodyBytes;
   }
 
   String getNotificationTitle(String type, {int? oozReceived}) {

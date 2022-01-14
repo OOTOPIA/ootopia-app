@@ -5,14 +5,14 @@ part 'notification_model.g.dart';
 @JsonSerializable()
 class NotificationModel {
   NotificationModel({
-    this.photoUrl,
+    this.photoURL,
     required this.type,
     required this.usersName,
     required this.postId,
     this.oozAmount,
   });
 
-  final String? photoUrl;
+  final String? photoURL;
   final String type;
   final List<String> usersName;
   final String postId;
