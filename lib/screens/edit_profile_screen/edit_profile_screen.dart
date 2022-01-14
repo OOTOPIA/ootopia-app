@@ -1,9 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -13,11 +13,14 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+
+import 'add_link/add_link_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -91,6 +94,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
                           ),
+
                           Center(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 30.0),
@@ -135,6 +139,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: 16,
                           ),
+
                           Text(
                             AppLocalizations.of(context)!.bio,
                             style: GoogleFonts.roboto(
@@ -158,6 +163,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       alignLabelWithHint: true,
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 16))),
+                          SizedBox(
+                            height: 16,
+                          ),
+
+                          Text(
+                            AppLocalizations.of(context)!.links,
+                            style: GoogleFonts.roboto(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              print('aaa');
+                              dynamic list = await  Navigator.of(context)
+                                  .pushNamed(
+                                PageRoute.Page.addLink.route,
+                              );
+                              if(list != null){
+                                print('foi ${list.length}');
+                              }else{
+                                print('fuck');
+                              }
+                            },
+                            child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
+                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                enabled: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                    AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
+                                    prefixIcon: Icon(Icons.add, color:
+                                    LightColors.grey,),
+                                    labelStyle: TextStyle(color: Colors.black),
+                                    alignLabelWithHint: true,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
+                          ),
+
                           SizedBox(
                             height: 16,
                           ),
