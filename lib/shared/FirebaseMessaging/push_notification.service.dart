@@ -84,6 +84,8 @@ class PushNotification {
       event.data["usersName"] = jsonDecode(event.data["usersName"]);
       final notification = NotificationModel.fromJson(event.data);
 
+      String longdata = getNotificationBody(notification.type, notification.usersName);
+
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -96,6 +98,7 @@ class PushNotification {
               color: Colors.white,
               channelDescription: channel.description,
               icon: '@mipmap/ic_launcher',
+              styleInformation: BigTextStyleInformation(longdata),
             ),
           ),
         );
@@ -108,7 +111,6 @@ class PushNotification {
   }
 
   String getNotificationTitle(String type, {int? oozReceived}) {
-    print("Title: $type");
     if (type == "gratitude_reward")
       return AppLocalizations.of(context!)!
           .notificationTitleOOzReceived
@@ -120,7 +122,6 @@ class PushNotification {
   }
 
   String getNotificationBody(String type, List<String> usersName) {
-    print("Body: $type");
     if (type == "gratitude_reward") {
       if (usersName.length == 1)
         return AppLocalizations.of(context!)!
