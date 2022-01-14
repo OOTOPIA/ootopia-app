@@ -228,6 +228,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             keyboardType: TextInputType.numberWithOptions(
                                 signed: true, decimal: true),
                             inputDecoration: InputDecoration(
+                              fillColor: Colors.white.withOpacity(0.75),
                               hintText:
                                   AppLocalizations.of(context)!.enterYourNumber,
                               hintStyle:
