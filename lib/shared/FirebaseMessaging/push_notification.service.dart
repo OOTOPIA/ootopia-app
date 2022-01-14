@@ -85,7 +85,8 @@ class PushNotification {
       event.data["usersName"] = jsonDecode(event.data["usersName"]);
       final notification = NotificationModel.fromJson(event.data);
 
-      String longTextDescription =
+      String title = getNotificationTitle(notification.type);
+      String body =
           getNotificationBody(notification.type, notification.usersName);
 
       ByteArrayAndroidBitmap? bigIcon = await _turnPhotoURLIntoBitmap(notification.photoURL!);
@@ -93,8 +94,8 @@ class PushNotification {
       if (event.data != {} || event.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          getNotificationTitle(notification.usersName[0]),
-          longTextDescription,
+          title,
+          body,
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -103,7 +104,7 @@ class PushNotification {
               channelDescription: channel.description,
               icon: '@mipmap/ic_launcher',
               largeIcon: bigIcon!,
-              styleInformation: BigTextStyleInformation(longTextDescription),
+              styleInformation: BigTextStyleInformation(body),
             ),
           ),
         );
@@ -156,7 +157,7 @@ class PushNotification {
             .replaceAll('%USER_NAME%', '${usersName.first}');
       else
         return AppLocalizations.of(context!)!
-            .notificationBodyOOzReceivedBySomePeople
+            .notificationBodyCommentedPostBySomePeople
             .replaceAll('%USER_NAME%', '${usersName.last}')
             .replaceAll(
                 '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
