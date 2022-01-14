@@ -153,7 +153,9 @@ class _RegenerationGameState extends State<RegenerationGame>
                       Expanded(
                         child: InkWell(
                           onTap: () async {
-                            if (editProfileStore.currentUser != null) {
+                            if (editProfileStore.currentUser != null &&
+                                !showPersonal && !showLocal && !showGlobo
+                            ) {
                               showModalBottomSheet(
                                   barrierColor: Colors.black.withAlpha(1),
                                   context: context,
@@ -723,7 +725,9 @@ class _RegenerationGameState extends State<RegenerationGame>
     if (welcomeGuideLearningTrack == null) {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     }
-    if (welcomeGuideLearningTrack != null) {
+    if (welcomeGuideLearningTrack != null && !showMap && !showPersonal &&
+    !showPersonal && !showLocal &&
+        !showGlobo) {
       openLearningTrack(welcomeGuideLearningTrack!);
     }
   }
