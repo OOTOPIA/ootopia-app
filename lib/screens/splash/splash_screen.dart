@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -31,6 +33,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
       AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
       await appUsageSplashScreen.updateLastSplashScreenOpening();
+
+      Locale locale = Localizations.localeOf(context);
+      final language = await appUsageSplashScreen.checkLanguageConfig();
+
+      if (language == null || locale.languageCode != language)
+        await appUsageSplashScreen.updateLanguageConfig(locale.languageCode);
 
       if (appUsageSplashScreen.displayedToday)
         Navigator.of(context).pushReplacementNamed(
