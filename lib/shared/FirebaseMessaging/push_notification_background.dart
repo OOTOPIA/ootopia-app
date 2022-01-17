@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class PushNotification {
-  static PushNotification? _instance;
+class PushNotificationBackground {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   SecureStoreMixin storage = SecureStoreMixin();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
@@ -25,19 +25,11 @@ class PushNotification {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   User? user;
-  BuildContext? context;
   String? payload;
 
   String? token;
-  static PushNotification getInstance() {
-    if (_instance == null) {
-      _instance = PushNotification();
-    }
-    return _instance!;
-  }
 
-  PushNotification() {
-    _firebaseMessaging.getNotificationSettings();
+  PushNotificationBackground() {
     channel = const AndroidNotificationChannel(
       'high_importance_channel',
       'High Importance Notifications',
@@ -72,13 +64,6 @@ class PushNotification {
 
       await flutterLocalNotificationsPlugin.initialize(initializationSettings,
           onSelectNotification: selectNotification);
-
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
     });
   }
 
@@ -86,32 +71,10 @@ class PushNotification {
     if (payload != null) await getPost(payload);
   }
 
-  setContext(BuildContext context) => this.context = context;
-
-  void listenerFirebaseCloudMessagingToken() async {
-    token = await _firebaseMessaging.getToken();
-    print("object pegou $token");
-    if (await storage.getCurrentUser() != null && token != null) {
-      await this.userRepository.updateTokenDeviceUser(token!);
-    }
-
-    _firebaseMessaging.onTokenRefresh
-        .asBroadcastStream()
-        .listen((_token) async {
-      token = _token;
-      print("object atualizou $token");
-
-      if (await storage.getCurrentUser() != null) {
-        await this.userRepository.updateTokenDeviceUser(token!);
-      }
-    });
-  }
-
-  void listenerFirebaseCloudMessagingMessages() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
-      print("Message ${event.data}");
-      event.data["usersName"] = jsonDecode(event.data["usersName"]);
-      final notification = NotificationModel.fromJson(event.data);
+  showNotificationOnBackground(RemoteMessage message) async {
+      print("Message ${message.data}");
+      message.data["usersName"] = jsonDecode(message.data["usersName"]);
+      final notification = NotificationModel.fromJson(message.data);
 
       String title = getNotificationTitle(notification.type);
       String body =
@@ -120,11 +83,11 @@ class PushNotification {
       ByteArrayAndroidBitmap? bigIcon =
           await _turnPhotoURLIntoBitmap(notification.photoURL!);
 
-      if (event.data != {} || event.data != null) {
+      if (message.data != {} || message.data != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
-          title,
-          body,
+          "title",
+          "body",
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
@@ -133,17 +96,12 @@ class PushNotification {
               channelDescription: channel.description,
               icon: '@mipmap/ic_launcher',
               largeIcon: bigIcon!,
-              styleInformation: BigTextStyleInformation(body),
+              styleInformation: BigTextStyleInformation("body"),
             ),
           ),
-          payload: notification.postId,
+         payload: notification.postId,
         );
       }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
-    });
   }
 
   _turnPhotoURLIntoBitmap(String photoURL) async {
@@ -158,40 +116,42 @@ class PushNotification {
   }
 
   String getNotificationTitle(String type, {int? oozReceived}) {
-    if (type == "gratitude_reward")
-      return AppLocalizations.of(context!)!
-          .notificationTitleOOzReceived
-          .replaceAll('%OOZ_RECEIVED%', '${oozReceived.toString()}');
-    else
-      return AppLocalizations.of(context!)!
-          .notificationTitleCommentedPost
-          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
+     return "";
+    // if (type == "gratitude_reward")
+    //   return AppLocalizations.of(context!)!
+    //       .notificationTitleOOzReceived
+    //       .replaceAll('%OOZ_RECEIVED%', '${oozReceived.toString()}');
+    // else
+    //   return AppLocalizations.of(context!)!
+    //       .notificationTitleCommentedPost
+    //       .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
   }
 
   String getNotificationBody(String type, List<String> usersName) {
-    if (type == "gratitude_reward") {
-      if (usersName.length == 1)
-        return AppLocalizations.of(context!)!
-            .notificationBodyOOzReceivedByOnePerson
-            .replaceAll('%USER_NAME%', '${usersName.first}');
-      else
-        return AppLocalizations.of(context!)!
-            .notificationBodyOOzReceivedBySomePeople
-            .replaceAll('%USER_NAME%', '${usersName.last}')
-            .replaceAll(
-                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
-    } else {
-      if (usersName.length == 1)
-        return AppLocalizations.of(context!)!
-            .notificationBodyCommentedPostByOnePerson
-            .replaceAll('%USER_NAME%', '${usersName.first}');
-      else
-        return AppLocalizations.of(context!)!
-            .notificationBodyCommentedPostBySomePeople
-            .replaceAll('%USER_NAME%', '${usersName.last}')
-            .replaceAll(
-                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
-    }
+    return "";
+    // if (type == "gratitude_reward") {
+    //   if (usersName.length == 1)
+    //     return AppLocalizations.of(context!)!
+    //         .notificationBodyOOzReceivedByOnePerson
+    //         .replaceAll('%USER_NAME%', '${usersName.first}');
+    //   else
+    //     return AppLocalizations.of(context!)!
+    //         .notificationBodyOOzReceivedBySomePeople
+    //         .replaceAll('%USER_NAME%', '${usersName.last}')
+    //         .replaceAll(
+    //             '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+    // } else {
+    //   if (usersName.length == 1)
+    //     return AppLocalizations.of(context!)!
+    //         .notificationBodyCommentedPostByOnePerson
+    //         .replaceAll('%USER_NAME%', '${usersName.first}');
+    //   else
+    //     return AppLocalizations.of(context!)!
+    //         .notificationBodyCommentedPostBySomePeople
+    //         .replaceAll('%USER_NAME%', '${usersName.last}')
+    //         .replaceAll(
+    //             '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+    // }
   }
 
   goToTimelinePost(List<TimelinePost> posts) {

@@ -21,7 +21,7 @@ abstract class AuthStoreBase with Store {
 
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
-  PushNotification pushNotification = PushNotification.getInstace();
+  PushNotification pushNotification = PushNotification.getInstance();
   final InterestsTagsRepositoryImpl interestsTagsrepository =
       InterestsTagsRepositoryImpl();
 

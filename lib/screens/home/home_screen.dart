@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen>
   HomeStore? homeStore;
   late TimelineStore timelineStore;
   late TimelinePostBloc timelinePostBloc;
-  PushNotification pushNotification = PushNotification.getInstace();
+  PushNotification pushNotification = PushNotification.getInstance();
 
   late ProfileScreenStore profileStore;
   Widget? currentPageWidget;

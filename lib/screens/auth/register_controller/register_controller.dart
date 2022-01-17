@@ -25,7 +25,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class RegisterSecondPhaseController with SecureStoreMixin {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  PushNotification pushNotification = PushNotification.getInstace();
+  PushNotification pushNotification = PushNotification.getInstance();
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
 
