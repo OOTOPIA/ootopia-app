@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -96,11 +97,7 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(width: 12),
-                  Icon(
-                    //TODO TROCAR ICONE
-                    Icons.link,
-                    color: LightColors.blue,
-                  ),
+                  SvgPicture.asset('assets/icons/link.svg'),
                   SizedBox(width: 12),
                   Container(
                     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 100),

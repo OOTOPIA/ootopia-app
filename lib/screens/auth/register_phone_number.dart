@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -173,8 +174,15 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
                                           AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
-                                          prefixIcon: Icon(Icons.add, color:
-                                          LightColors.grey,),
+                                          prefixIcon: Container(
+                                            height: 21,
+                                            width: 21,
+                                            margin: EdgeInsets.all(15),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/mais.svg',
+                                              height: 21,
+                                              width: 21,),
+                                          ),
                                           labelStyle: TextStyle(color: Colors.black),
                                           alignLabelWithHint: true,
                                           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),

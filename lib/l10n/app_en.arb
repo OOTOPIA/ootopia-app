@@ -348,6 +348,7 @@
     "link":"Link",
     "addLinksInYourPage":"Add links to your page",
     "url":"Url",
+    "invalidUrl":"invalid URL",
     "title":"Title",
     "addOneMoreLink":"ADD ONE MORE LINK",
     "selectLinksThatCorrespond":"Select links that correspond to the purposes of OOTOPIA and contribute to a better world.",

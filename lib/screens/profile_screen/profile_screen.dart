@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
@@ -193,17 +194,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ]else...[
                                 TextButton(
                                   onPressed: (){
-                                    // controller.insertPage(ViewLinksScreen(
-                                    //   {
-                                    //     'store': store,
-                                    //     'user_id': 1,
-                                    //   },
-                                    // ));
-
-                                    Navigator.of(context).pushNamed(
-                                      PageRoute.Page.registerPhoneNumberScreen
-                                          .route,
-                                    );
+                                    controller.insertPage(ViewLinksScreen(
+                                      {
+                                        'store': store,
+                                        'user_id': 1,
+                                      },
+                                    ));
 
                                   },
                                   child: Text(AppLocalizations.of(context)!.relatedLinks,

@@ -193,8 +193,11 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
               .copyWith(),
           controller: item.urlController,
           validator: (value) {
-            if (value == null || value.isEmpty) {
+            bool isUrl = Uri.tryParse(value!)?.hasAbsolutePath ?? false;
+            if (value.isEmpty) {
               return AppLocalizations.of(context)!.pleaseEnterLink;
+            }else if(!isUrl){
+              return AppLocalizations.of(context)!.invalidUrl;
             }
             return null;
           },
