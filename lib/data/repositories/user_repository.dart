@@ -145,6 +145,22 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future updateUserProfile(
       User user, List<String> tagsIds, FlutterUploader? uploader) async {
     try {
+      Map link = {};
+      if( user.links != null){
+        user.links!.forEach((element) {
+          link.addAll(element.toJson());
+        });
+      }
+
+      String links = '';
+      if(user.links!.length > 0){
+        links = jsonEncode([
+          link
+        ]);
+      }
+
+
+
       Map<String, String> data = {
         "birthdate": (user.birthdate == null ? "" : user.birthdate!),
         "dailyLearningGoalInMinutes":
@@ -160,7 +176,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "fullname": user.fullname.toString(),
         "countryCode": user.countryCode.toString(),
         "dialCode": user.dialCode.toString(),
-        "tagsIds": tagsIds.join(",")
+        "tagsIds": tagsIds.join(","),
+        "links": links
       };
 
       if (user.photoFilePath != null && uploader != null) {
@@ -190,13 +207,14 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         );
         if (response.statusCode == 200) {
           await setCurrentUser(response.body);
-          return User.fromJson(json.decode(response.body));
+          //return User.fromJson(json.decode(response.body));
         } else {
           throw Exception('Failed to update user');
         }
       }
     } catch (error) {
-      print('$error');
+      print(' error $error');
+      print('response.date ${user.id}');
       throw Exception('Failed to update user ' + error.toString());
     }
   }

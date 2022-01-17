@@ -183,7 +183,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 PageRoute.Page.addLink.route,
                               );
                               if(list != null){
-                                //TODO ADD/SHOW LINKS
+                                // List<Link> links = list;
+                                editProfileStore.links = list;
                                 print('foi ${list.length}');
                               }
                             },

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddLinkScreen extends StatefulWidget {
 
@@ -16,7 +17,7 @@ class AddLinkScreen extends StatefulWidget {
 class _AddLinkScreenState extends State<AddLinkScreen> {
   SmartPageController controller = SmartPageController.getInstance();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  List<Link> url = [Link()];
+  List<LinkController> url = [LinkController()];
 
 
 
@@ -34,13 +35,16 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
         },
         onTapAction: () async {
           if (formKey.currentState!.validate()) {
-            Navigator.of(context).pop(url);
-          //   await editProfileStore.updateUser();
-          //   await profileStore
-          //       .getProfileDetails(editProfileStore.currentUser!.id!);
-          //   authStore.setUserIsLogged();
-          //   controller.back();
-           }
+            List<Link> links = [];
+            url.forEach((element) {
+              links.add(Link(
+                URL: element.urlController.text,
+                title: element.titleController.text,
+              ));
+
+            });
+            Navigator.of(context).pop(links);
+          }
         },
       ),
       body: Container(
@@ -86,7 +90,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
                     OutlinedButton(
                       onPressed: () {
                         setState(() {
-                          url.add(Link());
+                          url.add(LinkController());
                         });
                       },
                       style: OutlinedButton.styleFrom(
@@ -134,7 +138,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
     );
   }
 
-  Widget urlItem(Link item,int index) {
+  Widget urlItem(LinkController item,int index) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +158,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
                     color: LightColors.grey,
                     fontWeight: FontWeight.w400)),
             Visibility(
-              visible: url.length > 1 || (index == 0 && item.urlController.text.isNotEmpty),
+                visible: url.length > 1 || (index == 0 && item.urlController.text.isNotEmpty),
                 child: TextButton(
                   onPressed: (){
                     if(index == 0){
@@ -163,9 +167,9 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
                         item.titleController.text = '';
                       });
                     }else{
-                    setState(() {
-                      url.remove(item);
-                    });
+                      setState(() {
+                        url.remove(item);
+                      });
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.delete,
@@ -193,10 +197,11 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
               .copyWith(),
           controller: item.urlController,
           validator: (value) {
-            bool isUrl = Uri.tryParse(value!)?.hasAbsolutePath ?? false;
-            if (value.isEmpty) {
+            //TODO VERIFICAR SE É LINK
+            bool isUrl = true;
+            if (value!.isEmpty) {
               return AppLocalizations.of(context)!.pleaseEnterLink;
-            }else if(!isUrl){
+            }else if(isUrl == false){
               return AppLocalizations.of(context)!.invalidUrl;
             }
             return null;
@@ -224,8 +229,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
   }
 }
 
-class Link{
+class LinkController{
   TextEditingController urlController = TextEditingController();
   TextEditingController titleController = TextEditingController();
-
 }

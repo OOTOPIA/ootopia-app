@@ -175,40 +175,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
 
-                            //TODO URLS.ISNOTEMPTY
-                            if(true)...[
-                              //TODO URLS.LENGHT = 1
-                              if(false)...[
-                                TextButton(
-                                  onPressed: () async{
-                                    //TODO PEGAR LINK
-                                    _launchURL('https://www.google.com');
-                                  },
-                                  child: Text('meu site',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 13,
-                                      color: Color(0xff018F9C),
-                                    ),),
-                                ),
-                              ]else...[
-                                TextButton(
-                                  onPressed: (){
-                                    controller.insertPage(ViewLinksScreen(
-                                      {
-                                        'store': store,
-                                        'user_id': 1,
-                                      },
-                                    ));
 
-                                  },
-                                  child: Text(AppLocalizations.of(context)!.relatedLinks,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 13,
-                                      color: Color(0xff018F9C),
-                                    ),),
-                                ),
+                            if(store?.profile?.links != null)...[
+                              if(store!.profile!.links!.isNotEmpty)...[
+                                if(store!.profile!.links!.length == 1)...[
+                                  TextButton(
+                                    onPressed: () async{
+                                      _launchURL(store!.profile!.links![0].URL);
+                                    },
+                                    child: Text(store!.profile!.links![0].title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),),
+                                  ),
+                                ]else...[
+                                  TextButton(
+                                    onPressed: (){
+                                      controller.insertPage(ViewLinksScreen(
+                                        {
+                                          'store': store,
+                                          'user_id': 1,
+                                        },
+                                      ));
+
+                                    },
+                                    child: Text(AppLocalizations.of(context)!.relatedLinks,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),),
+                                  ),
+                                ]
                               ]
                             ]else...[
                               SizedBox(

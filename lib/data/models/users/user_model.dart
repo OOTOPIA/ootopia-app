@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'badges_model.dart';
 
 class User extends Equatable {
@@ -33,6 +34,7 @@ class User extends Equatable {
   int? totalTrophyQuantity;
   String? countryCode;
   String? dialCode;
+  List<Link>? links;
 
   User({
     this.id,
@@ -65,6 +67,7 @@ class User extends Equatable {
     this.phone,
     this.countryCode,
     this.dialCode,
+    this.links
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -140,7 +143,13 @@ class User extends Equatable {
         bio: json['bio'],
         phone: json['phone'],
         dialCode: json['dialCode'],
-        countryCode: json['countryCode']);
+        countryCode: json['countryCode'],
+        links: (json['links'] == null || json['links'] == '[{}]'
+          ? []
+          : (json['links'] as List<dynamic>)
+          .map((e) => Link.fromJson(e as Map<String, dynamic>))
+          .toList()),
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -171,6 +180,7 @@ class User extends Equatable {
         'phone': phone,
         'countryCode': countryCode,
         'dialCode': dialCode,
+        'links': links,
       };
 
   @override
@@ -204,5 +214,6 @@ class User extends Equatable {
         bio,
         phone,
         dialCode,
+        links,
       ];
 }
