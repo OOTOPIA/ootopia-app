@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -29,6 +30,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
       RegisterSecondPhaseController.getInstance();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   SmartPageController pageController = SmartPageController.getInstance();
+  List<Link> links = [];
 
   @override
   void initState() {
@@ -70,7 +72,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
               child: CustomScrollView(
                 slivers: [
                   SliverFillRemaining(
-                    hasScrollBody: false,
+                    hasScrollBody: true,
                     fillOverscroll: true,
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -87,7 +89,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   height: 32,
                                 ),
                                 PhotoEdit(
-                                  photoPath: registerController.user?.photoFilePath,
+                                  photoPath: registerController.user!.photoFilePath,
                                   updatePhoto: (String? imagePath) {
                                     if (imagePath != null) {
                                       registerController.getImage(
@@ -157,13 +159,26 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
+                                    // dynamic list = await  Navigator.of(context)
+                                    //     .pushNamed(
+                                    //   PageRoute.Page.addLink.route,
+                                    // );
+                                    // if(list != null){
+                                    //   //TODO ADD/SHOW LINKS
+                                    //   print('foi ${list.length}');
+                                    // }
                                     dynamic list = await  Navigator.of(context)
                                         .pushNamed(
-                                      PageRoute.Page.addLink.route,
+                                        PageRoute.Page.addLink.route,
+                                        arguments: {
+                                          "list": links
+                                        }
                                     );
                                     if(list != null){
-                                      //TODO ADD/SHOW LINKS
-                                      print('foi ${list.length}');
+                                      setState(() {
+                                        links = list;
+                                      });
+                                      print(' afoi ${list.length}');
                                     }
                                   },
                                   child: TextFormField(
@@ -186,6 +201,14 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                           labelStyle: TextStyle(color: Colors.black),
                                           alignLabelWithHint: true,
                                           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
+                                ),
+                                ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: links.length,
+                                  itemBuilder: (context, index) {
+                                    return urlItem(links[index]);
+                                  },
                                 ),
                                 SizedBox(
                                   height: 16,
@@ -511,6 +534,37 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget urlItem(Link link) {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      child: Row(
+        children: [
+          SizedBox(width: 35),
+          Container(
+            height: 9,
+            width: 9,
+            decoration: BoxDecoration(
+                color: Color(0xff03DAC5),
+                shape: BoxShape.circle
+            ),
+          ),
+          SizedBox(width: 8),
+          Container(
+            width: MediaQuery.of(context).size.width - 101,
+            child: Text('${link.title}: ${link.URL}',
+              maxLines: 1,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: LightColors.grey
+
+
+              ),),
           ),
         ],
       ),
