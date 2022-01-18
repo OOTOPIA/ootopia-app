@@ -177,7 +177,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
                             if(store?.profile?.links != null)...[
-                              if(store!.profile!.links!.isNotEmpty)...[
                                 if(store!.profile!.links!.length == 1)...[
                                   TextButton(
                                     onPressed: () async{
@@ -190,13 +189,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         color: Color(0xff018F9C),
                                       ),),
                                   ),
-                                ]else...[
+                                ]else if (store!.profile!.links!.length > 1)...[
                                   TextButton(
                                     onPressed: (){
                                       controller.insertPage(ViewLinksScreen(
                                         {
                                           'store': store,
                                           'user_id': 1,
+                                          'list': store!.profile!.links!,
                                         },
                                       ));
 
@@ -209,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),),
                                   ),
                                 ]
-                              ]
+
                             ]else...[
                               SizedBox(
                                 height: GlobalConstants.of(context).spacingNormal,

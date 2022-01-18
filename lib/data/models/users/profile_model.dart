@@ -13,7 +13,7 @@ class Profile extends Equatable {
   int? cityTrophyQuantity;
   int? globalTrophyQuantity;
   int? totalTrophyQuantity;
-  List? links;
+  List<Link>? links;
 
   Profile({
     required this.id,

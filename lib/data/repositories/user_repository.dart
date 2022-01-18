@@ -38,7 +38,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     if (token == null) return API_HEADERS;
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
-
+    print('headers $headers');
+    //ROTA https://api-ootopia.devmagic.com.br/
     if (contentType == null) {
       headers['Content-Type'] = 'application/json; charset=UTF-8';
     }
@@ -145,18 +146,11 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future updateUserProfile(
       User user, List<String> tagsIds, FlutterUploader? uploader) async {
     try {
-      Map link = {};
-      if( user.links != null){
-        user.links!.forEach((element) {
-          link.addAll(element.toJson());
-        });
-      }
-
       String links = '';
       if(user.links!.length > 0){
-        links = jsonEncode([
-          link
-        ]);
+        links = jsonEncode(
+            user.links!
+        );
       }
 
 
@@ -213,8 +207,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         }
       }
     } catch (error) {
-      print(' error $error');
-      print('response.date ${user.id}');
       throw Exception('Failed to update user ' + error.toString());
     }
   }

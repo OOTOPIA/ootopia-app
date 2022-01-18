@@ -9,6 +9,9 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class AddLinkScreen extends StatefulWidget {
+  final Map<String, dynamic> args;
+
+  const AddLinkScreen( this.args);
 
   @override
   _AddLinkScreenState createState() => _AddLinkScreenState();
@@ -18,6 +21,23 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
   SmartPageController controller = SmartPageController.getInstance();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   List<LinkController> url = [LinkController()];
+
+  @override
+  void initState() {
+    List links = widget.args['list'];
+    if(links.length > 0) {
+      url.removeAt(0);
+      links.forEach((element) {
+        print('element.title ${element.title}');
+        LinkController linkController = LinkController();
+        linkController.urlController.text = element.URL;
+        linkController.titleController.text = element.title;
+        url.add(linkController);
+      });
+    }
+
+    super.initState();
+  }
 
 
 
@@ -162,10 +182,16 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
                 child: TextButton(
                   onPressed: (){
                     if(index == 0){
-                      setState(() {
-                        item.urlController.text = '';
-                        item.titleController.text = '';
-                      });
+                      if(url.length == 1){
+                        setState(() {
+                          item.urlController.text = '';
+                          item.titleController.text = '';
+                        });
+                      }else{
+                        setState(() {
+                          url.remove(item);
+                        });
+                      }
                     }else{
                       setState(() {
                         url.remove(item);
@@ -182,7 +208,9 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
         ),
         SizedBox(height: 8),
         TextFormField(
-          textCapitalization: TextCapitalization.words,
+          textCapitalization: TextCapitalization.none,
+          keyboardType: TextInputType.url,
+          textInputAction: TextInputAction.next,
           onChanged: (text){
             if(text.length == 0 || text.length == 1){
               setState(() {
@@ -196,12 +224,16 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
               AppLocalizations.of(context)!.url.toUpperCase())
               .copyWith(),
           controller: item.urlController,
+
           validator: (value) {
-            //TODO VERIFICAR SE É LINK
-            bool isUrl = true;
-            if (value!.isEmpty) {
+            if(value!.contains('http') == false){
+              value = 'http://' + value;
+              item.urlController.text = value;
+            }
+            bool isUrl = Uri.tryParse(value + "/")?.hasAbsolutePath ?? false;
+            if (value.isEmpty) {
               return AppLocalizations.of(context)!.pleaseEnterLink;
-            }else if(isUrl == false){
+            }else if(!isUrl){
               return AppLocalizations.of(context)!.invalidUrl;
             }
             return null;
@@ -210,6 +242,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
         SizedBox(height: 8),
         TextFormField(
           textCapitalization: TextCapitalization.words,
+          textInputAction: TextInputAction.next,
           style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w500),
           decoration: GlobalConstants.of(context).loginInputTheme(

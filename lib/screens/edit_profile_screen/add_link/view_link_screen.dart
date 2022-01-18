@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -13,8 +14,10 @@ class ViewLinksScreen extends StatefulWidget {
 
   final Map<String, dynamic> args;
   late ProfileScreenStore store;
+  late List<Link> links;
   ViewLinksScreen(this.args){
     store = args['store'];
+    links = args['list'];
   }
 
   @override
@@ -22,8 +25,7 @@ class ViewLinksScreen extends StatefulWidget {
 }
 
 class _ViewLinksScreenState extends State<ViewLinksScreen> {
-  List links = ['asasas', 'asasas' ,'asasas','asasas','asasas','asasas','asas'
-      'as','asasas'];
+
 
 
 
@@ -59,9 +61,9 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: links.length,
+                    itemCount: widget.links.length,
                     itemBuilder: (context, index) {
-                      return urlItem(links[index]);
+                      return urlItem(widget.links[index]);
                     },
                   )
                 ],
@@ -74,7 +76,7 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
     );
   }
 
-  Widget urlItem(link) {
+  Widget urlItem(Link link) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
@@ -88,8 +90,7 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
           child: InkWell(
             borderRadius: BorderRadius.all(Radius.circular(5)),
             onTap: (){
-              //TODO POR O LINK
-              _launchURL('https://www.google.com');
+              _launchURL(link.URL);
             },
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 15),
@@ -102,8 +103,7 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                   Container(
                     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 100),
                     child: Text(
-                      //TODO PEGAR NOME
-                      link,
+                      link.title,
                       maxLines: 1,
                       style: TextStyle(
                           fontSize: 20,

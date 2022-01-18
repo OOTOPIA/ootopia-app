@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
@@ -20,8 +22,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
-
-import 'add_link/add_link_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -40,7 +40,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
-
     Future.delayed(Duration.zero, () async {
       await editProfileStore.getUser();
       codeCountryPhoneNnumber = PhoneNumber(
@@ -49,9 +48,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
+  init(){
+    if(editProfileStore.links.isEmpty){
+      print('fuck');
+      editProfileStore.links = profileStore.profile!.links!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     profileStore = Provider.of<ProfileScreenStore>(context);
+    init();
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {
       return LoadingOverlay(
@@ -181,11 +188,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               dynamic list = await  Navigator.of(context)
                                   .pushNamed(
                                 PageRoute.Page.addLink.route,
+                                arguments: {
+                                  "list": editProfileStore.links
+                                }
                               );
                               if(list != null){
-                                // List<Link> links = list;
-                                editProfileStore.links = list;
-                                print('foi ${list.length}');
+                                setState(() {
+                                  editProfileStore.links = list;
+                                });
+                                print(' afoi ${list.length}');
                               }
                             },
                             child: TextFormField(
@@ -208,6 +219,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     labelStyle: TextStyle(color: Colors.black),
                                     alignLabelWithHint: true,
                                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
+                          ),
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: editProfileStore.links.length,
+                            itemBuilder: (context, index) {
+                              return urlItem(editProfileStore.links[index]);
+                            },
                           ),
 
                           SizedBox(
@@ -448,5 +467,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       );
     });
+  }
+
+  Widget urlItem(Link link) {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      child: Row(
+        children: [
+          SizedBox(width: 35),
+          Container(
+            height: 9,
+            width: 9,
+            decoration: BoxDecoration(
+                color: Color(0xff03DAC5),
+                shape: BoxShape.circle
+            ),
+          ),
+          SizedBox(width: 8),
+          Container(
+            width: MediaQuery.of(context).size.width - 101,
+            child: Text('${link.title}: ${link.URL}',
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: 16,
+              color: LightColors.grey
+
+
+            ),),
+          ),
+        ],
+      ),
+    );
   }
 }
