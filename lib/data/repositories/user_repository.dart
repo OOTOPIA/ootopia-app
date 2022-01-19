@@ -143,9 +143,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future updateUserProfile(
       User user, List<String> tagsIds, FlutterUploader? uploader) async {
     try {
-
-
-
       Map<String, String> data = {
         "birthdate": (user.birthdate == null ? "" : user.birthdate!),
         "dailyLearningGoalInMinutes":
@@ -197,6 +194,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         }
       }
     } catch (error) {
+      print('$error');
       throw Exception('Failed to update user ' + error.toString());
     }
   }
@@ -267,6 +265,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       if (res.statusCode != 200) {
         throw Exception(res.data);
       }
+      print("res data?? ${res.data}");
       var result = (res.data as List)
           .map((e) => InvitationCodeModel.fromJson(e))
           .toList();
