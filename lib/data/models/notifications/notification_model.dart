@@ -16,7 +16,7 @@ class NotificationModel {
   final String type;
   final List<String> usersName;
   final String postId;
-  final int? oozAmount;
+  final String? oozAmount;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       _$NotificationModelFromJson(json);

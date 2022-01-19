@@ -27,8 +27,8 @@ class PushNotification {
   User? user;
   BuildContext? context;
   String? payload;
-
   String? token;
+
   static PushNotification getInstance() {
     if (_instance == null) {
       _instance = PushNotification();
@@ -90,7 +90,6 @@ class PushNotification {
 
   void listenerFirebaseCloudMessagingToken() async {
     token = await _firebaseMessaging.getToken();
-    print("object pegou $token");
     if (await storage.getCurrentUser() != null && token != null) {
       await this.userRepository.updateTokenDeviceUser(token!);
     }
@@ -99,7 +98,6 @@ class PushNotification {
         .asBroadcastStream()
         .listen((_token) async {
       token = _token;
-      print("object atualizou $token");
 
       if (await storage.getCurrentUser() != null) {
         await this.userRepository.updateTokenDeviceUser(token!);
@@ -109,11 +107,10 @@ class PushNotification {
 
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
-      print("Message ${event.data}");
       event.data["usersName"] = jsonDecode(event.data["usersName"]);
       final notification = NotificationModel.fromJson(event.data);
 
-      String title = getNotificationTitle(notification.type);
+      String title = getNotificationTitle(notification.type, oozReceived: notification.oozAmount);
       String body =
           getNotificationBody(notification.type, notification.usersName);
 
@@ -141,8 +138,8 @@ class PushNotification {
       }
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async{
+      await getPost(message.data["postId"]);
     });
   }
 
@@ -157,11 +154,11 @@ class PushNotification {
     return response.bodyBytes;
   }
 
-  String getNotificationTitle(String type, {int? oozReceived}) {
+  String getNotificationTitle(String type, {String? oozReceived}) {
     if (type == "gratitude_reward")
       return AppLocalizations.of(context!)!
           .notificationTitleOOzReceived
-          .replaceAll('%OOZ_RECEIVED%', '${oozReceived.toString()}');
+          .replaceAll('%OOZ_RECEIVED%', '$oozReceived');
     else
       return AppLocalizations.of(context!)!
           .notificationTitleCommentedPost

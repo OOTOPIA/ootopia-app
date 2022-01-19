@@ -13,7 +13,7 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) {
     usersName:
         (json['usersName'] as List<dynamic>).map((e) => e as String).toList(),
     postId: json['postId'] as String,
-    oozAmount: json['oozAmount'] as int?,
+    oozAmount: json['oozAmount'] as String?,
   );
 }
 

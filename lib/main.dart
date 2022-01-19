@@ -60,7 +60,7 @@ import 'package:ootopia_app/screens/timeline/components/feed_player/player_video
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-import 'package:ootopia_app/shared/FirebaseMessaging/push_notification_background.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/background_service.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -85,7 +85,14 @@ import 'l10n/l10n.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    print("Message 1 on main: ${message!.notification}");
+    if (message != null) {
+      print("Message on main: ${message.notification}");
+      BackgroundService backgroundService = BackgroundService(message);
+      print(backgroundService.post);
+    }
+  });
   FlutterBackgroundService.initialize(onStartService);
   await dotenv.load(fileName: ".env");
   var configuredApp = new AppConfig(
@@ -111,13 +118,6 @@ Future main() async {
       ),
     ),
   );
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-
-  PushNotificationBackground pushNotificationOnBackground = PushNotificationBackground();
-  await pushNotificationOnBackground.showNotificationOnBackground(message);
 }
 
 void onStartService() async {

@@ -147,6 +147,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     try {
       String? deviceId;
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      String language = Platform.localeName.substring(0, 2);
 
       try {
         if (Platform.isAndroid) {
@@ -164,7 +165,11 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       final response = await http.put(
         Uri.parse(dotenv.env['API_URL']! + "users-device-token"),
         headers: await this.getHeaders(),
-        body: jsonEncode({'deviceToken': deviceToken, 'deviceId': deviceId}),
+        body: jsonEncode({
+          'deviceToken': deviceToken,
+          'deviceId': deviceId,
+          'language': language,
+        }),
       );
 
       if (response.statusCode != 200) {
