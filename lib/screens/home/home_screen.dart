@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
+import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/main.dart' as main;
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
@@ -100,7 +102,32 @@ class _HomeScreenState extends State<HomeScreen>
           {"action": "stopService"},
         );
       }
+
+      FirebaseMessaging.instance
+          .getInitialMessage()
+          .then((RemoteMessage? message) {
+        if (message != null) {
+          Future.delayed(Duration(seconds: 5)).then((h) async {
+            print("Deu 3 sec");
+            navigateToTimelineProfileScreen();
+          });
+        }
+      });
     });
+  }
+
+  navigateToTimelineProfileScreen() async {
+    PostRepositoryImpl postsRepository = PostRepositoryImpl();
+    var post = await postsRepository
+        .getPostById("7ce44e18-c1ad-42a3-8137-e1fe2cd7bb52");
+    Navigator.of(context).pushNamed(
+      PageRoute.Page.timelineProfileScreen.route,
+      arguments: {
+        "userId": authStore.currentUser?.id,
+        "posts": [post].toList(),
+        "postSelected": 0,
+      },
+    );
   }
 
   @override
