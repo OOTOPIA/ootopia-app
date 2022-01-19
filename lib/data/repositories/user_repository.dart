@@ -41,7 +41,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     if (token == null) return API_HEADERS;
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
-
     if (contentType == null) {
       headers['Content-Type'] = 'application/json; charset=UTF-8';
     }
@@ -137,7 +136,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         }
       }
     } catch (error) {
-      print('$error');
       throw Exception('Failed to update user ' + error.toString());
     }
   }
@@ -201,8 +199,9 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "fullname": user.fullname.toString(),
         "countryCode": user.countryCode.toString(),
         "dialCode": user.dialCode.toString(),
-        "tagsIds": tagsIds.join(",")
-      };
+        "tagsIds": tagsIds.join(","),
+        "links":  user.links!.length > 0 ? jsonEncode(user.links!) : '',
+    };
 
       if (user.photoFilePath != null && uploader != null) {
         var result = await uploader.enqueue(
@@ -220,7 +219,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
             tag: "Uploading user photo",
           ),
         );
-
         await setCurrentUser(user.toJson().toString());
         return result;
       } else {

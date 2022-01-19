@@ -23,6 +23,7 @@ class GlobalConstants extends InheritedWidget {
 
   InputDecoration loginInputTheme(String labelText) {
     return InputDecoration(
+        fillColor: Colors.white.withOpacity(0.6),
         counterText: "",
         labelText: labelText.isNotEmpty ? labelText : null,
         labelStyle: GoogleFonts.roboto(

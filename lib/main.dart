@@ -34,6 +34,7 @@ import 'package:ootopia_app/screens/camera_screen/camera_screen.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/create_categories/create_categories_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/add_link_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
@@ -70,6 +71,7 @@ import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'data/models/users/link_model.dart';
 import 'screens/persona_level/personal_level.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
@@ -364,6 +366,7 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.initialScreen: (args) => InitialScreen(),
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
+    PageRoute.Page.addLink: (args) => AddLinkScreen(args),
   };
 
   SharedExperienceService sharedExperienceService =

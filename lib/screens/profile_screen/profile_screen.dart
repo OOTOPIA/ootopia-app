@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
@@ -13,20 +14,18 @@ import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-// import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
-
-//Files
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'components/empty_posts_widget.dart';
-import 'components/timeline_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -120,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       setState(() {
-        if (store!.hasMorePosts && store!.loadingPosts==false) {
+        if (store!.hasMorePosts && store!.loadingPosts == false) {
           Future.delayed(Duration.zero, () async {
             await store?.getUserPosts(profileUserId);
           });
@@ -161,11 +160,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             ProfileAvatarWidget(profileScreenStore: store),
                             SizedBox(
-                                height: GlobalConstants.of(context).spacingSmall),
+                                height:
+                                    GlobalConstants.of(context).spacingSmall),
                             Text(
                               store == null ? "" : store!.profile!.fullname,
                               style: GoogleFonts.roboto(
-                                  color: Theme.of(context).textTheme.subtitle1!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color,
                                   fontSize: 24,
                                   fontWeight: Theme.of(context)
                                       .textTheme
@@ -173,16 +176,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .fontWeight),
                             ),
                             SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal),
+                                height:
+                                    GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
+
+
+                            if(store?.profile?.links != null)...[
+                                if(store!.profile!.links!.length == 1)...[
+                                  TextButton(
+                                    onPressed: () async{
+                                      _launchURL(store!.profile!.links![0].URL);
+                                    },
+                                    child: Text(store!.profile!.links![0].title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),),
+                                  ),
+                                ]else if (store!.profile!.links!.length > 1)...[
+                                  TextButton(
+                                    onPressed: (){
+                                      controller.insertPage(ViewLinksScreen(
+                                        {
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      ));
+
+                                    },
+                                    child: Text(AppLocalizations.of(context)!.relatedLinks,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),),
+                                  ),
+                                ]
+
+                            ]else...[
+                              SizedBox(
+                                height: GlobalConstants.of(context).spacingNormal,
+                              )
+                            ],
+
                             Text(
                               AppLocalizations.of(context)!
                                   .regenerationGame
                                   .toUpperCase(),
                               style: GoogleFonts.roboto(
-                                  color: Theme.of(context).textTheme.subtitle1!.color,
-                                  fontSize:
-                                      Theme.of(context).textTheme.subtitle1!.fontSize,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .fontSize,
                                   fontWeight: FontWeight.w500),
                             ),
                             SizedBox(height: 4),
@@ -210,10 +261,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     totalBalance: walletStore.wallet != null
                                         ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
                                         : '0,00',
-                                    onTap: () => controller.insertPage(WalletPage()))
+                                    onTap: () =>
+                                        controller.insertPage(WalletPage()))
                                 : Container(),
                             SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal),
+                                height:
+                                    GlobalConstants.of(context).spacingNormal),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
@@ -225,12 +278,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             if (store != null && store!.postsList.length > 0)
                               SizedBox(
-                                  height: GlobalConstants.of(context).spacingNormal),
+                                  height: GlobalConstants.of(context)
+                                      .spacingNormal),
                             if (store != null && store!.postsList.length > 0)
                               ProfileAlbumListWidget(),
                             if (store != null && store!.postsList.length > 0)
                               SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal,
+                                height:
+                                    GlobalConstants.of(context).spacingNormal,
                               ),
                             if (store != null && store!.postsList.length > 0)
                               Padding(
@@ -254,7 +309,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: double.infinity,
                                     child: Wrap(
                                       alignment: WrapAlignment.start,
-                                      crossAxisAlignment: WrapCrossAlignment.start,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.start,
                                       spacing: 10, // gap between adjacent chips
                                       runSpacing: 20, // gap between lines
                                       children: store!.postsList
@@ -285,19 +341,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   )
                                 : EmptyPostsWidget(),
                             Observer(
-                                builder: (_) =>
-                                    (store!.loadingPosts && store!.hasMorePosts)
-                                        ? SizedBox(
-                                            width: double.infinity,
-                                            height: 90,
-                                            child: Center(
-                                              child: CircularProgressIndicator(),
-                                            ),
-                                          )
-                                        : Container()),
+                                builder: (_) => (store!.loadingPosts &&
+                                        store!.hasMorePosts)
+                                    ? SizedBox(
+                                        width: double.infinity,
+                                        height: 90,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      )
+                                    : Container()),
                             SizedBox(
-                                height:
-                                    GlobalConstants.of(context).intermediateSpacing),
+                                height: GlobalConstants.of(context)
+                                    .intermediateSpacing),
                           ],
                         ),
                       ),
@@ -308,4 +364,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void _launchURL(String _url) async {
+    if(await canLaunch(_url)){
+      await launch(_url);
+    }
+  }
+
+
 }
