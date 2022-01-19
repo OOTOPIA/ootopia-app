@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
@@ -148,25 +149,30 @@ class _RegenerativeGameDetailsState extends State<RegenerativeGameDetails> {
                       },
                     );
                   },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons_profile/laurel_wreath.svg",
-                        width: 24,
-                        height: 21,
-                        color: Color(0xff018f9c),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("${profileStore.profile!.totalTrophyQuantity!}",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff018f9c),
-                          )),
-                    ],
-                  ),
+                  child: Observer(builder: (_) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          "assets/icons_profile/laurel_wreath.svg",
+                          width: 24,
+                          height: 21,
+                          color: Color(0xff018f9c),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                            "${(profileStore.profile?.totalTrophyQuantity == null ? 0 : profileStore.profile?.totalTrophyQuantity)}",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff018f9c),
+                            )),
+                      ],
+                    );
+                  }),
                 ),
                 SizedBox(
                   width: 8,

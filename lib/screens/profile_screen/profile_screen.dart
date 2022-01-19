@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       setState(() {
-        if (store!.hasMorePosts && store!.loadingPosts==false) {
+        if (store!.hasMorePosts && store!.loadingPosts == false) {
           Future.delayed(Duration.zero, () async {
             await store?.getUserPosts(profileUserId);
           });
@@ -161,11 +161,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             ProfileAvatarWidget(profileScreenStore: store),
                             SizedBox(
-                                height: GlobalConstants.of(context).spacingSmall),
+                                height:
+                                    GlobalConstants.of(context).spacingSmall),
                             Text(
                               store == null ? "" : store!.profile!.fullname,
                               style: GoogleFonts.roboto(
-                                  color: Theme.of(context).textTheme.subtitle1!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color,
                                   fontSize: 24,
                                   fontWeight: Theme.of(context)
                                       .textTheme
@@ -173,16 +177,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       .fontWeight),
                             ),
                             SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal),
+                                height:
+                                    GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
                             Text(
                               AppLocalizations.of(context)!
                                   .regenerationGame
                                   .toUpperCase(),
                               style: GoogleFonts.roboto(
-                                  color: Theme.of(context).textTheme.subtitle1!.color,
-                                  fontSize:
-                                      Theme.of(context).textTheme.subtitle1!.fontSize,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .fontSize,
                                   fontWeight: FontWeight.w500),
                             ),
                             SizedBox(height: 4),
@@ -210,10 +220,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     totalBalance: walletStore.wallet != null
                                         ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
                                         : '0,00',
-                                    onTap: () => controller.insertPage(WalletPage()))
+                                    onTap: () =>
+                                        controller.insertPage(WalletPage()))
                                 : Container(),
                             SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal),
+                                height:
+                                    GlobalConstants.of(context).spacingNormal),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
@@ -225,12 +237,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             if (store != null && store!.postsList.length > 0)
                               SizedBox(
-                                  height: GlobalConstants.of(context).spacingNormal),
+                                  height: GlobalConstants.of(context)
+                                      .spacingNormal),
                             if (store != null && store!.postsList.length > 0)
                               ProfileAlbumListWidget(),
                             if (store != null && store!.postsList.length > 0)
                               SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal,
+                                height:
+                                    GlobalConstants.of(context).spacingNormal,
                               ),
                             if (store != null && store!.postsList.length > 0)
                               Padding(
@@ -254,7 +268,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: double.infinity,
                                     child: Wrap(
                                       alignment: WrapAlignment.start,
-                                      crossAxisAlignment: WrapCrossAlignment.start,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.start,
                                       spacing: 10, // gap between adjacent chips
                                       runSpacing: 20, // gap between lines
                                       children: store!.postsList
@@ -285,19 +300,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   )
                                 : EmptyPostsWidget(),
                             Observer(
-                                builder: (_) =>
-                                    (store!.loadingPosts && store!.hasMorePosts)
-                                        ? SizedBox(
-                                            width: double.infinity,
-                                            height: 90,
-                                            child: Center(
-                                              child: CircularProgressIndicator(),
-                                            ),
-                                          )
-                                        : Container()),
+                                builder: (_) => (store!.loadingPosts &&
+                                        store!.hasMorePosts)
+                                    ? SizedBox(
+                                        width: double.infinity,
+                                        height: 90,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      )
+                                    : Container()),
                             SizedBox(
-                                height:
-                                    GlobalConstants.of(context).intermediateSpacing),
+                                height: GlobalConstants.of(context)
+                                    .intermediateSpacing),
                           ],
                         ),
                       ),
