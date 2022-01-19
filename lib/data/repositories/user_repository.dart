@@ -145,12 +145,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future updateUserProfile(
       User user, List<String> tagsIds, FlutterUploader? uploader) async {
     try {
-      String links = '';
-      if(user.links!.length > 0){
-        links = jsonEncode(
-            user.links!
-        );
-      }
 
 
 
@@ -170,8 +164,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "countryCode": user.countryCode.toString(),
         "dialCode": user.dialCode.toString(),
         "tagsIds": tagsIds.join(","),
-        "links": links
-      };
+        "links":  user.links!.length > 0 ? jsonEncode(user.links!) : '',
+    };
 
       if (user.photoFilePath != null && uploader != null) {
         print('primeiro');
