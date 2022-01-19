@@ -148,7 +148,7 @@ class User extends Equatable {
         links: (json['links'] == null || json['links'] == '[{}]'
           ? []
           : (json['links'] as List<dynamic>)
-          .map((e) => Link.fromJson(e as Map<String, dynamic>))
+          .map((e) => Link.fromJson(e.runtimeType == String ? js.jsonDecode(e) : e))
           .toList()),
     );
   }

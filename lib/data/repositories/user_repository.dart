@@ -191,7 +191,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         );
         if (response.statusCode == 200) {
           await setCurrentUser(response.body);
-          //return User.fromJson(json.decode(response.body));
+          return User.fromJson(json.decode(response.body));
         } else {
           throw Exception('Failed to update user');
         }
