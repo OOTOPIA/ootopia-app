@@ -229,8 +229,11 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
               .copyWith(),
           controller: item.urlController,
 
-          validator: (value) {
-            if(value!.contains('http') == false){
+          validator: (String? value) {
+            if(value == null){
+              value = '';
+            }
+            if(value.contains('http') == false){
               value = 'http://' + value;
               item.urlController.text = value;
             }
@@ -254,7 +257,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
               .copyWith(),
           controller: item.titleController,
           validator: (value) {
-            if (value == null || value.isEmpty) {
+            if (value?.isEmpty ?? true) {
               return AppLocalizations.of(context)!
                   .pleaseEnterTitle;
             }
