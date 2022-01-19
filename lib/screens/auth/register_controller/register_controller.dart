@@ -281,14 +281,10 @@ class RegisterSecondPhaseController with SecureStoreMixin {
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
 
     try {
-      print('passou aqui1');
       await this.authRepository.register(_user, tagsIds);
-      print('passou aqui2');
       User login = await authRepository.login(_user.email!, _user.password!);
-      print('passou aqui3');
       this.trackingEvents.trackingLoggedIn(login.id!, login.fullname!);
     } catch (err, stackTrace) {
-      print('algfum erro $err');
       await Sentry.captureException(
         err,
         stackTrace: stackTrace,

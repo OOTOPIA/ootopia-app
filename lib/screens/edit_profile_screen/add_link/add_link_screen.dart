@@ -28,7 +28,6 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
     if(links.length > 0) {
       url.removeAt(0);
       links.forEach((element) {
-        print('element.title ${element.title}');
         LinkController linkController = LinkController();
         linkController.urlController.text = element.URL;
         linkController.titleController.text = element.title;
@@ -54,16 +53,21 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
           Navigator.of(context).pop();
         },
         onTapAction: () async {
-          if (formKey.currentState!.validate()) {
+          if(url.length == 1 && url[0].urlController.text.isEmpty &&  url[0]
+              .titleController.text.isEmpty){
             List<Link> links = [];
-            url.forEach((element) {
-              links.add(Link(
-                URL: element.urlController.text,
-                title: element.titleController.text,
-              ));
-
-            });
             Navigator.of(context).pop(links);
+          }else {
+            if (formKey.currentState!.validate()) {
+              List<Link> links = [];
+              url.forEach((element) {
+                links.add(Link(
+                  URL: element.urlController.text,
+                  title: element.titleController.text,
+                ));
+              });
+              Navigator.of(context).pop(links);
+            }
           }
         },
       ),

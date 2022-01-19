@@ -192,10 +192,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 }
                               );
                               if(list != null){
-                                setState(() {
-                                  editProfileStore.links = list;
-                                });
-                                print(' afoi ${list.length}');
+                                if(list.isEmpty){
+                                  setState(() {
+                                    editProfileStore.links.removeWhere((element) => true);
+                                  });
+                                }else{
+                                  setState(() {
+                                    editProfileStore.links = list;
+                                  });
+                                }
                               }
                             },
                             child: TextFormField(
