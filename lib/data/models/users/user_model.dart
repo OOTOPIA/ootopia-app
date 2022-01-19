@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'badges_model.dart';
+import 'dart:convert' as js;
 
 class User extends Equatable {
   String? id;

@@ -46,6 +46,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
     );
 
     if (response.statusCode == 200) {
+      print('sucesso1');
+      print('response.body ${response.body}');
       User user = User.fromJson(json.decode(response.body));
 
       await setAuthToken(user.token!);
@@ -55,6 +57,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
     } else if (response.statusCode == 403) {
       throw FetchDataException("INVALID_PASSWORD");
     } else {
+      print('erro login ${response.statusCode}');
       throw FetchDataException('Failed to login');
     }
   }
@@ -62,6 +65,15 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   @override
   Future register(Auth user, List<String>? tagsIds) async {
     try {
+      String links = '';
+      if(user.links!.length > 0){
+        links = jsonEncode(
+            user.links!
+        );
+      }
+
+      print('links $links');
+
       Map<String, dynamic> data = {
         "fullname": user.fullname.toString(),
         "email": user.email.toString(),
@@ -88,6 +100,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
             : user.addressLongitude.toString(),
         "tagsIds": tagsIds!.join(","),
         "registerPhase": user.registerPhase.toString(),
+        "links": links,
       };
       final jsonData;
       if (user.photoFilePath != null) {
@@ -103,6 +116,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
           options: Options(headers: {}),
         );
         if (response.statusCode != 201) {
+          print('response.statusCode ${response.statusCode}');
           Sentry.captureMessage("ERROR_ON_REGISTER_1 >>> " + jsonEncode(data));
           throw Exception('Failed to create user #1');
         }

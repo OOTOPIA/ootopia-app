@@ -39,7 +39,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
     print('headers $headers');
-    //ROTA https://api-ootopia.devmagic.com.br/
     if (contentType == null) {
       headers['Content-Type'] = 'application/json; charset=UTF-8';
     }
@@ -175,6 +174,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       };
 
       if (user.photoFilePath != null && uploader != null) {
+        print('primeiro');
         var result = await uploader.enqueue(
           MultipartFormDataUpload(
             url: dotenv.env['API_URL']! + "users/${user.id}",
@@ -190,19 +190,25 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
             tag: "Uploading user photo",
           ),
         );
-
+        print('sucesso a');
         await setCurrentUser(user.toJson().toString());
+        print('sucesso b');
         return result;
       } else {
+        print('segundp');
         final response = await http.put(
           Uri.parse(dotenv.env['API_URL']! + "users/${user.id}"),
           headers: await this.getHeaders(),
           body: jsonEncode(data),
         );
         if (response.statusCode == 200) {
+          print('sucesso');
           await setCurrentUser(response.body);
+          print('sucesso2');
           //return User.fromJson(json.decode(response.body));
         } else {
+          print('response.statusCode ${response.statusCode}');
+          print('response.body ${response.body}');
           throw Exception('Failed to update user');
         }
       }

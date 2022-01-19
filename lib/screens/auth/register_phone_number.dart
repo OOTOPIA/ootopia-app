@@ -30,7 +30,6 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
       RegisterSecondPhaseController.getInstance();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   SmartPageController pageController = SmartPageController.getInstance();
-  List<Link> links = [];
 
   @override
   void initState() {
@@ -159,24 +158,16 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    // dynamic list = await  Navigator.of(context)
-                                    //     .pushNamed(
-                                    //   PageRoute.Page.addLink.route,
-                                    // );
-                                    // if(list != null){
-                                    //   //TODO ADD/SHOW LINKS
-                                    //   print('foi ${list.length}');
-                                    // }
                                     dynamic list = await  Navigator.of(context)
                                         .pushNamed(
                                         PageRoute.Page.addLink.route,
                                         arguments: {
-                                          "list": links
+                                          "list": registerController.links
                                         }
                                     );
                                     if(list != null){
                                       setState(() {
-                                        links = list;
+                                        registerController.links = list;
                                       });
                                       print(' afoi ${list.length}');
                                     }
@@ -205,9 +196,9 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: links.length,
+                                  itemCount: registerController.links.length,
                                   itemBuilder: (context, index) {
-                                    return urlItem(links[index]);
+                                    return urlItem(registerController.links[index]);
                                   },
                                 ),
                                 SizedBox(

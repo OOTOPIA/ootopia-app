@@ -85,6 +85,21 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     });
   }
 
+  final _$linksAtom = Atom(name: 'EditProfileStoreBase.links');
+
+  @override
+  List<Link> get links {
+    _$linksAtom.reportRead();
+    return super.links;
+  }
+
+  @override
+  set links(List<Link> value) {
+    _$linksAtom.reportWrite(value, super.links, () {
+      super.links = value;
+    });
+  }
+
   final _$updateUserAsyncAction =
       AsyncAction('EditProfileStoreBase.updateUser');
 
@@ -116,7 +131,8 @@ isloading: ${isloading},
 validCellPhone: ${validCellPhone},
 countryCode: ${countryCode},
 dialCode: ${dialCode},
-currentUser: ${currentUser}
+currentUser: ${currentUser},
+links: ${links}
     ''';
   }
 }

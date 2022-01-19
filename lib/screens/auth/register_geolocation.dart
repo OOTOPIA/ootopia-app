@@ -62,6 +62,7 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
         isLoading = true;
       });
       await registerController.registerUser();
+      print('aqui passou');
 
       setState(() {
         isLoading = false;
