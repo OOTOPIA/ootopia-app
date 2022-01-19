@@ -184,13 +184,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              dynamic list = await  Navigator.of(context)
+                              List<Link>? list = await  Navigator.of(context)
                                   .pushNamed(
                                 PageRoute.Page.addLink.route,
                                 arguments: {
                                   "list": editProfileStore.links
                                 }
-                              );
+                              ) as List<Link>?;
                               if(list != null){
                                 if(list.isEmpty){
                                   setState(() {

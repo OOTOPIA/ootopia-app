@@ -158,13 +158,13 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    dynamic list = await  Navigator.of(context)
+                                    List<Link>? list = await  Navigator.of(context)
                                         .pushNamed(
                                         PageRoute.Page.addLink.route,
                                         arguments: {
                                           "list": registerController.links
                                         }
-                                    );
+                                    ) as List<Link>?;
                                     if(list != null){
                                       setState(() {
                                         registerController.links = list;
