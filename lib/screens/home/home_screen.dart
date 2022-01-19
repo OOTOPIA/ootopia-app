@@ -283,11 +283,6 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  margin:  homeStore!.iphoneHasNotch
-                      ? EdgeInsets.only(bottom: 16)
-                      : EdgeInsets.only(bottom: 0),
                   decoration: BoxDecoration(
                       image:  DecorationImage(
                         image: AssetImage(
@@ -297,138 +292,121 @@ class _HomeScreenState extends State<HomeScreen>
                         fit: BoxFit.cover,
                       )
                   ),
-                  child: new SmartPageBottomNavigationBar(
-                    controller: controller,
-                    options: SmartPageBottomNavigationOptions(
-                      height: 50,
-                      indicatorColor: Theme.of(context).accentColor,
-                      backgroundColor: Colors.transparent,
-                      showBorder: false,
-                      showIndicator: true,
-                      borderColor: Color(0xff707070).withOpacity(0.20),
-                      selectedColor: selectedIconColor,
-                      unselectedColor: unselectedIconColor,
+                  child: Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    margin:  homeStore!.iphoneHasNotch
+                        ? EdgeInsets.only(bottom: 16)
+                        : EdgeInsets.only(bottom: 0),
+                    child: new SmartPageBottomNavigationBar(
+                      controller: controller,
+                      options: SmartPageBottomNavigationOptions(
+                        height: 50,
+                        indicatorColor: Theme.of(context).accentColor,
+                        backgroundColor: Colors.transparent,
+                        showBorder: false,
+                        showIndicator: true,
+                        borderColor: Color(0xff707070).withOpacity(0.20),
+                        selectedColor: selectedIconColor,
+                        unselectedColor: unselectedIconColor,
+                      ),
+                      children: [
+                        BottomIcon(
+                          selectedWidget: SvgPicture.asset(
+                            'assets/icons/home_icon.svg',
+                            color: selectedIconColor,
+                          ),
+                          unselectedWidget: SvgPicture.asset(
+                            'assets/icons/home_icon.svg',
+                            color: unselectedIconColor,
+                          ),
+                        ),
+                        BottomIcon(
+                          selectedWidget: SvgPicture.asset(
+                            'assets/icons/compass.svg',
+                            color: selectedIconColor,
+                          ),
+                          unselectedWidget: SvgPicture.asset(
+                            'assets/icons/compass.svg',
+                            color: unselectedIconColor,
+                          ),
+                        ),
+                        BottomIcon(
+                          selectedWidget: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: SvgPicture.asset(
+                              'assets/icons/plus.svg',
+                              // color: selectedIconColor,
+                            ),
+                          ),
+                          unselectedWidget: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: SvgPicture.asset(
+                              'assets/icons/plus.svg',
+                            ),
+                          ),
+                        ),
+                        BottomIcon(
+                          selectedWidget: SvgPicture.asset(
+                            "assets/icons/marketplace.svg",
+                            color: selectedIconColor,
+                          ),
+                          unselectedWidget: SvgPicture.asset(
+                            "assets/icons/marketplace.svg",
+                            color: unselectedIconColor,
+                          ),
+                        ),
+                        BottomIcon(
+                          selectedWidget: SvgPicture.asset(
+                            'assets/icons/profile_icon.svg',
+                            color: selectedIconColor,
+                          ),
+                          unselectedWidget: SvgPicture.asset(
+                            'assets/icons/profile_icon.svg',
+                            color: unselectedIconColor,
+                          ),
+                        ),
+                      ],
+                      onTap: (int index) {
+                        var result = true;
+                        switch (index) {
+                          case PageViewController.TAB_INDEX_TIMELINE:
+                            if (controller.pages[controller.currentPageIndex]
+                            is TimelinePage)
+                              timelineStore.goToTopTimeline(timelinePostBloc);
+
+                            controller.resetNavigation();
+                            break;
+                          case PageViewController.TAB_INDEX_LEARNING_TRACKS:
+                            break;
+                          case PageViewController.TAB_INDEX_CAMERA:
+                            if (authStore.currentUser == null) {
+                              Navigator.of(context).pushNamed(
+                                PageRoute.Page.loginScreen.route,
+                                arguments: {
+                                  "returnToPageWithArgs": {
+                                    "currentPageName": "camera",
+                                    "arguments": null
+                                  }
+                                },
+                              );
+                            } else {
+                              Navigator.of(context)
+                                  .pushNamed(PageRoute.Page.cameraScreen.route);
+                            }
+                            result = false;
+                            break;
+                          case PageViewController.TAB_INDEX_MARKETPLACE:
+                            break;
+                          case PageViewController.TAB_INDEX_PROFILE:
+                            result = openProfile();
+                            break;
+                          default:
+                        }
+
+                        return result;
+                      },
                     ),
-                    children: [
-                      BottomIcon(
-                        selectedWidget: SvgPicture.asset(
-                          'assets/icons/home_icon.svg',
-                          color: selectedIconColor,
-                        ),
-                        unselectedWidget: SvgPicture.asset(
-                          'assets/icons/home_icon.svg',
-                          color: unselectedIconColor,
-                        ),
-                      ),
-                      BottomIcon(
-                        selectedWidget: SvgPicture.asset(
-                          'assets/icons/compass.svg',
-                          color: selectedIconColor,
-                        ),
-                        unselectedWidget: SvgPicture.asset(
-                          'assets/icons/compass.svg',
-                          color: unselectedIconColor,
-                        ),
-                      ),
-                      BottomIcon(
-                        selectedWidget: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: SvgPicture.asset(
-                            'assets/icons/plus.svg',
-                            // color: selectedIconColor,
-                          ),
-                        ),
-                        unselectedWidget: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: SvgPicture.asset(
-                            'assets/icons/plus.svg',
-                          ),
-                        ),
-                      ),
-                      BottomIcon(
-                        selectedWidget: SvgPicture.asset(
-                          "assets/icons/marketplace.svg",
-                          color: selectedIconColor,
-                        ),
-                        unselectedWidget: SvgPicture.asset(
-                          "assets/icons/marketplace.svg",
-                          color: unselectedIconColor,
-                        ),
-                      ),
-                      BottomIcon(
-                        selectedWidget: SvgPicture.asset(
-                          'assets/icons/profile_icon.svg',
-                          color: selectedIconColor,
-                        ),
-                        unselectedWidget: SvgPicture.asset(
-                          'assets/icons/profile_icon.svg',
-                          color: unselectedIconColor,
-                        ),
-                      ),
-                    ],
-                    onTap: (int index) {
-                      var result = true;
-                      switch (index) {
-                        case PageViewController.TAB_INDEX_TIMELINE:
-                          if (controller.pages[controller.currentPageIndex]
-                          is TimelinePage)
-                            timelineStore.goToTopTimeline(timelinePostBloc);
-
-                          controller.resetNavigation();
-                          break;
-                        case PageViewController.TAB_INDEX_LEARNING_TRACKS:
-                        // if (authStore.currentUser == null) {
-                        //   Navigator.of(context).pushNamed(
-                        //     PageRoute.Page.loginScreen.route,
-                        //     arguments: {
-                        //       "returnToPageWithArgs": {
-                        //         "currentPageName": "learning_tracks",
-                        //         "arguments": null
-                        //       }
-                        //     },
-                        //   );
-                        //   result = false;
-                        // }
-                          break;
-                        case PageViewController.TAB_INDEX_CAMERA:
-                          if (authStore.currentUser == null) {
-                            Navigator.of(context).pushNamed(
-                              PageRoute.Page.loginScreen.route,
-                              arguments: {
-                                "returnToPageWithArgs": {
-                                  "currentPageName": "camera",
-                                  "arguments": null
-                                }
-                              },
-                            );
-                          } else {
-                            Navigator.of(context)
-                                .pushNamed(PageRoute.Page.cameraScreen.route);
-                          }
-                          result = false;
-                          break;
-                        case PageViewController.TAB_INDEX_MARKETPLACE:
-                        // if (authStore.currentUser == null) {
-                        //   Navigator.of(context).pushNamed(
-                        //     PageRoute.Page.loginScreen.route,
-                        //     arguments: {
-                        //       "returnToPageWithArgs": {
-                        //         "currentPageName": "marketplace",
-                        //         "arguments": null
-                        //       }
-                        //     },
-                        //   );
-                        //   result = false;
-                        // }
-                          break;
-                        case PageViewController.TAB_INDEX_PROFILE:
-                          result = openProfile();
-                          break;
-                        default:
-                      }
-
-                      return result;
-                    },
                   ),
                 ),
               ],

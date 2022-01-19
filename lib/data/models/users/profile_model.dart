@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'badges_model.dart';
 
 class Profile extends Equatable {
@@ -12,6 +13,7 @@ class Profile extends Equatable {
   int? cityTrophyQuantity;
   int? globalTrophyQuantity;
   int? totalTrophyQuantity;
+  List<Link>? links;
 
   Profile({
     required this.id,
@@ -24,6 +26,7 @@ class Profile extends Equatable {
     this.cityTrophyQuantity,
     this.globalTrophyQuantity,
     this.totalTrophyQuantity,
+    this.links,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -58,6 +61,11 @@ class Profile extends Equatable {
           : (json['totalTrophyQuantity'] is int
               ? json['totalTrophyQuantity']
               : int.parse(json['totalTrophyQuantity'])),
+      links: (json['links'] == null
+          ? []
+          : (json['links'] as List<dynamic>)
+          .map((e) => Link.fromJson(e as Map<String, dynamic>))
+          .toList()),
     );
   }
 

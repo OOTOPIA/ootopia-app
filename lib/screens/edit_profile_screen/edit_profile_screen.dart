@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
@@ -13,11 +16,12 @@ import 'package:ootopia_app/screens/profile_screen/components/profile_screen_sto
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -36,7 +40,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
-
     Future.delayed(Duration.zero, () async {
       await editProfileStore.getUser();
       codeCountryPhoneNnumber = PhoneNumber(
@@ -45,9 +48,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
+  init(){
+    if(editProfileStore.links.isEmpty){
+      editProfileStore.links = profileStore.profile!.links!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     profileStore = Provider.of<ProfileScreenStore>(context);
+    init();
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {
       return LoadingOverlay(
@@ -74,7 +84,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           body: Stack(
             children: [
               BackgroundButterflyTop(positioned: -59),
-              BackgroundButterflyBottom(positioned: -50),
+              Visibility(
+                  visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                  child: BackgroundButterflyBottom(positioned: -50)),
               SafeArea(
                 child: GestureDetector(
                   onTap: () {
@@ -89,6 +101,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
                           ),
+
                           Center(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 30.0),
@@ -133,6 +146,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: 16,
                           ),
+
                           Text(
                             AppLocalizations.of(context)!.bio,
                             style: GoogleFonts.roboto(
@@ -156,6 +170,69 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       alignLabelWithHint: true,
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 16))),
+                          SizedBox(
+                            height: 16,
+                          ),
+
+                          Text(
+                            AppLocalizations.of(context)!.links,
+                            style: GoogleFonts.roboto(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              List<Link>? list = await  Navigator.of(context)
+                                  .pushNamed(
+                                PageRoute.Page.addLink.route,
+                                arguments: {
+                                  "list": editProfileStore.links
+                                }
+                              ) as List<Link>?;
+                              if(list != null){
+                                if(list.isEmpty){
+                                  setState(() {
+                                    editProfileStore.links.removeWhere((element) => true);
+                                  });
+                                }else{
+                                  setState(() {
+                                    editProfileStore.links = list;
+                                  });
+                                }
+                              }
+                            },
+                            child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
+                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                enabled: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                    AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
+                                    prefixIcon: Container(
+                                      height: 21,
+                                      width: 21,
+                                      margin: EdgeInsets.all(15),
+                                      child: SvgPicture.asset(
+                                        'assets/icons/mais.svg',
+                                      height: 21,
+                                      width: 21,),
+                                    ),
+                                    labelStyle: TextStyle(color: Colors.black),
+                                    alignLabelWithHint: true,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
+                          ),
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: editProfileStore.links.length,
+                            itemBuilder: (context, index) {
+                              return urlItem(editProfileStore.links[index]);
+                            },
+                          ),
+
                           SizedBox(
                             height: 16,
                           ),
@@ -394,5 +471,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       );
     });
+  }
+
+  Widget urlItem(Link link) {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      child: Row(
+        children: [
+          SizedBox(width: 35),
+          Container(
+            height: 9,
+            width: 9,
+            decoration: BoxDecoration(
+                color: Color(0xff03DAC5),
+                shape: BoxShape.circle
+            ),
+          ),
+          SizedBox(width: 8),
+          Container(
+            width: MediaQuery.of(context).size.width - 101,
+            child: Text('${link.title}: ${link.URL}',
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: 16,
+              color: LightColors.grey
+
+
+            ),),
+          ),
+        ],
+      ),
+    );
   }
 }

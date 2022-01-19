@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
@@ -13,20 +14,18 @@ import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
-// import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
-
-//Files
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'components/empty_posts_widget.dart';
-import 'components/timeline_profile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -180,6 +179,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height:
                                     GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
+
+
+                            if(store?.profile?.links != null)...[
+                                if(store!.profile!.links!.length == 1)...[
+                                  TextButton(
+                                    onPressed: () async{
+                                      _launchURL(store!.profile!.links![0].URL);
+                                    },
+                                    child: Text(store!.profile!.links![0].title,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),),
+                                  ),
+                                ]else if (store!.profile!.links!.length > 1)...[
+                                  TextButton(
+                                    onPressed: (){
+                                      controller.insertPage(ViewLinksScreen(
+                                        {
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      ));
+
+                                    },
+                                    child: Text(AppLocalizations.of(context)!.relatedLinks,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),),
+                                  ),
+                                ]
+
+                            ]else...[
+                              SizedBox(
+                                height: GlobalConstants.of(context).spacingNormal,
+                              )
+                            ],
+
                             Text(
                               AppLocalizations.of(context)!
                                   .regenerationGame
@@ -323,4 +364,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void _launchURL(String _url) async {
+    if(await canLaunch(_url)){
+      await launch(_url);
+    }
+  }
+
+
 }
