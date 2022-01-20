@@ -26,6 +26,7 @@ import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -102,26 +103,25 @@ class _HomeScreenState extends State<HomeScreen>
           .getInitialMessage()
           .then((RemoteMessage? message) {
         if (message != null) {
-          Future.delayed(Duration(seconds: 5)).then((h) async {
-            print("Deu 3 sec");
-            navigateToTimelineProfileScreen();
+          Future.delayed(Duration(seconds: 3)).then((h) async {
+            navigateToTimelineProfileScreen(message.data["postId"]);
           });
         }
       });
     });
   }
 
-  navigateToTimelineProfileScreen() async {
+  navigateToTimelineProfileScreen(String postId) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
-    var post = await postsRepository
-        .getPostById("7ce44e18-c1ad-42a3-8137-e1fe2cd7bb52");
-    Navigator.of(context).pushNamed(
-      PageRoute.Page.timelineProfileScreen.route,
-      arguments: {
-        "userId": authStore.currentUser?.id,
-        "posts": [post].toList(),
-        "postSelected": 0,
-      },
+    var post = await postsRepository.getPostById(postId);
+    controller.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": authStore.currentUser?.id,
+          "posts": [post].toList(),
+          "postSelected": 0,
+        },
+      ),
     );
   }
 

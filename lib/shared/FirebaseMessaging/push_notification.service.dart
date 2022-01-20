@@ -20,7 +20,6 @@ class PushNotification {
   SecureStoreMixin storage = SecureStoreMixin();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
   PostRepositoryImpl postsRepository = PostRepositoryImpl();
-  SmartPageController? controller;
   late AndroidNotificationChannel channel;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -110,7 +109,8 @@ class PushNotification {
       event.data["usersName"] = jsonDecode(event.data["usersName"]);
       final notification = NotificationModel.fromJson(event.data);
 
-      String title = getNotificationTitle(notification.type, oozReceived: notification.oozAmount);
+      String title = getNotificationTitle(notification.type,
+          oozReceived: notification.oozAmount);
       String body =
           getNotificationBody(notification.type, notification.usersName);
 
@@ -138,7 +138,7 @@ class PushNotification {
       }
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) async{
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       await getPost(message.data["postId"]);
     });
   }
@@ -192,7 +192,8 @@ class PushNotification {
   }
 
   goToTimelinePost(List<TimelinePost> posts) {
-    controller?.insertPage(
+    SmartPageController controller = SmartPageController.getInstance();
+    controller.insertPage(
       TimelineScreenProfileScreen(
         {
           "userId": user?.id,
