@@ -79,6 +79,7 @@ abstract class AuthStoreBase with Store {
             .userRepository
             .updateTokenDeviceUser(pushNotification.token!);
         this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
+        pushNotification.currentUserData();
       }
     } catch (e) {
       String errorMessage = e.toString();

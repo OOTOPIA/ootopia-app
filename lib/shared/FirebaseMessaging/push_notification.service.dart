@@ -35,6 +35,11 @@ class PushNotification {
     return _instance!;
   }
 
+  currentUserData() async {
+    bool loggedIn = await storage.getUserIsLoggedIn();
+    if (loggedIn) user = await storage.getCurrentUser();
+  }
+
   PushNotification() {
     _firebaseMessaging.getNotificationSettings();
     channel = const AndroidNotificationChannel(
@@ -44,10 +49,7 @@ class PushNotification {
       importance: Importance.high,
     );
 
-    Future.delayed(Duration.zero, () async {
-      bool loggedIn = await storage.getUserIsLoggedIn();
-      if (loggedIn) user = await storage.getCurrentUser();
-    });
+    currentUserData();
 
     Future.delayed(Duration.zero, () async {
       await flutterLocalNotificationsPlugin
@@ -117,7 +119,7 @@ class PushNotification {
       ByteArrayAndroidBitmap? bigIcon =
           await _turnPhotoURLIntoBitmap(notification.photoURL!);
 
-      if (event.data != {} || event.data != null) {
+      if (event.data != null || event.data != {}) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           title,
