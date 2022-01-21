@@ -188,6 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       _launchURL(store!.profile!.links![0].URL);
                                     },
                                     child: Text(store!.profile!.links![0].title,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 13,
