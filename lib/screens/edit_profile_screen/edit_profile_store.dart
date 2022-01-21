@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:mobx/mobx.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 
@@ -38,6 +39,9 @@ abstract class EditProfileStoreBase with Store {
   @observable
   User? currentUser;
 
+  @observable
+  List<Link> links = [];
+
   @action
   Future<void> updateUser() async {
     isloading = true;
@@ -48,6 +52,7 @@ abstract class EditProfileStoreBase with Store {
     currentUser?.dailyLearningGoalInMinutes = currentSliderValue.toInt();
     currentUser?.countryCode = countryCode;
     currentUser?.dialCode = dialCode;
+    currentUser?.links = links;
 
     if (photoFilePathLocal != null) {
       currentUser?.photoFilePath = photoFilePathLocal;

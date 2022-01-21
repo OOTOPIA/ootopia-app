@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:ootopia_app/data/models/users/link_model.dart' as lk;
 import 'package:flutter/material.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 
@@ -47,6 +47,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   TextEditingController yearController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   TextEditingController cellPhoneController = TextEditingController();
+  List<lk.Link> links = [];
 
   //Step 04
   TextEditingController geolocationController = TextEditingController();
@@ -274,6 +275,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       addressLongitude: user!.addressLongitude,
       photoFilePath: photoFilePath,
       registerPhase: 2,
+      links: links
     );
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ootopia_app/data/models/users/badges_model.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 
 part 'auth_model.g.dart';
 
@@ -37,6 +38,7 @@ class Auth {
   String? createdAt;
   String? updatedAt;
   List<Badge>? badges;
+  List<Link>? links;
 
   Auth(
       {this.id,
@@ -70,7 +72,8 @@ class Auth {
       this.registerPhase,
       this.createdAt,
       this.updatedAt,
-      List<Badge>? badges});
+      List<Badge>? badges,
+      this.links});
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
   Map<String, dynamic> toJson() => _$AuthToJson(this);

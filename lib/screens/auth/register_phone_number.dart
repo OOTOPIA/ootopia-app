@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
@@ -8,10 +10,9 @@ import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 
 class RegisterPhoneNumberScreen extends StatefulWidget {
@@ -70,7 +71,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
               child: CustomScrollView(
                 slivers: [
                   SliverFillRemaining(
-                    hasScrollBody: false,
+                    hasScrollBody: true,
                     fillOverscroll: true,
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -137,6 +138,73 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 SizedBox(
                                   height: 24,
                                 ),
+
+
+
+                                Container(
+                                  width: double.infinity,
+                                  child: Text(
+                                    AppLocalizations.of(context)!.links,
+                                    textAlign: TextAlign.start,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: LightColors.grey
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    List<Link>? list = await  Navigator.of(context)
+                                        .pushNamed(
+                                        PageRoute.Page.addLink.route,
+                                        arguments: {
+                                          "list": registerController.links
+                                        }
+                                    ) as List<Link>?;
+                                    if(list != null){
+                                      setState(() {
+                                        registerController.links = list;
+                                      });
+                                      print(' afoi ${list.length}');
+                                    }
+                                  },
+                                  child: TextFormField(
+                                      textCapitalization: TextCapitalization.sentences,
+                                      style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+                                      maxLines: 1,
+                                      enabled: false,
+                                      decoration: GlobalConstants.of(context)
+                                          .loginInputTheme(
+                                          AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
+                                          prefixIcon: Container(
+                                            height: 21,
+                                            width: 21,
+                                            margin: EdgeInsets.all(15),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/mais.svg',
+                                              height: 21,
+                                              width: 21,),
+                                          ),
+                                          labelStyle: TextStyle(color: Colors.black),
+                                          alignLabelWithHint: true,
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
+                                ),
+                                ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: registerController.links.length,
+                                  itemBuilder: (context, index) {
+                                    return urlItem(registerController.links[index]);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -209,7 +277,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   keyboardType: TextInputType.numberWithOptions(
                                       signed: true, decimal: true),
                                   inputDecoration: InputDecoration(
-                                    fillColor: Colors.white,
+                                    fillColor: Colors.white.withOpacity(0.7),
                                     errorMaxLines: 4,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius:
@@ -457,6 +525,37 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget urlItem(Link link) {
+    return Container(
+      margin: EdgeInsets.only(top: 12),
+      child: Row(
+        children: [
+          SizedBox(width: 35),
+          Container(
+            height: 9,
+            width: 9,
+            decoration: BoxDecoration(
+                color: Color(0xff03DAC5),
+                shape: BoxShape.circle
+            ),
+          ),
+          SizedBox(width: 8),
+          Container(
+            width: MediaQuery.of(context).size.width - 101,
+            child: Text('${link.title}: ${link.URL}',
+              maxLines: 1,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: LightColors.grey
+
+
+              ),),
           ),
         ],
       ),
