@@ -6,6 +6,7 @@ part 'link_model.g.dart';
 class Link {
   String URL;
   String title;
+  String? textToShow;
 
   Link({
     required this.URL,
