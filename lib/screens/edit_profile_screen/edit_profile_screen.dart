@@ -49,19 +49,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
   bool newLinks = false;
 
-  init(){
-    if(!newLinks){
-      if(editProfileStore.links.isEmpty || editProfileStore.links.length != profileStore.profile?.links?.length){
-        editProfileStore.links = profileStore.profile?.links ?? [];
-      }
+
+
+  void updateLinks(){
+    bool newListLinks = editProfileStore.links.length != profileStore.profile?.links?.length;
+    if(!newLinks && (editProfileStore.links.isEmpty || newListLinks)){
+      editProfileStore.links = profileStore.profile?.links ?? [];
     }
-    newLinks = true;
   }
 
   @override
   Widget build(BuildContext context) {
     profileStore = Provider.of<ProfileScreenStore>(context);
-    init();
+    updateLinks();
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {
       return LoadingOverlay(
