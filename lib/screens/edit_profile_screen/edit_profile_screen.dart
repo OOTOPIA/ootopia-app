@@ -47,9 +47,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           phoneNumber: editProfileStore.cellPhoneController.text);
     });
   }
+  bool newLinks = false;
 
-  init(){
-    if(editProfileStore.links.isEmpty){
+
+
+  void updateLinks(){
+    bool newListLinks = editProfileStore.links.length != profileStore.profile?.links?.length;
+    if(!newLinks && (editProfileStore.links.isEmpty || newListLinks)){
       editProfileStore.links = profileStore.profile?.links ?? [];
     }
   }
@@ -57,7 +61,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     profileStore = Provider.of<ProfileScreenStore>(context);
-    init();
+    updateLinks();
     authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (context) {
       return LoadingOverlay(
@@ -195,10 +199,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 if(list.isEmpty){
                                   setState(() {
                                     editProfileStore.links.removeWhere((element) => true);
+                                    newLinks = true;
                                   });
                                 }else{
                                   setState(() {
                                     editProfileStore.links = list;
+                                    newLinks = true;
                                   });
                                 }
                               }
