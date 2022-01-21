@@ -50,7 +50,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   init(){
     if(editProfileStore.links.isEmpty){
-      editProfileStore.links = profileStore.profile!.links!;
+      editProfileStore.links = profileStore.profile?.links ?? [];
     }
   }
 
