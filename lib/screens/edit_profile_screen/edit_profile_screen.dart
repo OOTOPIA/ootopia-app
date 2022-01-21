@@ -51,9 +51,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   init(){
     if(!newLinks){
-    if(editProfileStore.links.isEmpty || editProfileStore.links.length != profileStore.profile?.links?.length){
-      editProfileStore.links = profileStore.profile?.links ?? [];
-    }
+      if(editProfileStore.links.isEmpty || editProfileStore.links.length != profileStore.profile?.links?.length){
+        editProfileStore.links = profileStore.profile?.links ?? [];
+      }
     }
     newLinks = true;
   }
