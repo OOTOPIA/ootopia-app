@@ -80,7 +80,7 @@ class TabHistoryState extends State<TabHistory> {
                       opacity: 0.5,
                       child: Container(
                           height: MediaQuery.of(context).size.height * 0.62,
-                          color: Colors.white,
+                          //color: Colors.white,
                           child: Center(
                               child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
