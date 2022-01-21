@@ -50,7 +50,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   init(){
     if(editProfileStore.links.isEmpty){
-      editProfileStore.links = profileStore.profile!.links!;
+      editProfileStore.links = profileStore.profile?.links ?? [];
     }
   }
 
@@ -305,6 +305,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             keyboardType: TextInputType.numberWithOptions(
                                 signed: true, decimal: true),
                             inputDecoration: InputDecoration(
+                              fillColor: Colors.white.withOpacity(0.75),
                               hintText:
                                   AppLocalizations.of(context)!.enterYourNumber,
                               hintStyle:
@@ -491,6 +492,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Container(
             width: MediaQuery.of(context).size.width - 101,
             child: Text('${link.title}: ${link.URL}',
+              overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(
               fontSize: 16,

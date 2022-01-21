@@ -550,6 +550,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
             width: MediaQuery.of(context).size.width - 101,
             child: Text('${link.title}: ${link.URL}',
               maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: 16,
                   color: LightColors.grey

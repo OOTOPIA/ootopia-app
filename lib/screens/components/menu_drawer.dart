@@ -650,122 +650,128 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: Column(
+        child: Stack(
+          children: [
+            BackgroundButterflyTop(),
+            BackgroundButterflyBottom(),
+            Column(
       children: [
-        DrawerHeader(
-            decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.white, width: 0))),
-            padding: EdgeInsets.only(bottom: 0, top: 0, left: 15, right: 15),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    padding: EdgeInsets.only(bottom: 6),
-                    icon: Icon(
-                      Icons.close,
-                      size: 15,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
+            DrawerHeader(
+                decoration: BoxDecoration(
+                    border:
+                        Border(bottom: BorderSide(color: Colors.white, width: 0))),
+                padding: EdgeInsets.only(bottom: 0, top: 0, left: 15, right: 15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        padding: EdgeInsets.only(bottom: 6),
+                        icon: Icon(
+                          Icons.close,
+                          size: 15,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                       ),
                     ),
-                  ),
-                  child: ListTile(
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/icons/user-plus-black.png',
-                          width: 15.83,
-                          height: 18.99,
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1.0,
+                          ),
                         ),
-                        SizedBox(
-                          width: 24,
-                        ),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      child: ListTile(
+                        title: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              '${AppLocalizations.of(context)!.login}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                              ),
+                            Image.asset(
+                              'assets/icons/user-plus-black.png',
+                              width: 15.83,
+                              height: 18.99,
                             ),
-                            Text(
-                              '${AppLocalizations.of(context)!.enterToOotopia}',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: LightColors.grey,
-                              ),
+                            SizedBox(
+                              width: 24,
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context)!.login}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  '${AppLocalizations.of(context)!.enterToOotopia}',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: LightColors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: Colors.black,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            PageRoute.Page.loginScreen.route,
+                          );
+                        },
+                      ),
                     ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 15,
-                      color: Colors.black,
+                  ],
+                )),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${AppLocalizations.of(context)!.appVersion} OOTOPIA ${widget.appVersion}.\n",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: LightColors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        PageRoute.Page.loginScreen.route,
-                      );
-                    },
-                  ),
+                    Text(
+                      AppLocalizations.of(context)!
+                          .madeWithLoveOnThisWonderfulPlanet,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: LightColors.grey),
+                    ),
+                    Text(
+                      '\ndevmagic.com.br \n ootopia.org',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: LightColors.grey),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
                 ),
-              ],
-            )),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "${AppLocalizations.of(context)!.appVersion} OOTOPIA ${widget.appVersion}.\n",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: LightColors.grey,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  AppLocalizations.of(context)!
-                      .madeWithLoveOnThisWonderfulPlanet,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: LightColors.grey),
-                ),
-                Text(
-                  '\ndevmagic.com.br \n ootopia.org',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: LightColors.grey),
-                ),
-                SizedBox(
-                  height: 20,
-                )
-              ],
-            ),
-          ),
-        )
+              ),
+            )
       ],
-    ));
+    ),
+          ],
+        ));
   }
 }
