@@ -492,6 +492,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Container(
             width: MediaQuery.of(context).size.width - 101,
             child: Text('${link.title}: ${link.URL}',
+              overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(
               fontSize: 16,
