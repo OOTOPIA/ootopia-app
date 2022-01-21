@@ -47,11 +47,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           phoneNumber: editProfileStore.cellPhoneController.text);
     });
   }
+  bool newLinks = false;
 
   init(){
-    if(editProfileStore.links.isEmpty){
+    if(!newLinks){
+    if(editProfileStore.links.isEmpty || editProfileStore.links.length != profileStore.profile?.links?.length){
       editProfileStore.links = profileStore.profile?.links ?? [];
     }
+    }
+    newLinks = true;
   }
 
   @override
@@ -195,10 +199,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 if(list.isEmpty){
                                   setState(() {
                                     editProfileStore.links.removeWhere((element) => true);
+                                    newLinks = true;
                                   });
                                 }else{
                                   setState(() {
                                     editProfileStore.links = list;
+                                    newLinks = true;
                                   });
                                 }
                               }
