@@ -383,7 +383,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       style: TextStyle(color: Colors.black),
                       controller: _inputController,
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
+                        fillColor: Colors.white.withOpacity(0.75),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: LightColors.grey, width: 0.25),
