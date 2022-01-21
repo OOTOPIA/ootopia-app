@@ -60,8 +60,10 @@ class PushNotification {
       AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
 
+      var initializationSettingsIOs = IOSInitializationSettings();
+
       var initializationSettings =
-          InitializationSettings(android: initializationSettingsAndroid);
+          InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
 
       flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
@@ -119,6 +121,8 @@ class PushNotification {
       ByteArrayAndroidBitmap? bigIcon =
           await _turnPhotoURLIntoBitmap(notification.photoURL!);
 
+
+
       if (event.data != null || event.data != {}) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -134,7 +138,10 @@ class PushNotification {
               largeIcon: bigIcon!,
               styleInformation: BigTextStyleInformation(body),
             ),
+            iOS:  IOSNotificationDetails()
           ),
+
+
           payload: notification.postId,
         );
       }
@@ -210,4 +217,17 @@ class PushNotification {
     var post = await postsRepository.getPostById(id);
     goToTimelinePost([post].toList());
   }
+
+
+  // showIOSnotification() async{
+  //   print("ios notificatuib");
+  //   var android = new AndroidNotificationDetails(
+  //       'id', 'channel ',
+  //       priority: Priority.high, importance: Importance.max);
+  //   var iOS = new IOSNotificationDetails();
+  //   var platform = new NotificationDetails(android: android, iOS: iOS);
+  //   await flutterLocalNotificationsPlugin.show(
+  //       0, 'Flutter devs', 'Flutter Local Notification Demo', platform,
+  //       payload: 'Welcome to the Local Notification demo ');
+  // }
 }
