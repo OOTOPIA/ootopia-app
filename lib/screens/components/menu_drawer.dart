@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -35,6 +37,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   AuthStore? authStore;
   SmartPageController controller = SmartPageController.getInstance();
   final ScrollController _firstController = ScrollController();
+  final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  PushNotification pushNotification = PushNotification.getInstance();
 
   @override
   void initState() {
@@ -52,6 +56,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   }
 
   clearAuth(context) async {
+    await userRepository.updateTokenDeviceUser(null);
     await authStore!.logout();
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();

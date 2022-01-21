@@ -141,7 +141,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   @override
-  Future updateTokenDeviceUser(String deviceToken) async {
+  Future updateTokenDeviceUser(String? deviceToken) async {
     try {
       String? deviceId;
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
