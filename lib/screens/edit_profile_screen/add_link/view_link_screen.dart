@@ -104,6 +104,7 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 100),
                     child: Text(
                       link.title,
+                      overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: TextStyle(
                           fontSize: 20,

@@ -212,6 +212,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
         ),
         SizedBox(height: 8),
         TextFormField(
+          maxLines: null,
           textCapitalization: TextCapitalization.none,
           keyboardType: TextInputType.url,
           textInputAction: TextInputAction.next,
@@ -233,14 +234,15 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
             if(value == null){
               value = '';
             }
+            if (value.isEmpty) {
+              return AppLocalizations.of(context)!.pleaseEnterLink;
+            }
             if(value.contains('http') == false){
               value = 'http://' + value;
               item.urlController.text = value;
             }
             bool isUrl = Uri.tryParse(value + "/")?.hasAbsolutePath ?? false;
-            if (value.isEmpty) {
-              return AppLocalizations.of(context)!.pleaseEnterLink;
-            }else if(!isUrl){
+            if(!isUrl){
               return AppLocalizations.of(context)!.invalidUrl;
             }
             return null;
@@ -248,6 +250,7 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
         ),
         SizedBox(height: 8),
         TextFormField(
+          maxLines: null,
           textCapitalization: TextCapitalization.words,
           textInputAction: TextInputAction.next,
           style: TextStyle(
