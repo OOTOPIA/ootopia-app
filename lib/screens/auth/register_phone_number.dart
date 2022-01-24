@@ -52,35 +52,9 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
         },
       );
 
-  void setTextToShowFromLinks(){
-    registerController.links.forEach((element) {
-      element.textToShow = "${element.title}: ${element.URL}";
-      bool status = true;
-      final style = TextStyle(fontSize: 16, color: LightColors.grey);
-      final span = TextSpan(text: element.textToShow , style: style);
-      final tp = TextPainter(text: span, maxLines: 1, textDirection: TextDirection.ltr);
-      tp.layout(maxWidth: MediaQuery.of(context).size.width-101);
-
-      if(tp.didExceedMaxLines){
-        int i = element.textToShow!.length;
-
-        while(status){
-          final span = TextSpan(text: element.textToShow!.substring(0,i) + "...", style: style );
-          final tp = TextPainter(text: span, maxLines: 1,  textDirection: TextDirection.ltr);
-          tp.layout(maxWidth: MediaQuery.of(context).size.width-101);
-          i--;
-          if(tp.didExceedMaxLines == false){
-            status = false;
-            element.textToShow = element.textToShow!.substring(0,i) + "...";
-          }
-        }
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    setTextToShowFromLinks();
     final node = FocusScope.of(context);
     return Scaffold(
       appBar: appBar,
@@ -196,7 +170,6 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                       setState(() {
                                         registerController.links = list;
                                       });
-                                      print(' afoi ${list.length}');
                                     }
                                   },
                                   child: TextFormField(
@@ -593,7 +566,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text(link.textToShow!,
+            child: Text(link.setTextWith3dots(MediaQuery.of(context).size.width - 101),
               maxLines: 1,
               style: TextStyle(
                   fontSize: 16,
