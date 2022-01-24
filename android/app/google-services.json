@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:986493600408:android:500cca3a8253aed1ec06ed",
+        "mobilesdk_app_id": "1:986493600408:android:67a012fd846032e5ec06ed",
         "android_client_info": {
-          "package_name": "com.example.ootopia_app"
+          "package_name": "org.ootopia.beta"
         }
       },
       "oauth_client": [
         {
-          "client_id": "986493600408-19kp10qkp3pd470pv9jl9c9nl7kfj4md.apps.googleusercontent.com",
+          "client_id": "986493600408-ejkg7q7o49a6bi9rhdcadb4gor3a9cc7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.ootopia_app",
+            "package_name": "org.ootopia.beta",
             "certificate_hash": "b487ed4bdc203486a4bcc6a8e845b7e2d89eaffc"
           }
         },

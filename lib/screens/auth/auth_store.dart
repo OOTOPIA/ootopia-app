@@ -5,6 +5,7 @@ import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -20,6 +21,7 @@ abstract class AuthStoreBase with Store {
 
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final AuthRepositoryImpl authRepository = AuthRepositoryImpl();
+  PushNotification pushNotification = PushNotification.getInstance();
   final InterestsTagsRepositoryImpl interestsTagsrepository =
       InterestsTagsRepositoryImpl();
 
@@ -72,7 +74,12 @@ abstract class AuthStoreBase with Store {
       var result = (await this.authRepository.login(email, password));
       if (result != null) {
         User user = result;
+
+        await this
+            .userRepository
+            .updateTokenDeviceUser(pushNotification.token!);
         this.trackingEvents.trackingLoggedIn(user.id!, user.fullname!);
+        pushNotification.currentUserData();
       }
     } catch (e) {
       String errorMessage = e.toString();

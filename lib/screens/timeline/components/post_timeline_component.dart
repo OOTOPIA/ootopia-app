@@ -798,7 +798,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             visible: this.post.description.isNotEmpty,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(top: 3,  bottom: 12),
+              padding: EdgeInsets.only(top: 3, bottom: 12),
               child: ExpandableText(this.post.description, 3),
             ),
           ),

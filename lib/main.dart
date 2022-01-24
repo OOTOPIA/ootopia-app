@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,6 +61,7 @@ import 'package:ootopia_app/screens/timeline/components/feed_player/player_video
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
@@ -82,6 +85,7 @@ import 'l10n/l10n.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   FlutterBackgroundService.initialize(onStartService);
   await dotenv.load(fileName: ".env");
   var configuredApp = new AppConfig(
@@ -173,15 +177,19 @@ class ExpensesApp extends StatefulWidget {
 
 class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  PushNotification pushNotification = PushNotification.getInstance();
+
   GeneralConfigRepositoryImpl generalConfigRepository =
       GeneralConfigRepositoryImpl();
 
   @override
   void initState() {
+    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    super.initState();
+    pushNotification.listenerFirebaseCloudMessagingToken();
+    pushNotification.listenerFirebaseCloudMessagingMessages();
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
     AppUsageTime.instance.startTimer();
@@ -414,6 +422,8 @@ class _mainPageState extends State<MainPage> {
     sharedExperienceService.addListener(() {
       showSharedExperience(context);
     });
+    PushNotification pushNotification = PushNotification.getInstance();
+    pushNotification.setContext(context);
   }
 
   @override

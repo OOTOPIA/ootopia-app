@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +23,7 @@ abstract class UserRepository {
   Future<DailyGoalStatsModel?> getDailyGoalStats();
   Future<List<InvitationCodeModel>?> getCodes();
   Future<String> verifyCodes(String code);
+  Future updateTokenDeviceUser(String tokenDevice);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -134,6 +137,44 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       }
     } catch (error) {
       throw Exception('Failed to update user ' + error.toString());
+    }
+  }
+
+  @override
+  Future updateTokenDeviceUser(String? deviceToken) async {
+    try {
+      String? deviceId;
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      String language = Platform.localeName.substring(0, 2);
+
+      try {
+        if (Platform.isAndroid) {
+          deviceId = (await deviceInfoPlugin.androidInfo).androidId;
+        } else if (Platform.isIOS) {
+          deviceId = (await deviceInfoPlugin.iosInfo).identifierForVendor;
+        }
+      } catch (error) {
+        print("ERROR !updateTokenDeviceUser $error");
+        return;
+      }
+
+      if (deviceId == null) return;
+
+      final response = await http.put(
+        Uri.parse(dotenv.env['API_URL']! + "users-device-token"),
+        headers: await this.getHeaders(),
+        body: jsonEncode({
+          'deviceToken': deviceToken,
+          'deviceId': deviceId,
+          'language': language,
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update token device user');
+      }
+    } catch (error) {
+      throw Exception('Failed to update token device user ' + error.toString());
     }
   }
 
