@@ -197,6 +197,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),),
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context).spacingNormal,
+                                  )
                                 ]else if (store!.profile!.links!.length > 1)...[
                                   TextButton(
                                     onPressed: (){
@@ -216,6 +219,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         color: Color(0xff018F9C),
                                       ),),
                                   ),
+                                  SizedBox(
+                                    height: GlobalConstants.of(context).spacingNormal,
+                                  )
                                 ]else...[
                                   SizedBox(
                                     height: GlobalConstants.of(context).spacingNormal,
