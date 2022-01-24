@@ -242,58 +242,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 }
                               }
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: new BorderRadius.circular(5),
-                                border: Border.all(color: LightColors.grey, width: 0.30),
-                                color: Colors.white.withOpacity(0.6)
-                              ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          height: 21,
-                                          width: 21,
-                                          margin: EdgeInsets.all(15),
-                                          child: SvgPicture.asset(
-                                            'assets/icons/mais.svg',
-                                            height: 21,
-                                            width: 21,),
-                                        ),
-                                        SizedBox(width:1),
-                                        Text(
-                                            AppLocalizations.of(context)!.addLinksInYourPage,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500
-                                          ),
-                                        ),
-                                      ],
+                            child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
+                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                enabled: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                    AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
+                                    prefixIcon: Container(
+                                      height: 21,
+                                      width: 21,
+                                      margin: EdgeInsets.all(15),
+                                      child: SvgPicture.asset(
+                                        'assets/icons/mais.svg',
+                                        height: 21,
+                                        width: 21,),
                                     ),
-                                    Visibility(
+                                    suffixIcon:  Visibility(
                                       visible: editProfileStore.links.length > 0,
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 16),
+                                        margin: EdgeInsets.symmetric
+                                          (horizontal: 16, vertical: 16),
                                         child: Text(
-                                          "${editProfileStore.links.length} ${AppLocalizations.of(context)!.added}",
+                                          "${editProfileStore.links.length} "
+                                              "${AppLocalizations.of(context)!
+                                              .added}",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              color: LightColors.grey,
-                                              fontSize: 16,
+                                            color: LightColors.grey,
+                                            fontSize: 16,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                    labelStyle: TextStyle(color: Colors.black),
+                                    alignLabelWithHint: true,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
                           ),
 
                           ListView.builder(
