@@ -58,6 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     profileStore = Provider.of<ProfileScreenStore>(context);
@@ -223,13 +224,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       margin: EdgeInsets.all(15),
                                       child: SvgPicture.asset(
                                         'assets/icons/mais.svg',
-                                      height: 21,
-                                      width: 21,),
+                                        height: 21,
+                                        width: 21,),
+                                    ),
+                                    suffixIcon:  Visibility(
+                                      visible: editProfileStore.links.length > 0,
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric
+                                          (horizontal: 16, vertical: 16),
+                                        child: Text(
+                                          "${editProfileStore.links.length} "
+                                              "${AppLocalizations.of(context)!
+                                              .added}",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: LightColors.grey,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     labelStyle: TextStyle(color: Colors.black),
                                     alignLabelWithHint: true,
                                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
                           ),
+
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -497,8 +517,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text('${link.title}: ${link.URL}',
-              overflow: TextOverflow.ellipsis,
+            child: Text( link.setTextWith3dots(MediaQuery.of(context).size.width - 101),
             maxLines: 1,
             style: TextStyle(
               fontSize: 16,

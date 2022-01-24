@@ -52,6 +52,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
         },
       );
 
+
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -169,7 +170,6 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                       setState(() {
                                         registerController.links = list;
                                       });
-                                      print(' afoi ${list.length}');
                                     }
                                   },
                                   child: TextFormField(
@@ -188,6 +188,24 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                               'assets/icons/mais.svg',
                                               height: 21,
                                               width: 21,),
+                                          ),
+                                          suffixIcon:  Visibility(
+                                            visible: registerController.links.length > 0,
+                                            child: Container(
+                                              margin: EdgeInsets.symmetric
+                                                (horizontal: 16, vertical: 16),
+                                              child: Text(
+                                                "${registerController.links.length} "
+                                                    "${AppLocalizations.of(context)!
+                                                    .added}",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: LightColors.grey,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                           labelStyle: TextStyle(color: Colors.black),
                                           alignLabelWithHint: true,
@@ -548,9 +566,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text('${link.title}: ${link.URL}',
+            child: Text(link.setTextWith3dots(MediaQuery.of(context).size.width - 101),
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: 16,
                   color: LightColors.grey

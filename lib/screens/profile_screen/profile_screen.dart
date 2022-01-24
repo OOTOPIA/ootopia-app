@@ -183,17 +183,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                             if(store?.profile?.links != null)...[
                                 if(store!.profile!.links!.length == 1)...[
-                                  TextButton(
-                                    onPressed: () async{
-                                      _launchURL(store!.profile!.links![0].URL);
-                                    },
-                                    child: Text(store!.profile!.links![0].title,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 13,
-                                        color: Color(0xff018F9C),
-                                      ),),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: GlobalConstants.of(context).screenHorizontalSpace),                                    child: TextButton(
+                                      onPressed: () async{
+                                        _launchURL(store!.profile!.links![0].URL);
+                                      },
+                                      child: Text(store!.profile!.links![0].title,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 13,
+                                          color: Color(0xff018F9C),
+                                        ),),
+                                    ),
                                   ),
                                 ]else if (store!.profile!.links!.length > 1)...[
                                   TextButton(
@@ -214,12 +216,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         color: Color(0xff018F9C),
                                       ),),
                                   ),
-                                ]
-
-                            ]else...[
-                              SizedBox(
-                                height: GlobalConstants.of(context).spacingNormal,
-                              )
+                                ]else...[
+                                  SizedBox(
+                                    height: GlobalConstants.of(context).spacingNormal,
+                                  )
+                                ],
                             ],
 
                             Text(
