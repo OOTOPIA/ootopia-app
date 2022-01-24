@@ -81,12 +81,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             status = false;
             element.textToShow = element.textToShow!.substring(0,i) + "...";
           }
-
         }
       }
-
-
-
     });
 
   }

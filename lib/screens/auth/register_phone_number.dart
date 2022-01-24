@@ -73,14 +73,9 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
             status = false;
             element.textToShow = element.textToShow!.substring(0,i) + "...";
           }
-
         }
       }
-
-
-
     });
-
   }
 
   @override
