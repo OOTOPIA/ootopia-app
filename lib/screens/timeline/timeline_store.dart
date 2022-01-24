@@ -160,7 +160,6 @@ abstract class TimelineStoreBase with Store {
       viewState = TimelineViewState.ok;
       _loadingMorePosts = false;
     } catch (err) {
-      print(err);
       viewState = TimelineViewState.error;
       _loadingMorePosts = false;
     }
