@@ -71,7 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if(tp.didExceedMaxLines){
         int i = element.textToShow!.length;
 
-        while(status){
+        while(status && i > 0){
           final span = TextSpan(text: element.textToShow!.substring(0,i) + "...", style: style );
           final tp = TextPainter(text: span, maxLines: 1,  textDirection: TextDirection.ltr);
           tp.layout(maxWidth: MediaQuery.of(context).size.width-101);
