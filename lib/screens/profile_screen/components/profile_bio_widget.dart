@@ -20,9 +20,6 @@ class ProfileBioWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(
-            height: GlobalConstants.of(context).spacingNormal,
-          )
         ],
       ),
     );
