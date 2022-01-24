@@ -34,12 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
       AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
       await appUsageSplashScreen.updateLastSplashScreenOpening();
 
-      Locale locale = Localizations.localeOf(context);
-      final language = await appUsageSplashScreen.checkLanguageConfig();
-
-      if (language == null || locale.languageCode != language)
-        await appUsageSplashScreen.updateLanguageConfig(locale.languageCode);
-
       if (appUsageSplashScreen.displayedToday)
         Navigator.of(context).pushReplacementNamed(
           PageRoute.Page.homeScreen.route,

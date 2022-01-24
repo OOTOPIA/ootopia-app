@@ -256,9 +256,7 @@ class _HomeScreenState extends State<HomeScreen>
                   controller: controller,
                 ),
                 Visibility(
-                  visible: homeStore!.seeCrisp &&
-                      controller.currentBottomIndex !=
-                          PageViewController.HIDE_BOTTOMBAR,
+                  visible: homeStore!.seeCrisp && controller.currentBottomIndex != PageViewController.HIDE_BOTTOMBAR,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton(
