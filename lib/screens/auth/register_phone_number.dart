@@ -593,7 +593,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text(link.textToShow ?? "",
+            child: Text(link.textToShow!,
               maxLines: 1,
               style: TextStyle(
                   fontSize: 16,

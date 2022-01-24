@@ -56,7 +56,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if(!newLinks && (editProfileStore.links.isEmpty || newListLinks)){
       editProfileStore.links = profileStore.profile?.links ?? [];
     }
-
     setTextToShowFromLinks();
   }
 
@@ -84,7 +83,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         }
       }
     });
-
   }
 
   @override
@@ -219,10 +217,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onTap: () async {
                               List<Link>? list = await  Navigator.of(context)
                                   .pushNamed(
-                                  PageRoute.Page.addLink.route,
-                                  arguments: {
-                                    "list": editProfileStore.links
-                                  }
+                                PageRoute.Page.addLink.route,
+                                arguments: {
+                                  "list": editProfileStore.links
+                                }
                               ) as List<Link>?;
                               if(list != null){
                                 if(list.isEmpty){
@@ -545,7 +543,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text( link.textToShow ?? "",
+            child: Text( link.textToShow!,
             maxLines: 1,
             style: TextStyle(
               fontSize: 16,
