@@ -100,7 +100,7 @@ Future main() async {
             criticalAlerts: true,
             importance: an.NotificationImportance.High,
             channelDescription: 'Notification channel for basic tests',
-            defaultColor: Color(0xFF796FED),
+            defaultColor: Color(0xFF003694),
             ledColor: Colors.white,
         )
       ],

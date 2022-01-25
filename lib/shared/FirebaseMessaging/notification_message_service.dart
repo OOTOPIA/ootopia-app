@@ -43,6 +43,7 @@ class NotificationMessageService {
         NotificationActionButton(
           key: 'accept',
           label: buttonText,
+          color: Color(0xFF003694),
         ),
       ],
     );
