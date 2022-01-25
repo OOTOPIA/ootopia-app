@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -12,6 +13,8 @@ import 'package:ootopia_app/data/models/notifications/notification_model.dart'
 class NotificationMessageService {
   AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
+  var locale;
+  var language;
 
   void createMessage(RemoteMessage message) async {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -23,12 +26,14 @@ class NotificationMessageService {
     message.data["usersName"] = jsonDecode(message.data["usersName"]);
     final notification = model.NotificationModel.fromJson(message.data);
 
+    await setLanguage();
+    setLocale();
+
     String title = await getNotificationTitle(notification.type,
         oozReceived: notification.oozAmount);
     String body =
         await getNotificationBody(notification.type, notification.usersName);
-    String buttonText =
-        await getNotificationButtonText();
+    String buttonText = await getNotificationButtonText();
 
     AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -54,22 +59,28 @@ class NotificationMessageService {
     if (loggedIn) return await userRepository.getCurrentUser();
   }
 
-  languageLocale() async {
-    String language = await appUsageSplashScreen.checkLanguageConfig();
-    return Locale(language);
+  setLanguage() async {
+    this.language = await appUsageSplashScreen.checkLanguageConfig();
+  }
+
+  setLocale() {
+    this.locale = Locale(this.language.split("_").first);
   }
 
   Future<String> getNotificationTitle(String type,
       {String? oozReceived}) async {
-    Locale locale = await languageLocale();
     User? user = await getUserData();
+
+    var formatOOz;
+    if (oozReceived != null)
+      formatOOz = formatNumber(double.parse(oozReceived), language);
 
     String titleText = "";
 
-    AppLocalizations.delegate.load(locale).then((value) {
+    AppLocalizations.delegate.load(this.locale).then((value) {
       if (type == "gratitude_reward")
         titleText = value.notificationTitleOOzReceived
-            .replaceAll('%OOZ_RECEIVED%', '$oozReceived');
+            .replaceAll('%OOZ_RECEIVED%', '$formatOOz');
       else
         titleText = value.notificationTitleCommentedPost
             .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
@@ -80,11 +91,9 @@ class NotificationMessageService {
 
   Future<String> getNotificationBody(
       String type, List<String> usersName) async {
-    Locale locale = await languageLocale();
-
     String bodyText = "";
 
-    AppLocalizations.delegate.load(locale).then((value) {
+    AppLocalizations.delegate.load(this.locale).then((value) {
       if (type == "gratitude_reward") {
         if (usersName.length == 1)
           bodyText = value.notificationBodyOOzReceivedByOnePerson
@@ -110,14 +119,15 @@ class NotificationMessageService {
   }
 
   Future<String> getNotificationButtonText() async {
-    Locale locale = await languageLocale();
-
     String buttonText = "";
 
-    AppLocalizations.delegate.load(locale).then((value) {
+    AppLocalizations.delegate.load(this.locale).then((value) {
       buttonText = value.notificationButtonText;
     });
 
     return buttonText;
   }
+
+  formatNumber(double number, String locale) =>
+      NumberFormat("###.00", locale).format(number);
 }
