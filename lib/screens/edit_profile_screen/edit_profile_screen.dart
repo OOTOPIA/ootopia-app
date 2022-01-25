@@ -56,40 +56,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if(!newLinks && (editProfileStore.links.isEmpty || newListLinks)){
       editProfileStore.links = profileStore.profile?.links ?? [];
     }
-
-    setTextToShowFromLinks();
   }
 
-  void setTextToShowFromLinks(){
-    editProfileStore.links.forEach((element) {
-      element.textToShow = "${element.title}: ${element.URL}";
-      bool status = true;
-      final style = TextStyle(fontSize: 16, color: LightColors.grey);
-      final span = TextSpan(text: element.textToShow , style: style);
-      final tp = TextPainter(text: span, maxLines: 1, textDirection: TextDirection.ltr);
-      tp.layout(maxWidth: MediaQuery.of(context).size.width-101);
-
-      if(tp.didExceedMaxLines){
-        int i = element.textToShow!.length;
-
-        while(status){
-          final span = TextSpan(text: element.textToShow!.substring(0,i) + "...", style: style );
-          final tp = TextPainter(text: span, maxLines: 1,  textDirection: TextDirection.ltr);
-          tp.layout(maxWidth: MediaQuery.of(context).size.width-101);
-          i--;
-          if(tp.didExceedMaxLines == false){
-            status = false;
-            element.textToShow = element.textToShow!.substring(0,i) + "...";
-          }
-
-        }
-      }
-
-
-
-    });
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,10 +191,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             onTap: () async {
                               List<Link>? list = await  Navigator.of(context)
                                   .pushNamed(
-                                  PageRoute.Page.addLink.route,
-                                  arguments: {
-                                    "list": editProfileStore.links
-                                  }
+                                PageRoute.Page.addLink.route,
+                                arguments: {
+                                  "list": editProfileStore.links
+                                }
                               ) as List<Link>?;
                               if(list != null){
                                 if(list.isEmpty){
@@ -242,58 +210,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 }
                               }
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: new BorderRadius.circular(5),
-                                border: Border.all(color: LightColors.grey, width: 0.30),
-                                color: Colors.white.withOpacity(0.6)
-                              ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          height: 21,
-                                          width: 21,
-                                          margin: EdgeInsets.all(15),
-                                          child: SvgPicture.asset(
-                                            'assets/icons/mais.svg',
-                                            height: 21,
-                                            width: 21,),
-                                        ),
-                                        SizedBox(width:1),
-                                        Text(
-                                            AppLocalizations.of(context)!.addLinksInYourPage,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500
-                                          ),
-                                        ),
-                                      ],
+                            child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
+                                style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                enabled: false,
+                                decoration: GlobalConstants.of(context)
+                                    .loginInputTheme(
+                                    AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
+                                    prefixIcon: Container(
+                                      height: 21,
+                                      width: 21,
+                                      margin: EdgeInsets.all(15),
+                                      child: SvgPicture.asset(
+                                        'assets/icons/mais.svg',
+                                        height: 21,
+                                        width: 21,),
                                     ),
-                                    Visibility(
+                                    suffixIcon:  Visibility(
                                       visible: editProfileStore.links.length > 0,
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 16),
+                                        margin: EdgeInsets.symmetric
+                                          (horizontal: 16, vertical: 16),
                                         child: Text(
-                                          "${editProfileStore.links.length} ${AppLocalizations.of(context)!.added}",
+                                          "${editProfileStore.links.length} "
+                                              "${AppLocalizations.of(context)!
+                                              .added}",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              color: LightColors.grey,
-                                              fontSize: 16,
+                                            color: LightColors.grey,
+                                            fontSize: 16,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                    labelStyle: TextStyle(color: Colors.black),
+                                    alignLabelWithHint: true,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
                           ),
 
                           ListView.builder(
@@ -563,7 +517,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text( link.textToShow ?? "",
+            child: Text( link.setTextWith3dots(MediaQuery.of(context).size.width - 101),
             maxLines: 1,
             style: TextStyle(
               fontSize: 16,
