@@ -6,7 +6,8 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/data/models/notifications/notification_model.dart' as model;
+import 'package:ootopia_app/data/models/notifications/notification_model.dart'
+    as model;
 
 class NotificationMessageService {
   AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
@@ -26,21 +27,22 @@ class NotificationMessageService {
         oozReceived: notification.oozAmount);
     String body =
         await getNotificationBody(notification.type, notification.usersName);
+    String buttonText =
+        await getNotificationButtonText();
 
     AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: message.hashCode,
-        channelKey: 'basic_channel',
-        title: title,
-        body: body,
-        largeIcon: notification.photoURL,
-        icon: 'resource://mipmap/ic_launcher',
-        payload: {"postId": notification.postId}
-      ),
+          id: message.hashCode,
+          channelKey: 'basic_channel',
+          title: title,
+          body: body,
+          largeIcon: notification.photoURL,
+          icon: 'resource://mipmap/ic_launcher',
+          payload: {"postId": notification.postId}),
       actionButtons: [
         NotificationActionButton(
           key: 'accept',
-          label: 'Accept',
+          label: buttonText,
         ),
       ],
     );
@@ -106,9 +108,8 @@ class NotificationMessageService {
     return bodyText;
   }
 
-    Future<String> getNotificationButtonText() async {
+  Future<String> getNotificationButtonText() async {
     Locale locale = await languageLocale();
-    User? user = await getUserData();
 
     String buttonText = "";
 
