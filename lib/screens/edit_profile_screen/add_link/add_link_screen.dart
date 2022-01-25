@@ -237,8 +237,8 @@ class _AddLinkScreenState extends State<AddLinkScreen> {
             if (value.isEmpty) {
               return AppLocalizations.of(context)!.pleaseEnterLink;
             }
-            if(value.contains('http') == false){
-              value = 'http://' + value;
+            if(value.contains('https') == false){
+              value = 'https://' + value;
               item.urlController.text = value;
             }
             bool isUrl = Uri.tryParse(value + "/")?.hasAbsolutePath ?? false;
