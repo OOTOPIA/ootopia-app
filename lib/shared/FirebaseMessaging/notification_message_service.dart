@@ -43,7 +43,7 @@ class NotificationMessageService {
           body: body,
           largeIcon: notification.photoURL,
           icon: 'resource://mipmap/ic_launcher',
-          payload: {"postId": notification.postId}),
+          payload: {"postId": notification.postId, "type": notification.type}),
       actionButtons: [
         NotificationActionButton(
           key: 'accept',

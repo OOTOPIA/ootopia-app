@@ -185,4 +185,12 @@ class AnalyticsTracking {
   profileViewedAProfile(eventName, property) {
     this.trackingEvent(eventName, property);
   }
+
+  notificationReceived(property) {
+    this.trackingEvent("Received notification", property);
+  }
+
+  notificationClicked(property) {
+    this.trackingEvent("Clicked notification", property);
+  }
 }

@@ -31,6 +31,7 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
@@ -101,19 +102,26 @@ class _HomeScreenState extends State<HomeScreen>
         );
       }
       AwesomeNotifications().actionStream.listen((event) {
-        final postId = event.payload!["postId"];
-        if (postId != null) {
+        final payload = event.payload!;
+        if (payload != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
-            navigateToTimelineProfileScreen(postId);
+            navigateToTimelineProfileScreen(payload);
           });
         }
       });
     });
   }
 
-  navigateToTimelineProfileScreen(String postId) async {
+  navigateToTimelineProfileScreen(payload) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
+    String type = payload["type"];
+    String postId = payload["postId"];
+    print("Payload: $type");
+    print("Payload: $postId");
     var post = await postsRepository.getPostById(postId);
+
+    AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+    //trackingEvents.notificationClicked("$type");
     controller.insertPage(
       TimelineScreenProfileScreen(
         {
