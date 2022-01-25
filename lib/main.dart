@@ -219,7 +219,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
       DeviceOrientation.portraitUp,
     ]);
     pushNotification.listenerFirebaseCloudMessagingToken();
-    pushNotification.listenerFirebaseCloudMessagingMessages();
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
     AppUsageTime.instance.startTimer();
@@ -452,8 +451,6 @@ class _mainPageState extends State<MainPage> {
     sharedExperienceService.addListener(() {
       showSharedExperience(context);
     });
-    PushNotification pushNotification = PushNotification.getInstance();
-    pushNotification.setContext(context);
   }
 
   @override
