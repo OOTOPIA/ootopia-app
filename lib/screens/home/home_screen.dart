@@ -36,6 +36,7 @@ import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -99,12 +100,11 @@ class _HomeScreenState extends State<HomeScreen>
           {"action": "stopService"},
         );
       }
-      FirebaseMessaging.instance
-          .getInitialMessage()
-          .then((RemoteMessage? message) {
-        if (message != null) {
+      AwesomeNotifications().actionStream.listen((event) {
+        final postId = event.payload!["postId"];
+        if (postId != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
-            navigateToTimelineProfileScreen(message.data["postId"]);
+            navigateToTimelineProfileScreen(postId);
           });
         }
       });

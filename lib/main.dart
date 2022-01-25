@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart' as an;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,6 +62,7 @@ import 'package:ootopia_app/screens/timeline/components/feed_player/player_video
 import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/notification_message_service.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -86,6 +88,29 @@ import 'l10n/l10n.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  an.AwesomeNotifications().initialize(
+      'resource://mipmap/ic_launcher',
+      [
+        an.NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelShowBadge: true,
+            criticalAlerts: true,
+            importance: an.NotificationImportance.High,
+            channelDescription: 'Notification channel for basic tests',
+            defaultColor: Color(0xFF796FED),
+            ledColor: Colors.white,
+        )
+      ],
+      channelGroups: [
+        an.NotificationChannelGroup(
+            channelGroupkey: 'basic_channel_group',
+            channelGroupName: 'Basic group')
+      ],
+      debug: true,
+  );
   FlutterBackgroundService.initialize(onStartService);
   await dotenv.load(fileName: ".env");
   var configuredApp = new AppConfig(
@@ -111,6 +136,11 @@ Future main() async {
       ),
     ),
   );
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  NotificationMessageService service = NotificationMessageService();
+  service.createMessage(message);
 }
 
 void onStartService() async {

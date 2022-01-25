@@ -104,9 +104,9 @@ class PushNotification {
 
   //Não deletar código comentado, será utilizado numa task futura
   void listenerFirebaseCloudMessagingMessages() {
-    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-      await getPost(message.data["postId"]);
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+    //   await getPost(message.data["postId"]);
+    // });
     // FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
     //   event.data["usersName"] = jsonDecode(event.data["usersName"]);
     //   final notification = NotificationModel.fromJson(event.data);

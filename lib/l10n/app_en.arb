@@ -474,7 +474,8 @@
     "notificationTitleCommentedPost": "Hello, %YOUR_NAME%!",
     "notificationBodyCommentedPostByOnePerson": "%USER_NAME%, commented your post.",
     "notificationBodyCommentedPostBySomePeople": "%USER_NAME% AND %PEOPLE_AMOUNT% other people commented your post.",
-    
+    "notificationButtonText": "Open",
+
     "hide" : "Hide",
     "readMore" : "Read more"
 }
