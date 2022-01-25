@@ -1,4 +1,5 @@
 //Packages
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,6 +54,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    AwesomeNotifications().initialize(null,
+        [
+          NotificationChannel(
+              channelGroupKey: 'basic_channel_group',
+              channelKey: 'basic_channel',
+              channelName: 'Basic notifications',
+              channelShowBadge: true,
+              criticalAlerts: true,
+              importance: NotificationImportance.High,
+              channelDescription: 'Notification channel for basic tests',
+              defaultColor: Color(0xFF9D50DD),
+
+              ledColor: Colors.white)
+        ],
+        // Channel groups are only visual and are not required
+        channelGroups: [
+          NotificationChannelGroup(
+              channelGroupkey: 'basic_channel_group',
+              channelGroupName: 'Basic group')
+        ],
+        debug: true
+    );
     super.initState();
     _scrollController.addListener(_scrollListener);
     if (store != null && profileUserIsLoggedUser) {
@@ -205,7 +228,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'list': store!.profile!.links!,
                                         },
                                       ));
-
                                     },
                                     child: Text(AppLocalizations.of(context)!.relatedLinks,
                                       style: TextStyle(
@@ -370,6 +392,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if(await canLaunch(_url)){
       await launch(_url);
     }
+  }
+
+
+  void test(){
+
+    print(2);
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        // This is just a basic example. For real apps, you must show some
+        // friendly dialog box before call the request method.
+        // This is very important to not harm the user experience
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    print(3);
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 10,
+            channelKey: 'basic_channel',
+            title: 'Simple Notification',
+            body: 'Simple body',
+
+        ),
+      actionButtons: [
+        NotificationActionButton(
+          key: 'accept',
+          label: 'Accept',
+        ),
+        NotificationActionButton(
+          key: 'cancel',
+          label: 'Cancel',
+        ),
+      ],
+    );
+
+    print(4);
+
+
   }
 
 
