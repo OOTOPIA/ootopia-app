@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen>
     var post = await postsRepository.getPostById(postId);
 
     AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-    //trackingEvents.notificationClicked("$type");
+    trackingEvents.notificationClicked({"notificationType": type});
     controller.insertPage(
       TimelineScreenProfileScreen(
         {

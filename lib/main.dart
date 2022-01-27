@@ -140,6 +140,8 @@ Future main() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   NotificationMessageService service = NotificationMessageService();
+  AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  trackingEvents.notificationReceived({"notificationType": message.data["type"]});
   service.createMessage(message);
 }
 

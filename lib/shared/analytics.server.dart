@@ -187,10 +187,10 @@ class AnalyticsTracking {
   }
 
   notificationReceived(property) {
-    this.trackingEvent("Received notification", property);
+    this.trackingEvent("Notification - Received notification", property);
   }
 
   notificationClicked(property) {
-    this.trackingEvent("Clicked notification", property);
+    this.trackingEvent("Notification - Clicked notification", property);
   }
 }
