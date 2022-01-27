@@ -145,7 +145,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     try {
       String? deviceId;
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-      String language = Platform.localeName.substring(0, 2);
 
       try {
         if (Platform.isAndroid) {
@@ -166,7 +165,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         body: jsonEncode({
           'deviceToken': deviceToken,
           'deviceId': deviceId,
-          'language': language,
         }),
       );
 

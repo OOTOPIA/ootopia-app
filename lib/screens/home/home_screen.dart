@@ -31,11 +31,13 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
+import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -99,21 +101,25 @@ class _HomeScreenState extends State<HomeScreen>
           {"action": "stopService"},
         );
       }
-      FirebaseMessaging.instance
-          .getInitialMessage()
-          .then((RemoteMessage? message) {
-        if (message != null) {
+      AwesomeNotifications().actionStream.listen((event) {
+        final payload = event.payload!;
+        if (payload != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
-            navigateToTimelineProfileScreen(message.data["postId"]);
+            navigateToTimelineProfileScreen(payload);
           });
         }
       });
     });
   }
 
-  navigateToTimelineProfileScreen(String postId) async {
+  navigateToTimelineProfileScreen(payload) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
+    String type = payload["type"];
+    String postId = payload["postId"];
     var post = await postsRepository.getPostById(postId);
+
+    AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+    trackingEvents.notificationClicked({"notificationType": type});
     controller.insertPage(
       TimelineScreenProfileScreen(
         {

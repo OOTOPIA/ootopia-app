@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppUsageSplashScreen with SecureStoreMixin {
   String _prefsKeyLastSplashScreenOpening = "last_splash_screen_opening_date";
+  String _prefsKeyLanguageConfig = "language_config";
   SharedPreferences? prefs;
   bool displayedToday = false;
 
@@ -25,5 +26,17 @@ class AppUsageSplashScreen with SecureStoreMixin {
       displayedToday = false;
     } else
       displayedToday = true;
+  }
+
+  updateLanguageConfig(String? language) async {
+    if (prefs == null) prefs = await SharedPreferences.getInstance();
+
+    if (language != null) prefs!.setString(_prefsKeyLanguageConfig, language);
+  }
+
+  checkLanguageConfig() async {
+    if (prefs == null) prefs = await SharedPreferences.getInstance();
+
+    return prefs!.getString(_prefsKeyLanguageConfig);
   }
 }
