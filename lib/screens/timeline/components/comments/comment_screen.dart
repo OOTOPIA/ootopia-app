@@ -380,10 +380,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                           }
                         });
                       },
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: LightColors.grey),
                       controller: _inputController,
                       decoration: InputDecoration(
-                        fillColor: Colors.white.withOpacity(0.6),
+                        fillColor: Colors.white.withOpacity(!focusNode.hasFocus ? 0.3: 1.0),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: LightColors.grey, width: 0.25),
@@ -400,9 +400,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         contentPadding: EdgeInsets.all(16),
-                        hintText:
-                        AppLocalizations.of(context)!.writeYourComment,
-                        hintStyle: TextStyle(color: Colors.black),
+                        hintText: AppLocalizations.of(context)!.writeYourComment,
+                        hintStyle: TextStyle(color: LightColors.grey),
                         suffixIcon: Observer(builder: (context) {
                           if (commentStore.isLoading) {
                             return Row(
