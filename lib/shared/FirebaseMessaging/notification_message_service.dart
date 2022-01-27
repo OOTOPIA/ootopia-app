@@ -129,5 +129,5 @@ class NotificationMessageService {
   }
 
   formatNumber(double number, String locale) =>
-      NumberFormat("###.00", locale).format(number);
+      NumberFormat("###,###,###.00", locale).format(number);
 }
