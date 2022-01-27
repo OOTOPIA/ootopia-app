@@ -17,6 +17,7 @@ class AppUsageTime with SecureStoreMixin {
   String _prefsKeyToday = "feedback_today";
   String _prefsKeydate = "feedback_last_usage_date";
   String _prefsPendingTimeKey = "last_pending_usage_time";
+  String _prefsPendingDateKey = "last_pending_usage_date";
   SharedPreferences? prefs;
   SharedExperienceService sharedExperienceService =
       SharedExperienceService.getInstace();
@@ -39,7 +40,11 @@ class AppUsageTime with SecureStoreMixin {
           if (!_watch.isRunning) {
             _watch.start();
           }
+        } else {
+          prefs!.setString(_prefsPendingDateKey, dateNowFormat);
         }
+      } else {
+        prefs!.setString(_prefsPendingDateKey, dateNowFormat);
       }
     });
   }
@@ -59,8 +64,7 @@ class AppUsageTime with SecureStoreMixin {
         int lastTime = prefs!.getInt(_prefsKeytime) ?? 0;
         bool displayedToday = prefs!.getBool(_prefsKeyToday) ?? false;
         String? displayedDate = prefs!.getString(_prefsKeydate);
-        DateTime date = new DateTime.now();
-        String today = "${date.day}/${date.month}/${date.year}";
+        String today = dateNowFormat;
 
         if (displayedDate == null || displayedDate != today) {
           prefs!.setString(_prefsKeydate, today);
@@ -85,6 +89,11 @@ class AppUsageTime with SecureStoreMixin {
         }
       }
     }
+  }
+
+  String get dateNowFormat {
+    DateTime date = new DateTime.now();
+    return "${date.day}/${date.month}/${date.year}";
   }
 
   startTimer() {
@@ -120,10 +129,11 @@ class AppUsageTime with SecureStoreMixin {
       //Sendo assim o registro será enviado quando o app for aberto novamente
       await Future.delayed(Duration.zero, () async {
         var _usersRepository = UserRepositoryImpl();
-        await _usersRepository.recordTimeUserUsedApp(ms!);
-        usageTimeSoFarInMilliseconds = 0;
-        prefs?.setInt(_prefsKey, 0);
-        prefs?.setInt(_prefsPendingTimeKey, 0);
+        String? pendingDate = prefs!.getString(_prefsPendingDateKey);
+        if (pendingDate != null && pendingDate == dateNowFormat) {
+          await _usersRepository.recordTimeUserUsedApp(ms!);
+        }
+        this.resetUsageTime();
       });
     }
   }

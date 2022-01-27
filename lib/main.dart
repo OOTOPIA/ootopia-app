@@ -90,7 +90,7 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   FlutterBackgroundService.initialize(onStartService);
- 
+
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',
@@ -117,36 +117,41 @@ Future main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   an.AwesomeNotifications().initialize(
-      'resource://mipmap/ic_launcher',
-      [
-        an.NotificationChannel(
-            channelGroupKey: 'basic_channel_group',
-            channelKey: 'basic_channel',
-            channelName: 'Basic notifications',
-            channelShowBadge: true,
-            criticalAlerts: true,
-            importance: an.NotificationImportance.High,
-            channelDescription: 'Notification channel for basic tests',
-            defaultColor: Color(0xFF003694),
-            ledColor: Colors.white,
-        )
-      ],
-      channelGroups: [
-        an.NotificationChannelGroup(
-            channelGroupkey: 'basic_channel_group',
-            channelGroupName: 'Basic group')
-      ],
-      debug: true,
+    'resource://mipmap/ic_launcher',
+    [
+      an.NotificationChannel(
+        channelGroupKey: 'basic_channel_group',
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelShowBadge: true,
+        criticalAlerts: true,
+        importance: an.NotificationImportance.High,
+        channelDescription: 'Notification channel for basic tests',
+        defaultColor: Color(0xFF003694),
+        ledColor: Colors.white,
+      )
+    ],
+    channelGroups: [
+      an.NotificationChannelGroup(
+          channelGroupkey: 'basic_channel_group',
+          channelGroupName: 'Basic group')
+    ],
+    debug: true,
   );
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (message.data['type'] == 'regeneration-game') {
+    AppUsageTime.instance.resetUsageTime();
+    return;
+  }
   NotificationMessageService service = NotificationMessageService();
 
   await dotenv.load(fileName: ".env");
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  trackingEvents.notificationReceived({"notificationType": message.data["type"]});
+  trackingEvents
+      .notificationReceived({"notificationType": message.data["type"]});
   service.createMessage(message);
 }
 
@@ -226,6 +231,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
       DeviceOrientation.portraitUp,
     ]);
     pushNotification.listenerFirebaseCloudMessagingToken();
+    pushNotification.listenerFirebaseCloudMessagingMessages();
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
     AppUsageTime.instance.startTimer();
@@ -380,7 +386,8 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
     PageRoute.Page.walletPage: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
-    PageRoute.Page.regenerationGameLearningAlert: (args) => RegenerationGameLearningAlert(args),
+    PageRoute.Page.regenerationGameLearningAlert: (args) =>
+        RegenerationGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),

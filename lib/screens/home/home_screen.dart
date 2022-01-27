@@ -31,7 +31,9 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
+import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +53,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with WidgetsBindingObserver, SecureStoreMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  UpdateRecordTimeUsage updateRecordTimeUsage =
+      UpdateRecordTimeUsage.getInstace();
   late AuthStore authStore;
   HomeStore? homeStore;
   late TimelineStore timelineStore;
@@ -83,6 +87,13 @@ class _HomeScreenState extends State<HomeScreen>
 
     controller.addListener(() {
       if (mounted) setState(() {});
+    });
+
+    updateRecordTimeUsage.addListener(() async {
+      homeStore?.stopDailyGoalTimer();
+      await homeStore?.getDailyGoalStats();
+      AppUsageTime.instance.resetUsageTime();
+      await homeStore?.startDailyGoalTimer();
     });
 
     Future.delayed(Duration(milliseconds: 1000), () async {
@@ -262,7 +273,9 @@ class _HomeScreenState extends State<HomeScreen>
                   controller: controller,
                 ),
                 Visibility(
-                  visible: homeStore!.seeCrisp && controller.currentBottomIndex != PageViewController.HIDE_BOTTOMBAR,
+                  visible: homeStore!.seeCrisp &&
+                      controller.currentBottomIndex !=
+                          PageViewController.HIDE_BOTTOMBAR,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton(
