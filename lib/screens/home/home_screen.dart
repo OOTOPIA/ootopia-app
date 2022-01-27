@@ -116,8 +116,6 @@ class _HomeScreenState extends State<HomeScreen>
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
     String type = payload["type"];
     String postId = payload["postId"];
-    print("Payload: $type");
-    print("Payload: $postId");
     var post = await postsRepository.getPostById(postId);
 
     AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
