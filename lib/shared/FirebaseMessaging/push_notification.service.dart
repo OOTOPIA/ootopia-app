@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class PushNotification {
@@ -8,6 +9,8 @@ class PushNotification {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   SecureStoreMixin storage = SecureStoreMixin();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
+  UpdateRecordTimeUsage updateRecordTimeUsage =
+      UpdateRecordTimeUsage.getInstace();
   User? user;
   String? token;
 
@@ -46,4 +49,12 @@ class PushNotification {
     });
   }
 
+  void listenerFirebaseCloudMessagingMessages() {
+    FirebaseMessaging.onMessage.listen((message) async {
+      if (message.data['type'] == 'regeneration-game') {
+        this.updateRecordTimeUsage.notify();
+        return;
+      }
+    });
+  }
 }

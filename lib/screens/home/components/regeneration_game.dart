@@ -133,7 +133,7 @@ class _RegenerationGameState extends State<RegenerationGame>
             width: double.infinity,
             height: 59,
             decoration: BoxDecoration(
-                color: Color(0xffAEAEAE).withOpacity(0.17),
+              color: Color(0xffAEAEAE).withOpacity(0.17),
             ),
             padding: EdgeInsets.only(
               left: getEdgeInsetsHorizontalSize,
@@ -154,8 +154,9 @@ class _RegenerationGameState extends State<RegenerationGame>
                         child: InkWell(
                           onTap: () async {
                             if (editProfileStore.currentUser != null &&
-                                !showPersonal && !showLocal && !showGlobo
-                            ) {
+                                !showPersonal &&
+                                !showLocal &&
+                                !showGlobo) {
                               showModalBottomSheet(
                                   barrierColor: Colors.black.withAlpha(1),
                                   context: context,
@@ -204,12 +205,12 @@ class _RegenerationGameState extends State<RegenerationGame>
                                 ),
                                 GestureDetector(
                                   onTap: () => onTapLearnMore(),
-                                  child: Text( subtext(),
+                                  child: Text(
+                                    subtext(),
                                     style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: LightColors.blue
-                                    ),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: LightColors.blue),
                                   ),
                                 )
                               ],
@@ -263,7 +264,6 @@ class _RegenerationGameState extends State<RegenerationGame>
       ),
     );
   }
-
 
   Widget newDetailedGoal() {
     int minutes = authStore.currentUser?.dailyLearningGoalInMinutes ?? 0;
@@ -597,14 +597,17 @@ class _RegenerationGameState extends State<RegenerationGame>
               width: gameProgressIconSize,
               height: gameProgressIconSize,
               decoration: BoxDecoration(
-                color: selected ? colorSelected : Colors.white.withOpacity(0.35),
-                borderRadius: BorderRadius.all(Radius.circular(gameProgressIconSize)),
+                color:
+                    selected ? colorSelected : Colors.white.withOpacity(0.35),
+                borderRadius:
+                    BorderRadius.all(Radius.circular(gameProgressIconSize)),
               ),
               alignment: Alignment.center,
               child: SvgPicture.asset(
                 gameProgress[type]!,
                 height: selected ? 24 : 18,
-                color: selected ? Colors.white : Theme.of(context).iconTheme.color,
+                color:
+                    selected ? Colors.white : Theme.of(context).iconTheme.color,
               ),
             ),
             Visibility(
@@ -624,11 +627,12 @@ class _RegenerationGameState extends State<RegenerationGame>
               child: Positioned(
                 top: 0,
                 child: CircularPercentIndicator(
-                    radius: gameProgressIconSize,
-                    lineWidth: 2,
-                    backgroundColor: Color(0XFFd4d4d4),
-                    progressColor: Color(0XFFd4d4d4),
-                    percent: 1,),
+                  radius: gameProgressIconSize,
+                  lineWidth: 2,
+                  backgroundColor: Color(0XFFd4d4d4),
+                  progressColor: Color(0XFFd4d4d4),
+                  percent: 1,
+                ),
               ),
             )
           ],
@@ -725,21 +729,24 @@ class _RegenerationGameState extends State<RegenerationGame>
     if (welcomeGuideLearningTrack == null) {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     }
-    if (welcomeGuideLearningTrack != null && !showMap && !showPersonal &&
-    !showPersonal && !showLocal &&
+    if (welcomeGuideLearningTrack != null &&
+        !showMap &&
+        !showPersonal &&
+        !showPersonal &&
+        !showLocal &&
         !showGlobo) {
       openLearningTrack(welcomeGuideLearningTrack!);
     }
   }
 
   String subtext() {
-    if(showMap || showPersonal){
+    if (showMap || showPersonal) {
       return AppLocalizations.of(context)!.personalLevel.toUpperCase();
-    }else if(showLocal){
+    } else if (showLocal) {
       return AppLocalizations.of(context)!.cityLevel.toUpperCase();
-    }else if(showGlobo){
+    } else if (showGlobo) {
       return AppLocalizations.of(context)!.planetaryLevel.toUpperCase();
-    }else{
+    } else {
       return AppLocalizations.of(context)!.learnMore;
     }
   }

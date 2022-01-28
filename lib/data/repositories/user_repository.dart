@@ -198,8 +198,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "countryCode": user.countryCode.toString(),
         "dialCode": user.dialCode.toString(),
         "tagsIds": tagsIds.join(","),
-        "links":  user.links!.length > 0 ? jsonEncode(user.links!) : '',
-    };
+        "links": user.links!.length > 0 ? jsonEncode(user.links!) : '',
+      };
 
       if (user.photoFilePath != null && uploader != null) {
         var result = await uploader.enqueue(
