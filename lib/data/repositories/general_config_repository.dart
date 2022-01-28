@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ootopia_app/data/repositories/api.dart';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class GeneralConfigRepository {
   Future<void> getGeneralConfig();
@@ -20,6 +21,23 @@ class GeneralConfigRepositoryImpl implements GeneralConfigRepository {
       if (response.statusCode == 200) {
         print("GENERAL CONFIG RESPONSE ${response.data}");
         await secureStoreMixin.setGeneralConfig(jsonEncode(response.data));
+      } else {
+        throw Exception('Failed to load general config');
+      }
+    } catch (error) {
+      throw Exception('Failed to load general config. Error: $error');
+    }
+  }
+
+  Future<void> getGlobalGoalLimitTimeInUtc() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      final response = await ApiClient.api()
+          .get("general-config/global_goal_limit_time_in_utc");
+      if (response.statusCode == 200) {
+        prefs.setString(
+            "global_goal_limit_time_in_utc", response.data['value']);
       } else {
         throw Exception('Failed to load general config');
       }

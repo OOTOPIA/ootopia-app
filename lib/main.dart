@@ -236,6 +236,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
     AppUsageTime.instance.startTimer();
     generalConfigRepository.getGeneralConfig();
+    generalConfigRepository.getGlobalGoalLimitTimeInUtc();
     AppTheme.instance(context).addListener(() {
       setState(() {}); //To update theme if user toggle
     });

@@ -92,8 +92,25 @@ class AppUsageTime with SecureStoreMixin {
   }
 
   String get dateNowFormat {
-    DateTime date = new DateTime.now();
-    return "${date.day}/${date.month}/${date.year}";
+    DateTime date = DateTime.now();
+    List<String?> hourResetGame =
+        (prefs?.getString("global_goal_limit_time_in_utc") ?? "").split(':');
+    DateTime resetGame = DateTime.utc(
+        date.year,
+        date.month,
+        date.day,
+        int.tryParse(hourResetGame.length > 0 ? hourResetGame[0]! : '0') ?? 0,
+        int.tryParse(hourResetGame.length > 1 ? hourResetGame[1]! : '0') ?? 0,
+        int.tryParse(hourResetGame.length > 2 ? hourResetGame[2]! : '0') ?? 0,
+        0,
+        0);
+
+    if (date.isAfter(resetGame)) {
+      resetGame = resetGame.add(Duration(days: 1));
+      return "${resetGame.day}/${resetGame.month}/${resetGame.year}";
+    } else {
+      return "${date.day}/${date.month}/${date.year}";
+    }
   }
 
   startTimer() {
