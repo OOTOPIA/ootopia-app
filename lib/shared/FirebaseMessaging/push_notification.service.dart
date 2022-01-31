@@ -4,6 +4,12 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
+enum TypeOfMessage {
+  gratitude_reward,
+  regeneration_game,
+  comments,
+}
+
 class PushNotification {
   static PushNotification? _instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -50,8 +56,9 @@ class PushNotification {
   }
 
   void listenerFirebaseCloudMessagingMessages() {
-    FirebaseMessaging.onMessage.listen((message) async {
-      if (message.data['type'] == 'regeneration-game') {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      if ((message.data['type'] as String).replaceAll('-', '_') ==
+          TypeOfMessage.regeneration_game.toString().substring(14)) {
         this.updateRecordTimeUsage.notify();
         return;
       }
