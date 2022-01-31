@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -57,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen>
   double oozToRewardAfterSendPost = 0;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   late SmartPageController controller;
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   @override
   void initState() {
@@ -75,6 +77,8 @@ class _HomeScreenState extends State<HomeScreen>
         ProfileScreen(null),
       ],
     );
+
+    initDynamicLinks();
 
     controller.addListener(() {
       if (mounted) setState(() {});
@@ -96,6 +100,19 @@ class _HomeScreenState extends State<HomeScreen>
           {"action": "stopService"},
         );
       }
+    });
+  }
+
+  Future<void> initDynamicLinks() async {
+    dynamicLinks.onLink.listen((dynamicLinkData) {
+      print("Meu link gerado ---> ${dynamicLinkData.link.path}");
+      print("Meu link gerado ---> ${dynamicLinkData.link}");
+      print("Meu link gerado ---> ${dynamicLinkData.link.queryParameters}");
+      
+      Navigator.pushNamed(context, dynamicLinkData.link.path);
+    }).onError((error) {
+      print('onLink error');
+      print(error.message);
     });
   }
 

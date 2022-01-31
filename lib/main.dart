@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -75,9 +77,33 @@ import 'shared/page-enum.dart' as PageRoute;
 import 'shared/shared_experience/shared_experience_service.dart';
 import 'shared/snackbar_component.dart';
 import 'theme/theme.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+
+Future init() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid) {
+    // Android will work via Dart initialisation
+    await Firebase.initializeApp(
+        // options: const FirebaseOptions(
+        // apiKey: 'AIzaSyAHAsf51D0A407EklG1bs-5wA7EbyfNFg0',
+        // appId: '1:448618578101:ios:3e76955ab6d49ecaac3efc',
+        // messagingSenderId: '448618578101',
+        // projectId: 'react-native-firebase-testing',
+        // authDomain: 'react-native-firebase-testing.firebaseapp.com',
+        // iosClientId:
+        //     '448618578101-4km55qmv55tguvnivgjdiegb3r0jquv5.apps.googleusercontent.com',
+        // ),
+        );
+  } else {
+    // iOS requires that there is a GoogleService-Info.plist otherwise getInitialLink & getDynamicLink will not work correctly.
+    // iOS also requires you run in release mode to test dynamic links ("flutter run --release").
+    await Firebase.initializeApp();
+  }
+}
 
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  init();
+
   FlutterBackgroundService.initialize(onStartService);
   await dotenv.load(fileName: ".env");
   var configuredApp = new AppConfig(
@@ -143,8 +169,7 @@ void onStartService() async {
   //Se não for, isso indica que o app ainda está aberto, então ainda pode estar contando tempo
   Timer.periodic(Duration(seconds: 30), (timer) async {
     int timeInMs = new DateTime.now().millisecondsSinceEpoch;
-    if (timeInMs - lastUpdateUsageTimeInMs >= 30000 &&
-        lastUpdateUsageTimeInMs > 0) {
+    if (timeInMs - lastUpdateUsageTimeInMs >= 30000 && lastUpdateUsageTimeInMs > 0) {
       await dotenv.load(fileName: ".env");
       AppUsageTime.instance;
       try {
@@ -169,8 +194,7 @@ class ExpensesApp extends StatefulWidget {
 
 class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-  GeneralConfigRepositoryImpl generalConfigRepository =
-      GeneralConfigRepositoryImpl();
+  GeneralConfigRepositoryImpl generalConfigRepository = GeneralConfigRepositoryImpl();
 
   @override
   void initState() {
@@ -225,12 +249,10 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           ),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              UserBloc(UserRepositoryImpl(), PostRepositoryImpl()),
+          create: (BuildContext context) => UserBloc(UserRepositoryImpl(), PostRepositoryImpl()),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              InterestsTagsBloc(InterestsTagsRepositoryImpl()),
+          create: (BuildContext context) => InterestsTagsBloc(InterestsTagsRepositoryImpl()),
         ),
         BlocProvider(
           create: (BuildContext context) => PostBloc(
@@ -308,24 +330,18 @@ class _mainPageState extends State<MainPage> {
   final Map<PageRoute.Page, Widget Function(dynamic)> _fragments = {
     PageRoute.Page.homeScreen: (args) => HomeScreen(args: args),
     PageRoute.Page.timelineScreen: (args) => TimelinePage(args),
-    PageRoute.Page.timelineProfileScreen: (args) =>
-        TimelineScreenProfileScreen(args),
+    PageRoute.Page.timelineProfileScreen: (args) => TimelineScreenProfileScreen(args),
     PageRoute.Page.commentScreen: (args) => CommentScreen(args),
     PageRoute.Page.profileScreen: (args) => ProfileScreen(args),
     PageRoute.Page.myProfileScreen: (args) => ProfileScreen(args),
     PageRoute.Page.loginScreen: (args) => LoginPage(args),
     PageRoute.Page.cameraScreen: (args) => CameraScreen(),
     PageRoute.Page.registerFormScreen: (args) => RegisterFormScreen(args),
-    PageRoute.Page.registerPhoneNumberScreen: (args) =>
-        RegisterPhoneNumberScreen(args),
-    PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
-        RegisterDailyLearningGoalScreen(args),
-    PageRoute.Page.registerGeolocationScreen: (args) =>
-        RegisterGeolocationScreen(args),
-    PageRoute.Page.registerTopInterestsScreen: (args) =>
-        RegisterTopInterestsScreen(args),
-    PageRoute.Page.playerVideoFullScreen: (args) =>
-        PLayerVideoFullscreen(args: args),
+    PageRoute.Page.registerPhoneNumberScreen: (args) => RegisterPhoneNumberScreen(args),
+    PageRoute.Page.registerDailyLearningGoalScreen: (args) => RegisterDailyLearningGoalScreen(args),
+    PageRoute.Page.registerGeolocationScreen: (args) => RegisterGeolocationScreen(args),
+    PageRoute.Page.registerTopInterestsScreen: (args) => RegisterTopInterestsScreen(args),
+    PageRoute.Page.playerVideoFullScreen: (args) => PLayerVideoFullscreen(args: args),
     PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
@@ -357,15 +373,11 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.addLink: (args) => AddLinkScreen(args),
   };
 
-  SharedExperienceService sharedExperienceService =
-      SharedExperienceService.getInstace();
+  SharedExperienceService sharedExperienceService = SharedExperienceService.getInstace();
 
   String get shareMyOpinion {
-    if (MediaQuery.of(context).size.width < 416 &&
-        AppLocalizations.of(context)!.localeName == 'pt') {
-      return AppLocalizations.of(context)!
-          .shareMyOpinion
-          .replaceFirst(" ", "\n");
+    if (MediaQuery.of(context).size.width < 416 && AppLocalizations.of(context)!.localeName == 'pt') {
+      return AppLocalizations.of(context)!.shareMyOpinion.replaceFirst(" ", "\n");
     }
     return AppLocalizations.of(context)!.shareMyOpinion;
   }
@@ -380,8 +392,7 @@ class _mainPageState extends State<MainPage> {
           return SnackBarWidget(
             menu: AppLocalizations.of(context)!.areYouEnjoyingTheOotopiaApp,
             automaticClosing: false,
-            text: AppLocalizations.of(context)!
-                .weWantYourExperienceToBeTheBestItCanBe,
+            text: AppLocalizations.of(context)!.weWantYourExperienceToBeTheBestItCanBe,
             buttons: [
               ButtonSnackBar(
                 text: shareMyOpinion,
@@ -423,14 +434,12 @@ class _mainPageState extends State<MainPage> {
         onGenerateRoute: (settings) {
           final pageName = settings.name;
 
-          final page = _fragments.keys
-              .firstWhere((element) => describeEnum(element) == pageName);
+          final page = _fragments.keys.firstWhere((element) => describeEnum(element) == pageName);
 
           return MaterialPageRoute(
             settings: settings,
-            builder: (context) => (settings.arguments == null
-                ? _fragments[page]!(null)
-                : _fragments[page]!(settings.arguments as Map)),
+            builder: (context) =>
+                (settings.arguments == null ? _fragments[page]!(null) : _fragments[page]!(settings.arguments as Map)),
           );
         },
       ),

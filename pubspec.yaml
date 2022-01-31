@@ -81,12 +81,13 @@ dependencies:
   share_extend: "^2.0.0"
   intl_phone_number_input: ^0.7.0+2
   syncfusion_flutter_sliders: ^19.2.62
-  #firebase_dynamic_links: ^2.0.9
   webview_flutter: ^2.0.14
   smart_page_navigation: ^1.1.2
   dotted_border: ^2.0.0+1
   flutter_background_service: ^0.1.5
   wakelock: ^0.5.6
+  firebase_dynamic_links: ^4.0.4
+  firebase_core: ^1.11.0
 
 dev_dependencies:
   flutter_test:
