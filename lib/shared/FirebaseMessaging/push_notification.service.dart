@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/update_accumulated_ooz.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -8,6 +9,7 @@ enum TypeOfMessage {
   gratitude_reward,
   regeneration_game,
   comments,
+  update_regeneration_game,
 }
 
 class PushNotification {
@@ -17,6 +19,7 @@ class PushNotification {
   UserRepositoryImpl userRepository = UserRepositoryImpl();
   UpdateRecordTimeUsage updateRecordTimeUsage =
       UpdateRecordTimeUsage.getInstace();
+  UpdateAccumulatedOOZ updateAccumulatedOZZ = UpdateAccumulatedOOZ.getInstace();
   User? user;
   String? token;
 
@@ -57,9 +60,15 @@ class PushNotification {
 
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // WARNING keep conditions always first in this function
       if ((message.data['type'] as String).replaceAll('-', '_') ==
           TypeOfMessage.regeneration_game.toString().substring(14)) {
         this.updateRecordTimeUsage.notify();
+        return;
+      }
+      if ((message.data['type'] as String).replaceAll('-', '_') ==
+          TypeOfMessage.update_regeneration_game.toString().substring(14)) {
+        updateAccumulatedOZZ.notify(message.data);
         return;
       }
     });
