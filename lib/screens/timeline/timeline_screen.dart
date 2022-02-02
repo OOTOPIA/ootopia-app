@@ -104,9 +104,7 @@ class _TimelinePageState extends State<TimelinePage>
     OOzDistributionSystem.getInstance().startTimelineView();
 
     _handleIncomingLinks();
-    //TODO firebase dynamic link
-    // initDynamicLinks();
-    //_handleInitialUri();
+    _handleInitialUri();
 
     Future.delayed(Duration.zero, () {
       timelineStore.init(controller);
@@ -119,8 +117,6 @@ class _TimelinePageState extends State<TimelinePage>
       if (!mounted || link == null) return;
       setState(() {
         var linkSplit = link.split("resetPasswordToken=");
-        print('\n\nlinkSplit $linkSplit');
-        print('link $link');
         bool isResetPassord = link.contains("resetPasswordToken=");
         if (isResetPassord) {
           String token = linkSplit[linkSplit.length - 1];
@@ -138,6 +134,7 @@ class _TimelinePageState extends State<TimelinePage>
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
       try {
+        print("\n\n aquiiii");
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
         setState(() {

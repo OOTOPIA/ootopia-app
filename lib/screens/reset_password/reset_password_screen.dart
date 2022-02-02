@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/auth/components/slogan.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -47,10 +49,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     try {
       await authStore.resetPassword(_passwordController.text);
-
       setState(() {
         isLoading = false;
       });
+      if(authStore.currentUser == null){
       Navigator.of(context).pushNamedAndRemoveUntil(
         PageRoute.Page.loginScreen.route,
         ModalRoute.withName('/'),
@@ -61,6 +63,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           }
         },
       );
+      }else{
+        Navigator.of(context).pushReplacementNamed(
+          PageRoute.Page.homeScreen.route,
+        );
+      }
     } catch (error) {
       setState(() {
         isLoading = false;
@@ -100,6 +107,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       isLoading: isLoading,
       child: Stack(
         children: [
+          BackgroundButterflyTop(positioned: -59),
+          Visibility(
+              visible: MediaQuery.of(context).viewInsets.bottom == 0,
+              child: BackgroundButterflyBottom()),
           Container(
             height: MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
@@ -251,7 +262,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                           ),
                                           suffixIcon: GestureDetector(
                                             child: ImageIcon(
-                                              _showPassword == false
+                                              _showRepeatPassword == false
                                                   ? AssetImage(
                                                       "assets/icons/eye-off.png")
                                                   : AssetImage(

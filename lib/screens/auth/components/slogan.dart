@@ -13,19 +13,27 @@ class Slogan extends StatelessWidget {
         Container(
           constraints: BoxConstraints(
             maxHeight: 42,
-            maxWidth: screenWidth <= 320
-                ? 270
-                : screenWidth <= 375
-                    ? 300
-                    : double.infinity,
+            maxWidth:imageSize(screenWidth),
           ),
           child: Image.asset(
             locale.languageCode == 'pt'
                 ? 'assets/icons/slogan_pt.png'
                 : 'assets/icons/slogan_en.png',
+            width: imageSize(screenWidth),
           ),
         ),
       ],
     );
+  }
+
+  double imageSize (screenWidth){
+    if(screenWidth <= 320){
+      return 270;
+    }else if(screenWidth <= 375){
+      return 300;
+    }else{
+      return screenWidth - 65;
+    }
+
   }
 }
