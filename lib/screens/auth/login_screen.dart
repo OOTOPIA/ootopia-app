@@ -483,15 +483,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void resetNavigation() {
-    // if(widget.args == null){
-    //   controller.resetNavigation();
-    // }else if(widget.args?['returnToPageWithArgs']['newPassword'] != null ){
-    //   controller.resetNavigation();
-    // }
-    if(widget.args?['returnToPageWithArgs']['newPassword'] != null ){
-      controller.resetNavigation();
-    }
-
-  }
 }
