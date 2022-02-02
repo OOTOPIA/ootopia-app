@@ -117,7 +117,7 @@ Future main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   an.AwesomeNotifications().initialize(
-    'resource://mipmap/ic_launcher',
+    'resource://drawable/vector',
     [
       an.NotificationChannel(
         channelGroupKey: 'basic_channel_group',
@@ -127,14 +127,15 @@ Future main() async {
         criticalAlerts: true,
         importance: an.NotificationImportance.High,
         channelDescription: 'Notification channel for basic tests',
-        defaultColor: Color(0xFF003694),
+        icon: 'resource://drawable/vector',
         ledColor: Colors.white,
       )
     ],
     channelGroups: [
       an.NotificationChannelGroup(
-          channelGroupkey: 'basic_channel_group',
-          channelGroupName: 'Basic group')
+        channelGroupkey: 'basic_channel_group',
+        channelGroupName: 'Basic group',
+      )
     ],
     debug: true,
   );
