@@ -59,7 +59,7 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="http" android:host="recover-password.ootopia.org" />
+        <data android:scheme="https" android:host="api-ootopia.devmagic.com.br" />
         <data android:scheme="https" />
       </intent-filter>
 
