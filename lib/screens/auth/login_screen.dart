@@ -95,13 +95,9 @@ class _LoginPageState extends State<LoginPage> {
       await authStore.login(
           _emailController.text.trim(), _passwordController.text);
       authStore.setUserIsLogged();
-
-
-      //resetNavigation();
       if(widget.args?['returnToPageWithArgs']['newPassword'] == null ){
         controller.resetNavigation();
       }
-
 
       setState(() {
         isLoading = false;

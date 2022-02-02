@@ -113,10 +113,9 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   void _handleIncomingLinks() {
-    _sub = getLinksStream().listen((link) {
+    _sub = linkStream.listen((link) {
       if (!mounted || link == null) return;
       redefinePassword(link);
-
     }, onError: (Object err) {
       if (!mounted) return;
     });
@@ -139,8 +138,7 @@ class _TimelinePageState extends State<TimelinePage>
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
         redefinePassword(uri.toString());
-      } on PlatformException {
-      } on FormatException catch (err) {
+      }  catch (err) {
         if (!mounted) return;
       }
     }
