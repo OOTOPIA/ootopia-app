@@ -183,25 +183,6 @@ abstract class HomeStoreBase with Store {
   }
 
   @action
-  updateDailyGoalStatsByMessage(dailyGoalStats) async {
-    this.dailyGoalStats = DailyGoalStatsModel(
-      id: dailyGoalStats['id'],
-      dailyGoalInMinutes: dailyGoalStats['dailyGoalInMinutes'],
-      dailyGoalAchieved: dailyGoalStats['dailyGoalAchieved'],
-      dailyGoalEndsAt: dailyGoalStats['dailyGoalEndsAt'],
-      percentageOfDailyGoalAchieved:
-          dailyGoalStats['percentageOfDailyGoalAchieved'],
-      remainingTimeUntilEndOfGame:
-          dailyGoalStats['remainingTimeUntilEndOfGame'],
-      remainingTimeUntilEndOfGameInMs:
-          dailyGoalStats['remainingTimeUntilEndOfGameInMs'],
-      totalAppUsageTimeSoFar: dailyGoalStats['totalAppUsageTimeSoFar'],
-      accumulatedOOZ: dailyGoalStats['accumulatedOOZ'],
-      totalAppUsageTimeSoFarInMs: dailyGoalStats['totalAppUsageTimeSoFarInMs'],
-    );
-  }
-
-  @action
   Future<bool> readyToShowCelebratePage() async {
     if (percentageOfDailyGoalAchieved >= 100 && prefs != null) {
       final result = prefs!.getBool(_personalCelebratePageEnabled);
