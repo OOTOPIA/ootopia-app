@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:awesome_notifications/awesome_notifications.dart' as an;
+import 'package:awesome_notifications/awesome_notifications.dart' as awesomeNotification;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,16 +117,16 @@ Future main() async {
   );
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  an.AwesomeNotifications().initialize(
+  awesomeNotification.AwesomeNotifications().initialize(
     'resource://mipmap/notification_icon',
     [
-      an.NotificationChannel(
+      awesomeNotification.NotificationChannel(
         channelGroupKey: 'basic_channel_group',
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
         channelShowBadge: true,
         criticalAlerts: true,
-        importance: an.NotificationImportance.High,
+        importance: awesomeNotification.NotificationImportance.High,
         channelDescription: 'Notification channel for basic tests',
         icon: 'resource://mipmap/notification_icon',
         ledColor: LightColors.blue,
@@ -134,7 +134,7 @@ Future main() async {
       )
     ],
     channelGroups: [
-      an.NotificationChannelGroup(
+      awesomeNotification.NotificationChannelGroup(
         channelGroupkey: 'basic_channel_group',
         channelGroupName: 'Basic group',
       )
