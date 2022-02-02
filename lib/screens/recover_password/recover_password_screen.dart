@@ -5,6 +5,8 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -147,6 +149,10 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
       isLoading: isLoading,
       child: Stack(
         children: [
+          BackgroundButterflyTop(positioned: -59),
+          Visibility(
+              visible: MediaQuery.of(context).viewInsets.bottom == 0,
+              child: BackgroundButterflyBottom()),
           Container(
             height: MediaQuery.of(context).size.height,
             color: snackBarActive

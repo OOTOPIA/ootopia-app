@@ -106,7 +106,7 @@ class _TimelinePageState extends State<TimelinePage>
     _handleIncomingLinks();
     //TODO firebase dynamic link
     // initDynamicLinks();
-    _handleInitialUri();
+    //_handleInitialUri();
 
     Future.delayed(Duration.zero, () {
       timelineStore.init(controller);
@@ -121,8 +121,10 @@ class _TimelinePageState extends State<TimelinePage>
         var linkSplit = link.split("resetPasswordToken=");
         print('\n\nlinkSplit $linkSplit');
         print('link $link');
-        var token = linkSplit[linkSplit.length - 1];
-        if (token.isNotEmpty) {
+        bool isResetPassord = link.contains("resetPasswordToken=");
+        if (isResetPassord) {
+          String token = linkSplit[linkSplit.length - 1];
+          print('token $token');
           setRecoverPasswordToken(token);
           goToResetPassword();
         }
