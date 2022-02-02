@@ -1,8 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/screens/home/components/home_store.dart';
-import 'package:ootopia_app/shared/FirebaseMessaging/update_accumulated_ozz.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/update_accumulated_ooz.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -13,14 +12,14 @@ enum TypeOfMessage {
   update_regeneration_game,
 }
 
-class PushNotification extends HomeStore {
+class PushNotification {
   static PushNotification? _instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   SecureStoreMixin storage = SecureStoreMixin();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
   UpdateRecordTimeUsage updateRecordTimeUsage =
       UpdateRecordTimeUsage.getInstace();
-  UpdateAccumulatedOZZ updateAccumulatedOZZ = UpdateAccumulatedOZZ.getInstace();
+  UpdateAccumulatedOOZ updateAccumulatedOZZ = UpdateAccumulatedOOZ.getInstace();
   User? user;
   String? token;
 
