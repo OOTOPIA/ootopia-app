@@ -423,8 +423,9 @@ class _RegenerationGameState extends State<RegenerationGame>
                                         padding: const EdgeInsets.only(left: 6),
                                         child: Text(
                                           homeStore.dailyGoalStats != null
-                                              ? currencyFormatter
-                                                  .format(amountOzzWillReceive)
+                                              ? currencyFormatter.format(
+                                                  homeStore.dailyGoalStats!
+                                                      .accumulatedOOZ)
                                               : "0,00",
                                           style: Theme.of(context)
                                               .textTheme

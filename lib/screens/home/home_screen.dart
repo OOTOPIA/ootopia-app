@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -31,6 +30,7 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/update_accumulated_ozz.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   UpdateRecordTimeUsage updateRecordTimeUsage =
       UpdateRecordTimeUsage.getInstace();
+  UpdateAccumulatedOZZ updateAccumulatedOZZ = UpdateAccumulatedOZZ.getInstace();
   late AuthStore authStore;
   HomeStore? homeStore;
   late TimelineStore timelineStore;
@@ -94,6 +95,11 @@ class _HomeScreenState extends State<HomeScreen>
       await homeStore?.getDailyGoalStats();
       AppUsageTime.instance.resetUsageTime();
       await homeStore?.startDailyGoalTimer();
+    });
+
+    updateAccumulatedOZZ.addListener(() {
+      homeStore
+          ?.updateDailyGoalStatsByMessage(updateAccumulatedOZZ.dailyGoalStats);
     });
 
     Future.delayed(Duration(milliseconds: 1000), () async {
