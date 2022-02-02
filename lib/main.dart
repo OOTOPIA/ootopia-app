@@ -68,6 +68,7 @@ import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +118,7 @@ Future main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   an.AwesomeNotifications().initialize(
-    'resource://drawable/vector',
+    'resource://mipmap/notification_icon',
     [
       an.NotificationChannel(
         channelGroupKey: 'basic_channel_group',
@@ -127,8 +128,9 @@ Future main() async {
         criticalAlerts: true,
         importance: an.NotificationImportance.High,
         channelDescription: 'Notification channel for basic tests',
-        icon: 'resource://drawable/vector',
-        ledColor: Colors.white,
+        icon: 'resource://mipmap/notification_icon',
+        ledColor: LightColors.blue,
+        defaultColor: LightColors.blue,
       )
     ],
     channelGroups: [

@@ -34,7 +34,8 @@
       <meta-data android:name="io.flutter.embedding.android.SplashScreenDrawable" android:resource="@drawable/launch_background" />
       <meta-data android:name="io.sentry.debug" android:value="true" />
       <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="high_importance_channel" />
-      <meta-data android:name="com.google.firebase.messaging.default_notification_icon"  android:resource="@drawable/vector" />
+      <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/notification_icon" />
+      <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/blue" />
       <intent-filter>
         <action android:name="FLUTTER_NOTICATION_CLICK" />
         <category android:name="android.intent.category.DEFAULT" />
