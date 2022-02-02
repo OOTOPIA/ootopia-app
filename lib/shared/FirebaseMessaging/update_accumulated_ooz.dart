@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-class UpdateAccumulatedOZZ with ChangeNotifier {
-  static UpdateAccumulatedOZZ? _instance;
+class UpdateAccumulatedOOZ with ChangeNotifier {
+  static UpdateAccumulatedOOZ? _instance;
   var dailyGoalStats;
 
-  static UpdateAccumulatedOZZ getInstace() {
+  static UpdateAccumulatedOOZ getInstace() {
     if (_instance == null) {
-      _instance = UpdateAccumulatedOZZ();
+      _instance = UpdateAccumulatedOOZ();
     }
     return _instance!;
   }
