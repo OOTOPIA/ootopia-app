@@ -115,36 +115,30 @@ class _TimelinePageState extends State<TimelinePage>
   void _handleIncomingLinks() {
     _sub = getLinksStream().listen((link) {
       if (!mounted || link == null) return;
-      setState(() {
-        var linkSplit = link.split("resetPasswordToken=");
-        bool isResetPassord = link.contains("resetPasswordToken=");
-        if (isResetPassord) {
-          String token = linkSplit[linkSplit.length - 1];
-          print('token $token');
-          setRecoverPasswordToken(token);
-          goToResetPassword();
-        }
-      });
+      redefinePassword(link);
+
     }, onError: (Object err) {
       if (!mounted) return;
     });
+  }
+
+  void redefinePassword(String link) {
+    bool isResetPassword = link.contains("resetPasswordToken=");
+    if (isResetPassword) {
+      var linkSplit = link.split("resetPasswordToken=");
+      String token = linkSplit[linkSplit.length - 1];
+      setRecoverPasswordToken(token);
+      goToResetPassword();
+    }
   }
 
   Future<void> _handleInitialUri() async {
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
       try {
-        print("\n\n aquiiii");
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
-        setState(() {
-          var linkSplit = uri.toString().split("resetPasswordToken=");
-          var token = linkSplit[linkSplit.length - 1];
-          if (token.isNotEmpty) {
-            setRecoverPasswordToken(token);
-            goToResetPassword();
-          }
-        });
+        redefinePassword(uri.toString());
       } on PlatformException {
       } on FormatException catch (err) {
         if (!mounted) return;
