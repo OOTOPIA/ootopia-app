@@ -145,6 +145,7 @@ class _CameraAppState extends State<CameraApp>
     controller = CameraController(
       cameras[indexCamera],
       ResolutionPreset.medium,
+      imageFormatGroup: ImageFormatGroup.yuv420,
     );
     await controller!.initialize();
 
