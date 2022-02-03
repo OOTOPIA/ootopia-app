@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -96,7 +95,9 @@ class _LoginPageState extends State<LoginPage> {
       await authStore.login(
           _emailController.text.trim(), _passwordController.text);
       authStore.setUserIsLogged();
-      controller.resetNavigation();
+      if(widget.args?['returnToPageWithArgs']['newPassword'] == null ){
+        controller.resetNavigation();
+      }
 
       setState(() {
         isLoading = false;
@@ -135,6 +136,8 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -475,4 +478,5 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
 }

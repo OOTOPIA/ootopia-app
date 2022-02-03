@@ -12,12 +12,8 @@ class Logo extends StatelessWidget {
       children: [
         Container(
           constraints: BoxConstraints(
-              maxHeight: 175.48,
-              maxWidth: screenWidth <= 320
-                  ? 250
-                  : screenWidth <= 375
-                      ? 290
-                      : double.infinity),
+            maxHeight: 175.48,
+            maxWidth: imageSize(screenWidth),),
           child: Image.asset(
             locale.languageCode == 'pt'
                 ? 'assets/icons/new_logo_pt.png'
@@ -27,4 +23,15 @@ class Logo extends StatelessWidget {
       ],
     );
   }
+
+  double imageSize(screenWidth) {
+    if (screenWidth <= 320) {
+      return 250;
+    } else if (screenWidth <= 375) {
+      return 290;
+    } else {
+      return screenWidth - 65;
+    }
+  }
+
 }

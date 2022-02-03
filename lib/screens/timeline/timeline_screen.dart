@@ -104,8 +104,6 @@ class _TimelinePageState extends State<TimelinePage>
     OOzDistributionSystem.getInstance().startTimelineView();
 
     _handleIncomingLinks();
-    //TODO firebase dynamic link
-    // initDynamicLinks();
     _handleInitialUri();
 
     Future.delayed(Duration.zero, () {
@@ -115,19 +113,22 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   void _handleIncomingLinks() {
-    _sub = getLinksStream().listen((link) {
+    _sub = linkStream.listen((link) {
       if (!mounted || link == null) return;
-      setState(() {
-        var linkSplit = link.split("resetPasswordToken=");
-        var token = linkSplit[linkSplit.length - 1];
-        if (token.isNotEmpty) {
-          setRecoverPasswordToken(token);
-          goToResetPassword();
-        }
-      });
+      redefinePassword(link);
     }, onError: (Object err) {
       if (!mounted) return;
     });
+  }
+
+  void redefinePassword(String link) {
+    bool isResetPassword = link.contains("resetPasswordToken=");
+    if (isResetPassword) {
+      var linkSplit = link.split("resetPasswordToken=");
+      String token = linkSplit[linkSplit.length - 1];
+      setRecoverPasswordToken(token);
+      goToResetPassword();
+    }
   }
 
   Future<void> _handleInitialUri() async {
@@ -136,16 +137,8 @@ class _TimelinePageState extends State<TimelinePage>
       try {
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
-        setState(() {
-          var linkSplit = uri.toString().split("resetPasswordToken=");
-          var token = linkSplit[linkSplit.length - 1];
-          if (token.isNotEmpty) {
-            setRecoverPasswordToken(token);
-            goToResetPassword();
-          }
-        });
-      } on PlatformException {
-      } on FormatException catch (err) {
+        redefinePassword(uri.toString());
+      }  catch (err) {
         if (!mounted) return;
       }
     }
