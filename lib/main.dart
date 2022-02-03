@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:awesome_notifications/awesome_notifications.dart' as an;
+import 'package:awesome_notifications/awesome_notifications.dart' as awesomeNotification;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,6 +68,7 @@ import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
@@ -116,25 +117,27 @@ Future main() async {
   );
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  an.AwesomeNotifications().initialize(
-    'resource://mipmap/ic_launcher',
+  awesomeNotification.AwesomeNotifications().initialize(
+    'resource://mipmap/notification_icon',
     [
-      an.NotificationChannel(
+      awesomeNotification.NotificationChannel(
         channelGroupKey: 'basic_channel_group',
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
         channelShowBadge: true,
         criticalAlerts: true,
-        importance: an.NotificationImportance.High,
+        importance: awesomeNotification.NotificationImportance.High,
         channelDescription: 'Notification channel for basic tests',
-        defaultColor: Color(0xFF003694),
-        ledColor: Colors.white,
+        icon: 'resource://mipmap/notification_icon',
+        ledColor: LightColors.blue,
+        defaultColor: LightColors.blue,
       )
     ],
     channelGroups: [
-      an.NotificationChannelGroup(
-          channelGroupkey: 'basic_channel_group',
-          channelGroupName: 'Basic group')
+      awesomeNotification.NotificationChannelGroup(
+        channelGroupkey: 'basic_channel_group',
+        channelGroupName: 'Basic group',
+      )
     ],
     debug: true,
   );

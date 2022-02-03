@@ -9,6 +9,7 @@ import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/data/models/notifications/notification_model.dart'
     as model;
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class NotificationMessageService {
   AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
@@ -37,18 +38,22 @@ class NotificationMessageService {
 
     AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: message.hashCode,
-          channelKey: 'basic_channel',
-          title: title,
-          body: body,
-          largeIcon: notification.photoURL,
-          icon: 'resource://mipmap/ic_launcher',
-          payload: {"postId": notification.postId, "type": notification.type}),
+        id: message.hashCode,
+        channelKey: 'basic_channel',
+        title: title,
+        body: body,
+        largeIcon: notification.photoURL,
+        icon: 'resource://mipmap/notification_icon',
+        notificationLayout: NotificationLayout.BigText,
+        color: LightColors.blue,
+        backgroundColor: LightColors.blue,
+        payload: {"postId": notification.postId, "type": notification.type},
+      ),
       actionButtons: [
         NotificationActionButton(
           key: 'accept',
           label: buttonText,
-          color: Color(0xFF003694),
+          color: LightColors.blue,
         ),
       ],
     );
