@@ -101,18 +101,18 @@ class _CameraAppState extends State<CameraApp>
       if (statuses[Permission.storage] == PermissionStatus.granted &&
           statuses[Permission.camera] == PermissionStatus.granted &&
           statuses[Permission.microphone] == PermissionStatus.granted) {
-        checkCameraAvailability();
+        await checkCameraAvailability();
         getLastVideoThumbnail();
         setState(() {
           permissionsIsNeeded = false;
         });
       }
     } else {
+      await checkCameraAvailability();
+      getLastVideoThumbnail();
       setState(() {
         permissionsIsNeeded = false;
       });
-      checkCameraAvailability();
-      getLastVideoThumbnail();
     }
   }
 
@@ -129,11 +129,11 @@ class _CameraAppState extends State<CameraApp>
 
   @override
   void dispose() {
-    super.dispose();
     if (controller != null) {
       controller!.dispose();
     }
     _animController.dispose();
+    super.dispose();
   }
 
   void setCamera() async {

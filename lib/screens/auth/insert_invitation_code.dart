@@ -271,47 +271,90 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(bottom: 20, top: 48),
-                              child: Container(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(40.0),
-                                          side: BorderSide.none),
-                                    ),
-                                    minimumSize: MaterialStateProperty.all(
-                                      Size(60, 55),
-                                    ),
-                                    elevation:
-                                        MaterialStateProperty.all<double>(0.0),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Color(0xff003694)),
-                                    padding:
-                                        MaterialStateProperty.all<EdgeInsets>(
-                                            EdgeInsets.all(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: 80,
+                                    margin: EdgeInsets.only(right: 16),
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(40.0),
+                                              side: BorderSide.none),
+                                        ),
+                                        minimumSize: MaterialStateProperty.all(
+                                          Size(10, 10),
+                                        ),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                0.0),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Color(0xffFFFFFF)),
+                                        padding: MaterialStateProperty
+                                            .all<EdgeInsets>(EdgeInsets.all(
                                                 GlobalConstants.of(context)
                                                     .spacingNormal)),
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(context)!
-                                        .continueAccess,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      ),
+                                      child: Text(
+                                        AppLocalizations.of(context)!.skip,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        registerController.codeController
+                                            .clear();
+                                        goToRegisterPhase();
+                                      },
                                     ),
                                   ),
-                                  onPressed: () {
-                                    if (!visibleValidStatusCode) {
-                                      registerController.codeController.clear();
-                                    }
-                                    goToRegisterPhase();
-                                  },
-                                ),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(40.0),
+                                              side: BorderSide.none),
+                                        ),
+                                        minimumSize: MaterialStateProperty.all(
+                                          Size(60, 55),
+                                        ),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                0.0),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Color(0xff003694)),
+                                        padding: MaterialStateProperty
+                                            .all<EdgeInsets>(EdgeInsets.all(
+                                                GlobalConstants.of(context)
+                                                    .spacingNormal)),
+                                      ),
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .continueAccess,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        goToRegisterPhase();
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
