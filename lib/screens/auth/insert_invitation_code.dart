@@ -85,7 +85,7 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
   void onInsertInvitationCode() async {
     if (registerController.codeController.text.isEmpty) {
       setState(() {
-        visibleValidStatusCode = true;
+        visibleValidStatusCode = false;
         showValidationErrorText = false;
       });
     } else if (registerController.codeController.text.length < 4 ||
@@ -271,90 +271,53 @@ class _InsertInvitationCodeState extends State<InsertInvitationCode> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(bottom: 20, top: 48),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 80,
-                                    margin: EdgeInsets.only(right: 16),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(40.0),
-                                              side: BorderSide.none),
-                                        ),
-                                        minimumSize: MaterialStateProperty.all(
-                                          Size(10, 10),
-                                        ),
-                                        elevation:
-                                            MaterialStateProperty.all<double>(
-                                                0.0),
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Color(0xffFFFFFF)),
-                                        padding: MaterialStateProperty
-                                            .all<EdgeInsets>(EdgeInsets.all(
-                                                GlobalConstants.of(context)
-                                                    .spacingNormal)),
-                                      ),
-                                      child: Text(
-                                        AppLocalizations.of(context)!.skip,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        registerController.codeController
-                                            .clear();
-                                        goToRegisterPhase();
-                                      },
-                                    ),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
+                                        side: BorderSide.none),
                                   ),
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(40.0),
-                                              side: BorderSide.none),
-                                        ),
-                                        minimumSize: MaterialStateProperty.all(
-                                          Size(60, 55),
-                                        ),
-                                        elevation:
-                                            MaterialStateProperty.all<double>(
-                                                0.0),
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Color(0xff003694)),
-                                        padding: MaterialStateProperty
-                                            .all<EdgeInsets>(EdgeInsets.all(
-                                                GlobalConstants.of(context)
-                                                    .spacingNormal)),
-                                      ),
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .continueAccess,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        goToRegisterPhase();
-                                      },
-                                    ),
+                                  minimumSize: MaterialStateProperty.all(
+                                    Size(60, 55),
                                   ),
-                                ],
+                                  elevation:
+                                      MaterialStateProperty.all<double>(0.0),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xff003694)),
+                                  padding:
+                                      MaterialStateProperty.all<EdgeInsets>(
+                                          EdgeInsets.all(
+                                              GlobalConstants.of(context)
+                                                  .spacingNormal)),
+                                ),
+                                child: Text(
+                                  registerController
+                                          .codeController.text.isNotEmpty
+                                      ? AppLocalizations.of(context)!
+                                          .continueAccess
+                                      : AppLocalizations.of(context)!.skip,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  if (registerController
+                                          .codeController.text.isNotEmpty &&
+                                      visibleValidStatusCode &&
+                                      !showValidationErrorText) {
+                                    goToRegisterPhase();
+                                  }
+                                  if (registerController
+                                      .codeController.text.isEmpty) {
+                                    goToRegisterPhase();
+                                  }
+                                },
                               ),
                             ),
                           ],
