@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:awesome_notifications/awesome_notifications.dart' as awesomeNotification;
+import 'package:awesome_notifications/awesome_notifications.dart'
+    as awesomeNotification;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -195,9 +196,9 @@ void onStartService() async {
   //tempo de visualização da timeline foi há mais de 30 segundos atrás
   //Se for, enviamos o tempo de visualização para a api, pois esse tempo será convertido em OOZ
   //Se não for, isso indica que o app ainda está aberto, então ainda pode estar contando tempo
-  Timer.periodic(Duration(seconds: 30), (timer) async {
+  Timer.periodic(Duration(seconds: 3), (timer) async {
     int timeInMs = new DateTime.now().millisecondsSinceEpoch;
-    if (timeInMs - lastUpdateUsageTimeInMs >= 30000 &&
+    if (timeInMs - lastUpdateUsageTimeInMs >= 3000 &&
         lastUpdateUsageTimeInMs > 0) {
       await dotenv.load(fileName: ".env");
       AppUsageTime.instance;
