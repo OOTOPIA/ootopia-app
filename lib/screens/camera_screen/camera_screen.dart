@@ -9,6 +9,7 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -163,13 +164,16 @@ class _CameraAppState extends State<CameraApp>
   }
 
   Future<Map<String, String>> getHeaders() async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
+
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return {
         'Content-Type': 'application/json; charset=UTF-8',
       };
     }
-    String? token = await getAuthToken();
+    String? token = prefs.getAuthToken();
 
     if (token == null) {
       return {

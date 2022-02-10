@@ -7,7 +7,7 @@ import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 part "timeline_store.g.dart";
@@ -73,7 +73,8 @@ abstract class TimelineStoreBase with Store {
   Stopwatch _watch = Stopwatch();
   Timer? _timelineViewTimer;
   String _prefsKey = "timeline_view_time";
-  SharedPreferences? prefs;
+  SharedPreferencesInstance? prefs;
+
   SmartPageController? _smartPageController;
 
   int _timelineViewtimeSoFarInMs = 0;
@@ -85,15 +86,15 @@ abstract class TimelineStoreBase with Store {
   @action
   startTimelineViewTimer() async {
     if (prefs == null) {
-      prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferencesInstance.getInstace();
     }
 
     if (!_watch.isRunning) {
       _watch.start();
     }
 
-    if (prefs!.getInt(_prefsKey) != null) {
-      _timelineViewtimeSoFarInMs = prefs!.getInt(_prefsKey)!;
+    if (prefs!.getTimelineViewTime() != null) {
+      _timelineViewtimeSoFarInMs = prefs!.getTimelineViewTime()!;
       if (_timelineViewtimeSoFarInMs > 0) {
         if (_watch.isRunning) {
           _watch.stop();
@@ -112,7 +113,7 @@ abstract class TimelineStoreBase with Store {
           _timelineViewtimeSoFarInMs++;
           if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
             //A cada 5 segundos armazenamos no storage o tempo cronometrado
-            prefs!.setInt(_prefsKey, _timelineViewtimeSoFarInMs);
+            prefs!.setTimelineViewTime(_timelineViewtimeSoFarInMs);
           }
         }
       });
@@ -188,7 +189,7 @@ abstract class TimelineStoreBase with Store {
         final repository = PostRepositoryImpl();
         await repository.recordTimelineWatched(_timelineViewtimeSoFarInMs);
         _timelineViewtimeSoFarInMs = 0;
-        prefs!.setInt(_prefsKey, 0);
+        prefs!.setTimelineViewTime(0);
         _sendingToApi = false;
       });
     }

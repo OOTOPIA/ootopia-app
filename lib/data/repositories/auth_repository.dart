@@ -9,6 +9,7 @@ import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 abstract class AuthRepository {
@@ -25,7 +26,13 @@ const Map<String, String> API_HEADERS = {
 
 class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+  late SharedPreferencesInstance prefs;
 
+  AuthRepositoryImpl() {
+    SharedPreferencesInstance.getInstace().then((value) {
+      prefs = value;
+    });
+  }
   Future<Map<String, String>> getRecoverPasswordHeader() async {
     String recoverPasswordToken = await getRecoverPasswordToken();
     if (recoverPasswordToken.isEmpty) {
@@ -48,7 +55,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
     if (response.statusCode == 200) {
       User user = User.fromJson(json.decode(response.body));
 
-      await setAuthToken(user.token!);
+      // await setAuthToken(user.token!);
+      await prefs.setAuthToken(user.token!);
       await setCurrentUser(response.body);
 
       return user;

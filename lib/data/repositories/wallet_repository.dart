@@ -8,6 +8,7 @@ import 'package:ootopia_app/data/repositories/api.dart';
 import 'dart:convert';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 abstract class WalletRepository {
   Future<Wallet> getWallet(String userId);
@@ -21,12 +22,14 @@ const Map<String, String> API_HEADERS = {
 
 class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
   Future<Map<String, String>> getHeaders() async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
 
-    String? token = await getAuthToken();
+    String? token = prefs.getAuthToken();
     if (token == null) return API_HEADERS;
 
     return {
@@ -73,7 +76,6 @@ class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
       );
 
       if (response.statusCode == 200) {
-
         return (response.data as List)
             .map((i) => WalletTransfer.fromJson(i))
             .toList();

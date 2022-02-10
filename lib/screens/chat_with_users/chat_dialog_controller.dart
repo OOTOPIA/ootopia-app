@@ -1,14 +1,12 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 class ChatDialogController {
   static ChatDialogController? _instance;
-  SharedPreferences? _prefs;
-
-  String _lastChatOpenedDateKey = "last_chat_opened_date";
-  String _chatOpenedKey = "chat_opened";
-
+  SharedPreferencesInstance? _prefs;
   ChatDialogController() {
-    SharedPreferences.getInstance().then((p) => _prefs = p);
+    SharedPreferencesInstance.getInstace().then((value) {
+      _prefs = value;
+    });
   }
 
   //Method created just so that SharedPreferences is instantiated
@@ -19,7 +17,7 @@ class ChatDialogController {
 
   Future<bool> getChatHasAlreadyBeenOpenedToday() async {
     DateTime now = new DateTime.now();
-    int? lastChatOpenedDateTimeMs = _prefs!.getInt(_lastChatOpenedDateKey);
+    int? lastChatOpenedDateTimeMs = _prefs?.getLastChatOpenedDateKey();
     if (lastChatOpenedDateTimeMs == null) {
       return false;
     }
@@ -34,19 +32,19 @@ class ChatDialogController {
       setChatOpened(false);
     }
 
-    return sameDate && _prefs!.getBool(_chatOpenedKey) == true;
+    return sameDate && _prefs?.getChatOpened() == true;
   }
 
   setChatOpened(bool value) {
-    _prefs!.setBool(_chatOpenedKey, value);
+    _prefs?.setChatOpened(value);
     if (value) {
-      _prefs!.setInt(
-          _lastChatOpenedDateKey, new DateTime.now().millisecondsSinceEpoch);
+      _prefs
+          ?.setLastChatOpenedDateKey(new DateTime.now().millisecondsSinceEpoch);
     }
   }
 
   resetSavedData() {
-    _prefs!.remove(_chatOpenedKey);
-    _prefs!.remove(_lastChatOpenedDateKey);
+    _prefs?.removeChatOpened();
+    _prefs?.removeLastChatOpenedDateKey();
   }
 }

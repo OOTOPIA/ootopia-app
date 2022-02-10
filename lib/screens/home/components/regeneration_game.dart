@@ -16,11 +16,11 @@ import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerario
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerationGame extends StatefulWidget {
@@ -56,7 +56,7 @@ class _RegenerationGameState extends State<RegenerationGame>
   SmartPageController controller = SmartPageController.getInstance();
   LearningTracksModel? welcomeGuideLearningTrack;
   LearningTracksStore learningTracksStore = LearningTracksStore();
-  SharedPreferences? prefs;
+  SharedPreferencesInstance? prefs;
   bool showMap = false;
   bool showPersonal = false;
   bool showLocal = false;
@@ -92,7 +92,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
     editProfileStore.getUser();
     Future.delayed(Duration.zero, () async {
-      prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferencesInstance.getInstace();
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     });
     Future.delayed(Duration(milliseconds: 300), () {
@@ -471,7 +471,7 @@ class _RegenerationGameState extends State<RegenerationGame>
         } else {
           if (type == 'personal') {
             bool dontShowAgainRegenerationGamePega =
-                prefs?.getBool('dontShowAgainRegenerationGamePega') ?? false;
+                prefs?.getDontShowAgainRegenerationGamePega() ?? false;
             if (dontShowAgainRegenerationGamePega) {
               if (showMap) {
                 controller.currentBottomIndex =

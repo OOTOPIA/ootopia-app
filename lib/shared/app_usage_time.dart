@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AppUsageTime with SecureStoreMixin {
   static AppUsageTime? _instance;
@@ -12,26 +14,20 @@ class AppUsageTime with SecureStoreMixin {
   Stopwatch _watch = Stopwatch();
   Timer? _timer;
   int usageTimeSoFarInMilliseconds = 0;
-  String _prefsKey = "last_usage_time";
-  String _prefsKeytime = "feedback_time";
-  String _prefsKeyToday = "feedback_today";
-  String _prefsKeydate = "feedback_last_usage_date";
-  String _prefsPendingTimeKey = "last_pending_usage_time";
-  String _prefsPendingDateKey = "last_pending_usage_date";
-  SharedPreferences? prefs;
+  SharedPreferencesInstance? prefs;
   SharedExperienceService sharedExperienceService =
       SharedExperienceService.getInstace();
 
   AppUsageTime() {
-    SharedPreferences.getInstance().then((_prefs) async {
+    SharedPreferencesInstance.getInstace().then((_prefs) async {
       prefs = _prefs;
-
-      if (prefs!.getBool(_prefsKeyToday) ?? false) {
+      await dotenv.load(fileName: ".env");
+      if (prefs!.getFeedbackToday() ?? false) {
         sharedExperienceService.displayedToday = true;
       }
 
-      if (prefs!.getInt(_prefsPendingTimeKey) != null) {
-        usageTimeSoFarInMilliseconds = prefs!.getInt(_prefsPendingTimeKey)!;
+      if (prefs!.getLastPendingUsageTime() != null) {
+        usageTimeSoFarInMilliseconds = prefs!.getLastPendingUsageTime()!;
         if (usageTimeSoFarInMilliseconds > 0) {
           if (_watch.isRunning) {
             _watch.stop();
@@ -41,10 +37,10 @@ class AppUsageTime with SecureStoreMixin {
             _watch.start();
           }
         } else {
-          prefs!.setString(_prefsPendingDateKey, dateNowFormat);
+          prefs!.setLastPendingUsageDate(dateNowFormat);
         }
       } else {
-        prefs!.setString(_prefsPendingDateKey, dateNowFormat);
+        prefs!.setLastPendingUsageDate(dateNowFormat);
       }
     });
   }
@@ -56,31 +52,31 @@ class AppUsageTime with SecureStoreMixin {
     if (_watch.isRunning) {
       usageTimeSoFarInMilliseconds += 1000;
       if (prefs == null) {
-        prefs = await SharedPreferences.getInstance();
+        prefs = await SharedPreferencesInstance.getInstace();
       }
       //A cada segundo armazenamos no storage o tempo cronometrado
       if (await getUserIsLoggedIn()) {
-        prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
-        int lastTime = prefs!.getInt(_prefsKeytime) ?? 0;
-        bool displayedToday = prefs!.getBool(_prefsKeyToday) ?? false;
-        String? displayedDate = prefs!.getString(_prefsKeydate);
+        prefs!.setLastUsageTime(usageTimeSoFarInMilliseconds);
+        int lastTime = prefs!.getFeedbackTime() ?? 0;
+        bool displayedToday = prefs!.getFeedbackToday() ?? false;
+        String? displayedDate = prefs!.getFeedbackLastUsageDate();
         String today = dateNowFormat;
 
         if (displayedDate == null || displayedDate != today) {
-          prefs!.setString(_prefsKeydate, today);
-          prefs!.setBool(_prefsKeyToday, false);
+          prefs!.setFeedbackLastUsageDate(today);
+          prefs!.setFeedbackToday(false);
           sharedExperienceService.displayedToday = false;
           lastTime = 0;
           displayedToday = false;
         }
         if (lastTime >= 600000 && !displayedToday) {
           try {
-            prefs!.setBool(_prefsKeyToday, true);
+            prefs!.setFeedbackToday(true);
             sharedExperienceService.displayedToday = true;
             sharedExperienceService.notify();
           } catch (e) {}
         }
-        prefs!.setInt(_prefsKeytime, lastTime + 1000);
+        prefs!.setFeedbackTime(lastTime + 1000);
         if (await FlutterBackgroundService().isServiceRunning()) {
           FlutterBackgroundService().sendData({
             "action": "ON_UPDATE_USAGE_TIME",
@@ -94,7 +90,7 @@ class AppUsageTime with SecureStoreMixin {
   String get dateNowFormat {
     DateTime date = DateTime.now();
     List<String?> hourResetGame =
-        (prefs?.getString("global_goal_limit_time_in_utc") ?? "").split(':');
+        (prefs?.getGlobalGoalLimitTimeInUtc() ?? "").split(':');
     DateTime resetGame = DateTime.utc(
         date.year,
         date.month,
@@ -126,14 +122,14 @@ class AppUsageTime with SecureStoreMixin {
     if (_watch.isRunning) {
       _watch.stop();
     }
-    prefs!.setInt(_prefsPendingTimeKey, usageTimeSoFarInMilliseconds);
+    prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
   }
 
   resetUsageTime() {
-    if (prefs != null && prefs!.getInt(_prefsKey) != null) {
+    if (prefs != null && prefs!.getLastUsageTime() != null) {
       usageTimeSoFarInMilliseconds = 0;
-      prefs!.setInt(_prefsKey, usageTimeSoFarInMilliseconds);
-      prefs!.setInt(_prefsPendingTimeKey, usageTimeSoFarInMilliseconds);
+      prefs!.setLastUsageTime(usageTimeSoFarInMilliseconds);
+      prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
     }
   }
 
@@ -146,7 +142,7 @@ class AppUsageTime with SecureStoreMixin {
       //Sendo assim o registro será enviado quando o app for aberto novamente
       await Future.delayed(Duration.zero, () async {
         var _usersRepository = UserRepositoryImpl();
-        String? pendingDate = prefs!.getString(_prefsPendingDateKey);
+        String? pendingDate = prefs!.getLastPendingUsageDate();
         if (pendingDate != null && pendingDate == dateNowFormat) {
           await _usersRepository.recordTimeUserUsedApp(ms!);
         }

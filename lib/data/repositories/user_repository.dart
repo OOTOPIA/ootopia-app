@@ -12,6 +12,7 @@ import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 abstract class UserRepository {
   Future<Profile> getProfile(String id);
@@ -32,12 +33,14 @@ const Map<String, String> API_HEADERS = {
 
 class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future<Map<String, String>> getHeaders([String? contentType]) async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
 
-    String? token = await getAuthToken();
+    String? token = prefs.getAuthToken();
     if (token == null) return API_HEADERS;
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
@@ -240,7 +243,10 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
 
   @override
   Future recordTimeUserUsedApp(int timeInMilliseconds) async {
-    bool loggedIn = await getUserIsLoggedIn();
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
+
+    bool loggedIn = prefs.getAuthToken() != null;
     if (!loggedIn || timeInMilliseconds <= 0) {
       return;
     }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class RegenerationGameLearningAlert extends StatefulWidget {
@@ -30,7 +29,7 @@ class _RegenerationGameLearningAlertState
   late String _secondText;
   late String _imageRights;
   String? _secondTextPt2;
-  SharedPreferences? prefs;
+  SharedPreferencesInstance? prefs;
   bool dontShowAgain = false;
 
   SmartPageController controller = SmartPageController.getInstance();
@@ -47,7 +46,6 @@ class _RegenerationGameLearningAlertState
         statusBarBrightness: Brightness.dark,
       ));
     }
-
   }
 
   @override
@@ -96,7 +94,7 @@ class _RegenerationGameLearningAlertState
     super.initState();
     Future.delayed(Duration.zero, () async {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
-      prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferencesInstance.getInstace();
     });
   }
 
@@ -276,8 +274,7 @@ class _RegenerationGameLearningAlertState
                                 ]
                               ],
                             ),
-                            SizedBox(
-                                height: 35),
+                            SizedBox(height: 35),
                             if (widget.args["type"] == 'personal') ...[
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -297,9 +294,9 @@ class _RegenerationGameLearningAlertState
                                           Colors.transparent),
                                       activeColor: Colors.white,
                                       onChanged: (value) {
-                                        prefs!.setBool(
-                                            'dontShowAgainRegenerationGamePega',
-                                            !dontShowAgain);
+                                        prefs
+                                            ?.setDontShowAgainRegenerationGamePega(
+                                                !dontShowAgain);
                                         setState(() {
                                           dontShowAgain = !dontShowAgain;
                                         });
