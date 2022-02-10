@@ -4,6 +4,8 @@ import 'package:ootopia_app/data/models/general_config/general_config_model.dart
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'dart:convert';
 
+import 'package:ootopia_app/shared/shared_preferences.dart';
+
 class SecureStoreMixin {
   final secureStore = new FlutterSecureStorage();
 
@@ -102,7 +104,10 @@ class SecureStoreMixin {
   }
 
   Future<bool> getUserIsLoggedIn() async {
-    String? token = await this.getAuthToken();
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
+
+    String? token = prefs.getAuthToken();
     return token != null;
   }
 

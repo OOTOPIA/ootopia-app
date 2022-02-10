@@ -12,6 +12,7 @@ import 'package:ootopia_app/data/repositories/api.dart';
 import 'dart:convert';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 abstract class PostRepository {
   Future<List<TimelinePost>> getPosts(
@@ -29,12 +30,15 @@ const Map<String, String> API_HEADERS = {
 
 class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   Future<Map<String, String>> getHeaders([String? contentType]) async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
+
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
 
-    String? token = await getAuthToken();
+    String? token = prefs.getAuthToken();
     if (token == null) return API_HEADERS;
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};

@@ -6,7 +6,7 @@ import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 part 'home_store.g.dart';
 
@@ -17,7 +17,7 @@ abstract class HomeStoreBase with Store {
   String _personalCelebratePageEnabled = "show_personal_celebrate_page";
   String _personalCelebratePageAlreadyOpened =
       "personal_celebrate_page_already_opened";
-  SharedPreferences? prefs;
+  SharedPreferencesInstance? prefs;
 
   BuildContext? context;
 
@@ -78,7 +78,7 @@ abstract class HomeStoreBase with Store {
     _timerIsStarted = false;
     _totalAppUsageTimeSoFarInMs = 0;
     if (prefs == null) {
-      prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferencesInstance.getInstace();
     }
     if (!_watch.isRunning) {
       _watch.start();
@@ -122,8 +122,8 @@ abstract class HomeStoreBase with Store {
                 (progressPerc >= 100 ? 100 : progressPerc);
           }
           if (percentageOfDailyGoalAchieved >= 100) {
-            prefs!.setBool(_personalCelebratePageEnabled, true);
-            if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == false &&
+            prefs?.setPersonalCelebratePageEnabled(true);
+            if (prefs?.getPersonalCelebratePageAlreadyOpened() == false &&
                 !totalIsSentToApi) {
               totalIsSentToApi = true;
               await AppUsageTime.instance
@@ -131,13 +131,13 @@ abstract class HomeStoreBase with Store {
               AppUsageTime.instance.resetUsageTime();
             }
           } else {
-            if (prefs!.getBool(_personalCelebratePageAlreadyOpened) == true) {
+            if (prefs?.getPersonalCelebratePageAlreadyOpened() == true) {
               AppUsageTime.instance.resetUsageTime();
               percentageOfDailyGoalAchieved = 0;
               _totalAppUsageTimeSoFarInMs = 0;
             }
-            prefs!.setBool(_personalCelebratePageEnabled, false);
-            prefs!.setBool(_personalCelebratePageAlreadyOpened, false);
+            prefs?.setPersonalCelebratePageEnabled(false);
+            prefs?.setPersonalCelebratePageAlreadyOpened(false);
           }
           remainingTime = _msToTime(_remainingTimeInMs);
           totalAppUsageTimeSoFar =
@@ -204,8 +204,8 @@ abstract class HomeStoreBase with Store {
   @action
   Future<bool> readyToShowCelebratePage() async {
     if (percentageOfDailyGoalAchieved >= 100 && prefs != null) {
-      final result = prefs!.getBool(_personalCelebratePageEnabled);
-      final alreadyOpened = prefs!.getBool(_personalCelebratePageAlreadyOpened);
+      final result = prefs?.getPersonalCelebratePageEnabled();
+      final alreadyOpened = prefs?.getPersonalCelebratePageAlreadyOpened();
       return (result != null &&
               result &&
               (alreadyOpened == null || !alreadyOpened))
@@ -218,7 +218,7 @@ abstract class HomeStoreBase with Store {
   @action
   setCelebratePageAlreadyOpened(bool show) {
     if (prefs != null) {
-      prefs!.setBool(_personalCelebratePageAlreadyOpened, show);
+      prefs?.setPersonalCelebratePageAlreadyOpened(show);
     }
   }
 

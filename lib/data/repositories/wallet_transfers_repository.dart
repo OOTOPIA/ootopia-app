@@ -4,6 +4,7 @@ import 'package:ootopia_app/data/utils/fetch-data-exception.dart';
 import 'dart:convert';
 
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 abstract class WalletTransfersRepository {
   Future<void> transferOOZToPost(String postId, double balance,
@@ -18,12 +19,14 @@ class WalletTransfersRepositoryImpl
     with SecureStoreMixin
     implements WalletTransfersRepository {
   Future<Map<String, String>> getHeaders() async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
     }
 
-    String? token = await getAuthToken();
+    String? token = prefs.getAuthToken();
     if (token == null) return API_HEADERS;
 
     return {

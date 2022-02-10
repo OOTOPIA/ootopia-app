@@ -13,7 +13,7 @@ class InitialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     homeStore = Provider.of<HomeStore>(context);
-    bool isShow = homeStore?.prefs?.getBool("showSplash") ?? true;
+    bool isShow = homeStore?.prefs?.getShowSplash() ?? true;
     if (isShow) return SplashScreen(null);
     return HomeScreen();
   }

@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:package_info/package_info.dart';
 
 class ApiClient {
@@ -54,12 +55,14 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
   };
 
   Future<Map<String, String>> getHeaders([String? contentType]) async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return _headers;
     }
 
-    String? token = await getAuthToken();
+    String? token = prefs.getAuthToken();
     if (token == null) return _headers;
 
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};

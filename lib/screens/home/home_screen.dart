@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
 
     WidgetsBinding.instance!.addObserver(this);
-    homeStore?.prefs?.setBool("showSplash", false);
+    homeStore?.prefs?.setShowSplash(false);
 
     controller = SmartPageController.newInstance(
       context: context,
@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen>
       case AppLifecycleState.detached:
         //homeStore?.stopDailyGoalTimer();
         //print("app in detached");
-        homeStore?.prefs?.setBool("showSplash", true);
+        homeStore?.prefs?.setShowSplash(true);
         break;
     }
   }
