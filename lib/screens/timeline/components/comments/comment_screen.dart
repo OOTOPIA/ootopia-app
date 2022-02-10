@@ -100,7 +100,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               children: [
                 BackgroundButterflyTop(positioned: -59),
                 Visibility(
-                    visible: !focusNode.hasFocus ,
+                    visible: !focusNode.hasFocus,
                     child: BackgroundButterflyBottom(positioned: -50)),
                 SingleChildScrollView(
                     child: ConstrainedBox(
@@ -352,23 +352,26 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     padding: EdgeInsets.only(
                         bottom: 24, left: 24, right: 24, top: 24),
                     child: TextField(
+                      autocorrect: true,
+                      enableSuggestions: true,
+                      textCapitalization: TextCapitalization.sentences,
                       maxLines: commentStore.isLoading ? 1 : null,
                       minLines: 1,
                       focusNode: focusNode,
                       onTap: authStore.currentUser == null
                           ? () {
-                        FocusScope.of(context)
-                            .requestFocus(new FocusNode());
-                        Navigator.of(context).pushNamed(
-                          PageRoute.Page.loginScreen.route,
-                          arguments: {
-                            "returnToPageWithArgs": {
-                              "currentPageName": "wallet",
-                              "arguments": null
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                              Navigator.of(context).pushNamed(
+                                PageRoute.Page.loginScreen.route,
+                                arguments: {
+                                  "returnToPageWithArgs": {
+                                    "currentPageName": "wallet",
+                                    "arguments": null
+                                  }
+                                },
+                              );
                             }
-                          },
-                        );
-                      }
                           : null,
                       onChanged: (value) {
                         value = value.trim();
@@ -383,24 +386,26 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       style: TextStyle(color: LightColors.grey),
                       controller: _inputController,
                       decoration: InputDecoration(
-                        fillColor: Colors.white.withOpacity(!focusNode.hasFocus ? 0.3: 1.0),
+                        fillColor: Colors.white
+                            .withOpacity(!focusNode.hasFocus ? 0.3 : 1.0),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: LightColors.grey, width: 0.25),
+                          borderSide:
+                              BorderSide(color: LightColors.grey, width: 0.25),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: LightColors.grey, width: 0.25),
+                          borderSide:
+                              BorderSide(color: LightColors.grey, width: 0.25),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: LightColors.grey, width: 0.25),
+                          borderSide:
+                              BorderSide(color: LightColors.grey, width: 0.25),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         contentPadding: EdgeInsets.all(16),
-                        hintText: AppLocalizations.of(context)!.writeYourComment,
+                        hintText:
+                            AppLocalizations.of(context)!.writeYourComment,
                         hintStyle: TextStyle(color: LightColors.grey),
                         suffixIcon: Observer(builder: (context) {
                           if (commentStore.isLoading) {
@@ -423,24 +428,24 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 padding: EdgeInsets.only(right: 16),
                                 child: isIconBlue
                                     ? Image.asset(
-                                  'assets/icons/icon-send-blue.png',
-                                  height: 22,
-                                  width: 22,
-                                )
+                                        'assets/icons/icon-send-blue.png',
+                                        height: 22,
+                                        width: 22,
+                                      )
                                     : Image.asset(
-                                  'assets/icons/icon-send-grey.png',
-                                  height: 22,
-                                  width: 22,
-                                ),
+                                        'assets/icons/icon-send-grey.png',
+                                        height: 22,
+                                        width: 22,
+                                      ),
                               ),
                               onTap: () async {
                                 if (isIconBlue) {
                                   if (_inputController.text.isEmpty) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                        content: Text(
-                                            AppLocalizations.of(context)!
-                                                .writeYourComment)));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                AppLocalizations.of(context)!
+                                                    .writeYourComment)));
                                   } else {
                                     FocusManager.instance.primaryFocus
                                         ?.unfocus();
