@@ -14,11 +14,6 @@ class SecureStoreMixin {
     return true;
   }
 
-  Future<bool> setAuthToken(String value) async {
-    await this.setSecureStore("auth_token", value);
-    return true;
-  }
-
   Future<bool> setGeneralConfig(String value) async {
     await this.setSecureStore("general_config", value);
     return true;
@@ -111,10 +106,6 @@ class SecureStoreMixin {
     return token != null;
   }
 
-  Future<String?> getAuthToken() async {
-    return await this.getSecureStore("auth_token");
-  }
-
   Future<User?> getCurrentUser() async {
     var userStorage = await this.getSecureStore("user");
     if (userStorage == null) {
@@ -134,6 +125,5 @@ class SecureStoreMixin {
 
   Future<dynamic> cleanAuthToken() async {
     await secureStore.delete(key: "user");
-    await secureStore.delete(key: "auth_token");
   }
 }

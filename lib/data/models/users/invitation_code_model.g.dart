@@ -14,7 +14,6 @@ InvitationCodeModel _$InvitationCodeModelFromJson(Map<String, dynamic> json) {
     active: json['active'] as bool,
     createdAt: json['createdAt'] as String,
     updatedAt: json['updatedAt'] as String,
-    code: json['code'] as String,
   );
 }
 
@@ -27,5 +26,4 @@ Map<String, dynamic> _$InvitationCodeModelToJson(
       'invitationCode': instance.invitationCode,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'code': instance.code,
     };

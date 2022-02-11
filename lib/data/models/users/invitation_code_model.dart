@@ -11,7 +11,6 @@ class InvitationCodeModel {
   //String userId;
   String createdAt;
   String updatedAt;
-  String code;
 
   InvitationCodeModel({
     required this.id,
@@ -21,7 +20,6 @@ class InvitationCodeModel {
     //required this.userId,
     required this.createdAt,
     required this.updatedAt,
-    required this.code,
   });
 
   factory InvitationCodeModel.fromJson(Map<String, dynamic> json) =>

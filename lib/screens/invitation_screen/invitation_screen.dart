@@ -25,8 +25,8 @@ class _InvitationScreenState extends State<InvitationScreen> {
   @override
   void initState() {
     super.initState();
-    invitationStore.getCodes();
     Future.delayed(Duration.zero).then((value) async {
+      await invitationStore.getCodes();
       generalConfigModel = await this.secureStoreMixin.getGeneralConfig();
     });
   }
@@ -55,9 +55,10 @@ class _InvitationScreenState extends State<InvitationScreen> {
                           child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
-                              text:
-                                  AppLocalizations.of(context)!.pictureByRommelDiaz,
-                              style: TextStyle(color: Colors.white, fontSize: 10),
+                              text: AppLocalizations.of(context)!
+                                  .pictureByRommelDiaz,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 10),
                             ),
                           ),
                         ),
