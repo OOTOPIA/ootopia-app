@@ -60,7 +60,6 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
     await authStore!.logout();
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();
-    AppUsageTime.instance.sendToApi();
     //Adicionei esse delayed para dar tempo de enviar o tempo de uso do app
     Future.delayed(Duration(milliseconds: 100), () {
       controller.resetNavigation();
@@ -171,10 +170,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             children: [
                                               AvatarPhotoWidget(
                                                 sizePhotoUrl: 100,
-                                                photoUrl:
-                                                    authStore!.currentUser!.photoUrl,
+                                                photoUrl: authStore!
+                                                    .currentUser!.photoUrl,
                                                 isBadges: authStore!
-                                                        .currentUser!.badges!.length >
+                                                        .currentUser!
+                                                        .badges!
+                                                        .length >
                                                     0,
                                                 onTap: () {},
                                               ),
@@ -194,13 +195,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                 child: Text(
                                   '${authStore!.currentUser!.fullname}',
                                   style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
                               child: Card(
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
@@ -214,8 +216,10 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 10),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         '${AppLocalizations.of(context)!.personalGoal}:',
@@ -223,7 +227,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                       ),
                                       Text(
                                         '${authStore!.currentUser!.dailyLearningGoalInMinutes}min',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       Text('|'),
                                       SvgPicture.asset(
@@ -280,9 +285,9 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                               ),
                                               RichText(
                                                 text: TextSpan(
-                                                    text:
-                                                        AppLocalizations.of(context)!
-                                                            .earn,
+                                                    text: AppLocalizations.of(
+                                                            context)!
+                                                        .earn,
                                                     style: TextStyle(
                                                         color: LightColors.grey,
                                                         fontSize: 10),
@@ -290,17 +295,21 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                                       TextSpan(
                                                         text: " OOz ",
                                                         style: TextStyle(
-                                                            color: LightColors.grey,
+                                                            color: LightColors
+                                                                .grey,
                                                             fontSize: 10,
                                                             fontWeight:
-                                                                FontWeight.bold),
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                       TextSpan(
-                                                        text: AppLocalizations.of(
-                                                                context)!
-                                                            .whenTheySignup,
+                                                        text:
+                                                            AppLocalizations.of(
+                                                                    context)!
+                                                                .whenTheySignup,
                                                         style: TextStyle(
-                                                            color: LightColors.grey,
+                                                            color: LightColors
+                                                                .grey,
                                                             fontSize: 10),
                                                       )
                                                     ]),
@@ -308,12 +317,13 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             ],
                                           ),
                                           leading: Padding(
-                                            padding:
-                                                MediaQuery.of(context).size.width >
-                                                        300
-                                                    ? const EdgeInsets.only(
-                                                        bottom: 3.0, left: 4)
-                                                    : EdgeInsets.all(0),
+                                            padding: MediaQuery.of(context)
+                                                        .size
+                                                        .width >
+                                                    300
+                                                ? const EdgeInsets.only(
+                                                    bottom: 3.0, left: 4)
+                                                : EdgeInsets.all(0),
                                             child: Image.asset(
                                               'assets/icons/add-user-plus.png',
                                               color: Colors.black,
@@ -327,7 +337,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             color: Colors.black,
                                           ),
                                           onTap: () {
-                                            controller.insertPage(InvitationScreen());
+                                            controller
+                                                .insertPage(InvitationScreen());
                                             Navigator.of(context).pop();
                                           },
                                         ),
@@ -366,7 +377,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             color: Colors.black,
                                           ),
                                           onTap: () {
-                                            if (widget.onTapWalletItem != null) {
+                                            if (widget.onTapWalletItem !=
+                                                null) {
                                               widget.onTapWalletItem!();
                                             }
                                             Navigator.of(context).pop();
@@ -440,13 +452,15 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             color: Colors.black,
                                           ),
                                           onTap: () {
-                                            Navigator.of(context).pushNamed(PageRoute
-                                                .Page.chatWithUsersScreen.route);
+                                            Navigator.of(context).pushNamed(
+                                                PageRoute.Page
+                                                    .chatWithUsersScreen.route);
                                           },
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 8, 0, 8),
                                         child: GestureDetector(
                                           onTap: () {
                                             openTermsOfUse(context, true, true);
@@ -477,7 +491,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 8, 0, 8),
                                         child: Row(
                                           children: [
                                             SizedBox(
@@ -493,7 +508,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                openTermsOfUse(context, false, false);
+                                                openTermsOfUse(
+                                                    context, false, false);
                                               },
                                               child: Text(
                                                 AppLocalizations.of(context)!
@@ -521,10 +537,12 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                openPrivacyPolicy(context, false);
+                                                openPrivacyPolicy(
+                                                    context, false);
                                               },
                                               child: Text(
-                                                AppLocalizations.of(context)!.privacy,
+                                                AppLocalizations.of(context)!
+                                                    .privacy,
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
@@ -559,7 +577,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                                 width: 16,
                                               ),
                                               Text(
-                                                AppLocalizations.of(context)!.exit,
+                                                AppLocalizations.of(context)!
+                                                    .exit,
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
@@ -651,16 +670,17 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
   Widget build(BuildContext context) {
     return Drawer(
         child: Stack(
-          children: [
-            BackgroundButterflyTop(),
-            BackgroundButterflyBottom(),
-            Column(
       children: [
+        BackgroundButterflyTop(),
+        BackgroundButterflyBottom(),
+        Column(
+          children: [
             DrawerHeader(
                 decoration: BoxDecoration(
-                    border:
-                        Border(bottom: BorderSide(color: Colors.white, width: 0))),
-                padding: EdgeInsets.only(bottom: 0, top: 0, left: 15, right: 15),
+                    border: Border(
+                        bottom: BorderSide(color: Colors.white, width: 0))),
+                padding:
+                    EdgeInsets.only(bottom: 0, top: 0, left: 15, right: 15),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -769,9 +789,9 @@ class _DrawerWithNoCurrentUserState extends State<DrawerWithNoCurrentUser> {
                 ),
               ),
             )
-      ],
-    ),
           ],
-        ));
+        ),
+      ],
+    ));
   }
 }

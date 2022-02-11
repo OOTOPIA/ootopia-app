@@ -23,6 +23,10 @@ class SharedPreferencesInstance {
     return prefs?.getString("auth_token");
   }
 
+  Future<bool> removeAuthToken() async {
+    return await prefs?.remove("auth_token") ?? false;
+  }
+
   Future<bool> setGlobalGoalLimitTimeInUtc(String value) async {
     return await prefs?.setString("global_goal_limit_time_in_utc", value) ??
         false;

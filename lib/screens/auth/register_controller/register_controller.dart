@@ -277,7 +277,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       addressLongitude: user!.addressLongitude,
       photoFilePath: photoFilePath,
       registerPhase: 2,
-      links: links
+      links: links,
     );
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();

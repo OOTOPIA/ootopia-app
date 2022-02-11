@@ -257,6 +257,15 @@ mixin _$HomeStore on HomeStoreBase, Store {
     return _$getDailyGoalStatsAsyncAction.run(() => super.getDailyGoalStats());
   }
 
+  final _$updateDailyGoalStatsByMessageAsyncAction =
+      AsyncAction('HomeStoreBase.updateDailyGoalStatsByMessage');
+
+  @override
+  Future updateDailyGoalStatsByMessage(dynamic dailyGoalStats) {
+    return _$updateDailyGoalStatsByMessageAsyncAction
+        .run(() => super.updateDailyGoalStatsByMessage(dailyGoalStats));
+  }
+
   final _$readyToShowCelebratePageAsyncAction =
       AsyncAction('HomeStoreBase.readyToShowCelebratePage');
 

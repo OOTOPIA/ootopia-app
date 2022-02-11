@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
-import 'package:ootopia_app/data/models/users/auth_model.dart';
 import 'package:ootopia_app/data/repositories/auth_repository.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
@@ -11,6 +9,7 @@ import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 part "auth_store.g.dart";
 
@@ -93,11 +92,14 @@ abstract class AuthStoreBase with Store {
 
   @action
   logout() async {
+    SharedPreferencesInstance prefs =
+        await SharedPreferencesInstance.getInstace();
     try {
       await AppUsageTime.instance.sendToApi();
     } catch (err) {}
     await Future.delayed(Duration(milliseconds: 500), () async {
       AppUsageTime.instance.stopTimer();
+      await prefs.removeAuthToken();
       await storage.cleanAuthToken();
       this._currentUser = null;
     });
