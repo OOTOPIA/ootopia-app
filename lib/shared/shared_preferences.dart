@@ -95,23 +95,6 @@ class SharedPreferencesInstance {
     return await prefs?.setInt('timeline_view_time', value) ?? false;
   }
 
-  String? getLastSplashScreenOpening() {
-    return prefs?.getString('last_splash_screen_opening_date');
-  }
-
-  Future<bool> setLastSplashScreenOpening(String value) async {
-    return await prefs?.setString('last_splash_screen_opening_date', value) ??
-        false;
-  }
-
-  String? getLanguageConfig() {
-    return prefs?.getString('language_config');
-  }
-
-  Future<bool> setLanguageConfig(String value) async {
-    return await prefs?.setString('language_config', value) ?? false;
-  }
-
   Future<bool> setLastUsageTime(int value) async {
     return await prefs?.setInt("last_usage_time", value) ?? false;
   }
