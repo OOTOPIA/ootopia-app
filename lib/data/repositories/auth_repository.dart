@@ -29,7 +29,7 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
   late SharedPreferencesInstance prefs;
 
   AuthRepositoryImpl() {
-    SharedPreferencesInstance.getInstace().then((value) {
+    SharedPreferencesInstance.getInstance().then((value) {
       prefs = value;
     });
   }

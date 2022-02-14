@@ -86,7 +86,7 @@ abstract class TimelineStoreBase with Store {
   @action
   startTimelineViewTimer() async {
     if (prefs == null) {
-      prefs = await SharedPreferencesInstance.getInstace();
+      prefs = await SharedPreferencesInstance.getInstance();
     }
 
     if (!_watch.isRunning) {

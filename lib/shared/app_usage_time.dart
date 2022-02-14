@@ -6,7 +6,6 @@ import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class AppUsageTime with SecureStoreMixin {
   static AppUsageTime? _instance;
@@ -19,7 +18,7 @@ class AppUsageTime with SecureStoreMixin {
       SharedExperienceService.getInstace();
 
   AppUsageTime() {
-    SharedPreferencesInstance.getInstace().then((_prefs) async {
+    SharedPreferencesInstance.getInstance().then((_prefs) async {
       prefs = _prefs;
       await dotenv.load(fileName: ".env");
       if (prefs!.getFeedbackToday() ?? false) {
@@ -52,7 +51,7 @@ class AppUsageTime with SecureStoreMixin {
     if (_watch.isRunning) {
       usageTimeSoFarInMilliseconds += 1000;
       if (prefs == null) {
-        prefs = await SharedPreferencesInstance.getInstace();
+        prefs = await SharedPreferencesInstance.getInstance();
       }
       //A cada segundo armazenamos no storage o tempo cronometrado
       if (await getUserIsLoggedIn()) {

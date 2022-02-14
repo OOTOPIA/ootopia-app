@@ -23,7 +23,7 @@ const Map<String, String> API_HEADERS = {
 class WalletRepositoryImpl with SecureStoreMixin implements WalletRepository {
   Future<Map<String, String>> getHeaders() async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;

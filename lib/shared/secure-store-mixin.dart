@@ -100,7 +100,7 @@ class SecureStoreMixin {
 
   Future<bool> getUserIsLoggedIn() async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
 
     String? token = prefs.getAuthToken();
     return token != null;

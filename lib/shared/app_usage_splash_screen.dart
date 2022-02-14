@@ -1,42 +1,40 @@
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ootopia_app/shared/shared_preferences.dart';
 
 class AppUsageSplashScreen with SecureStoreMixin {
-  String _prefsKeyLastSplashScreenOpening = "last_splash_screen_opening_date";
-  String _prefsKeyLanguageConfig = "language_config";
-  SharedPreferences? prefs;
+  SharedPreferencesInstance? prefs;
+
   bool displayedToday = false;
 
   AppUsageSplashScreen() {
-    SharedPreferences.getInstance().then((_prefs) {
+    SharedPreferencesInstance.getInstance().then((_prefs) {
       prefs = _prefs;
     });
   }
 
   updateLastSplashScreenOpening() async {
-    if (prefs == null) prefs = await SharedPreferences.getInstance();
+    if (prefs == null) prefs = await SharedPreferencesInstance.getInstance();
 
-    String? lastDisplayedDate =
-        prefs!.getString(_prefsKeyLastSplashScreenOpening);
+    String? lastDisplayedDate = prefs!.getLastSplashScreenOpening();
     DateTime date = new DateTime.now();
     String today = "${date.day}/${date.month}/${date.year}";
 
     if (lastDisplayedDate == null || lastDisplayedDate != today) {
-      await prefs!.setString(_prefsKeyLastSplashScreenOpening, today);
+      await prefs!.setLastSplashScreenOpening(today);
       displayedToday = false;
     } else
       displayedToday = true;
   }
 
   updateLanguageConfig(String? language) async {
-    if (prefs == null) prefs = await SharedPreferences.getInstance();
+    if (prefs == null) prefs = await SharedPreferencesInstance.getInstance();
 
-    if (language != null) prefs!.setString(_prefsKeyLanguageConfig, language);
+    if (language != null) prefs!.setLanguageConfig(language);
   }
 
   checkLanguageConfig() async {
-    if (prefs == null) prefs = await SharedPreferences.getInstance();
+    if (prefs == null) prefs = await SharedPreferencesInstance.getInstance();
 
-    return prefs!.getString(_prefsKeyLanguageConfig);
+    return prefs!.getLanguageConfig();
   }
 }

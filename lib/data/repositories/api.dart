@@ -56,7 +56,7 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
 
   Future<Map<String, String>> getHeaders([String? contentType]) async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return _headers;
