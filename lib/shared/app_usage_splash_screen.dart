@@ -1,6 +1,5 @@
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AppUsageSplashScreen with SecureStoreMixin {
   SharedPreferencesInstance? prefs;

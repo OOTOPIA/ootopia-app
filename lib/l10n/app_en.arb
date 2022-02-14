@@ -146,6 +146,9 @@
     "all2": "All",
     "received": "Received",
     "shared": "Shared",
+    "copyLink":"Copy link",
+    "linkCopied":"Link copied",
+    "nowYouCanShareThisPost":"Now you can share this Post and invite more people to live OOTOPIA!",
     "send": "Send",
     "noPosts": "No posts",
 
