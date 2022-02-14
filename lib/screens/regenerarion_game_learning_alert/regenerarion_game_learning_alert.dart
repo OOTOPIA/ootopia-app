@@ -94,7 +94,7 @@ class _RegenerationGameLearningAlertState
     super.initState();
     Future.delayed(Duration.zero, () async {
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
-      prefs = await SharedPreferencesInstance.getInstace();
+      prefs = await SharedPreferencesInstance.getInstance();
     });
   }
 

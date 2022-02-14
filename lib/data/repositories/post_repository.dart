@@ -31,7 +31,7 @@ const Map<String, String> API_HEADERS = {
 class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   Future<Map<String, String>> getHeaders([String? contentType]) async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
 
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {

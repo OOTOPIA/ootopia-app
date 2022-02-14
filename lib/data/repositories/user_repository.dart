@@ -34,7 +34,7 @@ const Map<String, String> API_HEADERS = {
 class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   Future<Map<String, String>> getHeaders([String? contentType]) async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;
@@ -244,7 +244,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   @override
   Future recordTimeUserUsedApp(int timeInMilliseconds) async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
 
     bool loggedIn = prefs.getAuthToken() != null;
     if (!loggedIn || timeInMilliseconds <= 0) {

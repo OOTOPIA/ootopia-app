@@ -6,9 +6,11 @@ class SharedPreferencesInstance {
 
   SharedPreferencesInstance() {}
 
-  static Future<SharedPreferencesInstance> getInstace() async {
+  static Future<SharedPreferencesInstance> getInstance() async {
     if (_instance == null) {
       _instance = SharedPreferencesInstance();
+    }
+    if (prefs == null) {
       prefs = await SharedPreferences.getInstance();
     }
     return _instance!;

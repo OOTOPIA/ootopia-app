@@ -93,7 +93,7 @@ abstract class AuthStoreBase with Store {
   @action
   logout() async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
     try {
       await AppUsageTime.instance.sendToApi();
     } catch (err) {}

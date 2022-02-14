@@ -165,7 +165,7 @@ class _CameraAppState extends State<CameraApp>
 
   Future<Map<String, String>> getHeaders() async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
 
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {

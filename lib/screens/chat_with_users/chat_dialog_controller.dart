@@ -4,7 +4,7 @@ class ChatDialogController {
   static ChatDialogController? _instance;
   SharedPreferencesInstance? _prefs;
   ChatDialogController() {
-    SharedPreferencesInstance.getInstace().then((value) {
+    SharedPreferencesInstance.getInstance().then((value) {
       _prefs = value;
     });
   }
