@@ -32,7 +32,7 @@ class GeneralConfigRepositoryImpl implements GeneralConfigRepository {
   Future<void> getGlobalGoalLimitTimeInUtc() async {
     try {
       SharedPreferencesInstance prefs =
-          await SharedPreferencesInstance.getInstace();
+          await SharedPreferencesInstance.getInstance();
 
       final response = await ApiClient.api()
           .get("general-config/global_goal_limit_time_in_utc");

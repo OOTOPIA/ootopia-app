@@ -7,13 +7,13 @@ class AppUsageSplashScreen with SecureStoreMixin {
   bool displayedToday = false;
 
   AppUsageSplashScreen() {
-    SharedPreferencesInstance.getInstace().then((_prefs) {
+    SharedPreferencesInstance.getInstance().then((_prefs) {
       prefs = _prefs;
     });
   }
 
   updateLastSplashScreenOpening() async {
-    if (prefs == null) prefs = await SharedPreferencesInstance.getInstace();
+    if (prefs == null) prefs = await SharedPreferencesInstance.getInstance();
 
     String? lastDisplayedDate = prefs!.getLastSplashScreenOpening();
     DateTime date = new DateTime.now();
@@ -27,13 +27,13 @@ class AppUsageSplashScreen with SecureStoreMixin {
   }
 
   updateLanguageConfig(String? language) async {
-    if (prefs == null) prefs = await SharedPreferencesInstance.getInstace();
+    if (prefs == null) prefs = await SharedPreferencesInstance.getInstance();
 
     if (language != null) prefs!.setLanguageConfig(language);
   }
 
   checkLanguageConfig() async {
-    if (prefs == null) prefs = await SharedPreferencesInstance.getInstace();
+    if (prefs == null) prefs = await SharedPreferencesInstance.getInstance();
 
     return prefs!.getLanguageConfig();
   }

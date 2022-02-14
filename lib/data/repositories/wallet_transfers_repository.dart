@@ -20,7 +20,7 @@ class WalletTransfersRepositoryImpl
     implements WalletTransfersRepository {
   Future<Map<String, String>> getHeaders() async {
     SharedPreferencesInstance prefs =
-        await SharedPreferencesInstance.getInstace();
+        await SharedPreferencesInstance.getInstance();
     bool loggedIn = await getUserIsLoggedIn();
     if (!loggedIn) {
       return API_HEADERS;

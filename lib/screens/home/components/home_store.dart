@@ -78,7 +78,7 @@ abstract class HomeStoreBase with Store {
     _timerIsStarted = false;
     _totalAppUsageTimeSoFarInMs = 0;
     if (prefs == null) {
-      prefs = await SharedPreferencesInstance.getInstace();
+      prefs = await SharedPreferencesInstance.getInstance();
     }
     if (!_watch.isRunning) {
       _watch.start();

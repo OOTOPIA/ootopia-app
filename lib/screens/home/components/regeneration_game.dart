@@ -92,7 +92,7 @@ class _RegenerationGameState extends State<RegenerationGame>
     editProfileStore = Provider.of<EditProfileStore>(context, listen: false);
     editProfileStore.getUser();
     Future.delayed(Duration.zero, () async {
-      prefs = await SharedPreferencesInstance.getInstace();
+      prefs = await SharedPreferencesInstance.getInstance();
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
     });
     Future.delayed(Duration(milliseconds: 300), () {
