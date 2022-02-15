@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
+import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/last_learning_track_component.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
+import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -115,7 +116,8 @@ class _TimelinePageState extends State<TimelinePage>
   void _handleIncomingLinks() {
     _sub = linkStream.listen((link) {
       if (!mounted || link == null) return;
-      redefinePassword(link);
+      if (link.contains("posts/shared")) goToPost(link);
+      if (link.contains("resetPasswordToken=")) redefinePassword(link);
     }, onError: (Object err) {
       if (!mounted) return;
     });
@@ -131,6 +133,22 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
+  void goToPost(String link) async {
+    PostRepositoryImpl postsRepository = PostRepositoryImpl();
+    String postId = link.split("/").last;
+    var post = await postsRepository.getPostById(postId);
+
+    controller.insertPage(
+      TimelineScreenProfileScreen(
+        {
+          "userId": authStore.currentUser?.id,
+          "posts": [post].toList(),
+          "postSelected": 0,
+        },
+      ),
+    );
+  }
+
   Future<void> _handleInitialUri() async {
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
@@ -138,7 +156,7 @@ class _TimelinePageState extends State<TimelinePage>
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
         redefinePassword(uri.toString());
-      }  catch (err) {
+      } catch (err) {
         if (!mounted) return;
       }
     }

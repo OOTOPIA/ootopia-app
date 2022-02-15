@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 
 class PopupMenuPost extends StatefulWidget {
   final bool isAnabled;
   final Function callbackReturnPopupMenu;
-  final post;
+  final TimelinePost post;
 
   PopupMenuPost({
     required this.isAnabled,
@@ -38,12 +43,35 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
     _checkUserIsLoggedInAndUserOwnsThePost();
   }
 
+  modalSharedCopyLink() {
+    showModalBottomSheet(
+        context: context,
+        barrierColor: Colors.black.withAlpha(1),
+        backgroundColor: Colors.black.withAlpha(1),
+        builder: (BuildContext context) {
+          return SnackBarWidget(
+            menu: AppLocalizations.of(context)!.linkCopied,
+            automaticClosing: true,
+            text: AppLocalizations.of(context)!.nowYouCanShareThisPost,
+            marginBottom: true,
+          );
+        });
+  }
+
+  copiLinkPost() {
+    Clipboard.setData(ClipboardData(
+        text:
+            '${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/${widget.post.id}'));
+  }
+
   _selectedOption(String optionSelected) {
-    if (!isUserOwnsPost) {
-      return 'isUserNotOwnsPost';
+    if (optionSelected == 'shared') {
+      copiLinkPost();
+      modalSharedCopyLink();
+      return;
     }
 
-    if (optionSelected == 'Excluir' || optionSelected == 'Delete') {
+    if (isUserOwnsPost && optionSelected == 'delete') {
       widget.callbackReturnPopupMenu(optionSelected);
     }
   }
@@ -53,6 +81,29 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
     return PopupMenuButton(
       child: Icon(Icons.more_vert),
       itemBuilder: (_) => <PopupMenuItem<String>>[
+        PopupMenuItem<String>(
+          child: Column(
+            children: [
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Padding(
+                    child: SvgPicture.asset(
+                      'assets/icons/link.svg',
+                      color: Color(0xff707070),
+                    ),
+                    padding: EdgeInsets.only(right: 4),
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.copyLink,
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          value: 'shared',
+        ),
         PopupMenuItem<String>(
           child: Opacity(
             opacity: isUserOwnsPost ? 1.0 : .4,
@@ -70,7 +121,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
               ],
             ),
           ),
-          value: AppLocalizations.of(context)!.delete,
+          value: 'delete',
         ),
       ],
       onSelected: (String value) => _selectedOption(value),
