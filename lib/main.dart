@@ -251,7 +251,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    print('DISPOSED');
     trackingEvents.trackingClosedApp();
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
