@@ -36,10 +36,10 @@ class AppUsageTime with SecureStoreMixin {
             _watch.start();
           }
         } else {
-          prefs!.setLastPendingUsageDate(dateNowFormat);
+          await prefs!.setLastPendingUsageDate(dateNowFormat);
         }
       } else {
-        prefs!.setLastPendingUsageDate(dateNowFormat);
+        await prefs!.setLastPendingUsageDate(dateNowFormat);
       }
     });
   }
@@ -144,6 +144,8 @@ class AppUsageTime with SecureStoreMixin {
         String? pendingDate = prefs!.getLastPendingUsageDate();
         if (pendingDate != null && pendingDate == dateNowFormat) {
           await _usersRepository.recordTimeUserUsedApp(ms!);
+        } else {
+          await prefs!.setLastPendingUsageDate(dateNowFormat);
         }
         this.resetUsageTime();
       });
