@@ -237,11 +237,13 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
     ]);
     pushNotification.listenerFirebaseCloudMessagingToken();
     pushNotification.listenerFirebaseCloudMessagingMessages();
+    Future.delayed(Duration.zero, () async {
+      await generalConfigRepository.getGlobalGoalLimitTimeInUtc();
+      await generalConfigRepository.getGeneralConfig();
+      AppUsageTime.instance.startTimer();
+    });
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
-    AppUsageTime.instance.startTimer();
-    generalConfigRepository.getGeneralConfig();
-    generalConfigRepository.getGlobalGoalLimitTimeInUtc();
     AppTheme.instance(context).addListener(() {
       setState(() {}); //To update theme if user toggle
     });
