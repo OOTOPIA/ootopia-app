@@ -123,8 +123,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   resetDailyGoalTimer() async {
     homeStore?.stopDailyGoalTimer();
-    await homeStore?.getDailyGoalStats();
     AppUsageTime.instance.resetUsageTime();
+    await homeStore?.getDailyGoalStats();
     await homeStore?.startDailyGoalTimer();
   }
 
