@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/shared/snackbar_component.dart';
 
 class PopupMenuPost extends StatefulWidget {
   final bool isAnabled;
@@ -43,31 +41,10 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
     _checkUserIsLoggedInAndUserOwnsThePost();
   }
 
-  modalSharedCopyLink() {
-    showModalBottomSheet(
-        context: context,
-        barrierColor: Colors.black.withAlpha(1),
-        backgroundColor: Colors.black.withAlpha(1),
-        builder: (BuildContext context) {
-          return SnackBarWidget(
-            menu: AppLocalizations.of(context)!.linkCopied,
-            automaticClosing: true,
-            text: AppLocalizations.of(context)!.nowYouCanShareThisPost,
-            marginBottom: true,
-          );
-        });
-  }
-
-  copiLinkPost() {
-    Clipboard.setData(ClipboardData(
-        text:
-            '${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/${widget.post.id}'));
-  }
-
   _selectedOption(String optionSelected) {
     if (optionSelected == 'shared') {
-      copiLinkPost();
-      modalSharedCopyLink();
+      copyLink(Type.posts, widget.post.id);
+      modalSharedCopyLink(Type.posts, context);
       return;
     }
 
