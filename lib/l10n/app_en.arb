@@ -480,5 +480,8 @@
     "notificationButtonText": "Open",
 
     "hide" : "Hide",
-    "readMore" : "Read more"
+    "readMore" : "Read more",
+
+    "circleOfFriends" : "Circle of friends"
+
 }

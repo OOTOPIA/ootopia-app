@@ -1,11 +1,10 @@
-//Packages
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
+import 'package:ootopia_app/screens/friends/circle_friends_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
@@ -18,7 +17,6 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -258,17 +256,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isVisible: isVisible,
                               profileScreenStore: store,
                             ),
-                            isLoggedInUserProfile
-                                ? WalletBarWidget(
-                                    totalBalance: walletStore.wallet != null
-                                        ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
-                                        : '0,00',
-                                    onTap: () =>
-                                        controller.insertPage(WalletPage()))
-                                : Container(),
-                            SizedBox(
-                                height:
-                                    GlobalConstants.of(context).spacingNormal),
+                            if(isLoggedInUserProfile)...[
+                              WalletBarWidget(
+                                  totalBalance: walletStore.wallet != null
+                                      ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
+                                      : '0,00',
+                                  onTap: () =>
+                                      controller.insertPage(WalletPage())),
+                            ],
+
+                            CircleOfFriendWidget(
+                              isUserLogged: isLoggedInUserProfile,
+                              userId: store!.profile!.id,
+                            ),
+
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
