@@ -69,7 +69,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
                       'assets/icons/link.svg',
                       color: Color(0xff707070),
                     ),
-                    padding: EdgeInsets.only(right: 4),
+                    padding: EdgeInsets.fromLTRB(3, 0, 7, 0),
                   ),
                   Text(
                     AppLocalizations.of(context)!.copyLink,
