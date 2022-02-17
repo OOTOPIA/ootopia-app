@@ -7,7 +7,6 @@
     "welcomeToTheRegenerativeWorldInWhich": "Welcome to the Regenerative World\nin which we all want to live.",
     "liveOotopiaNowMessage": "LIVE OOTOPIA NOW!",
     "email": "e-mail",
-    "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "password",
     "newPassword": "new password",
     "confirmPassword": "confirm password",
@@ -71,7 +70,6 @@
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
     "nameAndSurname": "name",
     "pleaseEnterYourNameAndSurname": "Please enter your name",
-    "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
     "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
     "pleaseInsertTheSamePassword": "Please enter the same password",
@@ -123,9 +121,7 @@
 
     "publications": "Publications",
     "initial": "Initial",
-    "noPosts": "no posts :(",
 
-    "gratitudeReward": "Gratitude reward",
     "transfer": "transfer",
     "to": "to",
     "from": "from",
@@ -180,7 +176,6 @@
     "pleaseEnterYourEmail": "Please enter your email",
     "changePassword": "Change Password",
     "enterNewPassword": "Enter new password",
-    "pleaseEnterYourPassword": "Please enter your valid password",
     "passwordsDontMatch": "Passwords don't match",
 
     "locationServicesAreDisabled": "Location services are disabled.",
@@ -273,9 +268,7 @@
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
     "youDontNothing": "You don't have nothing",
-    "all": "All",
     "sent":"Sent",
-    "received": "Received",
 
     "badgeChangeMakerPro": "Badge: Change Maker Pro",
     "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Change Maker Pro Badge is awarded to individuals and organizations that are professionally leading projects to regenerate the planet and creating extensive positive impact.",
@@ -398,12 +391,10 @@
     "laurelWreath": "Laurel Wreath",
     "iAccept": "I accept",
     "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Laurel Wreath represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
-    "optional":"Optional",
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
 
     "appTest": "Feedback",
-    "sendYourFeedback":"send your feedback",
 
     "required": "Required",
     
@@ -459,8 +450,6 @@
     "invalidEmailOrPassword": "Invalid email and/or password",
     "errorLogin": "Access error",
     "recoveryMessageError": "If this is your email, a link should be in your inbox so you can update your password.",
-     "giveSuggestion":"Give suggestion",
-     "supportCenter":"Support Center",
      "updatingRegenerationGameStatus":"Updating your stat in the regeneration game...",
      "offers":"Offers",
 
@@ -482,6 +471,9 @@
     "hide" : "Hide",
     "readMore" : "Read more",
 
-    "circleOfFriends" : "Circle of friends"
+    "circleOfFriends" : "Circle of friends",
+    "addFriends" : "Add friends",
+    "searchFriendsMsg" : "Search and add people to your circle of friends",
+    "searchFriends" : "Search friends"
 
 }

@@ -4,7 +4,6 @@
     "liveOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
     "welcomeToTheRegenerativeWorldInWhich": "Bem-vindo ao mundo regenerativo\n no qual todos nós queremos viver.",
     "email": "e-mail",
-    "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "senha",
     "newPassword": "nova senha",
     "confirmPassword": "confirme a senha",
@@ -65,7 +64,6 @@
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Crie sua conta e junte-se ao \nmovimento para curar o planeta Terra!",
     "nameAndSurname": "nome",
     "pleaseEnterYourNameAndSurname": "Por favor, insira seu nome",
-    "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
     "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
     "pleaseInsertTheSamePassword": "Por favor, insira a mesma senha",
@@ -117,7 +115,6 @@
 
     "publications": "Publicações",
     "initial": "Inicial",
-    "noPosts": "sem publicações :(",
 
     "gratitudeReward": "Recompensa de gratidão",
     "transfer": "transferir",
@@ -170,7 +167,6 @@
     "pleaseEnterYourEmail": "Por favor, informe seu e-mail",
     "changePassword": "Alterar senha",
     "enterNewPassword": "Informe a nova senha",
-    "pleaseEnterYourPassword": "Por favor, informe sua senha",
     "yourPasswordHasBeenChangedSuccessfully":"Sua senha foi alterada com sucesso",
     "passwordsDontMatch": "Senhas não combinam",
 
@@ -262,7 +258,6 @@
     "copyLink":"Copiar link",
     "linkCopied":"Link copiado",
     "nowYouCanShareThisPost":"Agora você pode compartilhar este Post e convidar mais pessoas para viver OOTOPIA!",
-    "received": "Recebidas",
     "youDontReceived": "Você não recebeu moedas",
     "youDontSent": "Você não enviou moedas",
     "youDontNothing": "Você não tem nada",
@@ -292,12 +287,10 @@
     "planetaryLevelText2pt1": "Estamos quase lá!",
     "planetaryLevelText2pt2": "Vamos cumprir a meta planetária hoje!",
     "invitationCode": "Código de convite",
-    "gratitudeReward": "Recompensa de gratidão",
     "personalGoalAchieved": "Meta pessoal atingida",
     "totalGameCompleted": "Jogo total completado",
     "back":"Voltar",
 
-    "thereAreNoWalletRecords": "Não há registros de OZZ",
 
     "sendYourFeedback":"Envie seu feedback",
     "questions":"perguntas",
@@ -417,7 +410,6 @@
     "purchaseNow": "Adquirir Agora",
 
     "appTest": "Feedback",
-    "sendYourFeedback":"envie seu comentário",
 
     "required": "Obrigatório",
 
@@ -473,5 +465,8 @@
     "hide" : "Ocultar",
     "readMore" : "Leia mais",
 
-    "circleOfFriends" : "Círculo de amigos"
+    "circleOfFriends" : "Círculo de amigos",
+    "addFriends" : "Adicionar amigos",
+    "searchFriendsMsg" : "Pesquise e adicione pessoas ao seu círculo de amigos",
+    "searchFriends" : "Buscar amigos"
 }

@@ -92,6 +92,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     return Observer(builder: (context) {
       return LoadingOverlay(
+
         isLoading: commentStore.isLoading,
         child: GestureDetector(
           onTap: () => focusNode.unfocus(),

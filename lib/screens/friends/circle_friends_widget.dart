@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_page.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
+
+import 'add_friends/add_friends.dart';
 
 
 class CircleOfFriendWidget extends StatefulWidget {
@@ -15,6 +19,9 @@ class CircleOfFriendWidget extends StatefulWidget {
 }
 
 class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
+
+  SmartPageController controller = SmartPageController.getInstance();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +46,10 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 ),
                 TextButton(
                   onPressed: (){
+                    Future.delayed(Duration(milliseconds: 100),(){
+                      controller.insertPage(CircleOfFriendPage());
 
+                    });
                   },
                   child: Row(
                     children: [
@@ -86,6 +96,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             child: RawMaterialButton(
               onPressed: () {
                 Future.delayed(Duration(milliseconds: 100),(){
+                  controller.insertPage(AddFriends());
 
                 });
               },
@@ -128,7 +139,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
         width: 56,
         height: 56,
         errorBuilder: (context, url, error) => Image.asset(
-          'assets/images/empty_photo_profile.png',
+          'assets/icons/user.png',
           fit: BoxFit.cover,
           width: 100,
           height: 56,
