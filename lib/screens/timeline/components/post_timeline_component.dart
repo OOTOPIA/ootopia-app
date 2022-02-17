@@ -165,7 +165,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _popupMenuReturn(String selectedOption) {
-    if (selectedOption == 'Excluir' || selectedOption == 'Delete') {
+    if (selectedOption == 'delete') {
       _showMyDialog();
     }
   }
@@ -323,7 +323,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     topRight: Radius.circular(20),
                   ),
                   color: Color(0xff1A4188),
-                  image:  DecorationImage(
+                  image: DecorationImage(
                     image: AssetImage(
                       'assets/images/Textura_azul_escuro.png',
                     ),
@@ -644,15 +644,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               Color(0xFF003286),
                             ],
                           ),
-                      image:  DecorationImage(
-                        image: AssetImage(
-                          'assets/images/Textura_azul_escuro.png',
-                        ),
-                        alignment: Alignment.bottomLeft,
-                        fit: BoxFit.none,
-                        opacity: 0.4
-                      )
-                        )
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images/Textura_azul_escuro.png',
+                              ),
+                              alignment: Alignment.bottomLeft,
+                              fit: BoxFit.none,
+                              opacity: 0.4))
                       : BoxDecoration(),
                 ),
                 Container(
@@ -669,21 +667,23 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                         child: SizedBox(),
                       ),
                       Positioned(
-                        left: _draggablePositionX >= 36 ? _draggablePositionX -36 : 0,
-                          child: Container(
-                            height: 30,
-                            width: 50,
-                            decoration: BoxDecoration(
-                                image:  DecorationImage(
-                                    image: AssetImage(
-                                      'assets/icons/button_rectangular.png',
-                                    ),
-                                    alignment: Alignment.bottomLeft,
-                                    fit: BoxFit.fitHeight,
-                                )
+                        left: _draggablePositionX >= 36
+                            ? _draggablePositionX - 36
+                            : 0,
+                        child: Container(
+                          height: 30,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/button_rectangular.png',
+                              ),
+                              alignment: Alignment.bottomLeft,
+                              fit: BoxFit.fitHeight,
                             ),
-                          )),
-                      //
+                          ),
+                        ),
+                      ),
                       Positioned(
                         top: 6,
                         left: _draggablePositionX >= 36
