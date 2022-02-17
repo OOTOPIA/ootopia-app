@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/screens/friends/add_friends/add_friends_store.dart';
+import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
+import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 
 class CircleOfFriendPage extends StatefulWidget {
@@ -21,16 +21,33 @@ class CircleOfFriendPage extends StatefulWidget {
 class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   TextEditingController messageController = TextEditingController();
-  AddFriendsStore addFriendsStore = AddFriendsStore();
+  CircleFriendsStore circleFriendsStore = CircleFriendsStore();
+  SmartPageController controller = SmartPageController.getInstance();
+  List<String> orderBy = [];
+  String orderBySelected = '';
+
+
+
+  init(){
+    if(orderBy.isEmpty){
+      orderBy = [
+        AppLocalizations.of(context)!.alphabeticalOrder,
+        AppLocalizations.of(context)!.mostRecent,
+        AppLocalizations.of(context)!.older,
+      ];
+      orderBySelected = AppLocalizations.of(context)!.alphabeticalOrder;
+    }
+  }
 
 
 
   @override
   Widget build(BuildContext context) {
+    init();
     return  Observer(
         builder: (context) {
           return LoadingOverlay(
-            isLoading: addFriendsStore.isLoading,
+            isLoading: circleFriendsStore.isLoading,
 
             child: Stack(
               children: [
@@ -45,88 +62,121 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         padding: const EdgeInsets.only(top: 14.0, left: 28,
                             right: 12),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(AppLocalizations.of(context)!.circleOfFriends,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 21,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2.0, left: 28),
-                        child: Text(AppLocalizations.of(context)!.searchFriendsMsg,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(25, 12, 14, 0),
-                        child: Container(
-                          height: 42,
-                          child: TextField(
-                            controller: messageController,
-                            textCapitalization: TextCapitalization.words,
-                            textAlignVertical: TextAlignVertical.center,
-                            textInputAction: TextInputAction.search,
-                            style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.normal),
-                            onEditingComplete: (){
-                              addFriendsStore.searchName(messageController.text);
-                            },
-                            decoration: InputDecoration(
-                              fillColor: Colors.white.withOpacity(0.3),
-                              prefixIcon: IconButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: (){
-                                  addFriendsStore.searchName(messageController.text);
-                                },
-                                icon: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 12),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/ooz-coin-blue-small.svg',
-                                    color: LightColors.blue,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 12),
+                                Text(AppLocalizations.of(context)!.circleOfFriends,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 21,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              ),
-                              contentPadding: EdgeInsets.only(top:16, right: 16),
-                              hintText: AppLocalizations.of(context)!.searchFriends,
-                              hintStyle: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                  color: LightColors.grey,
-                                  fontWeight: FontWeight.w400),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(9),
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: LightColors.grey)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(9),
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: LightColors.grey)),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2.0),
+                                  child: Text( "${circleFriendsStore.friends.length} ${AppLocalizations.of(context)!.friends}",
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 12,
+                                      color: Color(0xff939598),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+
+                            ElevatedButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular
+                                          (20),
+                                        side: BorderSide.none),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 24)),
+                                ),
+                                onPressed: () {
+
+                                  Future.delayed(Duration(milliseconds: 100),(){
+                                    controller.insertPage(AddFriends());
+                                  });
+                                },
+                                child: Text(
+                                  AppLocalizations.of(context)!.addFriends.toLowerCase(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ))
+                          ],
+                        ),
+
+
+                      ),
+
+                      GestureDetector(
+                        onTap: (){
+                          _showDialog(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 25, top: 18),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/icons/list.png',
+
+                                height: 10,
+                              ),
+                              SizedBox(width: 6),
+
+                              RichText(
+                                text: TextSpan(
+                                  text: AppLocalizations.of(context)!.orderBy,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: " $orderBySelected",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+
+                                    ),
+                                  ],
+                                ),
+                              )
+
+                            ],
                           ),
                         ),
                       ),
 
-                      if(addFriendsStore.users.isEmpty)...[
-                        ListView.builder(
-                            itemCount: 11,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return  itemShimmer();
-                            }
-                        ),
-                      ]else ...[
 
-                      ],
+
+
+
+                      ListView.builder(
+                          itemCount: 11,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return  itemShimmer();
+                          }
+                      ),
+
                       SizedBox(height: 16),
 
 
@@ -222,8 +272,93 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+
+          child: Container(
+            height: 180,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 14, left: 24, bottom: 18),
+                  child: Text(AppLocalizations.of(context)!.orderBy,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                rankedItemSelect(0, context),
+                rankedItemSelect(1, context),
+                rankedItemSelect(2, context),
+              ],
+            ),
+          )
+
+        );
+      },
+    );
+  }
 
 
+
+  Widget rankedItemSelect(int index, context){
+    return  Material(
+      color: orderBySelected == orderBy[index] ?
+      LightColors.blue.withOpacity(0.18) :
+      LightColors.white,
+      child: Ink(
+        child: InkWell(
+          splashColor: LightColors.blue,
+          onTap: (){
+            Future.delayed(Duration(milliseconds: 100),(){
+              setState(() {
+                orderBySelected = orderBy[index];
+              });
+              Navigator.of(context).pop();
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 10,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(orderBy[index],
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16
+                  ),),
+                Container(
+                  height: 13,
+                  width: 13,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2),
+                    color: orderBySelected == orderBy[index] ?
+                    LightColors.blue :
+                    LightColors.white,
+                    shape: BoxShape.circle,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
 
 

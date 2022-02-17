@@ -474,6 +474,11 @@
     "circleOfFriends" : "Circle of friends",
     "addFriends" : "Add friends",
     "searchFriendsMsg" : "Search and add people to your circle of friends",
-    "searchFriends" : "Search friends"
+    "searchFriends" : "Search friends",
+    "friends" : "Friends",
+    "orderBy" : "Ranked By:",
+    "alphabeticalOrder" : "Alphabetical order",
+    "mostRecent" : "Most recent",
+    "older" : "Older"
 
 }

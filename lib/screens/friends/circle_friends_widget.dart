@@ -97,7 +97,6 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
               onPressed: () {
                 Future.delayed(Duration(milliseconds: 100),(){
                   controller.insertPage(AddFriends());
-
                 });
               },
               elevation: 0,

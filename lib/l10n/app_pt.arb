@@ -468,5 +468,15 @@
     "circleOfFriends" : "Círculo de amigos",
     "addFriends" : "Adicionar amigos",
     "searchFriendsMsg" : "Pesquise e adicione pessoas ao seu círculo de amigos",
-    "searchFriends" : "Buscar amigos"
+    "searchFriends" : "Buscar amigos",
+    "friends" : "Amigos",
+    "orderBy" : "Classificar por:",
+    "alphabeticalOrder" : "Ordem Alfabética",
+    "mostRecent" : "Mais recentes",
+    "older" : "Mais antigos"
+
 }
+
+
+
+

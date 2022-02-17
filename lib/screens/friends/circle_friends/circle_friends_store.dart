@@ -5,10 +5,13 @@ part 'circle_friends_store.g.dart';
 
 class CircleFriendsStore = CircleFriendsStoreBase with _$CircleFriendsStore;
 
+enum ViewState { loading, error, done, loadingNewData, refresh }
+
+
 abstract class CircleFriendsStoreBase with Store {
 
   @observable
-  ObservableList users = ObservableList();
+  ObservableList friends = ObservableList();
 
   @observable
   bool isLoading = false;
