@@ -75,7 +75,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
           ),
           Container(
               width: MediaQuery.of(context).size.width,
-              height: 56,
+              height: 69,
               child: list(["sda","sda","sda","sda","sda","sda","sda"])),
         ],
       ),
@@ -90,41 +90,69 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
       itemBuilder: (context, index) {
         if(widget.isUserLogged && index == 0 ){
           return Container(
-            margin: EdgeInsets.only(left: 24),
-            width: 56,
-            height: 56,
-            child: RawMaterialButton(
-              onPressed: () {
-                Future.delayed(Duration(milliseconds: 100),(){
-                  controller.insertPage(AddFriends());
-                });
-              },
-              elevation: 0,
-              hoverElevation: 0,
-              focusElevation: 0,
-              highlightElevation: 0,
-              fillColor: Color(0xffD3D0D0),
-              hoverColor: Colors.white,
-              splashColor: Colors.black,
+            margin: EdgeInsets.only(left: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
 
-              child: SvgPicture.asset(
-                'assets/icons/mais.svg',
-                color: Colors.white,
-                height: 30,
-                width: 30,),
-              padding: EdgeInsets.all(0.0),
-              shape: CircleBorder(),
+                  width: 56,
+                  height: 56,
+                  child: RawMaterialButton(
+                    onPressed: () {
+                      Future.delayed(Duration(milliseconds: 100),(){
+                        controller.insertPage(AddFriends());
+                      });
+                    },
+                    elevation: 0,
+                    hoverElevation: 0,
+                    focusElevation: 0,
+                    highlightElevation: 0,
+                    fillColor: Color(0xffD3D0D0),
+                    hoverColor: Colors.white,
+                    splashColor: Colors.black,
+
+                    child: SvgPicture.asset(
+                      'assets/icons/mais.svg',
+                      color: Colors.white,
+                      height: 30,
+                      width: 30,),
+                    padding: EdgeInsets.all(0.0),
+                    shape: CircleBorder(),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 2),
+                  child: Text(
+                      AppLocalizations.of(context)!.addFriends,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 9,
+                      color: Color(0xffB7B7B8)
+                    ),
+                  ),
+                )
+              ],
             ),
           );
         }
-        return Container(
-            width: 56,
-            height: 56,
-            margin: EdgeInsets.only(
-                left: index == 0 ? 16 : 7,
-              right: index == size - 1 ? 24 : 0
-            ),
-            child: item(items[widget.isUserLogged ? index - 1 : index]));
+        return Column(
+          children: [
+            Container(
+                width: 56,
+                height: 56,
+                margin: EdgeInsets.only(
+                    left: index == 0 ? 16 :
+                    index == 1 && widget.isUserLogged ? 0 : 7,
+                  right: index == size - 1 ? 24 : 0
+                ),
+                child: item(items[widget.isUserLogged ? index - 1 : index])),
+            SizedBox(
+              height: 13,
+            )
+          ],
+        );
       },
     );
   }

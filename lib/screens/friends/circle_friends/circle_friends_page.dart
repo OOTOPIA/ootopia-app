@@ -44,6 +44,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   @override
   Widget build(BuildContext context) {
     init();
+    print(MediaQuery.of(context).size.width);
+
+    print(MediaQuery.of(context).size.width);
     return  Observer(
         builder: (context) {
           return LoadingOverlay(
@@ -72,7 +75,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 Text(AppLocalizations.of(context)!.circleOfFriends,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 21,
+                                    fontSize: 24,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -101,15 +104,16 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   ),
                                   backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
                                   padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.symmetric(horizontal: 20)),
+                                      EdgeInsets.symmetric(horizontal: 24)),
                                 ),
                                 onPressed: () {
                                   Future.delayed(Duration(milliseconds: 100),(){
                                     controller.insertPage(AddFriends());
                                   });
                                 },
-                                child: Text(
-                                  AppLocalizations.of(context)!.addFriends.toLowerCase(),
+                                child: Text(MediaQuery.of(context).size.width <= 414 ?
+                                AppLocalizations.of(context)!.add.toLowerCase():
+                                  AppLocalizations.of(context)!.addFriend.toLowerCase(),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
