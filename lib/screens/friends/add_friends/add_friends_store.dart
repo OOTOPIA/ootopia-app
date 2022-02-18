@@ -13,6 +13,10 @@ abstract class AddFriendsStoreBase with Store {
   @observable
   bool isLoading = false;
 
+
+  @observable
+  bool searchIsEmpty = false;
+
   @action
   Future<void> searchName(String name) async{
     if(name.isNotEmpty){
@@ -20,6 +24,8 @@ abstract class AddFriendsStoreBase with Store {
       isLoading = true;
       print(isLoading);
       Future.delayed(Duration(milliseconds: 1000),(){
+
+        searchIsEmpty = users.isEmpty;
         isLoading = false;
       });
       // listInvitationCode.clear();

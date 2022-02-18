@@ -101,10 +101,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   ),
                                   backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
                                   padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.symmetric(horizontal: 24)),
+                                      EdgeInsets.symmetric(horizontal: 20)),
                                 ),
                                 onPressed: () {
-
                                   Future.delayed(Duration(milliseconds: 100),(){
                                     controller.insertPage(AddFriends());
                                   });

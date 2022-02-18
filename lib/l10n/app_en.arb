@@ -479,6 +479,9 @@
     "orderBy" : "Ranked By:",
     "alphabeticalOrder" : "Alphabetical order",
     "mostRecent" : "Most recent",
-    "older" : "Older"
+    "older" : "Older",
+    "userNotFound" : "User not found",
+    "userNotFoundMsg" : "Unfortunately the user you are looking for is not found or does not exist yet."
+
 
 }

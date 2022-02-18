@@ -110,6 +110,36 @@ class _AddFriendsState extends State<AddFriends> {
                       ),
 
                       if(addFriendsStore.users.isEmpty)...[
+
+                        if(addFriendsStore.searchIsEmpty)...[
+                          Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.fromLTRB(30, 30, 30, 6),
+                            child: Text(AppLocalizations.of(context)!.userNotFound,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 21,
+                                color: LightColors.blue,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.fromLTRB(30, 0, 30, 15),
+                            child: Text(AppLocalizations.of(context)!.userNotFoundMsg,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          )
+
+                        ],
                         ListView.builder(
                             itemCount: 11,
                             shrinkWrap: true,

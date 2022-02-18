@@ -39,6 +39,21 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
     });
   }
 
+  final _$searchIsEmptyAtom = Atom(name: 'AddFriendsStoreBase.searchIsEmpty');
+
+  @override
+  bool get searchIsEmpty {
+    _$searchIsEmptyAtom.reportRead();
+    return super.searchIsEmpty;
+  }
+
+  @override
+  set searchIsEmpty(bool value) {
+    _$searchIsEmptyAtom.reportWrite(value, super.searchIsEmpty, () {
+      super.searchIsEmpty = value;
+    });
+  }
+
   final _$searchNameAsyncAction = AsyncAction('AddFriendsStoreBase.searchName');
 
   @override
@@ -50,7 +65,8 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
   String toString() {
     return '''
 users: ${users},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+searchIsEmpty: ${searchIsEmpty}
     ''';
   }
 }
