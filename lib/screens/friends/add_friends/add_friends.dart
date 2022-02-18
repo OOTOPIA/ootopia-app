@@ -83,7 +83,7 @@ class _AddFriendsState extends State<AddFriends> {
                                 icon: Container(
                                   margin: EdgeInsets.symmetric(horizontal: 12),
                                   child: SvgPicture.asset(
-                                    'assets/icons/ooz-coin-blue-small.svg',
+                                    'assets/icons/search.svg',
                                     color: LightColors.blue,
                                   ),
                                 ),
