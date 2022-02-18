@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/components/information_widget.dart';
+import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
@@ -88,9 +89,9 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
         body()
       ],
     );
-    }
+  }
 
-  Widget body(){
+  Widget body() {
     if (hasError) {
       return TryAgain(
         _getData,
@@ -188,40 +189,52 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                         child: Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  radius: 16,
-                                  backgroundImage: NetworkImage(
-                                    learningTrack.userPhotoUrl,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                Row(
                                   children: [
-                                    Text(
-                                      learningTrack.userName,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                    CircleAvatar(
+                                      radius: 16,
+                                      backgroundImage: NetworkImage(
+                                        learningTrack.userPhotoUrl,
                                       ),
                                     ),
-                                    Visibility(
-                                      visible:
-                                          learningTrack.location != 'null' &&
-                                              learningTrack.location != null,
-                                      child: Text(
-                                        learningTrack.location!,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          learningTrack.userName,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
+                                        Visibility(
+                                          visible: learningTrack.location !=
+                                                  'null' &&
+                                              learningTrack.location != null,
+                                          child: Text(
+                                            learningTrack.location!,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     )
                                   ],
+                                ),
+                                ShareLink(
+                                  type: Type.learning_track,
+                                  id: learningTrack.id,
                                 )
                               ],
                             ),

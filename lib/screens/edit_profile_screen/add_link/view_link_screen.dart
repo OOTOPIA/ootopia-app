@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
+import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
+import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewLinksScreen extends StatefulWidget {
-
   final Map<String, dynamic> args;
   late ProfileScreenStore store;
   late List<Link> links;
-  ViewLinksScreen(this.args){
+  ViewLinksScreen(this.args) {
     store = args['store'];
     links = args['list'];
   }
@@ -25,9 +31,10 @@ class ViewLinksScreen extends StatefulWidget {
 }
 
 class _ViewLinksScreenState extends State<ViewLinksScreen> {
-
-
-
+  SmartPageController controller = SmartPageController.getInstance();
+  LearningTracksRepositoryImpl learningTracksStore =
+      LearningTracksRepositoryImpl();
+  MarketplaceRepositoryImpl marketplaceRepository = MarketplaceRepositoryImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +53,14 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                     height: GlobalConstants.of(context).spacingNormal,
                   ),
                   ProfileAvatarWidget(profileScreenStore: widget.store),
-                  SizedBox(
-                      height: GlobalConstants.of(context).spacingSmall),
+                  SizedBox(height: GlobalConstants.of(context).spacingSmall),
                   Text(
                     widget.store.profile!.fullname,
                     style: GoogleFonts.roboto(
                         color: Theme.of(context).textTheme.subtitle1!.color,
                         fontSize: 24,
-                        fontWeight: Theme.of(context)
-                            .textTheme
-                            .subtitle1!
-                            .fontWeight),
+                        fontWeight:
+                            Theme.of(context).textTheme.subtitle1!.fontWeight),
                   ),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
@@ -69,7 +73,6 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                 ],
               ),
             )
-
           ],
         ),
       ),
@@ -89,7 +92,7 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
         child: Ink(
           child: InkWell(
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            onTap: (){
+            onTap: () {
               _launchURL(link.URL);
             },
             child: Padding(
@@ -98,10 +101,24 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(width: 12),
-                  SvgPicture.asset('assets/icons/link.svg'),
+                  if (link.URL.contains("market-place/shared/"))
+                    Image.asset(
+                      "assets/icons/marketplace_icon_bottomless.png",
+                      width: 24,
+                    ),
+                  if (link.URL.contains("learning-tracks/shared/"))
+                    SvgPicture.asset(
+                      "assets/icons/compass.svg",
+                      width: 24,
+                      color: LightColors.blue,
+                    ),
+                  if (!link.URL.contains("market-place/shared/") &&
+                      !link.URL.contains("learning-tracks/shared/"))
+                    SvgPicture.asset('assets/icons/link.svg'),
                   SizedBox(width: 12),
                   Container(
-                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 100),
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width - 100),
                     child: Text(
                       link.title,
                       overflow: TextOverflow.ellipsis,
@@ -122,9 +139,26 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
   }
 
   void _launchURL(String _url) async {
-    if(await canLaunch(_url)){
+    if (_url.contains("market-place/shared/")) {
+      ProductModel productModel = await marketplaceRepository
+          .getProductById(_url.split('market-place/shared/').last);
+      controller.insertPage(ProductDetailScreen(productModel: productModel));
+      return;
+    }
+    if (_url.contains("learning-tracks/shared/")) {
+      LearningTracksModel learningTrack = await learningTracksStore
+          .getLearningTrackById(_url.split('learning-tracks/shared/').last);
+      controller.insertPage(ViewLearningTracksScreen(
+        {
+          'list_chapters': learningTrack.chapters,
+          'learning_tracks': learningTrack,
+          'updateLearningTrack': () {},
+        },
+      ));
+      return;
+    }
+    if (await canLaunch(_url)) {
       await launch(_url);
     }
   }
-
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/screens/marketplace/components/horizontal_expanded_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/profile_name_location_widget.dart';
@@ -37,19 +38,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               builder: (context, constraint) {
                 return SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                    constraints:
+                        BoxConstraints(minHeight: constraint.maxHeight),
                     child: IntrinsicHeight(
                       child: Column(
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.only(
-                              right: 16,
+                              right: 26,
                               left: 26,
                             ),
-                            child: ProfileNameLocationWidget(
-                              profileImageUrl: widget.productModel.userPhotoUrl,
-                              profileName: widget.productModel.userName,
-                              location: widget.productModel.location,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ProfileNameLocationWidget(
+                                  profileImageUrl:
+                                      widget.productModel.userPhotoUrl,
+                                  profileName: widget.productModel.userName,
+                                  location: widget.productModel.location,
+                                ),
+                                ShareLink(
+                                  type: Type.offer,
+                                  id: widget.productModel.id,
+                                )
+                              ],
                             ),
                           ),
                           Expanded(
@@ -90,7 +102,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           },
                                         );
                                       } else {
-                                        pageController.insertPage(TransferScreen(
+                                        pageController
+                                            .insertPage(TransferScreen(
                                           productModel: widget.productModel,
                                         ));
                                       }

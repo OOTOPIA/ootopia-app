@@ -6,6 +6,7 @@ abstract class ILearningTracks {
   Future<List<LearningTracksModel>> listLearningTracks(
       {int? limit, int? offset, required String locale});
   Future<LearningTracksModel?> lastLearningTracks({required String locale});
+  Future<LearningTracksModel> getLearningTrackById(String id);
 }
 
 class LearningTracksRepositoryImpl
@@ -60,7 +61,7 @@ class LearningTracksRepositoryImpl
     }
   }
 
-  Future<LearningTracksModel> getLearningTracksById(
+  Future<LearningTracksModel> getLearningTrackById(
       String learningTrackId) async {
     try {
       var response =

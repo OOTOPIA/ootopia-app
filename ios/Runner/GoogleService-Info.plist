@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>986493600408-ofks88dk98lvp3q40o7q6vr9orgh646i.apps.googleusercontent.com</string>
+	<string>986493600408-vphb10n89bi60ul0151tmn6pbnrq2pb5.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.986493600408-ofks88dk98lvp3q40o7q6vr9orgh646i</string>
+	<string>com.googleusercontent.apps.986493600408-vphb10n89bi60ul0151tmn6pbnrq2pb5</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>986493600408-19kp10qkp3pd470pv9jl9c9nl7kfj4md.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.ootopia</string>
+	<string>org.ootopia.beta2</string>
 	<key>PROJECT_ID</key>
 	<string>ootopia-e8c63</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:986493600408:ios:3b1991dc7949d768ec06ed</string>
+	<string>1:986493600408:ios:404fb12eb1586887ec06ed</string>
 </dict>
 </plist>
