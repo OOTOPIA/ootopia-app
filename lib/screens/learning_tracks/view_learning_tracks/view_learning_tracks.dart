@@ -42,7 +42,7 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
       if (widget.args['id'] != null) {
         Future.delayed(Duration.zero).then((_) async {
           learningTracks = await learningTracksRepositoryImpl
-              .getLearningTracksById(widget.args['id']);
+              .getLearningTrackById(widget.args['id']);
 
           listChapters = learningTracks!.chapters;
 
