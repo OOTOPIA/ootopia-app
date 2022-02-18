@@ -3,14 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
+import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
+import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/last_learning_track_component.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -62,6 +68,9 @@ class _TimelinePageState extends State<TimelinePage>
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
+  LearningTracksRepositoryImpl learningTracksStore =
+      LearningTracksRepositoryImpl();
+  MarketplaceRepositoryImpl marketplaceRepository = MarketplaceRepositoryImpl();
 
   @override
   void initState() {
@@ -117,6 +126,8 @@ class _TimelinePageState extends State<TimelinePage>
     _sub = linkStream.listen((link) {
       if (!mounted || link == null) return;
       if (link.contains("posts/shared")) goToPost(link);
+      if (link.contains("market-place/shared")) goToMarketPlace(link);
+      if (link.contains("learning-tracks/shared")) goToLearningTracks(link);
       if (link.contains("resetPasswordToken=")) redefinePassword(link);
     }, onError: (Object err) {
       if (!mounted) return;
@@ -147,6 +158,26 @@ class _TimelinePageState extends State<TimelinePage>
         },
       ),
     );
+  }
+
+  goToMarketPlace(String link) async {
+    ProductModel productModel = await marketplaceRepository
+        .getProductById(link.split('market-place/shared/').last);
+
+    controller.insertPage(ProductDetailScreen(productModel: productModel));
+  }
+
+  goToLearningTracks(String link) async {
+    LearningTracksModel learningTrack = await learningTracksStore
+        .getLearningTrackById(link.split('learning-tracks/shared/').last);
+
+    controller.insertPage(ViewLearningTracksScreen(
+      {
+        'list_chapters': learningTrack.chapters,
+        'learning_tracks': learningTrack,
+        'updateLearningTrack': () {},
+      },
+    ));
   }
 
   Future<void> _handleInitialUri() async {
