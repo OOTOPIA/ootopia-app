@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_page.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -175,7 +176,13 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
     );
   }
 
-
+  void _goToProfile(userId) async {
+    controller.insertPage(ProfileScreen(
+      {
+        "id": userId,
+      },
+    ));
+  }
 
 
 }
