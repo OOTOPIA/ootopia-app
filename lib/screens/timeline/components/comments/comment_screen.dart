@@ -33,7 +33,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   String postId = '';
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
-
+  bool seSelectedUser = false;
+  late TextSelection teste;
+  int positionLeft = 0;
   @override
   void initState() {
     super.initState();
@@ -63,7 +65,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       "postOwnerId": widget.args['post'].userId,
       "commentsCount": widget.args['post'].commentsCount,
     });
-
+    teste = TextSelection.fromPosition(
+      TextPosition(offset: _inputController.text.length),
+    );
     focusNode.addListener(() {
       setState(() {
         print(focusNode.hasFocus);
@@ -375,10 +379,19 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                           : null,
                       onChanged: (value) {
                         value = value.trim();
+
                         setState(() {
+                          print(_inputController.selection.base.offset);
                           if (value.length > 0) {
+                            if (value.contains('@')) {
+                              positionLeft =
+                                  _inputController.selection.base.offset;
+                              seSelectedUser = true;
+                            }
                             isIconBlue = true;
                           } else {
+                            positionLeft = 0;
+                            seSelectedUser = false;
                             isIconBlue = false;
                           }
                         });
@@ -468,6 +481,31 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     ),
                   ),
                 ),
+                if (seSelectedUser)
+                  Positioned(
+                    bottom: 15,
+                    left: MediaQuery.of(context).size.width *
+                        (positionLeft / 100),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 16),
+                      height: 80,
+                      width: MediaQuery.of(context).size.width * .35,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text('data'),
+                            Text('data'),
+                            Text('data'),
+                            Text('data'),
+                            Text('data'),
+                            Text('data'),
+                            Text('data'),
+                            Text('data'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

@@ -16,6 +16,9 @@ abstract class CommentStoreBase with Store {
   List<Comment> listComments = [];
 
   @observable
+  List listUsers = [];
+
+  @observable
   int currentPage = 1;
 
   @action
