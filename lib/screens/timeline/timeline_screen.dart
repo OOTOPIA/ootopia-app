@@ -124,7 +124,7 @@ class _TimelinePageState extends State<TimelinePage>
 
   void _handleIncomingLinks() {
     _sub = linkStream.listen((link) {
-      if (!mounted || link == null) return;
+      if (link == null) return;
       if (link.contains("posts/shared")) goToPost(link);
       if (link.contains("market-place/shared")) goToMarketPlace(link);
       if (link.contains("learning-tracks/shared")) goToLearningTracks(link);
@@ -186,7 +186,18 @@ class _TimelinePageState extends State<TimelinePage>
       try {
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
-        redefinePassword(uri.toString());
+        if (uri.toString().contains("resetPasswordToken=")) {
+          redefinePassword(uri.toString());
+        }
+        if (uri.toString().contains("posts/shared")) {
+          goToPost(uri.toString());
+        }
+        if (uri.toString().contains("market-place/shared")) {
+          goToMarketPlace(uri.toString());
+        }
+        if (uri.toString().contains("learning-tracks/shared")) {
+          goToLearningTracks(uri.toString());
+        }
       } catch (err) {
         if (!mounted) return;
       }
