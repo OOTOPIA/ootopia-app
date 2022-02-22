@@ -34,8 +34,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
-  late TextSelection teste;
-  int positionLeft = 0;
+  bool teste = false;
   @override
   void initState() {
     super.initState();
@@ -65,9 +64,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       "postOwnerId": widget.args['post'].userId,
       "commentsCount": widget.args['post'].commentsCount,
     });
-    teste = TextSelection.fromPosition(
-      TextPosition(offset: _inputController.text.length),
-    );
     focusNode.addListener(() {
       setState(() {
         print(focusNode.hasFocus);
@@ -381,16 +377,16 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                         value = value.trim();
 
                         setState(() {
-                          print(_inputController.selection.base.offset);
                           if (value.length > 0) {
-                            if (value.contains('@')) {
-                              positionLeft =
-                                  _inputController.selection.base.offset;
+                            if (value.contains('@') &&
+                                commentStore.listUsersMarket.isEmpty) {
                               seSelectedUser = true;
+                            } else {
+                              seSelectedUser = false;
                             }
                             isIconBlue = true;
                           } else {
-                            positionLeft = 0;
+                            commentStore.listUsersMarket.clear();
                             seSelectedUser = false;
                             isIconBlue = false;
                           }
@@ -482,25 +478,79 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                   ),
                 ),
                 if (seSelectedUser)
-                  Positioned(
-                    bottom: 15,
-                    left: MediaQuery.of(context).size.width *
-                        (positionLeft / 100),
+                  Align(
+                    alignment: Alignment.topCenter,
                     child: Container(
-                      padding: EdgeInsets.only(left: 16),
-                      height: 80,
-                      width: MediaQuery.of(context).size.width * .35,
+                      color: Colors.white,
+                      height: MediaQuery.of(context).size.height * .42,
+                      padding: EdgeInsets.only(left: 16, top: 16),
+                      width: MediaQuery.of(context).size.width,
                       child: SingleChildScrollView(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('data'),
-                            Text('data'),
-                            Text('data'),
-                            Text('data'),
-                            Text('data'),
-                            Text('data'),
-                            Text('data'),
-                            Text('data'),
+                            InkWell(
+                              onTap: () {
+                                commentStore.listUsersMarket.add('data');
+                                setState(() {
+                                  teste = true;
+                                  _inputController.text =
+                                      '${_inputController.text}data';
+                                  _inputController.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset:
+                                              _inputController.text.length));
+                                  seSelectedUser = false;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  CircleAvatar(),
+                                  SizedBox(width: 8),
+                                  Text('data'),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _inputController.text =
+                                      '${_inputController.text}data2';
+                                  _inputController.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset:
+                                              _inputController.text.length));
+                                  seSelectedUser = false;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  CircleAvatar(),
+                                  SizedBox(width: 8),
+                                  Text('data1'),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _inputController.text =
+                                      '${_inputController.text}data2';
+                                  _inputController.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset:
+                                              _inputController.text.length));
+                                  seSelectedUser = false;
+                                });
+                              },
+                              child: Row(
+                                children: [
+                                  CircleAvatar(),
+                                  SizedBox(width: 8),
+                                  Text('data2'),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

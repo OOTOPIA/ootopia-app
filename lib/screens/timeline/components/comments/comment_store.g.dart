@@ -39,6 +39,36 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$listUsersAtom = Atom(name: 'CommentStoreBase.listUsers');
+
+  @override
+  List<dynamic> get listUsers {
+    _$listUsersAtom.reportRead();
+    return super.listUsers;
+  }
+
+  @override
+  set listUsers(List<dynamic> value) {
+    _$listUsersAtom.reportWrite(value, super.listUsers, () {
+      super.listUsers = value;
+    });
+  }
+
+  final _$listUsersMarketAtom = Atom(name: 'CommentStoreBase.listUsersMarket');
+
+  @override
+  List<String> get listUsersMarket {
+    _$listUsersMarketAtom.reportRead();
+    return super.listUsersMarket;
+  }
+
+  @override
+  set listUsersMarket(List<String> value) {
+    _$listUsersMarketAtom.reportWrite(value, super.listUsersMarket, () {
+      super.listUsersMarket = value;
+    });
+  }
+
   final _$currentPageAtom = Atom(name: 'CommentStoreBase.currentPage');
 
   @override
@@ -84,6 +114,8 @@ mixin _$CommentStore on CommentStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 listComments: ${listComments},
+listUsers: ${listUsers},
+listUsersMarket: ${listUsersMarket},
 currentPage: ${currentPage}
     ''';
   }

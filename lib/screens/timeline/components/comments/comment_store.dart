@@ -19,6 +19,9 @@ abstract class CommentStoreBase with Store {
   List listUsers = [];
 
   @observable
+  List<String> listUsersMarket = [];
+
+  @observable
   int currentPage = 1;
 
   @action
