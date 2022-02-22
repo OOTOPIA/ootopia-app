@@ -372,6 +372,7 @@
     "save":"Save",
     "editProfile": "Edit Profile",
     "edit": "Edit",
+    "proceed": "Continue",
     "insertValidCellPhone":"Please enter your mobile number.",
     "optional":"Optional",
     "enterYourNumber":"Your mobile number",
@@ -482,5 +483,6 @@
     "notificationButtonText": "Open",
 
     "hide" : "Hide",
-    "readMore" : "Read more"
+    "readMore" : "Read more",
+    "multiplesImages": "Multiples images"
 }
