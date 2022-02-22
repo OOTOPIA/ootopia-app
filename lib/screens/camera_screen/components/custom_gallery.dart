@@ -22,6 +22,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   List<AssetEntity> _mediaList = [];
   List imageList = [];
   var isLoading = false;
+  var singleMode = true;
 
   @override
   void initState() {
@@ -70,7 +71,7 @@ class _CustomGalleryState extends State<CustomGallery> {
                             horizontal: GlobalConstants.of(context)
                                 .screenHorizontalSpace),
                         child: GestureDetector(
-                          onTap: () => print('Teste'),
+                          onTap: switchMode,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -115,6 +116,7 @@ class _CustomGalleryState extends State<CustomGallery> {
                                       amountPadding: 0,
                                       image: imageBytes,
                                       columnsCount: 3,
+                                      singleMode: singleMode,
                                     ),
                                   ),
                                 )
@@ -147,6 +149,13 @@ class _CustomGalleryState extends State<CustomGallery> {
     }
     setState(() {
       isLoading = false;
+    });
+  }
+
+  switchMode() {
+    print('AAAAAAAAAAA');
+    setState(() {
+      singleMode = !singleMode;
     });
   }
 }
