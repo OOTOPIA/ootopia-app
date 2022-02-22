@@ -75,10 +75,19 @@ abstract class HomeStoreBase with Store {
 
   @action
   startDailyGoalTimer() async {
-    _timerIsStarted = false;
     _totalAppUsageTimeSoFarInMs = 0;
     if (prefs == null) {
       prefs = await SharedPreferencesInstance.getInstance();
+    }
+
+    if (prefs!.getLastPendingUsageTime() != null) {
+      int? usageTimeSoFarInMilliseconds = prefs!.getLastPendingUsageTime()!;
+      if (usageTimeSoFarInMilliseconds > 0) {
+        try {
+          await AppUsageTime.instance.sendToApi(usageTimeSoFarInMilliseconds);
+          await getDailyGoalStats();
+        } catch (e) {}
+      }
     }
     if (!_watch.isRunning) {
       _watch.start();
@@ -94,51 +103,40 @@ abstract class HomeStoreBase with Store {
       _dailyGoalTimer =
           Timer.periodic(Duration(seconds: 1), (Timer timer) async {
         if (_watch.isRunning && dailyGoalStats != null) {
-          if (!_getDailyGoalStats) {
-            _totalAppUsageTimeSoFarInMs =
-                dailyGoalStats!.totalAppUsageTimeSoFarInMs;
-            _getDailyGoalStats = true;
-          }
-          if (!_timerIsStarted) {
-            _remainingTimeInMs =
-                dailyGoalStats!.remainingTimeUntilEndOfGameInMs;
-            _totalAppUsageTimeSoFarInMs =
-                dailyGoalStats!.totalAppUsageTimeSoFarInMs;
-            if (AppUsageTime.instance.usageTimeSoFarInMilliseconds > 0) {
-              //Dessa forma mascaramos o "bug" do tempo de utilização não ter subido ainda ao abrir o app a tempo de retornar na requisição do status da meta pessoal
-              _totalAppUsageTimeSoFarInMs +=
-                  AppUsageTime.instance.usageTimeSoFarInMilliseconds;
-            }
-            percentageOfDailyGoalAchieved =
-                dailyGoalStats!.percentageOfDailyGoalAchieved;
-            _timerIsStarted = true;
-          } else {
-            _remainingTimeInMs = _remainingTimeInMs - 1000;
-            _totalAppUsageTimeSoFarInMs = _totalAppUsageTimeSoFarInMs + 1000;
-            var progressPerc = (_totalAppUsageTimeSoFarInMs /
-                    (dailyGoalStats!.dailyGoalInMinutes * 60000)) *
-                100;
-            percentageOfDailyGoalAchieved =
-                (progressPerc >= 100 ? 100 : progressPerc);
-          }
+          _remainingTimeInMs = dailyGoalStats!.remainingTimeUntilEndOfGameInMs;
+          _totalAppUsageTimeSoFarInMs =
+              dailyGoalStats!.totalAppUsageTimeSoFarInMs;
+          percentageOfDailyGoalAchieved =
+              dailyGoalStats!.percentageOfDailyGoalAchieved;
+          _totalAppUsageTimeSoFarInMs +=
+              AppUsageTime.instance.usageTimeSoFarInMilliseconds;
+          _remainingTimeInMs -=
+              AppUsageTime.instance.usageTimeSoFarInMilliseconds;
+          var progressPerc = (_totalAppUsageTimeSoFarInMs /
+                  (dailyGoalStats!.dailyGoalInMinutes * 60000)) *
+              100;
+          percentageOfDailyGoalAchieved =
+              (progressPerc >= 100 ? 100 : progressPerc);
+
           if (percentageOfDailyGoalAchieved >= 100) {
             prefs?.setPersonalCelebratePageEnabled(true);
             if (prefs?.getPersonalCelebratePageAlreadyOpened() == false &&
                 !totalIsSentToApi) {
+              if (!_watch.isRunning) {
+                _watch.stop();
+              }
               totalIsSentToApi = true;
-              await AppUsageTime.instance
-                  .sendToApi(_totalAppUsageTimeSoFarInMs);
-              AppUsageTime.instance.resetUsageTime();
+              await AppUsageTime.instance.sendToApi();
+              await getDailyGoalStats();
+              if (!_watch.isRunning) {
+                _watch.start();
+              }
             }
           } else {
-            if (prefs?.getPersonalCelebratePageAlreadyOpened() == true) {
-              AppUsageTime.instance.resetUsageTime();
-              percentageOfDailyGoalAchieved = 0;
-              _totalAppUsageTimeSoFarInMs = 0;
-            }
             prefs?.setPersonalCelebratePageEnabled(false);
             prefs?.setPersonalCelebratePageAlreadyOpened(false);
           }
+
           remainingTime = _msToTime(_remainingTimeInMs);
           totalAppUsageTimeSoFar =
               _msToTime(_totalAppUsageTimeSoFarInMs, showSeconds: true);
