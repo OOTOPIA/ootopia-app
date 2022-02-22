@@ -14,9 +14,6 @@ class HomeStore = HomeStoreBase with _$HomeStore;
 
 abstract class HomeStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
-  String _personalCelebratePageEnabled = "show_personal_celebrate_page";
-  String _personalCelebratePageAlreadyOpened =
-      "personal_celebrate_page_already_opened";
   SharedPreferencesInstance? prefs;
 
   BuildContext? context;
