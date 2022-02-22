@@ -5,10 +5,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends_store.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 
 
@@ -21,7 +23,7 @@ class AddFriends extends StatefulWidget {
 class _AddFriendsState extends State<AddFriends> {
   TextEditingController messageController = TextEditingController();
   AddFriendsStore addFriendsStore = AddFriendsStore();
-
+  SmartPageController controller = SmartPageController.getInstance();
 
 
   @override
@@ -244,6 +246,14 @@ class _AddFriendsState extends State<AddFriends> {
         ],
       ),
     );
+  }
+
+  void _goToProfile(userId) async {
+    controller.insertPage(ProfileScreen(
+      {
+        "id": userId,
+      },
+    ));
   }
 
 
