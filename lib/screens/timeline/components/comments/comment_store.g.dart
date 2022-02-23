@@ -42,15 +42,30 @@ mixin _$CommentStore on CommentStoreBase, Store {
   final _$listUsersAtom = Atom(name: 'CommentStoreBase.listUsers');
 
   @override
-  List<dynamic> get listUsers {
+  List<User> get listUsers {
     _$listUsersAtom.reportRead();
     return super.listUsers;
   }
 
   @override
-  set listUsers(List<dynamic> value) {
+  set listUsers(List<User> value) {
     _$listUsersAtom.reportWrite(value, super.listUsers, () {
       super.listUsers = value;
+    });
+  }
+
+  final _$resultListAtom = Atom(name: 'CommentStoreBase.resultList');
+
+  @override
+  List<User> get resultList {
+    _$resultListAtom.reportRead();
+    return super.resultList;
+  }
+
+  @override
+  set resultList(List<User> value) {
+    _$resultListAtom.reportWrite(value, super.resultList, () {
+      super.resultList = value;
     });
   }
 
@@ -84,6 +99,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$currentPageUserAtom = Atom(name: 'CommentStoreBase.currentPageUser');
+
+  @override
+  int get currentPageUser {
+    _$currentPageUserAtom.reportRead();
+    return super.currentPageUser;
+  }
+
+  @override
+  set currentPageUser(int value) {
+    _$currentPageUserAtom.reportWrite(value, super.currentPageUser, () {
+      super.currentPageUser = value;
+    });
+  }
+
   final _$getCommentsAsyncAction = AsyncAction('CommentStoreBase.getComments');
 
   @override
@@ -109,14 +139,38 @@ mixin _$CommentStore on CommentStoreBase, Store {
         .run(() => super.deleteComments(postId, id));
   }
 
+  final _$listAllUsersAsyncAction =
+      AsyncAction('CommentStoreBase.listAllUsers');
+
+  @override
+  Future<void> listAllUsers() {
+    return _$listAllUsersAsyncAction.run(() => super.listAllUsers());
+  }
+
+  final _$CommentStoreBaseActionController =
+      ActionController(name: 'CommentStoreBase');
+
+  @override
+  void searchUser(String value) {
+    final _$actionInfo = _$CommentStoreBaseActionController.startAction(
+        name: 'CommentStoreBase.searchUser');
+    try {
+      return super.searchUser(value);
+    } finally {
+      _$CommentStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
 listComments: ${listComments},
 listUsers: ${listUsers},
+resultList: ${resultList},
 listUsersMarket: ${listUsersMarket},
-currentPage: ${currentPage}
+currentPage: ${currentPage},
+currentPageUser: ${currentPageUser}
     ''';
   }
 }

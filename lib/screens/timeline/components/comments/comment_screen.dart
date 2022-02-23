@@ -34,7 +34,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
-  bool teste = false;
   @override
   void initState() {
     super.initState();
@@ -45,6 +44,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?"):
             const TextStyle(
           color: LightColors.linkText,
+        ),
+        RegExp(r"@"): const TextStyle(
+          color: LightColors.errorRed,
         ),
       },
       onMatch: (List<String> matches) {},
@@ -57,6 +59,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       homeStore.setSeeCrip(false);
 
       await commentStore.getComments(postId, commentStore.currentPage);
+      await commentStore.listAllUsers();
       commentStore.isLoading = false;
     });
     postCommentsCount = widget.args['post'].commentsCount;
@@ -378,8 +381,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
                         setState(() {
                           if (value.length > 0) {
-                            if (value.contains('@') &&
-                                commentStore.listUsersMarket.isEmpty) {
+                            if (value.contains('@')) {
                               seSelectedUser = true;
                               commentStore.searchUser(value);
                             } else {
@@ -478,55 +480,56 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     ),
                   ),
                 ),
-                if (seSelectedUser)
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      color: Colors.white,
-                      height: MediaQuery.of(context).size.height * .42,
-                      padding: EdgeInsets.only(left: 16, top: 16),
-                      width: MediaQuery.of(context).size.width,
-                      child: SingleChildScrollView(
-                        child: Observer(builder: (context) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: commentStore.resultList
-                                .map(
-                                  (e) => InkWell(
-                                    onTap: () {
-                                      commentStore.listUsersMarket.add('data');
-                                      setState(() {
-                                        teste = true;
-                                        _inputController.text =
-                                            '${_inputController.text.replaceAll('@', '')}data';
-                                        _inputController.selection =
-                                            TextSelection.fromPosition(
-                                                TextPosition(
-                                                    offset: _inputController
-                                                        .text.length));
-                                        seSelectedUser = false;
-                                      });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(),
-                                        SizedBox(width: 8),
-                                        Text('data'),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
+                if (seSelectedUser) listOfUsers(context),
               ],
             ),
           ),
         ),
       );
     });
+  }
+
+  Widget listOfUsers(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        color: Colors.white,
+        height: MediaQuery.of(context).size.height * .42,
+        padding: EdgeInsets.only(left: 16, top: 16),
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Observer(builder: (context) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: commentStore.resultList
+                  .map(
+                    (e) => InkWell(
+                      onTap: () {
+                        commentStore.listUsersMarket.add(e.fullname!);
+                        setState(() {
+                          _inputController.text.split('');
+                          _inputController.text =
+                              '${_inputController.text}${e.fullname}';
+                          _inputController.selection =
+                              TextSelection.fromPosition(TextPosition(
+                                  offset: _inputController.text.length));
+                          seSelectedUser = false;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          CircleAvatar(),
+                          SizedBox(width: 8),
+                          Text(e.fullname!),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            );
+          }),
+        ),
+      ),
+    );
   }
 }

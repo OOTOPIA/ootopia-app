@@ -1,5 +1,6 @@
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 
 part "comment_store.g.dart";
@@ -16,16 +17,19 @@ abstract class CommentStoreBase with Store {
   List<Comment> listComments = [];
 
   @observable
-  List listUsers = [];
+  List<User> listUsers = [];
 
   @observable
-  List resultList = [];
+  List<User> resultList = [];
 
   @observable
   List<String> listUsersMarket = [];
 
   @observable
   int currentPage = 1;
+
+  @observable
+  int currentPageUser = 1;
 
   @action
   Future<void> getComments(String postId, int page) async {
@@ -68,12 +72,25 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
+  Future<void> listAllUsers() async {
+    try {
+      for (var i = 0; i < 8; i++) {
+        listUsers.add(User(
+          fullname: 'data$i',
+        ));
+      }
+    } catch (e) {}
+  }
+
+  @action
   void searchUser(String value) {
-    List showResults = [];
-    for (var document in listUsers) {
-      var title = document.title.toLowerCase();
-      if (document.contains(value.toLowerCase())) {
-        showResults.add(document);
+    List<User> showResults = [];
+
+    for (var user in listUsers) {
+      var fullaname = user.fullname?.toLowerCase();
+      List<String> splitPage = value.split('@');
+      if (fullaname!.contains(splitPage[1])) {
+        showResults.add(user);
       }
     }
     resultList = showResults;

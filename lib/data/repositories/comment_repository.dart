@@ -1,4 +1,5 @@
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
@@ -42,6 +43,20 @@ class CommentRepositoryImpl with SecureStoreMixin {
       }
     } catch (error) {
       throw Exception('Failed to delete comment $error');
+    }
+  }
+
+  Future<List<User>> getAllUsers(int page) async {
+    try {
+      var response = await ApiClient.api()
+          .get('posts/comments/users', queryParameters: {'page': page});
+      if (response.statusCode == 200) {
+        return (response.data as List).map((i) => User.fromJson(i)).toList();
+      } else {
+        throw Exception('Failed to load comment');
+      }
+    } catch (error) {
+      throw Exception('Failed to load comment $error');
     }
   }
 }
