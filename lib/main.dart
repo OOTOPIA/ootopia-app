@@ -266,11 +266,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.inactive:
         AppUsageTime.instance.stopTimer();
-        AppUsageTime.instance.sendToApi();
         break;
       case AppLifecycleState.paused:
         AppUsageTime.instance.stopTimer();
-        AppUsageTime.instance.sendToApi();
         break;
       case AppLifecycleState.detached:
         AppUsageTime.instance.stopTimer();

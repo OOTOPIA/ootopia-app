@@ -43,6 +43,7 @@ abstract class HomeStoreBase with Store {
 
   int _remainingTimeInMs = 0;
   int _totalAppUsageTimeSoFarInMs = 0;
+  int _updateAppUsageTime = 0;
   bool _timerIsStarted = false;
   bool _getDailyGoalStats = false;
 
@@ -119,7 +120,7 @@ abstract class HomeStoreBase with Store {
             prefs?.setPersonalCelebratePageEnabled(true);
             if (prefs?.getPersonalCelebratePageAlreadyOpened() == false &&
                 !totalIsSentToApi) {
-              if (!_watch.isRunning) {
+              if (_watch.isRunning) {
                 _watch.stop();
               }
               totalIsSentToApi = true;
@@ -132,6 +133,17 @@ abstract class HomeStoreBase with Store {
           } else {
             prefs?.setPersonalCelebratePageEnabled(false);
             prefs?.setPersonalCelebratePageAlreadyOpened(false);
+          }
+
+          if (_totalAppUsageTimeSoFarInMs >= _updateAppUsageTime) {
+            if (_watch.isRunning) {
+              _watch.stop();
+            }
+            await AppUsageTime.instance.sendToApi();
+            await getDailyGoalStats();
+            if (!_watch.isRunning) {
+              _watch.start();
+            }
           }
 
           remainingTime = _msToTime(_remainingTimeInMs);
@@ -173,6 +185,7 @@ abstract class HomeStoreBase with Store {
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
     try {
       this.dailyGoalStats = await userRepository.getDailyGoalStats();
+      _updateAppUsageTime = dailyGoalStats!.totalAppUsageTimeSoFarInMs + 180000;
     } catch (err) {}
     return this.dailyGoalStats;
   }
