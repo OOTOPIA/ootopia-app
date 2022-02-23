@@ -9,6 +9,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:collection/collection.dart';
 
 class CustomGallery extends StatefulWidget {
   const CustomGallery({Key? key}) : super(key: key);
@@ -19,10 +20,12 @@ class CustomGallery extends StatefulWidget {
 
 class _CustomGalleryState extends State<CustomGallery> {
   List<AssetPathEntity> albums = [];
-  List<AssetEntity> _mediaList = [];
-  List imageList = [];
+  List<AssetEntity> _assetEntityList = [];
+  List<Map> mediaList = [];
+  List<Map> selectedMedias = [];
   var isLoading = false;
   var singleMode = true;
+  static const selectLimit = 5;
 
   @override
   void initState() {
@@ -41,7 +44,7 @@ class _CustomGalleryState extends State<CustomGallery> {
           AppBarComponents.back,
           AppBarComponents.proceed,
         ],
-        onTapLeading: () => print('vish2'),
+        onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () => print('vish'),
       ),
       body: Stack(
@@ -60,7 +63,8 @@ class _CustomGalleryState extends State<CustomGallery> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
-                            image: MemoryImage(imageList.first),
+                            image: FileImage(selectedMedias.last["mediaFile"]),
+                            //MemoryImage(selectedMedias.last["mediaBytes"]),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -68,8 +72,9 @@ class _CustomGalleryState extends State<CustomGallery> {
                       SizedBox(height: 10),
                       Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context)
-                                .screenHorizontalSpace),
+                          horizontal:
+                              GlobalConstants.of(context).screenHorizontalSpace,
+                        ),
                         child: GestureDetector(
                           onTap: switchMode,
                           child: Row(
@@ -106,17 +111,20 @@ class _CustomGalleryState extends State<CustomGallery> {
                             crossAxisAlignment: WrapCrossAlignment.start,
                             spacing: 8, // gap between adjacent chips
                             runSpacing: 8, // gap between lines
-                            children: imageList
+                            children: mediaList
                                 .asMap()
                                 .map(
-                                  (index, imageBytes) => MapEntry(
+                                  (index, media) => MapEntry(
                                     index,
                                     CustomGalleryGridView(
                                       discountSpacing: 10 * 3,
                                       amountPadding: 0,
-                                      image: imageBytes,
+                                      media: handleMediaOnGridView(media),
+                                      mediaType: media["mediaType"],
                                       columnsCount: 3,
                                       singleMode: singleMode,
+                                      positionOnList: returnPosition(media),
+                                      onTap: () => selectMedia(media),
                                     ),
                                   ),
                                 )
@@ -125,9 +133,43 @@ class _CustomGalleryState extends State<CustomGallery> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),
+          //colocar um timing
+          Positioned(
+            bottom: 20,
+            left: GlobalConstants.of(context).screenHorizontalSpace + 5,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 55,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: LightColors.cyan,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(width: 15),
+                  SvgPicture.asset(
+                    'assets/icons/Icon-feather-check.svg',
+                    height: 18,
+                    width: 18,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'The limit is 5 photos or videos',
+                    style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -141,21 +183,88 @@ class _CustomGalleryState extends State<CustomGallery> {
   }
 
   getImageList() async {
-    _mediaList =
+    _assetEntityList =
         await albums.first.getAssetListPaged(0, albums.first.assetCount);
 
-    for (var teste in _mediaList) {
-      imageList.add(await teste.thumbDataWithSize(200, 200));
+    for (var assetEntity in _assetEntityList) {
+      mediaList.add({
+        "mediaId": assetEntity.hashCode,
+        "mediaFile": await assetEntity.file,
+        "mediaType": assetEntity.mimeType!.split('/').first,
+        "mediaBytes": await assetEntity.thumbDataWithSize(200, 200),
+      });
     }
+
+    selectedMedias.add(mediaList.first);
+
     setState(() {
       isLoading = false;
     });
   }
 
+  // getImageList() async {
+  //   _assetEntityList =
+  //       await albums.first.getAssetListPaged(0, albums.first.assetCount);
+
+  //   for (var teste in _assetEntityList) {
+  //     testeFile = await teste.file;
+  //     print(testeFile);
+  //     mediaList.add({
+  //       "mediaBytes": await teste.thumbDataWithSize(200, 200),
+  //       "mediaType": teste.mimeType!.split('/')
+  //     });
+  //   }
+
+  //   selectedMedias.add(mediaList.first);
+
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
+
+  handleMediaOnGridView(Map media) {
+    if (media["mediaType"] == 'video')
+      return media["mediaBytes"];
+    else
+      return media["mediaFile"];
+  }
+
   switchMode() {
-    print('AAAAAAAAAAA');
+    selectedMedias = [mediaList.first];
     setState(() {
       singleMode = !singleMode;
     });
+  }
+
+  void selectMedia(Map media) {
+    if (singleMode) {
+      selectedMedias.first = media;
+    } else {
+      handleMultipleMedia(media);
+    }
+    print(selectedMedias.length);
+    setState(() {});
+  }
+
+  handleMultipleMedia(Map media) {
+    var hasMedia = selectedMedias
+        .singleWhereOrNull((element) => element["mediaId"] == media["mediaId"]);
+    if (hasMedia == null) {
+      if (selectedMedias.length < selectLimit)
+        selectedMedias.add(media);
+      else
+        print('');
+    } else {
+      selectedMedias
+          .removeWhere((element) => element["mediaId"] == media["mediaId"]);
+    }
+  }
+
+  returnPosition(Map media) {
+    if (singleMode == false) {
+      return (selectedMedias.indexWhere(
+              (element) => element["mediaId"] == media["mediaId"])) +
+          1;
+    }
   }
 }
