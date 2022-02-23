@@ -87,26 +87,32 @@ class _CameraAppState extends State<CameraApp>
     var storageStatus = await Permission.storage.status;
     var cameraStatus = await Permission.camera.status;
     var microphoneStatus = await Permission.microphone.status;
-    if (storageStatus.isRestricted ||
-        cameraStatus.isRestricted ||
-        microphoneStatus.isRestricted ||
-        storageStatus.isDenied ||
-        cameraStatus.isDenied ||
-        microphoneStatus.isDenied) {
-      // You can request multiple permissions at once.
+    if (!storageStatus.isGranted || !cameraStatus.isGranted || !microphoneStatus.isGranted) {
+
       Map<Permission, PermissionStatus> statuses = await [
         Permission.storage,
         Permission.camera,
         Permission.microphone
       ].request();
-      if (statuses[Permission.storage] == PermissionStatus.granted &&
-          statuses[Permission.camera] == PermissionStatus.granted &&
-          statuses[Permission.microphone] == PermissionStatus.granted) {
+
+      bool hasStoragePermition = statuses[Permission.storage] == PermissionStatus.granted;
+      bool hasStorageCamera = statuses[Permission.camera] == PermissionStatus.granted;
+      bool hasStorageMicrofone = statuses[Permission.microphone] == PermissionStatus.granted;
+
+      if (hasStoragePermition && hasStorageCamera && hasStorageMicrofone) {
         await checkCameraAvailability();
         getLastVideoThumbnail();
         setState(() {
           permissionsIsNeeded = false;
         });
+      }else{
+        if(Platform.isIOS && hasStoragePermition && hasStorageCamera && !hasStorageMicrofone) {
+          await checkCameraAvailability();
+          getLastVideoThumbnail();
+          setState(() {
+            permissionsIsNeeded = false;
+          });
+        }
       }
     } else {
       await checkCameraAvailability();
@@ -145,7 +151,7 @@ class _CameraAppState extends State<CameraApp>
     indexCamera = indexCamera == 0 ? 1 : 0;
     controller = CameraController(
       cameras[indexCamera],
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
       imageFormatGroup: ImageFormatGroup.yuv420,
     );
     await controller!.initialize();
