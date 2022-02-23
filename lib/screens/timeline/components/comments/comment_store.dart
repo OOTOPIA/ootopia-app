@@ -19,6 +19,9 @@ abstract class CommentStoreBase with Store {
   List listUsers = [];
 
   @observable
+  List resultList = [];
+
+  @observable
   List<String> listUsersMarket = [];
 
   @observable
@@ -62,5 +65,17 @@ abstract class CommentStoreBase with Store {
 
       return Future.error(e);
     }
+  }
+
+  @action
+  void searchUser(String value) {
+    List showResults = [];
+    for (var document in listUsers) {
+      var title = document.title.toLowerCase();
+      if (document.contains(value.toLowerCase())) {
+        showResults.add(document);
+      }
+    }
+    resultList = showResults;
   }
 }

@@ -381,6 +381,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                             if (value.contains('@') &&
                                 commentStore.listUsersMarket.isEmpty) {
                               seSelectedUser = true;
+                              commentStore.searchUser(value);
                             } else {
                               seSelectedUser = false;
                             }
@@ -486,73 +487,38 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       padding: EdgeInsets.only(left: 16, top: 16),
                       width: MediaQuery.of(context).size.width,
                       child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                commentStore.listUsersMarket.add('data');
-                                setState(() {
-                                  teste = true;
-                                  _inputController.text =
-                                      '${_inputController.text}data';
-                                  _inputController.selection =
-                                      TextSelection.fromPosition(TextPosition(
-                                          offset:
-                                              _inputController.text.length));
-                                  seSelectedUser = false;
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  CircleAvatar(),
-                                  SizedBox(width: 8),
-                                  Text('data'),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _inputController.text =
-                                      '${_inputController.text}data2';
-                                  _inputController.selection =
-                                      TextSelection.fromPosition(TextPosition(
-                                          offset:
-                                              _inputController.text.length));
-                                  seSelectedUser = false;
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  CircleAvatar(),
-                                  SizedBox(width: 8),
-                                  Text('data1'),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _inputController.text =
-                                      '${_inputController.text}data2';
-                                  _inputController.selection =
-                                      TextSelection.fromPosition(TextPosition(
-                                          offset:
-                                              _inputController.text.length));
-                                  seSelectedUser = false;
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  CircleAvatar(),
-                                  SizedBox(width: 8),
-                                  Text('data2'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: Observer(builder: (context) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: commentStore.resultList
+                                .map(
+                                  (e) => InkWell(
+                                    onTap: () {
+                                      commentStore.listUsersMarket.add('data');
+                                      setState(() {
+                                        teste = true;
+                                        _inputController.text =
+                                            '${_inputController.text.replaceAll('@', '')}data';
+                                        _inputController.selection =
+                                            TextSelection.fromPosition(
+                                                TextPosition(
+                                                    offset: _inputController
+                                                        .text.length));
+                                        seSelectedUser = false;
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(),
+                                        SizedBox(width: 8),
+                                        Text('data'),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          );
+                        }),
                       ),
                     ),
                   ),
