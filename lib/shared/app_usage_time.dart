@@ -129,7 +129,6 @@ class AppUsageTime with SecureStoreMixin {
         var _usersRepository = UserRepositoryImpl();
         String? pendingDate = prefs!.getLastPendingUsageDate();
         if (pendingDate != null && pendingDate == dateNowFormat) {
-          print("AHHHHHHHHHHHHHHHHHHHHHHH ${ms}");
           await _usersRepository.recordTimeUserUsedApp(ms!);
         } else {
           await prefs!.setLastPendingUsageDate(dateNowFormat);
