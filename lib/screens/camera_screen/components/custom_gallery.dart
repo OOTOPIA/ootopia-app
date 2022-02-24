@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +13,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
 import 'package:video_player/video_player.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CustomGallery extends StatefulWidget {
   const CustomGallery({Key? key}) : super(key: key);
@@ -64,7 +64,17 @@ class _CustomGalleryState extends State<CustomGallery> {
           AppBarComponents.proceed,
         ],
         onTapLeading: () => Navigator.of(context).pop(),
-        onTapAction: () => print('vish'),
+        onTapAction: () {
+          if (selectedMedias != [])
+            Navigator.of(this.context).pushNamed(
+              PageRoute.Page.postPreviewScreen.route,
+              arguments: {
+                "filePath": selectedMedias.first['mediaFile'].path,
+                "mirrored": "false",
+                "type": "image"
+              },
+            );
+        },
       ),
       body: Stack(
         children: [
@@ -77,14 +87,17 @@ class _CustomGalleryState extends State<CustomGallery> {
                     children: [
                       SizedBox(height: 20),
                       if (currentDirectory["mediaType"] != 'video')
-                        Container(
-                          width: 360,
-                          height: 360,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            image: DecorationImage(
-                              image: FileImage(currentDirectory["mediaFile"]),
-                              fit: BoxFit.cover,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Container(
+                            //width: 360,
+                            height: 360,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                image: FileImage(currentDirectory["mediaFile"]),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         )
@@ -234,6 +247,7 @@ class _CustomGalleryState extends State<CustomGallery> {
       });
     }
 
+    selectedMedias = [mediaList.first];
     initialMedia(mediaList.first);
 
     setState(() {
@@ -249,7 +263,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   }
 
   switchMode() {
-    currentDirectory = mediaList.first;
+    initialMedia(mediaList.first);
     setState(() {
       singleMode = !singleMode;
     });
@@ -281,6 +295,7 @@ class _CustomGalleryState extends State<CustomGallery> {
     } else {
       selectedMedias
           .removeWhere((element) => element["mediaId"] == media["mediaId"]);
+      if (selectedMedias.length == 0) initialMedia(mediaList.first);
     }
   }
 
