@@ -39,18 +39,18 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
-  final _$listUsersAtom = Atom(name: 'CommentStoreBase.listUsers');
+  final _$listAllUsersAtom = Atom(name: 'CommentStoreBase.listAllUsers');
 
   @override
-  List<User> get listUsers {
-    _$listUsersAtom.reportRead();
-    return super.listUsers;
+  List<User> get listAllUsers {
+    _$listAllUsersAtom.reportRead();
+    return super.listAllUsers;
   }
 
   @override
-  set listUsers(List<User> value) {
-    _$listUsersAtom.reportWrite(value, super.listUsers, () {
-      super.listUsers = value;
+  set listAllUsers(List<User> value) {
+    _$listAllUsersAtom.reportWrite(value, super.listAllUsers, () {
+      super.listAllUsers = value;
     });
   }
 
@@ -139,12 +139,11 @@ mixin _$CommentStore on CommentStoreBase, Store {
         .run(() => super.deleteComments(postId, id));
   }
 
-  final _$listAllUsersAsyncAction =
-      AsyncAction('CommentStoreBase.listAllUsers');
+  final _$getAllUsersAsyncAction = AsyncAction('CommentStoreBase.getAllUsers');
 
   @override
-  Future<void> listAllUsers() {
-    return _$listAllUsersAsyncAction.run(() => super.listAllUsers());
+  Future<void> getAllUsers() {
+    return _$getAllUsersAsyncAction.run(() => super.getAllUsers());
   }
 
   final _$CommentStoreBaseActionController =
@@ -166,7 +165,7 @@ mixin _$CommentStore on CommentStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 listComments: ${listComments},
-listUsers: ${listUsers},
+listAllUsers: ${listAllUsers},
 resultList: ${resultList},
 listUsersMarket: ${listUsersMarket},
 currentPage: ${currentPage},

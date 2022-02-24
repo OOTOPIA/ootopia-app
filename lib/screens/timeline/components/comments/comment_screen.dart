@@ -45,7 +45,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             const TextStyle(
           color: LightColors.linkText,
         ),
-        RegExp(r"@"): const TextStyle(
+        RegExp(r"\B@[a-zA-Z0-9]+\b"): const TextStyle(
           color: LightColors.errorRed,
         ),
       },
@@ -59,7 +59,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       homeStore.setSeeCrip(false);
 
       await commentStore.getComments(postId, commentStore.currentPage);
-      await commentStore.listAllUsers();
+      await commentStore.getAllUsers();
       commentStore.isLoading = false;
     });
     postCommentsCount = widget.args['post'].commentsCount;
@@ -381,12 +381,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
                         setState(() {
                           if (value.length > 0) {
-                            if (value.contains('@')) {
+                            var getLastString =
+                                value.split(RegExp(r'\B@+\b')).last;
+                            var checkIfNotHaveAValue =
+                                value.split(RegExp(r'\B@[a-zA-Z0-9]+\b')).last;
+                            if (checkIfNotHaveAValue.isEmpty) {
                               seSelectedUser = true;
-                              commentStore.searchUser(value);
+                              commentStore.searchUser(getLastString);
                             } else {
                               seSelectedUser = false;
                             }
+
                             isIconBlue = true;
                           } else {
                             commentStore.listUsersMarket.clear();
@@ -507,9 +512,15 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       onTap: () {
                         commentStore.listUsersMarket.add(e.fullname!);
                         setState(() {
-                          _inputController.text.split('');
-                          _inputController.text =
-                              '${_inputController.text}${e.fullname}';
+                          var list = _inputController.text.trim().split(' ');
+                          list.removeLast();
+                          list.add('@${e.fullname!}');
+                          print(list);
+                          _inputController.clear();
+                          for (var item in list) {
+                            _inputController.text += ' $item';
+                          }
+
                           _inputController.selection =
                               TextSelection.fromPosition(TextPosition(
                                   offset: _inputController.text.length));

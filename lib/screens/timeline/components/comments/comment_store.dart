@@ -17,7 +17,7 @@ abstract class CommentStoreBase with Store {
   List<Comment> listComments = [];
 
   @observable
-  List<User> listUsers = [];
+  List<User> listAllUsers = [];
 
   @observable
   List<User> resultList = [];
@@ -72,10 +72,10 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<void> listAllUsers() async {
+  Future<void> getAllUsers() async {
     try {
       for (var i = 0; i < 8; i++) {
-        listUsers.add(User(
+        listAllUsers.add(User(
           fullname: 'data$i',
         ));
       }
@@ -86,10 +86,9 @@ abstract class CommentStoreBase with Store {
   void searchUser(String value) {
     List<User> showResults = [];
 
-    for (var user in listUsers) {
+    for (var user in listAllUsers) {
       var fullaname = user.fullname?.toLowerCase();
-      List<String> splitPage = value.split('@');
-      if (fullaname!.contains(splitPage[1])) {
+      if (fullaname!.contains(value)) {
         showResults.add(user);
       }
     }
