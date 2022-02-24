@@ -475,6 +475,7 @@
 
     "hide" : "Ocultar",
     "readMore" : "Leia mais",
-    "multiplesImages": "Múltiplas imagens"
+    "multiplesImages": "Múltiplas imagens",
+    "limitSelectedImages": "O limite são 5 fotoss ou vídeos"
 
 }

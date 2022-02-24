@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +13,7 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
+import 'package:video_player/video_player.dart';
 
 class CustomGallery extends StatefulWidget {
   const CustomGallery({Key? key}) : super(key: key);
@@ -23,9 +27,18 @@ class _CustomGalleryState extends State<CustomGallery> {
   List<AssetEntity> _assetEntityList = [];
   List<Map> mediaList = [];
   List<Map> selectedMedias = [];
+  Map currentDirectory = {
+    "mediaId": null,
+    "mediaFile": null,
+    "mediaType": null,
+    "mediaBytes": null,
+  };
   var isLoading = false;
   var singleMode = true;
   static const selectLimit = 5;
+  bool showToastMessage = false;
+  late VideoPlayerController? _videoPlayerController;
+  bool videoIsLoading = true;
 
   @override
   void initState() {
@@ -34,6 +47,12 @@ class _CustomGalleryState extends State<CustomGallery> {
       isLoading = true;
     });
     getAlbum();
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,23 +71,42 @@ class _CustomGalleryState extends State<CustomGallery> {
           BackgroundButterflyTop(positioned: -59),
           BackgroundButterflyBottom(),
           isLoading
-              ? CircularProgressIndicator()
+              ? Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   child: Column(
                     children: [
                       SizedBox(height: 20),
-                      Container(
-                        width: 360,
-                        height: 360,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                            image: FileImage(selectedMedias.last["mediaFile"]),
-                            //MemoryImage(selectedMedias.last["mediaBytes"]),
-                            fit: BoxFit.cover,
+                      if (currentDirectory["mediaType"] != 'video')
+                        Container(
+                          width: 360,
+                          height: 360,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                              image: FileImage(currentDirectory["mediaFile"]),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      ),
+                        )
+                      else ...[
+                        if (videoIsLoading == true)
+                          CircularProgressIndicator()
+                        else ...[
+                          Container(
+                            width: 360,
+                            height: 360,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: FlickVideoPlayer(
+                                flickManager: FlickManager(
+                                  videoPlayerController:
+                                      _videoPlayerController!,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ],
                       SizedBox(height: 10),
                       Container(
                         padding: EdgeInsets.symmetric(
@@ -137,39 +175,40 @@ class _CustomGalleryState extends State<CustomGallery> {
                     ],
                   ),
                 ),
-          //colocar um timing
-          Positioned(
-            bottom: 20,
-            left: GlobalConstants.of(context).screenHorizontalSpace + 5,
-            child: Container(
-              width: MediaQuery.of(context).size.width - 55,
-              height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: LightColors.cyan,
-              ),
-              child: Row(
-                children: [
-                  SizedBox(width: 15),
-                  SvgPicture.asset(
-                    'assets/icons/Icon-feather-check.svg',
-                    height: 18,
-                    width: 18,
-                    color: Colors.white,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'The limit is 5 photos or videos',
-                    style: GoogleFonts.roboto(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
+          showToastMessage
+              ? Positioned(
+                  bottom: 20,
+                  left: GlobalConstants.of(context).screenHorizontalSpace + 5,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 55,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: LightColors.cyan,
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 15),
+                        SvgPicture.asset(
+                          'assets/icons/Icon-feather-check.svg',
+                          height: 18,
+                          width: 18,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          AppLocalizations.of(context)!.limitSelectedImages,
+                          style: GoogleFonts.roboto(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : Container()
         ],
       ),
     );
@@ -195,32 +234,12 @@ class _CustomGalleryState extends State<CustomGallery> {
       });
     }
 
-    selectedMedias.add(mediaList.first);
+    initialMedia(mediaList.first);
 
     setState(() {
       isLoading = false;
     });
   }
-
-  // getImageList() async {
-  //   _assetEntityList =
-  //       await albums.first.getAssetListPaged(0, albums.first.assetCount);
-
-  //   for (var teste in _assetEntityList) {
-  //     testeFile = await teste.file;
-  //     print(testeFile);
-  //     mediaList.add({
-  //       "mediaBytes": await teste.thumbDataWithSize(200, 200),
-  //       "mediaType": teste.mimeType!.split('/')
-  //     });
-  //   }
-
-  //   selectedMedias.add(mediaList.first);
-
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
 
   handleMediaOnGridView(Map media) {
     if (media["mediaType"] == 'video')
@@ -230,7 +249,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   }
 
   switchMode() {
-    selectedMedias = [mediaList.first];
+    currentDirectory = mediaList.first;
     setState(() {
       singleMode = !singleMode;
     });
@@ -238,25 +257,45 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   void selectMedia(Map media) {
     if (singleMode) {
-      selectedMedias.first = media;
+      selectedMedias = [media];
     } else {
       handleMultipleMedia(media);
     }
-    print(selectedMedias.length);
+
+    initialMedia(selectedMedias.last);
     setState(() {});
   }
 
   handleMultipleMedia(Map media) {
     var hasMedia = selectedMedias
         .singleWhereOrNull((element) => element["mediaId"] == media["mediaId"]);
-    if (hasMedia == null) {
-      if (selectedMedias.length < selectLimit)
-        selectedMedias.add(media);
-      else
-        print('');
+
+    if (hasMedia == null && selectedMedias.length < selectLimit) {
+      selectedMedias.add(media);
+    } else if (hasMedia == null && selectedMedias.length >= selectLimit) {
+      showToastMessage = true;
+      Future.delayed(Duration(seconds: 3), () async {
+        showToastMessage = false;
+        setState(() {});
+      });
     } else {
       selectedMedias
           .removeWhere((element) => element["mediaId"] == media["mediaId"]);
+    }
+  }
+
+  initialMedia(Map selectedMedia) {
+    if (selectedMedia['mediaType'] == 'video' &&
+        (currentDirectory['mediaId'] == null ||
+            selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
+      _videoPlayerController = null;
+      currentDirectory = selectedMedia;
+      initVideoPlayer(currentDirectory['mediaFile']);
+    } else if (selectedMedia['mediaType'] == 'image' &&
+        (currentDirectory['mediaId'] == null ||
+            selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
+      _videoPlayerController = null;
+      currentDirectory = selectedMedia;
     }
   }
 
@@ -266,5 +305,16 @@ class _CustomGalleryState extends State<CustomGallery> {
               (element) => element["mediaId"] == media["mediaId"])) +
           1;
     }
+  }
+
+  initVideoPlayer(var file) {
+    videoIsLoading = true;
+    _videoPlayerController = VideoPlayerController.file(file)
+      ..initialize().then((value) {
+        setState(() {
+          videoIsLoading = false;
+        });
+        _videoPlayerController!.play();
+      });
   }
 }
