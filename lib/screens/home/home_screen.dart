@@ -156,7 +156,6 @@ class _HomeScreenState extends State<HomeScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        _checkStores();
         break;
       case AppLifecycleState.inactive:
         //homeStore?.stopDailyGoalTimer();
