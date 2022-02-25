@@ -113,6 +113,9 @@ class _CustomGalleryState extends State<CustomGallery> {
                         mediatype: currentDirectory["mediaType"],
                         mediaSize: currentDirectory["mediaSize"],
                         videoPlayerController: _videoPlayerController,
+                        videoIsLoading: currentDirectory["mediaType"] == "video"
+                            ? videoIsLoading
+                            : null,
                       ),
                       SizedBox(height: 10),
                       multipleImagesButton(),

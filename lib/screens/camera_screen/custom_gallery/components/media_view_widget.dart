@@ -10,12 +10,14 @@ class MediaViewWidget extends StatefulWidget {
   final String mediatype;
   final Size mediaSize;
   final VideoPlayerController? videoPlayerController;
+  final bool? videoIsLoading;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
     required this.mediatype,
     required this.mediaSize,
     this.videoPlayerController,
+    this.videoIsLoading,
   }) : super(key: key);
 
   @override
@@ -46,11 +48,18 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
               child: widget.mediatype == "video"
                   ? ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(21)),
-                      child: FlickVideoPlayer(
-                        flickManager: FlickManager(
-                          videoPlayerController: widget.videoPlayerController!,
-                        ),
-                      ),
+                      child: widget.videoIsLoading!
+                          ? SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width,
+                              child: CircularProgressIndicator(),
+                            )
+                          : FlickVideoPlayer(
+                              flickManager: FlickManager(
+                                videoPlayerController:
+                                    widget.videoPlayerController!,
+                              ),
+                            ),
                     )
                   : Container(
                       width: MediaQuery.of(context).size.width,
