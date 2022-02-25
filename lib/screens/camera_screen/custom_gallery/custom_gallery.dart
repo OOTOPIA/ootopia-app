@@ -3,7 +3,8 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ootopia_app/screens/camera_screen/components/custom_gallery_grid_view.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/custom_gallery_grid_view.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/toast_message_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -90,7 +91,6 @@ class _CustomGalleryState extends State<CustomGallery> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Container(
-                            //width: 360,
                             height: 360,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -105,15 +105,18 @@ class _CustomGalleryState extends State<CustomGallery> {
                         if (videoIsLoading == true)
                           CircularProgressIndicator()
                         else ...[
-                          Container(
-                            width: 360,
-                            height: 360,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: FlickVideoPlayer(
-                                flickManager: FlickManager(
-                                  videoPlayerController:
-                                      _videoPlayerController!,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Container(
+                              width: 360,
+                              height: 360,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: FlickVideoPlayer(
+                                  flickManager: FlickManager(
+                                    videoPlayerController:
+                                        _videoPlayerController!,
+                                  ),
                                 ),
                               ),
                             ),
@@ -121,33 +124,7 @@ class _CustomGalleryState extends State<CustomGallery> {
                         ],
                       ],
                       SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal:
-                              GlobalConstants.of(context).screenHorizontalSpace,
-                        ),
-                        child: GestureDetector(
-                          onTap: switchMode,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.multiplesImages,
-                                style: GoogleFonts.roboto(
-                                    color: LightColors.blue,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(width: 2),
-                              SvgPicture.asset(
-                                'assets/icons/multiples_images.svg',
-                                height: 18,
-                                width: 18,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      multipleImagesButton(),
                       SizedBox(height: 10),
                       Container(
                         padding: EdgeInsets.symmetric(
@@ -188,41 +165,37 @@ class _CustomGalleryState extends State<CustomGallery> {
                     ],
                   ),
                 ),
-          showToastMessage
-              ? Positioned(
-                  bottom: 20,
-                  left: GlobalConstants.of(context).screenHorizontalSpace + 5,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width - 55,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: LightColors.cyan,
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 15),
-                        SvgPicture.asset(
-                          'assets/icons/Icon-feather-check.svg',
-                          height: 18,
-                          width: 18,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          AppLocalizations.of(context)!.limitSelectedImages,
-                          style: GoogleFonts.roboto(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Container()
+          showToastMessage ? ToastMessageWidget() : Container()
         ],
+      ),
+    );
+  }
+
+  Widget multipleImagesButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: GlobalConstants.of(context).screenHorizontalSpace,
+      ),
+      child: GestureDetector(
+        onTap: switchMode,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.multiplesImages,
+              style: GoogleFonts.roboto(
+                  color: LightColors.blue,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
+            ),
+            SizedBox(width: 2),
+            SvgPicture.asset(
+              'assets/icons/multiples_images.svg',
+              height: 18,
+              width: 18,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -263,6 +236,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   }
 
   switchMode() {
+    selectedMedias = [mediaList.first];
     initialMedia(mediaList.first);
     setState(() {
       singleMode = !singleMode;

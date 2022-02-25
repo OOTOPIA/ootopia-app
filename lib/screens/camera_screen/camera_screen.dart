@@ -9,7 +9,7 @@ import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ootopia_app/screens/camera_screen/components/custom_gallery.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/custom_gallery.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
