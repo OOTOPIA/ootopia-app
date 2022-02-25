@@ -18,10 +18,11 @@ class CommentRepositoryImpl with SecureStoreMixin {
     }
   }
 
-  Future<Comment> createComment(String postId, String text) async {
+  Future<Comment> createComment(
+      String postId, String text, List<String>? usersMarket) async {
     try {
-      var response = await ApiClient.api()
-          .post('posts/$postId/comments', data: {'text': text});
+      var response = await ApiClient.api().post('posts/$postId/comments',
+          data: {'text': text, 'taggedUser': usersMarket});
       if (response.statusCode == 201) {
         return Comment.fromJson(response.data);
       } else {

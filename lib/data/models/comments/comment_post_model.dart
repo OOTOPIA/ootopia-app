@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ootopia_app/data/models/users/user_model.dart';
 part 'comment_post_model.g.dart';
 
 @JsonSerializable()
@@ -13,6 +14,8 @@ class Comment {
   final bool selected = false;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  @JsonKey(name: 'usersComments')
+  final List<User>? userComments;
 
   Comment({
     required this.id,
@@ -23,6 +26,7 @@ class Comment {
     required this.username,
     this.createdAt,
     this.updatedAt,
+    this.userComments,
   });
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);

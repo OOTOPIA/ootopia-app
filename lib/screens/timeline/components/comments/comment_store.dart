@@ -1,42 +1,51 @@
+import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 
 part "comment_store.g.dart";
 
 class CommentStore = CommentStoreBase with _$CommentStore;
 
+enum ViewState { loading, error, done, loadingNewData, refresh }
+
 abstract class CommentStoreBase with Store {
   CommentRepositoryImpl commentRepository = CommentRepositoryImpl();
+  UserRepositoryImpl userRepository = UserRepositoryImpl();
 
   @observable
   bool isLoading = false;
 
   @observable
+  ViewState viewState = ViewState.loading;
+
+  @observable
   List<Comment> listComments = [];
 
   @observable
-  List<User> listAllUsers = [];
+  List<UserComment> listAllUsers = [];
 
   @observable
-  List<User> resultList = [];
+  List<String>? listUsersMarket = [];
 
   @observable
-  List<String> listUsersMarket = [];
-
-  @observable
-  int currentPage = 1;
+  int currentPageComment = 1;
 
   @observable
   int currentPageUser = 1;
+
+  @observable
+  bool hasMoreUsers = false;
 
   @action
   Future<void> getComments(String postId, int page) async {
     try {
       var response = await commentRepository.getComments(postId, page);
       if (response.isEmpty) {
-        currentPage = currentPage;
+        currentPageComment = currentPageComment;
       } else {
         listComments.addAll(response);
       }
@@ -47,7 +56,7 @@ abstract class CommentStoreBase with Store {
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
-      await commentRepository.createComment(postId, text);
+      await commentRepository.createComment(postId, text, listUsersMarket);
       isLoading = false;
     } catch (e) {
       isLoading = false;
@@ -72,26 +81,32 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<void> getAllUsers() async {
+  Future<void> searchUser(String fullName) async {
+    if (viewState != ViewState.loadingNewData) {
+      listAllUsers.clear();
+    }
     try {
-      for (var i = 0; i < 8; i++) {
-        listAllUsers.add(User(
-          fullname: 'data$i',
-        ));
-      }
-    } catch (e) {}
+      viewState = ViewState.loading;
+      var response =
+          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
+      hasMoreUsers = response.length == 10;
+      listAllUsers.addAll(response);
+      viewState = ViewState.done;
+    } catch (e) {
+      viewState = ViewState.error;
+    }
   }
 
-  @action
-  void searchUser(String value) {
-    List<User> showResults = [];
-
-    for (var user in listAllUsers) {
-      var fullaname = user.fullname?.toLowerCase();
-      if (fullaname!.contains(value)) {
-        showResults.add(user);
+  void updateOnScroll(
+      ScrollController scrollController, String fullname) async {
+    if (scrollController.position.atEdge) {
+      if (scrollController.position.pixels != 0) {
+        if (hasMoreUsers) {
+          currentPageUser++;
+          viewState = ViewState.loadingNewData;
+          await searchUser(fullname);
+        }
       }
     }
-    resultList = showResults;
   }
 }

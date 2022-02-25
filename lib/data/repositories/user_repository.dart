@@ -9,6 +9,7 @@ import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
 
 import 'package:ootopia_app/data/models/users/profile_model.dart';
+import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -333,6 +334,23 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       return res.data['status'];
     } catch (e) {
       throw Exception('Code invalid ' + e.toString());
+    }
+  }
+
+  Future<List<UserComment>> getAllUsersByName(
+      String fullName, int page, int limit) async {
+    try {
+      Response res = await ApiClient.api().get(
+        "users/list/$page/$limit/$fullName",
+      );
+      if (res.statusCode != 200) {
+        throw Exception(res.data);
+      }
+      var list =
+          (res.data as List).map((e) => UserComment.fromJson(e)).toList();
+      return list;
+    } catch (e) {
+      throw Exception('Name user not valid');
     }
   }
 }
