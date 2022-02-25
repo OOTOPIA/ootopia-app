@@ -510,7 +510,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                   .map(
                     (e) => InkWell(
                       onTap: () {
-                        commentStore.listUsersMarket.add(e.fullname!);
+                        commentStore.listUsersMarket.add(e.id!);
                         setState(() {
                           var list = _inputController.text.trim().split(' ');
                           list.removeLast();
