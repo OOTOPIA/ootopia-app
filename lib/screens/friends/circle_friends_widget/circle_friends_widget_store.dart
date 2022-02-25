@@ -18,6 +18,7 @@ abstract class CircleFriendsWidgetStoreBase with Store {
   Future<void> getFriends(String userId) async{
     isLoading = true;
     friends = await friendsRepositoryImpl.getFriends(userId);
+    print('friends ${friends.length}');
     isLoading = false;
   }
 }

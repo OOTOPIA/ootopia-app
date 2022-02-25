@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
 
@@ -34,11 +37,13 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
   Future<List> getFriends(String userId) async {
     try {
       final response = await http.get(
-        Uri.parse(dotenv.env['API_URL']! + "wallets/$userId"),
+        Uri.parse(dotenv.env['API_URL']! + "friends-request/$userId"),
         headers: await this.getHeaders(),
       );
+      print('response.body : ${response.body}');
       if (response.statusCode == 200) {
-        return  [];
+        print('response.body : ${response.body}');
+        return (json.decode(response.body) as List).map((i) => FriendModel.fromJson(i)).toList();
       } else {
         throw Future.error('Failed to load wallet');
       }

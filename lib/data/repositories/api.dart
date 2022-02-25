@@ -64,7 +64,7 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
 
     String? token = prefs.getAuthToken();
     if (token == null) return _headers;
-
+    print('token: $token');
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
 
     if (contentType == null) {
