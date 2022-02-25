@@ -1,12 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
-import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
-import 'package:ootopia_app/data/models/wallets/wallet_model.dart';
-import 'package:ootopia_app/data/repositories/api.dart';
-import 'dart:convert';
-
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
 
@@ -14,8 +7,6 @@ abstract class FriendsRepository {
   Future<List> getFriends(String userId);
   Future<List> searchFriends(String name);
   Future<bool> addFriend(String id);
-  // Future<Wallet> getFriends(String userId);
-
 }
 
 const Map<String, String> API_HEADERS = {
