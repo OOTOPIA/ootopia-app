@@ -285,13 +285,13 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
           ),
 
           child: Container(
-            height: 180,
+            height: 185,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 14, left: 24, bottom: 18),
+                  padding: const EdgeInsets.only(top: 14, left: 24, bottom: 12),
                   child: Text(AppLocalizations.of(context)!.orderBy,
                     style: TextStyle(
                       fontSize: 16,
