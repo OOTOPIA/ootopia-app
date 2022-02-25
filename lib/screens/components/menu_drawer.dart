@@ -56,7 +56,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
   }
 
   clearAuth(context) async {
-    await userRepository.updateTokenDeviceUser(null);
+    userRepository.updateTokenDeviceUser(null);
     await authStore!.logout();
     ChatDialogController.instance.resetSavedData();
     this.trackingEvents.trackingLoggedOut();

@@ -67,6 +67,7 @@ import 'package:ootopia_app/shared/FirebaseMessaging/notification_message_servic
 import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_experience/shared_experience_service.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
@@ -74,12 +75,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:ootopia_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'data/models/users/link_model.dart';
-import 'screens/persona_level/personal_level.dart';
 import 'screens/timeline/timeline_screen.dart';
 import './app_config.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import './shared/analytics.server.dart';
@@ -240,7 +237,10 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
     Future.delayed(Duration.zero, () async {
       await generalConfigRepository.getGlobalGoalLimitTimeInUtc();
       await generalConfigRepository.getGeneralConfig();
-      AppUsageTime.instance.startTimer();
+      SecureStoreMixin store = SecureStoreMixin();
+      if (await store.getUserIsLoggedIn()) {
+        AppUsageTime.instance.startTimer();
+      }
     });
     trackingEvents.trackingOpenedApp();
     WidgetsBinding.instance!.addObserver(this);
