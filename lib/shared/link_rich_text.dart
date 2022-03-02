@@ -28,14 +28,63 @@ class LinkRichText extends StatelessWidget {
   }
 
   void teste() {
+    var allName = [];
+    List<String> textFragmented = [];
     for (var item in userCommentsList!) {
-      if (text.indexOf(item.fullname) != -1) {
-        textSpanWidget.add(
-          TextSpan(
-              text: '@${item.fullname}', style: TextStyle(color: Colors.amber)),
-        );
+      int startname = text.indexOf(item.fullname);
+      if (startname != -1) {
+        allName.add({
+          "name": "@${item.fullname}",
+          "start": startname,
+          "end": startname + item.fullname.length + 1
+        });
       }
     }
+
+    allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
+
+    for (var i = 0; i < allName.length; i++) {
+      // inicio do loop
+      if (i == 0 && allName[0]["start"] > 0) {
+        textFragmented.add(text.substring(0, allName[0]["start"] - 1));
+        textFragmented.add(allName[0]["name"]);
+      }
+
+      // meio do loop
+      if (i < (allName.length - 2) &&
+          (allName[i - 1]["end"] + 1) < allName[i]["start"]) {
+        if ((allName[i - 1]["end"] + 1) == allName[i]["start"]) {
+          textFragmented.add(allName[i]["name"]);
+        } else {
+          textFragmented.add(
+              text.substring(allName[i - 1]["end"], allName[i]["start"] - 1));
+          textFragmented.add(allName[i]["name"]);
+        }
+      }
+
+      // fim do loop
+      if (i == (allName.length - 1)) {
+        if ((allName[i - 1]["end"] + 1) == allName[i]["start"]) {
+          textFragmented.add(allName[i]["name"]);
+        } else {
+          textFragmented.add(text.substring(
+              allName[i - 1]["end"] - 1, allName[i]["start"] - 1));
+          textFragmented.add(allName[i]["name"]);
+        }
+      }
+    }
+    print("TEXTOU INTEIRO AQUI /n \n ${allName}");
+    print("TEXTOU INTEIRO AQUI /n \n ${textFragmented}");
+    textFragmented.forEach((texttt) {
+      textSpanWidget.add(
+        TextSpan(
+          text: texttt,
+          style: TextStyle(
+            color: texttt.contains("@") ? Colors.red : Colors.blue,
+          ),
+        ),
+      );
+    });
   }
 
   _hasntLink() {
