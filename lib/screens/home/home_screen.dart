@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   resetDailyGoalTimer() async {
     homeStore?.stopDailyGoalTimer();
-    AppUsageTime.instance.resetUsageTime();
+    AppUsageTime.instance.sendToApi();
     await homeStore?.getDailyGoalStats();
     await homeStore?.startDailyGoalTimer();
   }
@@ -156,7 +156,6 @@ class _HomeScreenState extends State<HomeScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        _checkStores();
         break;
       case AppLifecycleState.inactive:
         //homeStore?.stopDailyGoalTimer();

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/parser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum AppBarComponents { back, menu, ooz, save, edit, close }
+enum AppBarComponents { back, menu, ooz, save, edit, close, proceed }
 
 // ignore: must_be_immutable
 class DefaultAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -69,7 +69,9 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       leading: leading(),
       actions: actions(),
       flexibleSpace: Image(
-        image: AssetImage('assets/images/butterfly_top.png',),
+        image: AssetImage(
+          'assets/images/butterfly_top.png',
+        ),
         alignment: Alignment.topCenter,
         fit: BoxFit.cover,
       ),
@@ -110,6 +112,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       if (hasComponent(AppBarComponents.close)) closeIcon,
       if (hasComponent(AppBarComponents.edit)) editIcon,
       if (hasComponent(AppBarComponents.save)) saveIcon,
+      if (hasComponent(AppBarComponents.proceed)) proceedIcon,
     ];
   }
 
@@ -289,6 +292,36 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                     color: Color(0xff018f9c),
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget get proceedIcon => InkWell(
+        onTap: () async {
+          if (widget.onTapAction != null) {
+            widget.onTapAction!();
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: GlobalConstants.of(_buildContext).spacingNormal,
+          ),
+          child: Row(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.proceed,
+                style: GoogleFonts.roboto(
+                    color: LightColors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(width: 8),
+              Icon(
+                FeatherIcons.arrowRight,
+                color: iconColor,
+                size: 20,
               ),
             ],
           ),

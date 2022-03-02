@@ -370,6 +370,7 @@
     "save":"Salvar",
     "editProfile": "Editar Perfil",
     "edit": "Editar",
+    "proceed": "Continuar",
     "insertValidCellPhone":"Por favor, insira seu número de celular.",
     "optional":"Opcional",
 
@@ -473,6 +474,8 @@
     "notificationButtonText": "Visualizar",
 
     "hide" : "Ocultar",
-    "readMore" : "Leia mais"
+    "readMore" : "Leia mais",
+    "multiplesImages": "Múltiplas imagens",
+    "limitSelectedImages": "O limite são 5 fotos ou vídeos"
 
 }

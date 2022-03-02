@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -27,19 +26,6 @@ class AppUsageTime with SecureStoreMixin {
 
       if (prefs!.getLastPendingUsageTime() != null) {
         usageTimeSoFarInMilliseconds = prefs!.getLastPendingUsageTime()!;
-        if (usageTimeSoFarInMilliseconds > 0) {
-          if (_watch.isRunning) {
-            _watch.stop();
-          }
-          await sendToApi();
-          if (!_watch.isRunning) {
-            _watch.start();
-          }
-        } else {
-          await prefs!.setLastPendingUsageDate(dateNowFormat);
-        }
-      } else {
-        await prefs!.setLastPendingUsageDate(dateNowFormat);
       }
     });
   }
@@ -50,12 +36,12 @@ class AppUsageTime with SecureStoreMixin {
   _updateUsageTime(Timer timer) async {
     if (_watch.isRunning) {
       usageTimeSoFarInMilliseconds += 1000;
+      await prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
       if (prefs == null) {
         prefs = await SharedPreferencesInstance.getInstance();
       }
       //A cada segundo armazenamos no storage o tempo cronometrado
       if (await getUserIsLoggedIn()) {
-        prefs!.setLastUsageTime(usageTimeSoFarInMilliseconds);
         int lastTime = prefs!.getFeedbackTime() ?? 0;
         bool displayedToday = prefs!.getFeedbackToday() ?? false;
         String? displayedDate = prefs!.getFeedbackLastUsageDate();
@@ -125,7 +111,7 @@ class AppUsageTime with SecureStoreMixin {
   }
 
   resetUsageTime() {
-    if (prefs != null && prefs!.getLastUsageTime() != null) {
+    if (prefs != null && prefs!.getLastPendingUsageTime() != null) {
       usageTimeSoFarInMilliseconds = 0;
       prefs!.setLastUsageTime(usageTimeSoFarInMilliseconds);
       prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
