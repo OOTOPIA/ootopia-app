@@ -15,6 +15,7 @@ import 'package:ootopia_app/data/models/general_config/general_config_model.dart
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -456,107 +457,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
               padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
               child: Column(
                 children: [
-                  Container(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: widget.args["type"] == "video"
-                            ? MediaQuery.of(context).size.height * .6
-                            : MediaQuery.of(context).size.width + GlobalConstants.of(context).spacingNormal*2,
-                      ),
-                      child: Stack(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: GlobalConstants.of(context).spacingNormal,
-                              right: GlobalConstants.of(context).spacingNormal,
-                              top: GlobalConstants.of(context).spacingNormal,
-                              bottom: GlobalConstants.of(context)
-                                  .screenHorizontalSpace,
-                            ),
-                            child: widget.args["type"] == "video"
-                                ? ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(21)),
-                                    child: Transform(
-                                      alignment: Alignment.center,
-                                      child: FlickVideoPlayer(
-                                        preferredDeviceOrientationFullscreen: [],
-                                        flickManager: flickManager!,
-                                        flickVideoWithControls:
-                                            FlickVideoWithControls(
-                                          controls: null,
-                                        ),
-                                      ),
-                                      transform: Matrix4.rotationY(mirror),
-                                    ),
-                                  )
-                                : Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff000000),
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20),
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20),
-                                        ),
-                                        image: DecorationImage(
-                                          fit: this.imageSize!.height >
-                                                  imageSize!.width
-                                              ? BoxFit.fitHeight
-                                              : BoxFit.fitWidth,
-                                          alignment: FractionalOffset.center,
-                                          image: FileImage(
-                                              File(widget.args["filePath"])),
-                                        )),
-                                  ),
-                          ),
-                          widget.args["type"] == "video"
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.all(
-                                          GlobalConstants.of(context)
-                                              .spacingMedium),
-                                      padding: EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black38,
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      child: SizedBox(
-                                        width: 28,
-                                        height: 28,
-                                        child: IconButton(
-                                          padding: EdgeInsets.all(0),
-                                          icon: Icon(
-                                              flickManager!.flickControlManager!
-                                                      .isMute
-                                                  ? Icons.volume_off
-                                                  : Icons.volume_up,
-                                              size: 20),
-                                          onPressed: () {
-                                            setState(() {
-                                              //flickMultiManager.toggleMute();
-                                              if(!flickManager!.flickControlManager!.isMute){
-                                                flickManager!.flickControlManager!.mute();
-                                              }else{
-                                                flickManager!.flickControlManager!.unmute();
-                                              }
-                                            });
-                                          },
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
+                  MediaViewWidget(
+                    mediaFilePath: widget.args['filePath'],
+                    mediaType: widget.args['type'],
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(

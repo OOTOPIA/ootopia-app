@@ -86,15 +86,18 @@ class _CustomGalleryState extends State<CustomGallery> {
         ],
         onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () {
-          if (selectedMedias != [])
+          if (selectedMedias != []){
+            final listFilesPaths = selectedMedias.map((e) => e['mediaFile'].path);
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
                 "filePath": selectedMedias.first['mediaFile'].path,
+                "listFilesPaths": listFilesPaths,
                 "mirrored": "false",
                 "type": selectedMedias.first['mediaType']
               },
             );
+          }
         },
       ),
       body: Stack(
@@ -109,13 +112,13 @@ class _CustomGalleryState extends State<CustomGallery> {
                     children: [
                       SizedBox(height: 20),
                       MediaViewWidget(
-                        mediaFilePath: currentDirectory["mediaFile"],
-                        mediatype: currentDirectory["mediaType"],
+                        mediaFilePath: currentDirectory["mediaFile"].path,
+                        mediaType: currentDirectory["mediaType"],
                         mediaSize: currentDirectory["mediaSize"],
-                        videoPlayerController: _videoPlayerController,
-                        videoIsLoading: currentDirectory["mediaType"] == "video"
-                            ? videoIsLoading
-                            : null,
+                        // videoPlayerController: _videoPlayerController,
+                        // videoIsLoading: currentDirectory["mediaType"] == "video"
+                        //     ? videoIsLoading
+                        //     : null,
                       ),
                       SizedBox(height: 10),
                       multipleImagesButton(),

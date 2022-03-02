@@ -6,31 +6,52 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:video_player/video_player.dart';
 
 class MediaViewWidget extends StatefulWidget {
-  final File mediaFilePath;
-  final String mediatype;
-  final Size mediaSize;
-  final VideoPlayerController? videoPlayerController;
-  final bool? videoIsLoading;
-  const MediaViewWidget({
-    Key? key,
-    required this.mediaFilePath,
-    required this.mediatype,
-    required this.mediaSize,
-    this.videoPlayerController,
-    this.videoIsLoading,
-  }) : super(key: key);
+  final String mediaFilePath;
+  final String mediaType;
+  final Size? mediaSize;
+  const MediaViewWidget(
+      {Key? key,
+      required this.mediaFilePath,
+      required this.mediaType,
+      this.mediaSize})
+      : super(key: key);
 
   @override
   State<MediaViewWidget> createState() => _MediaViewWidgetState();
 }
 
 class _MediaViewWidgetState extends State<MediaViewWidget> {
+  FlickManager? flickManager;
+  bool videoIsLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.mediaType == 'video') initVideo();
+  }
+
+  initVideo() {
+    setState(() {
+      videoIsLoading = true;
+    });
+    VideoPlayerController _videoPlayerController =
+        VideoPlayerController.file(File(widget.mediaFilePath))
+          ..initialize().then((value) {
+            setState(() {
+              videoIsLoading = false;
+            });
+          });
+
+    flickManager = FlickManager(videoPlayerController: _videoPlayerController);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: widget.mediatype == "video"
+          maxHeight: widget.mediaType == "video"
               ? MediaQuery.of(context).size.height * .6
               : MediaQuery.of(context).size.width +
                   GlobalConstants.of(context).spacingNormal * 2,
@@ -45,19 +66,20 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                 top: GlobalConstants.of(context).spacingNormal,
                 bottom: GlobalConstants.of(context).screenHorizontalSpace,
               ),
-              child: widget.mediatype == "video"
+              child: widget.mediaType == "video"
                   ? ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(21)),
-                      child: widget.videoIsLoading!
+                      child: videoIsLoading
                           ? SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
                               child: CircularProgressIndicator(),
                             )
                           : FlickVideoPlayer(
-                              flickManager: FlickManager(
-                                videoPlayerController:
-                                    widget.videoPlayerController!,
+                              preferredDeviceOrientationFullscreen: [],
+                              flickManager: flickManager!,
+                              flickVideoWithControls: FlickVideoWithControls(
+                                controls: null,
                               ),
                             ),
                     )
@@ -73,15 +95,59 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           topRight: Radius.circular(20),
                         ),
                         image: DecorationImage(
-                          fit: widget.mediaSize.height > widget.mediaSize.width
-                              ? BoxFit.fitHeight
-                              : BoxFit.fitWidth,
+                          fit:
+                              widget.mediaSize!.height > widget.mediaSize!.width
+                                  ? BoxFit.fitHeight
+                                  : BoxFit.fitWidth,
                           alignment: FractionalOffset.center,
-                          image: FileImage(widget.mediaFilePath),
+                          image: FileImage(File(widget.mediaFilePath)),
                         ),
                       ),
                     ),
             ),
+            widget.mediaType == "video"
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.all(
+                            GlobalConstants.of(context).spacingMedium),
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.black38,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: SizedBox(
+                          width: 28,
+                          height: 28,
+                          child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            icon: Icon(
+                              flickManager!.flickControlManager!.isMute
+                                  ? Icons.volume_off
+                                  : Icons.volume_up,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  //flickMultiManager.toggleMute();
+                                  if (!flickManager!
+                                      .flickControlManager!.isMute) {
+                                    flickManager!.flickControlManager!.mute();
+                                  } else {
+                                    flickManager!.flickControlManager!.unmute();
+                                  }
+                                },
+                              );
+                            },
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
           ],
         ),
       ),
