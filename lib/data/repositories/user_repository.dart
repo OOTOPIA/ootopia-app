@@ -341,7 +341,12 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       String fullName, int page, int limit) async {
     try {
       Response res = await ApiClient.api().get(
-        "users/list/$page/$limit/$fullName",
+        "users/search",
+        queryParameters: {
+          'page': page,
+          'limit': limit,
+          'fullname': fullName,
+        },
       );
       if (res.statusCode != 200) {
         throw Exception(res.data);

@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/data/models/users/user_comment.dart';
 part 'comment_post_model.g.dart';
 
 @JsonSerializable()
@@ -15,7 +15,7 @@ class Comment {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   @JsonKey(name: 'usersComments')
-  final List<User>? userComments;
+  final List<UserComment>? userComments;
 
   Comment({
     required this.id,

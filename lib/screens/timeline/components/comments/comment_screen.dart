@@ -50,9 +50,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             const TextStyle(
           color: LightColors.linkText,
         ),
-        RegExp(r"\B@[a-zA-Z0-9]+\b\b"): const TextStyle(
-          color: LightColors.errorRed,
-        ),
       },
       onMatch: (List<String> matches) {},
     );
@@ -248,6 +245,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                               0.60,
                                                           child: LinkRichText(
                                                             comment.text,
+                                                            userCommentsList:
+                                                                comment
+                                                                    .userComments,
                                                             maxLines: 10,
                                                           ),
                                                         ),
@@ -384,16 +384,18 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                         value = value.trim();
 
                         if (value.length > 0) {
-                          var getLastString =
-                              value.split(RegExp(r'\B@+\b')).last;
-                          var checkIfNotHaveAValue =
-                              value.split(RegExp(r'\B@[a-zA-Z0-9]+\b')).last;
-                          if (checkIfNotHaveAValue.isEmpty) {
+                          var getLastString = value.split(RegExp(
+                              "([a-zA-Z]{2,}\\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\\s?([a-zA-Z]{1,})?)"));
+                          print(getLastString);
+                          if (getLastString.last.contains('@')) {
                             setState(() {
                               seSelectedUser = true;
                             });
 
-                            commentStore.searchUser(getLastString);
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              commentStore.searchUser(
+                                  getLastString.last.replaceAll('@', ''));
+                            });
                           } else {
                             setState(() {
                               seSelectedUser = false;
@@ -507,7 +509,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       alignment: Alignment.topCenter,
       child: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height * .42,
+        height: MediaQuery.of(context).size.height * .30,
         padding: EdgeInsets.only(left: 16, top: 16),
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(

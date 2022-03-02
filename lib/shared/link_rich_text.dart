@@ -1,18 +1,21 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkRichText extends StatelessWidget {
   final String text;
+  final List<UserComment>? userCommentsList;
   final int? maxLines;
   final Key? key;
   final RegExp regExp = RegExp(
       r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
   final List<InlineSpan> textSpanWidget = <TextSpan>[];
-
+  final RegExp regExpUser = RegExp('');
   LinkRichText(
     this.text, {
+    this.userCommentsList,
     this.maxLines,
     this.key,
   }) {
@@ -20,9 +23,20 @@ class LinkRichText extends StatelessWidget {
   }
 
   _initialize() {
+    teste();
     regExp.hasMatch(text) ? _hasLink() : _hasntLink();
   }
 
+  void teste() {
+    for (var item in userCommentsList!) {
+      if (text.indexOf(item.fullname) != -1) {
+        textSpanWidget.add(
+          TextSpan(
+              text: '@${item.fullname}', style: TextStyle(color: Colors.amber)),
+        );
+      }
+    }
+  }
 
   _hasntLink() {
     textSpanWidget.add(TextSpan(
@@ -32,7 +46,6 @@ class LinkRichText extends StatelessWidget {
   }
 
   _hasLink() {
-
     final splitedText = this.text.split(RegExp(r"((?<= |\n)|(?= |\n))"));
 
     splitedText.forEach((element) {
@@ -43,7 +56,7 @@ class LinkRichText extends StatelessWidget {
   _checkTextStyleType(String text) {
     if (regExp.hasMatch(text) && _checkIfLinkIsAbsolute(_validateLink(text))) {
       var url = _validateLink(text);
-      
+
       textSpanWidget.add(TextSpan(
           text: text,
           style: handleTextStyle(true),
