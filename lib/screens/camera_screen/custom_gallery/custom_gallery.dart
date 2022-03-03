@@ -223,7 +223,7 @@ class _CustomGalleryState extends State<CustomGallery> {
       mediaList.add({
         "mediaId": assetEntity.hashCode,
         "mediaFile": await assetEntity.file,
-        "mediaType": assetEntity.mimeType!.split('/').first,
+        "mediaType": assetEntity.type == AssetType.image ? 'image' : 'video',
         "mediaBytes": await assetEntity.thumbDataWithSize(200, 200),
         "mediaSize": assetEntity.size,
       });
