@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:ootopia_app/data/models/users/link_model.dart' as lk;
 import 'package:flutter/material.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
-
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
