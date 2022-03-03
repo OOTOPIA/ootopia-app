@@ -23,18 +23,17 @@ class LinkRichText extends StatelessWidget {
   }
 
   _initialize() {
-    colorUserMarket();
+    colorUserInText();
     if (regExp.hasMatch(text)) {
       _hasLink();
     }
   }
 
-  void colorUserMarket() {
+  void colorUserInText() {
     var allName = [];
+    int positionEnd = 0;
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
       List<String> textFragmented = [];
-      var positionEnd = 0;
-
       for (var item in userCommentsList!) {
         int startname = text.indexOf('@${item.fullname}', positionEnd);
         if (startname != -1) {
@@ -42,22 +41,28 @@ class LinkRichText extends StatelessWidget {
             "id": item.id,
             "name": "@${item.fullname}",
             "start": startname,
-            "end": startname + item.fullname.length,
+            "end": startname + item.fullname.length
           });
           positionEnd = startname + item.fullname.length;
         }
       }
+      var textIdList = [];
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-
-      for (var i = 0; i < text.length; i++) {
-        for (var j = 0; j < allName.length; j++) {
-          if (i >= allName[j]['start'] && i <= allName[j]['end']) {
-            textFragmented.add(allName[j]['name']);
-            i = allName[j]['end'];
+      for (var countText = 0; countText < text.length; countText++) {
+        for (var countAllName = 0;
+            countAllName < allName.length;
+            countAllName++) {
+          if (!textIdList.contains(allName[countAllName]['id']) &&
+              countText >= allName[countAllName]['start'] &&
+              countText <= allName[countAllName]['end']) {
+            textFragmented.add(allName[countAllName]['name']);
+            textIdList.add(allName[countAllName]['id']);
+            countText = allName[countAllName]['end'];
             break;
-          } else if (i < allName[j]['start']) {
-            textFragmented.add(text.substring(i, allName[j]['start']));
-            i = allName[j]['start'];
+          } else if (countText < allName[countAllName]['start']) {
+            textFragmented
+                .add(text.substring(countText, allName[countAllName]['start']));
+            countText = allName[countAllName]['start'];
             break;
           }
         }
@@ -68,7 +73,7 @@ class LinkRichText extends StatelessWidget {
           TextSpan(
             text: comment,
             style: TextStyle(
-              color: comment.contains("@")
+              color: comment.contains('@')
                   ? LightColors.errorRed
                   : LightColors.black,
               fontWeight: FontWeight.w400,
