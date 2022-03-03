@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -12,7 +11,6 @@ import 'package:ootopia_app/screens/timeline/components/post_timeline_component.
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';

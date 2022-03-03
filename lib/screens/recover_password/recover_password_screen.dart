@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';

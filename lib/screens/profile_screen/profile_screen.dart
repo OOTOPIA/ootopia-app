@@ -1,5 +1,4 @@
 //Packages
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +17,6 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';

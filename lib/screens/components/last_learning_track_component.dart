@@ -8,7 +8,6 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:provider/provider.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
