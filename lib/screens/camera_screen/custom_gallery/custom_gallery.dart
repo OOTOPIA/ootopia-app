@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,6 +49,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   int countPage = 0;
   bool hasMoreMedias = false;
   late VideoPlayerController? _videoPlayerController;
+  late FlickManager? flickManager;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -129,6 +131,8 @@ class _CustomGalleryState extends State<CustomGallery> {
                             mediaFilePath: currentDirectory["mediaFile"].path,
                             mediaType: currentDirectory["mediaType"],
                             mediaSize: currentDirectory["mediaSize"],
+                            flickManager: getFlickManager(),
+                            videoIsLoading: videoIsLoading,
                           ),
                           SizedBox(height: 10),
                           multipleImagesButton(),
@@ -177,6 +181,11 @@ class _CustomGalleryState extends State<CustomGallery> {
         ],
       ),
     );
+  }
+
+  FlickManager? getFlickManager() {
+    if (currentDirectory["mediaType"] == 'video') return flickManager;
+    return null;
   }
 
   Widget multipleImagesButton() {
@@ -330,7 +339,9 @@ class _CustomGalleryState extends State<CustomGallery> {
         setState(() {
           videoIsLoading = false;
         });
-        _videoPlayerController!.play();
+        //_videoPlayerController!.play();
       });
+
+    flickManager = FlickManager(videoPlayerController: _videoPlayerController!);
   }
 }

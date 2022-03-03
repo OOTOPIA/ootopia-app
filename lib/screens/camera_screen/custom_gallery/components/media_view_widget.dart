@@ -9,43 +9,24 @@ class MediaViewWidget extends StatefulWidget {
   final String mediaFilePath;
   final String mediaType;
   final Size? mediaSize;
-  const MediaViewWidget(
-      {Key? key,
-      required this.mediaFilePath,
-      required this.mediaType,
-      this.mediaSize})
-      : super(key: key);
+  final VideoPlayerController? videoPlayerController;
+  final FlickManager? flickManager;
+  final bool? videoIsLoading;
+  const MediaViewWidget({
+    Key? key,
+    required this.mediaFilePath,
+    required this.mediaType,
+    this.mediaSize,
+    this.videoPlayerController,
+    this.videoIsLoading,
+    this.flickManager,
+  }) : super(key: key);
 
   @override
   State<MediaViewWidget> createState() => _MediaViewWidgetState();
 }
 
 class _MediaViewWidgetState extends State<MediaViewWidget> {
-  FlickManager? flickManager;
-  bool videoIsLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.mediaType == 'video') initVideo();
-  }
-
-  initVideo() {
-    setState(() {
-      videoIsLoading = true;
-    });
-    VideoPlayerController _videoPlayerController =
-        VideoPlayerController.file(File(widget.mediaFilePath))
-          ..initialize().then((value) {
-            setState(() {
-              videoIsLoading = false;
-            });
-          });
-
-    flickManager = FlickManager(videoPlayerController: _videoPlayerController);
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,7 +50,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
               child: widget.mediaType == "video"
                   ? ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(21)),
-                      child: videoIsLoading
+                      child: widget.videoIsLoading!
                           ? SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
@@ -79,10 +60,10 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                             )
                           : FlickVideoPlayer(
                               preferredDeviceOrientationFullscreen: [],
-                              flickManager: flickManager!,
-                              flickVideoWithControls: FlickVideoWithControls(
-                                controls: null,
-                              ),
+                              flickManager: widget.flickManager!,
+                              // flickVideoWithControls: FlickVideoWithControls(
+                              //   controls: null,
+                              // ),
                             ),
                     )
                   : Container(
@@ -107,49 +88,50 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                       ),
                     ),
             ),
-            widget.mediaType == "video"
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(
-                            GlobalConstants.of(context).spacingMedium),
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: SizedBox(
-                          width: 28,
-                          height: 28,
-                          child: IconButton(
-                            padding: EdgeInsets.all(0),
-                            icon: Icon(
-                              flickManager!.flickControlManager!.isMute
-                                  ? Icons.volume_off
-                                  : Icons.volume_up,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              setState(
-                                () {
-                                  //flickMultiManager.toggleMute();
-                                  if (!flickManager!
-                                      .flickControlManager!.isMute) {
-                                    flickManager!.flickControlManager!.mute();
-                                  } else {
-                                    flickManager!.flickControlManager!.unmute();
-                                  }
-                                },
-                              );
-                            },
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Container(),
+            // widget.mediaType == "video"
+            //     ? Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: <Widget>[
+            //           Container(
+            //             margin: EdgeInsets.all(
+            //                 GlobalConstants.of(context).spacingMedium),
+            //             padding: EdgeInsets.all(2),
+            //             decoration: BoxDecoration(
+            //               color: Colors.black38,
+            //               borderRadius: BorderRadius.circular(50),
+            //             ),
+            //             child: SizedBox(
+            //               width: 28,
+            //               height: 28,
+            //               child: IconButton(
+            //                 padding: EdgeInsets.all(0),
+            //                 icon: Icon(
+            //                   widget.flickManager!.flickControlManager!.isMute
+            //                       ? Icons.volume_off
+            //                       : Icons.volume_up,
+            //                   size: 20,
+            //                 ),
+            //                 onPressed: () {
+            //                   setState(
+            //                     () {
+            //                       if (!widget.flickManager!.flickControlManager!
+            //                           .isMute) {
+            //                         widget.flickManager!.flickControlManager!
+            //                             .mute();
+            //                       } else {
+            //                         widget.flickManager!.flickControlManager!
+            //                             .unmute();
+            //                       }
+            //                     },
+            //                   );
+            //                 },
+            //                 color: Colors.white,
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       )
+            //     : Container(),
           ],
         ),
       ),
