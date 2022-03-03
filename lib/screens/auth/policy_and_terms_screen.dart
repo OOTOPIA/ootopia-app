@@ -1,10 +1,7 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
