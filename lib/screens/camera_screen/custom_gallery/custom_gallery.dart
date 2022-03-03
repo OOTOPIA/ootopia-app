@@ -38,6 +38,8 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   bool isLoading = false;
   bool videoIsLoading = true;
+  bool isLoadingMoreMedia = false;
+  bool hasError = false;
   var singleMode = true;
   static const selectLimit = 5;
   static const limitMedias = 15;
@@ -103,62 +105,75 @@ class _CustomGalleryState extends State<CustomGallery> {
           BackgroundButterflyBottom(),
           isLoading
               ? Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20),
-                      MediaViewWidget(
-                        mediaFilePath: currentDirectory["mediaFile"],
-                        mediatype: currentDirectory["mediaType"],
-                        mediaSize: currentDirectory["mediaSize"],
-                        videoPlayerController: _videoPlayerController,
-                        videoIsLoading: currentDirectory["mediaType"] == "video"
-                            ? videoIsLoading
-                            : null,
-                      ),
-                      SizedBox(height: 10),
-                      multipleImagesButton(),
-                      SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: GlobalConstants.of(context)
-                                  .screenHorizontalSpace -
-                              5,
+              : hasError
+                  ? Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.hasntImageOnGallery,
+                        style: GoogleFonts.roboto(
+                          color: LightColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
-                        width: double.infinity,
-                        child: Center(
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            spacing: 8, // gap between adjacent chips
-                            runSpacing: 8, // gap between lines
-                            children: mediaList
-                                .asMap()
-                                .map(
-                                  (index, media) => MapEntry(
-                                    index,
-                                    CustomGalleryGridView(
-                                      discountSpacing: 10 * 3,
-                                      amountPadding: 0,
-                                      media: handleMediaOnGridView(media),
-                                      mediaType: media["mediaType"],
-                                      columnsCount: 3,
-                                      singleMode: singleMode,
-                                      positionOnList: returnPosition(media),
-                                      onTap: () => selectMedia(media),
-                                    ),
-                                  ),
-                                )
-                                .values
-                                .toList(),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 20),
+                          MediaViewWidget(
+                            mediaFilePath: currentDirectory["mediaFile"],
+                            mediatype: currentDirectory["mediaType"],
+                            mediaSize: currentDirectory["mediaSize"],
+                            videoPlayerController: _videoPlayerController,
+                            videoIsLoading:
+                                currentDirectory["mediaType"] == "video"
+                                    ? videoIsLoading
+                                    : null,
                           ),
-                        ),
+                          SizedBox(height: 10),
+                          multipleImagesButton(),
+                          SizedBox(height: 10),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: GlobalConstants.of(context)
+                                      .screenHorizontalSpace -
+                                  5,
+                            ),
+                            width: double.infinity,
+                            child: Center(
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                spacing: 8, // gap between adjacent chips
+                                runSpacing: 8, // gap between lines
+                                children: mediaList
+                                    .asMap()
+                                    .map(
+                                      (index, media) => MapEntry(
+                                        index,
+                                        CustomGalleryGridView(
+                                          discountSpacing: 10 * 3,
+                                          amountPadding: 0,
+                                          media: handleMediaOnGridView(media),
+                                          mediaType: media["mediaType"],
+                                          columnsCount: 3,
+                                          singleMode: singleMode,
+                                          positionOnList: returnPosition(media),
+                                          onTap: () => selectMedia(media),
+                                        ),
+                                      ),
+                                    )
+                                    .values
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                          if (isLoadingMoreMedia) CircularProgressIndicator(),
+                          SizedBox(height: 20),
+                        ],
                       ),
-                      SizedBox(height: 20),
-                    ],
-                  ),
-                ),
+                    ),
           showToastMessage ? ToastMessageWidget() : Container()
         ],
       ),
@@ -215,15 +230,25 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   getImageList(int page) async {
     int initialPage = page * limitMedias;
+    isLoadingMoreMedia = true;
+    setState(() {});
 
-    _assetEntityList = await albums.first
-        .getAssetListRange(start: initialPage, end: initialPage + limitMedias);
+    try {
+      _assetEntityList = await albums.first.getAssetListRange(
+          start: initialPage, end: initialPage + limitMedias);
+    } catch (e) {
+      setState(() {
+        hasError = true;
+        isLoading = false;
+      });
+      return;
+    }
 
     for (var assetEntity in _assetEntityList) {
       mediaList.add({
         "mediaId": assetEntity.hashCode,
         "mediaFile": await assetEntity.file,
-        "mediaType": assetEntity.mimeType!.split('/').first,
+        "mediaType": assetEntity.type == AssetType.image ? 'image' : 'video',
         "mediaBytes": await assetEntity.thumbDataWithSize(200, 200),
         "mediaSize": assetEntity.size,
       });
@@ -231,6 +256,8 @@ class _CustomGalleryState extends State<CustomGallery> {
 
     hasMoreMedias = _assetEntityList.length == limitMedias;
     countPage++;
+    
+    isLoadingMoreMedia = false;
     setState(() {});
   }
 

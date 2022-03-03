@@ -52,7 +52,9 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           ? SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
-                              child: CircularProgressIndicator(),
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             )
                           : FlickVideoPlayer(
                               flickManager: FlickManager(
