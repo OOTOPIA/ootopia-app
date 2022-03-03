@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -9,7 +8,6 @@ import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_bar.dart';
 import 'package:ootopia_app/screens/learning_tracks/components/video_play_and_pause.dart';
 import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPlayerLearningTracks extends StatefulWidget {
   final Widget viewQuiz;

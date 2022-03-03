@@ -7,7 +7,6 @@ import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_le
 import 'package:ootopia_app/screens/marketplace/transfer_success_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
-import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
