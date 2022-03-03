@@ -23,68 +23,63 @@ class LinkRichText extends StatelessWidget {
   }
 
   _initialize() {
-    teste();
-    regExp.hasMatch(text) ? _hasLink() : _hasntLink();
+    colorUserMarket();
+    if (regExp.hasMatch(text)) {
+      _hasLink();
+    }
   }
 
-  void teste() {
+  void colorUserMarket() {
     var allName = [];
-    List<String> textFragmented = [];
-    for (var item in userCommentsList!) {
-      int startname = text.indexOf(item.fullname);
-      if (startname != -1) {
-        allName.add({
-          "name": "@${item.fullname}",
-          "start": startname,
-          "end": startname + item.fullname.length + 1
-        });
+    if (userCommentsList != null && userCommentsList!.isNotEmpty) {
+      List<String> textFragmented = [];
+      var positionEnd = 0;
+
+      for (var item in userCommentsList!) {
+        int startname = text.indexOf('@${item.fullname}', positionEnd);
+        if (startname != -1) {
+          allName.add({
+            "id": item.id,
+            "name": "@${item.fullname}",
+            "start": startname,
+            "end": startname + item.fullname.length,
+          });
+          positionEnd = startname + item.fullname.length;
+        }
       }
-    }
+      allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
 
-    allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-
-    for (var i = 0; i < allName.length; i++) {
-      // inicio do loop
-      if (i == 0 && allName[0]["start"] > 0) {
-        textFragmented.add(text.substring(0, allName[0]["start"] - 1));
-        textFragmented.add(allName[0]["name"]);
-      }
-
-      // meio do loop
-      if (i < (allName.length - 2) &&
-          (allName[i - 1]["end"] + 1) < allName[i]["start"]) {
-        if ((allName[i - 1]["end"] + 1) == allName[i]["start"]) {
-          textFragmented.add(allName[i]["name"]);
-        } else {
-          textFragmented.add(
-              text.substring(allName[i - 1]["end"], allName[i]["start"] - 1));
-          textFragmented.add(allName[i]["name"]);
+      for (var i = 0; i < text.length; i++) {
+        for (var j = 0; j < allName.length; j++) {
+          if (i >= allName[j]['start'] && i <= allName[j]['end']) {
+            textFragmented.add(allName[j]['name']);
+            i = allName[j]['end'];
+            break;
+          } else if (i < allName[j]['start']) {
+            textFragmented.add(text.substring(i, allName[j]['start']));
+            i = allName[j]['start'];
+            break;
+          }
         }
       }
 
-      // fim do loop
-      if (i == (allName.length - 1)) {
-        if ((allName[i - 1]["end"] + 1) == allName[i]["start"]) {
-          textFragmented.add(allName[i]["name"]);
-        } else {
-          textFragmented.add(text.substring(
-              allName[i - 1]["end"] - 1, allName[i]["start"] - 1));
-          textFragmented.add(allName[i]["name"]);
-        }
-      }
-    }
-    print("TEXTOU INTEIRO AQUI /n \n ${allName}");
-    print("TEXTOU INTEIRO AQUI /n \n ${textFragmented}");
-    textFragmented.forEach((texttt) {
-      textSpanWidget.add(
-        TextSpan(
-          text: texttt,
-          style: TextStyle(
-            color: texttt.contains("@") ? Colors.red : Colors.blue,
+      textFragmented.forEach((comment) {
+        textSpanWidget.add(
+          TextSpan(
+            text: comment,
+            style: TextStyle(
+              color: comment.contains("@")
+                  ? LightColors.errorRed
+                  : LightColors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 16,
+            ),
           ),
-        ),
-      );
-    });
+        );
+      });
+    } else {
+      _hasntLink();
+    }
   }
 
   _hasntLink() {
