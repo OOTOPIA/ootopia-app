@@ -23,6 +23,86 @@ class ShareLink extends StatefulWidget {
 }
 
 class ShareLinkState extends State<ShareLink> {
+  copyLink(Type type, String id, BuildContext context) {
+    try {
+      String link;
+      switch (type) {
+        case Type.posts:
+          link = '${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id';
+          break;
+        case Type.offer:
+          link =
+              '${dotenv.env['LINK_SHARING_URL_API']!}market-place/shared/$id';
+          break;
+        case Type.learning_track:
+          link =
+              '${dotenv.env['LINK_SHARING_URL_API']!}learning-tracks/shared/$id';
+          break;
+      }
+      Clipboard.setData(ClipboardData(text: link));
+    } catch (e) {
+      print(
+          "OQUE ACONTECEU AO COPIAR ESSE LINK  $type ${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id \n /n ${e.toString()}");
+      showModalBottomSheet(
+          context: context,
+          barrierColor: Colors.black.withAlpha(1),
+          backgroundColor: Colors.black.withAlpha(1),
+          builder: (BuildContext context) {
+            return SnackBarWidget(
+              menu: AppLocalizations.of(context)!.linkCopied,
+              automaticClosing: true,
+              text:
+                  "OQUE ACONTECEU AO COPIAR ESSE LINK  $type ${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id \n /n ${e.toString()}",
+              marginBottom: true,
+            );
+          });
+    }
+  }
+
+  modalSharedCopyLink(Type type, BuildContext context) {
+    try {
+      String text;
+      switch (type) {
+        case Type.posts:
+          text = AppLocalizations.of(context)!.nowYouCanShareThisPost;
+          break;
+        case Type.offer:
+          text = AppLocalizations.of(context)!.nowYouCanShareThisOffer;
+          break;
+        case Type.learning_track:
+          text = AppLocalizations.of(context)!.nowYouCanShareThisLearningTracks;
+          break;
+      }
+
+      showModalBottomSheet(
+          context: context,
+          barrierColor: Colors.black.withAlpha(1),
+          backgroundColor: Colors.black.withAlpha(1),
+          builder: (BuildContext context) {
+            return SnackBarWidget(
+              menu: AppLocalizations.of(context)!.linkCopied,
+              automaticClosing: true,
+              text: text,
+              marginBottom: true,
+            );
+          });
+    } catch (e) {
+      print("MOSTRAR MODAL DE COPIADO $type ${e.toString()}");
+      showModalBottomSheet(
+          context: context,
+          barrierColor: Colors.black.withAlpha(1),
+          backgroundColor: Colors.black.withAlpha(1),
+          builder: (BuildContext context) {
+            return SnackBarWidget(
+              menu: AppLocalizations.of(context)!.linkCopied,
+              automaticClosing: true,
+              text: "MOSTRAR MODAL DE COPIADO $type ${e.toString()}",
+              marginBottom: true,
+            );
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -49,88 +129,20 @@ class ShareLinkState extends State<ShareLink> {
           copyLink(widget.type, widget.id, context);
           modalSharedCopyLink(widget.type, context);
         } catch (e) {
-          print("ERROR AO COPIAR ${e.toString()}");
+          showModalBottomSheet(
+              context: context,
+              barrierColor: Colors.black.withAlpha(1),
+              backgroundColor: Colors.black.withAlpha(1),
+              builder: (BuildContext context) {
+                return SnackBarWidget(
+                  menu: AppLocalizations.of(context)!.linkCopied,
+                  automaticClosing: true,
+                  text: "ERRO ao copiar link ${e.toString()}",
+                  marginBottom: true,
+                );
+              });
         }
       },
     );
-  }
-}
-
-copyLink(Type type, String id, BuildContext context) {
-  try {
-    String link;
-    switch (type) {
-      case Type.posts:
-        link = '${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id';
-        break;
-      case Type.offer:
-        link = '${dotenv.env['LINK_SHARING_URL_API']!}market-place/shared/$id';
-        break;
-      case Type.learning_track:
-        link =
-            '${dotenv.env['LINK_SHARING_URL_API']!}learning-tracks/shared/$id';
-        break;
-    }
-    Clipboard.setData(ClipboardData(text: link));
-  } catch (e) {
-    print(
-        "OQUE ACONTECEU AO COPIAR ESSE LINK  $type ${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id \n /n ${e.toString()}");
-    showModalBottomSheet(
-        context: context,
-        barrierColor: Colors.black.withAlpha(1),
-        backgroundColor: Colors.black.withAlpha(1),
-        builder: (BuildContext context) {
-          return SnackBarWidget(
-            menu: AppLocalizations.of(context)!.linkCopied,
-            automaticClosing: true,
-            text:
-                "OQUE ACONTECEU AO COPIAR ESSE LINK  $type ${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id \n /n ${e.toString()}",
-            marginBottom: true,
-          );
-        });
-  }
-}
-
-modalSharedCopyLink(Type type, BuildContext context) {
-  try {
-    String text;
-    switch (type) {
-      case Type.posts:
-        text = AppLocalizations.of(context)!.nowYouCanShareThisPost;
-        break;
-      case Type.offer:
-        text = AppLocalizations.of(context)!.nowYouCanShareThisOffer;
-        break;
-      case Type.learning_track:
-        text = AppLocalizations.of(context)!.nowYouCanShareThisLearningTracks;
-        break;
-    }
-
-    showModalBottomSheet(
-        context: context,
-        barrierColor: Colors.black.withAlpha(1),
-        backgroundColor: Colors.black.withAlpha(1),
-        builder: (BuildContext context) {
-          return SnackBarWidget(
-            menu: AppLocalizations.of(context)!.linkCopied,
-            automaticClosing: true,
-            text: text,
-            marginBottom: true,
-          );
-        });
-  } catch (e) {
-    print("MOSTRAR MODAL DE COPIADO $type ${e.toString()}");
-    showModalBottomSheet(
-        context: context,
-        barrierColor: Colors.black.withAlpha(1),
-        backgroundColor: Colors.black.withAlpha(1),
-        builder: (BuildContext context) {
-          return SnackBarWidget(
-            menu: AppLocalizations.of(context)!.linkCopied,
-            automaticClosing: true,
-            text: "MOSTRAR MODAL DE COPIADO $type ${e.toString()}",
-            marginBottom: true,
-          );
-        });
   }
 }
