@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';

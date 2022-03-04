@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/wallets/wallet_transfer_model.dart';
 import 'package:ootopia_app/screens/wallet/components/card_information_balance.dart';

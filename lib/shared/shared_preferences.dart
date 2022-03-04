@@ -4,7 +4,7 @@ class SharedPreferencesInstance {
   static SharedPreferences? prefs;
   static SharedPreferencesInstance? _instance;
 
-  SharedPreferencesInstance() {}
+  SharedPreferencesInstance();
 
   static Future<SharedPreferencesInstance> getInstance() async {
     if (_instance == null) {

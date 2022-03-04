@@ -4,14 +4,12 @@
     "liveOotopiaNowMessage": "VIVA A OOTOPIA AGORA!",
     "welcomeToTheRegenerativeWorldInWhich": "Bem-vindo ao mundo regenerativo\n no qual todos nós queremos viver.",
     "email": "e-mail",
-    "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "password": "senha",
     "newPassword": "nova senha",
     "confirmPassword": "confirme a senha",
     "pleaseEnterANewPassword": "Por favor, digite uma nova senha",
     "pleaseEnterTheSamePassword": "Por favor, digite a mesma senha",
     "repeatPassword": "Repita a senha",
-    "pleaseEnterYourPassword": "Por favor, insira sua senha",
     "iForgotMyPassword": "Esqueci a minha senha",
     "pleaseRepeatYourPassword": "Por favor repita sua senha",
     "passwordDoesNotMatch": "Senha não corresponde",
@@ -65,7 +63,6 @@
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Crie sua conta e junte-se ao \nmovimento para curar o planeta Terra!",
     "nameAndSurname": "nome",
     "pleaseEnterYourNameAndSurname": "Por favor, insira seu nome",
-    "pleaseEnterYourEmail": "Por favor introduza o seu e-mail",
     "pleaseEnterAValidEmail": "Por favor digite um email válido",
     "pleaseEnterYourValidEmailAddress": "Por favor, insira seu e-mail válido",
     "pleaseInsertTheSamePassword": "Por favor, insira a mesma senha",
@@ -84,7 +81,7 @@
     "weRespectAndProtectThePrivacyofYourData":"Respeitamos e protegemos a privacidade de seus dados.\nConheça nossos preceitos éticos e de transparência quanto ao uso e privacidade",
 
     "youNeedToEnableSomePermissionsToAllowFullUseOfTheCamera": "Você precisa habilitar algumas \npermissões para permitir o uso completo \n da câmera.",
-    
+
     "decline": "Recusar",
     "theVideoIsLoading": "O vídeo esta sendo carregado",
     "home": "Principal",
@@ -117,7 +114,6 @@
 
     "publications": "Publicações",
     "initial": "Inicial",
-    "noPosts": "sem publicações :(",
 
     "gratitudeReward": "Recompensa de gratidão",
     "transfer": "transferir",
@@ -135,7 +131,6 @@
     "sendMoney": "Enviar dinheiro",
     "balanceIn": "Saldo em",
     "all2": "Todos",
-    "received": "Recebido",
     "sent": "Enviei",
     "send": "Enviar",
     "noPosts": "Sem postagens",
@@ -215,7 +210,7 @@
     "theOOTOPIAServiceSixth": "Ensuring access to our Service. To operate our global Service, we must store and transfer data across our systems around the world, including outside of your country of residence. The use of this global infrastructure is necessary and essential to provide our Service. This infrastructure may be owned or operated by Facebook Inc., Facebook Ireland Limited, or their affiliates.",
     "theOOTOPIAServiceSeventh": "Connecting you with brands, products, and services in ways you care about. We use data from Instagram and other Facebook Company Products, as well as from third-party partners, to show you ads, offers, and other sponsored content that we believe will be meaningful to you. And we try to make that content as relevant as all your other experiences on Instagram.",
     "theOOTOPIAServiceEighth": "Research and innovation. We use the information we have to develop, test, and improve our Service and collaborate with others on research to make our Service better and contribute to the well-being of our community. This includes analyzing the data we have about our users and understanding how people use our Services, for example by conducting surveys and testing and troubleshooting new features.",
-    
+
     "yourCommitments": "YOUR COMMITMENTS",
     "yourCommitmentsPrimary": "In return for our commitment to provide the Service, we require you to make the below commitments to us.",
     "yourCommitmentsSecond": "Who Can Use Instagram. We want our Service to be as open and inclusive as possible, but we also want it to be safe, secure, and in accordance with the law. So, we need you to commit to a few restrictions in order to be part of the Instagram community.",
@@ -235,10 +230,10 @@
     "yourCommitmentsSixteenth": "We do not claim ownership of your content, but you grant us a license to use it. Nothing is changing about your rights in your content. We do not claim ownership of your content that you post on or through the Service and you are free to share your content with anyone else, wherever you want. However, we need certain legal permissions from you (known as a “license”) to provide the Service. When you share, post, or upload content that is covered by intellectual property rights (like photos or videos) on or in connection with our Service, you hereby grant to us a non-exclusive, transferable, sub-licensable, worldwide license to host, use, distribute, modify, run, copy, publicly perform or display, translate, and create derivative works of your content (consistent with your privacy and application settings) for purposes of making the Instagram Service available. This license will end when your content is deleted from our systems. You can delete content individually or all at once by deleting your account. To learn more about how we use information, and how to control or delete your content, review the Data Policy and visit the Instagram Help Center.",
     "yourCommitmentsSeventeenth": "Use of your username, profile picture, and information about your relationships and actions with accounts, ads, and sponsored content. Your username, profile picture, and information about your actions (such as likes) or relationships (such as follows) can be used next to or in connection with accounts, ads, offers, and other sponsored content that you follow or engage with that are displayed on Facebook Products, without any compensation to you. For example, we may show that you liked a sponsored post created by a brand that has paid us to display its ads on Instagram. As with actions on other content and follows of other accounts, actions on sponsored content and follows of sponsored accounts can be seen only by people who have permission to see that content or follow. We will also respect your ad settings. You can learn more here about your ad settings.",
     "yourCommitmentsEighteenth": "You agree that we can download and install updates to the Service on your device.",
-    
+
     "congratulations": "Parabéns!",
-    "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar\n a regenerar o planeta", 
-    "youMetYourDailyGoalToHelpRegenerateThePlanetWithoutParagraphs": "Você cumpriu sua meta diária de ajudar a regenerar o planeta", 
+    "youMetYourDailyGoalToHelpRegenerateThePlanet": "Você cumpriu sua meta diária de ajudar\n a regenerar o planeta",
+    "youMetYourDailyGoalToHelpRegenerateThePlanetWithoutParagraphs": "Você cumpriu sua meta diária de ajudar a regenerar o planeta",
     "totalBalance": "Total Somado",
     "nextStepIsToHelpMeetYourCityGoal": "O próximo passo é ajudar a atingir o objetivo da sua cidade.",
     "keepMakingOOTOPIAAlive": "Continue fazendo OOTOPIA vivo!",
@@ -271,7 +266,7 @@
 
     "textExplainWallet":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
     "textExplainWalletWithoutParagraph":"Esta é a sua carteira OOz. Aqui você pode verificar seu saldo total e todas as transações de entrada e saída",
-    
+
     "badgeChangeMakerPro": "Distintivo: Change Maker Pro",
     "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "O emblema de Change Maker Pro é dado a indivíduos e organizações que estão liderando profissionalmente projetos para regenerar o planeta e criando amplo impacto positivo.",
     "areYouAChangeMakerProToo": "Você também é um Change Maker Pro?",
@@ -294,7 +289,6 @@
     "planetaryLevelText2pt1": "Estamos quase lá!",
     "planetaryLevelText2pt2": "Vamos cumprir a meta planetária hoje!",
     "invitationCode": "Código de convite",
-    "gratitudeReward": "Recompensa de gratidão",
     "personalGoalAchieved": "Meta pessoal atingida",
     "totalGameCompleted": "Jogo total completado",
     "back":"Voltar",
@@ -314,7 +308,6 @@
     "notNow": "Agora não",
     "shareMyExperience": "Compartilhar minha experiência",
 
-    "thereAreNoWalletRecords": "Não há registros de OZZ",
 
     "eachOneMakeADiference": "CADA UM DE NÓS FAZ A DIFERENÇA",
     "code": "Código",
@@ -370,6 +363,7 @@
     "save":"Salvar",
     "editProfile": "Editar Perfil",
     "edit": "Editar",
+    "proceed": "Continuar",
     "insertValidCellPhone":"Por favor, insira seu número de celular.",
     "optional":"Opcional",
 
@@ -407,19 +401,18 @@
     "searchForAHashtag" : "Procure por uma hashtag",
     "errorUpdateProfile": "Erro ao atualizar perfil, tente novamente",
     "learningTracks":"Trilhas de Aprendizagem",
-    "learningTracksDescription":"Aqui você encontrará pequenas vídeo-aulas onde obterá uma compreensão prática das práticas regenerativas. Assista, responda aos quizzez e receba mais OOz.",
+    "learningTracksDescription":"Aqui você encontra vídeo-aulas animadas e compactas para ampliar seus conhecimentos e práticas sustentáveis e regenerativas. Assista e responda aos quizzes para fixar seu aprendizado e receba OOz por cada acerto.",
     "aboutLearningTracks":"Aqui você encontrará trilhas de aprendizagem que lhe trarão uma compreensão mais profunda das principais práticas regenerativas. Assista, responda aos questionários e ganhe ainda mais OOz.",
 
     "ethicalMarketplace": "Mercado Ético",
     "thanksForYourOrder": "OBRIGADO PELO SEU PEDIDO",
     "ethicalMarketplaceDescription": "O lugar para trocar bens e serviços que impactam positivamente nossas vidas e o planeta.",
-    "ethicalMarketplaceHeaderDescription": "Aqui você pode usar seus créditos OOz para comprar produtos e serviços que contribuem para um mundo melhor.",
+    "ethicalMarketplaceHeaderDescription": "Aqui você pode ofertar produtos e serviços que contribuem para um mundo melhor e adquirir ofertas usando seus OOz.",
     "messageVendorContact": "O fornecedor entrará em contato com você em breve por e-mail para providenciar a entrega de sua aquisição",
     "messageOptional": "Mensagem - Opcional",
     "purchaseNow": "Adquirir Agora",
 
     "appTest": "Feedback",
-    "sendYourFeedback":"envie seu comentário",
 
     "required": "Obrigatório",
 
@@ -456,7 +449,7 @@
      "recoveryMessageError": "Se este for seu e-mail, um link deverá estar na sua caixa de entrada para que você possa atualizar sua senha.",
      "updatingRegenerationGameStatus":"Atualizando o seu status no jogo da regeneração...",
      "offers":"Ofertas",
-     
+
      "areYouEnjoyingTheOotopiaApp": "Você está gostando\ndo app OOTOPIA?",
      "weWantYourExperienceToBeTheBestItCanBe": "Queremos que sua experiência seja a melhor possível. Por isso sua opinião sincera e suas sugestões são muito importantes!\nCo-crie o OOTOPIA conosco.",
     "shareMyOpinion" : "Compartilhar minha opinião",
@@ -464,7 +457,7 @@
     "giveYourOpinion" : "Dê sua opinião sobre o app",
     "itIsVeryImportant" : "Ela é muito importante para nós!",
 
-    "notificationTitleOOzReceived": "Você recebeu %OOZ_RECEIVED% OOz!", 
+    "notificationTitleOOzReceived": "Você recebeu %OOZ_RECEIVED% OOz!",
     "notificationBodyOOzReceivedByOnePerson": "%USER_NAME% enviou uma recompensa de gratidão por sua publicação.",
     "notificationBodyOOzReceivedBySomePeople": "%USER_NAME% e mais %PEOPLE_AMOUNT% pessoas enviaram uma recompensa de gratidão por sua publicação.",
     "notificationTitleCommentedPost": "Olá, %YOUR_NAME%!",
@@ -473,6 +466,9 @@
     "notificationButtonText": "Visualizar",
 
     "hide" : "Ocultar",
-    "readMore" : "Leia mais"
+    "readMore" : "Leia mais",
+    "multiplesImages": "Múltiplas imagens",
+    "limitSelectedImages": "O limite são 5 fotos ou vídeos",
+    "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo"
 
 }
