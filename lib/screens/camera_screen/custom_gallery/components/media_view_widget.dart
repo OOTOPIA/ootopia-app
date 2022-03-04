@@ -6,18 +6,20 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:video_player/video_player.dart';
 
 class MediaViewWidget extends StatefulWidget {
-  final File mediaFilePath;
-  final String mediatype;
-  final Size mediaSize;
+  final String mediaFilePath;
+  final String mediaType;
+  final Size? mediaSize;
   final VideoPlayerController? videoPlayerController;
+  final FlickManager? flickManager;
   final bool? videoIsLoading;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
-    required this.mediatype,
-    required this.mediaSize,
+    required this.mediaType,
+    this.mediaSize,
     this.videoPlayerController,
     this.videoIsLoading,
+    this.flickManager,
   }) : super(key: key);
 
   @override
@@ -30,7 +32,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
     return Container(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: widget.mediatype == "video"
+          maxHeight: widget.mediaType == "video"
               ? MediaQuery.of(context).size.height * .6
               : MediaQuery.of(context).size.width +
                   GlobalConstants.of(context).spacingNormal * 2,
@@ -45,7 +47,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                 top: GlobalConstants.of(context).spacingNormal,
                 bottom: GlobalConstants.of(context).screenHorizontalSpace,
               ),
-              child: widget.mediatype == "video"
+              child: widget.mediaType == "video"
                   ? ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(21)),
                       child: widget.videoIsLoading!
@@ -57,10 +59,11 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                               ),
                             )
                           : FlickVideoPlayer(
-                              flickManager: FlickManager(
-                                videoPlayerController:
-                                    widget.videoPlayerController!,
-                              ),
+                              preferredDeviceOrientationFullscreen: [],
+                              flickManager: widget.flickManager!,
+                              // flickVideoWithControls: FlickVideoWithControls(
+                              //   controls: null,
+                              // ),
                             ),
                     )
                   : Container(
@@ -75,15 +78,60 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           topRight: Radius.circular(20),
                         ),
                         image: DecorationImage(
-                          fit: widget.mediaSize.height > widget.mediaSize.width
-                              ? BoxFit.fitHeight
-                              : BoxFit.fitWidth,
+                          fit:
+                              widget.mediaSize!.height > widget.mediaSize!.width
+                                  ? BoxFit.fitHeight
+                                  : BoxFit.fitWidth,
                           alignment: FractionalOffset.center,
-                          image: FileImage(widget.mediaFilePath),
+                          image: FileImage(File(widget.mediaFilePath)),
                         ),
                       ),
                     ),
             ),
+            // widget.mediaType == "video"
+            //     ? Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: <Widget>[
+            //           Container(
+            //             margin: EdgeInsets.all(
+            //                 GlobalConstants.of(context).spacingMedium),
+            //             padding: EdgeInsets.all(2),
+            //             decoration: BoxDecoration(
+            //               color: Colors.black38,
+            //               borderRadius: BorderRadius.circular(50),
+            //             ),
+            //             child: SizedBox(
+            //               width: 28,
+            //               height: 28,
+            //               child: IconButton(
+            //                 padding: EdgeInsets.all(0),
+            //                 icon: Icon(
+            //                   widget.flickManager!.flickControlManager!.isMute
+            //                       ? Icons.volume_off
+            //                       : Icons.volume_up,
+            //                   size: 20,
+            //                 ),
+            //                 onPressed: () {
+            //                   setState(
+            //                     () {
+            //                       if (!widget.flickManager!.flickControlManager!
+            //                           .isMute) {
+            //                         widget.flickManager!.flickControlManager!
+            //                             .mute();
+            //                       } else {
+            //                         widget.flickManager!.flickControlManager!
+            //                             .unmute();
+            //                       }
+            //                     },
+            //                   );
+            //                 },
+            //                 color: Colors.white,
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       )
+            //     : Container(),
           ],
         ),
       ),
