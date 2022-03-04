@@ -14,6 +14,7 @@ import 'package:ootopia_app/data/models/general_config/general_config_model.dart
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -460,7 +461,8 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       constraints: BoxConstraints(
                         maxHeight: widget.args["type"] == "video"
                             ? MediaQuery.of(context).size.height * .6
-                            : MediaQuery.of(context).size.width + GlobalConstants.of(context).spacingNormal*2,
+                            : MediaQuery.of(context).size.width +
+                                GlobalConstants.of(context).spacingNormal * 2,
                       ),
                       child: Stack(
                         alignment: AlignmentDirectional.bottomCenter,
@@ -539,10 +541,16 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                           onPressed: () {
                                             setState(() {
                                               //flickMultiManager.toggleMute();
-                                              if(!flickManager!.flickControlManager!.isMute){
-                                                flickManager!.flickControlManager!.mute();
-                                              }else{
-                                                flickManager!.flickControlManager!.unmute();
+                                              if (!flickManager!
+                                                  .flickControlManager!
+                                                  .isMute) {
+                                                flickManager!
+                                                    .flickControlManager!
+                                                    .mute();
+                                              } else {
+                                                flickManager!
+                                                    .flickControlManager!
+                                                    .unmute();
                                               }
                                             });
                                           },
