@@ -49,7 +49,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   int countPage = 0;
   bool hasMoreMedias = false;
   late VideoPlayerController? _videoPlayerController;
-  late FlickManager? flickManager;
+  FlickManager? flickManager;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -339,7 +339,7 @@ class _CustomGalleryState extends State<CustomGallery> {
         setState(() {
           videoIsLoading = false;
         });
-        //_videoPlayerController!.play();
+        _videoPlayerController!.play();
       });
 
     flickManager = FlickManager(videoPlayerController: _videoPlayerController!);

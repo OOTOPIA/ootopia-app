@@ -1,15 +1,12 @@
 import 'dart:io';
-
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:video_player/video_player.dart';
 
 class MediaViewWidget extends StatefulWidget {
   final String mediaFilePath;
   final String mediaType;
   final Size? mediaSize;
-  final VideoPlayerController? videoPlayerController;
   final FlickManager? flickManager;
   final bool? videoIsLoading;
   const MediaViewWidget({
@@ -17,7 +14,6 @@ class MediaViewWidget extends StatefulWidget {
     required this.mediaFilePath,
     required this.mediaType,
     this.mediaSize,
-    this.videoPlayerController,
     this.videoIsLoading,
     this.flickManager,
   }) : super(key: key);
@@ -27,6 +23,20 @@ class MediaViewWidget extends StatefulWidget {
 }
 
 class _MediaViewWidgetState extends State<MediaViewWidget> {
+  @override
+  void dispose() {
+    widget.flickManager?.dispose();
+    super.dispose();
+  }
+
+  @mustCallSuper
+  @protected
+  void didUpdateWidget(covariant MediaViewWidget oldWidget) {
+    if (oldWidget.mediaType != widget.mediaType) {
+      oldWidget.flickManager?.dispose();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
