@@ -384,17 +384,15 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                         value = value.trim();
 
                         if (value.length > 0) {
-                          var getLastString = value.split(RegExp(
-                              "([a-zA-Z]{2,}\\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\\s?([a-zA-Z]{1,})?)"));
-                          print(getLastString);
+                          var getLastString = value.split(RegExp("ㅤ@"));
                           if (getLastString.last.contains('@')) {
                             setState(() {
                               seSelectedUser = true;
                             });
-
+                            var startName = getLastString.last.split('@').last;
+                            var finishName = startName.split(RegExp("ㅤ"));
                             Future.delayed(Duration(milliseconds: 500), () {
-                              commentStore.searchUser(
-                                  getLastString.last.replaceAll('@', ''));
+                              commentStore.searchUser(finishName.first);
                             });
                           } else {
                             setState(() {
@@ -535,10 +533,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                 var list =
                                     _inputController.text.trim().split(' ');
                                 list.removeLast();
-                                list.add('@${e.fullname}');
+                                list.add('ㅤ@${e.fullname}ㅤ');
                                 _inputController.clear();
                                 for (var item in list) {
-                                  _inputController.text += ' $item';
+                                  _inputController.text += '$item';
                                 }
 
                                 _inputController.selection =

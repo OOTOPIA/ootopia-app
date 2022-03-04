@@ -83,6 +83,10 @@ class NotificationMessageService {
     String titleText = "";
 
     AppLocalizations.delegate.load(this.locale).then((value) {
+      if (type == '') {
+        titleText = value.notificationTitleOOzReceived
+            .replaceAll('%OOZ_RECEIVED%', '$formatOOz');
+      }
       if (type == "gratitude_reward")
         titleText = value.notificationTitleOOzReceived
             .replaceAll('%OOZ_RECEIVED%', '$formatOOz');
@@ -99,6 +103,10 @@ class NotificationMessageService {
     String bodyText = "";
 
     AppLocalizations.delegate.load(this.locale).then((value) {
+      if (type == '') {
+        bodyText = value.notificationBodyOOzReceivedByOnePerson
+            .replaceAll('%USER_NAME%', '${usersName.first}');
+      }
       if (type == "gratitude_reward") {
         if (usersName.length == 1)
           bodyText = value.notificationBodyOOzReceivedByOnePerson
