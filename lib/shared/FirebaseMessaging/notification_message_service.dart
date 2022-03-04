@@ -83,9 +83,9 @@ class NotificationMessageService {
     String titleText = "";
 
     AppLocalizations.delegate.load(this.locale).then((value) {
-      if (type == '') {
-        titleText = value.notificationTitleOOzReceived
-            .replaceAll('%OOZ_RECEIVED%', '$formatOOz');
+      if (type == 'user-tagged-in-comment') {
+        titleText = value.userComment
+            .replaceAll('%USER_NAME_MARKET%', '${user!.fullname}');
       }
       if (type == "gratitude_reward")
         titleText = value.notificationTitleOOzReceived
@@ -103,9 +103,9 @@ class NotificationMessageService {
     String bodyText = "";
 
     AppLocalizations.delegate.load(this.locale).then((value) {
-      if (type == '') {
-        bodyText = value.notificationBodyOOzReceivedByOnePerson
-            .replaceAll('%USER_NAME%', '${usersName.first}');
+      if (type == 'user-tagged-in-comment') {
+        bodyText = value.userComment
+            .replaceAll('%USER_NAME_MARKET%', '${usersName.first}');
       }
       if (type == "gratitude_reward") {
         if (usersName.length == 1)

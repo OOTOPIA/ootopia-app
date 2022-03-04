@@ -476,6 +476,7 @@
     "hide" : "Ocultar",
     "readMore" : "Leia mais",
     "multiplesImages": "Múltiplas imagens",
-    "limitSelectedImages": "O limite são 5 fotos ou vídeos"
+    "limitSelectedImages": "O limite são 5 fotos ou vídeos",
+    "userComment":"%USER_NAME_MARKET% marcou você em um comentário"
 
 }

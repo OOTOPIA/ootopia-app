@@ -26,7 +26,7 @@ class CommentRepositoryImpl with SecureStoreMixin {
       if (response.statusCode == 201) {
         return Comment.fromJson(response.data);
       } else {
-        throw Exception('Failed to create comment');
+        throw Exception('Failed to create comment ${response.data}');
       }
     } catch (error) {
       throw Exception('Failed to create comment $error');

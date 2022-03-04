@@ -55,6 +55,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     );
 
     postId = widget.args['post'].id;
+    print(postId);
     Future.delayed(Duration.zero, () async {
       commentStore.isLoading = true;
       homeStore.setResizeToAvoidBottomInset(true);
@@ -529,6 +530,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                           child: InkWell(
                             onTap: () {
                               commentStore.listUsersMarket?.add(e.id);
+                              print(e.id);
                               setState(() {
                                 var list =
                                     _inputController.text.trim().split(' ');
