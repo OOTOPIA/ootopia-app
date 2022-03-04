@@ -1,21 +1,23 @@
 import 'dart:io';
+
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:video_player/video_player.dart';
 
 class MediaViewWidget extends StatefulWidget {
-  final String mediaFilePath;
-  final String mediaType;
-  final Size? mediaSize;
-  final FlickManager? flickManager;
+  final File mediaFilePath;
+  final String mediatype;
+  final Size mediaSize;
+  final VideoPlayerController? videoPlayerController;
   final bool? videoIsLoading;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
-    required this.mediaType,
-    this.mediaSize,
+    required this.mediatype,
+    required this.mediaSize,
+    this.videoPlayerController,
     this.videoIsLoading,
-    this.flickManager,
   }) : super(key: key);
 
   @override
@@ -24,25 +26,11 @@ class MediaViewWidget extends StatefulWidget {
 
 class _MediaViewWidgetState extends State<MediaViewWidget> {
   @override
-  void dispose() {
-    widget.flickManager?.dispose();
-    super.dispose();
-  }
-
-  @mustCallSuper
-  @protected
-  void didUpdateWidget(covariant MediaViewWidget oldWidget) {
-    if (oldWidget.mediaType != widget.mediaType) {
-      oldWidget.flickManager?.dispose();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: widget.mediaType == "video"
+          maxHeight: widget.mediatype == "video"
               ? MediaQuery.of(context).size.height * .6
               : MediaQuery.of(context).size.width +
                   GlobalConstants.of(context).spacingNormal * 2,
@@ -57,7 +45,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                 top: GlobalConstants.of(context).spacingNormal,
                 bottom: GlobalConstants.of(context).screenHorizontalSpace,
               ),
-              child: widget.mediaType == "video"
+              child: widget.mediatype == "video"
                   ? ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(21)),
                       child: widget.videoIsLoading!
@@ -69,8 +57,10 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                               ),
                             )
                           : FlickVideoPlayer(
-                              preferredDeviceOrientationFullscreen: [],
-                              flickManager: widget.flickManager!,
+                              flickManager: FlickManager(
+                                videoPlayerController:
+                                    widget.videoPlayerController!,
+                              ),
                             ),
                     )
                   : Container(
@@ -85,12 +75,11 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           topRight: Radius.circular(20),
                         ),
                         image: DecorationImage(
-                          fit:
-                              widget.mediaSize!.height > widget.mediaSize!.width
-                                  ? BoxFit.fitHeight
-                                  : BoxFit.fitWidth,
+                          fit: widget.mediaSize.height > widget.mediaSize.width
+                              ? BoxFit.fitHeight
+                              : BoxFit.fitWidth,
                           alignment: FractionalOffset.center,
-                          image: FileImage(File(widget.mediaFilePath)),
+                          image: FileImage(widget.mediaFilePath),
                         ),
                       ),
                     ),
