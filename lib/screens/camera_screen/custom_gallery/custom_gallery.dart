@@ -65,6 +65,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   @override
   void dispose() {
     _videoPlayerController?.dispose();
+    flickManager?.dispose();
     super.dispose();
   }
 
@@ -93,6 +94,7 @@ class _CustomGalleryState extends State<CustomGallery> {
           if (selectedMedias != []) {
             final listFilesPaths =
                 selectedMedias.map((e) => e['mediaFile'].path);
+            flickManager?.flickControlManager?.pause();
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
