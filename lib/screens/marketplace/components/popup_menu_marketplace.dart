@@ -22,7 +22,7 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
 
   _selectedOption(String optionSelected) {
     if (optionSelected == 'shared') {
-      copyLink(Type.offer, widget.productModel.id);
+      copyLink(Type.offer, widget.productModel.id, context);
       modalSharedCopyLink(Type.offer, context);
       return;
     }

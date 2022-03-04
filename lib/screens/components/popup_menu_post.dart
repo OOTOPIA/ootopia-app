@@ -43,7 +43,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
 
   _selectedOption(String optionSelected) {
     if (optionSelected == 'shared') {
-      copyLink(Type.posts, widget.post.id);
+      copyLink(Type.posts, widget.post.id, context);
       modalSharedCopyLink(Type.posts, context);
       return;
     }
