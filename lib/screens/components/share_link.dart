@@ -96,7 +96,8 @@ class ShareLinkState extends State<ShareLink> {
             return SnackBarWidget(
               menu: AppLocalizations.of(context)!.linkCopied,
               automaticClosing: true,
-              text: "MOSTRAR MODAL DE COPIADO $type ${e.toString()}",
+              text:
+                  "MOSTRAR MODAL DE COPIADO $type ${e.toString()} link aqui ó ${dotenv.env['LINK_SHARING_URL_API']!} ${dotenv.env.toString()}}",
               marginBottom: true,
             );
           });
