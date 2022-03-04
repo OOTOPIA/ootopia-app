@@ -138,7 +138,8 @@ class ShareLinkState extends State<ShareLink> {
                 return SnackBarWidget(
                   menu: AppLocalizations.of(context)!.linkCopied,
                   automaticClosing: true,
-                  text: "ERRO ao copiar link ${e.toString()}",
+                  text:
+                      "ERRO ao copiar link ${e.toString()} ${dotenv.env['LINK_SHARING_URL_API']!} ${dotenv.env.toString()}",
                   marginBottom: true,
                 );
               });
