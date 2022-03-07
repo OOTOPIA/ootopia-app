@@ -262,7 +262,6 @@ class _CustomGalleryState extends State<CustomGallery> {
 
     hasMoreMedias = _assetEntityList.length == limitMedias;
     countPage++;
-
     isLoadingMoreMedia = false;
     setState(() {});
   }

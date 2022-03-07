@@ -96,7 +96,8 @@ class ShareLinkState extends State<ShareLink> {
             return SnackBarWidget(
               menu: AppLocalizations.of(context)!.linkCopied,
               automaticClosing: true,
-              text: "MOSTRAR MODAL DE COPIADO $type ${e.toString()}",
+              text:
+                  "MOSTRAR MODAL DE COPIADO $type ${e.toString()} link aqui ó ${dotenv.env['LINK_SHARING_URL_API']!} ${dotenv.env.toString()}}",
               marginBottom: true,
             );
           });
@@ -125,24 +126,54 @@ class ShareLinkState extends State<ShareLink> {
         ],
       ),
       onTap: () {
-        try {
-          copyLink(widget.type, widget.id, context);
-          modalSharedCopyLink(widget.type, context);
-        } catch (e) {
-          showModalBottomSheet(
-              context: context,
-              barrierColor: Colors.black.withAlpha(1),
-              backgroundColor: Colors.black.withAlpha(1),
-              builder: (BuildContext context) {
-                return SnackBarWidget(
-                  menu: AppLocalizations.of(context)!.linkCopied,
-                  automaticClosing: true,
-                  text: "ERRO ao copiar link ${e.toString()}",
-                  marginBottom: true,
-                );
-              });
-        }
+        copyLink(widget.type, widget.id, context);
+        modalSharedCopyLink(widget.type, context);
       },
     );
   }
+}
+
+copyLink(Type type, String id, BuildContext context) {
+  String link;
+  switch (type) {
+    case Type.posts:
+      link = '${dotenv.env['LINK_SHARING_URL_API']!}posts/shared/$id';
+      break;
+    case Type.offer:
+      link = '${dotenv.env['LINK_SHARING_URL_API']!}market-place/shared/$id';
+      break;
+    case Type.learning_track:
+      link = '${dotenv.env['LINK_SHARING_URL_API']!}learning-tracks/shared/$id';
+      break;
+  }
+
+  Clipboard.setData(ClipboardData(text: link));
+}
+
+modalSharedCopyLink(Type type, BuildContext context) {
+  String text;
+  switch (type) {
+    case Type.posts:
+      text = AppLocalizations.of(context)!.nowYouCanShareThisPost;
+      break;
+    case Type.offer:
+      text = AppLocalizations.of(context)!.nowYouCanShareThisOffer;
+      break;
+    case Type.learning_track:
+      text = AppLocalizations.of(context)!.nowYouCanShareThisLearningTracks;
+      break;
+  }
+
+  showModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withAlpha(1),
+      backgroundColor: Colors.black.withAlpha(1),
+      builder: (BuildContext context) {
+        return SnackBarWidget(
+          menu: AppLocalizations.of(context)!.linkCopied,
+          automaticClosing: true,
+          text: text,
+          marginBottom: true,
+        );
+      });
 }
