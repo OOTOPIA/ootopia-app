@@ -55,7 +55,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     );
 
     postId = widget.args['post'].id;
-    print(postId);
     Future.delayed(Duration.zero, () async {
       commentStore.isLoading = true;
       homeStore.setResizeToAvoidBottomInset(true);
@@ -530,20 +529,25 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                           child: InkWell(
                             onTap: () {
                               commentStore.listUsersMarket?.add(e.id);
-                              print(e.id);
                               setState(() {
                                 var list =
                                     _inputController.text.trim().split(' ');
+                                print(list);
                                 list.removeLast();
                                 list.add('ㅤ@${e.fullname}ㅤ');
                                 _inputController.clear();
                                 for (var item in list) {
-                                  _inputController.text += '$item';
+                                  if (item.contains('@')) {
+                                    _inputController.text += '$item';
+                                  } else {
+                                    _inputController.text += ' $item';
+                                  }
                                 }
 
                                 _inputController.selection =
                                     TextSelection.fromPosition(TextPosition(
-                                        offset: _inputController.text.length));
+                                        offset:
+                                            _inputController.text.length - 1));
                                 seSelectedUser = false;
                               });
                             },

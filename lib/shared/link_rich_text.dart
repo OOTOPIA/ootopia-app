@@ -35,11 +35,11 @@ class LinkRichText extends StatelessWidget {
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
       List<String> textFragmented = [];
       for (var item in userCommentsList!) {
-        int startname = text.indexOf('@${item.fullname}', positionEnd);
+        int startname = text.indexOf('ㅤ@', positionEnd);
         if (startname != -1) {
           allName.add({
             "id": item.id,
-            "name": "@${item.fullname}",
+            "name": " @${item.fullname}",
             "start": startname,
             "end": startname + item.fullname.length
           });
@@ -74,7 +74,7 @@ class LinkRichText extends StatelessWidget {
             text: comment,
             style: TextStyle(
               color: comment.contains('@')
-                  ? LightColors.errorRed
+                  ? LightColors.linkText
                   : LightColors.black,
               fontWeight: FontWeight.w400,
               fontSize: 16,
