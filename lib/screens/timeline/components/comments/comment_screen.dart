@@ -532,7 +532,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                               setState(() {
                                 var list =
                                     _inputController.text.trim().split(' ');
-                                print(list);
                                 list.removeLast();
                                 list.add('ㅤ@${e.fullname}ㅤ');
                                 _inputController.clear();
