@@ -57,7 +57,7 @@
     "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Please enter a valid birthdate in format DD/MM/YYYY",
     "pleaseEnterAValidBirthdate": "Please enter a valid birthdate",
-"userComment":"%USER_NAME_MARKET% tagged you in a comment",
+    "userComment":"%USER_NAME_MARKET% tagged you in a comment",
     "others": "Others",
 
     "favoriteThemes": "Favorite Themes",
