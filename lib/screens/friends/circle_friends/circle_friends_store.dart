@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 import 'package:ootopia_app/data/repositories/friends_repository.dart';
 
 part 'circle_friends_store.g.dart';
@@ -10,7 +10,7 @@ abstract class CircleFriendsStoreBase with Store {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
 
   @observable
-  List<FriendModel> friends = [];
+  late FriendsDataModel friendsDate;
 
   @observable
   bool isLoading = false;
@@ -21,7 +21,7 @@ abstract class CircleFriendsStoreBase with Store {
   @action
   Future<void> getFriends(String userId) async{
     isLoading = true;
-    friends = await friendsRepositoryImpl.getFriends(userId, page, limit);
+    friendsDate = await friendsRepositoryImpl.getFriends(userId, page, limit);
     isLoading = false;
   }
 }

@@ -92,7 +92,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
               return Container(
                   width: MediaQuery.of(context).size.width,
                   height: widget.isUserLogged ? 70 : 56,
-                  child: list(circleFriendsWidgetStore.friends));
+                  child: list(circleFriendsWidgetStore.friendsDate?.friends ?? []));
             }
           ),
         ],

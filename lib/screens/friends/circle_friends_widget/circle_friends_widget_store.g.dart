@@ -9,18 +9,19 @@ part of 'circle_friends_widget_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CircleFriendsWidgetStore on CircleFriendsWidgetStoreBase, Store {
-  final _$friendsAtom = Atom(name: 'CircleFriendsWidgetStoreBase.friends');
+  final _$friendsDateAtom =
+      Atom(name: 'CircleFriendsWidgetStoreBase.friendsDate');
 
   @override
-  List<FriendModel> get friends {
-    _$friendsAtom.reportRead();
-    return super.friends;
+  FriendsDataModel? get friendsDate {
+    _$friendsDateAtom.reportRead();
+    return super.friendsDate;
   }
 
   @override
-  set friends(List<FriendModel> value) {
-    _$friendsAtom.reportWrite(value, super.friends, () {
-      super.friends = value;
+  set friendsDate(FriendsDataModel? value) {
+    _$friendsDateAtom.reportWrite(value, super.friendsDate, () {
+      super.friendsDate = value;
     });
   }
 
@@ -50,7 +51,7 @@ mixin _$CircleFriendsWidgetStore on CircleFriendsWidgetStoreBase, Store {
   @override
   String toString() {
     return '''
-friends: ${friends},
+friendsDate: ${friendsDate},
 isLoading: ${isLoading}
     ''';
   }

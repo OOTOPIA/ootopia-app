@@ -85,7 +85,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 2.0),
-                                  child: Text( "${circleFriendsStore.friends.length} ${AppLocalizations.of(context)!.friends}",
+                                  child: Text( "${circleFriendsStore.friendsDate.length} ${AppLocalizations.of(context)!.friends}",
                                     style: TextStyle(
                                       fontStyle: FontStyle.italic,
                                       fontSize: 12,
