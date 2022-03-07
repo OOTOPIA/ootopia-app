@@ -26,7 +26,7 @@ abstract class CommentStoreBase with Store {
   List<Comment> listComments = [];
 
   @observable
-  List<UserComment> listAllUsers = [];
+  List<UserSearchModel> listAllUsers = [];
 
   @observable
   List<String>? listUsersMarket = [];

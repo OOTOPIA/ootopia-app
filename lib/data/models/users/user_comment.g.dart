@@ -6,8 +6,8 @@ part of 'user_comment.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserComment _$UserCommentFromJson(Map<String, dynamic> json) {
-  return UserComment(
+UserSearchModel _$UserSearchModelFromJson(Map<String, dynamic> json) {
+  return UserSearchModel(
     email: json['email'] as String?,
     fullname: json['fullname'] as String,
     id: json['id'] as String,
@@ -15,7 +15,7 @@ UserComment _$UserCommentFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$UserCommentToJson(UserComment instance) =>
+Map<String, dynamic> _$UserSearchModelToJson(UserSearchModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'fullname': instance.fullname,

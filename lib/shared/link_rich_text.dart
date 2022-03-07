@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LinkRichText extends StatelessWidget {
   final String text;
-  final List<UserComment>? userCommentsList;
+  final List<UserSearchModel>? userCommentsList;
   final int? maxLines;
   final Key? key;
   final RegExp regExp = RegExp(

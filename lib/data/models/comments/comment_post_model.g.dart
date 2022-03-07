@@ -21,7 +21,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['updatedAt'] as String),
     userComments: (json['usersComments'] as List<dynamic>?)
-        ?.map((e) => UserComment.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 }

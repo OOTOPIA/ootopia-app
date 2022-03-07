@@ -3,19 +3,19 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_comment.g.dart';
 
 @JsonSerializable()
-class UserComment {
+class UserSearchModel {
   String id;
   String fullname;
   String? email;
   String? photoUrl;
 
-  UserComment({
+  UserSearchModel({
     this.email,
     required this.fullname,
     required this.id,
     this.photoUrl,
   });
 
-  factory UserComment.fromJson(Map<String, dynamic> json) =>
-      _$UserCommentFromJson(json);
+  factory UserSearchModel.fromJson(Map<String, dynamic> json) =>
+      _$UserSearchModelFromJson(json);
 }

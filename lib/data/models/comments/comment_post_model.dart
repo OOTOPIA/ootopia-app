@@ -15,7 +15,7 @@ class Comment {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   @JsonKey(name: 'usersComments')
-  final List<UserComment>? userComments;
+  final List<UserSearchModel>? userComments;
 
   Comment({
     required this.id,

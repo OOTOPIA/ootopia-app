@@ -337,7 +337,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     }
   }
 
-  Future<List<UserComment>> getAllUsersByName(
+  Future<List<UserSearchModel>> getAllUsersByName(
       String fullName, int page, int limit) async {
     try {
       Response res = await ApiClient.api().get(
@@ -352,7 +352,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         throw Exception(res.data);
       }
       var list =
-          (res.data as List).map((e) => UserComment.fromJson(e)).toList();
+          (res.data as List).map((e) => UserSearchModel.fromJson(e)).toList();
       return list;
     } catch (e) {
       throw Exception('Name user not valid');

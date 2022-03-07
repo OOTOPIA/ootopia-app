@@ -57,13 +57,13 @@ mixin _$CommentStore on CommentStoreBase, Store {
   final _$listAllUsersAtom = Atom(name: 'CommentStoreBase.listAllUsers');
 
   @override
-  List<UserComment> get listAllUsers {
+  List<UserSearchModel> get listAllUsers {
     _$listAllUsersAtom.reportRead();
     return super.listAllUsers;
   }
 
   @override
-  set listAllUsers(List<UserComment> value) {
+  set listAllUsers(List<UserSearchModel> value) {
     _$listAllUsersAtom.reportWrite(value, super.listAllUsers, () {
       super.listAllUsers = value;
     });
