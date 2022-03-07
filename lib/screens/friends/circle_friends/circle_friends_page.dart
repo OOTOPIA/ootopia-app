@@ -12,6 +12,9 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 
 class CircleOfFriendPage extends StatefulWidget {
+  final String userId;
+
+  const CircleOfFriendPage({Key? key,required this.userId}) : super(key: key);
 
 
   @override
@@ -29,6 +32,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
 
   init(){
+    circleFriendsStore.getFriends(widget.userId,);
     if(orderBy.isEmpty){
       orderBy = [
         AppLocalizations.of(context)!.alphabeticalOrder,

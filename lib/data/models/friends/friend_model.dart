@@ -6,12 +6,10 @@ part 'friend_model.g.dart';
 
 @JsonSerializable()
 class FriendModel {
-  final String id;
-  @JsonKey(name: 'create_at')
-  final String createAt;
-  List<FriendThumbModel>? friendsThumbs;
+  final String? id;
+  final String? createAt;
+  List<FriendThumbModel?>? friendsThumbs;
   final String? fullname;
-  @JsonKey(name: 'photo_url')
   final String? photoUrl;
   final String? city;
   final String? state;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_page.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -61,8 +62,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 TextButton(
                   onPressed: (){
                     Future.delayed(Duration(milliseconds: 100),(){
-                      controller.insertPage(CircleOfFriendPage());
-
+                      controller.insertPage(CircleOfFriendPage(userId: widget.userId));
                     });
                   },
                   child: Row(
@@ -91,7 +91,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             builder: (_) {
               return Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 70,
+                  height: widget.isUserLogged ? 70 : 56,
                   child: list(circleFriendsWidgetStore.friends));
             }
           ),
@@ -102,7 +102,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
   Widget list(List items){
     int size = widget.isUserLogged ? items.length + 1 : items.length;
-    if(circleFriendsWidgetStore.isLoading){
+    if(circleFriendsWidgetStore.isLoading || items.length == 0){
       size = widget.isUserLogged ? 10 + 1 : 10;
     }
 
@@ -172,26 +172,37 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 child: circleFriendsWidgetStore.isLoading ?
                 itemShimmer() :
                 item(items[widget.isUserLogged ? index - 1 : index])),
-            SizedBox(
-              height: 13,
-            )
+            if(widget.isUserLogged)...[
+              SizedBox(
+                height: 13,
+              )
+            ]
+
           ],
         );
       },
     );
   }
 
-  Widget item(item){
+  Widget item(FriendModel item){
     final double size = 56;
     return Stack(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(size),
           child: Image.network(
-            item,
+            item.photoUrl ?? '',
             fit: BoxFit.cover,
             width: size,
             height: size,
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+              if (loadingProgress == null){
+                return child;
+              }
+              return itemShimmer();
+            },
+
+
             errorBuilder: (context, url, error) => Image.asset(
               'assets/icons/user.png',
               fit: BoxFit.cover,
@@ -212,7 +223,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
               ),
               onTap: (){
                 Future.delayed(Duration(microseconds: 80),(){
-                  _goToProfile(item.userId);
+                  _goToProfile(item.id);
                 });
               },
               child: Container(

@@ -12,13 +12,13 @@ mixin _$CircleFriendsWidgetStore on CircleFriendsWidgetStoreBase, Store {
   final _$friendsAtom = Atom(name: 'CircleFriendsWidgetStoreBase.friends');
 
   @override
-  List<dynamic> get friends {
+  List<FriendModel> get friends {
     _$friendsAtom.reportRead();
     return super.friends;
   }
 
   @override
-  set friends(List<dynamic> value) {
+  set friends(List<FriendModel> value) {
     _$friendsAtom.reportWrite(value, super.friends, () {
       super.friends = value;
     });

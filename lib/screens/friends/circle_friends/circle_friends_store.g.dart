@@ -12,13 +12,13 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
   final _$friendsAtom = Atom(name: 'CircleFriendsStoreBase.friends');
 
   @override
-  ObservableList<dynamic> get friends {
+  List<FriendModel> get friends {
     _$friendsAtom.reportRead();
     return super.friends;
   }
 
   @override
-  set friends(ObservableList<dynamic> value) {
+  set friends(List<FriendModel> value) {
     _$friendsAtom.reportWrite(value, super.friends, () {
       super.friends = value;
     });
@@ -39,12 +39,12 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
     });
   }
 
-  final _$searchNameAsyncAction =
-      AsyncAction('CircleFriendsStoreBase.searchName');
+  final _$getFriendsAsyncAction =
+      AsyncAction('CircleFriendsStoreBase.getFriends');
 
   @override
-  Future<void> searchName(String name) {
-    return _$searchNameAsyncAction.run(() => super.searchName(name));
+  Future<void> getFriends(String userId) {
+    return _$getFriendsAsyncAction.run(() => super.getFriends(userId));
   }
 
   @override
