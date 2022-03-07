@@ -9,6 +9,7 @@ class MediaViewWidget extends StatefulWidget {
   final Size? mediaSize;
   final FlickManager? flickManager;
   final bool? videoIsLoading;
+  final bool shouldCustomFlickManager;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
@@ -16,6 +17,7 @@ class MediaViewWidget extends StatefulWidget {
     this.mediaSize,
     this.videoIsLoading,
     this.flickManager,
+    this.shouldCustomFlickManager = false,
   }) : super(key: key);
 
   @override
@@ -71,6 +73,11 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           : FlickVideoPlayer(
                               preferredDeviceOrientationFullscreen: [],
                               flickManager: widget.flickManager!,
+                              flickVideoWithControls: FlickVideoWithControls(
+                                controls: widget.shouldCustomFlickManager
+                                    ? null
+                                    : FlickPortraitControls(),
+                              ),
                             ),
                     )
                   : Container(
@@ -90,11 +97,58 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                                   ? BoxFit.fitHeight
                                   : BoxFit.fitWidth,
                           alignment: FractionalOffset.center,
-                          image: FileImage(File(widget.mediaFilePath)),
+                          image: FileImage(
+                            File(widget.mediaFilePath),
+                          ),
                         ),
                       ),
                     ),
             ),
+            widget.mediaType == "video" && widget.shouldCustomFlickManager
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.all(
+                          GlobalConstants.of(context).spacingMedium,
+                        ),
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.black38,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: SizedBox(
+                          width: 28,
+                          height: 28,
+                          child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            icon: Icon(
+                                widget.flickManager!.flickControlManager!.isMute
+                                    ? Icons.volume_off
+                                    : Icons.volume_up,
+                                size: 20),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  //flickMultiManager.toggleMute();
+                                  if (!widget.flickManager!.flickControlManager!
+                                      .isMute) {
+                                    widget.flickManager!.flickControlManager!
+                                        .mute();
+                                  } else {
+                                    widget.flickManager!.flickControlManager!
+                                        .unmute();
+                                  }
+                                },
+                              );
+                            },
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
           ],
         ),
       ),

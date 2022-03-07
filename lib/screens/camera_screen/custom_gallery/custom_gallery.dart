@@ -92,16 +92,12 @@ class _CustomGalleryState extends State<CustomGallery> {
         onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () {
           if (selectedMedias != []) {
-            final listFilesPaths =
-                selectedMedias.map((e) => e['mediaFile'].path);
             flickManager?.flickControlManager?.pause();
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
-                "filePath": selectedMedias.first['mediaFile'].path,
-                "listFilesPaths": listFilesPaths,
+                "fileList": selectedMedias,
                 "mirrored": "false",
-                "type": selectedMedias.first['mediaType']
               },
             );
           }
