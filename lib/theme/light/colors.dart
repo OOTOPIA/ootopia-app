@@ -16,4 +16,5 @@ class LightColors {
   static const Color darkBlue = Color(0xFF03145C);
   static const Color errorRed = Color(0xFF8E1816);
   static Color blackText = Colors.black;
+  static const Color cyan = Color(0xFF03DAC6);
 }

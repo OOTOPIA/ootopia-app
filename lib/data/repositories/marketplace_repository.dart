@@ -10,6 +10,7 @@ abstract class MarketplaceRepository {
   Future<List<ProductModel>> getProducts({int? limit, int? offset});
   Future<Response<dynamic>> makePurchase(
       {required String productId, required String optionalMessage});
+  Future<ProductModel> getProductById(String id);
 }
 
 class MarketplaceRepositoryImpl implements MarketplaceRepository {
@@ -31,6 +32,23 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
           productList.add(product);
         });
         return productList;
+      } else {
+        throw Exception('Something went wrong');
+      }
+    } catch (error) {
+      throw Exception('Failed to load products $error');
+    }
+  }
+
+  @override
+  Future<ProductModel> getProductById(String id) async {
+    try {
+      final response = await ApiClient.api().get("market-place/$id");
+
+      if (response.statusCode == 200) {
+        final ProductModel product;
+        product = ProductModel.fromJson(response.data);
+        return product;
       } else {
         throw Exception('Something went wrong');
       }

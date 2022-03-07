@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/screens/marketplace/components/popup_menu_marketplace.dart';
 import 'package:ootopia_app/shared/image_handler_mixin.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
@@ -71,6 +72,9 @@ class ProductItem extends StatelessWidget with ImageHandler {
                         ],
                       ),
                     ),
+                    PopupMenuMarkeplace(
+                      productModel: productModel,
+                    )
                   ],
                 ),
                 const SizedBox(height: 7.6),

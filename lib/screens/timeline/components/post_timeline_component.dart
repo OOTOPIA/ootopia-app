@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,7 +25,6 @@ import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/expanded_text.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
