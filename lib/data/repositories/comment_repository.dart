@@ -3,10 +3,11 @@ import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 
 class CommentRepositoryImpl with SecureStoreMixin {
-  Future<List<Comment>> getComments(postId, page) async {
+  Future<List<Comment>> getComments(String postId, int page) async {
     try {
       var response = await ApiClient.api()
           .get('posts/$postId/comments', queryParameters: {'page': page});
+
       if (response.statusCode == 200) {
         return (response.data as List).map((i) => Comment.fromJson(i)).toList();
       } else {
@@ -17,14 +18,15 @@ class CommentRepositoryImpl with SecureStoreMixin {
     }
   }
 
-  Future<Comment> createComment(String postId, String text) async {
+  Future<Comment> createComment(
+      String postId, String text, List<String>? usersMarket) async {
     try {
-      var response = await ApiClient.api()
-          .post('posts/$postId/comments', data: {'text': text});
+      var response = await ApiClient.api().post('posts/$postId/comments',
+          data: {'text': text, 'taggedUser': usersMarket});
       if (response.statusCode == 201) {
         return Comment.fromJson(response.data);
       } else {
-        throw Exception('Failed to create comment');
+        throw Exception('Failed to create comment ${response.data}');
       }
     } catch (error) {
       throw Exception('Failed to create comment $error');

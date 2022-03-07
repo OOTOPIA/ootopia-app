@@ -24,6 +24,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$viewStateAtom = Atom(name: 'CommentStoreBase.viewState');
+
+  @override
+  ViewState get viewState {
+    _$viewStateAtom.reportRead();
+    return super.viewState;
+  }
+
+  @override
+  set viewState(ViewState value) {
+    _$viewStateAtom.reportWrite(value, super.viewState, () {
+      super.viewState = value;
+    });
+  }
+
   final _$listCommentsAtom = Atom(name: 'CommentStoreBase.listComments');
 
   @override
@@ -39,18 +54,79 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
-  final _$currentPageAtom = Atom(name: 'CommentStoreBase.currentPage');
+  final _$listAllUsersAtom = Atom(name: 'CommentStoreBase.listAllUsers');
 
   @override
-  int get currentPage {
-    _$currentPageAtom.reportRead();
-    return super.currentPage;
+  List<UserSearchModel> get listAllUsers {
+    _$listAllUsersAtom.reportRead();
+    return super.listAllUsers;
   }
 
   @override
-  set currentPage(int value) {
-    _$currentPageAtom.reportWrite(value, super.currentPage, () {
-      super.currentPage = value;
+  set listAllUsers(List<UserSearchModel> value) {
+    _$listAllUsersAtom.reportWrite(value, super.listAllUsers, () {
+      super.listAllUsers = value;
+    });
+  }
+
+  final _$listUsersMarketAtom = Atom(name: 'CommentStoreBase.listUsersMarket');
+
+  @override
+  List<String>? get listUsersMarket {
+    _$listUsersMarketAtom.reportRead();
+    return super.listUsersMarket;
+  }
+
+  @override
+  set listUsersMarket(List<String>? value) {
+    _$listUsersMarketAtom.reportWrite(value, super.listUsersMarket, () {
+      super.listUsersMarket = value;
+    });
+  }
+
+  final _$currentPageCommentAtom =
+      Atom(name: 'CommentStoreBase.currentPageComment');
+
+  @override
+  int get currentPageComment {
+    _$currentPageCommentAtom.reportRead();
+    return super.currentPageComment;
+  }
+
+  @override
+  set currentPageComment(int value) {
+    _$currentPageCommentAtom.reportWrite(value, super.currentPageComment, () {
+      super.currentPageComment = value;
+    });
+  }
+
+  final _$currentPageUserAtom = Atom(name: 'CommentStoreBase.currentPageUser');
+
+  @override
+  int get currentPageUser {
+    _$currentPageUserAtom.reportRead();
+    return super.currentPageUser;
+  }
+
+  @override
+  set currentPageUser(int value) {
+    _$currentPageUserAtom.reportWrite(value, super.currentPageUser, () {
+      super.currentPageUser = value;
+    });
+  }
+
+  final _$hasMoreUsersAtom = Atom(name: 'CommentStoreBase.hasMoreUsers');
+
+  @override
+  bool get hasMoreUsers {
+    _$hasMoreUsersAtom.reportRead();
+    return super.hasMoreUsers;
+  }
+
+  @override
+  set hasMoreUsers(bool value) {
+    _$hasMoreUsersAtom.reportWrite(value, super.hasMoreUsers, () {
+      super.hasMoreUsers = value;
     });
   }
 
@@ -79,12 +155,24 @@ mixin _$CommentStore on CommentStoreBase, Store {
         .run(() => super.deleteComments(postId, id));
   }
 
+  final _$searchUserAsyncAction = AsyncAction('CommentStoreBase.searchUser');
+
+  @override
+  Future<void> searchUser(String fullName) {
+    return _$searchUserAsyncAction.run(() => super.searchUser(fullName));
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
+viewState: ${viewState},
 listComments: ${listComments},
-currentPage: ${currentPage}
+listAllUsers: ${listAllUsers},
+listUsersMarket: ${listUsersMarket},
+currentPageComment: ${currentPageComment},
+currentPageUser: ${currentPageUser},
+hasMoreUsers: ${hasMoreUsers}
     ''';
   }
 }
