@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_comment.dart';
-import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 

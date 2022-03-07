@@ -469,7 +469,7 @@
     "readMore" : "Leia mais",
     "multiplesImages": "Múltiplas imagens",
     "limitSelectedImages": "O limite são 5 fotos ou vídeos",
-    "userComment":"%USER_NAME_MARKET% marcou você em um comentário"
+    "userComment":"%USER_NAME_MARKET% marcou você em um comentário",
     "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo"
 
 }
