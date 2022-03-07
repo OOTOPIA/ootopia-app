@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/persona_level/ripple_animationA.dart';
 import 'package:percent_indicator/percent_indicator.dart';

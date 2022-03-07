@@ -7,7 +7,6 @@
     "welcomeToTheRegenerativeWorldInWhich": "Welcome to the Regenerative World\nin which we all want to live.",
     "liveOotopiaNowMessage": "LIVE OOTOPIA NOW!",
     "email": "e-mail",
-    "pleaseEnterYourEmail": "Please enter your e-mail",
     "password": "password",
     "newPassword": "new password",
     "confirmPassword": "confirm password",
@@ -71,7 +70,6 @@
     "createYourAccountAndJoinTheMovementToHealPlanetEarth": "Create your account and join the \nmovement to heal planet Earth!",
     "nameAndSurname": "name",
     "pleaseEnterYourNameAndSurname": "Please enter your name",
-    "pleaseEnterYourEmail": "Please enter your email",
     "pleaseEnterAValidEmail": "Please enter a valid e-mail",
     "pleaseEnterYourValidEmailAddress": "Please enter your valid email address",
     "pleaseInsertTheSamePassword": "Please enter the same password",
@@ -123,7 +121,6 @@
 
     "publications": "Publications",
     "initial": "Initial",
-    "noPosts": "no posts :(",
 
     "gratitudeReward": "Gratitude reward",
     "transfer": "transfer",
@@ -182,7 +179,6 @@
     "pleaseEnterYourEmail": "Please enter your email",
     "changePassword": "Change Password",
     "enterNewPassword": "Enter new password",
-    "pleaseEnterYourPassword": "Please enter your valid password",
     "passwordsDontMatch": "Passwords don't match",
 
     "locationServicesAreDisabled": "Location services are disabled.",
@@ -275,16 +271,13 @@
     "youDontReceived": "You have no received coins",
     "youDontSent": "You don't have any submissions.",
     "youDontNothing": "You don't have nothing",
-    "all": "All",
     "sent":"Sent",
-    "received": "Received",
 
     "badgeChangeMakerPro": "Badge: Change Maker Pro",
     "theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth": "The Change Maker Pro Badge is awarded to individuals and organizations that are professionally leading projects to regenerate the planet and creating extensive positive impact.",
     "areYouAChangeMakerProToo": "Are you a Change Maker Pro too?",
     "getInContact": "Get in contact!",
     "invitationCode": "Invitation code",
-    "gratitudeReward": "Gratitude reward",
     "personalGoalAchieved": "Personal Goal Achieved",
     "totalGameCompleted": "Today's Game Completed",
     "yourPublicationIsBeingProcessed": "Your publication is being processed. When it is finished, you will receive % OOz.",
@@ -372,6 +365,7 @@
     "save":"Save",
     "editProfile": "Edit Profile",
     "edit": "Edit",
+    "proceed": "Continue",
     "insertValidCellPhone":"Please enter your mobile number.",
     "optional":"Optional",
     "enterYourNumber":"Your mobile number",
@@ -400,17 +394,15 @@
     "laurelWreath": "Laurel Wreath",
     "iAccept": "I accept",
     "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Laurel Wreath represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
-    "optional":"Optional",
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
 
     "appTest": "Feedback",
-    "sendYourFeedback":"send your feedback",
 
     "required": "Required",
     
     "learningTracks":"Learning Tracks",
-    "learningTracksDescription":"Here you will find short video lessons where you will get a practical understanding of regenerative practices. Watch, answer the quizzes, and receive more OOz.",
+    "learningTracksDescription":"Here you will find lively and compact video lessons to expand your knowledge and practices on sustainability and regeneration. Watch and answer quizzes to fix your learning and receive OOz for every correct answer.",
     "aboutLearningTracks":"Here you will find learning tracks that will bring you a deeper understanding of the main regenerative practices. Watch, answer the quizzes, and earn even more OOz.",
     "seeAll":"See all",
     "dontExistLearningTracks":"Don't exist learning tracks",
@@ -434,7 +426,7 @@
     },
 
     "ethicalMarketplace": "Ethical Marketplace",
-    "ethicalMarketplaceHeaderDescription": "Here you can use your OOz credits to purchase products and services that contribute to a better world.",
+    "ethicalMarketplaceHeaderDescription": "Here you can offer products and services that contribute to a better world and purchase offers using your OOz.",
     "thanksForYourOrder": "THANKS FOR YOUR ORDER",
     "ethicalMarketplaceDescription": "The place to exchange goods and services that positively impact our lives and the planet.",
     "messageVendorContact": "The vendor will soon contact you by email to arrange delivery of your purchase.",
@@ -461,10 +453,8 @@
     "invalidEmailOrPassword": "Invalid email and/or password",
     "errorLogin": "Access error",
     "recoveryMessageError": "If this is your email, a link should be in your inbox so you can update your password.",
-     "giveSuggestion":"Give suggestion",
-     "supportCenter":"Support Center",
-     "updatingRegenerationGameStatus":"Updating your stat in the regeneration game...",
-     "offers":"Offers",
+    "updatingRegenerationGameStatus":"Updating your stat in the regeneration game...",
+    "offers":"Offers",
 
     "areYouEnjoyingTheOotopiaApp": "Are you enjoying\nthe OOTOPIA app?",
     "weWantYourExperienceToBeTheBestItCanBe": "We want your experience to be the best it can be. That's why your sincere opinion and your suggestions are very important!\nCo-create OOTOPIA with us.",
@@ -482,5 +472,8 @@
     "notificationButtonText": "Open",
 
     "hide" : "Hide",
-    "readMore" : "Read more"
+    "readMore" : "Read more",
+    "multiplesImages": "Multiples images",
+    "limitSelectedImages": "The limit is 5 photos or videos",
+    "hasntImageOnGallery": "This gallery has no any files"
 }
