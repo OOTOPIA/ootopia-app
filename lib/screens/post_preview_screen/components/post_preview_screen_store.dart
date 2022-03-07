@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/widgets.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:mobx/mobx.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
@@ -111,7 +109,5 @@ abstract class _PostPreviewScreenStoreBase with Store {
     }
   }
 
-  void _backgroundHandler() {
-    WidgetsFlutterBinding.ensureInitialized();
-  }
+
 }

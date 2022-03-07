@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:ootopia_app/screens/auth/register_controller/register_controller.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 
