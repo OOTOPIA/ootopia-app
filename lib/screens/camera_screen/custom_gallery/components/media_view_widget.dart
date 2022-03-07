@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 
 class MediaViewWidget extends StatefulWidget {
@@ -10,6 +11,7 @@ class MediaViewWidget extends StatefulWidget {
   final FlickManager? flickManager;
   final bool? videoIsLoading;
   final bool shouldCustomFlickManager;
+  final bool showCropWidget;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
@@ -18,6 +20,7 @@ class MediaViewWidget extends StatefulWidget {
     this.videoIsLoading,
     this.flickManager,
     this.shouldCustomFlickManager = false,
+    this.showCropWidget = false,
   }) : super(key: key);
 
   @override
@@ -147,6 +150,29 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                         ),
                       ),
                     ],
+                  )
+                : Container(),
+            widget.mediaType == "image" && widget.showCropWidget
+                ? Positioned(
+                    right: 30,
+                    bottom: 35,
+                    child: GestureDetector(
+                      onTap: () => print('work'),
+                      child: Container(
+                        width: 25,
+                        height: 25,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/crop.svg',
+                          height: 20,
+                          width: 20,
+                        ),
+                      ),
+                    ),
                   )
                 : Container(),
           ],

@@ -804,13 +804,18 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   }
 
   filePathToTile(dynamic file) {
-    return MediaViewWidget(
-      mediaFilePath: file['mediaFile'].path,
-      mediaType: file['mediaType'],
-      //flickManager: ,
-      mediaSize: Size(300, 300),
-      shouldCustomFlickManager: true,
-      videoIsLoading: false,
+    return Container(
+      width: MediaQuery.of(context).size.width - 80,
+      height: MediaQuery.of(context).size.width - 80,
+      child: MediaViewWidget(
+        mediaFilePath: file['mediaFile'].path,
+        mediaType: file['mediaType'],
+        //flickManager: ,
+        mediaSize: file['mediaSize'],
+        shouldCustomFlickManager: true,
+        videoIsLoading: false,
+        showCropWidget: true,
+      ),
     );
   }
 }
