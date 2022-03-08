@@ -118,6 +118,10 @@ class AnalyticsTracking {
     this.trackingEvent("Learning tracks - Quiz", null);
   }
 
+  timelineInviteYourFriends() {
+    this.trackingEvent("Timeline - Invite your friends", null);
+  }
+
   creteOfferMarketPlace() {
     this.trackingEvent("Create Offer - MarketingPlace", null);
   }

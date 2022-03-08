@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/components/logo.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
@@ -95,14 +96,14 @@ class _LoginPageState extends State<LoginPage> {
       await authStore.login(
           _emailController.text.trim(), _passwordController.text);
       authStore.setUserIsLogged();
-      if(widget.args?['returnToPageWithArgs']['newPassword'] == null ){
+      if (widget.args?['returnToPageWithArgs']['newPassword'] == null) {
         controller.resetNavigation();
       }
+      print(widget.args);
 
       setState(() {
         isLoading = false;
       });
-
       if (widget.args != null && widget.args!['returnToPageWithArgs'] != null) {
         Navigator.of(context).pushNamedAndRemoveUntil(
           PageRoute.Page.homeScreen.route,
@@ -112,10 +113,15 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       } else {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          PageRoute.Page.homeScreen.route,
-          (Route<dynamic> route) => false,
-        );
+        if (widget.args != null &&
+            widget.args!['redirectToSharedInvitationCode'] != null) {
+          controller.insertPage(InvitationScreen());
+        } else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            PageRoute.Page.homeScreen.route,
+            (Route<dynamic> route) => false,
+          );
+        }
       }
     } catch (error) {
       showModalBottomSheet(
@@ -136,8 +142,6 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -163,12 +167,13 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             BackgroundButterflyTop(),
             Visibility(
-              visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                visible: MediaQuery.of(context).viewInsets.bottom == 0,
                 child: BackgroundButterflyBottom()),
             Container(
               child: Center(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(GlobalConstants.of(context).spacingMedium),
+                  padding:
+                      EdgeInsets.all(GlobalConstants.of(context).spacingMedium),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -192,16 +197,19 @@ class _LoginPageState extends State<LoginPage> {
                                           mailIsValid = true;
                                           setState(() {});
                                         },
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         style: GoogleFonts.roboto(
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black),
                                         decoration: GlobalConstants.of(context)
                                             .loginInputTheme(
-                                                AppLocalizations.of(context)!.email)
+                                                AppLocalizations.of(context)!
+                                                    .email)
                                             .copyWith(
                                                 prefixIcon: ImageIcon(
-                                                  AssetImage("assets/icons/mail.png"),
+                                                  AssetImage(
+                                                      "assets/icons/mail.png"),
                                                   color: mailIsValid
                                                       ? LightColors.grey
                                                       : LightColors.errorRed,
@@ -215,7 +223,8 @@ class _LoginPageState extends State<LoginPage> {
                                                 )),
                                                 errorStyle: mailIsValid
                                                     ? TextStyle(
-                                                        color: Colors.transparent,
+                                                        color:
+                                                            Colors.transparent,
                                                         fontSize: 0)
                                                     : TextStyle(),
                                                 focusedErrorBorder:
@@ -227,11 +236,15 @@ class _LoginPageState extends State<LoginPage> {
                                                 )),
                                                 labelStyle: mailIsValid
                                                     ? GoogleFonts.roboto(
-                                                        color: LightColors.lightGrey,
-                                                        fontWeight: FontWeight.w500)
+                                                        color: LightColors
+                                                            .lightGrey,
+                                                        fontWeight:
+                                                            FontWeight.w500)
                                                     : GoogleFonts.roboto(
-                                                        color: LightColors.errorRed,
-                                                        fontWeight: FontWeight.w500)),
+                                                        color: LightColors
+                                                            .errorRed,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                         validator: (value) {
                                           value = value!.trim();
                                           if (value.isEmpty) {
@@ -258,8 +271,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     SizedBox(
-                                      height:
-                                          GlobalConstants.of(context).spacingMedium,
+                                      height: GlobalConstants.of(context)
+                                          .spacingMedium,
                                     ),
                                     Container(
                                       child: Stack(
@@ -274,23 +287,28 @@ class _LoginPageState extends State<LoginPage> {
                                             style: GoogleFonts.roboto(
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.black),
-                                            decoration: GlobalConstants.of(context)
+                                            decoration: GlobalConstants.of(
+                                                    context)
                                                 .loginInputTheme(
-                                                    AppLocalizations.of(context)!
+                                                    AppLocalizations.of(
+                                                            context)!
                                                         .password)
                                                 .copyWith(
                                                   errorStyle: passIsValid
                                                       ? TextStyle(
-                                                          color: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
                                                           fontSize: 0)
                                                       : TextStyle(),
                                                   labelStyle: passIsValid
                                                       ? GoogleFonts.roboto(
-                                                          color:
-                                                              LightColors.lightGrey,
-                                                          fontWeight: FontWeight.w500)
+                                                          color: LightColors
+                                                              .lightGrey,
+                                                          fontWeight:
+                                                              FontWeight.w500)
                                                       : GoogleFonts.roboto(
-                                                          color: LightColors.errorRed,
+                                                          color: LightColors
+                                                              .errorRed,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                   prefixIcon: ImageIcon(
@@ -300,15 +318,18 @@ class _LoginPageState extends State<LoginPage> {
                                                         ? LightColors.grey
                                                         : LightColors.errorRed,
                                                   ),
-                                                  errorBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(
+                                                  errorBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
                                                     color: passIsValid
                                                         ? LightColors.grey
                                                         : LightColors.errorRed,
                                                   )),
                                                   focusedErrorBorder:
                                                       OutlineInputBorder(
-                                                          borderSide: BorderSide(
+                                                          borderSide:
+                                                              BorderSide(
                                                     color: passIsValid
                                                         ? LightColors.grey
                                                         : LightColors.errorRed,
@@ -332,11 +353,13 @@ class _LoginPageState extends State<LoginPage> {
                                                   ),
                                                 ),
                                             validator: (value) {
-                                              if (value == null || value.isEmpty) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
                                                 setState(() {
                                                   passIsValid = false;
                                                 });
-                                                return AppLocalizations.of(context)!
+                                                return AppLocalizations.of(
+                                                        context)!
                                                     .pleaseEnterYourPassword;
                                               }
                                               setState(() {
@@ -354,8 +377,11 @@ class _LoginPageState extends State<LoginPage> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            Navigator.of(context).pushNamed(PageRoute
-                                                .Page.recoverPasswordScreen.route);
+                                            Navigator.of(context).pushNamed(
+                                                PageRoute
+                                                    .Page
+                                                    .recoverPasswordScreen
+                                                    .route);
                                           },
                                           child: Text(
                                             AppLocalizations.of(context)!
@@ -364,7 +390,8 @@ class _LoginPageState extends State<LoginPage> {
                                             style: GoogleFonts.roboto(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w400,
-                                              decoration: TextDecoration.underline,
+                                              decoration:
+                                                  TextDecoration.underline,
                                               color: Colors.black,
                                             ),
                                           ),
@@ -426,7 +453,8 @@ class _LoginPageState extends State<LoginPage> {
                               height: 28,
                             ),
                             Text(
-                              AppLocalizations.of(context)!.dontHaveAnAccountYet,
+                              AppLocalizations.of(context)!
+                                  .dontHaveAnAccountYet,
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
@@ -472,11 +500,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
           ],
         ),
       ),
     );
   }
-
 }
