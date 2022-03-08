@@ -539,7 +539,7 @@ class _CameraAppState extends State<CameraApp>
                   GestureDetector(
                     onTap: () {
                       if (!controller!.value.isRecordingVideo) {
-                         openCustomGallery();
+                        _selectImageOrVideo();
                       }
                     },
                     child: Padding(
