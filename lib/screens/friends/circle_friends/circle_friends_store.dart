@@ -10,7 +10,7 @@ abstract class CircleFriendsStoreBase with Store {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
 
   @observable
-  late FriendsDataModel friendsDate;
+  FriendsDataModel? friendsDate;
 
   @observable
   bool isLoading = false;
@@ -21,7 +21,14 @@ abstract class CircleFriendsStoreBase with Store {
   @action
   Future<void> getFriends(String userId) async{
     isLoading = true;
-    friendsDate = await friendsRepositoryImpl.getFriends(userId, page, limit);
+    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.getFriends(userId, page, limit);
+
+    if(friendsDate == null){
+      friendsDate = friendsDateAux;
+    }else{
+      friendsDate!.friends?.addAll(friendsDateAux.friends!);
+    }
+
     isLoading = false;
   }
 }

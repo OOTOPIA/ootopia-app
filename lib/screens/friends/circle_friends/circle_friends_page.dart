@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -53,148 +53,12 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     print(MediaQuery.of(context).size.width);
     return  Observer(
         builder: (context) {
-          return LoadingOverlay(
-            isLoading: circleFriendsStore.isLoading,
-
-            child: Stack(
-              children: [
-                BackgroundButterflyTop(positioned: -59),
-                BackgroundButterflyBottom(positioned: -50),
-                SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 14.0, left: 28,
-                            right: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 12),
-                                Text(AppLocalizations.of(context)!.circleOfFriends,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 24,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 2.0),
-                                  child: Text( "${circleFriendsStore.friendsDate.length} ${AppLocalizations.of(context)!.friends}",
-                                    style: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 12,
-                                      color: Color(0xff939598),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            ElevatedButton(
-                                style: ButtonStyle(
-                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular
-                                          (20),
-                                        side: BorderSide.none),
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                  padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.symmetric(horizontal: 24)),
-                                ),
-                                onPressed: () {
-                                  Future.delayed(Duration(milliseconds: 100),(){
-                                    controller.insertPage(AddFriends());
-                                  });
-                                },
-                                child: Text(MediaQuery.of(context).size.width <= 414 ?
-                                AppLocalizations.of(context)!.add.toLowerCase():
-                                  AppLocalizations.of(context)!.addFriend.toLowerCase(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ))
-                          ],
-                        ),
-
-
-                      ),
-
-                      GestureDetector(
-                        onTap: (){
-                          _showDialog(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 25, top: 18),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/icons/list.png',
-
-                                height: 10,
-                              ),
-                              SizedBox(width: 6),
-
-                              RichText(
-                                text: TextSpan(
-                                  text: AppLocalizations.of(context)!.orderBy,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: " $orderBySelected",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-
-                                    ),
-                                  ],
-                                ),
-                              )
-
-                            ],
-                          ),
-                        ),
-                      ),
-
-
-
-
-
-                      ListView.builder(
-                          itemCount: 11,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return  itemShimmer();
-                          }
-                      ),
-
-                      SizedBox(height: 16),
-
-
-
-
-
-                    ],
-                  ),
-                )
-              ],
-            ),
+          return Stack(
+            children: [
+              BackgroundButterflyTop(positioned: -59),
+              BackgroundButterflyBottom(positioned: -50),
+              body(),
+            ],
           );
         }
     );
@@ -284,32 +148,32 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
 
-          child: Container(
-            height: 185,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 14, left: 24, bottom: 12),
-                  child: Text(AppLocalizations.of(context)!.orderBy,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+            child: Container(
+              height: 185,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14, left: 24, bottom: 12),
+                    child: Text(AppLocalizations.of(context)!.orderBy,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
-                rankedItemSelect(0, context),
-                rankedItemSelect(1, context),
-                rankedItemSelect(2, context),
-              ],
-            ),
-          )
+                  rankedItemSelect(0, context),
+                  rankedItemSelect(1, context),
+                  rankedItemSelect(2, context),
+                ],
+              ),
+            )
 
         );
       },
@@ -367,6 +231,238 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
+  Widget body() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 14.0, left: 28,
+                right: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 12),
+                    Text(AppLocalizations.of(context)!.circleOfFriends,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: Text( "${circleFriendsStore.friendsDate?.friends?.length ?? 0} ${AppLocalizations.of(context)!.friends}",
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                          color: Color(0xff939598),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                      shape: MaterialStateProperty.all<
+                          RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular
+                              (20),
+                            side: BorderSide.none),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(horizontal: 24)),
+                    ),
+                    onPressed: () {
+                      Future.delayed(Duration(milliseconds: 100),(){
+                        controller.insertPage(AddFriends());
+                      });
+                    },
+                    child: Text(MediaQuery.of(context).size.width <= 414 ?
+                    AppLocalizations.of(context)!.add.toLowerCase():
+                    AppLocalizations.of(context)!.addFriend.toLowerCase(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ))
+              ],
+            ),
+
+
+          ),
+
+          GestureDetector(
+            onTap: (){
+              _showDialog(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 25, top: 18),
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/list.png',
+
+                    height: 10,
+                  ),
+                  SizedBox(width: 6),
+
+                  RichText(
+                    text: TextSpan(
+                      text: AppLocalizations.of(context)!.orderBy,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: " $orderBySelected",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+
+                        ),
+                      ],
+                    ),
+                  )
+
+                ],
+              ),
+            ),
+          ),
+
+
+
+
+
+          if(circleFriendsStore.isLoading ||
+              (circleFriendsStore.friendsDate?.friends?.isEmpty ?? true))...[
+            ListView.builder(
+                itemCount: 11,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return  itemShimmer();
+                }
+            ),
+          ]else...[
+            ListView.builder(
+                itemCount: circleFriendsStore.friendsDate!.friends!.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return  friendItem(circleFriendsStore.friendsDate!.friends![index]!);
+                }
+            ),
+          ],
+
+          SizedBox(height: 16),
+
+        ],
+      ),
+    );
+  }
+
+  Widget friendItem(FriendModel friendModel){
+    double size = MediaQuery.of(context).size.width - (25+14+48+82);
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(25, 31, 14, 0),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(size),
+                child: Image.network(
+                  friendModel.photoUrl ?? '',
+                  fit: BoxFit.cover,
+                  width: 40,
+                  height: 40,
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null){
+                      return child;
+                    }
+                    return itemShimmer();
+                  },
+
+
+                  errorBuilder: (context, url, error) => Image.asset(
+                    'assets/icons/user.png',
+                    fit: BoxFit.cover,
+                    width: size,
+                    height: size,
+
+                  ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 11,
+                      width: size*0.35,
+                      color: Colors.white,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 6),
+                      height: 8,
+                      width: size*0.23,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+              Spacer(),
+              Container(
+                height: 11,
+                width: 80,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 90,
+          width: MediaQuery.of(context).size.width,
+          child: ListView.builder(
+              itemCount: 11,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                return  Container(
+                  margin: EdgeInsets.only(
+                    left: index == 0 ? 25 : 8,
+                    top: 14,
+                    right: index == 10 ? 14 : 0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  height: 76,
+                  width: 74,
+                );
+              }
+          ),
+        )
+      ],
+    );
+  }
 
 
 }

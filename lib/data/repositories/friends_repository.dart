@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
@@ -9,7 +10,7 @@ import 'api.dart';
 
 abstract class FriendsRepository {
   Future<FriendsDataModel> getFriends(String userId, int page, int limit);
-  Future<List> searchFriends(String name);
+  Future<List> searchFriends(String name, int page, int limit);
   Future<bool> addFriend(String userId);
 }
 
@@ -50,26 +51,32 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       if (response.statusCode == 200) {
         print('response.body : ${response.data}');
         return FriendsDataModel.fromJson(response.data);
-      } else {
-        throw Future.error('error: status code != 200 ${response.statusCode}');
       }
+      return   FriendsDataModel(length: 0, friends: []);
     } catch (error) {
       print('error: $error');
       return   FriendsDataModel(length: 0, friends: []);
     }
   }
 
-  Future<List> searchFriends(String name) async {
+  Future<List<FriendModel>> searchFriends(String name, int page, int limit) async {
     try {
-      final response = await http.get(
-        Uri.parse(dotenv.env['API_URL']! + "wallets/$name"),
-        headers: await this.getHeaders(),
+      Map<String, dynamic> queryParams = {
+        "page": page,
+        "limit" : limit,
+        "name": name,
+        "orderBy": 'name',
+        'sortingType' : 'asc'
+      };
+
+      final response = await ApiClient.api().get(
+        dotenv.env['API_URL']! + "friends/search",
+        queryParameters: queryParams
       );
       if (response.statusCode == 200) {
-        return  [];
-      } else {
-        throw Future.error('Failed to load wallet');
+        return (response.data as List).map((i) => FriendModel.fromJson(i)).toList();
       }
+      return [];
     } catch (error) {
       print('error: $error');
       return   [];
@@ -79,10 +86,10 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
   Future<bool> addFriend(String userId) async {
     try {
       final response = await http.post(
-        Uri.parse(dotenv.env['API_URL']! + "friends-request/$userId"),
+        Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
         headers: await this.getHeaders(),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return  true;
       } else {
         print('response.statusCode: ${response.statusCode}');

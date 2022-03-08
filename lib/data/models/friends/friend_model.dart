@@ -25,6 +25,19 @@ class FriendModel {
     this.state,
     this.country, });
 
+
+  String location(){
+    if((state?.isNotEmpty ?? false) && (country?.isNotEmpty ?? false)){
+      return '$state - $country';
+    }else  if((state?.isNotEmpty ?? false)){
+      return state!;
+    }else if((country?.isNotEmpty ?? false)){
+      return country!;
+    }
+    return '';
+
+  }
+
   factory FriendModel.fromJson(Map<String, dynamic> json) =>
       _$FriendModelFromJson(json);
 

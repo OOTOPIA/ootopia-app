@@ -103,7 +103,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   Widget list(List items){
     int size = widget.isUserLogged ? items.length + 1 : items.length;
     if(circleFriendsWidgetStore.isLoading || items.length == 0){
-      size = widget.isUserLogged ? 10 + 1 : 10;
+      size =  10;
     }
 
     return ListView.builder(
@@ -169,7 +169,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                     index == 1 && widget.isUserLogged ? 0 : 7,
                     right: index == size - 1 ? 24 : 0
                 ),
-                child: circleFriendsWidgetStore.isLoading ?
+                child: (circleFriendsWidgetStore.friendsDate?.friends?.isEmpty ?? true) ?
                 itemShimmer() :
                 item(items[widget.isUserLogged ? index - 1 : index])),
             if(widget.isUserLogged)...[

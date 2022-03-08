@@ -12,15 +12,30 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
   final _$usersAtom = Atom(name: 'AddFriendsStoreBase.users');
 
   @override
-  ObservableList<dynamic> get users {
+  List<FriendModel> get users {
     _$usersAtom.reportRead();
     return super.users;
   }
 
   @override
-  set users(ObservableList<dynamic> value) {
+  set users(List<FriendModel> value) {
     _$usersAtom.reportWrite(value, super.users, () {
       super.users = value;
+    });
+  }
+
+  final _$usersIdAddedAtom = Atom(name: 'AddFriendsStoreBase.usersIdAdded');
+
+  @override
+  List<String> get usersIdAdded {
+    _$usersIdAddedAtom.reportRead();
+    return super.usersIdAdded;
+  }
+
+  @override
+  set usersIdAdded(List<String> value) {
+    _$usersIdAddedAtom.reportWrite(value, super.usersIdAdded, () {
+      super.usersIdAdded = value;
     });
   }
 
@@ -54,17 +69,26 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
     });
   }
 
-  final _$searchNameAsyncAction = AsyncAction('AddFriendsStoreBase.searchName');
+  final _$searchNewNameAsyncAction =
+      AsyncAction('AddFriendsStoreBase.searchNewName');
 
   @override
-  Future<void> searchName(String name) {
-    return _$searchNameAsyncAction.run(() => super.searchName(name));
+  Future<void> searchNewName(String name) {
+    return _$searchNewNameAsyncAction.run(() => super.searchNewName(name));
+  }
+
+  final _$addFriendAsyncAction = AsyncAction('AddFriendsStoreBase.addFriend');
+
+  @override
+  Future<void> addFriend(String userId) {
+    return _$addFriendAsyncAction.run(() => super.addFriend(userId));
   }
 
   @override
   String toString() {
     return '''
 users: ${users},
+usersIdAdded: ${usersIdAdded},
 isLoading: ${isLoading},
 searchIsEmpty: ${searchIsEmpty}
     ''';
