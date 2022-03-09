@@ -110,53 +110,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
       itemCount: size,
       itemBuilder: (context, index) {
         if(widget.isUserLogged && index == 0 ){
-          return Container(
-            margin: EdgeInsets.only(left: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-
-                  width: 56,
-                  height: 56,
-                  child: RawMaterialButton(
-                    onPressed: () {
-                      Future.delayed(Duration(milliseconds: 100),(){
-                        controller.insertPage(AddFriends());
-                      });
-                    },
-                    elevation: 0,
-                    hoverElevation: 0,
-                    focusElevation: 0,
-                    highlightElevation: 0,
-                    fillColor: Color(0xffD3D0D0),
-                    hoverColor: Colors.white,
-                    splashColor: Colors.black,
-
-                    child: SvgPicture.asset(
-                      'assets/icons/mais.svg',
-                      color: Colors.white,
-                      height: 30,
-                      width: 30,),
-                    padding: EdgeInsets.all(0.0),
-                    shape: CircleBorder(),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 2),
-                  child: Text(
-                    AppLocalizations.of(context)!.addFriends,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 9,
-                        color: Color(0xffB7B7B8)
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
+          return buttonToAddFriends();
         }
         return Column(
           children: [
@@ -168,9 +122,16 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                     index == 1 && widget.isUserLogged ? 7 : 7,
                     right: index == size - 1 ? 24 : 0
                 ),
-                child: (circleFriendsWidgetStore.friendsDate?.friends?.isEmpty ?? true) ?
-                itemShimmer() :
-                item(items[widget.isUserLogged ? index - 1 : index])),
+                child:
+                Stack(
+                  children: [
+                    itemShimmer(),
+                    if(items.isNotEmpty)...[
+                      item(items[widget.isUserLogged ? index - 1 : index]),
+                    ]
+
+                  ],
+                )),
             if(widget.isUserLogged)...[
               SizedBox(
                 height: 13,
@@ -258,6 +219,56 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
         "id": userId,
       },
     ));
+  }
+
+  Widget buttonToAddFriends() {
+    return Container(
+      margin: EdgeInsets.only(left: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+
+            width: 56,
+            height: 56,
+            child: RawMaterialButton(
+              onPressed: () {
+                Future.delayed(Duration(milliseconds: 100),(){
+                  controller.insertPage(AddFriends());
+                });
+              },
+              elevation: 0,
+              hoverElevation: 0,
+              focusElevation: 0,
+              highlightElevation: 0,
+              fillColor: Color(0xffD3D0D0),
+              hoverColor: Colors.white,
+              splashColor: Colors.black,
+
+              child: SvgPicture.asset(
+                'assets/icons/mais.svg',
+                color: Colors.white,
+                height: 30,
+                width: 30,),
+              padding: EdgeInsets.all(0.0),
+              shape: CircleBorder(),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 2),
+            child: Text(
+              AppLocalizations.of(context)!.addFriends,
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 9,
+                  color: Color(0xffB7B7B8)
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
 

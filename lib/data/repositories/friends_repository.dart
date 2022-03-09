@@ -8,7 +8,7 @@ import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'api.dart';
 
 abstract class FriendsRepository {
-  Future<FriendsDataModel> getFriends(String userId, int page, int limit);
+  Future<FriendsDataModel> getFriends(String userId, int page, int limit, {required String orderBy, required String sortingType});
   Future<List> searchFriends(String name, int page, int limit);
   Future<bool> addFriend(String userId);
 }
@@ -35,11 +35,21 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
     };
   }
 
-  Future<FriendsDataModel> getFriends(String userId, int page, int limit) async {
+  Future<FriendsDataModel> getFriends(
+      String userId,
+      int page, int limit,
+      {
+        required String orderBy,
+        required String sortingType
+      }
+      )
+  async {
     try {
-      Map<String, int> queryParams = {
+      Map<String, dynamic> queryParams = {
         "page": page,
         "limit" : limit,
+        "orderBy": orderBy,
+        'sortingType' : sortingType
       };
 
       final response = await ApiClient.api().get(
@@ -67,8 +77,8 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       };
 
       final response = await ApiClient.api().get(
-        dotenv.env['API_URL']! + "friends/search",
-        queryParameters: queryParams
+          dotenv.env['API_URL']! + "friends/search",
+          queryParameters: queryParams
       );
       if (response.statusCode == 200) {
         return (response.data as List).map((i) => FriendModel.fromJson(i)).toList();
@@ -83,6 +93,24 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
   Future<bool> addFriend(String userId) async {
     try {
       final response = await http.post(
+        Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
+        headers: await this.getHeaders(),
+      );
+      if (response.statusCode == 201) {
+        return  true;
+      } else {
+        print('response.statusCode: ${response.statusCode}');
+        return  false;
+      }
+    } catch (error) {
+      print('error: $error');
+      return  false;
+    }
+  }
+
+  Future<bool> removeFriends(String userId) async {
+    try {
+      final response = await http.delete(
         Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
         headers: await this.getHeaders(),
       );

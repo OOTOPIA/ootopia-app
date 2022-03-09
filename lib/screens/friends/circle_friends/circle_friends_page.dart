@@ -33,7 +33,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
 
   init(){
-    circleFriendsStore.getFriends(widget.userId,);
+    circleFriendsStore.init(widget.userId);
     if(orderBy.isEmpty){
       orderBy = [
         AppLocalizations.of(context)!.alphabeticalOrder,
@@ -193,7 +193,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
               setState(() {
                 orderBySelected = orderBy[index];
               });
+              circleFriendsStore.changeOrderBy(index);
               Navigator.of(context).pop();
+              circleFriendsStore.getFriends(widget.userId);
             });
           },
           child: Padding(

@@ -8,7 +8,8 @@ class CircleFriendsStore = CircleFriendsStoreBase with _$CircleFriendsStore;
 
 abstract class CircleFriendsStoreBase with Store {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
-
+  List<String> listOrderBy = ['name','created'];
+  List<String> listSortingType = ['asc','desc'];
   @observable
   FriendsDataModel? friendsDate;
 
@@ -24,17 +25,33 @@ abstract class CircleFriendsStoreBase with Store {
   @observable
   bool loadingMoreFriends = false;
 
+  @observable
+  String? orderBy;
+
+  @observable
+  String? sortingType;
+
+  @action
+  void init(String userId) {
+    if(orderBy == null){
+      orderBy = listOrderBy[0];
+      sortingType = listSortingType[0];
+      getFriends(userId);
+    }
+
+  }
+
+
   @action
   Future<void> getFriends(String userId) async{
     isLoading = true;
-    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.getFriends(userId, page, limit);
-
-    if(friendsDate == null){
-      friendsDate = friendsDateAux;
-    }else{
-      friendsDate!.friends?.addAll(friendsDateAux.friends!);
-    }
-
+    friendsDate?.friends = [];
+    page = 0;
+    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
+    getFriends(userId, page, limit, orderBy: orderBy!, sortingType:
+    sortingType!);
+    friendsDate = friendsDateAux;
+    hasMoreFriends = friendsDateAux.friends!.length == limit;
     isLoading = false;
   }
 
@@ -43,10 +60,26 @@ abstract class CircleFriendsStoreBase with Store {
     if(hasMoreFriends) {
       loadingMoreFriends = true;
       page++;
-      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriends(userId, page, limit);
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriends
+        (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
       friendsDate!.friends!.addAll(auxUsers.friends!);
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;
     }
+  }
+
+  @action
+  void changeOrderBy(int index){
+    if(index == 0){
+      orderBy = listOrderBy[0];
+      sortingType = listSortingType[0];
+    }else if(index == 1){
+      orderBy = listOrderBy[1];
+      sortingType = listSortingType[0];
+    }else{
+      orderBy = listOrderBy[1];
+      sortingType = listSortingType[1];
+    }
+
   }
 }
