@@ -351,7 +351,9 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
       if (res.statusCode != 200) {
         throw Exception(res.data);
       }
-      var list =
+      List<UserSearchModel> list = [];
+      print(res.data);
+      list =
           (res.data as List).map((e) => UserSearchModel.fromJson(e)).toList();
       return list;
     } catch (e) {

@@ -81,13 +81,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void addUserInText(UserSearchModel e) {
     commentStore.listUsersMarket?.add(e.id);
     setState(() {
-      var list = _inputController.text.trim().split(' ');
+      var list = _inputController.text.trim().split('@');
       list.removeLast();
       list.add('ㅤ@${e.fullname}ㅤ');
       _inputController.clear();
       for (var item in list) {
         if (item.contains('@')) {
-          _inputController.text += ' $item';
+          _inputController.text += '$item';
         } else {
           _inputController.text += ' $item ';
         }
@@ -137,10 +137,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     });
   }
 
-  void onChanged(String value) {
+  void onChanged(String value) async {
     value = value.trim();
 
     if (value.length > 0) {
+      setState(() {
+        isIconBlue = true;
+      });
       var getLastString = value.split(RegExp("ㅤ@"));
       if (getLastString.last.contains('@')) {
         setState(() {
@@ -148,13 +151,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         });
         var startName = getLastString.last.split('@').last;
         var finishName = startName.split(RegExp("ㅤ"));
-        Future.delayed(Duration(seconds: 1), () {
-          commentStore.searchUser(finishName.first);
-        });
+        await commentStore.searchUser(finishName.first);
       } else {
         setState(() {
           seSelectedUser = false;
-          isIconBlue = true;
         });
       }
     } else {
@@ -208,7 +208,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       return LoadingOverlay(
         isLoading: commentStore.isLoading,
         child: GestureDetector(
-          onTap: () => focusNode.unfocus(),
+          onTap: () {
+            setState(() {
+              seSelectedUser = true;
+            });
+            focusNode.unfocus();
+          },
           child: Scaffold(
             body: Stack(
               children: [

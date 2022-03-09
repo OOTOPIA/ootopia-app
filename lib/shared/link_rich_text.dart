@@ -30,7 +30,6 @@ class LinkRichText extends StatelessWidget {
   }
 
   void colorUserInText() {
-    print(text);
     var allName = [];
     int positionEnd = 0;
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
