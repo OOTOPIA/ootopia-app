@@ -24,6 +24,12 @@ abstract class AddFriendsStoreBase with Store {
 
   int page = 0;
   final int limit = 10;
+  @observable
+  bool hasMoreUsers = true;
+  String lastName = '';
+
+  @observable
+  bool loadingMoreUsers = false;
 
   @action
   Future<void> searchNewName(String name) async {
@@ -32,21 +38,34 @@ abstract class AddFriendsStoreBase with Store {
       isLoading = true;
       page = 0;
       users = [];
+      lastName = name;
       users = await friendsRepositoryImpl.searchFriends(name, page, limit);
-
-      print('\n\n ${users.length}');
-
       searchIsEmpty = users.isEmpty;
       isLoading = false;
     }
   }
 
   @action
+  Future<void> getMoreUser() async {
+    if(hasMoreUsers && lastName.isNotEmpty) {
+      loadingMoreUsers = true;
+      page++;
+      List<FriendModel> auxUsers = await friendsRepositoryImpl.
+      searchFriends(lastName, page, limit);
+      users.addAll(auxUsers);
+      loadingMoreUsers = false;
+      hasMoreUsers = auxUsers.length == 10;
+    }
+  }
+
+
+
+  @action
   Future<void> addFriend(String userId) async {
-      usersIdAdded.add(userId);
-      bool status = await friendsRepositoryImpl.addFriend(userId);
-      if(!status){
-        usersIdAdded.remove(userId);
-      }
+    usersIdAdded.add(userId);
+    bool status = await friendsRepositoryImpl.addFriend(userId);
+    if(!status){
+      usersIdAdded.remove(userId);
+    }
   }
 }

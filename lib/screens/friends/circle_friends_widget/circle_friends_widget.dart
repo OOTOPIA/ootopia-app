@@ -166,7 +166,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 height: 56,
                 margin: EdgeInsets.only(
                     left: index == 0 ? 16 :
-                    index == 1 && widget.isUserLogged ? 0 : 7,
+                    index == 1 && widget.isUserLogged ? 7 : 7,
                     right: index == size - 1 ? 24 : 0
                 ),
                 child: (circleFriendsWidgetStore.friendsDate?.friends?.isEmpty ?? true) ?

@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_store.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
@@ -363,7 +364,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  return  friendItem(circleFriendsStore.friendsDate!.friends![index]!);
+                  return  itemFriend(circleFriendsStore.friendsDate!.friends![index]!);
                 }
             ),
           ],
@@ -375,93 +376,210 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-  Widget friendItem(FriendModel friendModel){
-    double size = MediaQuery.of(context).size.width - (25+14+48+82);
+  Widget itemFriend(FriendModel friendModel){
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(25, 31, 14, 0),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(size),
-                child: Image.network(
-                  friendModel.photoUrl ?? '',
-                  fit: BoxFit.cover,
-                  width: 40,
-                  height: 40,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null){
-                      return child;
-                    }
-                    return itemShimmer();
-                  },
-
-
-                  errorBuilder: (context, url, error) => Image.asset(
-                    'assets/icons/user.png',
-                    fit: BoxFit.cover,
-                    width: size,
-                    height: size,
-
-                  ),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        SizedBox(
+          height: 18,
+        ),
+        Material(
+          color: Colors.transparent,
+          child: Ink(
+            child: InkWell(
+              splashColor: LightColors.grey.withOpacity(0.2),
+              child:  Padding(
+                padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      height: 11,
-                      width: size*0.35,
-                      color: Colors.white,
+                    Stack(
+                      children: [
+                        Shimmer.fromColors(
+                          baseColor:  Colors.grey[300] ?? Colors.blue,
+                          highlightColor:  Colors.grey[100] ?? Colors.blue,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              friendModel.photoUrl ?? '',
+                              fit: BoxFit.cover,
+                              width: 40,
+                              height: 40,
+                              errorBuilder: (context, url, error) => Image.asset(
+                                'assets/icons/user.png',
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ),
+
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 6),
-                      height: 8,
-                      width: size*0.23,
-                      color: Colors.white,
-                    )
+                      margin: const EdgeInsets.only(left: 12),
+                      width: MediaQuery.of(context).size.width - 200,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            friendModel.fullname ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: LightColors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            friendModel.location(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: LightColors.black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                      SizedBox(
+                        height: 30,
+                        child: TextButton(onPressed: (){
+                          Future.delayed(Duration(milliseconds: 80),(){
+                            _goToProfile(friendModel.id);
+                          });
+                        },
+                            child: Row(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.seeProfile,
+                                  style: TextStyle(
+                                    color: LightColors.blue,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_sharp,
+                                  color: LightColors.blue,
+                                  size: 12,
+                                )
+                              ],
+                            )),
+                      )
+
                   ],
                 ),
               ),
-              Spacer(),
-              Container(
-                height: 11,
-                width: 80,
-                color: Colors.white,
-              ),
-            ],
+              onTap: () {
+                Future.delayed(Duration(milliseconds: 100),(){
+                  _goToProfile(friendModel.id);
+                });
+              },
+            ),
           ),
         ),
-        Container(
-          height: 90,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-              itemCount: 11,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return  Container(
-                  margin: EdgeInsets.only(
-                    left: index == 0 ? 25 : 8,
-                    top: 14,
-                    right: index == 10 ? 14 : 0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  height: 76,
-                  width: 74,
-                );
-              }
+        if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
+          SizedBox(
+            height: 8,
           ),
-        )
+          Container(
+            height: 76,
+            width: MediaQuery.of(context).size.width,
+            child: ListView.builder(
+                itemCount: friendModel.friendsThumbs!.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return  Stack(
+                    children: [
+                      Shimmer.fromColors(
+                        baseColor:  Colors.grey[300] ?? Colors.blue,
+                        highlightColor:  Colors.grey[100] ?? Colors.blue,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: index == 0 ? 25 : 8,
+                            top: 2,
+                            right: index == (friendModel.friendsThumbs!
+                                .length - 1) ? 14 : 0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          height: 76,
+                          width: 74,
+                        ),
+                      ),
+                      Container(
+                        width: 74,
+                        height: 76,
+                        margin: EdgeInsets.only(
+                          left: index == 0 ? 25 : 8,
+                          right: index == friendModel.friendsThumbs!.length - 1
+                              ? 14 : 0,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
+                            fit: BoxFit.cover,
+                            width: 74,
+                            height: 76,
+                            errorBuilder: (context, url, error) => Center(
+                              child: Icon(Icons.error),
+                            ),
+
+                          ),
+                        ),
+                      ),
+                      if(friendModel.friendsThumbs![index]!.type == 'video')...[
+                        Container(
+                          width: 74,
+                          height: 76,
+                          margin: EdgeInsets.only(
+                            left: index == 0 ? 25 : 8,
+                            right: index == (friendModel.friendsThumbs!
+                                .length - 1) ? 14 : 0,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  );
+                }
+            ),
+          )
+        ]
       ],
     );
+  }
+
+  void _goToProfile(userId) async {
+    controller.insertPage(ProfileScreen({"id": userId,},));
   }
 
 
