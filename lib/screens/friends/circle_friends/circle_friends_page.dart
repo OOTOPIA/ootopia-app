@@ -262,7 +262,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 12),
-                      Text(AppLocalizations.of(context)!.circleOfFriends,
+                      Text(AppLocalizations.of(context)!.friends,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 24,

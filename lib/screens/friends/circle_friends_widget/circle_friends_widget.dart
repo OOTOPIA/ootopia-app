@@ -50,7 +50,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 14.0),
-                  child: Text(AppLocalizations.of(context)!.circleOfFriends,
+                  child: Text(AppLocalizations.of(context)!.friends,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
