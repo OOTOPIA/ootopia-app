@@ -69,16 +69,23 @@ abstract class CircleFriendsStoreBase with Store {
   }
 
   @action
+  Future<void> removeFriends(userId) async {
+    friendsDate!.friends!.removeWhere((element) => element!.id == userId);
+    friendsRepositoryImpl.removeFriends(userId);
+
+  }
+
+  @action
   void changeOrderBy(int index){
     if(index == 0){
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
     }else if(index == 1){
       orderBy = listOrderBy[1];
-      sortingType = listSortingType[0];
+      sortingType = listSortingType[1];
     }else{
       orderBy = listOrderBy[1];
-      sortingType = listSortingType[1];
+      sortingType = listSortingType[0];
     }
 
   }

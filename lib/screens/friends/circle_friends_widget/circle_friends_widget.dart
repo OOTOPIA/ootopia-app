@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
-import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_page.dart';
+import 'package:ootopia_app/screens/friends/circle_friends_page/circle_friends_page.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:shimmer/shimmer.dart';

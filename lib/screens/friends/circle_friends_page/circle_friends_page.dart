@@ -3,13 +3,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
-import 'package:ootopia_app/screens/friends/circle_friends/circle_friends_store.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+
+import 'circle_friends_store.dart';
 
 
 class CircleOfFriendPage extends StatefulWidget {
@@ -279,7 +280,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                             height: 10,
                             width: 72,
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                              color: Colors.white,
                             ),
                           ),
                         )
@@ -312,7 +313,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       ),
                       onPressed: () {
                         Future.delayed(Duration(milliseconds: 100),(){
-                          controller.insertPage(AddFriends(updateFriends: (friendModel) {;
+                          controller.insertPage(AddFriends(updateFriends: (friendModel) {
                             circleFriendsStore.friendsDate!.friends!.add(friendModel);
                             circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
                             setState(() {});
@@ -492,30 +493,58 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       ),
                     ),
                     Spacer(),
-                      SizedBox(
-                        height: 30,
-                        child: TextButton(onPressed: (){
-                          Future.delayed(Duration(milliseconds: 80),(){
-                            _goToProfile(friendModel.id);
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular
+                                  (20),
+                                side: BorderSide.none),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>
+                            (LightColors.errorRed),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 24)),
+                        ),
+                        onPressed: () {
+                          Future.delayed(Duration(milliseconds: 100),(){
+                            circleFriendsStore.removeFriends(widget.userId);
                           });
                         },
-                            child: Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.seeProfile,
-                                  style: TextStyle(
-                                    color: LightColors.blue,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Icon(Icons.arrow_forward_ios_sharp,
+                        child: Text(
+                        AppLocalizations.of(context)!.removeFriend.toLowerCase(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(onPressed: (){
+                        Future.delayed(Duration(milliseconds: 80),(){
+                          _goToProfile(friendModel.id);
+                        });
+                      },
+                          child: Row(
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.seeProfile,
+                                style: TextStyle(
                                   color: LightColors.blue,
-                                  size: 12,
-                                )
-                              ],
-                            )),
-                      )
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Icon(Icons.arrow_forward_ios_sharp,
+                                color: LightColors.blue,
+                                size: 12,
+                              )
+                            ],
+                          )),
+                    )
 
                   ],
                 ),

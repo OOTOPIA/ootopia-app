@@ -35,15 +35,9 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
     };
   }
 
-  Future<FriendsDataModel> getFriends(
-      String userId,
-      int page, int limit,
-      {
-        required String orderBy,
-        required String sortingType
-      }
-      )
-  async {
+  Future<FriendsDataModel> getFriends(String userId, int page, int limit,
+      {required String orderBy,
+        required String sortingType}) async {
     try {
       Map<String, dynamic> queryParams = {
         "page": page,
@@ -114,7 +108,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
         Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
         headers: await this.getHeaders(),
       );
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return  true;
       } else {
         print('response.statusCode: ${response.statusCode}');
