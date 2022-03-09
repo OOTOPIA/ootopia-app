@@ -99,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
       if (widget.args?['returnToPageWithArgs']['newPassword'] == null) {
         controller.resetNavigation();
       }
-      print(widget.args);
 
       setState(() {
         isLoading = false;
@@ -120,7 +119,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (error) {
-      print(error);
       showModalBottomSheet(
         context: context,
         barrierColor: Colors.black.withAlpha(1),
