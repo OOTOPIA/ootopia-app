@@ -214,11 +214,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen(
-      {
-        "id": userId,
-      },
-    ));
+    controller.insertPage(ProfileScreen({"id": userId,},));
   }
 
   Widget buttonToAddFriends() {

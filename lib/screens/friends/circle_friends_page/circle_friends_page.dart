@@ -34,8 +34,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   String orderBySelected = '';
 
 
-
-  init(){
+  void init(){
     authStore = Provider.of<AuthStore>(context);
     circleFriendsStore.init(widget.userId);
     if(orderBy.isEmpty){
@@ -44,11 +43,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
         AppLocalizations.of(context)!.mostRecent,
         AppLocalizations.of(context)!.older,
       ];
-      orderBySelected = AppLocalizations.of(context)!.alphabeticalOrder;
+      orderBySelected = orderBy[0];
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,175 +60,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
             ],
           );
         }
-    );
-  }
-
-
-  Widget itemShimmer(){
-    double size = MediaQuery.of(context).size.width - (25+14+48+82);
-    return Shimmer.fromColors(
-      baseColor:  Colors.grey[300] ?? Colors.blue,
-      highlightColor:  Colors.grey[100] ?? Colors.blue,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(25, 31, 14, 0),
-            child: Row(
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 11,
-                        width: size*0.35,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 6),
-                        height: 8,
-                        width: size*0.23,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  height: 11,
-                  width: 80,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 90,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                itemCount: 11,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return  Container(
-                    margin: EdgeInsets.only(
-                      left: index == 0 ? 25 : 8,
-                      top: 14,
-                      right: index == 10 ? 14 : 0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    height: 76,
-                    width: 74,
-                  );
-                }
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-
-            child: Container(
-              height: 185,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 14, left: 24, bottom: 12),
-                    child: Text(AppLocalizations.of(context)!.orderBy,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  rankedItemSelect(0, context),
-                  rankedItemSelect(1, context),
-                  rankedItemSelect(2, context),
-                ],
-              ),
-            )
-
-        );
-      },
-    );
-  }
-
-
-
-  Widget rankedItemSelect(int index, context){
-    return  Material(
-      color: orderBySelected == orderBy[index] ?
-      LightColors.blue.withOpacity(0.18) :
-      LightColors.white,
-      child: Ink(
-        child: InkWell(
-          splashColor: LightColors.blue,
-          onTap: (){
-            Future.delayed(Duration(milliseconds: 100),(){
-              setState(() {
-                orderBySelected = orderBy[index];
-              });
-              circleFriendsStore.changeOrderBy(index);
-              Navigator.of(context).pop();
-              circleFriendsStore.getFriends(widget.userId);
-            });
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 10,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(orderBy[index],
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16
-                  ),),
-                Container(
-                  height: 13,
-                  width: 13,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                    color: orderBySelected == orderBy[index] ?
-                    LightColors.blue :
-                    LightColors.white,
-                    shape: BoxShape.circle,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -410,6 +238,84 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
           ],
         ),
+      ),
+    );
+  }
+
+  Widget itemShimmer(){
+    double size = MediaQuery.of(context).size.width - (25+14+48+82);
+    return Shimmer.fromColors(
+      baseColor:  Colors.grey[300] ?? Colors.blue,
+      highlightColor:  Colors.grey[100] ?? Colors.blue,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(25, 31, 14, 0),
+            child: Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 11,
+                        width: size*0.35,
+                        color: Colors.white,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 6),
+                        height: 8,
+                        width: size*0.23,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  height: 11,
+                  width: 80,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 90,
+            width: MediaQuery.of(context).size.width,
+            child: ListView.builder(
+                itemCount: 11,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return  Container(
+                    margin: EdgeInsets.only(
+                      left: index == 0 ? 25 : 8,
+                      top: 14,
+                      right: index == 10 ? 14 : 0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    height: 76,
+                    width: 74,
+                  );
+                }
+            ),
+          )
+        ],
       ),
     );
   }
@@ -651,8 +557,96 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
+  Widget rankedItemSelect(int index, context){
+    return  Material(
+      color: orderBySelected == orderBy[index] ?
+      LightColors.blue.withOpacity(0.18) :
+      LightColors.white,
+      child: Ink(
+        child: InkWell(
+          splashColor: LightColors.blue,
+          onTap: (){
+            Future.delayed(Duration(milliseconds: 100),(){
+              setState(() {
+                orderBySelected = orderBy[index];
+              });
+              circleFriendsStore.changeOrderBy(index);
+              Navigator.of(context).pop();
+              circleFriendsStore.getFriends(widget.userId);
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 10,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(orderBy[index],
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16
+                  ),),
+                Container(
+                  height: 13,
+                  width: 13,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2),
+                    color: orderBySelected == orderBy[index] ?
+                    LightColors.blue :
+                    LightColors.white,
+                    shape: BoxShape.circle,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _goToProfile(userId) async {
     controller.insertPage(ProfileScreen({"id": userId,},));
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+
+            child: Container(
+              height: 185,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14, left: 24, bottom: 12),
+                    child: Text(AppLocalizations.of(context)!.orderBy,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  rankedItemSelect(0, context),
+                  rankedItemSelect(1, context),
+                  rankedItemSelect(2, context),
+                ],
+              ),
+            )
+
+        );
+      },
+    );
   }
 
   bool isPageOfUserLogged(){

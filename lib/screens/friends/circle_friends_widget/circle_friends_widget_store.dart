@@ -20,8 +20,6 @@ abstract class CircleFriendsWidgetStoreBase with Store {
   int page = 0;
   final int limit = 10;
 
-
-
   @action
   Future<void> getFriends(String userId) async{
     List<String> listOrderBy = ['name','created'];
@@ -29,7 +27,8 @@ abstract class CircleFriendsWidgetStoreBase with Store {
     Random random = new Random();
     isLoading = true;
     FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriends(userId, page, limit,
+    getFriends(
+      userId, page, limit,
       orderBy: listOrderBy[random.nextInt(2)],
       sortingType: listSortingType[random.nextInt(2)],
     );

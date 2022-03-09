@@ -22,14 +22,15 @@ abstract class AddFriendsStoreBase with Store {
   @observable
   bool searchIsEmpty = false;
 
-  int page = 0;
-  final int limit = 10;
   @observable
   bool hasMoreUsers = true;
-  String lastName = '';
 
   @observable
   bool loadingMoreUsers = false;
+
+  int page = 0;
+  String lastName = '';
+  final int limit = 10;
 
   @action
   Future<void> searchNewName(String name) async {

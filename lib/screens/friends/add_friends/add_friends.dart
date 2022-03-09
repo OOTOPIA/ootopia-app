@@ -188,7 +188,6 @@ class _AddFriendsState extends State<AddFriends> {
     );
   }
 
-
   Widget itemShimmer(){
     double size = MediaQuery.of(context).size.width - (25+14+48+82);
     return Shimmer.fromColors(

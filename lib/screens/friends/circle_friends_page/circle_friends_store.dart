@@ -87,6 +87,5 @@ abstract class CircleFriendsStoreBase with Store {
       orderBy = listOrderBy[1];
       sortingType = listSortingType[0];
     }
-
   }
 }
