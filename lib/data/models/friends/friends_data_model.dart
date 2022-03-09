@@ -4,7 +4,7 @@ part 'friends_data_model.g.dart';
 
 @JsonSerializable()
 class FriendsDataModel {
-  final int? total;
+  int? total;
   List<FriendModel?>? friends;
 
   FriendsDataModel({

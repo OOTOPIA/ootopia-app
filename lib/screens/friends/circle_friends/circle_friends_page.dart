@@ -271,11 +271,21 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0),
-                        //TODO REMOVER A ULTIMA ${}
-                        child: Text( "${circleFriendsStore.friendsDate?.total ?? 0}"
-                            " ${AppLocalizations.of(context)!.friends} "
-                            "${circleFriendsStore.friendsDate?.friends!
-                            .length}",
+                        child: circleFriendsStore.friendsDate == null ?
+                        Shimmer.fromColors(
+                          baseColor:  Colors.grey[300] ?? Colors.blue,
+                          highlightColor:  Colors.grey[100] ?? Colors.blue,
+                          child: Container(
+                            height: 10,
+                            width: 72,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                            ),
+                          ),
+                        )
+                            :
+                        Text( "${circleFriendsStore.friendsDate?.total ?? 0}"
+                            " ${AppLocalizations.of(context)!.friends}",
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontSize: 12,
@@ -302,7 +312,11 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       ),
                       onPressed: () {
                         Future.delayed(Duration(milliseconds: 100),(){
-                          controller.insertPage(AddFriends());
+                          controller.insertPage(AddFriends(updateFriends: (friendModel) {;
+                            circleFriendsStore.friendsDate!.friends!.add(friendModel);
+                            circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
+                            setState(() {});
+                          },));
                         });
                       },
                       child: Text(MediaQuery.of(context).size.width <= 414 ?

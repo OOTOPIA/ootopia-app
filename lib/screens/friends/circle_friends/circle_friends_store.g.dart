@@ -71,6 +71,36 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
     });
   }
 
+  final _$orderByAtom = Atom(name: 'CircleFriendsStoreBase.orderBy');
+
+  @override
+  String? get orderBy {
+    _$orderByAtom.reportRead();
+    return super.orderBy;
+  }
+
+  @override
+  set orderBy(String? value) {
+    _$orderByAtom.reportWrite(value, super.orderBy, () {
+      super.orderBy = value;
+    });
+  }
+
+  final _$sortingTypeAtom = Atom(name: 'CircleFriendsStoreBase.sortingType');
+
+  @override
+  String? get sortingType {
+    _$sortingTypeAtom.reportRead();
+    return super.sortingType;
+  }
+
+  @override
+  set sortingType(String? value) {
+    _$sortingTypeAtom.reportWrite(value, super.sortingType, () {
+      super.sortingType = value;
+    });
+  }
+
   final _$getFriendsAsyncAction =
       AsyncAction('CircleFriendsStoreBase.getFriends');
 
@@ -87,13 +117,40 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
     return _$getMoreFriendsAsyncAction.run(() => super.getMoreFriends(userId));
   }
 
+  final _$CircleFriendsStoreBaseActionController =
+      ActionController(name: 'CircleFriendsStoreBase');
+
+  @override
+  void init(String userId) {
+    final _$actionInfo = _$CircleFriendsStoreBaseActionController.startAction(
+        name: 'CircleFriendsStoreBase.init');
+    try {
+      return super.init(userId);
+    } finally {
+      _$CircleFriendsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeOrderBy(int index) {
+    final _$actionInfo = _$CircleFriendsStoreBaseActionController.startAction(
+        name: 'CircleFriendsStoreBase.changeOrderBy');
+    try {
+      return super.changeOrderBy(index);
+    } finally {
+      _$CircleFriendsStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 friendsDate: ${friendsDate},
 isLoading: ${isLoading},
 hasMoreFriends: ${hasMoreFriends},
-loadingMoreFriends: ${loadingMoreFriends}
+loadingMoreFriends: ${loadingMoreFriends},
+orderBy: ${orderBy},
+sortingType: ${sortingType}
     ''';
   }
 }

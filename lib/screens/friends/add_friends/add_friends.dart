@@ -15,6 +15,9 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 
 class AddFriends extends StatefulWidget {
+  Function updateFriends;
+
+  AddFriends({Key? key,required this.updateFriends}) : super(key: key);
 
   @override
   State<AddFriends> createState() => _AddFriendsState();
@@ -399,6 +402,7 @@ class _AddFriendsState extends State<AddFriends> {
                             onPressed: () {
                               Future.delayed(Duration(milliseconds: 80),(){
                                 addFriendsStore.addFriend(friendModel.id!);
+                                widget.updateFriends(friendModel);
                                 setState(() {});
                               });
                             },
