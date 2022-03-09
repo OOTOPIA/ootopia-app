@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
@@ -47,15 +46,13 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
         dotenv.env['API_URL']! + "friends/$userId",
         queryParameters: queryParams,
       );
-      log('response.body : ${response.data}');
       if (response.statusCode == 200) {
-        print('response.body : ${response.data}');
         return FriendsDataModel.fromJson(response.data);
       }
-      return   FriendsDataModel(length: 0, friends: []);
+      return   FriendsDataModel(total: 0, friends: []);
     } catch (error) {
       print('error: $error');
-      return   FriendsDataModel(length: 0, friends: []);
+      return   FriendsDataModel(total: 0, friends: []);
     }
   }
 

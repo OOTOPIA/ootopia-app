@@ -18,6 +18,12 @@ abstract class CircleFriendsStoreBase with Store {
   int page = 0;
   int limit = 10;
 
+  @observable
+  bool hasMoreFriends = true;
+
+  @observable
+  bool loadingMoreFriends = false;
+
   @action
   Future<void> getFriends(String userId) async{
     isLoading = true;
@@ -30,5 +36,17 @@ abstract class CircleFriendsStoreBase with Store {
     }
 
     isLoading = false;
+  }
+
+  @action
+  Future<void> getMoreFriends(userId) async {
+    if(hasMoreFriends) {
+      loadingMoreFriends = true;
+      page++;
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriends(userId, page, limit);
+      friendsDate!.friends!.addAll(auxUsers.friends!);
+      loadingMoreFriends = false;
+      hasMoreFriends = auxUsers.friends!.length == limit;
+    }
   }
 }

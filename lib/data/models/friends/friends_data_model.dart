@@ -4,11 +4,11 @@ part 'friends_data_model.g.dart';
 
 @JsonSerializable()
 class FriendsDataModel {
-  final int? length;
+  final int? total;
   List<FriendModel?>? friends;
 
   FriendsDataModel({
-    required this.length,
+    required this.total,
     required this.friends
   });
 

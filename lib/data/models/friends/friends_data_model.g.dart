@@ -8,7 +8,7 @@ part of 'friends_data_model.dart';
 
 FriendsDataModel _$FriendsDataModelFromJson(Map<String, dynamic> json) {
   return FriendsDataModel(
-    length: json['length'] as int?,
+    total: json['total'] as int?,
     friends: (json['friends'] as List<dynamic>?)
         ?.map((e) =>
             e == null ? null : FriendModel.fromJson(e as Map<String, dynamic>))
@@ -18,6 +18,6 @@ FriendsDataModel _$FriendsDataModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$FriendsDataModelToJson(FriendsDataModel instance) =>
     <String, dynamic>{
-      'length': instance.length,
+      'total': instance.total,
       'friends': instance.friends,
     };

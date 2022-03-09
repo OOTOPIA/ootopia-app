@@ -38,7 +38,6 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('widget.userId: ${widget.userId}');
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       child: Column(

@@ -69,12 +69,51 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
     });
   }
 
+  final _$hasMoreUsersAtom = Atom(name: 'AddFriendsStoreBase.hasMoreUsers');
+
+  @override
+  bool get hasMoreUsers {
+    _$hasMoreUsersAtom.reportRead();
+    return super.hasMoreUsers;
+  }
+
+  @override
+  set hasMoreUsers(bool value) {
+    _$hasMoreUsersAtom.reportWrite(value, super.hasMoreUsers, () {
+      super.hasMoreUsers = value;
+    });
+  }
+
+  final _$loadingMoreUsersAtom =
+      Atom(name: 'AddFriendsStoreBase.loadingMoreUsers');
+
+  @override
+  bool get loadingMoreUsers {
+    _$loadingMoreUsersAtom.reportRead();
+    return super.loadingMoreUsers;
+  }
+
+  @override
+  set loadingMoreUsers(bool value) {
+    _$loadingMoreUsersAtom.reportWrite(value, super.loadingMoreUsers, () {
+      super.loadingMoreUsers = value;
+    });
+  }
+
   final _$searchNewNameAsyncAction =
       AsyncAction('AddFriendsStoreBase.searchNewName');
 
   @override
   Future<void> searchNewName(String name) {
     return _$searchNewNameAsyncAction.run(() => super.searchNewName(name));
+  }
+
+  final _$getMoreUserAsyncAction =
+      AsyncAction('AddFriendsStoreBase.getMoreUser');
+
+  @override
+  Future<void> getMoreUser() {
+    return _$getMoreUserAsyncAction.run(() => super.getMoreUser());
   }
 
   final _$addFriendAsyncAction = AsyncAction('AddFriendsStoreBase.addFriend');
@@ -90,7 +129,9 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
 users: ${users},
 usersIdAdded: ${usersIdAdded},
 isLoading: ${isLoading},
-searchIsEmpty: ${searchIsEmpty}
+searchIsEmpty: ${searchIsEmpty},
+hasMoreUsers: ${hasMoreUsers},
+loadingMoreUsers: ${loadingMoreUsers}
     ''';
   }
 }

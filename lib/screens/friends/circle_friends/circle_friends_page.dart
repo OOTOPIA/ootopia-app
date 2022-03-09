@@ -49,9 +49,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   @override
   Widget build(BuildContext context) {
     init();
-    print(MediaQuery.of(context).size.width);
-
-    print(MediaQuery.of(context).size.width);
     return  Observer(
         builder: (context) {
           return Stack(
@@ -233,145 +230,164 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   }
 
   Widget body() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 14.0, left: 28,
-                right: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 12),
-                    Text(AppLocalizations.of(context)!.circleOfFriends,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 24,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2.0),
-                      child: Text( "${circleFriendsStore.friendsDate?.friends?.length ?? 0} ${AppLocalizations.of(context)!.friends}",
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 12,
-                          color: Color(0xff939598),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        if (!circleFriendsStore.loadingMoreFriends &&
+            scrollInfo.metrics.pixels >= scrollInfo.metrics
+                .maxScrollExtent*0.8 &&
+            circleFriendsStore.hasMoreFriends) {
 
-                ElevatedButton(
-                    style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
-                      shape: MaterialStateProperty.all<
-                          RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular
-                              (20),
-                            side: BorderSide.none),
-                      ),
-                      backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 24)),
-                    ),
-                    onPressed: () {
-                      Future.delayed(Duration(milliseconds: 100),(){
-                        controller.insertPage(AddFriends());
-                      });
-                    },
-                    child: Text(MediaQuery.of(context).size.width <= 414 ?
-                    AppLocalizations.of(context)!.add.toLowerCase():
-                    AppLocalizations.of(context)!.addFriend.toLowerCase(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ))
-              ],
-            ),
-
-
-          ),
-
-          GestureDetector(
-            onTap: (){
-              _showDialog(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25, top: 18),
+          Future.delayed(Duration.zero,() async {
+            await circleFriendsStore.getMoreFriends(widget.userId);
+            setState(() {});
+          });
+        }
+        return true;
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 14.0, left: 28,
+                  right: 12),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.asset(
-                    'assets/icons/list.png',
-
-                    height: 10,
-                  ),
-                  SizedBox(width: 6),
-
-                  RichText(
-                    text: TextSpan(
-                      text: AppLocalizations.of(context)!.orderBy,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: " $orderBySelected",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 12),
+                      Text(AppLocalizations.of(context)!.circleOfFriends,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24,
+                          color: Colors.black,
                         ),
-                      ],
-                    ),
-                  )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        //TODO REMOVER A ULTIMA ${}
+                        child: Text( "${circleFriendsStore.friendsDate?.total ?? 0}"
+                            " ${AppLocalizations.of(context)!.friends} "
+                            "${circleFriendsStore.friendsDate?.friends!
+                            .length}",
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 12,
+                            color: Color(0xff939598),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
 
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                        shape: MaterialStateProperty.all<
+                            RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular
+                                (20),
+                              side: BorderSide.none),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(horizontal: 24)),
+                      ),
+                      onPressed: () {
+                        Future.delayed(Duration(milliseconds: 100),(){
+                          controller.insertPage(AddFriends());
+                        });
+                      },
+                      child: Text(MediaQuery.of(context).size.width <= 414 ?
+                      AppLocalizations.of(context)!.add.toLowerCase():
+                      AppLocalizations.of(context)!.addFriend.toLowerCase(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ))
                 ],
               ),
+
+
             ),
-          ),
 
+            GestureDetector(
+              onTap: (){
+                _showDialog(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25, top: 18),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icons/list.png',
 
+                      height: 10,
+                    ),
+                    SizedBox(width: 6),
 
+                    RichText(
+                      text: TextSpan(
+                        text: AppLocalizations.of(context)!.orderBy,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: " $orderBySelected",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
 
+                          ),
+                        ],
+                      ),
+                    )
 
-          if(circleFriendsStore.isLoading ||
-              (circleFriendsStore.friendsDate?.friends?.isEmpty ?? true))...[
-            ListView.builder(
-                itemCount: 11,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return  itemShimmer();
-                }
+                  ],
+                ),
+              ),
             ),
-          ]else...[
-            ListView.builder(
-                itemCount: circleFriendsStore.friendsDate!.friends!.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return  itemFriend(circleFriendsStore.friendsDate!.friends![index]!);
-                }
-            ),
+
+
+
+
+
+            if(circleFriendsStore.isLoading ||
+                (circleFriendsStore.friendsDate?.friends?.isEmpty ?? true))...[
+              ListView.builder(
+                  itemCount: 11,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return  itemShimmer();
+                  }
+              ),
+            ]else...[
+              ListView.builder(
+                  itemCount: circleFriendsStore.friendsDate!.friends!.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return  itemFriend(circleFriendsStore.friendsDate!.friends![index]!);
+                  }
+              ),
+            ],
+
+            SizedBox(height: 16),
+
           ],
-
-          SizedBox(height: 16),
-
-        ],
+        ),
       ),
     );
   }

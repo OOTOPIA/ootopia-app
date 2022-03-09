@@ -39,6 +39,38 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
     });
   }
 
+  final _$hasMoreFriendsAtom =
+      Atom(name: 'CircleFriendsStoreBase.hasMoreFriends');
+
+  @override
+  bool get hasMoreFriends {
+    _$hasMoreFriendsAtom.reportRead();
+    return super.hasMoreFriends;
+  }
+
+  @override
+  set hasMoreFriends(bool value) {
+    _$hasMoreFriendsAtom.reportWrite(value, super.hasMoreFriends, () {
+      super.hasMoreFriends = value;
+    });
+  }
+
+  final _$loadingMoreFriendsAtom =
+      Atom(name: 'CircleFriendsStoreBase.loadingMoreFriends');
+
+  @override
+  bool get loadingMoreFriends {
+    _$loadingMoreFriendsAtom.reportRead();
+    return super.loadingMoreFriends;
+  }
+
+  @override
+  set loadingMoreFriends(bool value) {
+    _$loadingMoreFriendsAtom.reportWrite(value, super.loadingMoreFriends, () {
+      super.loadingMoreFriends = value;
+    });
+  }
+
   final _$getFriendsAsyncAction =
       AsyncAction('CircleFriendsStoreBase.getFriends');
 
@@ -47,11 +79,21 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
     return _$getFriendsAsyncAction.run(() => super.getFriends(userId));
   }
 
+  final _$getMoreFriendsAsyncAction =
+      AsyncAction('CircleFriendsStoreBase.getMoreFriends');
+
+  @override
+  Future<void> getMoreFriends(dynamic userId) {
+    return _$getMoreFriendsAsyncAction.run(() => super.getMoreFriends(userId));
+  }
+
   @override
   String toString() {
     return '''
 friendsDate: ${friendsDate},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+hasMoreFriends: ${hasMoreFriends},
+loadingMoreFriends: ${loadingMoreFriends}
     ''';
   }
 }

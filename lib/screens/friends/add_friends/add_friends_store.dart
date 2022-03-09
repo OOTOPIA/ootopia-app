@@ -58,8 +58,6 @@ abstract class AddFriendsStoreBase with Store {
     }
   }
 
-
-
   @action
   Future<void> addFriend(String userId) async {
     usersIdAdded.add(userId);
