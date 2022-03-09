@@ -70,8 +70,12 @@ abstract class CircleFriendsStoreBase with Store {
 
   @action
   Future<void> removeFriends(userId) async {
+    print('size: ${friendsDate!.friends!.length}');
     friendsDate!.friends!.removeWhere((element) => element!.id == userId);
-    friendsRepositoryImpl.removeFriends(userId);
+    friendsDate!.total = friendsDate!.total! - 1;
+    print('size: ${friendsDate!.friends!.length}');
+    bool status = await friendsRepositoryImpl.removeFriends(userId);
+    print('size: $status');
 
   }
 

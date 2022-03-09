@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -25,7 +27,7 @@ class CircleOfFriendPage extends StatefulWidget {
 
 class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
-  TextEditingController messageController = TextEditingController();
+  late AuthStore authStore;
   CircleFriendsStore circleFriendsStore = CircleFriendsStore();
   SmartPageController controller = SmartPageController.getInstance();
   List<String> orderBy = [];
@@ -34,6 +36,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
 
   init(){
+    authStore = Provider.of<AuthStore>(context);
     circleFriendsStore.init(widget.userId);
     if(orderBy.isEmpty){
       orderBy = [
@@ -297,38 +300,40 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                     ],
                   ),
 
-                  ElevatedButton(
-                      style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
-                        shape: MaterialStateProperty.all<
-                            RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular
-                                (20),
-                              side: BorderSide.none),
+                  if(isPageOfUserLogged())...[
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular
+                                  (20),
+                                side: BorderSide.none),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 24)),
                         ),
-                        backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 24)),
-                      ),
-                      onPressed: () {
-                        Future.delayed(Duration(milliseconds: 100),(){
-                          controller.insertPage(AddFriends(updateFriends: (friendModel) {
-                            circleFriendsStore.friendsDate!.friends!.add(friendModel);
-                            circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
-                            setState(() {});
-                          },));
-                        });
-                      },
-                      child: Text(MediaQuery.of(context).size.width <= 414 ?
-                      AppLocalizations.of(context)!.add.toLowerCase():
-                      AppLocalizations.of(context)!.addFriend.toLowerCase(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ))
+                        onPressed: () {
+                          Future.delayed(Duration(milliseconds: 100),(){
+                            controller.insertPage(AddFriends(updateFriends: (friendModel) {
+                              circleFriendsStore.friendsDate!.friends!.add(friendModel);
+                              circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
+                              setState(() {});
+                            },));
+                          });
+                        },
+                        child: Text(MediaQuery.of(context).size.width <= 414 ?
+                        AppLocalizations.of(context)!.add.toLowerCase():
+                        AppLocalizations.of(context)!.addFriend.toLowerCase(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                  ]
                 ],
               ),
 
@@ -462,6 +467,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         ),
                       ],
                     ),
+
                     Container(
                       margin: const EdgeInsets.only(left: 12),
                       width: MediaQuery.of(context).size.width - 200,
@@ -492,35 +498,41 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         ],
                       ),
                     ),
+
                     Spacer(),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular
-                                  (20),
-                                side: BorderSide.none),
+
+                    if(isPageOfUserLogged())...[
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular
+                                    (20),
+                                  side: BorderSide.none),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>
+                              (LightColors.errorRed),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(horizontal: 24)),
                           ),
-                          backgroundColor: MaterialStateProperty.all<Color>
-                            (LightColors.errorRed),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.symmetric(horizontal: 24)),
-                        ),
-                        onPressed: () {
-                          Future.delayed(Duration(milliseconds: 100),(){
-                            circleFriendsStore.removeFriends(widget.userId);
-                          });
-                        },
-                        child: Text(
-                        AppLocalizations.of(context)!.removeFriend.toLowerCase(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
+                          onPressed: () {
+                            Future.delayed(Duration(milliseconds: 100),(){
+                              circleFriendsStore.removeFriends(friendModel.id);
+                              setState(() {});
+                            });
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.removeFriend.toLowerCase(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))
+                    ],
+
                     SizedBox(
                       height: 30,
                       child: TextButton(onPressed: (){
@@ -641,6 +653,10 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   void _goToProfile(userId) async {
     controller.insertPage(ProfileScreen({"id": userId,},));
+  }
+
+  bool isPageOfUserLogged(){
+    return widget.userId == authStore.currentUser?.id;
   }
 
 
