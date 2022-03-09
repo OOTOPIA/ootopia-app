@@ -87,9 +87,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       _inputController.clear();
       for (var item in list) {
         if (item.contains('@')) {
-          _inputController.text += '$item';
-        } else {
           _inputController.text += ' $item';
+        } else {
+          _inputController.text += ' $item ';
         }
       }
 
@@ -148,7 +148,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         });
         var startName = getLastString.last.split('@').last;
         var finishName = startName.split(RegExp("ㅤ"));
-        Future.delayed(Duration(milliseconds: 500), () {
+        Future.delayed(Duration(seconds: 1), () {
           commentStore.searchUser(finishName.first);
         });
       } else {
