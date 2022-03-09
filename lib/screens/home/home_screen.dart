@@ -80,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       initialPages: [
         widget.args?['redirectToInvitationCode'] != null
-            ? TimelinePage(null)
-            : InvitationScreen(),
+            ? InvitationScreen()
+            : TimelinePage(null),
         LearningTracksScreen(),
         LearningTracksScreen(),
         MarketplaceScreen(),
