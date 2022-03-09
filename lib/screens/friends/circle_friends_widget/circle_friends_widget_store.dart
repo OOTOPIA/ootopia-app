@@ -34,8 +34,7 @@ abstract class CircleFriendsWidgetStoreBase with Store {
       sortingType: listSortingType[random.nextInt(2)],
     );
     friendsDate = friendsDateAux;
-
-
+    friendsDate!.friends!.sort((a, b) => a?.photoUrl == null ? 1 : 0);
     isLoading = false;
   }
 }
