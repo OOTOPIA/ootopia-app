@@ -48,8 +48,6 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   int countPage = 0;
   bool hasMoreMedias = false;
-  late VideoPlayerController? _videoPlayerController;
-  FlickManager? flickManager;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -64,8 +62,6 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
-    flickManager?.dispose();
     super.dispose();
   }
 
@@ -92,7 +88,6 @@ class _CustomGalleryState extends State<CustomGallery> {
         onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () {
           if (selectedMedias != []) {
-            flickManager?.flickControlManager?.pause();
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
@@ -129,8 +124,6 @@ class _CustomGalleryState extends State<CustomGallery> {
                             mediaFilePath: currentDirectory["mediaFile"].path,
                             mediaType: currentDirectory["mediaType"],
                             mediaSize: currentDirectory["mediaSize"],
-                            flickManager: getFlickManager(),
-                            videoIsLoading: videoIsLoading,
                           ),
                           SizedBox(height: 10),
                           multipleImagesButton(),
@@ -179,11 +172,6 @@ class _CustomGalleryState extends State<CustomGallery> {
         ],
       ),
     );
-  }
-
-  FlickManager? getFlickManager() {
-    if (currentDirectory["mediaType"] == 'video') return flickManager;
-    return null;
   }
 
   Widget multipleImagesButton() {
@@ -310,13 +298,10 @@ class _CustomGalleryState extends State<CustomGallery> {
     if (selectedMedia['mediaType'] == 'video' &&
         (currentDirectory['mediaId'] == null ||
             selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
-      _videoPlayerController = null;
       currentDirectory = selectedMedia;
-      initVideoPlayer(currentDirectory['mediaFile']);
     } else if (selectedMedia['mediaType'] == 'image' &&
         (currentDirectory['mediaId'] == null ||
             selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
-      _videoPlayerController = null;
       currentDirectory = selectedMedia;
     }
   }
@@ -327,18 +312,5 @@ class _CustomGalleryState extends State<CustomGallery> {
               (element) => element["mediaId"] == media["mediaId"])) +
           1;
     }
-  }
-
-  initVideoPlayer(var file) {
-    videoIsLoading = true;
-    _videoPlayerController = VideoPlayerController.file(file)
-      ..initialize().then((value) {
-        setState(() {
-          videoIsLoading = false;
-        });
-        _videoPlayerController!.play();
-      });
-
-    flickManager = FlickManager(videoPlayerController: _videoPlayerController!);
   }
 }

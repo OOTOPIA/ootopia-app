@@ -3,13 +3,12 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:video_player/video_player.dart';
 
 class MediaViewWidget extends StatefulWidget {
   final String mediaFilePath;
   final String mediaType;
   final Size? mediaSize;
-  final FlickManager? flickManager;
-  final bool? videoIsLoading;
   final bool shouldCustomFlickManager;
   final bool showCropWidget;
   const MediaViewWidget({
@@ -17,8 +16,6 @@ class MediaViewWidget extends StatefulWidget {
     required this.mediaFilePath,
     required this.mediaType,
     this.mediaSize,
-    this.videoIsLoading,
-    this.flickManager,
     this.shouldCustomFlickManager = false,
     this.showCropWidget = false,
   }) : super(key: key);
@@ -28,18 +25,46 @@ class MediaViewWidget extends StatefulWidget {
 }
 
 class _MediaViewWidgetState extends State<MediaViewWidget> {
+  bool isLoading = false;
+  FlickManager? flickManager;
+  VideoPlayerController? _videoPlayerController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.mediaType == "video") {
+      initFlickManager();
+    }
+  }
+
+  initFlickManager() {
+    isLoading = true;
+
+    _videoPlayerController =
+        VideoPlayerController.file(File(widget.mediaFilePath))
+          ..initialize().then((value) {
+            setState(() {
+              isLoading = false;
+            });
+            flickManager =
+                FlickManager(videoPlayerController: _videoPlayerController!);
+          });
+  }
+
   @override
   void dispose() {
-    widget.flickManager?.dispose();
+    _videoPlayerController?.dispose();
+    flickManager?.dispose();
     super.dispose();
   }
 
   @mustCallSuper
   @protected
   void didUpdateWidget(covariant MediaViewWidget oldWidget) {
-    if (oldWidget.mediaType != widget.mediaType) {
-      oldWidget.flickManager?.dispose();
-    }
+    if (oldWidget.mediaType == "video")
+      flickManager?.flickControlManager!.pause();
+
+    if (widget.mediaType == "video") initFlickManager();
   }
 
   @override
@@ -65,7 +90,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
               child: widget.mediaType == "video"
                   ? ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(21)),
-                      child: widget.videoIsLoading!
+                      child: isLoading
                           ? SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
@@ -75,7 +100,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                             )
                           : FlickVideoPlayer(
                               preferredDeviceOrientationFullscreen: [],
-                              flickManager: widget.flickManager!,
+                              flickManager: flickManager!,
                               flickVideoWithControls: FlickVideoWithControls(
                                 controls: widget.shouldCustomFlickManager
                                     ? null
@@ -107,7 +132,15 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                       ),
                     ),
             ),
-            widget.mediaType == "video" && widget.shouldCustomFlickManager
+            GestureDetector(
+              onTap: () => flickManager?.flickControlManager!.play(),
+              child: Container(
+                child: Text('Tenta aí'),
+              ),
+            ),
+            widget.mediaType == "video" &&
+                    widget.shouldCustomFlickManager &&
+                    !isLoading
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -126,21 +159,18 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           child: IconButton(
                             padding: EdgeInsets.all(0),
                             icon: Icon(
-                                widget.flickManager!.flickControlManager!.isMute
+                                flickManager!.flickControlManager!.isMute
                                     ? Icons.volume_off
                                     : Icons.volume_up,
                                 size: 20),
                             onPressed: () {
                               setState(
                                 () {
-                                  //flickMultiManager.toggleMute();
-                                  if (!widget.flickManager!.flickControlManager!
-                                      .isMute) {
-                                    widget.flickManager!.flickControlManager!
-                                        .mute();
+                                  if (!flickManager!
+                                      .flickControlManager!.isMute) {
+                                    flickManager!.flickControlManager!.mute();
                                   } else {
-                                    widget.flickManager!.flickControlManager!
-                                        .unmute();
+                                    flickManager!.flickControlManager!.unmute();
                                   }
                                 },
                               );

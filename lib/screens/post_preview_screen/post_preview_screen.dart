@@ -462,16 +462,13 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       ? MediaViewWidget(
                           mediaFilePath: widget.args["filePath"],
                           mediaType: widget.args["type"],
-                          flickManager: widget.args["type"] == "video"
-                              ? flickManager
-                              : null,
                           shouldCustomFlickManager: true,
                           mediaSize: widget.args["type"] == "video"
                               ? null
                               : this.imageSize!,
-                          videoIsLoading: false,
                         )
                       : buildListOfMedias(),
+                  SizedBox(height: 50),
                   Container(
                     margin: EdgeInsets.symmetric(
                         horizontal: GlobalConstants.of(context).spacingNormal),
@@ -797,23 +794,21 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          ...widget.args["fileList"].map(filePathToTile).toList(),
+          ...widget.args["fileList"].map(buildMediaRow).toList(),
         ],
       ),
     );
   }
 
-  filePathToTile(dynamic file) {
+  buildMediaRow(dynamic file) {
     return Container(
-      width: MediaQuery.of(context).size.width - 80,
-      height: MediaQuery.of(context).size.width - 80,
+      width: MediaQuery.of(context).size.width - 60,
+      height: MediaQuery.of(context).size.width - 60,
       child: MediaViewWidget(
-        mediaFilePath: file['mediaFile'].path,
-        mediaType: file['mediaType'],
-        //flickManager: ,
-        mediaSize: file['mediaSize'],
+        mediaFilePath: file["mediaFile"].path,
+        mediaType: file["mediaType"],
+        mediaSize: file["mediaSize"],
         shouldCustomFlickManager: true,
-        videoIsLoading: false,
         showCropWidget: true,
       ),
     );
