@@ -109,21 +109,18 @@ class _LoginPageState extends State<LoginPage> {
           PageRoute.Page.homeScreen.route,
           (Route<dynamic> route) => false,
           arguments: {
-            "returnToPageWithArgs": widget.args!['returnToPageWithArgs']
+            "returnToPageWithArgs": widget.args!['returnToPageWithArgs'],
+            "redirectToInvitationCode": true,
           },
         );
       } else {
-        if (widget.args != null &&
-            widget.args!['redirectToSharedInvitationCode'] != null) {
-          controller.insertPage(InvitationScreen());
-        } else {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            PageRoute.Page.homeScreen.route,
-            (Route<dynamic> route) => false,
-          );
-        }
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          PageRoute.Page.homeScreen.route,
+          (Route<dynamic> route) => false,
+        );
       }
     } catch (error) {
+      print(error);
       showModalBottomSheet(
         context: context,
         barrierColor: Colors.black.withAlpha(1),

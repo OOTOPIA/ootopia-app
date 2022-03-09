@@ -24,7 +24,13 @@ class InviteYourFriends extends StatelessWidget {
           Navigator.pushNamed(
             context,
             PageRoute.Page.loginScreen.route,
-            arguments: {'redirectToSharedInvitationCode': true},
+            arguments: {
+              "returnToPageWithArgs": {
+                "currentPageName": "home",
+                "arguments": null
+              },
+              'redirectToSharedInvitationCode': true,
+            },
           );
         }
       },
