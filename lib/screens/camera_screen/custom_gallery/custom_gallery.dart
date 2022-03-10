@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +13,6 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
-import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CustomGallery extends StatefulWidget {
