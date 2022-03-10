@@ -20,7 +20,7 @@ FriendModel _$FriendModelFromJson(Map<String, dynamic> json) {
     city: json['city'] as String?,
     state: json['state'] as String?,
     country: json['country'] as String?,
-  );
+  )..remove = json['remove'] as bool?;
 }
 
 Map<String, dynamic> _$FriendModelToJson(FriendModel instance) =>
@@ -33,4 +33,5 @@ Map<String, dynamic> _$FriendModelToJson(FriendModel instance) =>
       'city': instance.city,
       'state': instance.state,
       'country': instance.country,
+      'remove': instance.remove,
     };

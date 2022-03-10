@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 import 'package:ootopia_app/data/repositories/friends_repository.dart';
 
@@ -69,10 +70,11 @@ abstract class CircleFriendsStoreBase with Store {
   }
 
   @action
-  Future<void> removeFriends(userId) async {
-    friendsDate!.friends!.removeWhere((element) => element!.id == userId);
+  Future<void> removeFriends(FriendModel user, index) async {
+    //friendsDate!.friends!.removeWhere((element) => element!.id == user.id);
+    friendsDate!.friends![index]!.remove = true;
     friendsDate!.total = friendsDate!.total! - 1;
-    friendsRepositoryImpl.removeFriends(userId);
+    friendsRepositoryImpl.removeFriends(user.id!);
   }
 
   @action

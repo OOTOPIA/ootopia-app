@@ -183,7 +183,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 height: 56,
                 margin: EdgeInsets.only(
                     left: index == 0 ? 16 :
-                    index == 1 && widget.isUserLogged ? 0 : 7,
+                    index == 1 && widget.isUserLogged ? 0 : 8,
                     right: index == size - 1 ? 24 : 0
                 ),
                 child:
@@ -283,7 +283,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
   Widget buttonToAddFriends() {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: EdgeInsets.only(left: 24, right: 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -320,7 +320,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
           Container(
             margin: EdgeInsets.only(top: 2),
             child: Text(
-              AppLocalizations.of(context)!.addFriends,
+              AppLocalizations.of(context)!.add,
               style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 9,

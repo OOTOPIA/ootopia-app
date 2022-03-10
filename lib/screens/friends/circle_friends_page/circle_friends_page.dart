@@ -230,7 +230,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    return  itemFriend(circleFriendsStore.friendsDate!.friends![index]!);
+                    return  itemFriend(circleFriendsStore.friendsDate!.friends![index]!, index);
                   }
               ),
             ],
@@ -321,249 +321,261 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-  Widget itemFriend(FriendModel friendModel){
-    return Column(
-      children: [
-        SizedBox(
-          height: 18,
-        ),
-        Material(
-          color: Colors.transparent,
-          child: Ink(
-            child: InkWell(
-              splashColor: LightColors.grey.withOpacity(0.2),
-              child:  Padding(
-                padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
+  Widget itemFriend(FriendModel friendModel, index){
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 500),
+      height: friendModel.remove == true ? 0 : hasImages(friendModel) ? 150: 66,
+      child: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 18,
+            ),
+            Material(
+              color: Colors.transparent,
+              child: Ink(
+                child: InkWell(
+                  splashColor: LightColors.grey.withOpacity(0.2),
+                  child:  Padding(
+                    padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Shimmer.fromColors(
-                          baseColor:  Colors.grey[300] ?? Colors.blue,
-                          highlightColor:  Colors.grey[100] ?? Colors.blue,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              friendModel.photoUrl ?? '',
-                              fit: BoxFit.cover,
-                              width: 40,
-                              height: 40,
-                              errorBuilder: (context, url, error) => Image.asset(
-                                'assets/icons/user.png',
-                                fit: BoxFit.cover,
-                                width: 40,
+                        Stack(
+                          children: [
+                            Shimmer.fromColors(
+                              baseColor:  Colors.grey[300] ?? Colors.blue,
+                              highlightColor:  Colors.grey[100] ?? Colors.blue,
+                              child: Container(
                                 height: 40,
-                              ),
-
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Container(
-                      margin: const EdgeInsets.only(left: 12),
-                      width: MediaQuery.of(context).size.width - 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            friendModel.fullname ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: LightColors.grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            friendModel.location(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: LightColors.black,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Spacer(),
-
-                    if(isPageOfUserLogged())...[
-                      SizedBox(
-                        height: 24,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              elevation: MaterialStateProperty.all<double>(0.0),                              fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 24)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular
-                                    (20),
-                                  side: BorderSide(
-                                      color: LightColors.blue),
-                                  //borderRadius: BorderRadius.circular(8),
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle
                                 ),
                               ),
-                              backgroundColor: MaterialStateProperty.all<Color>
-                                (Colors.transparent),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.symmetric(horizontal: 14)),
                             ),
-                            onPressed: () {
-                              Future.delayed(Duration(milliseconds: 100),(){
-                                circleFriendsStore.removeFriends(friendModel.id);
-                                setState(() {});
-                              });
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.removeFriend,
-                              style: TextStyle(
-                                color: LightColors.blue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                            SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.network(
+                                  friendModel.photoUrl ?? '',
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                  errorBuilder: (context, url, error) => Image.asset(
+                                    'assets/icons/user.png',
+                                    fit: BoxFit.cover,
+                                    width: 40,
+                                    height: 40,
+                                  ),
+
+                                ),
                               ),
-                            )),
-                      )
-                    ]else ...[
-                      SizedBox(
-                        height: 30,
-                        child: TextButton(onPressed: (){
-                          Future.delayed(Duration(milliseconds: 80),(){
-                            _goToProfile(friendModel.id);
-                          });
-                        },
-                            child: Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.seeProfile,
+                            ),
+                          ],
+                        ),
+
+                        Container(
+                          margin: const EdgeInsets.only(left: 12),
+                          width: MediaQuery.of(context).size.width - 200,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                friendModel.fullname ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: LightColors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                friendModel.location(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: LightColors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Spacer(),
+
+                        if(isPageOfUserLogged())...[
+                          SizedBox(
+                            height: 24,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  elevation: MaterialStateProperty.all<double>(0.0),                              fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 24)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular
+                                        (20),
+                                      side: BorderSide(
+                                          color: LightColors.blue),
+                                      //borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all<Color>
+                                    (Colors.transparent),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 14)),
+                                ),
+                                onPressed: () {
+                                  Future.delayed(Duration(milliseconds: 100),(){
+                                    circleFriendsStore.removeFriends(friendModel, index);
+                                    setState(() {});
+                                  });
+                                },
+                                child: Text(
+                                  AppLocalizations.of(context)!.removeFriend,
                                   style: TextStyle(
                                     color: LightColors.blue,
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                                Icon(Icons.arrow_forward_ios_sharp,
-                                  color: LightColors.blue,
-                                  size: 12,
-                                )
-                              ],
-                            )),
-                      )
-                    ],
+                                )),
+                          )
+                        ]else ...[
+                          SizedBox(
+                            height: 30,
+                            child: TextButton(onPressed: (){
+                              Future.delayed(Duration(milliseconds: 80),(){
+                                _goToProfile(friendModel.id);
+                              });
+                            },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!.seeProfile,
+                                      style: TextStyle(
+                                        color: LightColors.blue,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Icon(Icons.arrow_forward_ios_sharp,
+                                      color: LightColors.blue,
+                                      size: 12,
+                                    )
+                                  ],
+                                )),
+                          )
+                        ],
 
 
 
-                  ],
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Future.delayed(Duration(milliseconds: 100),(){
+                      _goToProfile(friendModel.id);
+                    });
+                  },
                 ),
               ),
-              onTap: () {
-                Future.delayed(Duration(milliseconds: 100),(){
-                  _goToProfile(friendModel.id);
-                });
-              },
             ),
-          ),
-        ),
-        if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
-          SizedBox(
-            height: 8,
-          ),
-          Container(
-            height: 76,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                itemCount: friendModel.friendsThumbs!.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return  Stack(
-                    children: [
-                      Shimmer.fromColors(
-                        baseColor:  Colors.grey[300] ?? Colors.blue,
-                        highlightColor:  Colors.grey[100] ?? Colors.blue,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            left: index == 0 ? 25 : 8,
-                            top: 2,
-                            right: index == (friendModel.friendsThumbs!
-                                .length - 1) ? 14 : 0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+            if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                height: 76,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                    itemCount: friendModel.friendsThumbs!.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return  Stack(
+                        children: [
+                          Shimmer.fromColors(
+                            baseColor:  Colors.grey[300] ?? Colors.blue,
+                            highlightColor:  Colors.grey[100] ?? Colors.blue,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                left: index == 0 ? 25 : 8,
+                                top: 2,
+                                right: index == (friendModel.friendsThumbs!
+                                    .length - 1) ? 14 : 0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              height: 76,
+                              width: 74,
                             ),
                           ),
-                          height: 76,
-                          width: 74,
-                        ),
-                      ),
-                      Container(
-                        width: 74,
-                        height: 76,
-                        margin: EdgeInsets.only(
-                          left: index == 0 ? 25 : 8,
-                          right: index == friendModel.friendsThumbs!.length - 1
-                              ? 14 : 0,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
-                            fit: BoxFit.cover,
+                          Container(
                             width: 74,
                             height: 76,
-                            errorBuilder: (context, url, error) => Center(
-                              child: Icon(Icons.error),
+                            margin: EdgeInsets.only(
+                              left: index == 0 ? 25 : 8,
+                              right: index == friendModel.friendsThumbs!.length - 1
+                                  ? 14 : 0,
                             ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
+                                fit: BoxFit.cover,
+                                width: 74,
+                                height: 76,
+                                errorBuilder: (context, url, error) => Center(
+                                  child: Icon(Icons.error),
+                                ),
 
-                          ),
-                        ),
-                      ),
-                      if(friendModel.friendsThumbs![index]!.type == 'video')...[
-                        Container(
-                          width: 74,
-                          height: 76,
-                          margin: EdgeInsets.only(
-                            left: index == 0 ? 25 : 8,
-                            right: index == (friendModel.friendsThumbs!
-                                .length - 1) ? 14 : 0,
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ],
-                  );
-                }
-            ),
-          )
-        ]
-      ],
+                          if(friendModel.friendsThumbs![index]!.type == 'video')...[
+                            Container(
+                              width: 74,
+                              height: 76,
+                              margin: EdgeInsets.only(
+                                left: index == 0 ? 25 : 8,
+                                right: index == (friendModel.friendsThumbs!
+                                    .length - 1) ? 14 : 0,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      );
+                    }
+                ),
+              )
+            ]
+          ],
+        ),
+      ),
     );
+  }
+
+  bool  hasImages(FriendModel friendModel){
+    return friendModel.friendsThumbs?.isNotEmpty ?? false;
+
   }
 
   Widget rankedItemSelect(int index, context){

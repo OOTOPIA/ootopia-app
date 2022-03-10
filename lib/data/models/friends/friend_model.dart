@@ -14,6 +14,7 @@ class FriendModel {
   final String? city;
   final String? state;
   final String? country;
+  bool? remove = false;
 
   FriendModel({
     required this.id,
