@@ -89,7 +89,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         if (item.contains('@')) {
           _inputController.text += '$item';
         } else {
-          _inputController.text += ' $item ';
+          _inputController.text += ' $item';
         }
       }
 
@@ -144,19 +144,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
-      var getLastString = value.split(RegExp("ㅤ@"));
-      if (getLastString.last.contains('@')) {
-        setState(() {
-          seSelectedUser = true;
-        });
-        var startName = getLastString.last.split('@').last;
-        var finishName = startName.split(RegExp("ㅤ"));
-        await commentStore.searchUser(finishName.first);
-      } else {
-        setState(() {
-          seSelectedUser = false;
-        });
-      }
+      Future.delayed(Duration(seconds: 2), () async {
+        var getLastString = value.split(RegExp("ㅤ@"));
+        if (getLastString.last.contains('@')) {
+          setState(() {
+            seSelectedUser = true;
+          });
+          var startName = getLastString.last.split('@').last;
+          var finishName = startName.split(RegExp("ㅤ"));
+          await commentStore.searchUser(finishName.first);
+        } else {
+          setState(() {
+            seSelectedUser = false;
+          });
+        }
+      });
     } else {
       commentStore.listUsersMarket!.clear();
       setState(() {

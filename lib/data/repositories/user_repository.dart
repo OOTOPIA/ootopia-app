@@ -352,7 +352,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         throw Exception(res.data);
       }
       List<UserSearchModel> list = [];
-      print(res.data);
       list =
           (res.data as List).map((e) => UserSearchModel.fromJson(e)).toList();
       return list;
