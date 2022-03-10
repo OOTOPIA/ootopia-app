@@ -63,6 +63,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
+
   Widget body() {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
@@ -437,32 +438,34 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ))
+                    ]else ...[
+                      SizedBox(
+                        height: 30,
+                        child: TextButton(onPressed: (){
+                          Future.delayed(Duration(milliseconds: 80),(){
+                            _goToProfile(friendModel.id);
+                          });
+                        },
+                            child: Row(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.seeProfile,
+                                  style: TextStyle(
+                                    color: LightColors.blue,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(Icons.arrow_forward_ios_sharp,
+                                  color: LightColors.blue,
+                                  size: 12,
+                                )
+                              ],
+                            )),
+                      )
                     ],
 
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(onPressed: (){
-                        Future.delayed(Duration(milliseconds: 80),(){
-                          _goToProfile(friendModel.id);
-                        });
-                      },
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.seeProfile,
-                                style: TextStyle(
-                                  color: LightColors.blue,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Icon(Icons.arrow_forward_ios_sharp,
-                                color: LightColors.blue,
-                                size: 12,
-                              )
-                            ],
-                          )),
-                    )
+
 
                   ],
                 ),

@@ -38,64 +38,101 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: 16, left: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Observer(
+        builder: (context) {
+          return Container(
+            margin: EdgeInsets.only(bottom: 16),
+            child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 14.0),
-                  child: Text(AppLocalizations.of(context)!.friends,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: (){
-                    Future.delayed(Duration(milliseconds: 100),(){
-                      controller.insertPage(CircleOfFriendPage(userId: widget.userId));
-                    });
-                  },
+                  padding: EdgeInsets.only(right: 16, left: 24),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(AppLocalizations.of(context)!.seeAll,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: LightColors.blue,
-                        ),),
-                      SizedBox(width: 4),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: LightColors.blue,
-                        size: 14,
+                      if(!circleFriendsWidgetStore.isLoading)...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 14.0),
+                          child: Text('${circleFriendsWidgetStore.friendsDate?.total ?? 0} ${AppLocalizations.of(context)!.friends}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
 
-                      )
+                      if(circleFriendsWidgetStore.isLoading)...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 14.0, bottom: 18),
+                          child: Shimmer.fromColors(
+                            baseColor:  Colors.grey[300] ?? Colors.blue,
+                            highlightColor:  Colors.grey[100] ?? Colors.blue,
+                            child: Container(
+                              height: 14,
+                              width: 80,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 14.0, bottom: 18),
+                          child: Shimmer.fromColors(
+                            baseColor:  Colors.grey[300] ?? Colors.blue,
+                            highlightColor:  Colors.grey[100] ?? Colors.blue,
+                            child: Container(
+                              height: 14,
+                              width: 80,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ]else if(circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false)...[
+                        TextButton(
+                          onPressed: (){
+                            Future.delayed(Duration(milliseconds: 100),(){
+                              controller.insertPage(CircleOfFriendPage(userId: widget.userId));
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Text(AppLocalizations.of(context)!.seeAll,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: LightColors.blue,
+                                ),),
+                              SizedBox(width: 4),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: LightColors.blue,
+                                size: 14,
+
+                              )
+                            ],
+                          ),
+                        ),
+                      ]
                     ],
                   ),
+
                 ),
+
+
+
+                if((circleFriendsWidgetStore.isLoading ||
+                    (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false))
+                )...[
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: widget.isUserLogged ? 70 : 56,
+                      child: list(circleFriendsWidgetStore.friendsDate?.friends ?? []))
+                ],
               ],
             ),
-
-          ),
-          Observer(
-            builder: (_) {
-              return Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: widget.isUserLogged ? 70 : 56,
-                  child: list(circleFriendsWidgetStore.friendsDate?.friends ?? []));
-            }
-          ),
-        ],
-      ),
+          );
+        }
     );
   }
 
@@ -268,6 +305,5 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
       ),
     );
   }
-
 
 }
