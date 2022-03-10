@@ -80,21 +80,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   void addUserInText(UserSearchModel e) {
     commentStore.listUsersMarket?.add(e.id);
-    setState(() {
-      var list = _inputController.text.trim().split('@');
-      list.removeLast();
-      list.add('ㅤ@${e.fullname}ㅤ');
-      _inputController.clear();
-      for (var item in list) {
-        if (item.contains('@')) {
-          _inputController.text += '$item';
-        } else {
-          _inputController.text += ' $item';
-        }
-      }
 
-      _inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: _inputController.text.length - 1));
+    var name = 'ㅤ@${e.fullname}ㅤ';
+    var s = 0;
+    var text = _inputController.text;
+    for (var i = text.length - 1; i > 0; i--) {
+      if (text[i].contains('@')) {
+        _inputController.text = text.replaceRange(i, i + s + 1, name);
+        break;
+      }
+      s++;
+    }
+
+    _inputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _inputController.text.length));
+    setState(() {
       seSelectedUser = false;
     });
   }
