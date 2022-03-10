@@ -191,7 +191,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                       children: [
                         SvgPicture.asset(
                           'assets/icons/ooz-coin-blue-small.svg',
-                          color: Theme.of(context).accentColor,
+                          color: LightColors.blue,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8),
@@ -200,7 +200,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                                 ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
                                 : '0,00',
                             style: TextStyle(
-                              color: Theme.of(context).accentColor,
+                              color: LightColors.blue,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
