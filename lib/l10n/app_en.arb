@@ -477,7 +477,8 @@
 
     "addFriends" : "Add friends",
     "addFriend" : "Add friend",
-    "removeFriend" : "Remove",
+    "remove" : "Remove",
+    "removeFriend" : "Remove friend",
     "seeProfile" : "See profile",
     "searchFriendsMsg" : "Search and add people to your circle of friends",
     "searchFriends" : "Search friends",

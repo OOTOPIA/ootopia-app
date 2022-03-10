@@ -156,6 +156,45 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
     });
   }
 
+  final _$isFriendAtom = Atom(name: '_ProfileScreenStoreBase.isFriend');
+
+  @override
+  bool? get isFriend {
+    _$isFriendAtom.reportRead();
+    return super.isFriend;
+  }
+
+  @override
+  set isFriend(bool? value) {
+    _$isFriendAtom.reportWrite(value, super.isFriend, () {
+      super.isFriend = value;
+    });
+  }
+
+  final _$addFriendAsyncAction =
+      AsyncAction('_ProfileScreenStoreBase.addFriend');
+
+  @override
+  Future<bool> addFriend() {
+    return _$addFriendAsyncAction.run(() => super.addFriend());
+  }
+
+  final _$removeFriendAsyncAction =
+      AsyncAction('_ProfileScreenStoreBase.removeFriend');
+
+  @override
+  Future<bool> removeFriend() {
+    return _$removeFriendAsyncAction.run(() => super.removeFriend());
+  }
+
+  final _$getIfIsFriendAsyncAction =
+      AsyncAction('_ProfileScreenStoreBase.getIfIsFriend');
+
+  @override
+  Future<bool> getIfIsFriend(String userId) {
+    return _$getIfIsFriendAsyncAction.run(() => super.getIfIsFriend(userId));
+  }
+
   final _$getProfileDetailsAsyncAction =
       AsyncAction('_ProfileScreenStoreBase.getProfileDetails');
 
@@ -183,6 +222,7 @@ loadingProfileError: ${loadingProfileError},
 loadingPostsError: ${loadingPostsError},
 profile: ${profile},
 postsList: ${postsList},
+isFriend: ${isFriend},
 postsOffset: ${postsOffset},
 hasMorePosts: ${hasMorePosts},
 loadingPosts: ${loadingPosts}

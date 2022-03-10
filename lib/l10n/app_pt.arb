@@ -475,7 +475,8 @@
 
     "addFriends" : "Adicionar amigos",
     "addFriend" : "Adicionar amigo",
-    "removeFriend" : "Remover",
+    "remove" : "Remover",
+    "removeFriend" : "Remover amigo",
     "seeProfile" : "Ver perfil",
     "searchFriendsMsg" : "Pesquise e adicione pessoas ao seu círculo de amigos",
     "searchFriends" : "Buscar amigos",

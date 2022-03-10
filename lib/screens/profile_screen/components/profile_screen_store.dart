@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/profile_model.dart';
+import 'package:ootopia_app/data/repositories/friends_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
@@ -11,6 +12,7 @@ class ProfileScreenStore = _ProfileScreenStoreBase with _$ProfileScreenStore;
 
 abstract class _ProfileScreenStoreBase with Store {
   UserRepositoryImpl repository = UserRepositoryImpl();
+  FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
   PostRepositoryImpl postsRepository = PostRepositoryImpl();
 
   @observable
@@ -37,6 +39,9 @@ abstract class _ProfileScreenStoreBase with Store {
   @observable
   bool _hasMorePosts = false;
 
+  @observable
+  bool? isFriend;
+
   @computed
   int get postsOffset => _postsOffset;
 
@@ -47,6 +52,22 @@ abstract class _ProfileScreenStoreBase with Store {
   bool get loadingPosts => _loadingPosts;
 
   int get maxPostsPerPage => 12;
+
+  @action
+  Future<bool> addFriend() async {
+    return await friendsRepositoryImpl.addFriend(profile!.id);
+  }
+
+  @action
+  Future<bool> removeFriend() async {
+    return await friendsRepositoryImpl.removeFriends(profile!.id);
+  }
+
+  @action
+  Future<bool> getIfIsFriend(String userId) async {
+    isFriend =  await friendsRepositoryImpl.getIfIsFriends(userId);
+    return isFriend!;
+  }
 
   @action
   Future<Profile?> getProfileDetails(String userId) async {

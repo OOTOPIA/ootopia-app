@@ -18,6 +18,7 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -67,7 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!profileUserIsLoggedUser) {
         store = ProfileScreenStore();
+        await store!.getIfIsFriend(profileUserId);
       }
+
 
       await store?.getProfileDetails(profileUserId);
       await homeStore.getCurrentUser(profileUserId);
@@ -220,6 +223,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: GlobalConstants.of(context).spacingNormal,
                                   )
                                 ],
+                            ],
+
+                            if(!isLoggedInUserProfile && store?.isFriend != null)...[
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular
+                                            (20),
+                                          side: BorderSide.none),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.symmetric(horizontal: 24)),
+                                  ),
+                                  onPressed: () {
+                                    Future.delayed(Duration(milliseconds: 100),(){
+                                     if( store!.isFriend == true){
+                                       store!.addFriend();
+                                     }else{
+                                       store!.removeFriend();
+                                     }
+                                    });
+                                  },
+                                  child: Text(store!.isFriend == true ?
+                                  AppLocalizations.of(context)!.addFriend:
+                                  AppLocalizations.of(context)!.removeFriend,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                              SizedBox(
+                                height: 16,
+                              )
                             ],
 
                             Text(

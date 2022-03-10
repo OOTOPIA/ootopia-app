@@ -11,6 +11,8 @@ abstract class FriendsRepository {
   Future<FriendsDataModel> getFriends(String userId, int page, int limit, {required String orderBy, required String sortingType});
   Future<List> searchFriends(String name, int page, int limit);
   Future<bool> addFriend(String userId);
+  Future<bool> removeFriends(String userId);
+  Future<bool> getIfIsFriends(String userId);
 }
 
 const Map<String, String> API_HEADERS = {
@@ -103,6 +105,24 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
   }
 
   Future<bool> removeFriends(String userId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
+        headers: await this.getHeaders(),
+      );
+      if (response.statusCode == 200) {
+        return  true;
+      } else {
+        print('response.statusCode: ${response.statusCode}');
+        return  false;
+      }
+    } catch (error) {
+      print('error: $error');
+      return  false;
+    }
+  }
+
+  Future<bool> getIfIsFriends(String userId) async {
     try {
       final response = await http.delete(
         Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),

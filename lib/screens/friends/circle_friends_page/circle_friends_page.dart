@@ -441,7 +441,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   });
                                 },
                                 child: Text(
-                                  AppLocalizations.of(context)!.removeFriend,
+                                  AppLocalizations.of(context)!.remove,
                                   style: TextStyle(
                                     color: LightColors.blue,
                                     fontSize: 12,
