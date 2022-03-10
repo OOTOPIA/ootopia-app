@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_page/circle_friends_page.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -44,6 +45,18 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             margin: EdgeInsets.only(bottom: 16),
             child: Column(
               children: [
+                Visibility(
+                  visible: !widget.isUserLogged,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: GlobalConstants.of(context).screenHorizontalSpace),
+                    child: Divider(
+                      height: 1,
+                      color: Color(0xff707070).withOpacity(.5),
+                    ),
+                  ),
+                ),
+
                 Padding(
                   padding: EdgeInsets.only(right: 16, left: 24),
                   child: Row(
@@ -53,13 +66,25 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                       if(!circleFriendsWidgetStore.isLoading)...[
                         Padding(
                           padding: const EdgeInsets.only(top: 14.0),
-                          child: Text('${circleFriendsWidgetStore.friendsDate?.total ?? 0} ${AppLocalizations.of(context)!.friends}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
+                          child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: '${circleFriendsWidgetStore.friendsDate?.total ?? 0} ',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: LightColors.blue,
+                                        fontWeight: FontWeight.w500)
+
+                                ),
+                                TextSpan(
+                                    text: AppLocalizations.of(context)!.friends,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: LightColors.black,
+                                        fontWeight: FontWeight.w500)
+
+                                ),
+                              ])),
                         ),
                       ],
 
@@ -121,15 +146,17 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
 
 
-                if((circleFriendsWidgetStore.isLoading ||
-                    (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false))
-                )...[
-                  Container(
+
+                Visibility(
+                  visible: (circleFriendsWidgetStore.isLoading ||
+                      (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false)),
+                  child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: widget.isUserLogged ? 70 : 56,
-                      child: list(circleFriendsWidgetStore.friendsDate?.friends ?? []))
-                ],
+                      child: list(circleFriendsWidgetStore.friendsDate?.friends ?? [])),
+                )
               ],
+
             ),
           );
         }

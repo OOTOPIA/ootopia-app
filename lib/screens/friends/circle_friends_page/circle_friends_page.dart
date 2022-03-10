@@ -153,9 +153,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                             },));
                           });
                         },
-                        child: Text(MediaQuery.of(context).size.width <= 414 ?
-                        AppLocalizations.of(context)!.add.toLowerCase():
-                        AppLocalizations.of(context)!.addFriend.toLowerCase(),
+                        child: Text(MediaQuery.of(context).size.width <= 300 ?
+                        AppLocalizations.of(context)!.add:
+                        AppLocalizations.of(context)!.addFriend,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -409,35 +409,41 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                     Spacer(),
 
                     if(isPageOfUserLogged())...[
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
+                      SizedBox(
+                        height: 24,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              elevation: MaterialStateProperty.all<double>(0.0),                              fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 24)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular
                                     (20),
-                                  side: BorderSide.none),
+                                  side: BorderSide(
+                                      color: LightColors.blue),
+                                  //borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>
+                                (Colors.transparent),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.symmetric(horizontal: 14)),
                             ),
-                            backgroundColor: MaterialStateProperty.all<Color>
-                              (LightColors.errorRed),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.symmetric(horizontal: 24)),
-                          ),
-                          onPressed: () {
-                            Future.delayed(Duration(milliseconds: 100),(){
-                              circleFriendsStore.removeFriends(friendModel.id);
-                              setState(() {});
-                            });
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.removeFriend.toLowerCase(),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ))
+                            onPressed: () {
+                              Future.delayed(Duration(milliseconds: 100),(){
+                                circleFriendsStore.removeFriends(friendModel.id);
+                                setState(() {});
+                              });
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.removeFriend,
+                              style: TextStyle(
+                                color: LightColors.blue,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                      )
                     ]else ...[
                       SizedBox(
                         height: 30,
