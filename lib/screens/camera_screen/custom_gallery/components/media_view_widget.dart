@@ -3,6 +3,7 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_controls.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_crop.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -31,6 +32,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
   FlickManager? flickManager;
   VideoPlayerController? _videoPlayerController;
   bool controlIsVisible = true;
+  Image? cropImage;
 
   @override
   void initState() {
@@ -50,7 +52,6 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
               isLoading = false;
             });
             _videoPlayerController!.setLooping(true);
-            // _videoPlayerController!.play();
             flickManager =
                 FlickManager(videoPlayerController: _videoPlayerController!);
           });
@@ -135,9 +136,11 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                                 ? BoxFit.fitHeight
                                 : BoxFit.fitWidth,
                             alignment: FractionalOffset.center,
-                            image: FileImage(
-                              File(widget.mediaFilePath),
-                            ),
+                            image: cropImage != null
+                                ? cropImage!.image
+                                : FileImage(
+                                    File(widget.mediaFilePath),
+                                  ),
                           ),
                         ),
                       ),
@@ -147,7 +150,19 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                       right: 30,
                       bottom: 35,
                       child: GestureDetector(
-                        onTap: () => print('work'),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CustomCrop(
+                              image: File(widget.mediaFilePath),
+                              onChanged: (value) {
+                                setState(() {
+                                  cropImage = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
                         child: Container(
                           width: 25,
                           height: 25,

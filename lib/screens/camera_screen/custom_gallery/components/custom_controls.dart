@@ -12,13 +12,10 @@ class CustomControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        flickManager.flickDisplayManager!.handleVideoTap();
-        print("tapped one time!!");
-      },
+      onTap: () => flickManager.flickDisplayManager!.handleVideoTap(),
       child: Container(
         color: Colors.transparent,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Stack(
           children: <Widget>[
             FlickAutoHideChild(
@@ -41,7 +38,7 @@ class CustomControls extends StatelessWidget {
             ),
             Positioned(
               bottom: 5,
-              right: 5,
+              right: 10,
               child: FlickAutoHideChild(
                 autoHide: true,
                 showIfVideoNotInitialized: false,
@@ -49,15 +46,18 @@ class CustomControls extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Container(
+                      width: 25,
+                      height: 25,
                       decoration: BoxDecoration(
-                        color: Colors.black38,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: FlickSoundToggle(
                         toggleMute: () {
                           flickManager.flickControlManager!.toggleMute();
                         },
-                        color: Colors.white,
+                        size: 20,
+                        color: Colors.black,
                       ),
                     ),
                   ],
