@@ -49,7 +49,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       };
 
       final response = await ApiClient.api().get(
-        dotenv.env['API_URL']! + "friends/$userId",
+        dotenv.env['API_URL']! + "friends/by-user/$userId",
         queryParameters: queryParams,
       );
       if (response.statusCode == 200) {
@@ -124,18 +124,17 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
 
   Future<bool> getIfIsFriends(String userId) async {
     try {
-      final response = await http.delete(
-        Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
-        headers: await this.getHeaders(),
+      final response = await ApiClient.api().get(
+        dotenv.env['API_URL']! + "friends/$userId",
       );
       if (response.statusCode == 200) {
-        return  true;
+        bool isFriend = response.data["isFriend"] ?? false;
+        return  isFriend;
       } else {
-        print('response.statusCode: ${response.statusCode}');
         return  false;
       }
     } catch (error) {
-      print('error: $error');
+      print('\nerror: $error');
       return  false;
     }
   }

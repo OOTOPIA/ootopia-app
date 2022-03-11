@@ -60,11 +60,8 @@ abstract class AddFriendsStoreBase with Store {
   }
 
   @action
-  Future<void> addFriend(String userId) async {
+  Future<bool> addFriend(String userId) async {
     usersIdAdded.add(userId);
-    bool status = await friendsRepositoryImpl.addFriend(userId);
-    if(!status){
-      usersIdAdded.remove(userId);
-    }
+    return await friendsRepositoryImpl.addFriend(userId);
   }
 }

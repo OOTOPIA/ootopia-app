@@ -6,24 +6,24 @@ part 'friend_model.g.dart';
 
 @JsonSerializable()
 class FriendModel {
-  final String? id;
-  final String? createAt;
+  final String id;
   List<FriendThumbModel?>? friendsThumbs;
   final String? fullname;
   final String? photoUrl;
   final String? city;
   final String? state;
   final String? country;
+  bool? isFriend;
   bool? remove = false;
 
   FriendModel({
     required this.id,
-    required this.createAt,
     this.friendsThumbs,
     this.fullname,
     this.photoUrl,
     this.city,
     this.state,
+    this.isFriend,
     this.country, });
 
 

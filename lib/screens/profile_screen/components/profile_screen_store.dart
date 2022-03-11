@@ -55,11 +55,13 @@ abstract class _ProfileScreenStoreBase with Store {
 
   @action
   Future<bool> addFriend() async {
-    return await friendsRepositoryImpl.addFriend(profile!.id);
+    isFriend = true;
+    return  await friendsRepositoryImpl.addFriend(profile!.id);
   }
 
   @action
   Future<bool> removeFriend() async {
+    isFriend = false;
     return await friendsRepositoryImpl.removeFriends(profile!.id);
   }
 

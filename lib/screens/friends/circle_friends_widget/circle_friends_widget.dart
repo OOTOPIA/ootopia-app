@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_page/circle_friends_page.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -44,6 +45,8 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
           return Container(
             margin: EdgeInsets.only(bottom: 16),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Visibility(
                   visible: !widget.isUserLogged,
@@ -117,7 +120,16 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                         TextButton(
                           onPressed: (){
                             Future.delayed(Duration(milliseconds: 100),(){
-                              controller.insertPage(CircleOfFriendPage(userId: widget.userId));
+                              controller.insertPage(CircleOfFriendPage(
+                                userId: widget.userId,
+                                removeFriend: (FriendModel friend) {
+                                  if(widget.isUserLogged){
+                                    circleFriendsWidgetStore.friendsDate!.friends!.removeWhere((element) => element!.id == friend.id);
+                                    circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! - 1;
+                                    setState(() {});
+                                  }
+                                },
+                              ));
                             });
                           },
                           child: Row(
@@ -154,6 +166,14 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                       width: MediaQuery.of(context).size.width,
                       height: widget.isUserLogged ? 70 : 56,
                       child: list(circleFriendsWidgetStore.friendsDate?.friends ?? [])),
+                ),
+                Visibility(
+                  visible: !(circleFriendsWidgetStore.isLoading ||
+                      (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false)) && widget.isUserLogged,
+                  child: Container(
+                      height: 70,
+                      margin: EdgeInsets.only(top: 12),
+                      child: buttonToAddFriends()),
                 )
               ],
 
@@ -278,7 +298,25 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen({"id": userId,},));
+    controller.insertPage(ProfileScreen({"id": userId,},
+      addOrRemoveFriend:(bool add, Profile profile ){
+        if(widget.isUserLogged){
+          if(add){
+            FriendModel friend = FriendModel(
+                id: userId,
+                fullname: profile.id,
+                photoUrl: profile.photoUrl
+            );
+            circleFriendsWidgetStore.friendsDate!.friends!.add(friend);
+            circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! + 1;
+          }else{
+            circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! - 1;
+            circleFriendsWidgetStore.friendsDate!.friends!.removeWhere((element) => element!.id == userId);
+          }
+          setState(() {});
+        }
+      },
+    ));
   }
 
   Widget buttonToAddFriends() {
@@ -294,10 +332,22 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             height: 56,
             child: RawMaterialButton(
               onPressed: () {
-                Future.delayed(Duration(milliseconds: 100),() async {
-                  controller.insertPage(AddFriends(updateFriends: () async {
-                    await circleFriendsWidgetStore.getFriends(widget.userId);
-                  }));
+                Future.delayed(Duration(milliseconds: 100),()  {
+                  controller.insertPage(
+                      AddFriends(
+                          addOrRemoveFriend: (bool add ,FriendModel friendModel) {
+                            print('\n\n CircleWidget: ADD: $add');
+                            if(widget.isUserLogged){
+                              if(add){
+                                circleFriendsWidgetStore.friendsDate!.friends!.add(friendModel);
+                                circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! +1;
+                              }else{
+                                circleFriendsWidgetStore.friendsDate!.friends!.removeWhere((element) => element!.id == friendModel.id);
+                                circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! -1;
+                              }
+                              setState(() {});
+                            }
+                          }));
                 });
               },
               elevation: 0,

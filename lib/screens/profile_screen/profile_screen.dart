@@ -31,8 +31,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
+  Function? addOrRemoveFriend;
 
-  ProfileScreen([this.args]);
+  ProfileScreen( this.args, {this.addOrRemoveFriend});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -242,14 +243,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   onPressed: () {
                                     Future.delayed(Duration(milliseconds: 100),(){
-                                     if( store!.isFriend == true){
+                                     if( store!.isFriend == false){
                                        store!.addFriend();
+                                       widget.addOrRemoveFriend!(true, store!.profile, );
                                      }else{
+                                       widget.addOrRemoveFriend!(false, store!.profile);
                                        store!.removeFriend();
                                      }
                                     });
                                   },
-                                  child: Text(store!.isFriend == true ?
+                                  child: Text(store!.isFriend == false ?
                                   AppLocalizations.of(context)!.addFriend:
                                   AppLocalizations.of(context)!.removeFriend,
                                     style: TextStyle(

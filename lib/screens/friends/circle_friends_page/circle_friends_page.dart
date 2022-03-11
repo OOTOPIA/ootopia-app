@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/data/models/users/profile_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -17,8 +18,9 @@ import 'circle_friends_store.dart';
 
 class CircleOfFriendPage extends StatefulWidget {
   final String userId;
+  Function? removeFriend;
 
-  const CircleOfFriendPage({Key? key,required this.userId}) : super(key: key);
+  CircleOfFriendPage({Key? key,required this.userId, this.removeFriend}) : super(key: key);
 
 
   @override
@@ -146,7 +148,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         ),
                         onPressed: () {
                           Future.delayed(Duration(milliseconds: 100),(){
-                            controller.insertPage(AddFriends(updateFriends: (friendModel) {
+                            controller.insertPage(AddFriends(addOrRemoveFriend: (FriendModel friendModel) {
                               circleFriendsStore.friendsDate!.friends!.add(friendModel);
                               circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
                               setState(() {});
@@ -210,12 +212,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
               ),
             ),
 
-
-
-
-
-            if(circleFriendsStore.isLoading ||
-                (circleFriendsStore.friendsDate?.friends?.isEmpty ?? true))...[
+            if(circleFriendsStore.isLoading)...[
               ListView.builder(
                   itemCount: 11,
                   shrinkWrap: true,
@@ -223,6 +220,33 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                   itemBuilder: (BuildContext context, int index) {
                     return  itemShimmer();
                   }
+              ),
+            ]else  if(allFriendsIsHide())...[
+              Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.fromLTRB(30, 48, 30, 8),
+                child: Text(AppLocalizations.of(context)!.userNotFound,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    color: LightColors.grey,
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.fromLTRB(48, 0, 48, 15),
+                child: Text(AppLocalizations.of(context)!.userNotFoundMsg,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: LightColors.grey.withOpacity(0.7),
+                  ),
+                ),
               ),
             ]else...[
               ListView.builder(
@@ -437,6 +461,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 onPressed: () {
                                   Future.delayed(Duration(milliseconds: 100),(){
                                     circleFriendsStore.removeFriends(friendModel, index);
+                                    if(widget.removeFriend != null){
+                                      widget.removeFriend!(friendModel);
+                                    }
                                     setState(() {});
                                   });
                                 },
@@ -573,11 +600,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-  bool  hasImages(FriendModel friendModel){
-    return friendModel.friendsThumbs?.isNotEmpty ?? false;
-
-  }
-
   Widget rankedItemSelect(int index, context){
     return  Material(
       color: orderBySelected == orderBy[index] ?
@@ -610,17 +632,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       fontWeight: FontWeight.w400,
                       fontSize: 16
                   ),),
-                Container(
-                  height: 13,
-                  width: 13,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                    color: orderBySelected == orderBy[index] ?
-                    LightColors.blue :
-                    LightColors.white,
-                    shape: BoxShape.circle,
-                  ),
-                )
               ],
             ),
           ),
@@ -630,7 +641,26 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen({"id": userId,},));
+    controller.insertPage(ProfileScreen(
+      {"id": userId,},
+      addOrRemoveFriend: (bool add, Profile profile ){
+        if(isPageOfUserLogged()){
+          if(add){
+            FriendModel friend = FriendModel(
+                id: userId,
+                fullname: profile.id,
+                photoUrl: profile.photoUrl
+            );
+            circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
+            circleFriendsStore.friendsDate!.friends!.add(friend);
+          }else{
+            circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! - 1;
+            circleFriendsStore.friendsDate!.friends!.removeWhere((element) => element!.id == userId);
+          }
+          setState(() {});
+        }
+      },
+    ));
   }
 
   void _showDialog(BuildContext context) {
@@ -674,5 +704,18 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     return widget.userId == authStore.currentUser?.id;
   }
 
+  bool  hasImages(FriendModel friendModel){
+    return friendModel.friendsThumbs?.isNotEmpty ?? false;
+  }
+
+  bool allFriendsIsHide(){
+    bool allFriendsIsHide = true;
+    circleFriendsStore.friendsDate!.friends!.forEach((element) {
+      if(element?.remove != true ){
+        allFriendsIsHide = false;
+      }
+    });
+    return allFriendsIsHide;
+  }
 
 }

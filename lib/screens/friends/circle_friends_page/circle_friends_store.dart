@@ -71,10 +71,9 @@ abstract class CircleFriendsStoreBase with Store {
 
   @action
   Future<void> removeFriends(FriendModel user, index) async {
-    //friendsDate!.friends!.removeWhere((element) => element!.id == user.id);
     friendsDate!.friends![index]!.remove = true;
     friendsDate!.total = friendsDate!.total! - 1;
-    friendsRepositoryImpl.removeFriends(user.id!);
+    friendsRepositoryImpl.removeFriends(user.id);
   }
 
   @action
