@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_controls.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -29,6 +30,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
   bool isLoading = false;
   FlickManager? flickManager;
   VideoPlayerController? _videoPlayerController;
+  bool controlIsVisible = true;
 
   @override
   void initState() {
@@ -47,6 +49,8 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
             setState(() {
               isLoading = false;
             });
+            _videoPlayerController!.setLooping(true);
+            // _videoPlayerController!.play();
             flickManager =
                 FlickManager(videoPlayerController: _videoPlayerController!);
           });
@@ -107,7 +111,9 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                                 flickManager: flickManager!,
                                 flickVideoWithControls: FlickVideoWithControls(
                                   controls: widget.shouldCustomFlickManager
-                                      ? null
+                                      ? CustomControls(
+                                          flickManager: flickManager!,
+                                        )
                                       : FlickPortraitControls(),
                                 ),
                               ),
@@ -136,57 +142,6 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                         ),
                       ),
               ),
-              GestureDetector(
-                onTap: () => flickManager?.flickControlManager!.play(),
-                child: Container(
-                  child: Text('Tenta aí'),
-                ),
-              ),
-              widget.mediaType == "video" &&
-                      widget.shouldCustomFlickManager &&
-                      !isLoading
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(
-                            GlobalConstants.of(context).spacingMedium,
-                          ),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.black38,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: SizedBox(
-                            width: 28,
-                            height: 28,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              icon: Icon(
-                                  flickManager!.flickControlManager!.isMute
-                                      ? Icons.volume_off
-                                      : Icons.volume_up,
-                                  size: 20),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    if (!flickManager!
-                                        .flickControlManager!.isMute) {
-                                      flickManager!.flickControlManager!.mute();
-                                    } else {
-                                      flickManager!.flickControlManager!
-                                          .unmute();
-                                    }
-                                  },
-                                );
-                              },
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
               widget.mediaType == "image" && widget.showCropWidget
                   ? Positioned(
                       right: 30,
