@@ -332,7 +332,6 @@ class _TimelinePageState extends State<TimelinePage>
                 },
                 body: Column(
                   children: [
-                    //RegenerationGame(),
                     InviteYourFriends(),
                     Expanded(
                       child: Center(
