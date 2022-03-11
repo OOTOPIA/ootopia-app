@@ -81,14 +81,13 @@ abstract class CommentStoreBase with Store {
 
   @action
   Future<void> searchUser(String fullName) async {
-    if (viewState != ViewState.loadingNewData) {
-      listAllUsers.clear();
-    }
     try {
       viewState = ViewState.loading;
       var response =
           await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
       hasMoreUsers = response.length == 10;
+      listAllUsers.clear();
+
       listAllUsers.addAll(response);
       viewState = ViewState.done;
     } catch (e) {

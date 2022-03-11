@@ -35,6 +35,8 @@ import 'package:uni_links/uni_links.dart';
 import 'package:flutter/services.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
+import 'components/invite_your_friends.dart';
+
 bool _initialUriIsHandled = false;
 
 class TimelinePage extends StatefulWidget {
@@ -330,7 +332,7 @@ class _TimelinePageState extends State<TimelinePage>
                 },
                 body: Column(
                   children: [
-                    RegenerationGame(),
+                    InviteYourFriends(),
                     Expanded(
                       child: Center(
                         child: body(),

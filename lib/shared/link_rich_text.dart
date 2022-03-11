@@ -34,27 +34,28 @@ class LinkRichText extends StatelessWidget {
     int positionEnd = 0;
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
       List<String> textFragmented = [];
-      for (var item in userCommentsList!) {
+      for (var item in userCommentsList!.reversed) {
         int startname = text.indexOf('ㅤ@', positionEnd);
         if (startname != -1) {
           allName.add({
             "id": item.id,
-            "name": " @${item.fullname}",
+            "name": " @${item.fullname} ",
             "start": startname,
-            "end": startname + item.fullname.length
+            "end": startname + item.fullname.length + 2
           });
-          positionEnd = startname + item.fullname.length;
+          positionEnd = startname + item.fullname.length + 2;
         }
       }
       var textIdList = [];
+      var lastEndName = 0;
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
       for (var countText = 0; countText < text.length; countText++) {
         for (var countAllName = 0;
             countAllName < allName.length;
             countAllName++) {
           if (!textIdList.contains(allName[countAllName]['id']) &&
-              countText >= allName[countAllName]['start'] &&
-              countText <= allName[countAllName]['end']) {
+              countText > allName[countAllName]['start'] &&
+              countText < allName[countAllName]['end']) {
             textFragmented.add(allName[countAllName]['name']);
             textIdList.add(allName[countAllName]['id']);
             countText = allName[countAllName]['end'];
@@ -65,9 +66,12 @@ class LinkRichText extends StatelessWidget {
             countText = allName[countAllName]['start'];
             break;
           }
+          lastEndName = allName[countAllName]['end'];
         }
       }
-
+      if (text.length > lastEndName) {
+        textFragmented.add(text.substring(lastEndName, text.length));
+      }
       textFragmented.forEach((comment) {
         textSpanWidget.add(
           TextSpan(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
 
 class ListOfUsers extends StatefulWidget {
   final CommentStore commentStore;
@@ -28,7 +29,6 @@ class _ListOfUsersState extends State<ListOfUsers> {
       child: Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height * .30,
-        padding: EdgeInsets.only(left: 16, top: 16),
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           controller: widget.scrollController,
@@ -38,40 +38,45 @@ class _ListOfUsersState extends State<ListOfUsers> {
                 child: CircularProgressIndicator(),
               );
             }
-            return Column(
+            return Stack(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: widget.commentStore.listAllUsers
-                      .map(
-                        (e) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              widget.addUserInText!(e);
-                            },
-                            child: Row(
-                              children: [
-                                if (e.photoUrl != null)
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(e.photoUrl!),
-                                  )
-                                else
-                                  CircleAvatar(
-                                    radius: 25,
-                                    child: Image.asset(
-                                      'assets/icons/user.png',
+                BackgroundButterflyTop(positioned: -59),
+                Padding(
+                  padding: EdgeInsets.only(left: 16, top: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: widget.commentStore.listAllUsers
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: InkWell(
+                              onTap: () {
+                                widget.addUserInText!(e);
+                              },
+                              child: Row(
+                                children: [
+                                  if (e.photoUrl != null)
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage:
+                                          NetworkImage(e.photoUrl!),
+                                    )
+                                  else
+                                    CircleAvatar(
+                                      radius: 25,
+                                      child: Image.asset(
+                                        'assets/icons/user.png',
+                                      ),
                                     ),
-                                  ),
-                                SizedBox(width: 8),
-                                Text(e.fullname),
-                              ],
+                                  SizedBox(width: 8),
+                                  Text(e.fullname),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                  ),
                 ),
                 if (widget.commentStore.viewState == ViewState.loadingNewData)
                   Center(
