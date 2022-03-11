@@ -1,0 +1,148 @@
+import 'package:flutter/material.dart';
+import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/shared/link_rich_text.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+class ItemComment extends StatelessWidget {
+  final Comment comment;
+  final bool visibleDelete;
+  final CommentStore commentStore;
+  final String postId;
+  final Function() getData;
+  const ItemComment({
+    Key? key,
+    required this.comment,
+    required this.visibleDelete,
+    required this.commentStore,
+    required this.postId,
+    required this.getData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            comment.photoUrl == 'null' || comment.photoUrl == null
+                ? CircleAvatar(
+                    radius: 19,
+                    backgroundImage: AssetImage('assets/icons/user.png'),
+                  )
+                : CircleAvatar(
+                    radius: 19,
+                    backgroundImage: NetworkImage(comment.photoUrl!),
+                  ),
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    comment.username!,
+                    style: TextStyle(
+                      color: LightColors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.60,
+                        child: LinkRichText(
+                          comment.text,
+                          userCommentsList: comment.userComments,
+                          maxLines: 10,
+                        ),
+                      ),
+                      Visibility(
+                        visible: visibleDelete,
+                        child: GestureDetector(
+                          onTap: () {
+                            deleteComment(comment, context);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.delete,
+                            style: TextStyle(
+                              color: LightColors.grey,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 25,
+        )
+      ],
+    );
+  }
+
+  void deleteComment(Comment comment, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(
+              AppLocalizations.of(context)!.commentsWillBePermanentlyRemoved,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.cancel,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  Navigator.of(context).pop();
+                  await commentStore.deleteComments(postId, comment.id);
+                  commentStore.listComments.clear();
+                  commentStore.currentPageComment = 1;
+                  getData();
+                },
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+}

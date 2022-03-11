@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41.62" height="41.619" viewBox="0 0 41.62 41.619">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.275" cy="0.047" r="0.989" gradientTransform="matrix(0.454, 0.891, -1.517, 0.772, 0.265, -0.228)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#3b64b8"/>
+      <stop offset="0.183" stop-color="#3f61b5"/>
+      <stop offset="0.477" stop-color="#2b2d97"/>
+      <stop offset="1" stop-color="#44149d"/>
+    </radialGradient>
+  </defs>
+  <g id="Grupo_6697" data-name="Grupo 6697" transform="translate(-2306.561 -15469.523)">
+    <rect id="Retângulo_1076" data-name="Retângulo 1076" width="41.62" height="41.62" rx="20.81" transform="translate(2306.561 15469.523)" fill="url(#radial-gradient)"/>
+    <g id="Grupo_2923" data-name="Grupo 2923" transform="translate(2318.125 15481.088)">
+      <path id="Caminho_309" data-name="Caminho 309" d="M18,12V31.1" transform="translate(-8.452 -12)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path id="Caminho_310" data-name="Caminho 310" d="M12,18H31.1" transform="translate(-12 -8.451)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+  </g>
+</svg>
