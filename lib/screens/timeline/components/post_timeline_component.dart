@@ -74,7 +74,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       WalletTransfersRepositoryImpl();
 
   late WalletStore walletStore;
-  late PostBloc postBloc;
   bool loggedIn = false;
   User? user;
   bool isUserOwnsPost = false;
@@ -119,7 +118,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     super.initState();
     _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
-    postBloc = BlocProvider.of<PostBloc>(context);
     if (this.post.oozToTransfer == null) {
       this.post.oozToTransfer = 0;
     }
@@ -182,7 +180,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   }
 
   _deletePost() async {
-    //postBloc.add(DeletePostEvent(this.post.id, widget.isProfile));
     await timelineStore.removePost(this.post);
     widget.onDelete();
   }
