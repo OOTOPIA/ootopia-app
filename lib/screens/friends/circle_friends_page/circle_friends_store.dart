@@ -42,7 +42,6 @@ abstract class CircleFriendsStoreBase with Store {
 
   }
 
-
   @action
   Future<void> getFriends(String userId) async{
     isLoading = true;

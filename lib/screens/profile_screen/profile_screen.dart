@@ -243,12 +243,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   onPressed: () {
                                     Future.delayed(Duration(milliseconds: 100),(){
+
                                      if( store!.isFriend == false){
                                        store!.addFriend();
-                                       widget.addOrRemoveFriend!(true, store!.profile, );
                                      }else{
-                                       widget.addOrRemoveFriend!(false, store!.profile);
+                                       //widget.addOrRemoveFriend!(false, store!.profile);
                                        store!.removeFriend();
+                                     }
+                                     if( widget.addOrRemoveFriend != null){
+                                       widget.addOrRemoveFriend!(store!.isFriend == false, store!.profile, );
                                      }
                                     });
                                   },

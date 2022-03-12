@@ -119,7 +119,7 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
   final _$addFriendAsyncAction = AsyncAction('AddFriendsStoreBase.addFriend');
 
   @override
-  Future<void> addFriend(String userId) {
+  Future<bool> addFriend(String userId) {
     return _$addFriendAsyncAction.run(() => super.addFriend(userId));
   }
 
