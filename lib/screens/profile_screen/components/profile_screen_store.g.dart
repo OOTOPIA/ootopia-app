@@ -175,7 +175,7 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
       AsyncAction('_ProfileScreenStoreBase.addFriend');
 
   @override
-  Future<bool> addFriend() {
+  Future<void> addFriend() {
     return _$addFriendAsyncAction.run(() => super.addFriend());
   }
 
@@ -183,7 +183,7 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
       AsyncAction('_ProfileScreenStoreBase.removeFriend');
 
   @override
-  Future<bool> removeFriend() {
+  Future<void> removeFriend() {
     return _$removeFriendAsyncAction.run(() => super.removeFriend());
   }
 

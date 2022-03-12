@@ -54,15 +54,13 @@ abstract class _ProfileScreenStoreBase with Store {
   int get maxPostsPerPage => 12;
 
   @action
-  Future<bool> addFriend() async {
+  Future<void> addFriend() async {
     isFriend = true;
-    return  await friendsRepositoryImpl.addFriend(profile!.id);
   }
 
   @action
-  Future<bool> removeFriend() async {
+  Future<void> removeFriend() async {
     isFriend = false;
-    return await friendsRepositoryImpl.removeFriends(profile!.id);
   }
 
   @action

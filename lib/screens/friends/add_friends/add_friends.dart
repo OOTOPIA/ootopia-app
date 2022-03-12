@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
-import 'package:ootopia_app/data/models/users/profile_model.dart';
-import 'package:ootopia_app/screens/friends/add_friends/add_friends_store.dart';
+import 'package:ootopia_app/screens/friends/teste.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 
 
 class AddFriends extends StatefulWidget {
-  Function addOrRemoveFriend;
-
-  AddFriends({Key? key,required this.addOrRemoveFriend}) : super(key: key);
 
   @override
   State<AddFriends> createState() => _AddFriendsState();
@@ -26,27 +22,43 @@ class AddFriends extends StatefulWidget {
 
 class _AddFriendsState extends State<AddFriends> {
   TextEditingController messageController = TextEditingController();
-  AddFriendsStore addFriendsStore = AddFriendsStore();
   SmartPageController controller = SmartPageController.getInstance();
+  late FriendsStore friendsStore;
+  bool startPage = false;
 
+  @override
+  void initState() {
+    super.initState();
+    startPage = true;
+  }
+
+  init(){
+    friendsStore  = Provider.of<FriendsStore>(context);
+    if(startPage){
+      friendsStore.cleanSearchPage();
+      startPage = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return  Observer(
-        builder: (_) {
+    init();
+    print('creat add');
+    return Consumer<FriendsStore>(
+        builder: (cont, counter, _) {
           return Stack(
             children: [
               BackgroundButterflyTop(positioned: -59),
               BackgroundButterflyBottom(positioned: -50),
               NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo) {
-                  if (!addFriendsStore.loadingMoreUsers &&
+                  if (!friendsStore.loadingMoreUsersSearch &&
                       scrollInfo.metrics.pixels >= scrollInfo.metrics
                           .maxScrollExtent*0.8 &&
-                      addFriendsStore.hasMoreUsers) {
+                      friendsStore.hasMoreUsersSearch ) {
 
                     Future.delayed(Duration.zero,() async {
-                      await addFriendsStore.getMoreUser();
+                      await friendsStore.getMoreUserBySearch();
                       setState(() {});
                     });
                   }
@@ -88,14 +100,14 @@ class _AddFriendsState extends State<AddFriends> {
                             textInputAction: TextInputAction.search,
                             style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.normal),
                             onEditingComplete: (){
-                              addFriendsStore.searchNewName(messageController.text);
+                              friendsStore.searchNewName(messageController.text);
                             },
                             decoration: InputDecoration(
                               fillColor: Colors.white.withOpacity(0.3),
                               prefixIcon: IconButton(
                                 padding: EdgeInsets.zero,
                                 onPressed: (){
-                                  addFriendsStore.searchNewName(messageController.text);
+                                  friendsStore.searchNewName(messageController.text);
                                 },
                                 icon: Container(
                                   margin: EdgeInsets.symmetric(horizontal: 12),
@@ -126,7 +138,7 @@ class _AddFriendsState extends State<AddFriends> {
                         ),
                       ),
 
-                      if(addFriendsStore.isLoading)...[
+                      if(friendsStore.isLoadingSearch)...[
                         ListView.builder(
                             itemCount: 11,
                             shrinkWrap: true,
@@ -135,7 +147,7 @@ class _AddFriendsState extends State<AddFriends> {
                               return  itemShimmer();
                             }
                         ),
-                      ]else if(addFriendsStore.searchIsEmpty)...[
+                      ]else if(friendsStore.searchIsEmpty)...[
                         Container(
                           alignment: Alignment.center,
                           width: MediaQuery.of(context).size.width,
@@ -164,15 +176,12 @@ class _AddFriendsState extends State<AddFriends> {
                         )
                       ]else...[
                         ListView.builder(
-                            itemCount: addFriendsStore.users.length,
+                            itemCount: friendsStore.usersSearch.length,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return  Observer(
-                                  builder: (_) {
-                                    return itemFriend(addFriendsStore.users[index]);
-                                  }
-                              );
+                              return itemFriend(friendsStore.usersSearch[index]);
+
                             }
                         ),
                       ],
@@ -180,13 +189,12 @@ class _AddFriendsState extends State<AddFriends> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           );
         }
     );
   }
-
 
   Widget itemShimmer(){
     double size = MediaQuery.of(context).size.width - (25+14+48+82);
@@ -267,248 +275,244 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   Widget itemFriend(FriendModel friendModel){
-    return Column(
-      children: [
-        SizedBox(
-          height: 18,
-        ),
-        Material(
-          color: Colors.transparent,
-          child: Ink(
-            child: InkWell(
-              splashColor: LightColors.grey.withOpacity(0.2),
-              child:  Padding(
-                padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
+    return Builder(
+      builder: (context) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 18,
+            ),
+            Material(
+              color: Colors.transparent,
+              child: Ink(
+                child: InkWell(
+                  splashColor: LightColors.grey.withOpacity(0.2),
+                  child:  Padding(
+                    padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Shimmer.fromColors(
-                          baseColor:  Colors.grey[300] ?? Colors.blue,
-                          highlightColor:  Colors.grey[100] ?? Colors.blue,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle
+                        Stack(
+                          children: [
+                            Shimmer.fromColors(
+                              baseColor:  Colors.grey[300] ?? Colors.blue,
+                              highlightColor:  Colors.grey[100] ?? Colors.blue,
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              friendModel.photoUrl ?? '',
-                              fit: BoxFit.cover,
+                            SizedBox(
                               width: 40,
                               height: 40,
-                              errorBuilder: (context, url, error) => Image.asset(
-                                'assets/icons/user.png',
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.network(
+                                  friendModel.photoUrl ?? '',
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                  errorBuilder: (context, url, error) => Image.asset(
+                                    'assets/icons/user.png',
+                                    fit: BoxFit.cover,
+                                    width: 40,
+                                    height: 40,
+                                  ),
 
+                                ),
+                              ),
                             ),
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 12),
+                          width: MediaQuery.of(context).size.width - 200,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                friendModel.fullname ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: LightColors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                friendModel.location(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: LightColors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        Spacer(),
+                        Visibility(
+                          //TODO VERIFICAR SE NAO É NULO friendModel.isFriend != null
+                          visible: true,
+                          child: SizedBox(
+                            height: 30,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular
+                                          (20),
+                                        side: BorderSide.none),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 18)),
+                                ),
+                                onPressed: () {
+                                  Future.delayed(Duration(milliseconds: 80),(){
+                                    if(friendModel.isFriend != true){
+                                      friendsStore.addFriend(friendModel);
+                                      friendModel.isFriend = true;
+                                      setState(() {});
+                                    }else{
+                                      _goToProfile(friendModel.id);
+                                    }
+                                  });
+                                },
+                                child: Text(
+                                  getIfIsFriend(friendModel) ?
+                                  AppLocalizations.of(context)!.friend:
+                                  AppLocalizations.of(context)!.add,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                          ),
+                        )
                       ],
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 12),
-                      width: MediaQuery.of(context).size.width - 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            friendModel.fullname ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: LightColors.grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            friendModel.location(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: LightColors.black,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Spacer(),
-                    SizedBox(
-                      height: 30,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular
-                                    (20),
-                                  side: BorderSide.none),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.symmetric(horizontal: 18)),
-                          ),
-                          onPressed: () {
-                            Future.delayed(Duration(milliseconds: 80),(){
-                              if(friendModel.isFriend == false){
-                                addFriendsStore.addFriend(friendModel.id);
-                                friendModel.isFriend = true;
-                                widget.addOrRemoveFriend(true, friendModel);
-                                setState(() {});
-                              }else{
-                                _goToProfile(friendModel.id);
-                              }
-                            });
-                          },
-                          child: Text(
-                            friendModel.isFriend == true ?
-                            AppLocalizations.of(context)!.friend:
-                            AppLocalizations.of(context)!.add,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )),
-                    )
-                  ],
+                  ),
+                  onTap: () {
+                    Future.delayed(Duration(milliseconds: 100),(){
+                      _goToProfile(friendModel.id);
+                    });
+                  },
                 ),
               ),
-              onTap: () {
-                Future.delayed(Duration(milliseconds: 100),(){
-                  _goToProfile(friendModel.id);
-                });
-              },
             ),
-          ),
-        ),
-        if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
-          SizedBox(
-            height: 8,
-          ),
-          Container(
-            height: 76,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                itemCount: friendModel.friendsThumbs!.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return  Stack(
-                    children: [
-                      Shimmer.fromColors(
-                        baseColor:  Colors.grey[300] ?? Colors.blue,
-                        highlightColor:  Colors.grey[100] ?? Colors.blue,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            left: index == 0 ? 25 : 8,
-                            top: 2,
-                            right: index == friendModel.friendsThumbs!.length ? 14 : 0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+            if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                height: 76,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                    itemCount: friendModel.friendsThumbs!.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return  Stack(
+                        children: [
+                          Shimmer.fromColors(
+                            baseColor:  Colors.grey[300] ?? Colors.blue,
+                            highlightColor:  Colors.grey[100] ?? Colors.blue,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                left: index == 0 ? 25 : 8,
+                                top: 2,
+                                right: index == friendModel.friendsThumbs!.length ? 14 : 0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              height: 76,
+                              width: 74,
                             ),
                           ),
-                          height: 76,
-                          width: 74,
-                        ),
-                      ),
-                      Container(
-                        width: 74,
-                        height: 76,
-                        margin: EdgeInsets.only(
-                          left: index == 0 ? 25 : 8,
-                          right: index == (friendModel.friendsThumbs!
-                              .length - 1) ? 14 : 0,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
-                            fit: BoxFit.cover,
+                          Container(
                             width: 74,
                             height: 76,
-                            errorBuilder: (context, url, error) => Center(
-                              child: Icon(Icons.error),
+                            margin: EdgeInsets.only(
+                              left: index == 0 ? 25 : 8,
+                              right: index == (friendModel.friendsThumbs!
+                                  .length - 1) ? 14 : 0,
                             ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
+                                fit: BoxFit.cover,
+                                width: 74,
+                                height: 76,
+                                errorBuilder: (context, url, error) => Center(
+                                  child: Icon(Icons.error),
+                                ),
 
-                          ),
-                        ),
-                      ),
-                      if(friendModel.friendsThumbs![index]!.type == 'video')...[
-                        Container(
-                          width: 74,
-                          height: 76,
-                          margin: EdgeInsets.only(
-                            left: index == 0 ? 25 : 8,
-                            right: index == (friendModel.friendsThumbs!
-                                .length - 1) ? 14 : 0,
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ],
-                  );
-                }
-            ),
-          )
-        ]
-      ],
+                          if(friendModel.friendsThumbs![index]!.type == 'video')...[
+                            Container(
+                              width: 74,
+                              height: 76,
+                              margin: EdgeInsets.only(
+                                left: index == 0 ? 25 : 8,
+                                right: index == (friendModel.friendsThumbs!
+                                    .length - 1) ? 14 : 0,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      );
+                    }
+                ),
+              )
+            ]
+          ],
+        );
+      }
     );
   }
 
   void _goToProfile(userId) async {
     controller.insertPage(ProfileScreen({"id": userId,},
-      addOrRemoveFriend: (bool add, Profile profile ){
-        FriendModel friend = FriendModel(
-            id: userId,
-            fullname: profile.id,
-            photoUrl: profile.photoUrl
-        );
-        if(add){
-          addFriendsStore.users.forEach((element) {
-            if(element.id == profile.id){
-              element.isFriend = true;
-            }
-          });
-          widget.addOrRemoveFriend(true, friend);
-        }else{
-          FriendModel friendModel = FriendModel(id: profile.id);
-          widget.addOrRemoveFriend(false,friendModel);
-          addFriendsStore.users.forEach((element) {
-            if(element.id == profile.id){
-              element.isFriend = false;
-            }
-          });
-        }
-        setState(() {});
-
-      },
     ));
+  }
+
+  getIfIsFriend(FriendModel friendModel) {
+    print('getIfIsFriend');
+    if(friendModel.isFriend == true){
+      return true;
+    }
+    bool isFriend = false;
+    friendsStore.myFriendsDate?.friends?.forEach((element) {
+      if(element!.id == friendModel.id){
+        isFriend = true;
+      }
+    });
+    return isFriend;
   }
 
 

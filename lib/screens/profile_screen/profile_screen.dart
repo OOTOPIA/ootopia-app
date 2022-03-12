@@ -4,8 +4,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
+import 'package:ootopia_app/screens/friends/teste.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
@@ -31,9 +33,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
-  Function? addOrRemoveFriend;
 
-  ProfileScreen( this.args, {this.addOrRemoveFriend});
+  ProfileScreen( [this.args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -41,6 +42,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   ProfileScreenStore? store;
+  late FriendsStore friendsStore;
   late AuthStore authStore;
   late WalletStore walletStore;
   late HomeStore homeStore;
@@ -139,6 +141,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     homeStore = Provider.of<HomeStore>(context);
     if (profileUserIsLoggedUser) {
       store = Provider.of<ProfileScreenStore>(context);
+    }else{
+      friendsStore  = Provider.of<FriendsStore>(context);
     }
     return Scaffold(
       body: Container(
@@ -243,15 +247,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   onPressed: () {
                                     Future.delayed(Duration(milliseconds: 100),(){
+                                      final friend = FriendModel(
+                                        id: store!.profile!.id,
+                                        fullname: store!.profile!.id,
+                                        photoUrl: store!.profile!.photoUrl,
+                                      );
 
-                                     if( store!.isFriend == false){
+                                     if( friendsStore.isFriend == false){
                                        store!.addFriend();
+                                       friendsStore.addFriend(friend);
                                      }else{
-                                       //widget.addOrRemoveFriend!(false, store!.profile);
                                        store!.removeFriend();
-                                     }
-                                     if( widget.addOrRemoveFriend != null){
-                                       widget.addOrRemoveFriend!((store!.isFriend != false), store!.profile, );
+                                       friendsStore.removeFriend(friend);
                                      }
                                     });
                                   },

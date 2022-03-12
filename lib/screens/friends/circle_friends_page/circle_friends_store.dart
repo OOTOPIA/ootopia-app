@@ -39,7 +39,6 @@ abstract class CircleFriendsStoreBase with Store {
       sortingType = listSortingType[0];
       getFriends(userId);
     }
-
   }
 
   @action
@@ -72,7 +71,7 @@ abstract class CircleFriendsStoreBase with Store {
   Future<void> removeFriends(FriendModel user, index) async {
     friendsDate!.friends![index]!.remove = true;
     friendsDate!.total = friendsDate!.total! - 1;
-    friendsRepositoryImpl.removeFriends(user.id);
+    friendsRepositoryImpl.removeFriend(user.id);
   }
 
   @action

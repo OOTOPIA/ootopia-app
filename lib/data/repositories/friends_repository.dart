@@ -11,7 +11,7 @@ abstract class FriendsRepository {
   Future<FriendsDataModel> getFriends(String userId, int page, int limit, {required String orderBy, required String sortingType});
   Future<List> searchFriends(String name, int page, int limit);
   Future<bool> addFriend(String userId);
-  Future<bool> removeFriends(String userId);
+  Future<bool> removeFriend(String userId);
   Future<bool> getIfIsFriends(String userId);
 }
 
@@ -49,7 +49,8 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       };
 
       final response = await ApiClient.api().get(
-        dotenv.env['API_URL']! + "friends/by-user/$userId",
+        //TODO ADD by-user/
+        dotenv.env['API_URL']! + "friends/$userId",
         queryParameters: queryParams,
       );
       if (response.statusCode == 200) {
@@ -104,7 +105,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
     }
   }
 
-  Future<bool> removeFriends(String userId) async {
+  Future<bool> removeFriend(String userId) async {
     try {
       final response = await http.delete(
         Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
@@ -125,7 +126,8 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
   Future<bool> getIfIsFriends(String userId) async {
     try {
       final response = await ApiClient.api().get(
-        dotenv.env['API_URL']! + "friends/$userId",
+        //TODO REMOVER TODO
+        dotenv.env['API_URL']! + "friends/TODO/$userId",
       );
       if (response.statusCode == 200) {
         bool isFriend = response.data["isFriend"] ?? false;
@@ -134,7 +136,8 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
         return  false;
       }
     } catch (error) {
-      print('\nerror: $error');
+      //TODO REMOVER IGNORE
+      //print('\nerror IGNORE: $error');
       return  false;
     }
   }
