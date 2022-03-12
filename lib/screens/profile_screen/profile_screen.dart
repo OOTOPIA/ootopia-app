@@ -226,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                             ],
 
-                            if(!isLoggedInUserProfile && store?.isFriend != null)...[
+                            if(!isLoggedInUserProfile && store?.isFriend != null && authStore.currentUser != null)...[
                               ElevatedButton(
                                   style: ButtonStyle(
                                     fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                        store!.removeFriend();
                                      }
                                      if( widget.addOrRemoveFriend != null){
-                                       widget.addOrRemoveFriend!(store!.isFriend == false, store!.profile, );
+                                       widget.addOrRemoveFriend!((store!.isFriend != false), store!.profile, );
                                      }
                                     });
                                   },

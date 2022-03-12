@@ -122,10 +122,16 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                             Future.delayed(Duration(milliseconds: 100),(){
                               controller.insertPage(CircleOfFriendPage(
                                 userId: widget.userId,
-                                removeFriend: (FriendModel friend) {
+                                addOrRemoveFriend: (bool add,FriendModel friend) {
                                   if(widget.isUserLogged){
-                                    circleFriendsWidgetStore.friendsDate!.friends!.removeWhere((element) => element!.id == friend.id);
-                                    circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! - 1;
+                                    if(add){
+                                      circleFriendsWidgetStore.friendsDate!.friends!.add(friend);
+                                      circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! + 1;
+                                    }else{
+                                      circleFriendsWidgetStore.friendsDate!.friends!.removeWhere((element) => element!.id == friend.id);
+                                      circleFriendsWidgetStore.friendsDate!.total = circleFriendsWidgetStore.friendsDate!.total! - 1;
+
+                                    }
                                     setState(() {});
                                   }
                                 },
@@ -300,6 +306,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   void _goToProfile(userId) async {
     controller.insertPage(ProfileScreen({"id": userId,},
       addOrRemoveFriend:(bool add, Profile profile ){
+      print('chamou update FriendsWidget');
         if(widget.isUserLogged){
           if(add){
             FriendModel friend = FriendModel(

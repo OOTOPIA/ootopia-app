@@ -18,9 +18,9 @@ import 'circle_friends_store.dart';
 
 class CircleOfFriendPage extends StatefulWidget {
   final String userId;
-  Function? removeFriend;
+  Function? addOrRemoveFriend;
 
-  CircleOfFriendPage({Key? key,required this.userId, this.removeFriend}) : super(key: key);
+  CircleOfFriendPage({Key? key,required this.userId, this.addOrRemoveFriend}) : super(key: key);
 
 
   @override
@@ -148,9 +148,10 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         ),
                         onPressed: () {
                           Future.delayed(Duration(milliseconds: 100),(){
-                            controller.insertPage(AddFriends(addOrRemoveFriend: (FriendModel friendModel) {
+                            controller.insertPage(AddFriends(addOrRemoveFriend: (bool add, FriendModel friendModel) {
                               circleFriendsStore.friendsDate!.friends!.add(friendModel);
                               circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
+                              widget.addOrRemoveFriend!(true, friendModel);
                               setState(() {});
                             },));
                           });
@@ -461,8 +462,8 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 onPressed: () {
                                   Future.delayed(Duration(milliseconds: 100),(){
                                     circleFriendsStore.removeFriends(friendModel, index);
-                                    if(widget.removeFriend != null){
-                                      widget.removeFriend!(friendModel);
+                                    if(widget.addOrRemoveFriend != null){
+                                      widget.addOrRemoveFriend!(false, friendModel);
                                     }
                                     setState(() {});
                                   });
@@ -645,17 +646,20 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       {"id": userId,},
       addOrRemoveFriend: (bool add, Profile profile ){
         if(isPageOfUserLogged()){
+          FriendModel friend = FriendModel(
+              id: userId,
+              fullname: profile.id,
+              photoUrl: profile.photoUrl
+          );
           if(add){
-            FriendModel friend = FriendModel(
-                id: userId,
-                fullname: profile.id,
-                photoUrl: profile.photoUrl
-            );
             circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! + 1;
             circleFriendsStore.friendsDate!.friends!.add(friend);
           }else{
             circleFriendsStore.friendsDate!.total = circleFriendsStore.friendsDate!.total! - 1;
             circleFriendsStore.friendsDate!.friends!.removeWhere((element) => element!.id == userId);
+          }
+          if(widget.addOrRemoveFriend != null){
+            widget.addOrRemoveFriend!((add == true), friend);
           }
           setState(() {});
         }
