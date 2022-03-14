@@ -123,7 +123,6 @@ class _TimelinePageState extends State<TimelinePage>
       timelineStore.init(controller);
       timelineStore.startTimelineViewTimer();
     });
-    print('args ${widget.args}');
     if (widget.args != null &&
         widget.args?['redirectToInvitationCode'] != null) {
       Future.delayed(Duration(milliseconds: 100), () {
