@@ -51,7 +51,13 @@ abstract class CommentRepliesStoreBase with Store {
       if (response.isEmpty) {
         currentPageComment = currentPageComment;
       } else {
-        listComments.addAll(response);
+        response.forEach((element) {
+          if (listComments != null && !listComments.contains(element)) {
+            listComments.insert(0, element);
+          } else if (listComments == null) {
+            listComments.add(element);
+          }
+        });
       }
     } catch (e) {
       print("ERROU nem ferrando ? ${e.toString()}");

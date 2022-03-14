@@ -39,6 +39,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   int postCommentsCount = 0;
   String postId = '';
   String? commentReply;
+  int? indexComment;
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
@@ -184,6 +185,24 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         if (commentReply != null) {
           CommentReply createCommentReply = await commentRepliesStore
               .createComment(commentReply!, _inputController.text.trim());
+          commentStore.listComments[indexComment!].totalReplies =
+              commentStore.listComments[indexComment!].totalReplies != null
+                  ? commentStore.listComments[indexComment!].totalReplies! + 1
+                  : 1;
+          if (commentStore.listComments[indexComment!].commentReplies != null) {
+            commentStore.listComments[indexComment!].commentReplies!
+                .add(createCommentReply);
+          } else {
+            commentStore.listComments[indexComment!].commentReplies = [
+              createCommentReply
+            ];
+          }
+          commentStore.isLoading = false;
+          Future.delayed(Duration(seconds: 1), () {
+            setState(() {});
+          });
+
+          return;
         } else {
           await commentStore.createComment(
               postId, _inputController.text.trim());
@@ -208,6 +227,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         TextPosition(offset: _inputController.text.length));
     commentStore.listUsersMarket?.add(comment.userId);
     commentReply = comment.id;
+    indexComment = commentStore.listComments
+        .indexWhere((_comment) => _comment.id == comment.id);
+    print("ASDFGH ${indexComment}");
   }
 
   @override
@@ -230,9 +252,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         child: GestureDetector(
           onTap: () {
             focusNode.unfocus();
-            commentReply = null;
-            commentStore.listUsersMarket = null;
-            _inputController.text = '';
           },
           child: Scaffold(
             body: Stack(

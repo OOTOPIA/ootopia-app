@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
+import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
 import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ItemReply extends StatefulWidget {
+  final Comment comment;
   final CommentReply commentReplies;
   final bool lastWidget;
   final bool visibleDelete;
@@ -15,6 +19,7 @@ class ItemReply extends StatefulWidget {
 
   const ItemReply({
     Key? key,
+    required this.comment,
     required this.commentReplies,
     required this.lastWidget,
     required this.visibleDelete,
@@ -28,8 +33,26 @@ class ItemReply extends StatefulWidget {
 }
 
 class ItemReplyState extends State<ItemReply> {
+  late AuthStore authStore;
+
+  replyComment(CommentReply commentReply) {
+    Comment comment = Comment(
+      id: widget.comment.id,
+      postId: widget.comment.postId,
+      text: commentReply.text,
+      userId: authStore.currentUser!.id!,
+      username: authStore.currentUser!.fullname,
+      photoUrl: authStore.currentUser!.photoUrl,
+      totalReplies: widget.comment.totalReplies,
+      userComments: commentReply.userComments,
+    );
+    widget.replyComment(comment);
+  }
+
   @override
   Widget build(BuildContext context) {
+    authStore = Provider.of<AuthStore>(context);
+
     return Column(
       children: [
         Row(
@@ -105,7 +128,7 @@ class ItemReplyState extends State<ItemReply> {
                       ),
                     ),
                     onTap: () {
-                      widget.replyComment(widget.commentReplies);
+                      replyComment(widget.commentReplies);
                     },
                   ),
                 ],

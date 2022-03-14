@@ -113,6 +113,7 @@ class _ItemCommentState extends State<ItemComment> {
                   CommentReplies(
                     comment: widget.comment,
                     updateState: widget.updateState,
+                    replyComment: widget.replyComment,
                   )
                 ],
               ),

@@ -10,8 +10,13 @@ import 'package:provider/provider.dart';
 class CommentReplies extends StatefulWidget {
   final Comment comment;
   final Function updateState;
+  final Function replyComment;
 
-  CommentReplies({required this.comment, required this.updateState});
+  CommentReplies({
+    required this.comment,
+    required this.updateState,
+    required this.replyComment,
+  });
 
   @override
   State<CommentReplies> createState() => CcommentStateReplies();
@@ -46,9 +51,19 @@ class CcommentStateReplies extends State<CommentReplies> {
     super.initState();
   }
 
-  replyComment() {
-    print("ASDFGHJKL");
-    widget.updateState();
+  @mustCallSuper
+  @protected
+  void didUpdateWidget(covariant CommentReplies oldWidget) {
+    if (widget.comment.commentReplies != null) {
+      widget.comment.commentReplies!.forEach((element) {
+        if (commentReplies.listComments != null &&
+            !commentReplies.listComments.contains(element)) {
+          commentReplies.listComments.add(element);
+        } else if (commentReplies.listComments == null) {
+          commentReplies.listComments.add(element);
+        }
+      });
+    }
   }
 
   @override
@@ -94,13 +109,14 @@ class CcommentStateReplies extends State<CommentReplies> {
                           commentReply.commentUserId;
                     }
                     return ItemReply(
+                      comment: widget.comment,
                       commentReplies: commentReply,
                       lastWidget:
                           commentReplies.listComments.length - 1 != index,
                       visibleDelete: visibleDelete,
                       commentRepliesStore: commentReplies,
                       getData: _getData,
-                      replyComment: replyComment,
+                      replyComment: widget.replyComment,
                     );
                   },
                 ),
