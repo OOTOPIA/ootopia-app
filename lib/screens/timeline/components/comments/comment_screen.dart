@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -37,6 +39,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
+  Timer? _debounce;
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -144,7 +147,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
-      Future.delayed(Duration(seconds: 2), () async {
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(Duration(seconds: 2), () async {
         var getLastString = value.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
@@ -195,6 +199,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   @override
   void dispose() {
     Future.delayed(Duration(milliseconds: 300), () async {
+      _debounce?.cancel();
       homeStore.setSeeCrip(true);
       homeStore.setResizeToAvoidBottomInset(false);
     });
