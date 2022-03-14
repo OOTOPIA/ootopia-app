@@ -184,6 +184,14 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
           ),
 
           Visibility(
+            visible: !widget.isUserLogged && (circleFriendsWidgetStore
+                .friendsDate?.friends?.isNotEmpty ?? false),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 12),
+          ),
+
+          Visibility(
             visible: ListIsNotEmpty(),
             child: Container(
                 width: MediaQuery.of(context).size.width,

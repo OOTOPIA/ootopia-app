@@ -66,7 +66,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
             children: [
               BackgroundButterflyTop(positioned: -59),
               BackgroundButterflyBottom(positioned: -50),
-              body(),
+             // body(),
               if(isPageOfUserLogged())...[
                 Consumer<FriendsStore>(
                     builder: (cont, friend, child) {
