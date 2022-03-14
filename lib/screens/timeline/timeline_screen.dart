@@ -15,6 +15,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/last_learning_track_component.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/regeneration_game.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
@@ -34,6 +35,8 @@ import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:flutter/services.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+
+import 'components/invite_your_friends.dart';
 
 bool _initialUriIsHandled = false;
 
@@ -120,6 +123,12 @@ class _TimelinePageState extends State<TimelinePage>
       timelineStore.init(controller);
       timelineStore.startTimelineViewTimer();
     });
+    if (widget.args != null &&
+        widget.args?['redirectToInvitationCode'] != null) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        controller.insertPage(InvitationScreen());
+      });
+    }
   }
 
   void _handleIncomingLinks() {
@@ -313,6 +322,7 @@ class _TimelinePageState extends State<TimelinePage>
   Widget build(BuildContext context) {
     timelineStore = Provider.of<TimelineStore>(context);
     authStore = Provider.of<AuthStore>(context);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Theme.of(context).scaffoldBackgroundColor,
@@ -330,7 +340,7 @@ class _TimelinePageState extends State<TimelinePage>
                 },
                 body: Column(
                   children: [
-                    RegenerationGame(),
+                    InviteYourFriends(),
                     Expanded(
                       child: Center(
                         child: body(),

@@ -142,8 +142,8 @@ Future main() async {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if ((message.data['type'] as String).replaceAll('-', '_') ==
-      TypeOfMessage.regeneration_game.toString().substring(14)) {
+  String messageType = (message.data['type'] as String).replaceAll('-', '_');
+  if (messageType == TypeOfMessage.regeneration_game.name) {
     AppUsageTime.instance.resetUsageTime();
     return;
   }

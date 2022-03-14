@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -37,6 +39,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
+  Timer? _debounce;
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -80,21 +83,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   void addUserInText(UserSearchModel e) {
     commentStore.listUsersMarket?.add(e.id);
-    setState(() {
-      var list = _inputController.text.trim().split(' ');
-      list.removeLast();
-      list.add('ㅤ@${e.fullname}ㅤ');
-      _inputController.clear();
-      for (var item in list) {
-        if (item.contains('@')) {
-          _inputController.text += '$item';
-        } else {
-          _inputController.text += ' $item';
-        }
-      }
 
-      _inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: _inputController.text.length - 1));
+    var name = 'ㅤ@${e.fullname}ㅤ';
+    var s = 0;
+    var text = _inputController.text;
+    for (var i = text.length - 1; i >= 0; i--) {
+      if (text[i].contains('@')) {
+        _inputController.text = text.replaceRange(i, i + s + 1, name);
+        break;
+      }
+      s++;
+    }
+
+    _inputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _inputController.text.length));
+    setState(() {
       seSelectedUser = false;
     });
   }
@@ -137,26 +140,29 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     });
   }
 
-  void onChanged(String value) {
+  void onChanged(String value) async {
     value = value.trim();
 
     if (value.length > 0) {
-      var getLastString = value.split(RegExp("ㅤ@"));
-      if (getLastString.last.contains('@')) {
-        setState(() {
-          seSelectedUser = true;
-        });
-        var startName = getLastString.last.split('@').last;
-        var finishName = startName.split(RegExp("ㅤ"));
-        Future.delayed(Duration(milliseconds: 500), () {
-          commentStore.searchUser(finishName.first);
-        });
-      } else {
-        setState(() {
-          seSelectedUser = false;
-          isIconBlue = true;
-        });
-      }
+      setState(() {
+        isIconBlue = true;
+      });
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(Duration(seconds: 2), () async {
+        var getLastString = value.split(RegExp("ㅤ@"));
+        if (getLastString.last.contains('@')) {
+          setState(() {
+            seSelectedUser = true;
+          });
+          var startName = getLastString.last.split('@').last;
+          var finishName = startName.split(RegExp("ㅤ"));
+          await commentStore.searchUser(finishName.first);
+        } else {
+          setState(() {
+            seSelectedUser = false;
+          });
+        }
+      });
     } else {
       commentStore.listUsersMarket!.clear();
       setState(() {
@@ -193,6 +199,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   @override
   void dispose() {
     Future.delayed(Duration(milliseconds: 300), () async {
+      _debounce?.cancel();
       homeStore.setSeeCrip(true);
       homeStore.setResizeToAvoidBottomInset(false);
     });
@@ -209,7 +216,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
         isLoading: commentStore.isLoading,
         child: GestureDetector(
-          onTap: () => focusNode.unfocus(),
+          onTap: () {
+            setState(() {
+              seSelectedUser = true;
+            });
+            focusNode.unfocus();
+          },
           child: Scaffold(
             body: Stack(
               children: [

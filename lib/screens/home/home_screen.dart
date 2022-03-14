@@ -22,6 +22,7 @@ import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -79,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
     controller = SmartPageController.newInstance(
       context: context,
       initialPages: [
-        TimelinePage(null),
+        TimelinePage(widget.args),
         LearningTracksScreen(),
         LearningTracksScreen(),
         MarketplaceScreen(),
@@ -202,6 +203,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (homeStore == null) {
       homeStore = Provider.of<HomeStore>(context);
     }
+
     return WillPopScope(
       onWillPop: () async {
         var result = await controller.back();

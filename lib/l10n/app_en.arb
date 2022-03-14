@@ -57,7 +57,7 @@
     "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Please enter a valid birthdate in format DD/MM/YYYY",
     "pleaseEnterAValidBirthdate": "Please enter a valid birthdate",
-    "userComment":"%USER_NAME_MARKET% tagged you in a comment",
+    "userComment":"You have been tagged in a comment",
     "others": "Others",
 
     "favoriteThemes": "Favorite Themes",
@@ -396,7 +396,7 @@
     "laurelWreathRepresentHowManyTimesAPersonHasReachedTheirGoalInTheRegenerationGame" : "Laurel Wreath represent how many times a person has reached their goal in the regeneration game. Or how many times she/he helped to reach her/his city goal or the planetary goal!",
     "chooseYourDailyGoal":"Choose your daily goal for game participation.",
     "watchVideoToLearn":"Watch the video to learn how the regeneration game works and how to take part on it.",
-
+    "earnOOzWhenTheySignup":"earn OOz when they signup",
     "appTest": "Feedback",
 
     "required": "Required",
