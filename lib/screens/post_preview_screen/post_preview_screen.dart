@@ -800,9 +800,11 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     );
   }
 
-  void teste(Image newImage, var oldImage) {
-    print('NOVO $newImage');
-    print('ANTIGO $oldImage');
+  void changeMediaFile(File newImage, var oldImage) {
+    int index = widget.args["fileList"]
+        .indexWhere((element) => element["mediaId"] == oldImage["mediaId"]);
+
+    widget.args["fileList"][index]["mediaFile"] = newImage;
   }
 
   buildMediaRow(dynamic file) {
@@ -816,7 +818,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
         shouldCustomFlickManager: true,
         showCropWidget: true,
         onChanged: (value) {
-          teste(value, file);
+          changeMediaFile(value, file);
         },
       ),
     );

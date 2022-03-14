@@ -14,7 +14,7 @@ class MediaViewWidget extends StatefulWidget {
   final Size? mediaSize;
   final bool shouldCustomFlickManager;
   final bool showCropWidget;
-  final ValueChanged<Image>? onChanged;
+  final ValueChanged<File>? onChanged;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
@@ -34,7 +34,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
   FlickManager? flickManager;
   VideoPlayerController? _videoPlayerController;
   bool controlIsVisible = true;
-  Image? cropImage;
+  File? croppedImage;
 
   @override
   void initState() {
@@ -138,8 +138,10 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                                 ? BoxFit.fitHeight
                                 : BoxFit.fitWidth,
                             alignment: FractionalOffset.center,
-                            image: cropImage != null
-                                ? cropImage!.image
+                            image: croppedImage != null
+                                ? FileImage(
+                                    File(croppedImage!.path),
+                                  )
                                 : FileImage(
                                     File(widget.mediaFilePath),
                                   ),
@@ -159,8 +161,8 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                               image: File(widget.mediaFilePath),
                               onChanged: (value) {
                                 setState(() {
-                                  cropImage = value;
-                                  widget.onChanged!(cropImage!);
+                                  croppedImage = value;
+                                  widget.onChanged!(croppedImage!);
                                 });
                               },
                             ),
