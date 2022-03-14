@@ -23,6 +23,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     userComments: (json['usersComments'] as List<dynamic>?)
         ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
         .toList(),
+    totalReplies: json['totalReplies'] as int?,
   );
 }
 
@@ -35,5 +36,6 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'username': instance.username,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
+      'totalReplies': instance.totalReplies,
       'usersComments': instance.userComments,
     };

@@ -88,17 +88,21 @@ class _CameraAppState extends State<CameraApp>
     var storageStatus = await Permission.storage.status;
     var cameraStatus = await Permission.camera.status;
     var microphoneStatus = await Permission.microphone.status;
-    if (!storageStatus.isGranted || !cameraStatus.isGranted || !microphoneStatus.isGranted) {
-
+    if (!storageStatus.isGranted ||
+        !cameraStatus.isGranted ||
+        !microphoneStatus.isGranted) {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.storage,
         Permission.camera,
         Permission.microphone
       ].request();
 
-      bool hasStoragePermition = statuses[Permission.storage] == PermissionStatus.granted;
-      bool hasStorageCamera = statuses[Permission.camera] == PermissionStatus.granted;
-      bool hasStorageMicrofone = statuses[Permission.microphone] == PermissionStatus.granted;
+      bool hasStoragePermition =
+          statuses[Permission.storage] == PermissionStatus.granted;
+      bool hasStorageCamera =
+          statuses[Permission.camera] == PermissionStatus.granted;
+      bool hasStorageMicrofone =
+          statuses[Permission.microphone] == PermissionStatus.granted;
 
       if (hasStoragePermition && hasStorageCamera && hasStorageMicrofone) {
         await checkCameraAvailability();
@@ -106,8 +110,11 @@ class _CameraAppState extends State<CameraApp>
         setState(() {
           permissionsIsNeeded = false;
         });
-      }else{
-        if(Platform.isIOS && hasStoragePermition && hasStorageCamera && !hasStorageMicrofone) {
+      } else {
+        if (Platform.isIOS &&
+            hasStoragePermition &&
+            hasStorageCamera &&
+            !hasStorageMicrofone) {
           await checkCameraAvailability();
           getLastVideoThumbnail();
           setState(() {
@@ -539,7 +546,7 @@ class _CameraAppState extends State<CameraApp>
                   GestureDetector(
                     onTap: () {
                       if (!controller!.value.isRecordingVideo) {
-                         openCustomGallery();
+                        openCustomGallery();
                       }
                     },
                     child: Padding(

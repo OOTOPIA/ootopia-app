@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
-import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
 import 'package:ootopia_app/data/models/users/user_comment.dart';
-import 'package:ootopia_app/data/repositories/comment_repository.dart';
+import 'package:ootopia_app/data/repositories/comment_replies_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 
-part "comment_store.g.dart";
+part "comment_replies_store.g.dart";
 
-class CommentStore = CommentStoreBase with _$CommentStore;
+class CommentRepliesStore = CommentRepliesStoreBase with _$CommentRepliesStore;
 
 enum ViewState { loading, error, done, loadingNewData, refresh }
 
-abstract class CommentStoreBase with Store {
-  CommentRepositoryImpl commentRepository = CommentRepositoryImpl();
+abstract class CommentRepliesStoreBase with Store {
+  CommentRepliesRepositoryImpl commentRepliesRepository =
+      CommentRepliesRepositoryImpl();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
 
   @observable
   bool isLoading = false;
 
   @observable
+  bool howCommentReplies = false;
+
+  @observable
   ViewState viewState = ViewState.loading;
 
   @observable
-  List<Comment> listComments = [];
+  List<CommentReply> listComments = [];
 
   @observable
   List<UserSearchModel> listAllUsers = [];
@@ -31,7 +35,7 @@ abstract class CommentStoreBase with Store {
   List<String>? listUsersMarket = [];
 
   @observable
-  int currentPageComment = 1;
+  int currentPageComment = 0;
 
   @observable
   int currentPageUser = 1;
@@ -39,33 +43,30 @@ abstract class CommentStoreBase with Store {
   @observable
   bool hasMoreUsers = false;
 
-  @observable
-  bool hasMorePosts = true;
-
   @action
-  Future<void> getComments(String postId, int page) async {
+  Future<void> getCommentReplies(String commentId, int page) async {
     try {
-      var response = await commentRepository.getComments(postId, page);
-      print("AHHHHHHHHHHHHHHHHHHH ${response}");
-      hasMorePosts = response.length > 0;
+      var response =
+          await commentRepliesRepository.getCommentsReplies(commentId, page);
       if (response.isEmpty) {
         currentPageComment = currentPageComment;
       } else {
         listComments.addAll(response);
       }
     } catch (e) {
-      print("ERROU ? ${e.toString()}");
+      print("ERROU nem ferrando ? ${e.toString()}");
     }
   }
 
   @action
-  Future<void> createComment(String postId, String text) async {
+  Future<CommentReply> createComment(String commentId, String text) async {
     try {
       isLoading = true;
-      var oi =
-          await commentRepository.createComment(postId, text, listUsersMarket);
-      print("AHHHHHHHHHHHHHHH ${oi.id}");
+      CommentReply commentReply = await commentRepliesRepository
+          .createCommentReply(commentId, text, listUsersMarket);
+
       isLoading = false;
+      return commentReply;
     } catch (e) {
       isLoading = false;
       return Future.error(e);
@@ -73,11 +74,11 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<bool> deleteComments(String postId, String id) async {
+  Future<bool> deleteComments(String commentId) async {
     try {
       isLoading = true;
-      List<String> idComments = [id];
-      var response = await commentRepository.deleteComments(postId, idComments);
+      var response =
+          await commentRepliesRepository.deleteCommentReply(commentId);
       isLoading = false;
 
       return response;

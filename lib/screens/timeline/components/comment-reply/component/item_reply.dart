@@ -1,36 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
-import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_screen.dart';
-import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
+import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
 import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ItemComment extends StatefulWidget {
-  final Comment comment;
+class ItemReply extends StatefulWidget {
+  final CommentReply commentReplies;
+  final bool lastWidget;
   final bool visibleDelete;
-  final CommentStore commentStore;
-  final String postId;
+  final CommentRepliesStore? commentRepliesStore;
   final Function() getData;
   final Function replyComment;
-  final Function updateState;
 
-  ItemComment({
+  const ItemReply({
     Key? key,
-    required this.comment,
+    required this.commentReplies,
+    required this.lastWidget,
     required this.visibleDelete,
-    required this.commentStore,
-    required this.postId,
+    this.commentRepliesStore,
     required this.getData,
     required this.replyComment,
-    required this.updateState,
   }) : super(key: key);
 
   @override
-  State<ItemComment> createState() => _ItemCommentState();
+  State<ItemReply> createState() => ItemReplyState();
 }
 
-class _ItemCommentState extends State<ItemComment> {
+class ItemReplyState extends State<ItemReply> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,14 +36,15 @@ class _ItemCommentState extends State<ItemComment> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.comment.photoUrl == null
+            widget.commentReplies.photoCommentUser == null
                 ? CircleAvatar(
                     radius: 19,
                     backgroundImage: AssetImage('assets/icons/user.png'),
                   )
                 : CircleAvatar(
                     radius: 19,
-                    backgroundImage: NetworkImage(widget.comment.photoUrl!),
+                    backgroundImage:
+                        NetworkImage(widget.commentReplies.photoCommentUser!),
                   ),
             SizedBox(
               width: 16,
@@ -58,7 +56,7 @@ class _ItemCommentState extends State<ItemComment> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.comment.username!,
+                    widget.commentReplies.fullNameCommentUser,
                     style: TextStyle(
                       color: LightColors.black,
                       fontWeight: FontWeight.bold,
@@ -73,10 +71,10 @@ class _ItemCommentState extends State<ItemComment> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.60,
+                        width: MediaQuery.of(context).size.width * 0.43,
                         child: LinkRichText(
-                          widget.comment.text,
-                          userCommentsList: widget.comment.userComments,
+                          widget.commentReplies.text,
+                          userCommentsList: widget.commentReplies.userComments,
                           maxLines: 10,
                         ),
                       ),
@@ -84,7 +82,7 @@ class _ItemCommentState extends State<ItemComment> {
                         visible: widget.visibleDelete,
                         child: GestureDetector(
                           onTap: () {
-                            deleteComment(widget.comment, context);
+                            deleteComment(widget.commentReplies, context);
                           },
                           child: Text(
                             AppLocalizations.of(context)!.delete,
@@ -100,33 +98,30 @@ class _ItemCommentState extends State<ItemComment> {
                   ),
                   GestureDetector(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                       child: Text(
                         "Responder",
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
                     onTap: () {
-                      widget.replyComment(widget.comment);
+                      widget.replyComment(widget.commentReplies);
                     },
                   ),
-                  CommentReplies(
-                    comment: widget.comment,
-                    updateState: widget.updateState,
-                  )
                 ],
               ),
             )
           ],
         ),
-        SizedBox(
-          height: 25,
-        )
+        if (widget.lastWidget)
+          SizedBox(
+            height: 25,
+          )
       ],
     );
   }
 
-  void deleteComment(Comment comment, BuildContext context) {
+  void deleteComment(CommentReply commentReply, BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
@@ -155,10 +150,10 @@ class _ItemCommentState extends State<ItemComment> {
                 onPressed: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.of(context).pop();
-                  await widget.commentStore
-                      .deleteComments(widget.postId, comment.id);
-                  widget.commentStore.listComments.clear();
-                  widget.commentStore.currentPageComment = 1;
+                  await widget.commentRepliesStore!
+                      .deleteComments(commentReply.id);
+                  widget.commentRepliesStore!.listComments.clear();
+                  widget.commentRepliesStore!.currentPageComment = 1;
                   widget.getData();
                 },
                 child: Text(

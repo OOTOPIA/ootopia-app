@@ -14,6 +14,7 @@ class Comment {
   final bool selected = false;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? totalReplies;
   @JsonKey(name: 'usersComments')
   final List<UserSearchModel>? userComments;
 
@@ -27,6 +28,7 @@ class Comment {
     this.createdAt,
     this.updatedAt,
     this.userComments,
+    this.totalReplies,
   });
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);

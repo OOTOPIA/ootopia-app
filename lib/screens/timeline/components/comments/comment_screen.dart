@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
+import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/component/item_comment.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/component/list_of_users.dart';
@@ -30,10 +33,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   late RichTextController _inputController;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   CommentStore commentStore = CommentStore();
+  CommentRepliesStore commentRepliesStore = CommentRepliesStore();
   late HomeStore homeStore;
   late AuthStore authStore;
   int postCommentsCount = 0;
   String postId = '';
+  String? commentReply;
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
@@ -176,7 +181,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         commentStore.isLoading = true;
         commentStore.currentPageComment = 1;
         isIconBlue = false;
-        await commentStore.createComment(postId, _inputController.text.trim());
+        if (commentReply != null) {
+          CommentReply createCommentReply = await commentRepliesStore
+              .createComment(commentReply!, _inputController.text.trim());
+        } else {
+          await commentStore.createComment(
+              postId, _inputController.text.trim());
+        }
+
         _inputController.clear();
         commentStore.listComments.clear();
         _getData();
@@ -188,6 +200,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   Future<void> _getData() async {
     await commentStore.getComments(postId, commentStore.currentPageComment);
     commentStore.isLoading = false;
+  }
+
+  replyComment(Comment comment) {
+    _inputController.text = "ㅤ@${comment.username}ㅤ";
+    _inputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _inputController.text.length));
+    commentStore.listUsersMarket?.add(comment.userId);
+    commentReply = comment.id;
   }
 
   @override
@@ -208,7 +228,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       return LoadingOverlay(
         isLoading: commentStore.isLoading,
         child: GestureDetector(
-          onTap: () => focusNode.unfocus(),
+          onTap: () {
+            focusNode.unfocus();
+            commentReply = null;
+            commentStore.listUsersMarket = null;
+            _inputController.text = '';
+          },
           child: Scaffold(
             body: Stack(
               children: [
@@ -255,7 +280,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     (ScrollNotification scrollInfo) {
                                   //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
-                                      scrollInfo.metrics.maxScrollExtent) {
+                                          scrollInfo.metrics.maxScrollExtent &&
+                                      commentStore.hasMorePosts &&
+                                      !commentStore.isLoading) {
                                     commentStore.currentPageComment++;
                                     commentStore.isLoading = true;
 
@@ -293,12 +320,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                     .listComments[index].userId;
                                       }
                                       return ItemComment(
-                                        comment: comment,
-                                        visibleDelete: visibleDelete,
-                                        commentStore: commentStore,
-                                        getData: _getData,
-                                        postId: postId,
-                                      );
+                                          comment: comment,
+                                          visibleDelete: visibleDelete,
+                                          commentStore: commentStore,
+                                          getData: _getData,
+                                          postId: postId,
+                                          replyComment: replyComment,
+                                          updateState: () => setState(() {}));
                                     },
                                   ),
                                 ),
