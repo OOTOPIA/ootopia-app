@@ -14,6 +14,7 @@ class MediaViewWidget extends StatefulWidget {
   final Size? mediaSize;
   final bool shouldCustomFlickManager;
   final bool showCropWidget;
+  final ValueChanged<Image>? onChanged;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
@@ -21,6 +22,7 @@ class MediaViewWidget extends StatefulWidget {
     this.mediaSize,
     this.shouldCustomFlickManager = false,
     this.showCropWidget = false,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -158,6 +160,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                               onChanged: (value) {
                                 setState(() {
                                   cropImage = value;
+                                  widget.onChanged!(cropImage!);
                                 });
                               },
                             ),

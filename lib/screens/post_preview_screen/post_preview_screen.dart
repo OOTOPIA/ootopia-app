@@ -800,6 +800,11 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     );
   }
 
+  void teste(Image newImage, var oldImage) {
+    print('NOVO $newImage');
+    print('ANTIGO $oldImage');
+  }
+
   buildMediaRow(dynamic file) {
     return Container(
       width: MediaQuery.of(context).size.width - 60,
@@ -810,6 +815,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
         mediaSize: file["mediaSize"],
         shouldCustomFlickManager: true,
         showCropWidget: true,
+        onChanged: (value) {
+          teste(value, file);
+        },
       ),
     );
   }
