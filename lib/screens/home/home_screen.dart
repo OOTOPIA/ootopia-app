@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
+//import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,7 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
-import 'package:ootopia_app/main.dart' as main;
+//import 'package:ootopia_app/main.dart' as main;
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -100,19 +100,19 @@ class _HomeScreenState extends State<HomeScreen>
     Future.delayed(Duration(milliseconds: 1000), () async {
       _checkStores();
       _checkPageParams();
-      FlutterBackgroundService().sendData(
-        {
-          "action": "START_SYNC",
-          "message":
-              AppLocalizations.of(context)!.updatingRegenerationGameStatus,
-        },
-      );
-      if (await FlutterBackgroundService().isServiceRunning() &&
-          !await getUserIsLoggedIn()) {
-        FlutterBackgroundService().sendData(
-          {"action": "stopService"},
-        );
-      }
+      // FlutterBackgroundService().sendData(
+      //   {
+      //     "action": "START_SYNC",
+      //     "message":
+      //         AppLocalizations.of(context)!.updatingRegenerationGameStatus,
+      //   },
+      // );
+      // if (await FlutterBackgroundService().isServiceRunning() &&
+      //     !await getUserIsLoggedIn()) {
+      //   FlutterBackgroundService().sendData(
+      //     {"action": "stopService"},
+      //   );
+      // }
       AwesomeNotifications().actionStream.listen((event) {
         final payload = event.payload!;
         if (payload != null) {
@@ -178,13 +178,13 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    FlutterBackgroundService.initialize(main.onStartService);
-    FlutterBackgroundService().sendData(
-      {
-        "action": "START_SYNC",
-        "message": AppLocalizations.of(context)!.updatingRegenerationGameStatus,
-      },
-    );
+    // FlutterBackgroundService.initialize(main.onStartService);
+    // FlutterBackgroundService().sendData(
+    //   {
+    //     "action": "START_SYNC",
+    //     "message": AppLocalizations.of(context)!.updatingRegenerationGameStatus,
+    //   },
+    // );
     homeStore?.stopDailyGoalTimer();
     updateRecordTimeUsage.removeListener(resetDailyGoalTimer);
     updateAccumulatedOOZ.removeListener(updateDailyGoalStatsByMessage);
