@@ -27,9 +27,8 @@ class InviteYourFriends extends StatelessWidget {
             arguments: {
               "returnToPageWithArgs": {
                 "currentPageName": "home",
-                "arguments": null
               },
-              'redirectToSharedInvitationCode': true,
+              'redirectToInvitationCode': true,
             },
           );
         }
