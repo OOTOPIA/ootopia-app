@@ -84,7 +84,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     var name = 'ㅤ@${e.fullname}ㅤ';
     var s = 0;
     var text = _inputController.text;
-    for (var i = text.length - 1; i > 0; i--) {
+    for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
         _inputController.text = text.replaceRange(i, i + s + 1, name);
         break;
