@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 class CustomCrop extends StatefulWidget {
   final File image;
-  final ValueChanged<File> onChanged; //volta aqui
+  final ValueChanged<File> onChanged;
   const CustomCrop({Key? key, required this.image, required this.onChanged})
       : super(key: key);
 
@@ -71,7 +71,6 @@ class _CustomCropState extends State<CustomCrop> {
   }
 
   Future<void> _cropImage() async {
-    //newCroppedImage = await controller.croppedImage();
     final croppedBitmap = await controller.croppedBitmap();
     teste(await croppedBitmap.toByteData(format: ImageByteFormat.png));
 
@@ -79,7 +78,7 @@ class _CustomCropState extends State<CustomCrop> {
   }
 
   teste(ByteData? imageBytes) async {
-    String appPath = (await getExternalStorageDirectory())!.path;
+    String appPath = (await getApplicationDocumentsDirectory()).path;
     File newFile = File('$appPath/${imageBytes.hashCode}.png');
     await newFile.writeAsBytes(imageBytes!.buffer
         .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
