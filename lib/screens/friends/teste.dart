@@ -56,7 +56,7 @@ class FriendsStore with ChangeNotifier {
 
 
   //SEARCH PAGE
-  List<FriendModel> usersSearch = [];
+  FriendsDataModel usersSearch = FriendsDataModel(total: 0, friends: []);
   bool isLoadingSearch = false;
   bool searchIsEmpty = false;
   bool hasMoreUsersSearch = true;
@@ -65,7 +65,7 @@ class FriendsStore with ChangeNotifier {
   String lastName = '';
 
   void cleanSearchPage() {
-    usersSearch = [];
+    usersSearch = FriendsDataModel(total: 0, friends: []);
     isLoadingSearch = false;
     searchIsEmpty = false;
     hasMoreUsersSearch = true;
@@ -80,10 +80,10 @@ class FriendsStore with ChangeNotifier {
       isLoadingSearch = true;
       notifyListeners();
       pageSearch = 0;
-      usersSearch = [];
+      usersSearch = FriendsDataModel(total: 0, friends: []);
       lastName = name;
       usersSearch = await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
-      searchIsEmpty = usersSearch.isEmpty;
+      searchIsEmpty = usersSearch.friends!.isEmpty;
       isLoadingSearch = false;
       notifyListeners();
     }
@@ -93,23 +93,23 @@ class FriendsStore with ChangeNotifier {
     if(hasMoreUsersSearch && lastName.isNotEmpty) {
       loadingMoreUsersSearch = true;
       pageSearch++;
-      List<FriendModel> auxUsers = await friendsRepositoryImpl.
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.
       searchFriends(lastName, pageSearch, limit);
-      usersSearch.addAll(auxUsers);
+      usersSearch.friends!.addAll(auxUsers.friends!);
       loadingMoreUsersSearch = false;
-      hasMoreUsersSearch = auxUsers.length == 10;
+      hasMoreUsersSearch = auxUsers.friends!.length == 10;
     }
   }
   //END SEARCH
 
 
   //GET IF IS FRIEND
-  bool isFriend = false;
-
-  Future<bool> getIfIsFriend(String userId) async {
-    isFriend =  await friendsRepositoryImpl.getIfIsFriends(userId);
-    return isFriend;
-  }
+  // bool isFriend = false;
+  //
+  // Future<bool> getIfIsFriend(String userId) async {
+  //   isFriend =  await friendsRepositoryImpl.getIfIsFriends(userId);
+  //   return isFriend;
+  // }
   //END GET IF IS FRIEND
 
 

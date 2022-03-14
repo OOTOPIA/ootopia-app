@@ -1,6 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
@@ -9,7 +8,7 @@ import 'api.dart';
 
 abstract class FriendsRepository {
   Future<FriendsDataModel> getFriends(String userId, int page, int limit, {required String orderBy, required String sortingType});
-  Future<List> searchFriends(String name, int page, int limit);
+  Future<FriendsDataModel> searchFriends(String name, int page, int limit);
   Future<bool> addFriend(String userId);
   Future<bool> removeFriend(String userId);
   Future<bool> getIfIsFriends(String userId);
@@ -49,8 +48,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       };
 
       final response = await ApiClient.api().get(
-        //TODO ADD by-user/
-        dotenv.env['API_URL']! + "friends/$userId",
+        dotenv.env['API_URL']! + "friends/by-user/$userId",
         queryParameters: queryParams,
       );
       if (response.statusCode == 200) {
@@ -63,7 +61,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
     }
   }
 
-  Future<List<FriendModel>> searchFriends(String name, int page, int limit) async {
+  Future<FriendsDataModel> searchFriends(String name, int page, int limit) async {
     try {
       Map<String, dynamic> queryParams = {
         "page": page,
@@ -78,12 +76,13 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
           queryParameters: queryParams
       );
       if (response.statusCode == 200) {
-        return (response.data as List).map((i) => FriendModel.fromJson(i)).toList();
+        print('\n\n ${response.data}');
+        return FriendsDataModel.fromJson(response.data);
       }
-      return [];
+      return FriendsDataModel(total: 0, friends: []);
     } catch (error) {
       print('error: $error');
-      return   [];
+      return FriendsDataModel(total: 0, friends: []);
     }
   }
 
@@ -126,8 +125,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
   Future<bool> getIfIsFriends(String userId) async {
     try {
       final response = await ApiClient.api().get(
-        //TODO REMOVER TODO
-        dotenv.env['API_URL']! + "friends/TODO/$userId",
+        dotenv.env['API_URL']! + "friends/$userId",
       );
       if (response.statusCode == 200) {
         bool isFriend = response.data["isFriend"] ?? false;
@@ -136,8 +134,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
         return  false;
       }
     } catch (error) {
-      //TODO REMOVER IGNORE
-      //print('\nerror IGNORE: $error');
+      print('\nerror IGNORE: $error');
       return  false;
     }
   }

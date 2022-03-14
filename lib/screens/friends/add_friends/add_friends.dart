@@ -43,7 +43,7 @@ class _AddFriendsState extends State<AddFriends> {
   @override
   Widget build(BuildContext context) {
     init();
-    print('creat add');
+    print('update search');
     return Consumer<FriendsStore>(
         builder: (cont, counter, _) {
           return Stack(
@@ -137,6 +137,23 @@ class _AddFriendsState extends State<AddFriends> {
                           ),
                         ),
                       ),
+                      Visibility(
+                        visible: !friendsStore.isLoading && !(friendsStore.usersSearch.friends?.isEmpty ?? true),
+                        child: Container(
+                          margin: EdgeInsets.only(left: 25, top: 8),
+                          child: Text('${friendsStore.usersSearch.total} '
+                              '${AppLocalizations.of(context)!.resultsFor} '
+                              '\"${friendsStore.lastName}\"',
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: LightColors.blue,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w400
+                            ),
+                          ),
+                        ),
+                      ),
 
                       if(friendsStore.isLoadingSearch)...[
                         ListView.builder(
@@ -176,11 +193,12 @@ class _AddFriendsState extends State<AddFriends> {
                         )
                       ]else...[
                         ListView.builder(
-                            itemCount: friendsStore.usersSearch.length,
+                            itemCount: friendsStore.usersSearch.friends!.length,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return itemFriend(friendsStore.usersSearch[index]);
+                              return itemFriend(friendsStore.usersSearch
+                                  .friends![index]!);
 
                             }
                         ),
@@ -204,7 +222,7 @@ class _AddFriendsState extends State<AddFriends> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(25, 31, 14, 0),
+            padding: EdgeInsets.fromLTRB(25, 16, 14, 0),
             child: Row(
               children: [
                 Container(
@@ -276,198 +294,174 @@ class _AddFriendsState extends State<AddFriends> {
 
   Widget itemFriend(FriendModel friendModel){
     return Builder(
-      builder: (context) {
-        return Column(
-          children: [
-            SizedBox(
-              height: 18,
-            ),
-            Material(
-              color: Colors.transparent,
-              child: Ink(
-                child: InkWell(
-                  splashColor: LightColors.grey.withOpacity(0.2),
-                  child:  Padding(
-                    padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
+        builder: (context) {
+          return Column(
+            children: [
+              SizedBox(
+                height: 8,
+              ),
+              Material(
+                color: Colors.transparent,
+                child: Ink(
+                  child: InkWell(
+                    splashColor: LightColors.grey.withOpacity(0.2),
+                    child:  Padding(
+                      padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Shimmer.fromColors(
+                                baseColor:  Colors.grey[300] ?? Colors.blue,
+                                highlightColor:  Colors.grey[100] ?? Colors.blue,
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    friendModel.photoUrl ?? '',
+                                    fit: BoxFit.cover,
+                                    width: 40,
+                                    height: 40,
+                                    errorBuilder: (context, url, error) => Image.asset(
+                                      'assets/icons/user.png',
+                                      fit: BoxFit.cover,
+                                      width: 40,
+                                      height: 40,
+                                    ),
+
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 12),
+                            width: MediaQuery.of(context).size.width - 200,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  friendModel.fullname ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: LightColors.grey,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  friendModel.location(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: LightColors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          Visibility(
+                            visible: friendModel.isFriend != null,
+                            child: SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular
+                                            (20),
+                                          side: BorderSide.none),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.symmetric(horizontal: 18)),
+                                  ),
+                                  onPressed: () {
+                                    Future.delayed(Duration(milliseconds: 80),(){
+                                      if(friendModel.isFriend != true){
+                                        friendsStore.addFriend(friendModel);
+                                        friendModel.isFriend = true;
+                                        setState(() {});
+                                      }else{
+                                        _goToProfile(friendModel.id);
+                                      }
+                                    });
+                                  },
+                                  child: Text(
+                                    getIfIsFriend(friendModel) ?
+                                    AppLocalizations.of(context)!.friend:
+                                    AppLocalizations.of(context)!.add,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Future.delayed(Duration(milliseconds: 100),(){
+                        _goToProfile(friendModel.id);
+                      });
+                    },
+                  ),
+                ),
+              ),
+              if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  height: 76,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                      itemCount: friendModel.friendsThumbs!.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return  Stack(
                           children: [
                             Shimmer.fromColors(
                               baseColor:  Colors.grey[300] ?? Colors.blue,
                               highlightColor:  Colors.grey[100] ?? Colors.blue,
                               child: Container(
-                                height: 40,
-                                width: 40,
+                                margin: EdgeInsets.only(
+                                  left: index == 0 ? 25 : 8,
+                                  top: 2,
+                                  right: index == friendModel.friendsThumbs!.length ? 14 : 0,
+                                ),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(
-                                  friendModel.photoUrl ?? '',
-                                  fit: BoxFit.cover,
-                                  width: 40,
-                                  height: 40,
-                                  errorBuilder: (context, url, error) => Image.asset(
-                                    'assets/icons/user.png',
-                                    fit: BoxFit.cover,
-                                    width: 40,
-                                    height: 40,
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
                                   ),
-
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 12),
-                          width: MediaQuery.of(context).size.width - 200,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                friendModel.fullname ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: LightColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                friendModel.location(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: LightColors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Spacer(),
-                        Visibility(
-                          //TODO VERIFICAR SE NAO É NULO friendModel.isFriend != null
-                          visible: true,
-                          child: SizedBox(
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular
-                                          (20),
-                                        side: BorderSide.none),
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                  padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.symmetric(horizontal: 18)),
-                                ),
-                                onPressed: () {
-                                  Future.delayed(Duration(milliseconds: 80),(){
-                                    if(friendModel.isFriend != true){
-                                      friendsStore.addFriend(friendModel);
-                                      friendModel.isFriend = true;
-                                      setState(() {});
-                                    }else{
-                                      _goToProfile(friendModel.id);
-                                    }
-                                  });
-                                },
-                                child: Text(
-                                  getIfIsFriend(friendModel) ?
-                                  AppLocalizations.of(context)!.friend:
-                                  AppLocalizations.of(context)!.add,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    Future.delayed(Duration(milliseconds: 100),(){
-                      _goToProfile(friendModel.id);
-                    });
-                  },
-                ),
-              ),
-            ),
-            if(friendModel.friendsThumbs?.isNotEmpty ?? false)...[
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                height: 76,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                    itemCount: friendModel.friendsThumbs!.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return  Stack(
-                        children: [
-                          Shimmer.fromColors(
-                            baseColor:  Colors.grey[300] ?? Colors.blue,
-                            highlightColor:  Colors.grey[100] ?? Colors.blue,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: index == 0 ? 25 : 8,
-                                top: 2,
-                                right: index == friendModel.friendsThumbs!.length ? 14 : 0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              height: 76,
-                              width: 74,
-                            ),
-                          ),
-                          Container(
-                            width: 74,
-                            height: 76,
-                            margin: EdgeInsets.only(
-                              left: index == 0 ? 25 : 8,
-                              right: index == (friendModel.friendsThumbs!
-                                  .length - 1) ? 14 : 0,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
-                                fit: BoxFit.cover,
-                                width: 74,
                                 height: 76,
-                                errorBuilder: (context, url, error) => Center(
-                                  child: Icon(Icons.error),
-                                ),
-
+                                width: 74,
                               ),
                             ),
-                          ),
-                          if(friendModel.friendsThumbs![index]!.type == 'video')...[
                             Container(
                               width: 74,
                               height: 76,
@@ -476,23 +470,46 @@ class _AddFriendsState extends State<AddFriends> {
                                 right: index == (friendModel.friendsThumbs!
                                     .length - 1) ? 14 : 0,
                               ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.white,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  friendModel.friendsThumbs![index]!.thumbnailUrl ?? '',
+                                  fit: BoxFit.cover,
+                                  width: 74,
+                                  height: 76,
+                                  errorBuilder: (context, url, error) => Center(
+                                    child: Icon(Icons.error),
+                                  ),
+
                                 ),
                               ),
                             ),
+                            if(friendModel.friendsThumbs![index]!.type == 'video')...[
+                              Container(
+                                width: 74,
+                                height: 76,
+                                margin: EdgeInsets.only(
+                                  left: index == 0 ? 25 : 8,
+                                  right: index == (friendModel.friendsThumbs!
+                                      .length - 1) ? 14 : 0,
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
-                      );
-                    }
-                ),
-              )
-            ]
-          ],
-        );
-      }
+                        );
+                      }
+                  ),
+                )
+              ]
+            ],
+          );
+        }
     );
   }
 

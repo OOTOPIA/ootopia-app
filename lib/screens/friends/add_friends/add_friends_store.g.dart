@@ -12,13 +12,13 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
   final _$usersAtom = Atom(name: 'AddFriendsStoreBase.users');
 
   @override
-  List<FriendModel> get users {
+  FriendsDataModel get users {
     _$usersAtom.reportRead();
     return super.users;
   }
 
   @override
-  set users(List<FriendModel> value) {
+  set users(FriendsDataModel value) {
     _$usersAtom.reportWrite(value, super.users, () {
       super.users = value;
     });
@@ -108,12 +108,12 @@ mixin _$AddFriendsStore on AddFriendsStoreBase, Store {
     return _$searchNewNameAsyncAction.run(() => super.searchNewName(name));
   }
 
-  final _$getMoreUserAsyncAction =
-      AsyncAction('AddFriendsStoreBase.getMoreUser');
+  final _$getMoreUserSearchAsyncAction =
+      AsyncAction('AddFriendsStoreBase.getMoreUserSearch');
 
   @override
-  Future<void> getMoreUser() {
-    return _$getMoreUserAsyncAction.run(() => super.getMoreUser());
+  Future<void> getMoreUserSearch() {
+    return _$getMoreUserSearchAsyncAction.run(() => super.getMoreUserSearch());
   }
 
   final _$addFriendAsyncAction = AsyncAction('AddFriendsStoreBase.addFriend');

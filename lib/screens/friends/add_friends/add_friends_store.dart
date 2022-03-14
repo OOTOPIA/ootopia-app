@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 import 'package:ootopia_app/data/repositories/friends_repository.dart';
 
 part 'add_friends_store.g.dart';
@@ -11,7 +11,7 @@ abstract class AddFriendsStoreBase with Store {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
 
   @observable
-  List<FriendModel> users = [];
+  FriendsDataModel users = FriendsDataModel(total: 0, friends: []);
 
   @observable
   List<String> usersIdAdded = [];
@@ -38,24 +38,24 @@ abstract class AddFriendsStoreBase with Store {
       FocusManager.instance.primaryFocus?.unfocus();
       isLoading = true;
       page = 0;
-      users = [];
+      users = FriendsDataModel(total: 0, friends: []);
       lastName = name;
       users = await friendsRepositoryImpl.searchFriends(name, page, limit);
-      searchIsEmpty = users.isEmpty;
+      searchIsEmpty = users.friends!.isEmpty;
       isLoading = false;
     }
   }
 
   @action
-  Future<void> getMoreUser() async {
+  Future<void> getMoreUserSearch() async {
     if(hasMoreUsers && lastName.isNotEmpty) {
       loadingMoreUsers = true;
       page++;
-      List<FriendModel> auxUsers = await friendsRepositoryImpl.
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.
       searchFriends(lastName, page, limit);
-      users.addAll(auxUsers);
+      users..friends!.addAll(auxUsers.friends!);
       loadingMoreUsers = false;
-      hasMoreUsers = auxUsers.length == 10;
+      hasMoreUsers = auxUsers.friends!.length == 10;
     }
   }
 

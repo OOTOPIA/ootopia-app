@@ -57,141 +57,150 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   @override
   Widget build(BuildContext context) {
     init();
-    return Consumer<FriendsStore>(
-        builder: (context, counter, _) {
-          return Observer(
-            builder: (_) {
-              return Container(
-                margin: EdgeInsets.only(bottom: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Visibility(
-                      visible: !widget.isUserLogged,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context).screenHorizontalSpace),
-                        child: Divider(
-                          height: 1,
-                          color: Color(0xff707070).withOpacity(.5),
-                        ),
+    if(widget.isUserLogged){
+      return Consumer<FriendsStore>(
+          builder: (context, counter, _) {
+            return body();
+          }
+      );
+    }else{
+      return Observer(
+          builder: (_) {
+            return body();
+          }
+      );
+    }
+
+  }
+
+  Widget body(){
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Visibility(
+            visible: !widget.isUserLogged,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: GlobalConstants.of(context).screenHorizontalSpace),
+              child: Divider(
+                height: 1,
+                color: Color(0xff707070).withOpacity(.5),
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(right: 16, left: 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if(!friendsStore.isLoading && !circleFriendsWidgetStore.isLoading)...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14.0),
+                    child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: widget.isUserLogged ?
+                              '${friendsStore.myFriendsDate?.total ?? 0} ' :
+                              '${circleFriendsWidgetStore.friendsDate?.total ?? 0} ',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: LightColors.blue,
+                                  fontWeight: FontWeight.w500)
+
+                          ),
+                          TextSpan(
+                              text: AppLocalizations.of(context)!.friends,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: LightColors.black,
+                                  fontWeight: FontWeight.w500)
+
+                          ),
+                        ])),
+                  ),
+                ],
+
+                if(friendsStore.isLoading || circleFriendsWidgetStore.isLoading)...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14.0, bottom: 18),
+                    child: Shimmer.fromColors(
+                      baseColor:  Colors.grey[300] ?? Colors.blue,
+                      highlightColor:  Colors.grey[100] ?? Colors.blue,
+                      child: Container(
+                        height: 14,
+                        width: 80,
+                        color: Colors.white,
                       ),
                     ),
-
-                    Padding(
-                      padding: EdgeInsets.only(right: 16, left: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if(!friendsStore.isLoading && !circleFriendsWidgetStore.isLoading)...[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 14.0),
-                              child: RichText(
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: widget.isUserLogged ?
-                                        '${friendsStore.myFriendsDate?.total ?? 0} ' :
-                                        '${circleFriendsWidgetStore.friendsDate?.total ?? 0} ',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: LightColors.blue,
-                                            fontWeight: FontWeight.w500)
-
-                                    ),
-                                    TextSpan(
-                                        text: AppLocalizations.of(context)!.friends,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: LightColors.black,
-                                            fontWeight: FontWeight.w500)
-
-                                    ),
-                                  ])),
-                            ),
-                          ],
-
-                          if(friendsStore.isLoading || circleFriendsWidgetStore.isLoading)...[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 14.0, bottom: 18),
-                              child: Shimmer.fromColors(
-                                baseColor:  Colors.grey[300] ?? Colors.blue,
-                                highlightColor:  Colors.grey[100] ?? Colors.blue,
-                                child: Container(
-                                  height: 14,
-                                  width: 80,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 14.0, bottom: 18),
-                              child: Shimmer.fromColors(
-                                baseColor:  Colors.grey[300] ?? Colors.blue,
-                                highlightColor:  Colors.grey[100] ?? Colors.blue,
-                                child: Container(
-                                  height: 14,
-                                  width: 80,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
-                          ]else if(widget.isUserLogged && (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false))...[
-                            TextButton(
-                              onPressed: (){
-                                Future.delayed(Duration(milliseconds: 100),(){
-                                  controller.insertPage(CircleOfFriendPage(
-                                    userId: widget.userId,
-                                  ));
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  Text(AppLocalizations.of(context)!.seeAll,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: LightColors.blue,
-                                    ),),
-                                  SizedBox(width: 4),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: LightColors.blue,
-                                    size: 14,
-
-                                  )
-                                ],
-                              ),
-                            ),
-                          ]
-                        ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14.0, bottom: 18),
+                    child: Shimmer.fromColors(
+                      baseColor:  Colors.grey[300] ?? Colors.blue,
+                      highlightColor:  Colors.grey[100] ?? Colors.blue,
+                      child: Container(
+                        height: 14,
+                        width: 80,
+                        color: Colors.white,
                       ),
-
                     ),
+                  )
+                ]else if(widget.isUserLogged && (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false))...[
+                  TextButton(
+                    onPressed: (){
+                      Future.delayed(Duration(milliseconds: 100),(){
+                        controller.insertPage(CircleOfFriendPage(
+                          userId: widget.userId,
+                        ));
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Text(AppLocalizations.of(context)!.seeAll,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: LightColors.blue,
+                          ),),
+                        SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: LightColors.blue,
+                          size: 14,
 
-                    Visibility(
-                      visible: xxx(),
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: widget.isUserLogged ? 70 : 56,
-                          child: listFriends()),
+                        )
+                      ],
                     ),
-                    Visibility(
-                      visible: !(friendsStore.isLoading ||
-                          (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false)) && widget.isUserLogged,
-                      child: Container(
-                          height: 70,
-                          margin: EdgeInsets.only(top: 12),
-                          child: buttonToAddFriends()),
-                    )
-                  ],
+                  ),
+                ]
+              ],
+            ),
 
-                ),
-              );
-            }
-          );
-        }
+          ),
+
+          Visibility(
+            visible: xxx(),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: widget.isUserLogged ? 70 : 56,
+                child: listFriends()),
+          ),
+          Visibility(
+            visible: !(friendsStore.isLoading ||
+                (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false)) && widget.isUserLogged,
+            child: Container(
+                height: 70,
+                margin: EdgeInsets.only(top: 12),
+                child: buttonToAddFriends()),
+          )
+        ],
+
+      ),
     );
   }
 

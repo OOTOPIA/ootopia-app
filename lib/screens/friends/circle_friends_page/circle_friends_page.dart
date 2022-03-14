@@ -67,6 +67,18 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
               BackgroundButterflyTop(positioned: -59),
               BackgroundButterflyBottom(positioned: -50),
               body(),
+              if(isPageOfUserLogged())...[
+                Consumer<FriendsStore>(
+                    builder: (cont, friend, child) {
+                      return body();
+                    }
+                )
+              ]else...[
+                Observer(
+                    builder: (context) {
+                      return body();
+                    })
+              ]
             ],
           );
         }
@@ -75,211 +87,207 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
 
   Widget body() {
-    return  Consumer<FriendsStore>(
-        builder: (cont, friend, child) {
-          return NotificationListener<ScrollNotification>(
-            onNotification: (ScrollNotification scrollInfo) {
-              if ( loadMoreFriends(scrollInfo)) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        if ( loadMoreFriends(scrollInfo)) {
 
-                Future.delayed(Duration.zero,() async {
-                  if(isPageOfUserLogged()){
-                    await friendsStore.getMoreFriends(widget.userId);
-                  }else{
-                    await circleFriendsStore.getMoreFriends(widget.userId);
+          Future.delayed(Duration.zero,() async {
+            if(isPageOfUserLogged()){
+              await friendsStore.getMoreFriends(widget.userId);
+            }else{
+              await circleFriendsStore.getMoreFriends(widget.userId);
 
-                  }
-                 // setState(() {});
-                });
-              }
-              return true;
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            }
+            // setState(() {});
+          });
+        }
+        return true;
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 14.0, left: 28,
+                  right: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 14.0, left: 28,
-                        right: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 12),
-                            Text(AppLocalizations.of(context)!.friends,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 24,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2.0),
-                              child: circleFriendsStore.isLoading || friendsStore.isloadingA?
-                              Shimmer.fromColors(
-                                baseColor:  Colors.grey[300] ?? Colors.blue,
-                                highlightColor:  Colors.grey[100] ?? Colors.blue,
-                                child: Container(
-                                  height: 10,
-                                  width: 72,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              )
-                                  :
-                              Text(
-                                "${getAmountOfFriends()}"
-                                    " ${AppLocalizations.of(context)!.friends}",
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 12,
-                                  color: Color(0xff939598),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        if(isPageOfUserLogged())...[
-                          ElevatedButton(
-                              style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular
-                                        (20),
-                                      side: BorderSide.none),
-                                ),
-                                backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                padding: MaterialStateProperty.all<EdgeInsets>(
-                                    EdgeInsets.symmetric(horizontal: 24)),
-                              ),
-                              onPressed: () {
-                                Future.delayed(Duration(milliseconds: 100),(){
-                                  controller.insertPage(AddFriends());
-                                });
-                              },
-                              child: Text(MediaQuery.of(context).size.width <= 300 ?
-                              AppLocalizations.of(context)!.add:
-                              AppLocalizations.of(context)!.addFriend,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ))
-                        ]
-                      ],
-                    ),
-
-
-                  ),
-
-                  GestureDetector(
-                    onTap: (){
-                      _showDialog(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 18),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/icons/list.png',
-
-                            height: 10,
-                          ),
-                          SizedBox(width: 6),
-
-                          RichText(
-                            text: TextSpan(
-                              text: AppLocalizations.of(context)!.orderBy,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: " $orderBySelected",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-
-                                ),
-                              ],
-                            ),
-                          )
-
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  if(circleFriendsStore.isLoading || friendsStore.isloadingA)...[
-                    ListView.builder(
-                        itemCount: 11,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return  itemShimmer();
-                        }
-                    ),
-                  ]else  if(isPageOfUserLogged() && allFriendsIsHide())...[
-                    Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.fromLTRB(30, 48, 30, 8),
-                      child: Text(AppLocalizations.of(context)!.userNotFound,
-                        textAlign: TextAlign.center,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 12),
+                      Text(AppLocalizations.of(context)!.friends,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          color: LightColors.grey,
+                          fontSize: 24,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.fromLTRB(48, 0, 48, 15),
-                      child: Text(AppLocalizations.of(context)!.userNotFoundMsg,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: LightColors.grey.withOpacity(0.7),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: circleFriendsStore.isLoading || friendsStore.isloadingA?
+                        Shimmer.fromColors(
+                          baseColor:  Colors.grey[300] ?? Colors.blue,
+                          highlightColor:  Colors.grey[100] ?? Colors.blue,
+                          child: Container(
+                            height: 10,
+                            width: 72,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                            :
+                        Text(
+                          "${getAmountOfFriends()}"
+                              " ${AppLocalizations.of(context)!.friends}",
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 12,
+                            color: Color(0xff939598),
+                          ),
                         ),
                       ),
-                    ),
-                  ]else...[
-                    ListView.builder(
-                        itemCount: isPageOfUserLogged() ?
-                        friendsStore.friendsDate?.friends?.length ?? 0 :
-                        circleFriendsStore.friendsDate!.friends!.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return  itemFriend(
-                              isPageOfUserLogged() ?
-                                  friendsStore.friendsDate!.friends![index]! :
-                              circleFriendsStore.friendsDate!.friends![index]!, index);
-                        }
-                    ),
-                  ],
+                    ],
+                  ),
 
-                  SizedBox(height: 16),
-
+                  if(isPageOfUserLogged())...[
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                          shape: MaterialStateProperty.all<
+                              RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular
+                                  (20),
+                                side: BorderSide.none),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 24)),
+                        ),
+                        onPressed: () {
+                          Future.delayed(Duration(milliseconds: 100),(){
+                            controller.insertPage(AddFriends());
+                          });
+                        },
+                        child: Text(MediaQuery.of(context).size.width <= 300 ?
+                        AppLocalizations.of(context)!.add:
+                        AppLocalizations.of(context)!.addFriend,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                  ]
                 ],
               ),
+
+
             ),
-          );
-        }
+
+            GestureDetector(
+              onTap: (){
+                _showDialog(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25, top: 18),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icons/list.png',
+
+                      height: 10,
+                    ),
+                    SizedBox(width: 6),
+
+                    RichText(
+                      text: TextSpan(
+                        text: AppLocalizations.of(context)!.orderBy,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: " $orderBySelected",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+
+                          ),
+                        ],
+                      ),
+                    )
+
+                  ],
+                ),
+              ),
+            ),
+
+            if(circleFriendsStore.isLoading || friendsStore.isloadingA)...[
+              ListView.builder(
+                  itemCount: 11,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return  itemShimmer();
+                  }
+              ),
+            ]else  if(isPageOfUserLogged() && allFriendsIsHide())...[
+              Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.fromLTRB(30, 48, 30, 8),
+                child: Text(AppLocalizations.of(context)!.userNotFound,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    color: LightColors.grey,
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.fromLTRB(48, 0, 48, 15),
+                child: Text(AppLocalizations.of(context)!.userNotFoundMsg,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: LightColors.grey.withOpacity(0.7),
+                  ),
+                ),
+              ),
+            ]else...[
+              ListView.builder(
+                  itemCount: isPageOfUserLogged() ?
+                  friendsStore.friendsDate?.friends?.length ?? 0 :
+                  circleFriendsStore.friendsDate!.friends!.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return  itemFriend(
+                        isPageOfUserLogged() ?
+                        friendsStore.friendsDate!.friends![index]! :
+                        circleFriendsStore.friendsDate!.friends![index]!, index);
+                  }
+              ),
+            ],
+
+            SizedBox(height: 16),
+
+          ],
+        ),
+      ),
     );
   }
 

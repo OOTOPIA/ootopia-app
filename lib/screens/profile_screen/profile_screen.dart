@@ -253,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         photoUrl: store!.profile!.photoUrl,
                                       );
 
-                                     if( friendsStore.isFriend == false){
+                                     if( store!.isFriend == false){
                                        store!.addFriend();
                                        friendsStore.addFriend(friend);
                                      }else{

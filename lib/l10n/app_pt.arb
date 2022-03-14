@@ -487,6 +487,7 @@
     "mostRecent" : "Mais recentes",
     "older" : "Mais antigos",
     "userNotFound" : "Usuário não encontrado",
+    "resultsFor" : "Resultados para",
     "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe."
 
 }
