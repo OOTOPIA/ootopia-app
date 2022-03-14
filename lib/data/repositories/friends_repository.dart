@@ -76,7 +76,6 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
           queryParameters: queryParams
       );
       if (response.statusCode == 200) {
-        print('\n\n ${response.data}');
         return FriendsDataModel.fromJson(response.data);
       }
       return FriendsDataModel(total: 0, friends: []);
@@ -95,7 +94,6 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       if (response.statusCode == 201) {
         return  true;
       } else {
-        print('response.statusCode: ${response.statusCode}');
         return  false;
       }
     } catch (error) {
@@ -113,7 +111,6 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
       if (response.statusCode == 200) {
         return  true;
       } else {
-        print('response.statusCode: ${response.statusCode}');
         return  false;
       }
     } catch (error) {
@@ -134,7 +131,7 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
         return  false;
       }
     } catch (error) {
-      print('\nerror IGNORE: $error');
+      print('\nerror : $error');
       return  false;
     }
   }
