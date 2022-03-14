@@ -469,8 +469,6 @@
     "readMore" : "Leia mais",
     "multiplesImages": "Múltiplas imagens",
     "limitSelectedImages": "O limite são 5 fotos ou vídeos",
-    "userComment":"%USER_NAME_MARKET% marcou você em um comentário",
-    "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
 
 
     "addFriends" : "Adicionar amigos",
@@ -488,10 +486,11 @@
     "older" : "Mais antigos",
     "userNotFound" : "Usuário não encontrado",
     "resultsFor" : "Resultados para",
-    "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe."
+    "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe.",
     "userComment":"Você foi marcado em um comentário",
     "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
     "earnOOzWhenTheySignup":"ganham OOz quando se inscrevem"
+
 
 
 }

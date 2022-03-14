@@ -35,7 +35,6 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<bool> addFriend(FriendModel friend) async {
-    print('add');
     myFriendsDate?.total = (myFriendsDate?.total ?? 0) + 1;
     myFriendsDate?.friends!.add(friend);
     notifyListeners();
