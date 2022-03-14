@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_page/circle_friends_page.dart';
-import 'package:ootopia_app/screens/friends/teste.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
@@ -184,7 +184,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
           ),
 
           Visibility(
-            visible: xxx(),
+            visible: ListIsNotEmpty(),
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: widget.isUserLogged ? 70 : 56,
@@ -383,7 +383,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
     );
   }
 
-  xxx() {
+  ListIsNotEmpty() {
     if(widget.isUserLogged){
       return (friendsStore.isLoading || (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false));
     }else{

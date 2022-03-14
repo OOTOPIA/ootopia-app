@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
-import 'package:ootopia_app/screens/friends/teste.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -128,7 +128,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 2.0),
-                        child: circleFriendsStore.isLoading || friendsStore.isloadingA?
+                        child: circleFriendsStore.isLoading || friendsStore.isLoadingGetAllFriends?
                         Shimmer.fromColors(
                           baseColor:  Colors.grey[300] ?? Colors.blue,
                           highlightColor:  Colors.grey[100] ?? Colors.blue,
@@ -231,7 +231,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
               ),
             ),
 
-            if(circleFriendsStore.isLoading || friendsStore.isloadingA)...[
+            if(circleFriendsStore.isLoading || friendsStore.isLoadingGetAllFriends)...[
               ListView.builder(
                   itemCount: 11,
                   shrinkWrap: true,
@@ -747,7 +747,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     }else{
       status =  !circleFriendsStore.loadingMoreFriends && circleFriendsStore.hasMoreFriends;
     }
-    print('load more $status ${scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent*0.8}');
     return status && scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent*0.8;
   }
 

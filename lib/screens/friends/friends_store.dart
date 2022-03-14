@@ -103,14 +103,7 @@ class FriendsStore with ChangeNotifier {
   //END SEARCH
 
 
-  //GET IF IS FRIEND
-  // bool isFriend = false;
-  //
-  // Future<bool> getIfIsFriend(String userId) async {
-  //   isFriend =  await friendsRepositoryImpl.getIfIsFriends(userId);
-  //   return isFriend;
-  // }
-  //END GET IF IS FRIEND
+
 
 
   //GET ALL FRIEND BY USER LOGGED
@@ -121,7 +114,7 @@ class FriendsStore with ChangeNotifier {
   FriendsDataModel? friendsDate;
   bool hasMoreFriends = true;
   bool loadingMoreFriends = false;
-  bool isloadingA = false;
+  bool isLoadingGetAllFriends = false;
 
   void init(String userId) {
     if(orderBy == null){
@@ -132,7 +125,7 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<void> getFriends(String userId) async{
-    isloadingA = true;
+    isLoadingGetAllFriends = true;
     notifyListeners();
     friendsDate?.friends = [];
     page = 0;
@@ -141,7 +134,7 @@ class FriendsStore with ChangeNotifier {
     sortingType!);
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
-    isloadingA = false;
+    isLoadingGetAllFriends = false;
     notifyListeners();
   }
 

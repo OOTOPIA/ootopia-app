@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
-import 'package:ootopia_app/screens/friends/teste.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -43,7 +43,6 @@ class _AddFriendsState extends State<AddFriends> {
   @override
   Widget build(BuildContext context) {
     init();
-    print('update search');
     return Consumer<FriendsStore>(
         builder: (cont, counter, _) {
           return Stack(
@@ -519,7 +518,6 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   getIfIsFriend(FriendModel friendModel) {
-    print('getIfIsFriend');
     if(friendModel.isFriend == true){
       return true;
     }

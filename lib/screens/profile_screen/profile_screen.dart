@@ -7,7 +7,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
-import 'package:ootopia_app/screens/friends/teste.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
