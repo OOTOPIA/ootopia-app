@@ -109,7 +109,8 @@ class _LoginPageState extends State<LoginPage> {
           (Route<dynamic> route) => false,
           arguments: {
             "returnToPageWithArgs": widget.args!['returnToPageWithArgs'],
-            "redirectToInvitationCode": true,
+            "redirectToInvitationCode":
+                widget.args!['redirectToInvitationCode'] ?? null,
           },
         );
       } else {
