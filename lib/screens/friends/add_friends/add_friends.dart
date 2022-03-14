@@ -53,7 +53,7 @@ class _AddFriendsState extends State<AddFriends> {
                 onNotification: (ScrollNotification scrollInfo) {
                   if (!friendsStore.loadingMoreUsersSearch &&
                       scrollInfo.metrics.pixels >= scrollInfo.metrics
-                          .maxScrollExtent*0.8 &&
+                          .maxScrollExtent*0.6 &&
                       friendsStore.hasMoreUsersSearch ) {
 
                     Future.delayed(Duration.zero,() async {
@@ -380,7 +380,7 @@ class _AddFriendsState extends State<AddFriends> {
                           Visibility(
                             visible: friendModel.isFriend != null,
                             child: SizedBox(
-                              height: 30,
+                              height: 24,
                               child: ElevatedButton(
                                   style: ButtonStyle(
                                     fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),

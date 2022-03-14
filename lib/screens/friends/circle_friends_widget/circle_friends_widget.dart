@@ -149,8 +149,9 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                         color: Colors.white,
                       ),
                     ),
-                  )
-                ]else if(widget.isUserLogged && (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false))...[
+                  ),
+                ]else if((!widget.isUserLogged && (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false)) ||
+                    (widget.isUserLogged && (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false)))...[
                   TextButton(
                     onPressed: (){
                       Future.delayed(Duration(milliseconds: 100),(){
@@ -183,13 +184,6 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
           ),
 
-          Visibility(
-            visible: !widget.isUserLogged && (circleFriendsWidgetStore
-                .friendsDate?.friends?.isNotEmpty ?? false),
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 12),
-          ),
 
           Visibility(
             visible: ListIsNotEmpty(),

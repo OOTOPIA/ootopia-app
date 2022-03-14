@@ -38,7 +38,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   void init(){
     authStore = Provider.of<AuthStore>(context);
-
+    friendsStore  = Provider.of<FriendsStore>(context);
     if(orderBy.isEmpty){
       orderBy = [
         AppLocalizations.of(context)!.alphabeticalOrder,
@@ -48,7 +48,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       orderBySelected = orderBy[0];
     }
     if(isPageOfUserLogged()){
-      friendsStore  = Provider.of<FriendsStore>(context);
       Future.delayed(Duration.zero, (){
         friendsStore.init(widget.userId);
       });
@@ -75,7 +74,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 )
               ]else...[
                 Observer(
-                    builder: (context) {
+                    builder: (_) {
                       return body();
                     })
               ]
@@ -85,20 +84,18 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-
   Widget body() {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
-        if ( loadMoreFriends(scrollInfo)) {
+        if (loadMoreFriends(scrollInfo)) {
 
           Future.delayed(Duration.zero,() async {
             if(isPageOfUserLogged()){
               await friendsStore.getMoreFriends(widget.userId);
             }else{
               await circleFriendsStore.getMoreFriends(widget.userId);
-
+              setState(() {});
             }
-            // setState(() {});
           });
         }
         return true;
@@ -281,6 +278,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         circleFriendsStore.friendsDate!.friends![index]!, index);
                   }
               ),
+              SizedBox(height: 50,),
             ],
 
             SizedBox(height: 16),
@@ -461,7 +459,8 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
                         Spacer(),
 
-                        if(isPageOfUserLogged())...[
+                        if(isPageOfUserLogged() || friendModel.isFriend != null)
+                          ...[
                           SizedBox(
                             height: 24,
                             child: ElevatedButton(
@@ -495,31 +494,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                )),
-                          )
-                        ]else ...[
-                          SizedBox(
-                            height: 30,
-                            child: TextButton(onPressed: (){
-                              Future.delayed(Duration(milliseconds: 80),(){
-                                _goToProfile(friendModel.id);
-                              });
-                            },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.seeProfile,
-                                      style: TextStyle(
-                                        color: LightColors.blue,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    Icon(Icons.arrow_forward_ios_sharp,
-                                      color: LightColors.blue,
-                                      size: 12,
-                                    )
-                                  ],
                                 )),
                           )
                         ],
@@ -734,9 +708,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   String getAmountOfFriends() {
     if(isPageOfUserLogged()){
-      return '${friendsStore.friendsDate?.total ?? 0} ${friendsStore.friendsDate?.friends?.length}';
+      return '${friendsStore.friendsDate?.total ?? 0}';
     }else{
-      return '${circleFriendsStore.friendsDate?.total ?? 0} ${circleFriendsStore.friendsDate?.friends?.length}';
+      return '${circleFriendsStore.friendsDate?.total ?? 0}';
     }
   }
 
@@ -747,7 +721,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     }else{
       status =  !circleFriendsStore.loadingMoreFriends && circleFriendsStore.hasMoreFriends;
     }
-    return status && scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent*0.8;
+    return status && scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent*0.6;
   }
 
 }
