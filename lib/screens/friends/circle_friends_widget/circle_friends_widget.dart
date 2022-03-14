@@ -361,7 +361,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
           Container(
             margin: EdgeInsets.only(top: 2),
             child: Text(
-              AppLocalizations.of(context)!.add,
+              AppLocalizations.of(context)!.addFriend,
               style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 9,
