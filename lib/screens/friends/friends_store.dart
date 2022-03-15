@@ -7,8 +7,6 @@ import 'package:ootopia_app/data/repositories/friends_repository.dart';
 
 class FriendsStore with ChangeNotifier {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
-
-
   bool isLoading = false;
   int page = 0;
   final int limit = 10;
@@ -101,10 +99,6 @@ class FriendsStore with ChangeNotifier {
   }
   //END SEARCH
 
-
-
-
-
   //GET ALL FRIEND BY USER LOGGED
   String? orderBy;
   String? sortingType;
@@ -163,10 +157,5 @@ class FriendsStore with ChangeNotifier {
       sortingType = listSortingType[0];
     }
   }
-
-
-
-
-
 
 }
