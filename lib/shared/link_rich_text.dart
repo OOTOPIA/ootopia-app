@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkRichText extends StatelessWidget {
@@ -30,6 +32,7 @@ class LinkRichText extends StatelessWidget {
   }
 
   void colorUserInText() {
+    SmartPageController controller = SmartPageController.getInstance();
     var allName = [];
     int positionEnd = 0;
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
@@ -39,28 +42,29 @@ class LinkRichText extends StatelessWidget {
         if (startname != -1) {
           allName.add({
             "id": item.id,
-            "name": " @${item.fullname} ",
+            "name": "@${item.fullname}",
             "start": startname,
-            "end": startname + item.fullname.length + 2
+            "end": startname + item.fullname.length + 1
           });
-          positionEnd = startname + item.fullname.length + 2;
+          positionEnd = startname + item.fullname.length + 1;
         }
       }
-      var textIdList = [];
+      Map<int, String> textIdList = {};
       var lastEndName = 0;
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
       for (var countText = 0; countText < text.length; countText++) {
         for (var countAllName = 0;
             countAllName < allName.length;
             countAllName++) {
-          if (!textIdList.contains(allName[countAllName]['id']) &&
-              countText > allName[countAllName]['start'] &&
-              countText < allName[countAllName]['end']) {
+          if (countText >= allName[countAllName]['start'] &&
+              countText <= allName[countAllName]['end']) {
             textFragmented.add(allName[countAllName]['name']);
-            textIdList.add(allName[countAllName]['id']);
+            textIdList.addAll({
+              textFragmented.length - 1: allName[countAllName]['id'],
+            });
             countText = allName[countAllName]['end'];
             break;
-          } else if (countText < allName[countAllName]['start']) {
+          } else if (countText <= allName[countAllName]['start']) {
             textFragmented
                 .add(text.substring(countText, allName[countAllName]['start']));
             countText = allName[countAllName]['start'];
@@ -70,12 +74,22 @@ class LinkRichText extends StatelessWidget {
         }
       }
       if (text.length > lastEndName) {
-        textFragmented.add(text.substring(lastEndName, text.length));
+        textFragmented.add(text.substring(lastEndName + 1, text.length));
       }
-      textFragmented.forEach((comment) {
+      for (var i = 0; i < textFragmented.length; i++) {
+        var comment = textFragmented[i];
+
         textSpanWidget.add(
           TextSpan(
-            text: comment,
+            text: comment.replaceAll('ㅤ', ' '),
+            recognizer: new TapGestureRecognizer()
+              ..onTap = () {
+                controller.insertPage(
+                  ProfileScreen({
+                    "id": textIdList[i],
+                  }),
+                );
+              },
             style: TextStyle(
               color: comment.contains('@')
                   ? LightColors.linkText
@@ -85,7 +99,7 @@ class LinkRichText extends StatelessWidget {
             ),
           ),
         );
-      });
+      }
     } else {
       _hasntLink();
     }
