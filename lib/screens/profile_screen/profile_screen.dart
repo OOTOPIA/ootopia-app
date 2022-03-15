@@ -246,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                             ],
 
-                            if(!isLoggedInUserProfile && store?.isFriend != null && authStore.currentUser != null)...[
+                            if(showButton)...[
                               ElevatedButton(
                                   style: ButtonStyle(
                                     fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
@@ -449,5 +449,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE &&
         (controller.pages[controller.currentPageIndex]) is ProfileScreen;
   }
+
+  bool get  showButton{
+    return !isLoggedInUserProfile && store?.isFriend != null && authStore.currentUser != null;
+  }
+
 
 }

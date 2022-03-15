@@ -35,31 +35,37 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   List<String> orderBy = [];
   String orderBySelected = '';
 
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
 
   void init(){
-    authStore = Provider.of<AuthStore>(context);
-    friendsStore  = Provider.of<FriendsStore>(context);
-    if(orderBy.isEmpty){
-      orderBy = [
-        AppLocalizations.of(context)!.alphabeticalOrder,
-        AppLocalizations.of(context)!.mostRecent,
-        AppLocalizations.of(context)!.older,
-      ];
-      orderBySelected = orderBy[0];
-    }
-
-    if(isPageOfUserLogged()){
-      Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, (){
+      if(orderBy.isEmpty){
+        orderBy = [
+          AppLocalizations.of(context)!.alphabeticalOrder,
+          AppLocalizations.of(context)!.mostRecent,
+          AppLocalizations.of(context)!.older,
+        ];
+        orderBySelected = orderBy[0];
+      }
+      if(isPageOfUserLogged()){
         friendsStore.init(widget.userId);
-      });
-    }else{
-      circleFriendsStore.init(widget.userId, authStore.currentUser != null);
-    }
+      }else{
+        circleFriendsStore.init(widget.userId, authStore.currentUser != null);
+      }
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    init();
+    authStore = Provider.of<AuthStore>(context);
+    friendsStore  = Provider.of<FriendsStore>(context);
+    //init();
     return  Observer(
         builder: (context) {
           return Stack(

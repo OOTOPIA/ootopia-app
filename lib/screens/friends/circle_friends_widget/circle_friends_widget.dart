@@ -30,7 +30,6 @@ class CircleOfFriendWidget extends StatefulWidget {
 class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
   late FriendsStore friendsStore;
-  bool started = false;
   SmartPageController controller = SmartPageController.getInstance();
   CircleFriendsWidgetStore circleFriendsWidgetStore = CircleFriendsWidgetStore();
 
@@ -39,23 +38,17 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
     super.initState();
     if(!widget.isUserLogged){
       circleFriendsWidgetStore.getFriends(widget.userId);
-    }
-  }
-
-  init(){
-    friendsStore  = Provider.of<FriendsStore>(context);
-    if(!started && widget.isUserLogged){
-      started = true;
+    }else{
       Future.delayed(Duration.zero,(){
         friendsStore.getRandomFriends(widget.userId);
       });
     }
-
   }
+
 
   @override
   Widget build(BuildContext context) {
-    init();
+    friendsStore  = Provider.of<FriendsStore>(context);
     if(widget.isUserLogged){
       return Consumer<FriendsStore>(
           builder: (context, counter, _) {
@@ -149,8 +142,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                       ),
                     ),
                   ),
-                ]else if((!widget.isUserLogged && (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false)) ||
-                    (widget.isUserLogged && (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false)))...[
+                ]else if(listIsNotEmpty())...[
                   TextButton(
                     onPressed: (){
                       Future.delayed(Duration(milliseconds: 100),(){
@@ -185,15 +177,14 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
 
 
           Visibility(
-            visible: ListIsNotEmpty(),
+            visible: listIsNotEmptyOrLoading(),
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: widget.isUserLogged ? 70 : 56,
                 child: listFriends()),
           ),
           Visibility(
-            visible: !(friendsStore.isLoading ||
-                (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false)) && widget.isUserLogged,
+            visible: !listIsNotEmptyOrLoading() && widget.isUserLogged,
             child: Container(
                 height: 70,
                 margin: EdgeInsets.only(top: 12),
@@ -384,12 +375,17 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
     );
   }
 
-  ListIsNotEmpty() {
+  bool listIsNotEmptyOrLoading() {
     if(widget.isUserLogged){
       return (friendsStore.isLoading || (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false));
     }else{
       return (circleFriendsWidgetStore.isLoading || (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false));
     }
+  }
+
+  bool listIsNotEmpty() {
+    return (!widget.isUserLogged && (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false)) ||
+        (widget.isUserLogged && (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false));
   }
 
 }

@@ -127,9 +127,8 @@ class FriendsStore with ChangeNotifier {
     notifyListeners();
     friendsDate?.friends = [];
     page = 0;
-    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriendsWhenIsLogged(userId, page, limit, orderBy: orderBy!, sortingType:
-    sortingType!);
+    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.getFriendsWhenIsLogged(
+      userId, page, limit, orderBy: orderBy!, sortingType: sortingType!,);
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
     isLoadingGetAllFriends = false;
@@ -141,8 +140,8 @@ class FriendsStore with ChangeNotifier {
       loadingMoreFriends = true;
       notifyListeners();
       page++;
-      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged
-        (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged(
+        userId, page, limit, orderBy: orderBy!, sortingType: sortingType!,);
       friendsDate!.friends!.addAll(auxUsers.friends!);
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;

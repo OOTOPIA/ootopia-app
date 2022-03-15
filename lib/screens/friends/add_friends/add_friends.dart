@@ -24,25 +24,18 @@ class _AddFriendsState extends State<AddFriends> {
   TextEditingController messageController = TextEditingController();
   SmartPageController controller = SmartPageController.getInstance();
   late FriendsStore friendsStore;
-  bool startPage = false;
 
   @override
   void initState() {
     super.initState();
-    startPage = true;
-  }
-
-  init(){
-    friendsStore  = Provider.of<FriendsStore>(context);
-    if(startPage){
+    Future.delayed(Duration.zero, (){
       friendsStore.cleanSearchPage();
-      startPage = false;
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    init();
+    friendsStore  = Provider.of<FriendsStore>(context);
     return Consumer<FriendsStore>(
         builder: (cont, counter, _) {
           return Stack(
