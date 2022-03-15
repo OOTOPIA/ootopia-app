@@ -74,7 +74,7 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<void> searchNewName(String name) async {
-    if (name.isNotEmpty) {
+    if (name.replaceAll(' ', '').isNotEmpty ) {
       FocusManager.instance.primaryFocus?.unfocus();
       isLoadingSearch = true;
       notifyListeners();

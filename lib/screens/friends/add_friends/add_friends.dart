@@ -311,7 +311,7 @@ class _AddFriendsState extends State<AddFriends> {
                   child: InkWell(
                     splashColor: LightColors.grey.withOpacity(0.2),
                     child:  Padding(
-                      padding: EdgeInsets.fromLTRB(25, 4, 14, 4),
+                      padding: EdgeInsets.fromLTRB(25, 4, 25, 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
