@@ -94,7 +94,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       }
       s++;
     }
-
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
     setState(() {
@@ -185,6 +184,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         await commentStore.createComment(postId, _inputController.text.trim());
         _inputController.clear();
         commentStore.listComments.clear();
+        commentStore.listAllUsers.clear();
+        commentStore.listUsersMarket?.clear();
         _getData();
         commentStore.isLoading = false;
       }
@@ -216,9 +217,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         isLoading: commentStore.isLoading,
         child: GestureDetector(
           onTap: () {
-            setState(() {
-              seSelectedUser = true;
-            });
             focusNode.unfocus();
           },
           child: Scaffold(
