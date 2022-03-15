@@ -272,9 +272,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
               ),
             ]else...[
               ListView.builder(
-                  itemCount: isPageOfUserLogged() ?
-                  friendsStore.friendsDate?.friends?.length ?? 0 :
-                  circleFriendsStore.friendsDate!.friends!.length,
+                  itemCount: amountOfFriends(),
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
@@ -775,6 +773,15 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       status =  !circleFriendsStore.loadingMoreFriends && circleFriendsStore.hasMoreFriends;
     }
     return status && scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent*0.6;
+  }
+
+  int amountOfFriends() {
+    if(isPageOfUserLogged()){
+       return friendsStore.friendsDate?.friends?.length ?? 0;
+    } else{
+      return circleFriendsStore.friendsDate?.friends?.length ?? 0;
+
+    }
   }
 
 }
