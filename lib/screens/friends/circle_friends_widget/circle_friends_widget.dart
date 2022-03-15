@@ -43,7 +43,6 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   }
 
   init(){
-    print('widget.userId: ${widget.userId}');
     friendsStore  = Provider.of<FriendsStore>(context);
     if(!started && widget.isUserLogged){
       started = true;

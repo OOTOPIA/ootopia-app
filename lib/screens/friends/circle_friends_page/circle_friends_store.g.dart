@@ -117,15 +117,6 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
     return _$getMoreFriendsAsyncAction.run(() => super.getMoreFriends(userId));
   }
 
-  final _$removeFriendsAsyncAction =
-      AsyncAction('CircleFriendsStoreBase.removeFriends');
-
-  @override
-  Future<void> removeFriends(FriendModel user, dynamic index) {
-    return _$removeFriendsAsyncAction
-        .run(() => super.removeFriends(user, index));
-  }
-
   final _$CircleFriendsStoreBaseActionController =
       ActionController(name: 'CircleFriendsStoreBase');
 
