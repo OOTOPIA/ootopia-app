@@ -37,8 +37,8 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   @override
   void initState() {
-    init();
     super.initState();
+    init();
   }
 
 
