@@ -4,7 +4,7 @@ import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 import 'api.dart';
 
 abstract class FriendsRepository {
-  Future<FriendsDataModel> getFriendsWhenNotISLogged(String userId, int page, int limit, {required String orderBy, required String sortingType});
+  Future<FriendsDataModel> getFriendsWhenNotIsLogged(String userId, int page, int limit, {required String orderBy, required String sortingType});
   Future<FriendsDataModel> searchFriends(String name, int page, int limit);
   Future<bool> addFriend(String userId);
   Future<bool> removeFriend(String userId);
@@ -15,7 +15,7 @@ abstract class FriendsRepository {
 
 class FriendsRepositoryImpl implements FriendsRepository {
 
-  Future<FriendsDataModel> getFriendsWhenNotISLogged(String userId, int page, int limit,
+  Future<FriendsDataModel> getFriendsWhenNotIsLogged(String userId, int page, int limit,
       {required String orderBy,
         required String sortingType}) async {
     try {

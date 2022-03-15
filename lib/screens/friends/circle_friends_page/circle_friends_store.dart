@@ -51,12 +51,10 @@ abstract class CircleFriendsStoreBase with Store {
     late FriendsDataModel friendsDateAux;
     if (userLogged) {
       friendsDateAux = await friendsRepositoryImpl.getFriendsWhenIsLogged(
-          userId, page, limit, orderBy: orderBy!, sortingType:
-      sortingType!);
+          userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
     } else{
-      friendsDateAux = await friendsRepositoryImpl.getFriendsWhenNotISLogged(
-          userId, page, limit, orderBy: orderBy!, sortingType:
-      sortingType!);
+      friendsDateAux = await friendsRepositoryImpl.getFriendsWhenNotIsLogged(
+          userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
     }
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
@@ -73,7 +71,7 @@ abstract class CircleFriendsStoreBase with Store {
         auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged
           (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
       }else {
-        auxUsers = await friendsRepositoryImpl.getFriendsWhenNotISLogged
+        auxUsers = await friendsRepositoryImpl.getFriendsWhenNotIsLogged
           (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
       }
       friendsDate!.friends!.addAll(auxUsers.friends!);

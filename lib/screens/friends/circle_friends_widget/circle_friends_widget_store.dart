@@ -27,7 +27,7 @@ abstract class CircleFriendsWidgetStoreBase with Store {
     Random random = new Random();
     isLoading = true;
     FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriendsWhenNotISLogged(
+    getFriendsWhenNotIsLogged(
       userId, page, limit,
       orderBy: listOrderBy[random.nextInt(2)],
       sortingType: listSortingType[random.nextInt(2)],
