@@ -89,7 +89,7 @@ class _AddFriendsState extends State<AddFriends> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(25, 12, 14, 0),
+                        padding: const EdgeInsets.fromLTRB(25, 12, 25, 0),
                         child: Container(
                           height: 42,
                           child: TextField(
@@ -155,6 +155,9 @@ class _AddFriendsState extends State<AddFriends> {
                       ),
 
                       if(friendsStore.isLoadingSearch)...[
+                        SizedBox(
+                          height: 6,
+                        ),
                         ListView.builder(
                             itemCount: 11,
                             shrinkWrap: true,
@@ -221,7 +224,7 @@ class _AddFriendsState extends State<AddFriends> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(25, 16, 14, 0),
+            padding: EdgeInsets.fromLTRB(25, 16, 25, 0),
             child: Row(
               children: [
                 Container(
@@ -254,9 +257,12 @@ class _AddFriendsState extends State<AddFriends> {
                 ),
                 Spacer(),
                 Container(
-                  height: 11,
+                  height: 24,
                   width: 80,
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(12))
+                  ),
                 ),
               ],
             ),

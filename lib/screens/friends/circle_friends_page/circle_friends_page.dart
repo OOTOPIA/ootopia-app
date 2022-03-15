@@ -65,7 +65,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
             children: [
               BackgroundButterflyTop(positioned: -59),
               BackgroundButterflyBottom(positioned: -50),
-             // body(),
               if(isPageOfUserLogged())...[
                 Consumer<FriendsStore>(
                     builder: (cont, friend, child) {
@@ -297,7 +296,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(25, 31, 14, 0),
+            padding: EdgeInsets.fromLTRB(25, 31, 25, 0),
             child: Row(
               children: [
                 Container(
@@ -330,9 +329,12 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 ),
                 Spacer(),
                 Container(
-                  height: 11,
+                  height: 24,
                   width: 80,
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(12))
+                  ),
                 ),
               ],
             ),
@@ -459,8 +461,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
                         Spacer(),
 
-                        if(isPageOfUserLogged() || friendModel.isFriend != null)
-                          ...[
+                        if(isPageOfUserLogged())...[
                           SizedBox(
                             height: 24,
                             child: ElevatedButton(
@@ -496,7 +497,52 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   ),
                                 )),
                           )
-                        ],
+                        ]else if(!isPageOfUserLogged() && friendModel.isFriend != null &&
+                            (friendModel.id != authStore.currentUser?.id)
+                        )...[
+                            SizedBox(
+                              height: 24,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all<double>(0.0),                              fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 24)),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular
+                                          (20),
+                                        side: BorderSide(
+                                            color: LightColors.blue),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all<Color>
+                                      (friendModel.isFriend == true ?
+                                    Colors.transparent : LightColors.blue),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.symmetric(horizontal: 14)),
+                                  ),
+                                  onPressed: () {
+                                    Future.delayed(Duration(milliseconds: 100),(){
+                                      if(friendModel.isFriend == true){
+                                        friendsStore.removeFriend(friendModel, index: index);
+                                      }else{
+                                        friendsStore.addFriend(friendModel);
+                                      }
+                                      friendModel.isFriend = !friendModel.isFriend!;
+                                      setState(() {});
+                                    });
+                                  },
+                                  child: Text(friendModel.isFriend == true ?
+                                  AppLocalizations.of(context)!.remove :
+                                  AppLocalizations.of(context)!.add ,
+                                    style: TextStyle(
+                                      color: friendModel.isFriend == true ?
+                                      LightColors.blue : LightColors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                            )
+                          ],
 
 
 
