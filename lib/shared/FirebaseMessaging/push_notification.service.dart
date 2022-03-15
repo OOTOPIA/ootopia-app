@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:ootopia_app/shared/FirebaseMessaging/notification_message_service.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/update_accumulated_ooz.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/update_record_time_user_app.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -60,17 +61,20 @@ class PushNotification {
 
   void listenerFirebaseCloudMessagingMessages() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      String messageType =
+          (message.data['type'] as String).replaceAll('-', '_');
+
       // WARNING keep conditions always first in this function
-      if ((message.data['type'] as String).replaceAll('-', '_') ==
-          TypeOfMessage.regeneration_game.toString().substring(14)) {
+      if (messageType == TypeOfMessage.regeneration_game.name) {
         this.updateRecordTimeUsage.notify();
         return;
       }
-      if ((message.data['type'] as String).replaceAll('-', '_') ==
-          TypeOfMessage.update_regeneration_game.toString().substring(14)) {
+      if (messageType == TypeOfMessage.update_regeneration_game.name) {
         updateAccumulatedOZZ.notify(message.data);
         return;
       }
+      NotificationMessageService service = NotificationMessageService();
+      service.createMessage(message);
     });
   }
 }
