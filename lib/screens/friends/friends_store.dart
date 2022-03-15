@@ -35,12 +35,17 @@ class FriendsStore with ChangeNotifier {
   Future<bool> addFriend(FriendModel friend) async {
     myFriendsDate?.total = (myFriendsDate?.total ?? 0) + 1;
     myFriendsDate?.friends!.add(friend);
+    if(friendsDate != null){
+      friendsDate?.total = (friendsDate?.total ?? 0) + 1;
+      friendsDate?.friends!.add(friend);
+    }
     notifyListeners();
     return await friendsRepositoryImpl.addFriend(friend.id);
   }
 
-  Future<bool> removeFriend(FriendModel friend, {int? index}) async {
-    if(index != null){
+  Future<bool> removeFriend(FriendModel friend) async {
+    if(friendsDate != null){
+      int index = friendsDate!.friends!.indexWhere((element) => element?.id == friend.id);
       friendsDate!.friends![index]!.remove = true;
       friendsDate!.total = friendsDate!.total! - 1;
     }

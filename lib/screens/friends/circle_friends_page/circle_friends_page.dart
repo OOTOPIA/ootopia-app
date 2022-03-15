@@ -274,7 +274,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                     return  itemFriend(
                         isPageOfUserLogged() ?
                         friendsStore.friendsDate!.friends![index]! :
-                        circleFriendsStore.friendsDate!.friends![index]!, index);
+                        circleFriendsStore.friendsDate!.friends![index]!);
                   }
               ),
               SizedBox(height: 50,),
@@ -369,7 +369,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-  Widget itemFriend(FriendModel friendModel, index){
+  Widget itemFriend(FriendModel friendModel){
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
       height: friendModel.remove == true ? 0 : hasImages(friendModel) ? 150: 66,
@@ -484,7 +484,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 ),
                                 onPressed: () {
                                   Future.delayed(Duration(milliseconds: 100),(){
-                                    friendsStore.removeFriend(friendModel, index: index);
+                                    friendsStore.removeFriend(friendModel);
                                     setState(() {});
                                   });
                                 },
@@ -523,7 +523,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   onPressed: () {
                                     Future.delayed(Duration(milliseconds: 100),(){
                                       if(friendModel.isFriend == true){
-                                        friendsStore.removeFriend(friendModel, index: index);
+                                        friendsStore.removeFriend(friendModel);
                                       }else{
                                         friendsStore.addFriend(friendModel);
                                       }
