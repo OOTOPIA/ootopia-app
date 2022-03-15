@@ -47,12 +47,13 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       ];
       orderBySelected = orderBy[0];
     }
+
     if(isPageOfUserLogged()){
       Future.delayed(Duration.zero, (){
         friendsStore.init(widget.userId);
       });
     }else{
-      circleFriendsStore.init(widget.userId);
+      circleFriendsStore.init(widget.userId, authStore.currentUser != null);
     }
   }
 

@@ -11,6 +11,7 @@ import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart
 import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
@@ -157,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       friendsStore  = Provider.of<FriendsStore>(context);
     }
     return Scaffold(
-      appBar: appBarProfile,
+      appBar: showAppBar() ? appBarProfile : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -440,6 +441,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if(await canLaunch(_url)){
       await launch(_url);
     }
+  }
+
+  bool showAppBar() {
+    return controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE &&
+        (controller.pages[controller.currentPageIndex]) is ProfileScreen;
   }
 
 }

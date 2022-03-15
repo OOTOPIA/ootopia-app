@@ -20,7 +20,7 @@ class FriendsStore with ChangeNotifier {
     Random random = new Random();
 
     FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriends(
+    getFriendsWhenIsLogged(
       userId, 0, limit,
       orderBy: listOrderBy[random.nextInt(2)],
       sortingType: listSortingType[random.nextInt(2)],
@@ -128,7 +128,7 @@ class FriendsStore with ChangeNotifier {
     friendsDate?.friends = [];
     page = 0;
     FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriends(userId, page, limit, orderBy: orderBy!, sortingType:
+    getFriendsWhenIsLogged(userId, page, limit, orderBy: orderBy!, sortingType:
     sortingType!);
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
@@ -141,7 +141,7 @@ class FriendsStore with ChangeNotifier {
       loadingMoreFriends = true;
       notifyListeners();
       page++;
-      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriends
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged
         (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
       friendsDate!.friends!.addAll(auxUsers.friends!);
       loadingMoreFriends = false;

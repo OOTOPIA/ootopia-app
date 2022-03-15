@@ -31,9 +31,12 @@ abstract class CircleFriendsStoreBase with Store {
   @observable
   String? sortingType;
 
+  late bool userLogged;
+
   @action
-  void init(String userId) {
+  void init(String userId, bool userLogged) {
     if(orderBy == null){
+      this.userLogged = userLogged;
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
       getFriends(userId);
@@ -41,13 +44,20 @@ abstract class CircleFriendsStoreBase with Store {
   }
 
   @action
-  Future<void> getFriends(String userId) async{
+  Future<void> getFriends(String userId) async {
     isLoading = true;
     friendsDate?.friends = [];
     page = 0;
-    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriends(userId, page, limit, orderBy: orderBy!, sortingType:
-    sortingType!);
+    late FriendsDataModel friendsDateAux;
+    if (userLogged) {
+      friendsDateAux = await friendsRepositoryImpl.
+      getFriendsWhenIsLogged(userId, page, limit, orderBy: orderBy!, sortingType:
+      sortingType!);
+    } else{
+      friendsDateAux = await friendsRepositoryImpl.
+      getFriendsWhenNotISLogged(userId, page, limit, orderBy: orderBy!, sortingType:
+      sortingType!);
+    }
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
     isLoading = false;
@@ -58,8 +68,14 @@ abstract class CircleFriendsStoreBase with Store {
     if(hasMoreFriends) {
       loadingMoreFriends = true;
       page++;
-      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriends
-        (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
+      late FriendsDataModel auxUsers;
+      if (userLogged) {
+        auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged
+          (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
+      }else {
+        auxUsers = await friendsRepositoryImpl.getFriendsWhenNotISLogged
+          (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
+      }
       friendsDate!.friends!.addAll(auxUsers.friends!);
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;

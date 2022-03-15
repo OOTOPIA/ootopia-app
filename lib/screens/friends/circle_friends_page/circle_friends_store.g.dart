@@ -121,11 +121,11 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
       ActionController(name: 'CircleFriendsStoreBase');
 
   @override
-  void init(String userId) {
+  void init(String userId, bool userLogged) {
     final _$actionInfo = _$CircleFriendsStoreBaseActionController.startAction(
         name: 'CircleFriendsStoreBase.init');
     try {
-      return super.init(userId);
+      return super.init(userId, userLogged);
     } finally {
       _$CircleFriendsStoreBaseActionController.endAction(_$actionInfo);
     }
