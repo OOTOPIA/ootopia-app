@@ -92,7 +92,7 @@ ThemeData lightTheme(BuildContext context) => ThemeData.light().copyWith(
         ),
         focusedBorder: OutlineInputBorder(
           borderSide:
-              BorderSide(color: Theme.of(context).accentColor, width: 1.5),
+              BorderSide(color: LightColors.blue, width: 1.5),
           borderRadius: BorderRadius.circular(100),
         ),
         enabledBorder: OutlineInputBorder(
