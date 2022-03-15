@@ -50,12 +50,12 @@ abstract class CircleFriendsStoreBase with Store {
     page = 0;
     late FriendsDataModel friendsDateAux;
     if (userLogged) {
-      friendsDateAux = await friendsRepositoryImpl.
-      getFriendsWhenIsLogged(userId, page, limit, orderBy: orderBy!, sortingType:
+      friendsDateAux = await friendsRepositoryImpl.getFriendsWhenIsLogged(
+          userId, page, limit, orderBy: orderBy!, sortingType:
       sortingType!);
     } else{
-      friendsDateAux = await friendsRepositoryImpl.
-      getFriendsWhenNotISLogged(userId, page, limit, orderBy: orderBy!, sortingType:
+      friendsDateAux = await friendsRepositoryImpl.getFriendsWhenNotISLogged(
+          userId, page, limit, orderBy: orderBy!, sortingType:
       sortingType!);
     }
     friendsDate = friendsDateAux;
