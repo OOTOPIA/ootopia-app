@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
@@ -110,6 +112,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+
+  get appBarProfile => DefaultAppBar(
+    components: [
+      AppBarComponents.back,
+      isLoggedInUserProfile ? AppBarComponents.edit : AppBarComponents.empty,
+    ],
+    onTapAction: () => isLoggedInUserProfile ? controller.insertPage(EditProfileScreen()) : null,
+    onTapLeading: () => controller.back(),
+  );
+
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   bool get isLoggedInUserProfile {
@@ -145,6 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       friendsStore  = Provider.of<FriendsStore>(context);
     }
     return Scaffold(
+      appBar: appBarProfile,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(

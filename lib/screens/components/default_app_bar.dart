@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum AppBarComponents { back, menu, ooz, save, edit, close, proceed }
+enum AppBarComponents { back, menu, ooz, save, edit, close, proceed, empty }
 
 // ignore: must_be_immutable
 class DefaultAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -112,6 +112,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       if (hasComponent(AppBarComponents.close)) closeIcon,
       if (hasComponent(AppBarComponents.edit)) editIcon,
       if (hasComponent(AppBarComponents.save)) saveIcon,
+      if (hasComponent(AppBarComponents.empty)) empty,
       if (hasComponent(AppBarComponents.proceed)) proceedIcon,
     ];
   }
@@ -327,6 +328,8 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
           ),
         ),
       );
+
+  Widget get empty => Container();
 
   bool get hasNavigation =>
       controller.pages.length > controller.initialPages.length;
