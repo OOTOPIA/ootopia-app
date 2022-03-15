@@ -265,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Future.delayed(Duration(milliseconds: 100),(){
                                       final friend = FriendModel(
                                         id: store!.profile!.id,
-                                        fullname: store!.profile!.id,
+                                        fullname: store!.profile!.fullname,
                                         photoUrl: store!.profile!.photoUrl,
                                       );
 
