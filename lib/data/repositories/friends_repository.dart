@@ -1,8 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
-import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:ootopia_app/shared/shared_preferences.dart';
 
 import 'api.dart';
 
@@ -14,27 +11,9 @@ abstract class FriendsRepository {
   Future<bool> getIfIsFriends(String userId);
 }
 
-const Map<String, String> API_HEADERS = {
-  'Content-Type': 'application/json; charset=UTF-8'
-};
 
-class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
-  Future<Map<String, String>> getHeaders() async {
-    SharedPreferencesInstance prefs =
-    await SharedPreferencesInstance.getInstance();
-    bool loggedIn = await getUserIsLoggedIn();
-    if (!loggedIn) {
-      return API_HEADERS;
-    }
 
-    String? token = prefs.getAuthToken();
-    if (token == null) return API_HEADERS;
-
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + token
-    };
-  }
+class FriendsRepositoryImpl implements FriendsRepository {
 
   Future<FriendsDataModel> getFriendsWhenNotISLogged(String userId, int page, int limit,
       {required String orderBy,
@@ -113,9 +92,8 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
 
   Future<bool> addFriend(String userId) async {
     try {
-      final response = await http.post(
-        Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
-        headers: await this.getHeaders(),
+      final response = await ApiClient.api().post(
+        dotenv.env['API_URL']! + "friends/$userId",
       );
       if (response.statusCode == 201) {
         return  true;
@@ -130,9 +108,8 @@ class FriendsRepositoryImpl with SecureStoreMixin implements FriendsRepository {
 
   Future<bool> removeFriend(String userId) async {
     try {
-      final response = await http.delete(
-        Uri.parse(dotenv.env['API_URL']! + "friends/$userId"),
-        headers: await this.getHeaders(),
+      final response = await ApiClient.api().delete(
+        dotenv.env['API_URL']! + "friends/$userId",
       );
       if (response.statusCode == 200) {
         return  true;
