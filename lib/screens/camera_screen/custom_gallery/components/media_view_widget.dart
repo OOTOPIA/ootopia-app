@@ -66,15 +66,6 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
     super.dispose();
   }
 
-  @mustCallSuper
-  @protected
-  void didUpdateWidget(covariant MediaViewWidget oldWidget) {
-    if (oldWidget.mediaType == "video")
-      flickManager?.flickControlManager!.pause();
-
-    if (widget.mediaType == "video") initFlickManager();
-  }
-
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(

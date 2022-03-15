@@ -876,7 +876,6 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   }
 
   buildMediaRow(dynamic file) {
-    print('TESTE');
     return Container(
       width: MediaQuery.of(context).size.width - 60,
       height: MediaQuery.of(context).size.width - 60,

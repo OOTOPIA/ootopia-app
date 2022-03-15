@@ -119,6 +119,7 @@ class _CustomGalleryState extends State<CustomGallery> {
                         children: [
                           SizedBox(height: 20),
                           MediaViewWidget(
+                            key: ObjectKey(currentDirectory["mediaFile"].path),
                             mediaFilePath: currentDirectory["mediaFile"].path,
                             mediaType: currentDirectory["mediaType"],
                             mediaSize: currentDirectory["mediaSize"],
