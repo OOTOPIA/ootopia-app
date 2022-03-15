@@ -125,17 +125,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           _geolocationInputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
-          postData.addressCity = placemark.subAdministrativeArea != null
+          postGallery.addressCity = placemark.subAdministrativeArea != null
               ? placemark.subAdministrativeArea!
               : "";
-          postData.addressState = placemark.administrativeArea != null
+          postGallery.addressState = placemark.administrativeArea != null
               ? placemark.administrativeArea!
               : "";
-          postData.addressCountryCode =
+          postGallery.addressCountryCode =
               placemark.isoCountryCode != null ? placemark.isoCountryCode! : "";
-          postData.addressLatitude = position.latitude;
-          postData.addressLongitude = position.longitude;
-          postData.addressNumber =
+          postGallery.addressLatitude = position.latitude;
+          postGallery.addressLongitude = position.longitude;
+          postGallery.addressNumber =
               placemark.name != null ? placemark.name! : "";
         } else {
           geolocationMessage =
@@ -314,6 +314,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       postPreviewStore.uploadIsLoading = true;
     }
 
+    postGallery.tagsIds = _selectedTags.map((tag) => tag.id).toList();
+    postGallery.description = _descriptionInputController.text;
+
     sendingPost = true;
 
     try {
@@ -321,7 +324,29 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           .postPreviewStore
           .sendMedia(widget.args["fileList"], postGallery);
       sendingPost = false;
+
       await this.walletStore.getWallet();
+
+      if (this.postPreviewStore.successOnUpload) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          PageRoute.Page.homeScreen.route,
+          ModalRoute.withName('/'),
+          arguments: {
+            "createdPost": true,
+            "oozToReward": this.postPreviewStore.oozToReward
+          },
+        );
+      } else if (this.postPreviewStore.errorOnUpload) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
+                .replaceAll("video", postData.type!)),
+          ),
+        );
+      }
+
+      postPreviewStore.clearhashtags();
     } catch (e) {
       sendingPost = false;
     }
@@ -851,6 +876,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   }
 
   buildMediaRow(dynamic file) {
+    print('TESTE');
     return Container(
       width: MediaQuery.of(context).size.width - 60,
       height: MediaQuery.of(context).size.width - 60,

@@ -21,19 +21,15 @@ class PostGalleryCreateModel {
     this.addressNumber,
   });
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['mediaIds'] =
-        this.mediaIds != null ? this.mediaIds!.join(",") : this.mediaIds;
-    data['description'] = this.description;
-    data['tagsIds'] =
-        this.tagsIds != null ? this.tagsIds!.join(",") : this.tagsIds;
-    data['addressCountryCode'] = this.addressCountryCode;
-    data['addressState'] = this.addressState;
-    data['addressCity'] = this.addressCity;
-    data['addressLatitude'] = this.addressLatitude;
-    data['addressLongitude'] = this.addressLongitude;
-    data['addressNumber'] = this.addressNumber;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "description": description,
+        "addressCountryCode": addressCountryCode,
+        "addressState": addressState,
+        "addressCity": addressCity,
+        "addressLatitude": addressLatitude,
+        "addressLongitude": addressLongitude,
+        "addressNumber": addressNumber,
+        "mediaIds": List<dynamic>.from(mediaIds!.map((x) => x)),
+        "tagsIds": List<dynamic>.from(tagsIds!.map((x) => x)),
+      };
 }

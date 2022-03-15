@@ -175,9 +175,8 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
       AsyncAction('_PostPreviewScreenStoreBase.sendPost');
 
   @override
-  Future<dynamic> sendPost(
-      List<String> mediaIds, PostGalleryCreateModel model) {
-    return _$sendPostAsyncAction.run(() => super.sendPost(mediaIds, model));
+  Future<dynamic> sendPost(PostGalleryCreateModel model) {
+    return _$sendPostAsyncAction.run(() => super.sendPost(model));
   }
 
   final _$_PostPreviewScreenStoreBaseActionController =

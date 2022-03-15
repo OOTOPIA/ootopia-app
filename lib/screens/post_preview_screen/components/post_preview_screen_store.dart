@@ -120,13 +120,14 @@ abstract class _PostPreviewScreenStoreBase with Store {
   }
 
   @action
-  Future<dynamic> sendMedia(List<Map> fileList, PostGalleryCreateModel model) async {
+  Future<dynamic> sendMedia(
+      List<Map> fileList, PostGalleryCreateModel model) async {
     List<String> mediaIds = [];
-    fileList.forEach((element) async {
+    for (var file in fileList) {
       try {
         uploadIsLoading = true;
         var result =
-            await this._sendMedia(element["mediaType"], element["mediaFile"]);
+            await this._sendMedia(file["mediaType"], file["mediaFile"]);
 
         mediaIds.add(result.data["mediaId"]);
       } catch (err) {
@@ -135,24 +136,28 @@ abstract class _PostPreviewScreenStoreBase with Store {
         uploadIsLoading = false;
         return;
       }
-    });
-    sendPost(mediaIds, model);
+    }
+    model.mediaIds = mediaIds;
+    sendPost(model);
   }
 
-    @action
-  Future<dynamic> sendPost(List<String> mediaIds, PostGalleryCreateModel model) async {
-      try {
-        uploadIsLoading = true;
-        var result =
-            await this._sendPost(model);
+  @action
+  Future<dynamic> sendPost(PostGalleryCreateModel model) async {
+    try {
+      uploadIsLoading = true;
+      var result = await this._sendPost(model);
 
-        //this._trackingEvents.timelineCreatedAPost(post.type!);
-        uploadIsLoading = false;
-        successOnUpload = true;
-      } catch (err) {
-        print("erro aqui $err");
-        errorOnUpload = true;
-        uploadIsLoading = false;
-      }
+      print('RESPONSE:: $result');
+      // print('TESTE: ${result.body["oozGenerated"]}');
+      //this._trackingEvents.timelineCreatedAPost(post.type!);
+      //oozToReward = result.body["oozGenerated"];
+      uploadIsLoading = false;
+      successOnUpload = true;
+      print('AAAAAAAA $successOnUpload');
+    } catch (err) {
+      print("erro aqui2 $err");
+      errorOnUpload = true;
+      uploadIsLoading = false;
+    }
   }
 }

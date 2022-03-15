@@ -148,7 +148,16 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
   }
 
   Future sendPost(PostGalleryCreateModel model) async {
-    print('VEIO ATé aqui');
+    try {
+      final response = await http.post(
+        Uri.parse(dotenv.env['API_URL']! + "posts/gallery"),
+        body: jsonEncode(model.toJson()),
+        headers: (await this.getHeaders()),
+      );
+      return response;
+    } catch (e) {
+      print('ERRO $e');
+    }
   }
 
   @override
