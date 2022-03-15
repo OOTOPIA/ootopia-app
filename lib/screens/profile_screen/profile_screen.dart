@@ -74,7 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!profileUserIsLoggedUser) {
         store = ProfileScreenStore();
-        await store!.getIfIsFriend(profileUserId);
+        if(authStore.currentUser != null){
+          await store!.getIfIsFriend(profileUserId);
+        }
       }
 
 
