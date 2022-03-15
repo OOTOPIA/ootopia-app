@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
+import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
@@ -122,6 +123,32 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
         validateStatus: (status) => true,
       ),
     );
+  }
+
+  Future sendMedia(String type, File file) async {
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        file.path,
+        filename: fileName,
+      ),
+    });
+    try {
+      final response = await ApiClient.api().post(
+        dotenv.env['API_URL']! + "posts/file",
+        data: formData,
+        queryParameters: {
+          "type": type,
+        },
+      );
+      return response;
+    } catch (e) {
+      print('ERRO $e');
+    }
+  }
+
+  Future sendPost(PostGalleryCreateModel model) async {
+    print('VEIO ATé aqui');
   }
 
   @override

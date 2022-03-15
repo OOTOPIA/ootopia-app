@@ -13,6 +13,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
+import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -81,6 +82,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   bool sendingPost = false;
 
   PostCreate postData = PostCreate();
+  PostGalleryCreateModel postGallery = PostGalleryCreateModel();
 
   List<MultiSelectItem<InterestsTagsModel>> _items = [];
 
@@ -204,7 +206,87 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     return returnDialog;
   }
 
-  void _sendPost() async {
+  // void _sendPost() async {
+  //   if (_processingVideoInBackgroundError) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(AppLocalizations.of(context)!
+  //             .thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
+  //       ),
+  //     );
+  //     return;
+  //   }
+
+  //   if (_selectedTags.length < 1) {
+  //     setState(() {
+  //       tagsErrorMessage =
+  //           AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
+  //     });
+  //     return;
+  //   }
+
+  //   if (sendingPost) {
+  //     return;
+  //   }
+
+  //   if (_processingVideoInBackground) {
+  //     _readyToSendPost = true;
+  //     postPreviewStore.uploadIsLoading = true;
+  //   }
+
+  //   postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
+  //   postData.type = widget.args["type"] == "image" ? "image" : "video";
+  //   postData.description = _descriptionInputController.text;
+
+  //   if (postData.type == "video") {
+  //     postData.durationInSecs = (flickManager!.flickVideoManager!
+  //                 .videoPlayerValue!.duration.inMilliseconds %
+  //             60000) /
+  //         1000;
+  //   }
+
+  //   print("ready to start upload");
+
+  //   GeneralConfigModel? oozToRewardForVideo = await this
+  //       .secureStoreMixin
+  //       .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
+  //   GeneralConfigModel? oozToRewardForImage = await this
+  //       .secureStoreMixin
+  //       .getGeneralConfigByName("creator_reward_for_posted_photo");
+  //   sendingPost = true;
+
+  //   try {
+  //     await this.postPreviewStore.createPost(postData,
+  //         oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
+  //     sendingPost = false;
+  //     await this.walletStore.getWallet();
+
+  //     if (this.postPreviewStore.successOnUpload) {
+  //       Navigator.of(context).pushNamedAndRemoveUntil(
+  //         PageRoute.Page.homeScreen.route,
+  //         ModalRoute.withName('/'),
+  //         arguments: {
+  //           "createdPost": true,
+  //           "oozToReward": this.postPreviewStore.oozToReward
+  //         },
+  //       );
+  //     } else if (this.postPreviewStore.errorOnUpload) {
+  //       Scaffold.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text(AppLocalizations.of(context)!
+  //               .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
+  //               .replaceAll("video", postData.type!)),
+  //         ),
+  //       );
+  //     }
+
+  //     postPreviewStore.clearhashtags();
+  //   } catch (err) {
+  //     sendingPost = false;
+  //   }
+  // }
+
+  void sendPost() async {
     if (_processingVideoInBackgroundError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -232,54 +314,15 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       postPreviewStore.uploadIsLoading = true;
     }
 
-    postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
-    postData.type = widget.args["type"] == "image" ? "image" : "video";
-    postData.description = _descriptionInputController.text;
-
-    if (postData.type == "video") {
-      postData.durationInSecs = (flickManager!.flickVideoManager!
-                  .videoPlayerValue!.duration.inMilliseconds %
-              60000) /
-          1000;
-    }
-
-    print("ready to start upload");
-
-    GeneralConfigModel? oozToRewardForVideo = await this
-        .secureStoreMixin
-        .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
-    GeneralConfigModel? oozToRewardForImage = await this
-        .secureStoreMixin
-        .getGeneralConfigByName("creator_reward_for_posted_photo");
     sendingPost = true;
 
     try {
-      await this.postPreviewStore.createPost(postData,
-          oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
+      await this
+          .postPreviewStore
+          .sendMedia(widget.args["fileList"], postGallery);
       sendingPost = false;
       await this.walletStore.getWallet();
-
-      if (this.postPreviewStore.successOnUpload) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          PageRoute.Page.homeScreen.route,
-          ModalRoute.withName('/'),
-          arguments: {
-            "createdPost": true,
-            "oozToReward": this.postPreviewStore.oozToReward
-          },
-        );
-      } else if (this.postPreviewStore.errorOnUpload) {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!
-                .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
-                .replaceAll("video", postData.type!)),
-          ),
-        );
-      }
-
-      postPreviewStore.clearhashtags();
-    } catch (err) {
+    } catch (e) {
       sendingPost = false;
     }
   }
@@ -338,7 +381,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
             if (_readyToSendPost) {
               postPreviewStore.uploadIsLoading = false;
               _readyToSendPost = false;
-              _sendPost();
+              //_sendPost();
             }
           });
         }
@@ -726,7 +769,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                       _selectedTags =
                                           postPreviewStore.selectedTags;
                                     });
-                                    _sendPost();
+                                    sendPost();
                                   }),
                             )
                           ],
