@@ -610,8 +610,15 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 fit: BoxFit.cover,
                                 width: 74,
                                 height: 76,
-                                errorBuilder: (context, url, error) => Center(
-                                  child: Icon(Icons.error),
+                                errorBuilder: (context, url, error) => Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey
+                                  ),
+                                  width: 74,
+                                  height: 76,
+                                  child: Center(
+                                    child: Icon(Icons.error),
+                                  ),
                                 ),
 
                               ),
