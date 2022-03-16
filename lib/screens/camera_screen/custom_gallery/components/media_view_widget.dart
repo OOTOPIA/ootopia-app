@@ -3,7 +3,7 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_controls.dart';
-import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_crop.dart';
+import 'package:ootopia_app/screens/camera_screen/components/custom_crop.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
