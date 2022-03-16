@@ -34,66 +34,75 @@ class LinkRichText extends StatelessWidget {
   void colorUserInText() {
     SmartPageController controller = SmartPageController.getInstance();
     var allName = [];
-    int positionEnd = 0;
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
-      List<String> textFragmented = [];
-      for (var item in userCommentsList!.reversed) {
-        int startname = text.indexOf('ㅤ@', positionEnd);
+      List<Map<String, dynamic>> textFragmented = [];
+      for (var item in userCommentsList!) {
+        int startname = text.indexOf('@${item.fullname}');
         if (startname != -1) {
           allName.add({
             "id": item.id,
-            "name": "@${item.fullname}",
+            "name": "@${item.fullname} ",
             "start": startname,
             "end": startname + item.fullname.length + 1
           });
-          positionEnd = startname + item.fullname.length + 1;
         }
       }
-      Map<int, String> textIdList = {};
       var lastEndName = 0;
+      var countText = 0;
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-      for (var countText = 0; countText < text.length; countText++) {
-        for (var countAllName = 0;
-            countAllName < allName.length;
-            countAllName++) {
-          if (countText >= allName[countAllName]['start'] &&
-              countText <= allName[countAllName]['end']) {
-            textFragmented.add(allName[countAllName]['name']);
-            textIdList.addAll({
-              textFragmented.length - 1: allName[countAllName]['id'],
+      for (var i = 0; i < allName.length; i++) {
+        if (countText == 0) {
+          textFragmented.add({
+            'isName': false,
+            'string': text.substring(countText, allName[i]['start']),
+          });
+          textFragmented.add({
+            'isName': true,
+            'string': allName[i]['name'],
+            'id': allName[i]['id'],
+          });
+          countText = allName[i]['end'];
+        } else {
+          if (text
+              .substring(allName[i]['start'], allName[i]['end'])
+              .contains('@')) {
+            textFragmented.add({
+              'isName': true,
+              'string': allName[i]['name'],
+              'id': allName[i]['id'],
             });
-            countText = allName[countAllName]['end'];
-            break;
-          } else if (countText <= allName[countAllName]['start']) {
-            textFragmented
-                .add(text.substring(countText, allName[countAllName]['start']));
-            countText = allName[countAllName]['start'];
-            break;
+          } else {
+            textFragmented.add({
+              'isName': false,
+              'string': text.substring(allName[i]['start'], countText),
+            });
           }
-          lastEndName = allName[countAllName]['end'];
         }
+        lastEndName = allName[i]['end'];
       }
+
       if (text.length > lastEndName) {
-        textFragmented.add(text.substring(lastEndName + 1, text.length));
+        textFragmented.add({
+          'isName': false,
+          'string': text.substring(lastEndName + 1, text.length),
+        });
       }
       for (var i = 0; i < textFragmented.length; i++) {
         var comment = textFragmented[i];
-
         textSpanWidget.add(
           TextSpan(
-            text: comment.replaceAll('ㅤ', ' '),
+            text: comment['string'].replaceAll('ㅤ', ' '),
             recognizer: new TapGestureRecognizer()
               ..onTap = () {
                 controller.insertPage(
                   ProfileScreen({
-                    "id": textIdList[i],
+                    "id": comment['id'],
                   }),
                 );
               },
             style: TextStyle(
-              color: comment.contains('@')
-                  ? LightColors.linkText
-                  : LightColors.black,
+              color:
+                  comment['isName'] ? LightColors.linkText : LightColors.black,
               fontWeight: FontWeight.w400,
               fontSize: 16,
             ),
