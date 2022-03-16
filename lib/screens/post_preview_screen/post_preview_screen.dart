@@ -206,86 +206,6 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     return returnDialog;
   }
 
-  // void _sendPost() async {
-  //   if (_processingVideoInBackgroundError) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(AppLocalizations.of(context)!
-  //             .thereAasAProblemLoadingTheVideoPleaseTryToUploadTheVideoAgain),
-  //       ),
-  //     );
-  //     return;
-  //   }
-
-  //   if (_selectedTags.length < 1) {
-  //     setState(() {
-  //       tagsErrorMessage =
-  //           AppLocalizations.of(context)!.pleaseSelectAtLeast1Tag;
-  //     });
-  //     return;
-  //   }
-
-  //   if (sendingPost) {
-  //     return;
-  //   }
-
-  //   if (_processingVideoInBackground) {
-  //     _readyToSendPost = true;
-  //     postPreviewStore.uploadIsLoading = true;
-  //   }
-
-  //   postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
-  //   postData.type = widget.args["type"] == "image" ? "image" : "video";
-  //   postData.description = _descriptionInputController.text;
-
-  //   if (postData.type == "video") {
-  //     postData.durationInSecs = (flickManager!.flickVideoManager!
-  //                 .videoPlayerValue!.duration.inMilliseconds %
-  //             60000) /
-  //         1000;
-  //   }
-
-  //   print("ready to start upload");
-
-  //   GeneralConfigModel? oozToRewardForVideo = await this
-  //       .secureStoreMixin
-  //       .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
-  //   GeneralConfigModel? oozToRewardForImage = await this
-  //       .secureStoreMixin
-  //       .getGeneralConfigByName("creator_reward_for_posted_photo");
-  //   sendingPost = true;
-
-  //   try {
-  //     await this.postPreviewStore.createPost(postData,
-  //         oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
-  //     sendingPost = false;
-  //     await this.walletStore.getWallet();
-
-  //     if (this.postPreviewStore.successOnUpload) {
-  //       Navigator.of(context).pushNamedAndRemoveUntil(
-  //         PageRoute.Page.homeScreen.route,
-  //         ModalRoute.withName('/'),
-  //         arguments: {
-  //           "createdPost": true,
-  //           "oozToReward": this.postPreviewStore.oozToReward
-  //         },
-  //       );
-  //     } else if (this.postPreviewStore.errorOnUpload) {
-  //       Scaffold.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text(AppLocalizations.of(context)!
-  //               .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
-  //               .replaceAll("video", postData.type!)),
-  //         ),
-  //       );
-  //     }
-
-  //     postPreviewStore.clearhashtags();
-  //   } catch (err) {
-  //     sendingPost = false;
-  //   }
-  // }
-
   void sendPost() async {
     if (_processingVideoInBackgroundError) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -315,14 +235,22 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     }
 
     postGallery.tagsIds = _selectedTags.map((tag) => tag.id).toList();
+    String mediaType = widget.args["type"] == "image" ? "image" : "video";
     postGallery.description = _descriptionInputController.text;
 
     sendingPost = true;
 
     try {
-      await this
-          .postPreviewStore
-          .sendMedia(widget.args["fileList"], postGallery);
+      List<Map> fileList = widget.args["fileList"] != null
+          ? widget.args["fileList"]
+          : [
+              {
+                "mediaFile": File(widget.args["filePath"]),
+                "mediaType": widget.args["type"]
+              }
+            ];
+
+      await this.postPreviewStore.sendMedia(fileList, postGallery);
       sendingPost = false;
 
       await this.walletStore.getWallet();
@@ -341,7 +269,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           SnackBar(
             content: Text(AppLocalizations.of(context)!
                 .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
-                .replaceAll("video", postData.type!)),
+                .replaceAll("video", mediaType)),
           ),
         );
       }
