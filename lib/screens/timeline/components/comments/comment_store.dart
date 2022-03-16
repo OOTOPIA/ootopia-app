@@ -46,7 +46,6 @@ abstract class CommentStoreBase with Store {
   Future<void> getComments(String postId, int page) async {
     try {
       var response = await commentRepository.getComments(postId, page);
-      print("AHHHHHHHHHHHHHHHHHHH ${response}");
       hasMorePosts = response.length > 0;
       if (response.isEmpty) {
         currentPageComment = currentPageComment;
@@ -54,7 +53,7 @@ abstract class CommentStoreBase with Store {
         listComments.addAll(response);
       }
     } catch (e) {
-      print("ERROU ? ${e.toString()}");
+      return Future.error(e);
     }
   }
 
@@ -62,9 +61,7 @@ abstract class CommentStoreBase with Store {
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
-      var oi =
-          await commentRepository.createComment(postId, text, listUsersMarket);
-      print("AHHHHHHHHHHHHHHH ${oi.id}");
+      await commentRepository.createComment(postId, text, listUsersMarket);
       isLoading = false;
     } catch (e) {
       isLoading = false;

@@ -40,6 +40,38 @@ mixin _$CommentRepliesStore on CommentRepliesStoreBase, Store {
     });
   }
 
+  final _$hiddenAnswersAtom =
+      Atom(name: 'CommentRepliesStoreBase.hiddenAnswers');
+
+  @override
+  bool get hiddenAnswers {
+    _$hiddenAnswersAtom.reportRead();
+    return super.hiddenAnswers;
+  }
+
+  @override
+  set hiddenAnswers(bool value) {
+    _$hiddenAnswersAtom.reportWrite(value, super.hiddenAnswers, () {
+      super.hiddenAnswers = value;
+    });
+  }
+
+  final _$showCommentRepliesAtom =
+      Atom(name: 'CommentRepliesStoreBase.showCommentReplies');
+
+  @override
+  bool get showCommentReplies {
+    _$showCommentRepliesAtom.reportRead();
+    return super.showCommentReplies;
+  }
+
+  @override
+  set showCommentReplies(bool value) {
+    _$showCommentRepliesAtom.reportWrite(value, super.showCommentReplies, () {
+      super.showCommentReplies = value;
+    });
+  }
+
   final _$viewStateAtom = Atom(name: 'CommentRepliesStoreBase.viewState');
 
   @override
@@ -188,6 +220,8 @@ mixin _$CommentRepliesStore on CommentRepliesStoreBase, Store {
     return '''
 isLoading: ${isLoading},
 howCommentReplies: ${howCommentReplies},
+hiddenAnswers: ${hiddenAnswers},
+showCommentReplies: ${showCommentReplies},
 viewState: ${viewState},
 listComments: ${listComments},
 listAllUsers: ${listAllUsers},

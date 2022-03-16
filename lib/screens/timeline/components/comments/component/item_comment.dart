@@ -102,7 +102,7 @@ class _ItemCommentState extends State<ItemComment> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 8),
                       child: Text(
-                        "Responder",
+                        AppLocalizations.of(context)!.reply,
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -121,7 +121,7 @@ class _ItemCommentState extends State<ItemComment> {
           ],
         ),
         SizedBox(
-          height: 25,
+          height: 16,
         )
       ],
     );

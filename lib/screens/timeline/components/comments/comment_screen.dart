@@ -17,6 +17,7 @@ import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -44,6 +45,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
   final ScrollController scrollController = ScrollController();
+  String? userNameReply;
 
   @override
   void initState() {
@@ -174,43 +176,67 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   void onTap() async {
     if (isIconBlue) {
-      if (_inputController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(AppLocalizations.of(context)!.writeYourComment)));
-      } else {
-        FocusManager.instance.primaryFocus?.unfocus();
-        commentStore.isLoading = true;
-        commentStore.currentPageComment = 1;
-        isIconBlue = false;
-        if (commentReply != null) {
-          CommentReply createCommentReply = await commentRepliesStore
-              .createComment(commentReply!, _inputController.text.trim());
-          commentStore.listComments[indexComment!].totalReplies =
-              commentStore.listComments[indexComment!].totalReplies != null
-                  ? commentStore.listComments[indexComment!].totalReplies! + 1
-                  : 1;
-          if (commentStore.listComments[indexComment!].commentReplies != null) {
-            commentStore.listComments[indexComment!].commentReplies!
-                .add(createCommentReply);
-          } else {
-            commentStore.listComments[indexComment!].commentReplies = [
-              createCommentReply
-            ];
-          }
-          commentStore.isLoading = false;
-          Future.delayed(Duration(seconds: 1), () {
-            setState(() {});
-          });
-
-          return;
+      try {
+        if (_inputController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.writeYourComment)));
         } else {
-          await commentStore.createComment(
-              postId, _inputController.text.trim());
-        }
+          FocusManager.instance.primaryFocus?.unfocus();
+          commentStore.isLoading = true;
 
-        _inputController.clear();
-        commentStore.listComments.clear();
-        _getData();
+          if (commentReply != null) {
+            CommentReply createCommentReply = await commentRepliesStore
+                .createComment(commentReply!, _inputController.text.trim());
+            isIconBlue = false;
+            commentStore.listComments[indexComment!].totalReplies =
+                commentStore.listComments[indexComment!].totalReplies != null
+                    ? commentStore.listComments[indexComment!].totalReplies! + 1
+                    : 1;
+            if (commentStore.listComments[indexComment!].commentReplies !=
+                null) {
+              commentStore.listComments[indexComment!].commentReplies!
+                  .add(createCommentReply);
+            } else {
+              commentStore.listComments[indexComment!].commentReplies = [
+                createCommentReply
+              ];
+            }
+            _inputController.clear();
+            commentStore.listUsersMarket?.clear();
+            userNameReply = null;
+            commentReply = null;
+            indexComment = null;
+            commentStore.isLoading = false;
+
+            // Future.delayed(Duration(seconds: 1), () {
+            //   setState(() {});
+            // });
+
+            return;
+          } else {
+            await commentStore.createComment(
+                postId, _inputController.text.trim());
+            isIconBlue = false;
+            commentStore.currentPageComment = 1;
+            _inputController.clear();
+            commentStore.listComments.clear();
+            _getData();
+            commentStore.isLoading = false;
+          }
+        }
+      } catch (e) {
+        showModalBottomSheet(
+          context: context,
+          barrierColor: Colors.black.withAlpha(1),
+          backgroundColor: Colors.black.withAlpha(1),
+          builder: (BuildContext context) {
+            return SnackBarWidget(
+              menu: AppLocalizations.of(context)!.couldNotSend,
+              text: AppLocalizations.of(context)!.tryAgain,
+              automaticClosing: true,
+            );
+          },
+        );
         commentStore.isLoading = false;
       }
     }
@@ -223,13 +249,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   replyComment(Comment comment) {
     _inputController.text = "ㅤ@${comment.username}ㅤ";
+    userNameReply = comment.username;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
     commentStore.listUsersMarket?.add(comment.userId);
     commentReply = comment.id;
     indexComment = commentStore.listComments
         .indexWhere((_comment) => _comment.id == comment.id);
-    print("ASDFGH ${indexComment}");
+    setState(() {});
   }
 
   @override
@@ -339,13 +366,16 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                                     .listComments[index].userId;
                                       }
                                       return ItemComment(
-                                          comment: comment,
-                                          visibleDelete: visibleDelete,
-                                          commentStore: commentStore,
-                                          getData: _getData,
-                                          postId: postId,
-                                          replyComment: replyComment,
-                                          updateState: () => setState(() {}));
+                                        comment: comment,
+                                        visibleDelete: visibleDelete,
+                                        commentStore: commentStore,
+                                        getData: _getData,
+                                        postId: postId,
+                                        replyComment: replyComment,
+                                        updateState: () {
+                                          setState(() {});
+                                        },
+                                      );
                                     },
                                   ),
                                 ),
@@ -362,6 +392,15 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     child: TextFieldComment(
                       authStore: authStore,
                       commentStore: commentStore,
+                      userNameReply: userNameReply,
+                      removeReply: () {
+                        _inputController.clear();
+                        userNameReply = null;
+                        commentStore.listUsersMarket?.clear();
+                        commentReply = null;
+                        indexComment = null;
+                        setState(() {});
+                      },
                       focusNode: focusNode,
                       inputController: _inputController,
                       onChange: onChanged,

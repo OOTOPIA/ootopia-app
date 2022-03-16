@@ -4,6 +4,7 @@ import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart
 import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/data/repositories/comment_replies_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
+import 'package:collection/collection.dart';
 
 part "comment_replies_store.g.dart";
 
@@ -21,6 +22,12 @@ abstract class CommentRepliesStoreBase with Store {
 
   @observable
   bool howCommentReplies = false;
+
+  @observable
+  bool hiddenAnswers = false;
+
+  @observable
+  bool showCommentReplies = false;
 
   @observable
   ViewState viewState = ViewState.loading;
@@ -51,16 +58,19 @@ abstract class CommentRepliesStoreBase with Store {
       if (response.isEmpty) {
         currentPageComment = currentPageComment;
       } else {
-        response.forEach((element) {
-          if (listComments != null && !listComments.contains(element)) {
-            listComments.insert(0, element);
+        response.forEach((commentReply) {
+          if (listComments != null &&
+              listComments.firstWhereOrNull(
+                      (comment) => comment.id == commentReply.id) ==
+                  null) {
+            listComments.insert(0, commentReply);
           } else if (listComments == null) {
-            listComments.add(element);
+            listComments.add(commentReply);
           }
         });
       }
     } catch (e) {
-      print("ERROU nem ferrando ? ${e.toString()}");
+      throw Future.error(e);
     }
   }
 

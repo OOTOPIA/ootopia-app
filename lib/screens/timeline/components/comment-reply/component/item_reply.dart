@@ -16,6 +16,7 @@ class ItemReply extends StatefulWidget {
   final CommentRepliesStore? commentRepliesStore;
   final Function() getData;
   final Function replyComment;
+  final Function deleteReply;
 
   const ItemReply({
     Key? key,
@@ -26,6 +27,7 @@ class ItemReply extends StatefulWidget {
     this.commentRepliesStore,
     required this.getData,
     required this.replyComment,
+    required this.deleteReply,
   }) : super(key: key);
 
   @override
@@ -121,9 +123,9 @@ class ItemReplyState extends State<ItemReply> {
                   ),
                   GestureDetector(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                       child: Text(
-                        "Responder",
+                        AppLocalizations.of(context)!.reply,
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -173,11 +175,7 @@ class ItemReplyState extends State<ItemReply> {
                 onPressed: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.of(context).pop();
-                  await widget.commentRepliesStore!
-                      .deleteComments(commentReply.id);
-                  widget.commentRepliesStore!.listComments.clear();
-                  widget.commentRepliesStore!.currentPageComment = 1;
-                  widget.getData();
+                  widget.deleteReply(commentReply);
                 },
                 child: Text(
                   'OK',
