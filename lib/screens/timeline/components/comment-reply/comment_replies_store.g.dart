@@ -102,37 +102,6 @@ mixin _$CommentRepliesStore on CommentRepliesStoreBase, Store {
     });
   }
 
-  final _$listAllUsersAtom = Atom(name: 'CommentRepliesStoreBase.listAllUsers');
-
-  @override
-  List<UserSearchModel> get listAllUsers {
-    _$listAllUsersAtom.reportRead();
-    return super.listAllUsers;
-  }
-
-  @override
-  set listAllUsers(List<UserSearchModel> value) {
-    _$listAllUsersAtom.reportWrite(value, super.listAllUsers, () {
-      super.listAllUsers = value;
-    });
-  }
-
-  final _$listUsersMarketAtom =
-      Atom(name: 'CommentRepliesStoreBase.listUsersMarket');
-
-  @override
-  List<String>? get listUsersMarket {
-    _$listUsersMarketAtom.reportRead();
-    return super.listUsersMarket;
-  }
-
-  @override
-  set listUsersMarket(List<String>? value) {
-    _$listUsersMarketAtom.reportWrite(value, super.listUsersMarket, () {
-      super.listUsersMarket = value;
-    });
-  }
-
   final _$currentPageCommentAtom =
       Atom(name: 'CommentRepliesStoreBase.currentPageComment');
 
@@ -193,9 +162,10 @@ mixin _$CommentRepliesStore on CommentRepliesStoreBase, Store {
       AsyncAction('CommentRepliesStoreBase.createComment');
 
   @override
-  Future<CommentReply> createComment(String commentId, String text) {
+  Future<CommentReply> createComment(
+      String commentId, String text, List<String>? listUsersMarket) {
     return _$createCommentAsyncAction
-        .run(() => super.createComment(commentId, text));
+        .run(() => super.createComment(commentId, text, listUsersMarket));
   }
 
   final _$deleteCommentsAsyncAction =
@@ -207,14 +177,6 @@ mixin _$CommentRepliesStore on CommentRepliesStoreBase, Store {
         .run(() => super.deleteComments(commentId));
   }
 
-  final _$searchUserAsyncAction =
-      AsyncAction('CommentRepliesStoreBase.searchUser');
-
-  @override
-  Future<void> searchUser(String fullName) {
-    return _$searchUserAsyncAction.run(() => super.searchUser(fullName));
-  }
-
   @override
   String toString() {
     return '''
@@ -224,8 +186,6 @@ hiddenAnswers: ${hiddenAnswers},
 showCommentReplies: ${showCommentReplies},
 viewState: ${viewState},
 listComments: ${listComments},
-listAllUsers: ${listAllUsers},
-listUsersMarket: ${listUsersMarket},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
 hasMoreUsers: ${hasMoreUsers}

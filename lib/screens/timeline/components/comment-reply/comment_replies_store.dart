@@ -36,12 +36,6 @@ abstract class CommentRepliesStoreBase with Store {
   List<CommentReply> listComments = [];
 
   @observable
-  List<UserSearchModel> listAllUsers = [];
-
-  @observable
-  List<String>? listUsersMarket = [];
-
-  @observable
   int currentPageComment = 0;
 
   @observable
@@ -75,7 +69,8 @@ abstract class CommentRepliesStoreBase with Store {
   }
 
   @action
-  Future<CommentReply> createComment(String commentId, String text) async {
+  Future<CommentReply> createComment(
+      String commentId, String text, List<String>? listUsersMarket) async {
     try {
       isLoading = true;
       CommentReply commentReply = await commentRepliesRepository
@@ -102,36 +97,6 @@ abstract class CommentRepliesStoreBase with Store {
       isLoading = false;
 
       return Future.error(e);
-    }
-  }
-
-  @action
-  Future<void> searchUser(String fullName) async {
-    if (viewState != ViewState.loadingNewData) {
-      listAllUsers.clear();
-    }
-    try {
-      viewState = ViewState.loading;
-      var response =
-          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
-      hasMoreUsers = response.length == 10;
-      listAllUsers.addAll(response);
-      viewState = ViewState.done;
-    } catch (e) {
-      viewState = ViewState.error;
-    }
-  }
-
-  void updateOnScroll(
-      ScrollController scrollController, String fullname) async {
-    if (scrollController.position.atEdge) {
-      if (scrollController.position.pixels != 0) {
-        if (hasMoreUsers) {
-          currentPageUser++;
-          viewState = ViewState.loadingNewData;
-          await searchUser(fullname);
-        }
-      }
     }
   }
 }

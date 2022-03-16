@@ -190,8 +190,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           commentStore.isLoading = true;
 
           if (commentReply != null) {
-            CommentReply createCommentReply = await commentRepliesStore
-                .createComment(commentReply!, _inputController.text.trim());
+            CommentReply createCommentReply =
+                await commentRepliesStore.createComment(commentReply!,
+                    _inputController.text.trim(), commentStore.listUsersMarket);
             isIconBlue = false;
             commentStore.listComments[indexComment!].totalReplies =
                 commentStore.listComments[indexComment!].totalReplies != null
@@ -257,7 +258,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     userNameReply = comment.username;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
-    commentStore.listUsersMarket?.add(comment.userId);
+    commentStore.listUsersMarket!.add(comment.userId);
     commentReply = comment.id;
     indexComment = commentStore.listComments
         .indexWhere((_comment) => _comment.id == comment.id);

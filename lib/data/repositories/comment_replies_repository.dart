@@ -9,12 +9,11 @@ class CommentRepliesRepositoryImpl with SecureStoreMixin {
       var response =
           await ApiClient.api().get('post-comment-replies', queryParameters: {
         'page': page,
-        'limit': 2,
+        'limit': 5,
         'commentId': commentId,
       });
 
       if (response.statusCode == 200) {
-        print(" testre disso aqui óóó ${response.data}");
         return (response.data as List)
             .map((i) => CommentReply.fromJson(i))
             .toList();
@@ -22,7 +21,7 @@ class CommentRepliesRepositoryImpl with SecureStoreMixin {
         throw Exception('Failed to load comment');
       }
     } catch (error) {
-      throw Exception('Failed to load comment $error');
+      throw Exception('Failed to load comment ${error.toString()}');
     }
   }
 
@@ -31,7 +30,7 @@ class CommentRepliesRepositoryImpl with SecureStoreMixin {
     try {
       var response = await ApiClient.api().post('post-comment-replies', data: {
         'text': text,
-        'taggedUser': usersMarket,
+        'taggedUserIds': usersMarket,
         'commentId': commentId,
       });
       if (response.statusCode == 201) {
