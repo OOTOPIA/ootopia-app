@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 
 extension OotButton on ElevatedButton {
   ElevatedButton defaultButton(BuildContext context, {ButtonStyle? style}) {
@@ -9,7 +10,7 @@ extension OotButton on ElevatedButton {
         ),
       ),
       backgroundColor: MaterialStateProperty.all<Color>(
-        Theme.of(context).accentColor,
+        LightColors.blue,
       ),
       minimumSize: MaterialStateProperty.all(
         Size(60, 58),

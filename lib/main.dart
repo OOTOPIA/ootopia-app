@@ -39,6 +39,7 @@ import 'package:ootopia_app/screens/edit_profile_screen/add_link/add_link_screen
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/about_quiz_screen.dart';
@@ -310,6 +311,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
       ],
       child: MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (context) => FriendsStore()),
           Provider<AuthStore>(
             create: (_) => AuthStore(),
           ),

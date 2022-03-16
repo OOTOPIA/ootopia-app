@@ -473,6 +473,26 @@
 
     "hide" : "Hide",
     "readMore" : "Read more",
+
+
+    "addFriends" : "Add friends",
+    "friend" : "Friend",
+    "addFriend" : "Add friend",
+    "remove" : "Remove",
+    "removeFriend" : "Remove friend",
+    "seeProfile" : "See profile",
+    "searchFriendsMsg" : "Search and add people to your circle of friends",
+    "searchFriends" : "Search friends",
+    "friends" : "Friends",
+    "orderBy" : "Ranked By:",
+    "alphabeticalOrder" : "Alphabetical order",
+    "mostRecent" : "Most recent",
+    "older" : "Older",
+    "userNotFound" : "User not found",
+    "resultsFor" : "Results for",
+    "userNotFoundMsg" : "Unfortunately the user you are looking for is not found or does not exist yet.",
+
+
     "multiplesImages": "Multiples images",
     "limitSelectedImages": "The limit is 5 photos or videos",
     "hasntImageOnGallery": "This gallery has no any files"

@@ -4,8 +4,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
+import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
@@ -17,6 +23,7 @@ import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/screens/profile_screen/components/grid_custom_widget.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -30,7 +37,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
 
-  ProfileScreen([this.args]);
+  ProfileScreen( [this.args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -38,6 +45,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   ProfileScreenStore? store;
+  late FriendsStore friendsStore;
   late AuthStore authStore;
   late WalletStore walletStore;
   late HomeStore homeStore;
@@ -66,7 +74,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!profileUserIsLoggedUser) {
         store = ProfileScreenStore();
+        if(authStore.currentUser != null){
+          await store!.getIfIsFriend(profileUserId);
+        }
       }
+
 
       await store?.getProfileDetails(profileUserId);
       await homeStore.getCurrentUser(profileUserId);
@@ -103,6 +115,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+
+  get appBarProfile => DefaultAppBar(
+    components: [
+      AppBarComponents.back,
+      isLoggedInUserProfile ? AppBarComponents.edit : AppBarComponents.empty,
+    ],
+    onTapAction: () => isLoggedInUserProfile ? controller.insertPage(EditProfileScreen()) : null,
+    onTapLeading: () => controller.back(),
+  );
+
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
   bool get isLoggedInUserProfile {
@@ -134,8 +156,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     homeStore = Provider.of<HomeStore>(context);
     if (profileUserIsLoggedUser) {
       store = Provider.of<ProfileScreenStore>(context);
+    }else{
+      friendsStore  = Provider.of<FriendsStore>(context);
     }
     return Scaffold(
+      appBar: showAppBar() ? appBarProfile : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -221,6 +246,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                             ],
 
+                            if(showButton)...[
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular
+                                            (20),
+                                          side: BorderSide.none),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                        EdgeInsets.symmetric(horizontal: 24)),
+                                  ),
+                                  onPressed: () {
+                                    Future.delayed(Duration(milliseconds: 100),(){
+                                      final friend = FriendModel(
+                                        id: store!.profile!.id,
+                                        fullname: store!.profile!.fullname,
+                                        photoUrl: store!.profile!.photoUrl,
+                                      );
+
+                                     if( store!.isFriend == false){
+                                       store!.addFriend();
+                                       friendsStore.addFriend(friend);
+                                     }else{
+                                       store!.removeFriend();
+                                       friendsStore.removeFriend(friend);
+                                     }
+                                    });
+                                  },
+                                  child: Text(store!.isFriend == false ?
+                                  AppLocalizations.of(context)!.addFriend:
+                                  AppLocalizations.of(context)!.removeFriend,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                              SizedBox(
+                                height: 16,
+                              )
+                            ],
+
                             Text(
                               AppLocalizations.of(context)!
                                   .regenerationGame
@@ -256,17 +327,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isVisible: isVisible,
                               profileScreenStore: store,
                             ),
-                            isLoggedInUserProfile
-                                ? WalletBarWidget(
-                                    totalBalance: walletStore.wallet != null
-                                        ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
-                                        : '0,00',
-                                    onTap: () =>
-                                        controller.insertPage(WalletPage()))
-                                : Container(),
-                            SizedBox(
-                                height:
-                                    GlobalConstants.of(context).spacingNormal),
+                            if(isLoggedInUserProfile)...[
+                              WalletBarWidget(
+                                  totalBalance: walletStore.wallet != null
+                                      ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
+                                      : '0,00',
+                                  onTap: () =>
+                                      controller.insertPage(WalletPage())),
+                            ],
+
+                            CircleOfFriendWidget(
+                              isUserLogged: isLoggedInUserProfile,
+                              userId: store!.profile!.id,
+                            ),
+
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
@@ -370,5 +444,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await launch(_url);
     }
   }
+
+  bool showAppBar() {
+    return controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE &&
+        (controller.pages[controller.currentPageIndex]) is ProfileScreen;
+  }
+
+  bool get  showButton{
+    return !isLoggedInUserProfile && store?.isFriend != null && authStore.currentUser != null;
+  }
+
 
 }
