@@ -334,7 +334,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
             if (_readyToSendPost) {
               postPreviewStore.uploadIsLoading = false;
               _readyToSendPost = false;
-              //_sendPost();
+              sendPost();
             }
           });
         }

@@ -11,9 +11,12 @@ class CustomCrop extends StatefulWidget {
   final File image;
   final ValueChanged<File>? onChanged;
   final bool? fromCamera;
-  const CustomCrop(
-      {Key? key, required this.image, this.onChanged, this.fromCamera = false})
-      : super(key: key);
+  const CustomCrop({
+    Key? key,
+    required this.image,
+    this.onChanged,
+    this.fromCamera = false,
+  }) : super(key: key);
 
   @override
   State<CustomCrop> createState() => _CustomCropState();

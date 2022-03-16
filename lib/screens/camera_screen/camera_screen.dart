@@ -323,7 +323,6 @@ class _CameraAppState extends State<CameraApp>
                 builder: (context) => CustomCrop(
                   image: File(filePath),
                   fromCamera: true,
-                  // mirroredPhoto: mirroredPhoto,
                 ),
               ),
             );
