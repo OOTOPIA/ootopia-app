@@ -84,8 +84,7 @@ class NotificationMessageService {
 
     AppLocalizations.delegate.load(this.locale).then((value) {
       if (type == 'user-tagged-in-comment') {
-        titleText = value.userComment
-            .replaceAll('%USER_NAME_MARKET%', '${user!.fullname}');
+        titleText = value.userComment;
       }
       if (type == "gratitude_reward")
         titleText = value.notificationTitleOOzReceived
@@ -104,8 +103,7 @@ class NotificationMessageService {
 
     AppLocalizations.delegate.load(this.locale).then((value) {
       if (type == 'user-tagged-in-comment') {
-        bodyText = value.userComment
-            .replaceAll('%USER_NAME_MARKET%', '${usersName.first}');
+        bodyText = value.userComment;
       }
       if (type == "gratitude_reward") {
         if (usersName.length == 1)
