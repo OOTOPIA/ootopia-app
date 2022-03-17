@@ -35,56 +35,46 @@ class LinkRichText extends StatelessWidget {
     SmartPageController controller = SmartPageController.getInstance();
     var allName = [];
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
+      var positionInText = 0;
+
       List<Map<String, dynamic>> textFragmented = [];
+      const string = 'Dartisans';
+      string.indexOf(RegExp(r'sans'));
+      print(text);
       for (var item in userCommentsList!) {
-        int startname = text.indexOf('@${item.fullname}');
-        if (startname != -1) {
-          allName.add({
-            "id": item.id,
-            "name": "@${item.fullname} ",
-            "start": startname,
-            "end": startname + item.fullname.length + 1
-          });
-        }
+        var startname = text.indexOf('@${item.fullname}');
+        print(startname);
+        // if (startname >= 0) {
+        //   allName.add({
+        //     "id": item.id,
+        //     "name": "${item.fullname} ",
+        //     "start": startname,
+        //     "end": startname + item.fullname.length
+        //   });
+        // }
       }
-      var lastEndName = 0;
       var countText = 0;
+
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
       for (var i = 0; i < allName.length; i++) {
-        if (countText == 0) {
-          textFragmented.add({
-            'isName': false,
-            'string': text.substring(countText, allName[i]['start']),
-          });
-          textFragmented.add({
-            'isName': true,
-            'string': allName[i]['name'],
-            'id': allName[i]['id'],
-          });
-          countText = allName[i]['end'];
-        } else {
-          if (text
-              .substring(allName[i]['start'], allName[i]['end'])
-              .contains('@')) {
-            textFragmented.add({
-              'isName': true,
-              'string': allName[i]['name'],
-              'id': allName[i]['id'],
-            });
-          } else {
-            textFragmented.add({
-              'isName': false,
-              'string': text.substring(allName[i]['start'], countText),
-            });
-          }
-        }
-        lastEndName = allName[i]['end'];
-      }
+        // textFragmented.add({
+        //   'isName': false,
+        //   'string': text.substring(countText, allName[i]['start']),
+        // });
 
-      if (text.length > lastEndName) {
+        // textFragmented.add({
+        //   'isName': true,
+        //   'string': allName[i]['name'],
+        //   'id': allName[i]['id'],
+        // });
+        // print(
+        //     'name ${allName[i]['name']} start ${allName[i]['start']} end ${allName[i]['end']}');
+        // countText = allName[i]['end'];
+      }
+      if (text.length > countText) {
         textFragmented.add({
           'isName': false,
-          'string': text.substring(lastEndName + 1, text.length),
+          'string': text.substring(countText + 1, text.length),
         });
       }
       for (var i = 0; i < textFragmented.length; i++) {

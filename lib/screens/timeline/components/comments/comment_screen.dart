@@ -82,11 +82,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   void addUserInText(UserSearchModel e) {
+    var text = _inputController.text;
+
+    //if (text.substring(i, i + s + 1) == e.fullname) {}
+
     commentStore.listUsersMarket?.add(e.id);
 
     var name = 'ㅤ@${e.fullname}ㅤ';
     var s = 0;
-    var text = _inputController.text;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
         _inputController.text = text.replaceRange(i, i + s + 1, name);
@@ -147,7 +150,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         isIconBlue = true;
       });
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(Duration(seconds: 2), () async {
+      _debounce = Timer(Duration(seconds: 1), () async {
         var getLastString = value.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
@@ -214,7 +217,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     return Observer(builder: (context) {
       return LoadingOverlay(
-
         isLoading: commentStore.isLoading,
         child: GestureDetector(
           onTap: () {
