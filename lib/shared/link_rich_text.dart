@@ -36,76 +36,63 @@ class LinkRichText extends StatelessWidget {
     var allName = [];
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
       List<Map<String, dynamic>> textFragmented = [];
+      var countText = 0;
+      for (var item in userCommentsList!) {
+        var startName = text.indexOf('@[${item.id}]');
+        if (startName != -1) {
+          allName.add({
+            'id': item.id,
+            'start': startName,
+            'name': item.fullname,
+            'end': startName + item.id.length + 3,
+          });
+        }
+      }
+      allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
 
-      for (var userComment in userCommentsList!) {
-        var startname = text.indexOf('@${userComment.fullname}');
-        //print("startname >>> $startname");
-        //print("user comment >>>> ${userComment.fullname}");
+      for (var i = 0; i < allName.length; i++) {
+        var userInComment = allName[i];
+        textFragmented.add({
+          'isName': false,
+          'string': text.substring(countText, userInComment['start']),
+        });
+        countText = userInComment['id'].length + userInComment['start'] + 3;
+        textFragmented.add({
+          'isName': true,
+          'string': text
+              .substring(userInComment['start'], countText)
+              .replaceAll('@[${userInComment['id']}]', userInComment['name']),
+        });
+      }
+      if (text.length > countText) {
+        textFragmented.add({
+          'isName': false,
+          'string': text.substring(countText, text.length),
+        });
       }
 
-      //esse é o ㅤ@[id do maluco] tbm é ㅤ@[id do maluco]ㅤe tem também o ㅤ@[id do maluco]ㅤque é hack
-
-      // var positionInText = 0;
-
-      // List<Map<String, dynamic>> textFragmented = [];
-      // for (var item in userCommentsList!) {
-      //   var startname = text.indexOf('@${item.fullname}');
-      //   print(startname);
-      //   // if (startname >= 0) {
-      //   //   allName.add({
-      //   //     "id": item.id,
-      //   //     "name": "${item.fullname} ",
-      //   //     "start": startname,
-      //   //     "end": startname + item.fullname.length
-      //   //   });
-      //   // }
-      // }
-      // var countText = 0;
-
-      // allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-      // for (var i = 0; i < allName.length; i++) {
-      //   // textFragmented.add({
-      //   //   'isName': false,
-      //   //   'string': text.substring(countText, allName[i]['start']),
-      //   // });
-
-      //   // textFragmented.add({
-      //   //   'isName': true,
-      //   //   'string': allName[i]['name'],
-      //   //   'id': allName[i]['id'],
-      //   // });
-      //   // print(
-      //   //     'name ${allName[i]['name']} start ${allName[i]['start']} end ${allName[i]['end']}');
-      //   // countText = allName[i]['end'];
-      // }
-      // if (text.length > countText) {
-      //   textFragmented.add({
-      //     'isName': false,
-      //     'string': text.substring(countText + 1, text.length),
-      //   });
-      // }
-      // for (var i = 0; i < textFragmented.length; i++) {
-      //   var comment = textFragmented[i];
-      //   textSpanWidget.add(
-      //     TextSpan(
-      //       text: comment['string'].replaceAll('ㅤ', ' '),
-      //       recognizer: new TapGestureRecognizer()
-      //         ..onTap = () {
-      //           controller.insertPage(
-      //             ProfileScreen({
-      //               "id": comment['id'],
-      //             }),
-      //           );
-      //         },
-      //       style: TextStyle(
-      //         color:
-      //             comment['isName'] ? LightColors.linkText : LightColors.black,
-      //         fontWeight: FontWeight.w400,
-      //         fontSize: 16,
-      //       ),
-      //     ),
-      //   );
-      // }
+      for (var i = 0; i < textFragmented.length; i++) {
+        var comment = textFragmented[i];
+        textSpanWidget.add(
+          TextSpan(
+            text: comment['string'].replaceAll('ㅤ', ' '),
+            recognizer: new TapGestureRecognizer()
+              ..onTap = () {
+                controller.insertPage(
+                  ProfileScreen({
+                    "id": comment['id'],
+                  }),
+                );
+              },
+            style: TextStyle(
+              color:
+                  comment['isName'] ? LightColors.linkText : LightColors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 16,
+            ),
+          ),
+        );
+      }
     } else {
       _hasntLink();
     }

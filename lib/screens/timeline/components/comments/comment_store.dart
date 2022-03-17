@@ -55,17 +55,14 @@ abstract class CommentStoreBase with Store {
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
+      List<String> idsUsersTagged = [];
+      var newTextComment = text;
+
       if (listTaggedUsers != null) {
-        print("NEW COMMENT: $text");
         int newStartIndex = 0;
-        var newTextComment = text;
         listTaggedUsers?.forEach((user) {
-          //String searchString = "@${user.fullname}";
+          idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          print(
-              "user.start! + newStartIndex >>>>> ${user.start} ${user.start! + newStartIndex}");
-          print(
-              "user.end! + newStartIndex >>>>> ${user.end} ${user.end! + newStartIndex}");
           newTextComment = newTextComment.replaceRange(
             user.start! + newStartIndex,
             user.end! + newStartIndex,
@@ -73,15 +70,11 @@ abstract class CommentStoreBase with Store {
           );
           newStartIndex =
               newStartIndex + newString.length - (user.end! - user.start!);
-          print("newStartIndex >>>> $newStartIndex");
           user.end = user.start! + newString.length;
-          print("newTextComment >>> $newTextComment");
-
-          //print("tagged users ${user.fullname}");
         });
       }
-
-      //await commentRepository.createComment(postId, text, listTaggedUsers);
+      await commentRepository.createComment(
+          postId, newTextComment, idsUsersTagged);
       isLoading = false;
     } catch (e) {
       isLoading = false;
