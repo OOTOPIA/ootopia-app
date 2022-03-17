@@ -22,7 +22,6 @@ import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
-import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -37,6 +36,7 @@ import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     timelinePostBloc = BlocProvider.of<TimelinePostBloc>(context);
-    Color selectedIconColor = Theme.of(context).accentColor;
+    Color selectedIconColor = LightColors.blue;
     Color unselectedIconColor = Color(0XFF3A4046);
     authStore = Provider.of<AuthStore>(context);
     profileStore = Provider.of<ProfileScreenStore>(context);
@@ -360,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen>
                             controller: controller,
                             options: SmartPageBottomNavigationOptions(
                               height: 50,
-                              indicatorColor: Theme.of(context).accentColor,
+                              indicatorColor: LightColors.blue,
                               backgroundColor: Colors.transparent,
                               showBorder: false,
                               showIndicator: true,
@@ -581,7 +581,7 @@ class _HomeScreenState extends State<HomeScreen>
         : controller.currentBottomIndex ==
                     PageViewController.TAB_INDEX_PROFILE &&
                 currentPage is ProfileScreen
-            ? appBarProfile
+            ? null
             : controller.currentBottomIndex ==
                         PageViewController.TAB_INDEX_MARKETPLACE &&
                     currentPage is MarketplaceScreen

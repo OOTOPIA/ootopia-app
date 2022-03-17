@@ -5,12 +5,18 @@ import 'package:crop_image/crop_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CustomCrop extends StatefulWidget {
   final File image;
-  final ValueChanged<File> onChanged;
-  const CustomCrop({Key? key, required this.image, required this.onChanged})
-      : super(key: key);
+  final ValueChanged<File>? onChanged;
+  final bool? fromCamera;
+  const CustomCrop({
+    Key? key,
+    required this.image,
+    this.onChanged,
+    this.fromCamera = false,
+  }) : super(key: key);
 
   @override
   State<CustomCrop> createState() => _CustomCropState();
@@ -22,7 +28,6 @@ class _CustomCropState extends State<CustomCrop> {
     defaultCrop: Rect.fromLTRB(0.0, 0.0, 1, 1),
   );
 
-  //late Image newCroppedImage;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,17 +77,28 @@ class _CustomCropState extends State<CustomCrop> {
 
   Future<void> _cropImage() async {
     final croppedBitmap = await controller.croppedBitmap();
-    teste(await croppedBitmap.toByteData(format: ImageByteFormat.png));
-
-    Navigator.pop(context);
+    saveFileOnDirectory(
+        await croppedBitmap.toByteData(format: ImageByteFormat.png));
   }
 
-  teste(ByteData? imageBytes) async {
+  saveFileOnDirectory(ByteData? imageBytes) async {
     String appPath = (await getApplicationDocumentsDirectory()).path;
     File newFile = File('$appPath/${imageBytes.hashCode}.png');
     await newFile.writeAsBytes(imageBytes!.buffer
         .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
 
-    widget.onChanged(newFile);
+    if (widget.onChanged != null) widget.onChanged!(newFile);
+
+    handleNavigation(newFile);
+  }
+
+  handleNavigation(File file) {
+    if (widget.fromCamera!) {
+      Navigator.of(this.context).pushNamed(
+        PageRoute.Page.postPreviewScreen.route,
+        arguments: {"filePath": file.path, "type": "image"},
+      );
+    } else
+      Navigator.pop(context);
   }
 }

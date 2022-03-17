@@ -1,27 +1,22 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/custom_gallery.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
-
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:sentry_flutter/sentry_flutter.dart';
-
-import 'components/crop_widget.dart';
+import 'components/custom_crop.dart';
 
 class CameraApp extends StatefulWidget {
   @override
@@ -47,9 +42,6 @@ class _CameraAppState extends State<CameraApp>
 
   late double _scale;
   late AnimationController _animController;
-
-  final cropKey = GlobalKey<CropState>();
-  late final crop;
 
   @override
   void initState() {
@@ -88,17 +80,21 @@ class _CameraAppState extends State<CameraApp>
     var storageStatus = await Permission.storage.status;
     var cameraStatus = await Permission.camera.status;
     var microphoneStatus = await Permission.microphone.status;
-    if (!storageStatus.isGranted || !cameraStatus.isGranted || !microphoneStatus.isGranted) {
-
+    if (!storageStatus.isGranted ||
+        !cameraStatus.isGranted ||
+        !microphoneStatus.isGranted) {
       Map<Permission, PermissionStatus> statuses = await [
         Permission.storage,
         Permission.camera,
         Permission.microphone
       ].request();
 
-      bool hasStoragePermition = statuses[Permission.storage] == PermissionStatus.granted;
-      bool hasStorageCamera = statuses[Permission.camera] == PermissionStatus.granted;
-      bool hasStorageMicrofone = statuses[Permission.microphone] == PermissionStatus.granted;
+      bool hasStoragePermition =
+          statuses[Permission.storage] == PermissionStatus.granted;
+      bool hasStorageCamera =
+          statuses[Permission.camera] == PermissionStatus.granted;
+      bool hasStorageMicrofone =
+          statuses[Permission.microphone] == PermissionStatus.granted;
 
       if (hasStoragePermition && hasStorageCamera && hasStorageMicrofone) {
         await checkCameraAvailability();
@@ -106,8 +102,11 @@ class _CameraAppState extends State<CameraApp>
         setState(() {
           permissionsIsNeeded = false;
         });
-      }else{
-        if(Platform.isIOS && hasStoragePermition && hasStorageCamera && !hasStorageMicrofone) {
+      } else {
+        if (Platform.isIOS &&
+            hasStoragePermition &&
+            hasStorageCamera &&
+            !hasStorageMicrofone) {
           await checkCameraAvailability();
           getLastVideoThumbnail();
           setState(() {
@@ -249,44 +248,6 @@ class _CameraAppState extends State<CameraApp>
     }
   }
 
-  Future getVideoFromGallery() async {
-    final pickedFile = await picker.pickVideo(source: ImageSource.gallery);
-    indexCamera = 1;
-    setCamera();
-
-    setState(() async {
-      //await controller!.dispose();
-
-      if (pickedFile != null) {
-        await Navigator.of(context).pushNamed(
-          PageRoute.Page.postPreviewScreen.route,
-          arguments: {"filePath": pickedFile.path, "type": "video"},
-        );
-      }
-    });
-  }
-
-  Future getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    indexCamera = 1;
-    setCamera();
-
-    setState(() async {
-      //await controller!.dispose();
-
-      if (pickedFile != null) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CropWidget(
-              imageFile: File(pickedFile.path),
-            ),
-          ),
-        );
-      }
-    });
-  }
-
   Future openCustomGallery() async {
     await Navigator.push(
       context,
@@ -294,62 +255,6 @@ class _CameraAppState extends State<CameraApp>
         builder: (context) => CustomGallery(),
       ),
     );
-  }
-
-  Future _selectImageOrVideo() async {
-    switch (await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text(
-              AppLocalizations.of(context)!.whatWillYouContribute,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.normal,
-                  color: Colors.black),
-            ),
-            titleTextStyle: null,
-            children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, "video"),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 8),
-                      child: Icon(Icons.video_camera_back),
-                    ),
-                    Text('Video'),
-                  ],
-                ),
-              ),
-              SimpleDialogOption(
-                onPressed: () => Navigator.pop(context, "image"),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 10),
-                      child: Icon(Icons.image),
-                    ),
-                    Text('Image'),
-                  ],
-                ),
-              ),
-            ],
-          );
-        })) {
-      case null:
-        break;
-
-      case "image":
-        getImageFromGallery();
-        break;
-
-      case "video":
-        getVideoFromGallery();
-        break;
-    }
   }
 
   Widget renderButtonsFlashCamera() {
@@ -409,16 +314,15 @@ class _CameraAppState extends State<CameraApp>
         if (file != null) {
           GallerySaver.saveImage(file.path).then((res) async {
             String filePath = file.path;
-            bool mirroredPhoto = false;
 
             imageFile = file;
 
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CropWidget(
-                  imageFile: File(filePath),
-                  mirroredPhoto: mirroredPhoto,
+                builder: (context) => CustomCrop(
+                  image: File(filePath),
+                  fromCamera: true,
                 ),
               ),
             );
@@ -539,7 +443,7 @@ class _CameraAppState extends State<CameraApp>
                   GestureDetector(
                     onTap: () {
                       if (!controller!.value.isRecordingVideo) {
-                         openCustomGallery();
+                        openCustomGallery();
                       }
                     },
                     child: Padding(

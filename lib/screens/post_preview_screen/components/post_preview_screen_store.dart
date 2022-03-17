@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/widgets.dart';
 import 'package:mobx/mobx.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
@@ -137,8 +137,9 @@ abstract class _PostPreviewScreenStoreBase with Store {
         return;
       }
     }
+
     model.mediaIds = mediaIds;
-    sendPost(model);
+    await sendPost(model);
   }
 
   @action
@@ -147,15 +148,15 @@ abstract class _PostPreviewScreenStoreBase with Store {
       uploadIsLoading = true;
       var result = await this._sendPost(model);
 
-      print('RESPONSE:: $result');
-      // print('TESTE: ${result.body["oozGenerated"]}');
-      //this._trackingEvents.timelineCreatedAPost(post.type!);
-      //oozToReward = result.body["oozGenerated"];
+      Map resultValueMap = jsonDecode(result.body);
+      oozToReward = double.parse(resultValueMap["oozGenerated"]);
+
+      this._trackingEvents.timelineCreatedAPost('gallery');
+
       uploadIsLoading = false;
       successOnUpload = true;
-      print('AAAAAAAA $successOnUpload');
     } catch (err) {
-      print("erro aqui2 $err");
+      print("Erro aqui no sendPost $err");
       errorOnUpload = true;
       uploadIsLoading = false;
     }

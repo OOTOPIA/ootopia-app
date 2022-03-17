@@ -469,9 +469,32 @@
     "readMore" : "Leia mais",
     "multiplesImages": "Múltiplas imagens",
     "limitSelectedImages": "O limite são 5 fotos ou vídeos",
+
+
+    "addFriends" : "Adicionar amigos",
+    "friend" : "Amigo",
+    "addFriend" : "Adicionar amigo",
+    "remove" : "Remover",
+    "removeFriend" : "Remover amigo",
+    "seeProfile" : "Ver perfil",
+    "searchFriendsMsg" : "Pesquise e adicione pessoas ao seu círculo de amigos",
+    "searchFriends" : "Buscar amigos",
+    "friends" : "Amigos",
+    "orderBy" : "Classificar por:",
+    "alphabeticalOrder" : "Ordem Alfabética",
+    "mostRecent" : "Mais recentes",
+    "older" : "Mais antigos",
+    "userNotFound" : "Usuário não encontrado",
+    "resultsFor" : "Resultados para",
+    "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe.",
     "userComment":"Você foi marcado em um comentário",
     "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
-    "earnOOzWhenTheySignup":"ganham OOz quando se inscrevem"
+    "earnOOzWhenTheySignup":"ganhe OOz quando se inscrevem"
+
 
 
 }
+
+
+
+
