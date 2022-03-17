@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 
@@ -28,7 +28,7 @@ abstract class CommentStoreBase with Store {
   List<UserSearchModel> listAllUsers = [];
 
   @observable
-  List<String>? listUsersMarket = [];
+  List<UserSearchModel>? listTaggedUsers = [];
 
   @observable
   int currentPageComment = 1;
@@ -55,7 +55,33 @@ abstract class CommentStoreBase with Store {
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
-      await commentRepository.createComment(postId, text, listUsersMarket);
+      if (listTaggedUsers != null) {
+        print("NEW COMMENT: $text");
+        int newStartIndex = 0;
+        var newTextComment = text;
+        listTaggedUsers?.forEach((user) {
+          //String searchString = "@${user.fullname}";
+          String newString = "@[${user.id}]";
+          print(
+              "user.start! + newStartIndex >>>>> ${user.start} ${user.start! + newStartIndex}");
+          print(
+              "user.end! + newStartIndex >>>>> ${user.end} ${user.end! + newStartIndex}");
+          newTextComment = newTextComment.replaceRange(
+            user.start! + newStartIndex,
+            user.end! + newStartIndex,
+            newString,
+          );
+          newStartIndex =
+              newStartIndex + newString.length - (user.end! - user.start!);
+          print("newStartIndex >>>> $newStartIndex");
+          user.end = user.start! + newString.length;
+          print("newTextComment >>> $newTextComment");
+
+          //print("tagged users ${user.fullname}");
+        });
+      }
+
+      //await commentRepository.createComment(postId, text, listTaggedUsers);
       isLoading = false;
     } catch (e) {
       isLoading = false;

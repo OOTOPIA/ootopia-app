@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
@@ -86,17 +86,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     //if (text.substring(i, i + s + 1) == e.fullname) {}
 
-    commentStore.listUsersMarket?.add(e.id);
-
     var name = 'ㅤ@${e.fullname}ㅤ';
-    var s = 0;
+    var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
         _inputController.text = text.replaceRange(i, i + s + 1, name);
+        nameStartRange = i;
         break;
       }
       s++;
     }
+
+    e.start = nameStartRange;
+    e.end = nameStartRange + e.fullname.length + 2;
+
+    commentStore.listTaggedUsers?.add(e);
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
     setState(() {
@@ -166,7 +170,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         }
       });
     } else {
-      commentStore.listUsersMarket!.clear();
+      commentStore.listTaggedUsers!.clear();
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
@@ -188,7 +192,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         _inputController.clear();
         commentStore.listComments.clear();
         commentStore.listAllUsers.clear();
-        commentStore.listUsersMarket?.clear();
+        commentStore.listTaggedUsers?.clear();
         _getData();
         commentStore.isLoading = false;
       }

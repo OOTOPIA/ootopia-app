@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -35,70 +35,77 @@ class LinkRichText extends StatelessWidget {
     SmartPageController controller = SmartPageController.getInstance();
     var allName = [];
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
-      var positionInText = 0;
-
       List<Map<String, dynamic>> textFragmented = [];
-      const string = 'Dartisans';
-      string.indexOf(RegExp(r'sans'));
-      print(text);
-      for (var item in userCommentsList!) {
-        var startname = text.indexOf('@${item.fullname}');
-        print(startname);
-        // if (startname >= 0) {
-        //   allName.add({
-        //     "id": item.id,
-        //     "name": "${item.fullname} ",
-        //     "start": startname,
-        //     "end": startname + item.fullname.length
-        //   });
-        // }
-      }
-      var countText = 0;
 
-      allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-      for (var i = 0; i < allName.length; i++) {
-        // textFragmented.add({
-        //   'isName': false,
-        //   'string': text.substring(countText, allName[i]['start']),
-        // });
+      for (var userComment in userCommentsList!) {
+        var startname = text.indexOf('@${userComment.fullname}');
+        //print("startname >>> $startname");
+        //print("user comment >>>> ${userComment.fullname}");
+      }
 
-        // textFragmented.add({
-        //   'isName': true,
-        //   'string': allName[i]['name'],
-        //   'id': allName[i]['id'],
-        // });
-        // print(
-        //     'name ${allName[i]['name']} start ${allName[i]['start']} end ${allName[i]['end']}');
-        // countText = allName[i]['end'];
-      }
-      if (text.length > countText) {
-        textFragmented.add({
-          'isName': false,
-          'string': text.substring(countText + 1, text.length),
-        });
-      }
-      for (var i = 0; i < textFragmented.length; i++) {
-        var comment = textFragmented[i];
-        textSpanWidget.add(
-          TextSpan(
-            text: comment['string'].replaceAll('ㅤ', ' '),
-            recognizer: new TapGestureRecognizer()
-              ..onTap = () {
-                controller.insertPage(
-                  ProfileScreen({
-                    "id": comment['id'],
-                  }),
-                );
-              },
-            style: TextStyle(
-              color:
-                  comment['isName'] ? LightColors.linkText : LightColors.black,
-              fontWeight: FontWeight.w400,
-              fontSize: 16,
-            ),
-          ),
-        );
-      }
+      //esse é o ㅤ@[id do maluco] tbm é ㅤ@[id do maluco]ㅤe tem também o ㅤ@[id do maluco]ㅤque é hack
+
+      // var positionInText = 0;
+
+      // List<Map<String, dynamic>> textFragmented = [];
+      // for (var item in userCommentsList!) {
+      //   var startname = text.indexOf('@${item.fullname}');
+      //   print(startname);
+      //   // if (startname >= 0) {
+      //   //   allName.add({
+      //   //     "id": item.id,
+      //   //     "name": "${item.fullname} ",
+      //   //     "start": startname,
+      //   //     "end": startname + item.fullname.length
+      //   //   });
+      //   // }
+      // }
+      // var countText = 0;
+
+      // allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
+      // for (var i = 0; i < allName.length; i++) {
+      //   // textFragmented.add({
+      //   //   'isName': false,
+      //   //   'string': text.substring(countText, allName[i]['start']),
+      //   // });
+
+      //   // textFragmented.add({
+      //   //   'isName': true,
+      //   //   'string': allName[i]['name'],
+      //   //   'id': allName[i]['id'],
+      //   // });
+      //   // print(
+      //   //     'name ${allName[i]['name']} start ${allName[i]['start']} end ${allName[i]['end']}');
+      //   // countText = allName[i]['end'];
+      // }
+      // if (text.length > countText) {
+      //   textFragmented.add({
+      //     'isName': false,
+      //     'string': text.substring(countText + 1, text.length),
+      //   });
+      // }
+      // for (var i = 0; i < textFragmented.length; i++) {
+      //   var comment = textFragmented[i];
+      //   textSpanWidget.add(
+      //     TextSpan(
+      //       text: comment['string'].replaceAll('ㅤ', ' '),
+      //       recognizer: new TapGestureRecognizer()
+      //         ..onTap = () {
+      //           controller.insertPage(
+      //             ProfileScreen({
+      //               "id": comment['id'],
+      //             }),
+      //           );
+      //         },
+      //       style: TextStyle(
+      //         color:
+      //             comment['isName'] ? LightColors.linkText : LightColors.black,
+      //         fontWeight: FontWeight.w400,
+      //         fontSize: 16,
+      //       ),
+      //     ),
+      //   );
+      // }
     } else {
       _hasntLink();
     }
