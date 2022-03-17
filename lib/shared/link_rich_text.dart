@@ -58,6 +58,7 @@ class LinkRichText extends StatelessWidget {
         });
         countText = userInComment['id'].length + userInComment['start'] + 3;
         textFragmented.add({
+          'id': userInComment['id'],
           'isName': true,
           'string': text
               .substring(userInComment['start'], countText)
@@ -78,11 +79,13 @@ class LinkRichText extends StatelessWidget {
             text: comment['string'].replaceAll('ㅤ', ' '),
             recognizer: new TapGestureRecognizer()
               ..onTap = () {
-                controller.insertPage(
-                  ProfileScreen({
-                    "id": comment['id'],
-                  }),
-                );
+                if (comment['id'] != null) {
+                  controller.insertPage(
+                    ProfileScreen({
+                      "id": comment['id'],
+                    }),
+                  );
+                }
               },
             style: TextStyle(
               color:

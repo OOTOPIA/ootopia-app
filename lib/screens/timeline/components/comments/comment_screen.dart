@@ -41,7 +41,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool seSelectedUser = false;
   Timer? _debounce;
   final ScrollController scrollController = ScrollController();
-
+  String aux = '';
   @override
   void initState() {
     super.initState();
@@ -88,7 +88,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
-        _inputController.text = text.replaceRange(i, i + s + 1, name);
+        aux = text.replaceRange(i, i + s + 1, name);
+        _inputController.text =
+            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ''));
         nameStartRange = i;
         break;
       }
@@ -96,7 +98,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     }
 
     e.start = nameStartRange;
-    e.end = nameStartRange + e.fullname.length + 2;
+    e.end = nameStartRange + e.fullname.length + 1;
 
     commentStore.listTaggedUsers?.add(e);
     _inputController.selection = TextSelection.fromPosition(
@@ -151,9 +153,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
+      aux += value;
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1), () async {
-        var getLastString = value.split(RegExp("ㅤ@"));
+        var getLastString = aux.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
             seSelectedUser = true;
