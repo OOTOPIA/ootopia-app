@@ -503,6 +503,7 @@
     "loading": "Loading...",
     "hideReplies": "Hide replies",
     "couldNotSend": "Could not send",
-    "couldNotLoad": "Could not load"
+    "couldNotLoad": "Could not load",
+    "repliedToYourComment": "replied to your comment"
 
 }

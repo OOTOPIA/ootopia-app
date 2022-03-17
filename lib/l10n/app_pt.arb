@@ -497,8 +497,8 @@
     "loading": "Carregando...",
     "hideReplies": "Ocultar respostas",
     "couldNotSend": "Não foi possivel enviar",
-    "couldNotLoad": "Não foi possivel carregar"
-
+    "couldNotLoad": "Não foi possivel carregar",
+    "repliedToYourComment": "respondeu seu comentário"
 
 }
 

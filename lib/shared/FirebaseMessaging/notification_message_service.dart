@@ -18,11 +18,10 @@ class NotificationMessageService {
   var language;
 
   void createMessage(RemoteMessage message) async {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications();
+    }
 
     message.data["usersName"] = jsonDecode(message.data["usersName"]);
     final notification = model.NotificationModel.fromJson(message.data);
@@ -79,54 +78,50 @@ class NotificationMessageService {
     var formatOOz;
     if (oozReceived != null)
       formatOOz = formatNumber(double.parse(oozReceived), language);
-
-    String titleText = "";
-
-    AppLocalizations.delegate.load(this.locale).then((value) {
-      if (type == 'user-tagged-in-comment') {
-        titleText = value.userComment;
-      }
-      if (type == "gratitude_reward")
-        titleText = value.notificationTitleOOzReceived
-            .replaceAll('%OOZ_RECEIVED%', '$formatOOz');
-      else
-        titleText = value.notificationTitleCommentedPost
-            .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
-    });
-
-    return titleText;
+    AppLocalizations value = await AppLocalizations.delegate.load(this.locale);
+    if (type == 'user-tagged-in-comment') {
+      return value.userComment;
+    } else if (type == 'user-tagged-in-comment-reply') {
+      return value.notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
+    } else if (type == "gratitude_reward") {
+      return value.notificationTitleOOzReceived
+          .replaceAll('%OOZ_RECEIVED%', '$formatOOz');
+    } else {
+      return value.notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
+    }
   }
 
   Future<String> getNotificationBody(
-      String type, List<String> usersName) async {
-    String bodyText = "";
+      String type, List<String>? usersName) async {
+    AppLocalizations value = await AppLocalizations.delegate.load(this.locale);
 
-    AppLocalizations.delegate.load(this.locale).then((value) {
-      if (type == 'user-tagged-in-comment') {
-        bodyText = value.userComment;
-      }
-      if (type == "gratitude_reward") {
-        if (usersName.length == 1)
-          bodyText = value.notificationBodyOOzReceivedByOnePerson
-              .replaceAll('%USER_NAME%', '${usersName.first}');
-        else
-          bodyText = value.notificationBodyOOzReceivedBySomePeople
-              .replaceAll('%USER_NAME%', '${usersName.last}')
-              .replaceAll(
-                  '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+    if (type == 'user-tagged-in-comment') {
+      return value.userComment;
+    } else if (type == 'user-tagged-in-comment-reply') {
+      return "${usersName!.first} " + value.repliedToYourComment;
+    } else if (type == "gratitude_reward") {
+      if (usersName!.length == 1) {
+        return value.notificationBodyOOzReceivedByOnePerson
+            .replaceAll('%USER_NAME%', '${usersName.first}');
       } else {
-        if (usersName.length == 1)
-          bodyText = value.notificationBodyCommentedPostByOnePerson
-              .replaceAll('%USER_NAME%', '${usersName.first}');
-        else
-          bodyText = value.notificationBodyCommentedPostBySomePeople
-              .replaceAll('%USER_NAME%', '${usersName.last}')
-              .replaceAll(
-                  '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+        return value.notificationBodyOOzReceivedBySomePeople
+            .replaceAll('%USER_NAME%', '${usersName.last}')
+            .replaceAll(
+                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
       }
-    });
-
-    return bodyText;
+    } else {
+      if (usersName!.length == 1) {
+        return value.notificationBodyCommentedPostByOnePerson
+            .replaceAll('%USER_NAME%', '${usersName.first}');
+      } else {
+        return value.notificationBodyCommentedPostBySomePeople
+            .replaceAll('%USER_NAME%', '${usersName.last}')
+            .replaceAll(
+                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+      }
+    }
   }
 
   Future<String> getNotificationButtonText() async {

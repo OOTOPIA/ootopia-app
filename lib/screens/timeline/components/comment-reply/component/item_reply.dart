@@ -42,11 +42,11 @@ class ItemReplyState extends State<ItemReply> {
       id: widget.comment.id,
       postId: widget.comment.postId,
       text: commentReply.text,
-      userId: authStore.currentUser!.id!,
-      username: authStore.currentUser!.fullname,
-      photoUrl: authStore.currentUser!.photoUrl,
+      userId: commentReply.commentUserId,
+      username: commentReply.fullNameCommentUser,
+      photoUrl: commentReply.photoCommentUser,
       totalReplies: widget.comment.totalReplies,
-      userComments: commentReply.userComments,
+      userComments: commentReply.usersComments,
     );
     widget.replyComment(comment);
   }
@@ -99,7 +99,7 @@ class ItemReplyState extends State<ItemReply> {
                         width: MediaQuery.of(context).size.width * 0.43,
                         child: LinkRichText(
                           widget.commentReplies.text,
-                          userCommentsList: widget.commentReplies.userComments,
+                          userCommentsList: widget.commentReplies.usersComments,
                           maxLines: 10,
                         ),
                       ),

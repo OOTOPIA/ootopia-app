@@ -12,7 +12,7 @@ class CommentReply {
   final String? photoCommentUser;
   final String replyToUserId;
   final String fullNameCommentUser;
-  final List<UserSearchModel>? userComments;
+  final List<UserSearchModel>? usersComments;
 
   CommentReply({
     required this.id,
@@ -23,7 +23,7 @@ class CommentReply {
     required this.photoCommentUser,
     required this.replyToUserId,
     required this.fullNameCommentUser,
-    this.userComments,
+    this.usersComments,
   });
 
   factory CommentReply.fromJson(Map<String, dynamic> json) =>
