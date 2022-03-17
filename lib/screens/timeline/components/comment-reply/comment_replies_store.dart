@@ -69,12 +69,12 @@ abstract class CommentRepliesStoreBase with Store {
   }
 
   @action
-  Future<CommentReply> createComment(
-      String commentId, String text, List<String>? listUsersMarket) async {
+  Future<CommentReply> createComment(String commentId, String text,
+      String replyToUserId, List<String>? listUsersMarket) async {
     try {
       isLoading = true;
       CommentReply commentReply = await commentRepliesRepository
-          .createCommentReply(commentId, text, listUsersMarket);
+          .createCommentReply(commentId, text, replyToUserId, listUsersMarket);
 
       isLoading = false;
       return commentReply;

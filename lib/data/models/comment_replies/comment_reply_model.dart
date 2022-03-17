@@ -10,6 +10,7 @@ class CommentReply {
   final List<String>? taggedUserIds;
   final String commentUserId;
   final String? photoCommentUser;
+  final String replyToUserId;
   final String fullNameCommentUser;
   final List<UserSearchModel>? userComments;
 
@@ -20,6 +21,7 @@ class CommentReply {
     this.taggedUserIds,
     required this.commentUserId,
     required this.photoCommentUser,
+    required this.replyToUserId,
     required this.fullNameCommentUser,
     this.userComments,
   });

@@ -162,10 +162,10 @@ mixin _$CommentRepliesStore on CommentRepliesStoreBase, Store {
       AsyncAction('CommentRepliesStoreBase.createComment');
 
   @override
-  Future<CommentReply> createComment(
-      String commentId, String text, List<String>? listUsersMarket) {
-    return _$createCommentAsyncAction
-        .run(() => super.createComment(commentId, text, listUsersMarket));
+  Future<CommentReply> createComment(String commentId, String text,
+      String replyToUserId, List<String>? listUsersMarket) {
+    return _$createCommentAsyncAction.run(() =>
+        super.createComment(commentId, text, replyToUserId, listUsersMarket));
   }
 
   final _$deleteCommentsAsyncAction =

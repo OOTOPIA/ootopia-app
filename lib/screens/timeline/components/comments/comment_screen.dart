@@ -43,6 +43,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   String postId = '';
   String? commentReply;
   int? indexComment;
+  String? replyToUserId;
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
@@ -191,8 +192,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
           if (commentReply != null) {
             CommentReply createCommentReply =
-                await commentRepliesStore.createComment(commentReply!,
-                    _inputController.text.trim(), commentStore.listUsersMarket);
+                await commentRepliesStore.createComment(
+                    commentReply!,
+                    _inputController.text.trim(),
+                    replyToUserId!,
+                    commentStore.listUsersMarket);
             isIconBlue = false;
             commentStore.listComments[indexComment!].totalReplies =
                 commentStore.listComments[indexComment!].totalReplies != null
@@ -256,6 +260,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   replyComment(Comment comment) {
     _inputController.text = "ㅤ@${comment.username}ㅤ";
     userNameReply = comment.username;
+    replyToUserId = comment.userId;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
     commentStore.listUsersMarket!.add(comment.userId);
@@ -403,6 +408,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       removeReply: () {
                         _inputController.clear();
                         userNameReply = null;
+                        replyToUserId = null;
                         commentStore.listUsersMarket?.clear();
                         commentReply = null;
                         indexComment = null;

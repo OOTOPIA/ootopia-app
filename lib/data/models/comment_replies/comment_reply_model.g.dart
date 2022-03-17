@@ -16,6 +16,7 @@ CommentReply _$CommentReplyFromJson(Map<String, dynamic> json) {
         .toList(),
     commentUserId: json['commentUserId'] as String,
     photoCommentUser: json['photoCommentUser'] as String?,
+    replyToUserId: json['replyToUserId'] as String,
     fullNameCommentUser: json['fullNameCommentUser'] as String,
     userComments: (json['userComments'] as List<dynamic>?)
         ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
@@ -31,6 +32,7 @@ Map<String, dynamic> _$CommentReplyToJson(CommentReply instance) =>
       'taggedUserIds': instance.taggedUserIds,
       'commentUserId': instance.commentUserId,
       'photoCommentUser': instance.photoCommentUser,
+      'replyToUserId': instance.replyToUserId,
       'fullNameCommentUser': instance.fullNameCommentUser,
       'userComments': instance.userComments,
     };

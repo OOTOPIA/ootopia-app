@@ -25,13 +25,14 @@ class CommentRepliesRepositoryImpl with SecureStoreMixin {
     }
   }
 
-  Future<CommentReply> createCommentReply(
-      String commentId, String text, List<String>? usersMarket) async {
+  Future<CommentReply> createCommentReply(String commentId, String text,
+      String replyToUserId, List<String>? usersMarket) async {
     try {
       var response = await ApiClient.api().post('post-comment-replies', data: {
         'text': text,
         'taggedUserIds': usersMarket,
         'commentId': commentId,
+        'replyToUserId': replyToUserId,
       });
       if (response.statusCode == 201) {
         return CommentReply.fromJson(response.data);
