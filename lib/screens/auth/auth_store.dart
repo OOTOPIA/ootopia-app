@@ -96,13 +96,13 @@ abstract class AuthStoreBase with Store {
         await SharedPreferencesInstance.getInstance();
     AppUsageTime.instance.stopTimer();
     try {
-      await AppUsageTime.instance.sendToApi();
+      AppUsageTime.instance.sendToApi();
     } catch (err) {}
-    await Future.delayed(Duration(milliseconds: 500), () async {
-      await prefs.removeAuthToken();
-      await storage.cleanAuthToken();
-      this._currentUser = null;
-    });
+    await Future.delayed(Duration(milliseconds: 100));
+    prefs.removeAuthToken();
+    storage.cleanAuthToken();
+    this._currentUser = null;
+    await Future.delayed(Duration(milliseconds: 250));
   }
 
   @action
