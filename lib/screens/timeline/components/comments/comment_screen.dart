@@ -84,8 +84,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void addUserInText(UserSearchModel e) {
     var text = _inputController.text;
 
-    //if (text.substring(i, i + s + 1) == e.fullname) {}
-
     var name = 'ㅤ@${e.fullname}ㅤ';
     var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
@@ -224,6 +222,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         isLoading: commentStore.isLoading,
         child: GestureDetector(
           onTap: () {
+            setState(() {
+              seSelectedUser = false;
+            });
             focusNode.unfocus();
           },
           child: Scaffold(

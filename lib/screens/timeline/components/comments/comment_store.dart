@@ -63,11 +63,13 @@ abstract class CommentStoreBase with Store {
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          newTextComment = newTextComment.replaceRange(
-            user.start! + newStartIndex,
-            user.end! + newStartIndex,
-            newString,
-          );
+          if (newTextComment.contains(user.fullname)) {
+            newTextComment = newTextComment.replaceRange(
+              user.start! + newStartIndex,
+              user.end! + newStartIndex,
+              newString,
+            );
+          }
           newStartIndex =
               newStartIndex + newString.length - (user.end! - user.start!);
           user.end = user.start! + newString.length;
