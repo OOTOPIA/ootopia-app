@@ -175,6 +175,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
+        aux = '';
       });
     }
   }
@@ -194,6 +195,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         commentStore.listComments.clear();
         commentStore.listAllUsers.clear();
         commentStore.listTaggedUsers?.clear();
+        aux = '';
         _getData();
         commentStore.isLoading = false;
       }
