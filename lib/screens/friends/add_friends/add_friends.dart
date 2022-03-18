@@ -48,11 +48,7 @@ class _AddFriendsState extends State<AddFriends> {
                       scrollInfo.metrics.pixels >= scrollInfo.metrics
                           .maxScrollExtent*0.6 &&
                       friendsStore.hasMoreUsersSearch ) {
-
-                    Future.delayed(Duration.zero,() async {
-                      await friendsStore.getMoreUserBySearch();
-                      setState(() {});
-                    });
+                    friendsStore.getMoreUserBySearch();
                   }
                   return true;
                 },
@@ -198,6 +194,24 @@ class _AddFriendsState extends State<AddFriends> {
                             }
                         ),
                       ],
+                      Visibility(
+                        visible: friendsStore.loadingMoreUsersSearch,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 16),
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.transparent,
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
                       SizedBox(height: 16),
                     ],
                   ),
