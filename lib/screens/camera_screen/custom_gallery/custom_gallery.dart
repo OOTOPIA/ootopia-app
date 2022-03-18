@@ -270,7 +270,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   void selectMedia(Map media) {
     singleMode ? selectedMedias = [media] : handleMultipleMedia(media);
 
-    initialMedia(selectedMedias.last);
+    if (selectedMedias.isNotEmpty) initialMedia(selectedMedias.last);
     setState(() {});
   }
 
@@ -287,9 +287,12 @@ class _CustomGalleryState extends State<CustomGallery> {
         setState(() {});
       });
     } else {
-      selectedMedias
-          .removeWhere((element) => element["mediaId"] == media["mediaId"]);
-      if (selectedMedias.length == 0) initialMedia(mediaList.first);
+      selectedMedias.removeWhere(
+        (element) => element["mediaId"] == media["mediaId"],
+      );
+      if (selectedMedias.isEmpty) {
+        initialMedia(mediaList.first);
+      }
     }
   }
 
