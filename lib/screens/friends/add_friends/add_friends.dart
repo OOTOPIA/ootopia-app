@@ -49,10 +49,6 @@ class _AddFriendsState extends State<AddFriends> {
                           .maxScrollExtent*0.6 &&
                       friendsStore.hasMoreUsersSearch ) {
                     friendsStore.getMoreUserBySearch();
-                    Future.delayed(Duration.zero,() async {
-                      //await friendsStore.getMoreUserBySearch();
-                      //setState(() {});
-                    });
                   }
                   return true;
                 },
