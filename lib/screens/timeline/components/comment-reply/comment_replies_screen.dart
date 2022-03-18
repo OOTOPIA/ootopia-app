@@ -75,6 +75,10 @@ class CcommentStateReplies extends State<CommentReplies> {
           commentRepliesStore.listComments.removeAt(replyIndex);
         }
       }
+      widget.comment.totalReplies = widget.comment.totalReplies != null ||
+              widget.comment.totalReplies == 0
+          ? 0
+          : widget.comment.totalReplies! - 1;
       widget.updateState();
     }
   }
