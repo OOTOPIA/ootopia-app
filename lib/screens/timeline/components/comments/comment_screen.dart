@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
@@ -49,6 +49,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool seSelectedUser = false;
   Timer? _debounce;
   final ScrollController scrollController = ScrollController();
+  String aux = '';
   String? userNameReply;
 
   @override
@@ -91,18 +92,25 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   void addUserInText(UserSearchModel e) {
-    commentStore.listUsersMarket?.add(e.id);
+    var text = _inputController.text;
 
     var name = 'ㅤ@${e.fullname}ㅤ';
-    var s = 0;
-    var text = _inputController.text;
+    var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
-        _inputController.text = text.replaceRange(i, i + s + 1, name);
+        aux = text.replaceRange(i, i + s + 1, name);
+        _inputController.text =
+            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ''));
+        nameStartRange = i;
         break;
       }
       s++;
     }
+
+    e.start = nameStartRange;
+    e.end = nameStartRange + e.fullname.length + 1;
+
+    commentStore.listTaggedUsers?.add(e);
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
     setState(() {
@@ -155,9 +163,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
+      aux += value;
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(Duration(seconds: 2), () async {
-        var getLastString = value.split(RegExp("ㅤ@"));
+      _debounce = Timer(Duration(seconds: 1), () async {
+        var getLastString = aux.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
             seSelectedUser = true;
@@ -172,10 +181,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         }
       });
     } else {
-      commentStore.listUsersMarket!.clear();
+      commentStore.listTaggedUsers!.clear();
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
+        aux = '';
       });
     }
   }
@@ -196,7 +206,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     commentReply!,
                     _inputController.text.trim(),
                     replyToUserId!,
-                    commentStore.listUsersMarket);
+                    commentStore.listTaggedUsers);
             isIconBlue = false;
             commentStore.listComments[indexComment!].totalReplies =
                 commentStore.listComments[indexComment!].totalReplies != null
@@ -213,7 +223,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             }
             _inputController.clear();
             commentStore.listAllUsers.clear();
-            commentStore.listUsersMarket?.clear();
+            commentStore.listTaggedUsers?.clear();
             userNameReply = null;
             commentReply = null;
             indexComment = null;
@@ -229,7 +239,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             _inputController.clear();
             commentStore.listComments.clear();
             commentStore.listAllUsers.clear();
-            commentStore.listUsersMarket?.clear();
+            commentStore.listTaggedUsers?.clear();
+            aux = '';
             _getData();
             commentStore.isLoading = false;
           }
@@ -263,7 +274,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     replyToUserId = comment.userId;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
-    commentStore.listUsersMarket!.add(comment.userId);
+    commentStore.listTaggedUsers!.addAll(comment.userComments!);
     commentReply = comment.id;
     indexComment = commentStore.listComments
         .indexWhere((_comment) => _comment.id == comment.id);
@@ -290,6 +301,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         isLoading: commentStore.isLoading,
         child: GestureDetector(
           onTap: () {
+            setState(() {
+              seSelectedUser = false;
+            });
             focusNode.unfocus();
           },
           child: Scaffold(

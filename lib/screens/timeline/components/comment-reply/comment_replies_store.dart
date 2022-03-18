@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/comment_replies_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:collection/collection.dart';
@@ -70,8 +69,12 @@ abstract class CommentRepliesStoreBase with Store {
 
   @action
   Future<CommentReply> createComment(String commentId, String text,
-      String replyToUserId, List<String>? listUsersMarket) async {
+      String replyToUserId, List<UserSearchModel>? listTaggedUsers) async {
     try {
+      List<String> listUsersMarket = [];
+      listTaggedUsers?.forEach((element) {
+        listUsersMarket.add(element.id);
+      });
       isLoading = true;
       CommentReply commentReply = await commentRepliesRepository
           .createCommentReply(commentId, text, replyToUserId, listUsersMarket);

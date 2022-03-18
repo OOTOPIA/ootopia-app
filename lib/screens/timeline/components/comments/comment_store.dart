@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 
@@ -28,7 +28,7 @@ abstract class CommentStoreBase with Store {
   List<UserSearchModel> listAllUsers = [];
 
   @observable
-  List<String>? listUsersMarket = [];
+  List<UserSearchModel>? listTaggedUsers = [];
 
   @observable
   int currentPageComment = 1;
@@ -61,7 +61,28 @@ abstract class CommentStoreBase with Store {
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
-      await commentRepository.createComment(postId, text, listUsersMarket);
+      List<String> idsUsersTagged = [];
+      var newTextComment = text;
+
+      if (listTaggedUsers != null) {
+        int newStartIndex = 0;
+        listTaggedUsers?.forEach((user) {
+          idsUsersTagged.add(user.id);
+          String newString = "@[${user.id}]";
+          if (newTextComment.contains(user.fullname)) {
+            newTextComment = newTextComment.replaceRange(
+              user.start! + newStartIndex,
+              user.end! + newStartIndex,
+              newString,
+            );
+          }
+          newStartIndex =
+              newStartIndex + newString.length - (user.end! - user.start!);
+          user.end = user.start! + newString.length;
+        });
+      }
+      await commentRepository.createComment(
+          postId, newTextComment, idsUsersTagged);
       isLoading = false;
     } catch (e) {
       isLoading = false;

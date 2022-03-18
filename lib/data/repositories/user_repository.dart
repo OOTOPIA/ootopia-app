@@ -9,7 +9,7 @@ import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
 
 import 'package:ootopia_app/data/models/users/profile_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
