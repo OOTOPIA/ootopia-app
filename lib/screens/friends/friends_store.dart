@@ -33,8 +33,11 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<bool> addFriend(FriendModel friend) async {
-    myFriendsDate?.total = (myFriendsDate?.total ?? 0) + 1;
-    myFriendsDate?.friends!.add(friend);
+    if(myFriendsDate != null) {
+      myFriendsDate?.total = (myFriendsDate?.total ?? 0) + 1;
+      myFriendsDate?.friends!.add(friend);
+    }
+
     if(friendsDate != null){
       friendsDate?.total = (friendsDate?.total ?? 0) + 1;
       friendsDate?.friends!.add(friend);
@@ -43,16 +46,24 @@ class FriendsStore with ChangeNotifier {
     return await friendsRepositoryImpl.addFriend(friend.id);
   }
 
-  Future<bool> removeFriend(FriendModel friend) async {
+  Future<bool> removeFriend(FriendModel friend, userLoggedId) async {
     if(friendsDate != null){
       int index = friendsDate!.friends!.indexWhere((element) => element?.id == friend.id);
       friendsDate!.friends![index]!.remove = true;
       friendsDate!.total = friendsDate!.total! - 1;
     }
 
-    myFriendsDate?.total = (myFriendsDate?.total ?? 0) - 1;
-    myFriendsDate?.friends!.removeWhere((element) => element!.id == friend.id);
+    if(myFriendsDate != null){
+      myFriendsDate?.total = (myFriendsDate?.total ?? 0) - 1;
+      myFriendsDate?.friends!.removeWhere((element) => element!.id == friend.id);
+    }
+
+    if(hasMoreFriends && !loadingMoreFriends && orderBy!= null){
+      getMoreFriends(userLoggedId);
+    }
+
     notifyListeners();
+
     return await friendsRepositoryImpl.removeFriend(friend.id);
   }
 
@@ -74,6 +85,7 @@ class FriendsStore with ChangeNotifier {
     loadingMoreUsersSearch = false;
     pageSearch = 0;
     lastName = '';
+    notifyListeners();
   }
 
   Future<void> searchNewName(String name) async {
@@ -94,12 +106,14 @@ class FriendsStore with ChangeNotifier {
   Future<void> getMoreUserBySearch() async {
     if(hasMoreUsersSearch && lastName.isNotEmpty) {
       loadingMoreUsersSearch = true;
+      notifyListeners();
       pageSearch++;
       FriendsDataModel auxUsers = await friendsRepositoryImpl.
       searchFriends(lastName, pageSearch, limit);
       usersSearch.friends!.addAll(auxUsers.friends!);
       loadingMoreUsersSearch = false;
       hasMoreUsersSearch = auxUsers.friends!.length == 10;
+      notifyListeners();
     }
   }
   //END SEARCH
@@ -118,6 +132,7 @@ class FriendsStore with ChangeNotifier {
     if(orderBy == null){
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
+      notifyListeners();
       getFriends(userId);
     }
   }
