@@ -83,6 +83,11 @@ class _AddFriendsState extends State<AddFriends> {
                           height: 42,
                           child: TextField(
                             controller: messageController,
+                            onChanged: (value){
+                              if(value.isEmpty){
+                                friendsStore.cleanSearchPage();
+                              }
+                            },
                             textCapitalization: TextCapitalization.words,
                             textAlignVertical: TextAlignVertical.center,
                             textInputAction: TextInputAction.search,
@@ -489,8 +494,13 @@ class _AddFriendsState extends State<AddFriends> {
                                   fit: BoxFit.cover,
                                   width: 74,
                                   height: 76,
-                                  errorBuilder: (context, url, error) => Center(
-                                    child: Icon(Icons.error),
+                                  errorBuilder: (context, url, error) => Container(
+                                    width: 74,
+                                    height: 76,
+                                    color: Colors.grey,
+                                    child: Center(
+                                      child: Icon(Icons.error),
+                                    ),
                                   ),
 
                                 ),
