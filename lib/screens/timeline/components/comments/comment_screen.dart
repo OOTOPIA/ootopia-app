@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
+import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_comment.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/component/item_comment.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/component/list_of_users.dart';
@@ -16,6 +19,7 @@ import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -32,15 +36,20 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   late RichTextController _inputController;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   CommentStore commentStore = CommentStore();
+  CommentRepliesStore commentRepliesStore = CommentRepliesStore();
   late HomeStore homeStore;
   late AuthStore authStore;
   int postCommentsCount = 0;
   String postId = '';
+  String? commentReply;
+  int? indexComment;
+  String? replyToUserId;
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
   Timer? _debounce;
   final ScrollController scrollController = ScrollController();
+  String? userNameReply;
 
   @override
   void initState() {
@@ -173,20 +182,71 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   void onTap() async {
     if (isIconBlue) {
-      if (_inputController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(AppLocalizations.of(context)!.writeYourComment)));
-      } else {
-        FocusManager.instance.primaryFocus?.unfocus();
-        commentStore.isLoading = true;
-        commentStore.currentPageComment = 1;
-        isIconBlue = false;
-        await commentStore.createComment(postId, _inputController.text.trim());
-        _inputController.clear();
-        commentStore.listComments.clear();
-        commentStore.listAllUsers.clear();
-        commentStore.listUsersMarket?.clear();
-        _getData();
+      try {
+        if (_inputController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.writeYourComment)));
+        } else {
+          FocusManager.instance.primaryFocus?.unfocus();
+          commentStore.isLoading = true;
+
+          if (commentReply != null) {
+            CommentReply createCommentReply =
+                await commentRepliesStore.createComment(
+                    commentReply!,
+                    _inputController.text.trim(),
+                    replyToUserId!,
+                    commentStore.listUsersMarket);
+            isIconBlue = false;
+            commentStore.listComments[indexComment!].totalReplies =
+                commentStore.listComments[indexComment!].totalReplies != null
+                    ? commentStore.listComments[indexComment!].totalReplies! + 1
+                    : 1;
+            if (commentStore.listComments[indexComment!].commentReplies !=
+                null) {
+              commentStore.listComments[indexComment!].commentReplies!
+                  .add(createCommentReply);
+            } else {
+              commentStore.listComments[indexComment!].commentReplies = [
+                createCommentReply
+              ];
+            }
+            _inputController.clear();
+            commentStore.listAllUsers.clear();
+            commentStore.listUsersMarket?.clear();
+            userNameReply = null;
+            commentReply = null;
+            indexComment = null;
+            commentStore.isLoading = false;
+            setState(() {});
+
+            return;
+          } else {
+            await commentStore.createComment(
+                postId, _inputController.text.trim());
+            isIconBlue = false;
+            commentStore.currentPageComment = 1;
+            _inputController.clear();
+            commentStore.listComments.clear();
+            commentStore.listAllUsers.clear();
+            commentStore.listUsersMarket?.clear();
+            _getData();
+            commentStore.isLoading = false;
+          }
+        }
+      } catch (e) {
+        showModalBottomSheet(
+          context: context,
+          barrierColor: Colors.black.withAlpha(1),
+          backgroundColor: Colors.black.withAlpha(1),
+          builder: (BuildContext context) {
+            return SnackBarWidget(
+              menu: AppLocalizations.of(context)!.couldNotSend,
+              text: AppLocalizations.of(context)!.tryAgain,
+              automaticClosing: true,
+            );
+          },
+        );
         commentStore.isLoading = false;
       }
     }
@@ -195,6 +255,19 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   Future<void> _getData() async {
     await commentStore.getComments(postId, commentStore.currentPageComment);
     commentStore.isLoading = false;
+  }
+
+  replyComment(Comment comment) {
+    _inputController.text = "ㅤ@${comment.username}ㅤ";
+    userNameReply = comment.username;
+    replyToUserId = comment.userId;
+    _inputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _inputController.text.length));
+    commentStore.listUsersMarket!.add(comment.userId);
+    commentReply = comment.id;
+    indexComment = commentStore.listComments
+        .indexWhere((_comment) => _comment.id == comment.id);
+    setState(() {});
   }
 
   @override
@@ -214,7 +287,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     return Observer(builder: (context) {
       return LoadingOverlay(
-
         isLoading: commentStore.isLoading,
         child: GestureDetector(
           onTap: () {
@@ -266,7 +338,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     (ScrollNotification scrollInfo) {
                                   //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
-                                      scrollInfo.metrics.maxScrollExtent) {
+                                          scrollInfo.metrics.maxScrollExtent &&
+                                      commentStore.hasMorePosts &&
+                                      !commentStore.isLoading) {
                                     commentStore.currentPageComment++;
                                     commentStore.isLoading = true;
 
@@ -309,6 +383,10 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                         commentStore: commentStore,
                                         getData: _getData,
                                         postId: postId,
+                                        replyComment: replyComment,
+                                        updateState: () {
+                                          setState(() {});
+                                        },
                                       );
                                     },
                                   ),
@@ -326,6 +404,16 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     child: TextFieldComment(
                       authStore: authStore,
                       commentStore: commentStore,
+                      userNameReply: userNameReply,
+                      removeReply: () {
+                        _inputController.clear();
+                        userNameReply = null;
+                        replyToUserId = null;
+                        commentStore.listUsersMarket?.clear();
+                        commentReply = null;
+                        indexComment = null;
+                        setState(() {});
+                      },
                       focusNode: focusNode,
                       inputController: _inputController,
                       onChange: onChanged,

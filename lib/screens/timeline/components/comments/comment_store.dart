@@ -39,16 +39,22 @@ abstract class CommentStoreBase with Store {
   @observable
   bool hasMoreUsers = false;
 
+  @observable
+  bool hasMorePosts = true;
+
   @action
   Future<void> getComments(String postId, int page) async {
     try {
       var response = await commentRepository.getComments(postId, page);
+      hasMorePosts = response.length > 0;
       if (response.isEmpty) {
         currentPageComment = currentPageComment;
       } else {
         listComments.addAll(response);
       }
-    } catch (e) {}
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   @action

@@ -489,9 +489,16 @@
     "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe.",
     "userComment":"Você foi marcado em um comentário",
     "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
-    "earnOOzWhenTheySignup":"ganhe OOz quando se inscrevem"
+    "earnOOzWhenTheySignup":"ganham OOz quando se inscrevem",
 
-
+    "viewMoreReply": "Ver mais %amount% resposta",
+    "reply": "Responder",
+    "replyingTo": "Respondendo para %user_name%",
+    "loading": "Carregando...",
+    "hideReplies": "Ocultar respostas",
+    "couldNotSend": "Não foi possivel enviar",
+    "couldNotLoad": "Não foi possivel carregar",
+    "repliedToYourComment": "respondeu seu comentário"
 
 }
 
