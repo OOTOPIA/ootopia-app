@@ -313,10 +313,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 Visibility(
                     visible: !focusNode.hasFocus,
                     child: BackgroundButterflyBottom(positioned: -50)),
-                SingleChildScrollView(
-                    child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.85),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    commentStore.isLoading = true;
+                    commentStore.listComments.clear();
+                    commentStore.currentPageComment = 1;
+                    await _getData();
+                    commentStore.isLoading = false;
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -353,7 +357,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                   //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
                                           scrollInfo.metrics.maxScrollExtent &&
-                                      commentStore.hasMorePosts &&
+                                      commentStore.hasMoreComments &&
                                       !commentStore.isLoading) {
                                     commentStore.currentPageComment++;
                                     commentStore.isLoading = true;
@@ -366,50 +370,41 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     return false;
                                   }
                                 },
-                                child: RefreshIndicator(
-                                  onRefresh: () async {
-                                    commentStore.isLoading = true;
-                                    commentStore.listComments.clear();
-                                    commentStore.currentPageComment = 1;
-                                    await _getData();
-                                    commentStore.isLoading = false;
-                                  },
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24),
-                                    itemCount: commentStore.listComments.length,
-                                    itemBuilder: (context, index) {
-                                      var comment =
-                                          commentStore.listComments[index];
-                                      bool visibleDelete;
-                                      if (authStore.currentUser == null) {
-                                        visibleDelete = false;
-                                      } else {
-                                        visibleDelete =
-                                            authStore.currentUser!.id! ==
-                                                commentStore
-                                                    .listComments[index].userId;
-                                      }
-                                      return ItemComment(
-                                        comment: comment,
-                                        visibleDelete: visibleDelete,
-                                        commentStore: commentStore,
-                                        getData: _getData,
-                                        postId: postId,
-                                        replyComment: replyComment,
-                                        updateState: () {
-                                          setState(() {});
-                                        },
-                                      );
-                                    },
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: Column(
+                                      children: commentStore.listComments
+                                          .map((comment) {
+                                        bool visibleDelete;
+                                        if (authStore.currentUser == null) {
+                                          visibleDelete = false;
+                                        } else {
+                                          visibleDelete =
+                                              authStore.currentUser!.id! ==
+                                                  comment.userId;
+                                        }
+                                        return ItemComment(
+                                          comment: comment,
+                                          visibleDelete: visibleDelete,
+                                          commentStore: commentStore,
+                                          getData: _getData,
+                                          postId: postId,
+                                          replyComment: replyComment,
+                                          updateState: () {
+                                            setState(() {});
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                     ],
                   ),
-                )),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
