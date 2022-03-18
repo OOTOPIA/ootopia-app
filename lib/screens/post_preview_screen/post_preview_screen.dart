@@ -10,10 +10,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -21,6 +21,7 @@ import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/confirm_post_button_widget.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/hashtag_select_search_dialog_widget.dart';
+import 'package:ootopia_app/screens/post_preview_screen/components/list_of_users.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
@@ -62,6 +63,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   late WalletStore walletStore;
   late PostPreviewScreenStore postPreviewStore;
 
+  bool seSelectedUser = false;
+  Timer? _debounce;
+  final ScrollController scrollController = ScrollController();
+  String aux = '';
   bool _isLoading = true;
   bool _errorOnGetTags = false;
   bool _createdPost = false;
@@ -236,6 +241,26 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
     postGallery.tagsIds = _selectedTags.map((tag) => tag.id).toList();
     String mediaType = widget.args["type"] == "image" ? "image" : "video";
+    var newTextComment = _descriptionInputController.text;
+    List<String>? idsUsersTagged = [];
+    if (postPreviewStore.listTaggedUsers != null) {
+      int newStartIndex = 0;
+      postPreviewStore.listTaggedUsers?.forEach((user) {
+        idsUsersTagged.add(user.id);
+        String newString = "@[${user.id}]";
+        if (newTextComment.contains(user.fullname)) {
+          newTextComment = newTextComment.replaceRange(
+            user.start! + newStartIndex,
+            user.end! + newStartIndex,
+            newString,
+          );
+        }
+        newStartIndex =
+            newStartIndex + newString.length - (user.end! - user.start!);
+        user.end = user.start! + newString.length;
+      });
+    }
+    postGallery.idsUserTagged = idsUsersTagged;
     postGallery.description = _descriptionInputController.text;
 
     sendingPost = true;
@@ -374,6 +399,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   @override
   void dispose() {
+    _debounce?.cancel();
     if (widget.args["type"] == "video") {
       flickManager!.dispose();
       flickMultiManager.remove(flickManager!);
@@ -382,6 +408,33 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
+  }
+
+  void addUserInText(UserSearchModel e) {
+    var text = _descriptionInputController.text;
+
+    var name = 'ㅤ@${e.fullname}ㅤ';
+    var s = 0, nameStartRange = 0;
+    for (var i = text.length - 1; i >= 0; i--) {
+      if (text[i].contains('@')) {
+        aux = text.replaceRange(i, i + s + 1, name);
+        _descriptionInputController.text =
+            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ' '));
+        nameStartRange = i;
+        break;
+      }
+      s++;
+    }
+
+    e.start = nameStartRange;
+    e.end = nameStartRange + e.fullname.length + 1;
+
+    postPreviewStore.listTaggedUsers?.add(e);
+    _descriptionInputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _descriptionInputController.text.length));
+    setState(() {
+      seSelectedUser = false;
+    });
   }
 
   void _getSizeImage() {
@@ -421,9 +474,20 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                 visible: MediaQuery.of(context).viewInsets.bottom == 0,
                 child: BackgroundButterflyBottom()),
             GestureDetector(
-                onTap: () =>
-                    FocusScope.of(context).requestFocus(new FocusNode()),
+                onTap: () {
+                  setState(() {
+                    seSelectedUser = false;
+                  });
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
                 child: Observer(builder: (_) => body())),
+            if (seSelectedUser)
+              ListOfUsers(
+                postPreviewScreenStore: postPreviewStore,
+                inputController: _descriptionInputController,
+                scrollController: scrollController,
+                addUserInText: addUserInText,
+              ),
           ],
         ),
       ),
@@ -474,6 +538,37 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
                       controller: _descriptionInputController,
+                      onChanged: (value) {
+                        value = value.trim();
+
+                        if (value.length > 0) {
+                          aux += value;
+                          if (_debounce?.isActive ?? false) _debounce?.cancel();
+                          _debounce = Timer(Duration(seconds: 1), () async {
+                            var getLastString = aux.split(RegExp("ㅤ@"));
+                            if (getLastString.last.contains('@')) {
+                              setState(() {
+                                seSelectedUser = true;
+                              });
+                              var startName =
+                                  getLastString.last.split('@').last;
+                              var finishName = startName.split(RegExp("ㅤ"));
+                              await postPreviewStore
+                                  .searchUser(finishName.first);
+                            } else {
+                              setState(() {
+                                seSelectedUser = false;
+                              });
+                            }
+                          });
+                        } else {
+                          postPreviewStore.listTaggedUsers!.clear();
+                          setState(() {
+                            seSelectedUser = false;
+                            aux = '';
+                          });
+                        }
+                      },
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.normal),

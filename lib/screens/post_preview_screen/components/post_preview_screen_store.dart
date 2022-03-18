@@ -6,18 +6,21 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
 import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
+import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/hashtage_widget.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 part 'post_preview_screen_store.g.dart';
 
 class PostPreviewScreenStore = _PostPreviewScreenStoreBase
     with _$PostPreviewScreenStore;
+enum ViewState { loading, error, done, loadingNewData, refresh }
 
 abstract class _PostPreviewScreenStoreBase with Store {
   AnalyticsTracking _trackingEvents = AnalyticsTracking.getInstance();
   PostRepositoryImpl _repository = PostRepositoryImpl();
-
+  UserRepositoryImpl userRepository = UserRepositoryImpl();
   @observable
   ObservableList<InterestsTagsModel> selectedTags =
       ObservableList<InterestsTagsModel>();
@@ -37,7 +40,22 @@ abstract class _PostPreviewScreenStoreBase with Store {
   bool successOnUpload = false;
 
   @observable
+  int currentPageUser = 1;
+
+  @observable
+  bool hasMoreUsers = false;
+
+  @observable
+  List<UserSearchModel>? listTaggedUsers = [];
+
+  @observable
   double oozToReward = 0;
+
+  @observable
+  ViewState viewState = ViewState.loading;
+
+  @observable
+  List<UserSearchModel> listAllUsers = [];
 
   @observable
   String filterValue = "";
@@ -159,6 +177,23 @@ abstract class _PostPreviewScreenStoreBase with Store {
       print("Erro aqui no sendPost $err");
       errorOnUpload = true;
       uploadIsLoading = false;
+    }
+  }
+
+  @action
+  Future<void> searchUser(String fullName) async {
+    try {
+      if (viewState != ViewState.loadingNewData) {
+        listAllUsers.clear();
+      }
+      viewState = ViewState.loading;
+      var response =
+          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
+      hasMoreUsers = response.length == 10;
+      listAllUsers.addAll(response);
+      viewState = ViewState.done;
+    } catch (e) {
+      viewState = ViewState.error;
     }
   }
 }

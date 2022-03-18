@@ -105,6 +105,54 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
     });
   }
 
+  final _$currentPageUserAtom =
+      Atom(name: '_PostPreviewScreenStoreBase.currentPageUser');
+
+  @override
+  int get currentPageUser {
+    _$currentPageUserAtom.reportRead();
+    return super.currentPageUser;
+  }
+
+  @override
+  set currentPageUser(int value) {
+    _$currentPageUserAtom.reportWrite(value, super.currentPageUser, () {
+      super.currentPageUser = value;
+    });
+  }
+
+  final _$hasMoreUsersAtom =
+      Atom(name: '_PostPreviewScreenStoreBase.hasMoreUsers');
+
+  @override
+  bool get hasMoreUsers {
+    _$hasMoreUsersAtom.reportRead();
+    return super.hasMoreUsers;
+  }
+
+  @override
+  set hasMoreUsers(bool value) {
+    _$hasMoreUsersAtom.reportWrite(value, super.hasMoreUsers, () {
+      super.hasMoreUsers = value;
+    });
+  }
+
+  final _$listTaggedUsersAtom =
+      Atom(name: '_PostPreviewScreenStoreBase.listTaggedUsers');
+
+  @override
+  List<UserSearchModel>? get listTaggedUsers {
+    _$listTaggedUsersAtom.reportRead();
+    return super.listTaggedUsers;
+  }
+
+  @override
+  set listTaggedUsers(List<UserSearchModel>? value) {
+    _$listTaggedUsersAtom.reportWrite(value, super.listTaggedUsers, () {
+      super.listTaggedUsers = value;
+    });
+  }
+
   final _$oozToRewardAtom =
       Atom(name: '_PostPreviewScreenStoreBase.oozToReward');
 
@@ -118,6 +166,37 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
   set oozToReward(double value) {
     _$oozToRewardAtom.reportWrite(value, super.oozToReward, () {
       super.oozToReward = value;
+    });
+  }
+
+  final _$viewStateAtom = Atom(name: '_PostPreviewScreenStoreBase.viewState');
+
+  @override
+  ViewState get viewState {
+    _$viewStateAtom.reportRead();
+    return super.viewState;
+  }
+
+  @override
+  set viewState(ViewState value) {
+    _$viewStateAtom.reportWrite(value, super.viewState, () {
+      super.viewState = value;
+    });
+  }
+
+  final _$listAllUsersAtom =
+      Atom(name: '_PostPreviewScreenStoreBase.listAllUsers');
+
+  @override
+  List<UserSearchModel> get listAllUsers {
+    _$listAllUsersAtom.reportRead();
+    return super.listAllUsers;
+  }
+
+  @override
+  set listAllUsers(List<UserSearchModel> value) {
+    _$listAllUsersAtom.reportWrite(value, super.listAllUsers, () {
+      super.listAllUsers = value;
     });
   }
 
@@ -177,6 +256,14 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
   @override
   Future<dynamic> sendPost(PostGalleryCreateModel model) {
     return _$sendPostAsyncAction.run(() => super.sendPost(model));
+  }
+
+  final _$searchUserAsyncAction =
+      AsyncAction('_PostPreviewScreenStoreBase.searchUser');
+
+  @override
+  Future<void> searchUser(String fullName) {
+    return _$searchUserAsyncAction.run(() => super.searchUser(fullName));
   }
 
   final _$_PostPreviewScreenStoreBaseActionController =
@@ -257,7 +344,12 @@ tagsIsLoading: ${tagsIsLoading},
 errorOnGetTags: ${errorOnGetTags},
 errorOnUpload: ${errorOnUpload},
 successOnUpload: ${successOnUpload},
+currentPageUser: ${currentPageUser},
+hasMoreUsers: ${hasMoreUsers},
+listTaggedUsers: ${listTaggedUsers},
 oozToReward: ${oozToReward},
+viewState: ${viewState},
+listAllUsers: ${listAllUsers},
 filterValue: ${filterValue},
 isSelected: ${isSelected}
     ''';
