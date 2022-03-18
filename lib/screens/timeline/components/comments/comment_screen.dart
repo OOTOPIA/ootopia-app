@@ -100,7 +100,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       if (text[i].contains('@')) {
         aux = text.replaceRange(i, i + s + 1, name);
         _inputController.text =
-            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ''));
+            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ' '));
         nameStartRange = i;
         break;
       }
@@ -227,6 +227,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             userNameReply = null;
             commentReply = null;
             indexComment = null;
+            seSelectedUser = false;
             commentStore.isLoading = false;
             setState(() {});
 
@@ -241,6 +242,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
             aux = '';
+            seSelectedUser = false;
             _getData();
             commentStore.isLoading = false;
           }
