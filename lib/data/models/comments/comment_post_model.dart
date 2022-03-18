@@ -18,7 +18,7 @@ class Comment {
   int? totalReplies;
   List<CommentReply>? commentReplies;
   @JsonKey(name: 'usersComments')
-  final List<UserSearchModel>? userComments;
+  List<UserSearchModel>? userComments;
 
   Comment({
     required this.id,
