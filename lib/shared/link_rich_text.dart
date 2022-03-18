@@ -38,7 +38,7 @@ class LinkRichText extends StatelessWidget {
       List<Map<String, dynamic>> textFragmented = [];
       var countText = 0;
       for (var item in userCommentsList!) {
-        var startName = text.indexOf('@[${item.id}]');
+        var startName = text.indexOf('@[${item.id}]', countText);
         if (startName != -1) {
           allName.add({
             'id': item.id,
@@ -46,10 +46,11 @@ class LinkRichText extends StatelessWidget {
             'name': item.fullname,
             'end': startName + item.id.length + 3,
           });
+          countText = startName + item.id.length + 3;
         }
       }
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-
+      countText = 0;
       for (var i = 0; i < allName.length; i++) {
         var userInComment = allName[i];
         textFragmented.add({

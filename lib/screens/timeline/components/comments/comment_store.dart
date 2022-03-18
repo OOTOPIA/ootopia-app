@@ -31,6 +31,9 @@ abstract class CommentStoreBase with Store {
   List<UserSearchModel>? listTaggedUsers = [];
 
   @observable
+  List<String>? excludedIds = [];
+
+  @observable
   int currentPageComment = 1;
 
   @observable
@@ -113,8 +116,12 @@ abstract class CommentStoreBase with Store {
         listAllUsers.clear();
       }
       viewState = ViewState.loading;
-      var response =
-          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
+      var response = await userRepository.getAllUsersByName(
+        fullName,
+        currentPageUser,
+        10,
+        excludedIds,
+      );
       hasMoreUsers = response.length == 10;
       listAllUsers.addAll(response);
       viewState = ViewState.done;

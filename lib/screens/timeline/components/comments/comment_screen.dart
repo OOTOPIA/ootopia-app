@@ -95,6 +95,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     var text = _inputController.text;
 
     var name = 'ㅤ@${e.fullname}ㅤ';
+
     var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
@@ -109,7 +110,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     e.start = nameStartRange;
     e.end = nameStartRange + e.fullname.length + 1;
-
+    commentStore.excludedIds?.add(e.id);
     commentStore.listTaggedUsers?.add(e);
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
@@ -182,6 +183,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       });
     } else {
       commentStore.listTaggedUsers!.clear();
+      commentStore.excludedIds?.clear();
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
@@ -224,11 +226,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             _inputController.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
+            commentStore.excludedIds?.clear();
             userNameReply = null;
             commentReply = null;
             indexComment = null;
             seSelectedUser = false;
             commentStore.isLoading = false;
+            aux = '';
             setState(() {});
 
             return;
@@ -241,6 +245,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listComments.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
+            commentStore.excludedIds?.clear();
             aux = '';
             seSelectedUser = false;
             _getData();
