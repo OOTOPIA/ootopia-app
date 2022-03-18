@@ -13,6 +13,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
+import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -81,6 +82,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   bool sendingPost = false;
 
   PostCreate postData = PostCreate();
+  PostGalleryCreateModel postGallery = PostGalleryCreateModel();
 
   List<MultiSelectItem<InterestsTagsModel>> _items = [];
 
@@ -123,17 +125,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           _geolocationInputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
-          postData.addressCity = placemark.subAdministrativeArea != null
+          postGallery.addressCity = placemark.subAdministrativeArea != null
               ? placemark.subAdministrativeArea!
               : "";
-          postData.addressState = placemark.administrativeArea != null
+          postGallery.addressState = placemark.administrativeArea != null
               ? placemark.administrativeArea!
               : "";
-          postData.addressCountryCode =
+          postGallery.addressCountryCode =
               placemark.isoCountryCode != null ? placemark.isoCountryCode! : "";
-          postData.addressLatitude = position.latitude;
-          postData.addressLongitude = position.longitude;
-          postData.addressNumber =
+          postGallery.addressLatitude = position.latitude;
+          postGallery.addressLongitude = position.longitude;
+          postGallery.addressNumber =
               placemark.name != null ? placemark.name! : "";
         } else {
           geolocationMessage =
@@ -204,7 +206,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     return returnDialog;
   }
 
-  void _sendPost() async {
+  void sendPost() async {
     if (_processingVideoInBackgroundError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -232,31 +234,25 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       postPreviewStore.uploadIsLoading = true;
     }
 
-    postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
-    postData.type = widget.args["type"] == "image" ? "image" : "video";
-    postData.description = _descriptionInputController.text;
+    postGallery.tagsIds = _selectedTags.map((tag) => tag.id).toList();
+    String mediaType = widget.args["type"] == "image" ? "image" : "video";
+    postGallery.description = _descriptionInputController.text;
 
-    if (postData.type == "video") {
-      postData.durationInSecs = (flickManager!.flickVideoManager!
-                  .videoPlayerValue!.duration.inMilliseconds %
-              60000) /
-          1000;
-    }
-
-    print("ready to start upload");
-
-    GeneralConfigModel? oozToRewardForVideo = await this
-        .secureStoreMixin
-        .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
-    GeneralConfigModel? oozToRewardForImage = await this
-        .secureStoreMixin
-        .getGeneralConfigByName("creator_reward_for_posted_photo");
     sendingPost = true;
 
     try {
-      await this.postPreviewStore.createPost(postData,
-          oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
+      List<Map> fileList = widget.args["fileList"] != null
+          ? widget.args["fileList"]
+          : [
+              {
+                "mediaFile": File(widget.args["filePath"]),
+                "mediaType": widget.args["type"]
+              }
+            ];
+
+      await this.postPreviewStore.sendMedia(fileList, postGallery);
       sendingPost = false;
+
       await this.walletStore.getWallet();
 
       if (this.postPreviewStore.successOnUpload) {
@@ -273,13 +269,13 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           SnackBar(
             content: Text(AppLocalizations.of(context)!
                 .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
-                .replaceAll("video", postData.type!)),
+                .replaceAll("video", mediaType)),
           ),
         );
       }
 
       postPreviewStore.clearhashtags();
-    } catch (err) {
+    } catch (e) {
       sendingPost = false;
     }
   }
@@ -338,7 +334,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
             if (_readyToSendPost) {
               postPreviewStore.uploadIsLoading = false;
               _readyToSendPost = false;
-              _sendPost();
+              sendPost();
             }
           });
         }
@@ -726,7 +722,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                       _selectedTags =
                                           postPreviewStore.selectedTags;
                                     });
-                                    _sendPost();
+                                    sendPost();
                                   }),
                             )
                           ],
@@ -800,6 +796,13 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     );
   }
 
+  void changeMediaFile(File newImage, var oldImage) {
+    int index = widget.args["fileList"]
+        .indexWhere((element) => element["mediaId"] == oldImage["mediaId"]);
+
+    widget.args["fileList"][index]["mediaFile"] = newImage;
+  }
+
   buildMediaRow(dynamic file) {
     return Container(
       width: MediaQuery.of(context).size.width - 60,
@@ -810,6 +813,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
         mediaSize: file["mediaSize"],
         shouldCustomFlickManager: true,
         showCropWidget: true,
+        onChanged: (value) {
+          changeMediaFile(value, file);
+        },
       ),
     );
   }

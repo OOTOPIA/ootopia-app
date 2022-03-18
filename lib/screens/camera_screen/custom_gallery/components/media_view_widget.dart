@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_controls.dart';
+import 'package:ootopia_app/screens/camera_screen/components/custom_crop.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -12,6 +14,7 @@ class MediaViewWidget extends StatefulWidget {
   final Size? mediaSize;
   final bool shouldCustomFlickManager;
   final bool showCropWidget;
+  final ValueChanged<File>? onChanged;
   const MediaViewWidget({
     Key? key,
     required this.mediaFilePath,
@@ -19,6 +22,7 @@ class MediaViewWidget extends StatefulWidget {
     this.mediaSize,
     this.shouldCustomFlickManager = false,
     this.showCropWidget = false,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -29,6 +33,8 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
   bool isLoading = false;
   FlickManager? flickManager;
   VideoPlayerController? _videoPlayerController;
+  bool controlIsVisible = true;
+  File? croppedImage;
 
   @override
   void initState() {
@@ -47,6 +53,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
             setState(() {
               isLoading = false;
             });
+            _videoPlayerController!.setLooping(true);
             flickManager =
                 FlickManager(videoPlayerController: _videoPlayerController!);
           });
@@ -57,15 +64,6 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
     _videoPlayerController?.dispose();
     flickManager?.dispose();
     super.dispose();
-  }
-
-  @mustCallSuper
-  @protected
-  void didUpdateWidget(covariant MediaViewWidget oldWidget) {
-    if (oldWidget.mediaType == "video")
-      flickManager?.flickControlManager!.pause();
-
-    if (widget.mediaType == "video") initFlickManager();
   }
 
   @override
@@ -107,7 +105,9 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                                 flickManager: flickManager!,
                                 flickVideoWithControls: FlickVideoWithControls(
                                   controls: widget.shouldCustomFlickManager
-                                      ? null
+                                      ? CustomControls(
+                                          flickManager: flickManager!,
+                                        )
                                       : FlickPortraitControls(),
                                 ),
                               ),
@@ -129,70 +129,36 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                                 ? BoxFit.fitHeight
                                 : BoxFit.fitWidth,
                             alignment: FractionalOffset.center,
-                            image: FileImage(
-                              File(widget.mediaFilePath),
-                            ),
+                            image: croppedImage != null
+                                ? FileImage(
+                                    File(croppedImage!.path),
+                                  )
+                                : FileImage(
+                                    File(widget.mediaFilePath),
+                                  ),
                           ),
                         ),
                       ),
               ),
-              GestureDetector(
-                onTap: () => flickManager?.flickControlManager!.play(),
-                child: Container(
-                  child: Text('Tenta aí'),
-                ),
-              ),
-              widget.mediaType == "video" &&
-                      widget.shouldCustomFlickManager &&
-                      !isLoading
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(
-                            GlobalConstants.of(context).spacingMedium,
-                          ),
-                          padding: EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.black38,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: SizedBox(
-                            width: 28,
-                            height: 28,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              icon: Icon(
-                                  flickManager!.flickControlManager!.isMute
-                                      ? Icons.volume_off
-                                      : Icons.volume_up,
-                                  size: 20),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    if (!flickManager!
-                                        .flickControlManager!.isMute) {
-                                      flickManager!.flickControlManager!.mute();
-                                    } else {
-                                      flickManager!.flickControlManager!
-                                          .unmute();
-                                    }
-                                  },
-                                );
-                              },
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
               widget.mediaType == "image" && widget.showCropWidget
                   ? Positioned(
                       right: 30,
                       bottom: 35,
                       child: GestureDetector(
-                        onTap: () => print('work'),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CustomCrop(
+                              image: File(widget.mediaFilePath),
+                              onChanged: (value) {
+                                setState(() {
+                                  croppedImage = value;
+                                  widget.onChanged!(croppedImage!);
+                                });
+                              },
+                            ),
+                          ),
+                        ),
                         child: Container(
                           width: 25,
                           height: 25,
