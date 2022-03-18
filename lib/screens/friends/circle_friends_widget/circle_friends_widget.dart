@@ -146,7 +146,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                   TextButton(
                     onPressed: (){
                       Future.delayed(Duration(milliseconds: 100),(){
-                        controller.insertPage(CircleOfFriendPage(
+                        controller.insertPage(new CircleOfFriendPage(
                           userId: widget.userId,
                         ));
                       });
