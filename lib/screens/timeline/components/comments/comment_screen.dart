@@ -423,7 +423,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                         _inputController.clear();
                         userNameReply = null;
                         replyToUserId = null;
-                        commentStore.listUsersMarket?.clear();
+                        commentStore.listTaggedUsers?.clear();
                         commentReply = null;
                         indexComment = null;
                         setState(() {});
