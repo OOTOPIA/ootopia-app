@@ -130,6 +130,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$hasMorePostsAtom = Atom(name: 'CommentStoreBase.hasMorePosts');
+
+  @override
+  bool get hasMorePosts {
+    _$hasMorePostsAtom.reportRead();
+    return super.hasMorePosts;
+  }
+
+  @override
+  set hasMorePosts(bool value) {
+    _$hasMorePostsAtom.reportWrite(value, super.hasMorePosts, () {
+      super.hasMorePosts = value;
+    });
+  }
+
   final _$getCommentsAsyncAction = AsyncAction('CommentStoreBase.getComments');
 
   @override
@@ -172,7 +187,8 @@ listAllUsers: ${listAllUsers},
 listTaggedUsers: ${listTaggedUsers},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
-hasMoreUsers: ${hasMoreUsers}
+hasMoreUsers: ${hasMoreUsers},
+hasMorePosts: ${hasMorePosts}
     ''';
   }
 }

@@ -162,6 +162,23 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
         () => super.createPost(post, oozToRewardForVideo, oozToRewardForImage));
   }
 
+  final _$sendMediaAsyncAction =
+      AsyncAction('_PostPreviewScreenStoreBase.sendMedia');
+
+  @override
+  Future<dynamic> sendMedia(
+      List<Map<dynamic, dynamic>> fileList, PostGalleryCreateModel model) {
+    return _$sendMediaAsyncAction.run(() => super.sendMedia(fileList, model));
+  }
+
+  final _$sendPostAsyncAction =
+      AsyncAction('_PostPreviewScreenStoreBase.sendPost');
+
+  @override
+  Future<dynamic> sendPost(PostGalleryCreateModel model) {
+    return _$sendPostAsyncAction.run(() => super.sendPost(model));
+  }
+
   final _$_PostPreviewScreenStoreBaseActionController =
       ActionController(name: '_PostPreviewScreenStoreBase');
 

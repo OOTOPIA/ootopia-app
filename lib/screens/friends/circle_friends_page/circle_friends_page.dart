@@ -282,6 +282,24 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                         circleFriendsStore.friendsDate!.friends![index]!);
                   }
               ),
+              Visibility(
+                  visible: friendsStore.loadingMoreFriends || circleFriendsStore.loadingMoreFriends,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 16),
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.transparent,
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                        ),
+                      ),
+                    ),
+                  )
+              ),
               SizedBox(height: 50,),
             ],
 
@@ -489,8 +507,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 ),
                                 onPressed: () {
                                   Future.delayed(Duration(milliseconds: 100),(){
-                                    friendsStore.removeFriend(friendModel);
-                                    setState(() {});
+                                    friendsStore.removeFriend(friendModel, authStore.currentUser!.id);
                                   });
                                 },
                                 child: Text(
@@ -528,7 +545,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   onPressed: () {
                                     Future.delayed(Duration(milliseconds: 100),(){
                                       if(friendModel.isFriend == true){
-                                        friendsStore.removeFriend(friendModel);
+                                        friendsStore.removeFriend(friendModel, authStore.currentUser!.id);
                                       }else{
                                         friendsStore.addFriend(friendModel);
                                       }

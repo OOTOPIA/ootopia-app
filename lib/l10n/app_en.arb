@@ -495,5 +495,15 @@
 
     "multiplesImages": "Multiples images",
     "limitSelectedImages": "The limit is 5 photos or videos",
-    "hasntImageOnGallery": "This gallery has no any files"
+    "hasntImageOnGallery": "This gallery has no any files",
+
+    "viewMoreReply": "View %amount% more reply",
+    "reply": "Reply",
+    "replyingTo": "Replying To %user_name%",
+    "loading": "Loading...",
+    "hideReplies": "Hide replies",
+    "couldNotSend": "Could not send",
+    "couldNotLoad": "Could not load",
+    "repliedToYourComment": "replied to your comment"
+
 }
