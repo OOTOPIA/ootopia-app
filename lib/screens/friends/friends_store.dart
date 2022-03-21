@@ -98,6 +98,7 @@ class FriendsStore with ChangeNotifier {
       lastName = name;
       usersSearch = await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
       searchIsEmpty = usersSearch.friends!.isEmpty;
+      hasMoreUsersSearch = usersSearch.friends!.length == 10;
       isLoadingSearch = false;
       notifyListeners();
     }
@@ -129,12 +130,10 @@ class FriendsStore with ChangeNotifier {
   bool isLoadingGetAllFriends = false;
 
   void init(String userId) {
-    if(orderBy == null){
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
       notifyListeners();
       getFriends(userId);
-    }
   }
 
   Future<void> getFriends(String userId) async{

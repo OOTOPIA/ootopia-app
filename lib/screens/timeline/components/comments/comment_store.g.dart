@@ -145,18 +145,18 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
-  final _$hasMorePostsAtom = Atom(name: 'CommentStoreBase.hasMorePosts');
+  final _$hasMoreCommentsAtom = Atom(name: 'CommentStoreBase.hasMoreComments');
 
   @override
-  bool get hasMorePosts {
-    _$hasMorePostsAtom.reportRead();
-    return super.hasMorePosts;
+  bool get hasMoreComments {
+    _$hasMoreCommentsAtom.reportRead();
+    return super.hasMoreComments;
   }
 
   @override
-  set hasMorePosts(bool value) {
-    _$hasMorePostsAtom.reportWrite(value, super.hasMorePosts, () {
-      super.hasMorePosts = value;
+  set hasMoreComments(bool value) {
+    _$hasMoreCommentsAtom.reportWrite(value, super.hasMoreComments, () {
+      super.hasMoreComments = value;
     });
   }
 
@@ -204,7 +204,7 @@ excludedIds: ${excludedIds},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
 hasMoreUsers: ${hasMoreUsers},
-hasMorePosts: ${hasMorePosts}
+hasMoreComments: ${hasMoreComments}
     ''';
   }
 }

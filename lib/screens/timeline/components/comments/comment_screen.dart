@@ -166,7 +166,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       });
       aux += value;
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(Duration(seconds: 1), () async {
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 500), () async {
         var getLastString = aux.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
@@ -231,10 +231,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentReply = null;
             indexComment = null;
             seSelectedUser = false;
-            commentStore.isLoading = false;
             aux = '';
+            commentStore.isLoading = false;
             setState(() {});
-
             return;
           } else {
             await commentStore.createComment(
@@ -276,12 +275,20 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   replyComment(Comment comment) {
-    _inputController.text = "ㅤ@${comment.username}ㅤ";
     userNameReply = comment.username;
+    _inputController.text = "ㅤ@${comment.username}ㅤ ";
     replyToUserId = comment.userId;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
-    commentStore.listTaggedUsers!.addAll(comment.userComments!);
+    commentStore.listTaggedUsers = [
+      UserSearchModel(
+        fullname: "ㅤ@${comment.username}ㅤ",
+        id: comment.userId,
+        start: 0,
+        end: _inputController.text.length,
+      )
+    ].toList();
+
     commentReply = comment.id;
     indexComment = commentStore.listComments
         .indexWhere((_comment) => _comment.id == comment.id);
@@ -320,10 +327,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 Visibility(
                     visible: !focusNode.hasFocus,
                     child: BackgroundButterflyBottom(positioned: -50)),
-                SingleChildScrollView(
-                    child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.85),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    commentStore.isLoading = true;
+                    commentStore.listComments.clear();
+                    commentStore.currentPageComment = 1;
+                    await _getData();
+                    commentStore.isLoading = false;
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -360,7 +371,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                   //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
                                           scrollInfo.metrics.maxScrollExtent &&
-                                      commentStore.hasMorePosts &&
+                                      commentStore.hasMoreComments &&
                                       !commentStore.isLoading) {
                                     commentStore.currentPageComment++;
                                     commentStore.isLoading = true;
@@ -373,50 +384,41 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     return false;
                                   }
                                 },
-                                child: RefreshIndicator(
-                                  onRefresh: () async {
-                                    commentStore.isLoading = true;
-                                    commentStore.listComments.clear();
-                                    commentStore.currentPageComment = 1;
-                                    await _getData();
-                                    commentStore.isLoading = false;
-                                  },
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24),
-                                    itemCount: commentStore.listComments.length,
-                                    itemBuilder: (context, index) {
-                                      var comment =
-                                          commentStore.listComments[index];
-                                      bool visibleDelete;
-                                      if (authStore.currentUser == null) {
-                                        visibleDelete = false;
-                                      } else {
-                                        visibleDelete =
-                                            authStore.currentUser!.id! ==
-                                                commentStore
-                                                    .listComments[index].userId;
-                                      }
-                                      return ItemComment(
-                                        comment: comment,
-                                        visibleDelete: visibleDelete,
-                                        commentStore: commentStore,
-                                        getData: _getData,
-                                        postId: postId,
-                                        replyComment: replyComment,
-                                        updateState: () {
-                                          setState(() {});
-                                        },
-                                      );
-                                    },
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: Column(
+                                      children: commentStore.listComments
+                                          .map((comment) {
+                                        bool visibleDelete;
+                                        if (authStore.currentUser == null) {
+                                          visibleDelete = false;
+                                        } else {
+                                          visibleDelete =
+                                              authStore.currentUser!.id! ==
+                                                  comment.userId;
+                                        }
+                                        return ItemComment(
+                                          comment: comment,
+                                          visibleDelete: visibleDelete,
+                                          commentStore: commentStore,
+                                          getData: _getData,
+                                          postId: postId,
+                                          replyComment: replyComment,
+                                          updateState: () {
+                                            setState(() {});
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                     ],
                   ),
-                )),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(

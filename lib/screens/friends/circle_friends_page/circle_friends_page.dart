@@ -65,7 +65,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     friendsStore  = Provider.of<FriendsStore>(context);
-    //init();
     return  Observer(
         builder: (context) {
           return Stack(
