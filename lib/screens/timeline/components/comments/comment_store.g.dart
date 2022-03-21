@@ -84,6 +84,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$excludedIdsAtom = Atom(name: 'CommentStoreBase.excludedIds');
+
+  @override
+  String? get excludedIds {
+    _$excludedIdsAtom.reportRead();
+    return super.excludedIds;
+  }
+
+  @override
+  set excludedIds(String? value) {
+    _$excludedIdsAtom.reportWrite(value, super.excludedIds, () {
+      super.excludedIds = value;
+    });
+  }
+
   final _$currentPageCommentAtom =
       Atom(name: 'CommentStoreBase.currentPageComment');
 
@@ -185,6 +200,7 @@ viewState: ${viewState},
 listComments: ${listComments},
 listAllUsers: ${listAllUsers},
 listTaggedUsers: ${listTaggedUsers},
+excludedIds: ${excludedIds},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
 hasMoreUsers: ${hasMoreUsers},
