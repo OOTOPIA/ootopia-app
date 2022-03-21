@@ -87,13 +87,13 @@ mixin _$CommentStore on CommentStoreBase, Store {
   final _$excludedIdsAtom = Atom(name: 'CommentStoreBase.excludedIds');
 
   @override
-  List<String>? get excludedIds {
+  String? get excludedIds {
     _$excludedIdsAtom.reportRead();
     return super.excludedIds;
   }
 
   @override
-  set excludedIds(List<String>? value) {
+  set excludedIds(String? value) {
     _$excludedIdsAtom.reportWrite(value, super.excludedIds, () {
       super.excludedIds = value;
     });

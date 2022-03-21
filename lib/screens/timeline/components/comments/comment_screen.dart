@@ -110,7 +110,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     e.start = nameStartRange;
     e.end = nameStartRange + e.fullname.length + 1;
-    commentStore.excludedIds?.add(e.id);
+    if (commentStore.excludedIds!.isEmpty) {
+      commentStore.excludedIds = commentStore.excludedIds! + '${e.id}';
+    } else {
+      commentStore.excludedIds = commentStore.excludedIds! + ',${e.id}';
+    }
     commentStore.listTaggedUsers?.add(e);
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
@@ -166,7 +170,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       });
       aux += value;
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(Duration(seconds: 1, milliseconds: 500), () async {
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 250), () async {
         var getLastString = aux.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
@@ -183,7 +187,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       });
     } else {
       commentStore.listTaggedUsers!.clear();
-      commentStore.excludedIds?.clear();
+      commentStore.excludedIds = '';
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
@@ -226,7 +230,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             _inputController.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
-            commentStore.excludedIds?.clear();
+            commentStore.excludedIds = '';
             userNameReply = null;
             commentReply = null;
             indexComment = null;
@@ -244,7 +248,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listComments.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
-            commentStore.excludedIds?.clear();
+            commentStore.excludedIds = '';
             aux = '';
             seSelectedUser = false;
             _getData();

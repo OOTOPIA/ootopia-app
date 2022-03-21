@@ -341,7 +341,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     String fullName,
     int page,
     int limit,
-    List<String>? excludedIds,
+    String? excludedIds,
   ) async {
     try {
       Response res = await ApiClient.api().get(
@@ -350,6 +350,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           'page': page,
           'limit': limit,
           'fullname': fullName,
+          'excludedUsers': excludedIds
         },
       );
       if (res.statusCode != 200) {

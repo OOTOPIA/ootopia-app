@@ -31,7 +31,7 @@ abstract class CommentStoreBase with Store {
   List<UserSearchModel>? listTaggedUsers = [];
 
   @observable
-  List<String>? excludedIds = [];
+  String? excludedIds = '';
 
   @observable
   int currentPageComment = 1;
@@ -66,13 +66,12 @@ abstract class CommentStoreBase with Store {
       isLoading = true;
       List<String> idsUsersTagged = [];
       var newTextComment = text;
-
       if (listTaggedUsers != null) {
         int newStartIndex = 0;
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          if (newTextComment.contains(user.fullname)) {
+          if (newTextComment.trim().contains('@${user.fullname}')) {
             newTextComment = newTextComment.replaceRange(
               user.start! + newStartIndex,
               user.end! + newStartIndex,
