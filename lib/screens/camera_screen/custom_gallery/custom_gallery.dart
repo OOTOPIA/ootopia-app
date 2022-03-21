@@ -66,12 +66,12 @@ class _CustomGalleryState extends State<CustomGallery> {
   void _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      if (hasMoreMedias) {
-        Future.delayed(Duration.zero, () async {
-          await getImageList(countPage);
-        });
-      }
+        !_scrollController.position.outOfRange &&
+        hasMoreMedias &&
+        !isLoadingMoreMedia) {
+      Future.delayed(Duration.zero, () async {
+        await getImageList(countPage);
+      });
     }
   }
 
@@ -148,7 +148,7 @@ class _CustomGalleryState extends State<CustomGallery> {
                                         CustomGalleryGridView(
                                           discountSpacing: 10 * 3,
                                           amountPadding: 0,
-                                          media: handleMediaOnGridView(media),
+                                          media: media["mediaBytes"],
                                           mediaType: media["mediaType"],
                                           columnsCount: 3,
                                           singleMode: singleMode,
@@ -251,12 +251,6 @@ class _CustomGalleryState extends State<CustomGallery> {
     countPage++;
     isLoadingMoreMedia = false;
     setState(() {});
-  }
-
-  handleMediaOnGridView(Map media) {
-    return media["mediaType"] == 'video'
-        ? media["mediaBytes"]
-        : media["mediaFile"];
   }
 
   switchMode() {
