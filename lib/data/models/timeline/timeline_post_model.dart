@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ootopia_app/data/models/timeline/media_model.dart';
 import './../users/badges_model.dart';
 
 part "timeline_post_model.g.dart";
@@ -27,6 +28,7 @@ class TimelinePost {
   DateTime? createdAt;
   DateTime? updatedAt;
   List<Badge>? badges;
+  List<Media>? medias;
 
   TimelinePost({
     required this.id,
@@ -51,6 +53,7 @@ class TimelinePost {
     this.createdAt,
     this.updatedAt,
     this.badges,
+    this.medias
   });
 
   factory TimelinePost.fromJson(Map<String, dynamic> json) =>
