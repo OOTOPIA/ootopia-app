@@ -76,7 +76,7 @@ class LinkRichText extends StatelessWidget {
         var comment = textFragmented[i];
         textSpanWidget.add(
           TextSpan(
-            text: comment['string'].replaceAll('ㅤ', ' '),
+            text: comment['string'],
             recognizer: new TapGestureRecognizer()
               ..onTap = () {
                 if (comment['id'] != null) {
