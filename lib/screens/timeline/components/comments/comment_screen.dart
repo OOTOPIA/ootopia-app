@@ -49,7 +49,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool seSelectedUser = false;
   Timer? _debounce;
   final ScrollController scrollController = ScrollController();
-  String aux = '';
   String? userNameReply;
 
   @override
@@ -84,6 +83,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       "postOwnerId": widget.args['post'].userId,
       "commentsCount": widget.args['post'].commentsCount,
     });
+
     focusNode.addListener(() {
       setState(() {
         print(focusNode.hasFocus);
@@ -94,14 +94,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void addUserInText(UserSearchModel e) {
     var text = _inputController.text;
 
-    var name = 'ㅤ@${e.fullname}ㅤ';
+    var name = '‌@${e.fullname}‌';
 
     var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
-        aux = text.replaceRange(i, i + s + 1, name);
-        _inputController.text =
-            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ' '));
+        _inputController.text = text.replaceRange(i, i + s + 1, name);
         nameStartRange = i;
         break;
       }
@@ -109,7 +107,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     }
 
     e.start = nameStartRange;
-    e.end = nameStartRange + e.fullname.length + 1;
+    e.end = nameStartRange + e.fullname.length + 2;
     if (commentStore.excludedIds!.isEmpty) {
       commentStore.excludedIds = commentStore.excludedIds! + '${e.id}';
     } else {
@@ -168,16 +166,15 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
-      aux += value;
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
-        var getLastString = aux.split(RegExp("ㅤ@"));
+        var getLastString = value.split("‌@");
         if (getLastString.last.contains('@')) {
           setState(() {
             seSelectedUser = true;
           });
           var startName = getLastString.last.split('@').last;
-          var finishName = startName.split(RegExp("ㅤ"));
+          var finishName = startName.split(RegExp("‌"));
           await commentStore.searchUser(finishName.first);
         } else {
           setState(() {
@@ -191,7 +188,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
-        aux = '';
       });
     }
   }
@@ -227,7 +223,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 createCommentReply
               ];
             }
-            aux = '';
             commentStore.excludedIds = '';
             _inputController.clear();
             commentStore.listAllUsers.clear();
@@ -248,13 +243,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
             commentStore.excludedIds = '';
-            aux = '';
             seSelectedUser = false;
             _getData();
             commentStore.isLoading = false;
           }
         }
       } catch (e) {
+        print(e);
         showModalBottomSheet(
           context: context,
           barrierColor: Colors.black.withAlpha(1),
@@ -279,13 +274,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   replyComment(Comment comment) {
     userNameReply = comment.username;
-    _inputController.text = "ㅤ@${comment.username}ㅤ ";
+    _inputController.text = "‌@${comment.username}‌";
     replyToUserId = comment.userId;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
     commentStore.listTaggedUsers = [
       UserSearchModel(
-        fullname: "ㅤ@${comment.username}ㅤ",
+        fullname: "‌@${comment.username}‌",
         id: comment.userId,
         start: 0,
         end: _inputController.text.length,
