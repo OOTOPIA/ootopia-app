@@ -170,7 +170,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       });
       aux += value;
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(Duration(seconds: 1, milliseconds: 250), () async {
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
         var getLastString = aux.split(RegExp("ㅤ@"));
         if (getLastString.last.contains('@')) {
           setState(() {
@@ -227,18 +227,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 createCommentReply
               ];
             }
+            aux = '';
+            commentStore.excludedIds = '';
             _inputController.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
-            commentStore.excludedIds = '';
             userNameReply = null;
             commentReply = null;
             indexComment = null;
             seSelectedUser = false;
-            aux = '';
             commentStore.isLoading = false;
             setState(() {});
-            return;
           } else {
             await commentStore.createComment(
                 postId, _inputController.text.trim());
