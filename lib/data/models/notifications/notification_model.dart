@@ -7,15 +7,17 @@ class NotificationModel {
   NotificationModel({
     this.photoURL,
     required this.type,
-    required this.usersName,
+    this.usersName,
     required this.postId,
+    this.userCommentFullname,
     this.oozAmount,
   });
 
   final String? photoURL;
   final String type;
-  final List<String> usersName;
+  final List<String>? usersName;
   final String postId;
+  final String? userCommentFullname;
   final String? oozAmount;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>

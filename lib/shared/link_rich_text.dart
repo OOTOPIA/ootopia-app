@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -34,66 +34,62 @@ class LinkRichText extends StatelessWidget {
   void colorUserInText() {
     SmartPageController controller = SmartPageController.getInstance();
     var allName = [];
-    int positionEnd = 0;
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
-      List<String> textFragmented = [];
-      for (var item in userCommentsList!.reversed) {
-        int startname = text.indexOf('ㅤ@', positionEnd);
-        if (startname != -1) {
+      List<Map<String, dynamic>> textFragmented = [];
+      for (var item in userCommentsList!) {
+        var startName = text.indexOf('@[${item.id}]');
+        if (startName != -1) {
           allName.add({
-            "id": item.id,
-            "name": "@${item.fullname}",
-            "start": startname,
-            "end": startname + item.fullname.length + 1
+            'id': item.id,
+            'start': startName,
+            'name': item.fullname,
+            'end': startName + item.id.length + 3,
           });
-          positionEnd = startname + item.fullname.length + 1;
         }
       }
-      Map<int, String> textIdList = {};
-      var lastEndName = 0;
+      var countText = 0;
+
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-      for (var countText = 0; countText < text.length; countText++) {
-        for (var countAllName = 0;
-            countAllName < allName.length;
-            countAllName++) {
-          if (countText >= allName[countAllName]['start'] &&
-              countText <= allName[countAllName]['end']) {
-            textFragmented.add(allName[countAllName]['name']);
-            textIdList.addAll({
-              textFragmented.length - 1: allName[countAllName]['id'],
-            });
-            countText = allName[countAllName]['end'];
-            break;
-          } else if (countText <= allName[countAllName]['start']) {
-            textFragmented
-                .add(text.substring(countText, allName[countAllName]['start']));
-            countText = allName[countAllName]['start'];
-            break;
-          }
-          lastEndName = allName[countAllName]['end'];
-        }
+      for (var i = 0; i < allName.length; i++) {
+        var userInComment = allName[i];
+        textFragmented.add({
+          'isName': false,
+          'string': text.substring(countText, userInComment['start']),
+        });
+        countText = userInComment['id'].length + userInComment['start'] + 3;
+        textFragmented.add({
+          'id': userInComment['id'],
+          'isName': true,
+          'string': text
+              .substring(userInComment['start'], countText)
+              .replaceAll('@[${userInComment['id']}]', userInComment['name']),
+        });
       }
-      if (text.length > lastEndName) {
-        textFragmented.add(text.substring(lastEndName + 1, text.length));
+      if (text.length > countText) {
+        textFragmented.add({
+          'isName': false,
+          'string': text.substring(countText, text.length),
+        });
       }
+
       for (var i = 0; i < textFragmented.length; i++) {
         var comment = textFragmented[i];
-
         textSpanWidget.add(
           TextSpan(
-            text: comment.replaceAll('ㅤ', ' '),
+            text: comment['string'].replaceAll('ㅤ', ' '),
             recognizer: new TapGestureRecognizer()
               ..onTap = () {
-                controller.insertPage(
-                  ProfileScreen({
-                    "id": textIdList[i],
-                  }),
-                );
+                if (comment['id'] != null) {
+                  controller.insertPage(
+                    ProfileScreen({
+                      "id": comment['id'],
+                    }),
+                  );
+                }
               },
             style: TextStyle(
-              color: comment.contains('@')
-                  ? LightColors.linkText
-                  : LightColors.black,
+              color:
+                  comment['isName'] ? LightColors.linkText : LightColors.black,
               fontWeight: FontWeight.w400,
               fontSize: 16,
             ),

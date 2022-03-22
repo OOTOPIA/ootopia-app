@@ -274,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                        friendsStore.addFriend(friend);
                                      }else{
                                        store!.removeFriend();
-                                       friendsStore.removeFriend(friend);
+                                       friendsStore.removeFriend(friend, authStore.currentUser!.id);
                                      }
                                     });
                                   },

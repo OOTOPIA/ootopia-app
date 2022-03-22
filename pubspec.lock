@@ -204,6 +204,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
+  crop_image:
+    dependency: "direct main"
+    description:
+      name: crop_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   cross_file:
     dependency: transitive
     description:
@@ -597,13 +604,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
-  image_crop:
-    dependency: "direct main"
-    description:
-      name: image_crop
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   image_picker:
     dependency: "direct main"
     description:

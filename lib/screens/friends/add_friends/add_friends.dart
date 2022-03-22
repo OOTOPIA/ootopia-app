@@ -48,11 +48,7 @@ class _AddFriendsState extends State<AddFriends> {
                       scrollInfo.metrics.pixels >= scrollInfo.metrics
                           .maxScrollExtent*0.6 &&
                       friendsStore.hasMoreUsersSearch ) {
-
-                    Future.delayed(Duration.zero,() async {
-                      await friendsStore.getMoreUserBySearch();
-                      setState(() {});
-                    });
+                    friendsStore.getMoreUserBySearch();
                   }
                   return true;
                 },
@@ -87,6 +83,11 @@ class _AddFriendsState extends State<AddFriends> {
                           height: 42,
                           child: TextField(
                             controller: messageController,
+                            onChanged: (value){
+                              if(value.isEmpty){
+                                friendsStore.cleanSearchPage();
+                              }
+                            },
                             textCapitalization: TextCapitalization.words,
                             textAlignVertical: TextAlignVertical.center,
                             textInputAction: TextInputAction.search,
@@ -198,6 +199,24 @@ class _AddFriendsState extends State<AddFriends> {
                             }
                         ),
                       ],
+                      Visibility(
+                        visible: friendsStore.loadingMoreUsersSearch,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 16),
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.transparent,
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
                       SizedBox(height: 16),
                     ],
                   ),
@@ -475,8 +494,13 @@ class _AddFriendsState extends State<AddFriends> {
                                   fit: BoxFit.cover,
                                   width: 74,
                                   height: 76,
-                                  errorBuilder: (context, url, error) => Center(
-                                    child: Icon(Icons.error),
+                                  errorBuilder: (context, url, error) => Container(
+                                    width: 74,
+                                    height: 76,
+                                    color: Colors.grey,
+                                    child: Center(
+                                      child: Icon(Icons.error),
+                                    ),
                                   ),
 
                                 ),
