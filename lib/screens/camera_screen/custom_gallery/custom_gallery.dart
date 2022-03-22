@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_image.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/custom_gallery_grid_view.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/toast_message_widget.dart';
@@ -113,6 +114,60 @@ class _CustomGalleryState extends State<CustomGallery> {
                         ),
                       ),
                     )
+                  // : SingleChildScrollView(
+                  //     controller: _scrollController,
+                  //     child: Column(
+                  //       children: [
+                  //         SizedBox(height: 20),
+                  //         MediaViewWidget(
+                  //           key: ObjectKey(currentDirectory["mediaFile"].path),
+                  //           mediaFilePath: currentDirectory["mediaFile"].path,
+                  //           mediaType: currentDirectory["mediaType"],
+                  //           mediaSize: currentDirectory["mediaSize"],
+                  //         ),
+                  //         SizedBox(height: 10),
+                  //         multipleImagesButton(),
+                  //         SizedBox(height: 10),
+                  //         Container(
+                  //           padding: EdgeInsets.symmetric(
+                  //             horizontal: GlobalConstants.of(context)
+                  //                     .screenHorizontalSpace -
+                  //                 5,
+                  //           ),
+                  //           width: double.infinity,
+                  //           child: Center(
+                  //             child: Wrap(
+                  //               alignment: WrapAlignment.start,
+                  //               crossAxisAlignment: WrapCrossAlignment.start,
+                  //               spacing: 8, // gap between adjacent chips
+                  //               runSpacing: 8, // gap between lines
+                  //               children: mediaList
+                  //                   .asMap()
+                  //                   .map(
+                  //                     (index, media) => MapEntry(
+                  //                       index,
+                  //                       CustomGalleryGridView(
+                  //                         discountSpacing: 10 * 3,
+                  //                         amountPadding: 0,
+                  //                         media: media["mediaBytes"],
+                  //                         mediaType: media["mediaType"],
+                  //                         columnsCount: 3,
+                  //                         singleMode: singleMode,
+                  //                         positionOnList: returnPosition(media),
+                  //                         onTap: () => selectMedia(media),
+                  //                       ),
+                  //                     ),
+                  //                   )
+                  //                   .values
+                  //                   .toList(),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         if (isLoadingMoreMedia) CircularProgressIndicator(),
+                  //         SizedBox(height: 20),
+                  //       ],
+                  //     ),
+                  //   ),
                   : SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
@@ -127,43 +182,34 @@ class _CustomGalleryState extends State<CustomGallery> {
                           SizedBox(height: 10),
                           multipleImagesButton(),
                           SizedBox(height: 10),
-                          Container(
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            primary: false,
                             padding: EdgeInsets.symmetric(
                               horizontal: GlobalConstants.of(context)
                                       .screenHorizontalSpace -
-                                  5,
+                                  10,
                             ),
-                            width: double.infinity,
-                            child: Center(
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                spacing: 8, // gap between adjacent chips
-                                runSpacing: 8, // gap between lines
-                                children: mediaList
-                                    .asMap()
-                                    .map(
-                                      (index, media) => MapEntry(
-                                        index,
-                                        CustomGalleryGridView(
-                                          discountSpacing: 10 * 3,
-                                          amountPadding: 0,
-                                          media: media["mediaBytes"],
-                                          mediaType: media["mediaType"],
-                                          columnsCount: 3,
-                                          singleMode: singleMode,
-                                          positionOnList: returnPosition(media),
-                                          onTap: () => selectMedia(media),
-                                        ),
-                                      ),
-                                    )
-                                    .values
-                                    .toList(),
-                              ),
+                            itemCount: mediaList.length,
+                            itemBuilder: (BuildContext ctx, index) {
+                              return CustomImage(
+                                media: mediaList[index]["mediaBytes"],
+                                mediaType: mediaList[index]["mediaType"],
+                                singleMode: singleMode,
+                                positionOnList:
+                                    returnPosition(mediaList[index]),
+                                onTap: () => selectMedia(mediaList[index]),
+                              );
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 150,
+                              childAspectRatio: 2 / 2,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 0,
                             ),
                           ),
-                          if (isLoadingMoreMedia) CircularProgressIndicator(),
-                          SizedBox(height: 20),
                         ],
                       ),
                     ),
