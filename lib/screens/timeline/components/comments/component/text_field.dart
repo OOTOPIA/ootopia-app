@@ -10,7 +10,9 @@ class TextFieldComment extends StatefulWidget {
   final TextEditingController inputController;
   final Function()? onTap;
   final Function(String)? onChange;
+  final Function removeReply;
   final FocusNode focusNode;
+  final String? userNameReply;
   final AuthStore authStore;
   final Widget suffixIcon;
   const TextFieldComment({
@@ -22,6 +24,8 @@ class TextFieldComment extends StatefulWidget {
     required this.focusNode,
     required this.authStore,
     required this.suffixIcon,
+    required this.removeReply,
+    this.userNameReply,
   }) : super(key: key);
 
   @override
@@ -31,49 +35,91 @@ class TextFieldComment extends StatefulWidget {
 class _TextFieldCommentState extends State<TextFieldComment> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      autocorrect: true,
-      enableSuggestions: true,
-      textCapitalization: TextCapitalization.sentences,
-      maxLines: widget.commentStore.isLoading ? 1 : null,
-      minLines: 1,
-      focusNode: widget.focusNode,
-      onTap: widget.authStore.currentUser == null
-          ? () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              Navigator.of(context).pushNamed(
-                PageRoute.Page.loginScreen.route,
-                arguments: {
-                  "returnToPageWithArgs": {
-                    "currentPageName": "wallet",
-                    "arguments": null
+    return Container(
+      height: widget.userNameReply != null ? 86 : 52,
+      decoration: BoxDecoration(
+        color: widget.userNameReply != null ? Color(0XFFF8F8F8) : null,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(5),
+          bottomRight: Radius.circular(5),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (widget.userNameReply != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!
+                        .replyingTo
+                        .replaceFirst("%user_name%", "${widget.userNameReply}"),
+                    style: TextStyle(
+                      color: LightColors.grey,
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Icon(
+                      Icons.close,
+                      size: 15,
+                      color: Colors.black,
+                    ),
+                    onTap: () {
+                      widget.removeReply();
+                    },
+                  )
+                ],
+              ),
+            ),
+          TextField(
+            autocorrect: true,
+            enableSuggestions: true,
+            textCapitalization: TextCapitalization.sentences,
+            maxLines: widget.commentStore.isLoading ? 1 : null,
+            minLines: 1,
+            focusNode: widget.focusNode,
+            onTap: widget.authStore.currentUser == null
+                ? () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    Navigator.of(context).pushNamed(
+                      PageRoute.Page.loginScreen.route,
+                      arguments: {
+                        "returnToPageWithArgs": {
+                          "currentPageName": "wallet",
+                          "arguments": null
+                        }
+                      },
+                    );
                   }
-                },
-              );
-            }
-          : null,
-      onChanged: widget.onChange,
-      style: TextStyle(color: LightColors.grey),
-      controller: widget.inputController,
-      decoration: InputDecoration(
-        fillColor:
-            Colors.white.withOpacity(!widget.focusNode.hasFocus ? 0.3 : 1.0),
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: LightColors.grey, width: 0.25),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: LightColors.grey, width: 0.25),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: LightColors.grey, width: 0.25),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        contentPadding: EdgeInsets.all(16),
-        hintText: AppLocalizations.of(context)!.writeYourComment,
-        hintStyle: TextStyle(color: LightColors.grey),
-        suffixIcon: widget.suffixIcon,
+                : null,
+            onChanged: widget.onChange,
+            style: TextStyle(color: LightColors.grey),
+            controller: widget.inputController,
+            decoration: InputDecoration(
+              fillColor: Colors.white
+                  .withOpacity(!widget.focusNode.hasFocus ? 0.3 : 1.0),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: LightColors.grey, width: 0.25),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: LightColors.grey, width: 0.25),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: LightColors.grey, width: 0.25),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              contentPadding: EdgeInsets.all(16),
+              hintText: AppLocalizations.of(context)!.writeYourComment,
+              hintStyle: TextStyle(color: LightColors.grey),
+              suffixIcon: widget.suffixIcon,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -9,7 +9,7 @@ import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/models/users/invitation_code_model.dart';
 
 import 'package:ootopia_app/data/models/users/profile_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -338,7 +338,11 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   Future<List<UserSearchModel>> getAllUsersByName(
-      String fullName, int page, int limit) async {
+    String fullName,
+    int page,
+    int limit,
+    String? excludedIds,
+  ) async {
     try {
       Response res = await ApiClient.api().get(
         "users/search",
@@ -346,6 +350,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           'page': page,
           'limit': limit,
           'fullname': fullName,
+          'excludedUsers': excludedIds
         },
       );
       if (res.statusCode != 200) {

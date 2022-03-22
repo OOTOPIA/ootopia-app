@@ -69,18 +69,33 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
-  final _$listUsersMarketAtom = Atom(name: 'CommentStoreBase.listUsersMarket');
+  final _$listTaggedUsersAtom = Atom(name: 'CommentStoreBase.listTaggedUsers');
 
   @override
-  List<String>? get listUsersMarket {
-    _$listUsersMarketAtom.reportRead();
-    return super.listUsersMarket;
+  List<UserSearchModel>? get listTaggedUsers {
+    _$listTaggedUsersAtom.reportRead();
+    return super.listTaggedUsers;
   }
 
   @override
-  set listUsersMarket(List<String>? value) {
-    _$listUsersMarketAtom.reportWrite(value, super.listUsersMarket, () {
-      super.listUsersMarket = value;
+  set listTaggedUsers(List<UserSearchModel>? value) {
+    _$listTaggedUsersAtom.reportWrite(value, super.listTaggedUsers, () {
+      super.listTaggedUsers = value;
+    });
+  }
+
+  final _$excludedIdsAtom = Atom(name: 'CommentStoreBase.excludedIds');
+
+  @override
+  String? get excludedIds {
+    _$excludedIdsAtom.reportRead();
+    return super.excludedIds;
+  }
+
+  @override
+  set excludedIds(String? value) {
+    _$excludedIdsAtom.reportWrite(value, super.excludedIds, () {
+      super.excludedIds = value;
     });
   }
 
@@ -130,6 +145,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$hasMoreCommentsAtom = Atom(name: 'CommentStoreBase.hasMoreComments');
+
+  @override
+  bool get hasMoreComments {
+    _$hasMoreCommentsAtom.reportRead();
+    return super.hasMoreComments;
+  }
+
+  @override
+  set hasMoreComments(bool value) {
+    _$hasMoreCommentsAtom.reportWrite(value, super.hasMoreComments, () {
+      super.hasMoreComments = value;
+    });
+  }
+
   final _$getCommentsAsyncAction = AsyncAction('CommentStoreBase.getComments');
 
   @override
@@ -169,10 +199,12 @@ isLoading: ${isLoading},
 viewState: ${viewState},
 listComments: ${listComments},
 listAllUsers: ${listAllUsers},
-listUsersMarket: ${listUsersMarket},
+listTaggedUsers: ${listTaggedUsers},
+excludedIds: ${excludedIds},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
-hasMoreUsers: ${hasMoreUsers}
+hasMoreUsers: ${hasMoreUsers},
+hasMoreComments: ${hasMoreComments}
     ''';
   }
 }
