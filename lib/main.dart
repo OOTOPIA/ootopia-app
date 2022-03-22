@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
+//import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
@@ -87,7 +87,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
-  FlutterBackgroundService.initialize(onStartService);
+  //FlutterBackgroundService.initialize(onStartService);
 
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
@@ -141,8 +141,8 @@ Future main() async {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if ((message.data['type'] as String).replaceAll('-', '_') ==
-      TypeOfMessage.regeneration_game.toString().substring(14)) {
+  String messageType = (message.data['type'] as String).replaceAll('-', '_');
+  if (messageType == TypeOfMessage.regeneration_game.name) {
     AppUsageTime.instance.resetUsageTime();
     return;
   }
@@ -156,62 +156,62 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   service.createMessage(message);
 }
 
-void onStartService() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final service = FlutterBackgroundService();
-  int lastUpdateUsageTimeInMs = 0;
-  const int maxAttempts = 5;
-  int currentAttempt = 1;
-  service.onDataReceived.listen((event) {
-    if (event!["action"] == "setAsForeground") {
-      service.setForegroundMode(true);
-      return;
-    }
+// void onStartService() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   final service = FlutterBackgroundService();
+//   int lastUpdateUsageTimeInMs = 0;
+//   const int maxAttempts = 5;
+//   int currentAttempt = 1;
+//   service.onDataReceived.listen((event) {
+//     if (event!["action"] == "setAsForeground") {
+//       service.setForegroundMode(true);
+//       return;
+//     }
 
-    if (event["action"] == "setAsBackground") {
-      service.setForegroundMode(false);
-    }
+//     if (event["action"] == "setAsBackground") {
+//       service.setForegroundMode(false);
+//     }
 
-    if (event["action"] == "stopService") {
-      service.stopBackgroundService();
-    }
+//     if (event["action"] == "stopService") {
+//       service.stopBackgroundService();
+//     }
 
-    if (event["action"] == "START_SYNC") {
-      service.setNotificationInfo(
-        title: "OOTOPIA",
-        content: event["message"],
-      );
-    }
+//     if (event["action"] == "START_SYNC") {
+//       service.setNotificationInfo(
+//         title: "OOTOPIA",
+//         content: event["message"],
+//       );
+//     }
 
-    if (event["action"] == "ON_UPDATE_USAGE_TIME") {
-      lastUpdateUsageTimeInMs = event["value"];
-    }
-  });
-  service.setForegroundMode(true);
-  //Quando o aplicativo fechar, iremos verificar se a ultima atualização do
-  //tempo de visualização da timeline foi há mais de 30 segundos atrás
-  //Se for, enviamos o tempo de visualização para a api, pois esse tempo será convertido em OOZ
-  //Se não for, isso indica que o app ainda está aberto, então ainda pode estar contando tempo
-  Timer.periodic(Duration(seconds: 3), (timer) async {
-    int timeInMs = new DateTime.now().millisecondsSinceEpoch;
-    if (timeInMs - lastUpdateUsageTimeInMs >= 3000 &&
-        lastUpdateUsageTimeInMs > 0) {
-      await dotenv.load(fileName: ".env");
-      AppUsageTime.instance;
-      try {
-        await AppUsageTime.instance.sendToApi();
-        timer.cancel();
-        service.stopBackgroundService();
-      } catch (err) {
-        currentAttempt++;
-        if (currentAttempt >= maxAttempts) {
-          timer.cancel();
-          service.stopBackgroundService();
-        }
-      }
-    }
-  });
-}
+//     if (event["action"] == "ON_UPDATE_USAGE_TIME") {
+//       lastUpdateUsageTimeInMs = event["value"];
+//     }
+//   });
+//   service.setForegroundMode(true);
+//   //Quando o aplicativo fechar, iremos verificar se a ultima atualização do
+//   //tempo de visualização da timeline foi há mais de 30 segundos atrás
+//   //Se for, enviamos o tempo de visualização para a api, pois esse tempo será convertido em OOZ
+//   //Se não for, isso indica que o app ainda está aberto, então ainda pode estar contando tempo
+//   Timer.periodic(Duration(seconds: 3), (timer) async {
+//     int timeInMs = new DateTime.now().millisecondsSinceEpoch;
+//     if (timeInMs - lastUpdateUsageTimeInMs >= 3000 &&
+//         lastUpdateUsageTimeInMs > 0) {
+//       await dotenv.load(fileName: ".env");
+//       AppUsageTime.instance;
+//       try {
+//         await AppUsageTime.instance.sendToApi();
+//         timer.cancel();
+//         service.stopBackgroundService();
+//       } catch (err) {
+//         currentAttempt++;
+//         if (currentAttempt >= maxAttempts) {
+//           timer.cancel();
+//           service.stopBackgroundService();
+//         }
+//       }
+//     }
+//   });
+// }
 
 class ExpensesApp extends StatefulWidget {
   @override
