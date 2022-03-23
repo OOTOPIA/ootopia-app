@@ -160,6 +160,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$fullNameAtom = Atom(name: 'CommentStoreBase.fullName');
+
+  @override
+  String get fullName {
+    _$fullNameAtom.reportRead();
+    return super.fullName;
+  }
+
+  @override
+  set fullName(String value) {
+    _$fullNameAtom.reportWrite(value, super.fullName, () {
+      super.fullName = value;
+    });
+  }
+
   final _$getCommentsAsyncAction = AsyncAction('CommentStoreBase.getComments');
 
   @override
@@ -188,8 +203,8 @@ mixin _$CommentStore on CommentStoreBase, Store {
   final _$searchUserAsyncAction = AsyncAction('CommentStoreBase.searchUser');
 
   @override
-  Future<void> searchUser(String fullName) {
-    return _$searchUserAsyncAction.run(() => super.searchUser(fullName));
+  Future<void> searchUser() {
+    return _$searchUserAsyncAction.run(() => super.searchUser());
   }
 
   @override
@@ -204,7 +219,8 @@ excludedIds: ${excludedIds},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
 hasMoreUsers: ${hasMoreUsers},
-hasMoreComments: ${hasMoreComments}
+hasMoreComments: ${hasMoreComments},
+fullName: ${fullName}
     ''';
   }
 }
