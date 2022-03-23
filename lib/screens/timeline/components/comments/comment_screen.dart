@@ -93,7 +93,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void addUserInText(UserSearchModel e) {
     var text = _inputController.text;
 
-    var name = '‌@${e.fullname}‌';
+    var name = '‌@${e.fullname}‌ ';
 
     var s = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
@@ -186,6 +186,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     } else {
       commentStore.listTaggedUsers!.clear();
       commentStore.excludedIds = '';
+      commentStore.fullName = '';
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
@@ -225,6 +226,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               ];
             }
             commentStore.excludedIds = '';
+            commentStore.fullName = '';
             _inputController.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
@@ -244,6 +246,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
             commentStore.excludedIds = '';
+            commentStore.fullName = '';
             seSelectedUser = false;
             _getData();
             commentStore.isLoading = false;
