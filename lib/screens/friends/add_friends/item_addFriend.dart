@@ -8,15 +8,15 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class ItemFriendsWidget extends StatefulWidget {
+class ItemAddFriendsWidget extends StatefulWidget {
   final FriendModel friendModel;
-  ItemFriendsWidget(  this.friendModel, {Key? key}) : super(key: key);
+  ItemAddFriendsWidget(  this.friendModel, {Key? key}) : super(key: key);
 
   @override
-  _ItemFriendsWidgetState createState() => _ItemFriendsWidgetState();
+  _ItemAddFriendsWidgetState createState() => _ItemAddFriendsWidgetState();
 }
 
-class _ItemFriendsWidgetState extends State<ItemFriendsWidget> {
+class _ItemAddFriendsWidgetState extends State<ItemAddFriendsWidget> {
   SmartPageController controller = SmartPageController.getInstance();
   late FriendsStore friendsStore;
 

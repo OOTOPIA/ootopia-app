@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ootopia_app/screens/friends/add_friends/friend_item.dart';
+import 'package:ootopia_app/screens/friends/add_friends/item_addFriend.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -194,7 +194,7 @@ class _AddFriendsState extends State<AddFriends> {
                                 return Container(
                                     margin: EdgeInsets.only(bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0
                                     ),
-                                    child: ItemFriendsWidget(friendsStore.usersSearch.friends![index]!));
+                                    child: ItemAddFriendsWidget(friendsStore.usersSearch.friends![index]!));
                               }
                           ),
                         ),

@@ -9,7 +9,7 @@ class FriendsStore with ChangeNotifier {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
   bool isLoading = false;
   int page = 0;
-  final int limit = 100;
+  final int limit = 10;
   FriendsDataModel? myFriendsDate;
 
   Future<void> getRandomFriends(String userId) async{
@@ -115,7 +115,6 @@ class FriendsStore with ChangeNotifier {
       usersSearch.friends =  usersSearch.friends!.toSet().toList();
       loadingMoreUsersSearch = false;
       hasMoreUsersSearch = auxUsers.friends!.length == limit;
-      print('hasMoreUsersSearch ${auxUsers.friends!.length}');
       notifyListeners();
     }
   }
