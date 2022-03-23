@@ -106,7 +106,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     }
 
     e.start = nameStartRange;
-    e.end = nameStartRange + e.fullname.length + 2;
+    e.end = nameStartRange + e.fullname.length + 3;
     if (commentStore.excludedIds!.isEmpty) {
       commentStore.excludedIds = commentStore.excludedIds! + '${e.id}';
     } else {
