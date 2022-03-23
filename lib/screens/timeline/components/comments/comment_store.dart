@@ -116,9 +116,9 @@ abstract class CommentStoreBase with Store {
     try {
       if (viewState != ViewState.loadingNewData) {
         listAllUsers.clear();
+        viewState = ViewState.loading;
       }
 
-      viewState = ViewState.loading;
       var response = await userRepository.getAllUsersByName(
         fullName,
         currentPageUser,
