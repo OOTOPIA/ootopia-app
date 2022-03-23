@@ -9,7 +9,7 @@ class FriendsStore with ChangeNotifier {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
   bool isLoading = false;
   int page = 0;
-  final int limit = 10;
+  final int limit = 40;
   FriendsDataModel? myFriendsDate;
 
   Future<void> getRandomFriends(String userId) async{
