@@ -9,7 +9,7 @@ class FriendsStore with ChangeNotifier {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
   bool isLoading = false;
   int page = 0;
-  final int limit = 10;
+  final int limit = 100;
   FriendsDataModel? myFriendsDate;
 
   Future<void> getRandomFriends(String userId) async{
@@ -98,7 +98,7 @@ class FriendsStore with ChangeNotifier {
       lastName = name;
       usersSearch = await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
       searchIsEmpty = usersSearch.friends!.isEmpty;
-      hasMoreUsersSearch = usersSearch.friends!.length == 10;
+      hasMoreUsersSearch = usersSearch.friends!.length == limit;
       isLoadingSearch = false;
       notifyListeners();
     }
@@ -112,8 +112,10 @@ class FriendsStore with ChangeNotifier {
       FriendsDataModel auxUsers = await friendsRepositoryImpl.
       searchFriends(lastName, pageSearch, limit);
       usersSearch.friends!.addAll(auxUsers.friends!);
+      usersSearch.friends =  usersSearch.friends!.toSet().toList();
       loadingMoreUsersSearch = false;
-      hasMoreUsersSearch = auxUsers.friends!.length == 10;
+      hasMoreUsersSearch = auxUsers.friends!.length == limit;
+      print('hasMoreUsersSearch ${auxUsers.friends!.length}');
       notifyListeners();
     }
   }
@@ -157,6 +159,7 @@ class FriendsStore with ChangeNotifier {
       FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged(
         userId, page, limit, orderBy: orderBy!, sortingType: sortingType!,);
       friendsDate!.friends!.addAll(auxUsers.friends!);
+      friendsDate!.friends =  friendsDate!.friends!.toSet().toList();
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;
       notifyListeners();
