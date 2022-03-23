@@ -188,19 +188,22 @@ class _AddFriendsState extends State<AddFriends> {
                           ),
                         )
                       ]else...[
-                        ListView.builder(
-                            itemCount: friendsStore.usersSearch.friends!.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return itemFriend(friendsStore.usersSearch
-                                  .friends![index]!);
-
-                            }
+                        Container(
+                          margin: EdgeInsets.only(top: 4),
+                          height: MediaQuery.of(context).size.height - 250,
+                          child: ListView.builder(
+                              itemCount: friendsStore.usersSearch.friends!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                    margin: EdgeInsets.only(bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0
+                                    ),
+                                    child: itemFriend(friendsStore.usersSearch.friends![index]!));
+                              }
+                          ),
                         ),
                       ],
                       Visibility(
-                        visible: friendsStore.loadingMoreUsersSearch,
+                          visible: friendsStore.loadingMoreUsersSearch,
                           child: Container(
                             margin: EdgeInsets.only(top: 16),
                             alignment: Alignment.center,
@@ -310,8 +313,8 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   Widget itemFriend(FriendModel friendModel){
-    return Builder(
-        builder: (context) {
+    return Consumer<FriendsStore>(
+        builder: (cont, counter, _) {
           return Column(
             children: [
               SizedBox(
@@ -553,5 +556,6 @@ class _AddFriendsState extends State<AddFriends> {
     return isFriend;
   }
 
-
 }
+
+
