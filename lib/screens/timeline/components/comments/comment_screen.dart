@@ -55,8 +55,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void initState() {
     super.initState();
     scrollController.addListener(
-      () =>
-          commentStore.updateOnScroll(scrollController, _inputController.text),
+      () => commentStore.updateOnScroll(scrollController),
     );
     _inputController = RichTextController(
       deleteOnBack: false,
@@ -175,7 +174,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           });
           var startName = getLastString.last.split('@').last;
           var finishName = startName.split(RegExp("‌"));
-          await commentStore.searchUser(finishName.first);
+          commentStore.currentPageUser = 1;
+          commentStore.fullName = finishName.first;
+          await commentStore.searchUser();
         } else {
           setState(() {
             seSelectedUser = false;
@@ -249,7 +250,6 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           }
         }
       } catch (e) {
-        print(e);
         showModalBottomSheet(
           context: context,
           barrierColor: Colors.black.withAlpha(1),

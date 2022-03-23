@@ -45,6 +45,9 @@ abstract class CommentStoreBase with Store {
   @observable
   bool hasMoreComments = true;
 
+  @observable
+  String fullName = '';
+
   @action
   Future<void> getComments(String postId, int page) async {
     try {
@@ -109,11 +112,12 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<void> searchUser(String fullName) async {
+  Future<void> searchUser() async {
     try {
       if (viewState != ViewState.loadingNewData) {
         listAllUsers.clear();
       }
+
       viewState = ViewState.loading;
       var response = await userRepository.getAllUsersByName(
         fullName,
@@ -129,14 +133,13 @@ abstract class CommentStoreBase with Store {
     }
   }
 
-  void updateOnScroll(
-      ScrollController scrollController, String fullname) async {
+  void updateOnScroll(ScrollController scrollController) async {
     if (scrollController.position.atEdge) {
       if (scrollController.position.pixels != 0) {
         if (hasMoreUsers) {
           currentPageUser++;
           viewState = ViewState.loadingNewData;
-          await searchUser(fullname);
+          await searchUser();
         }
       }
     }
