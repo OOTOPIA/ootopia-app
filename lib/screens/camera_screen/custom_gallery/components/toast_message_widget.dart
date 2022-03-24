@@ -6,7 +6,8 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ToastMessageWidget extends StatelessWidget {
-  const ToastMessageWidget({Key? key}) : super(key: key);
+  final String toastText;
+  const ToastMessageWidget({Key? key, required this.toastText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class ToastMessageWidget extends StatelessWidget {
             ),
             SizedBox(width: 10),
             Text(
-              AppLocalizations.of(context)!.limitSelectedImages,
+              toastText,
               style: GoogleFonts.roboto(
                 color: Colors.white,
                 fontSize: 14,
