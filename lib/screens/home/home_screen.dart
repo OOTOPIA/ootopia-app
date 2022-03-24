@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
     controller = SmartPageController.newInstance(
       context: context,
       initialPages: [
-        TimelinePage(widget.args),
+        TimelinePage(null),
         LearningTracksScreen(),
         LearningTracksScreen(),
         MarketplaceScreen(),

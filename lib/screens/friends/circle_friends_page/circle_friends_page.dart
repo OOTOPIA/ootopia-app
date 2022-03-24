@@ -270,16 +270,22 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 ),
               ),
             ]else...[
-              ListView.builder(
-                  itemCount: amountOfFriends(),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return  itemFriend(
-                        isPageOfUserLogged() ?
-                        friendsStore.friendsDate!.friends![index]! :
-                        circleFriendsStore.friendsDate!.friends![index]!);
-                  }
+              Container(
+                margin: EdgeInsets.only(top: 4),
+                height: MediaQuery.of(context).size.height - 220,
+                child: ListView.builder(
+                    itemCount: amountOfFriends(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return  Container(
+                        margin: EdgeInsets.only(
+                            bottom: (index == amountOfFriends() - 1) ? 80 : 0),
+                        child: itemFriend(
+                            isPageOfUserLogged() ?
+                            friendsStore.friendsDate!.friends![index]! :
+                            circleFriendsStore.friendsDate!.friends![index]!),
+                      );
+                    }
+                ),
               ),
               Visibility(
                   visible: friendsStore.loadingMoreFriends || circleFriendsStore.loadingMoreFriends,
@@ -488,7 +494,8 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                             height: 24,
                             child: ElevatedButton(
                                 style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all<double>(0.0),                              fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 24)),
+                                  elevation: MaterialStateProperty.all<double>(0.0),
+                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 24)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -628,7 +635,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 height: 76,
                                 errorBuilder: (context, url, error) => Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.grey
+                                      color: Colors.grey
                                   ),
                                   width: 74,
                                   height: 76,
@@ -667,6 +674,15 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
         ),
       ),
     );
+  }
+
+  void _goToProfile(userId) async {
+    controller.insertPage(ProfileScreen({"id": userId,},
+    ));
+  }
+
+  bool  hasImages(FriendModel friendModel){
+    return friendModel.friendsThumbs?.isNotEmpty ?? false;
   }
 
   Widget rankedItemSelect(int index, context){
@@ -715,11 +731,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-  void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen(
-      {"id": userId,},
-    ));
-  }
 
   void _showDialog(BuildContext context) {
     showDialog(
@@ -762,9 +773,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     return widget.userId == authStore.currentUser?.id;
   }
 
-  bool  hasImages(FriendModel friendModel){
-    return friendModel.friendsThumbs?.isNotEmpty ?? false;
-  }
+
 
   bool allFriendsIsHide(){
 

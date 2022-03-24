@@ -85,7 +85,9 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
               Padding(
                 padding: EdgeInsets.only(
                   left: GlobalConstants.of(context).spacingNormal,
-                  right: GlobalConstants.of(context).spacingNormal,
+                  right: widget.showCropWidget
+                      ? 0
+                      : GlobalConstants.of(context).spacingNormal,
                   top: GlobalConstants.of(context).spacingNormal,
                   bottom: GlobalConstants.of(context).screenHorizontalSpace,
                 ),
@@ -142,7 +144,7 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
               ),
               widget.mediaType == "image" && widget.showCropWidget
                   ? Positioned(
-                      right: 30,
+                      right: 20,
                       bottom: 35,
                       child: GestureDetector(
                         onTap: () => Navigator.push(
@@ -169,8 +171,8 @@ class _MediaViewWidgetState extends State<MediaViewWidget> {
                           ),
                           child: SvgPicture.asset(
                             'assets/icons/crop.svg',
-                            height: 20,
-                            width: 20,
+                            height: 16,
+                            width: 16,
                           ),
                         ),
                       ),
