@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_image.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
-import 'package:ootopia_app/screens/camera_screen/custom_gallery/custom_gallery_grid_view.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/toast_message_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -15,6 +15,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:visibility_detector/visibility_detector.dart';
 
 class CustomGallery extends StatefulWidget {
   const CustomGallery({Key? key}) : super(key: key);
@@ -39,20 +40,24 @@ class _CustomGalleryState extends State<CustomGallery> {
   bool isLoading = false;
   bool videoIsLoading = true;
   bool isLoadingMoreMedia = false;
+  bool isReloadingMoreMedia = false;
   bool hasError = false;
+  bool showImageTop = true;
   var singleMode = true;
   static const selectLimit = 5;
-  static const limitMedias = 15;
+  static const limitMedias = 30;
   bool showToastMessage = false;
 
   int countPage = 0;
   bool hasMoreMedias = false;
   ScrollController _scrollController = ScrollController();
+  ScrollController _scrollControllerMedias = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    _scrollControllerMedias.addListener(_scrollListenerMedias);
     setState(() {
       isLoading = true;
     });
@@ -73,6 +78,26 @@ class _CustomGalleryState extends State<CustomGallery> {
       Future.delayed(Duration.zero, () async {
         await getImageList(countPage);
       });
+    }
+  }
+
+  void _scrollListenerMedias() {
+    if (_scrollControllerMedias.offset >=
+            _scrollControllerMedias.position.maxScrollExtent &&
+        !_scrollControllerMedias.position.outOfRange &&
+        hasMoreMedias &&
+        !isLoadingMoreMedia) {
+      Future.delayed(Duration.zero, () async {
+        await getImageList(countPage);
+      });
+    }
+    if (_scrollControllerMedias.position.userScrollDirection ==
+            ScrollDirection.forward &&
+        _scrollControllerMedias.offset <= 5) {
+      _scrollControllerMedias.animateTo(0,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
+      _scrollController.animateTo(0,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
 
@@ -114,102 +139,77 @@ class _CustomGalleryState extends State<CustomGallery> {
                         ),
                       ),
                     )
-                  // : SingleChildScrollView(
-                  //     controller: _scrollController,
-                  //     child: Column(
-                  //       children: [
-                  //         SizedBox(height: 20),
-                  //         MediaViewWidget(
-                  //           key: ObjectKey(currentDirectory["mediaFile"].path),
-                  //           mediaFilePath: currentDirectory["mediaFile"].path,
-                  //           mediaType: currentDirectory["mediaType"],
-                  //           mediaSize: currentDirectory["mediaSize"],
-                  //         ),
-                  //         SizedBox(height: 10),
-                  //         multipleImagesButton(),
-                  //         SizedBox(height: 10),
-                  //         Container(
-                  //           padding: EdgeInsets.symmetric(
-                  //             horizontal: GlobalConstants.of(context)
-                  //                     .screenHorizontalSpace -
-                  //                 5,
-                  //           ),
-                  //           width: double.infinity,
-                  //           child: Center(
-                  //             child: Wrap(
-                  //               alignment: WrapAlignment.start,
-                  //               crossAxisAlignment: WrapCrossAlignment.start,
-                  //               spacing: 8, // gap between adjacent chips
-                  //               runSpacing: 8, // gap between lines
-                  //               children: mediaList
-                  //                   .asMap()
-                  //                   .map(
-                  //                     (index, media) => MapEntry(
-                  //                       index,
-                  //                       CustomGalleryGridView(
-                  //                         discountSpacing: 10 * 3,
-                  //                         amountPadding: 0,
-                  //                         media: media["mediaBytes"],
-                  //                         mediaType: media["mediaType"],
-                  //                         columnsCount: 3,
-                  //                         singleMode: singleMode,
-                  //                         positionOnList: returnPosition(media),
-                  //                         onTap: () => selectMedia(media),
-                  //                       ),
-                  //                     ),
-                  //                   )
-                  //                   .values
-                  //                   .toList(),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         if (isLoadingMoreMedia) CircularProgressIndicator(),
-                  //         SizedBox(height: 20),
-                  //       ],
-                  //     ),
-                  //   ),
                   : SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
+                        key: Key('Column'),
                         children: [
-                          SizedBox(height: 20),
-                          MediaViewWidget(
-                            key: ObjectKey(currentDirectory["mediaFile"].path),
-                            mediaFilePath: currentDirectory["mediaFile"].path,
-                            mediaType: currentDirectory["mediaType"],
-                            mediaSize: currentDirectory["mediaSize"],
-                          ),
-                          SizedBox(height: 10),
-                          multipleImagesButton(),
-                          SizedBox(height: 10),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            primary: false,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: GlobalConstants.of(context)
-                                      .screenHorizontalSpace -
-                                  10,
-                            ),
-                            itemCount: mediaList.length,
-                            itemBuilder: (BuildContext ctx, index) {
-                              return CustomImage(
-                                media: mediaList[index]["mediaBytes"],
-                                mediaType: mediaList[index]["mediaType"],
-                                singleMode: singleMode,
-                                positionOnList:
-                                    returnPosition(mediaList[index]),
-                                onTap: () => selectMedia(mediaList[index]),
-                              );
+                          VisibilityDetector(
+                            key: Key('Column'),
+                            onVisibilityChanged: (visibilityInfo) {
+                              if (visibilityInfo.visibleFraction <= 0.05) {
+                                showImageTop = false;
+                                setState(() {});
+                              } else if (visibilityInfo.visibleFraction >= 0 &&
+                                  showImageTop == false) {
+                                showImageTop = true;
+                                setState(() {});
+                              }
                             },
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 150,
-                              childAspectRatio: 2 / 2,
-                              crossAxisSpacing: 0,
-                              mainAxisSpacing: 0,
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  MediaViewWidget(
+                                    key: ObjectKey(
+                                        currentDirectory["mediaFile"].path),
+                                    mediaFilePath:
+                                        currentDirectory["mediaFile"].path,
+                                    mediaType: currentDirectory["mediaType"],
+                                    mediaSize: currentDirectory["mediaSize"],
+                                  ),
+                                  SizedBox(height: 10),
+                                  multipleImagesButton(),
+                                  SizedBox(height: 10),
+                                ],
+                              ),
                             ),
                           ),
+                          Container(
+                            height: MediaQuery.of(context).size.height,
+                            child: GridView.builder(
+                              controller: _scrollControllerMedias,
+                              physics: showImageTop
+                                  ? NeverScrollableScrollPhysics()
+                                  : null,
+                              primary: false,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: GlobalConstants.of(context)
+                                          .screenHorizontalSpace -
+                                      10,
+                                  vertical: showImageTop ? 0 : 50),
+                              itemCount: mediaList.length,
+                              itemBuilder: (BuildContext ctx, index) {
+                                return CustomImage(
+                                  media: mediaList[index]["mediaBytes"],
+                                  mediaType: mediaList[index]["mediaType"],
+                                  singleMode: singleMode,
+                                  positionOnList:
+                                      returnPosition(mediaList[index]),
+                                  onTap: () => selectMedia(mediaList[index]),
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 150,
+                                childAspectRatio: 2 / 2,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 0,
+                              ),
+                            ),
+                          ),
+                          if (isLoadingMoreMedia) CircularProgressIndicator(),
+                          SizedBox(height: 20),
                         ],
                       ),
                     ),

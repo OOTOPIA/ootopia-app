@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 // ignore: must_be_immutable
@@ -27,8 +26,6 @@ class CustomImage extends StatefulWidget {
 class _CustomImageState extends State<CustomImage> {
   @override
   void dispose() {
-    print('ALOOO');
-    new MemoryImage(widget.media).evict();
     super.dispose();
   }
 
