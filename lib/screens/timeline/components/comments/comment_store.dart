@@ -45,6 +45,9 @@ abstract class CommentStoreBase with Store {
   @observable
   bool hasMoreComments = true;
 
+  @observable
+  String fullName = '';
+
   @action
   Future<void> getComments(String postId, int page) async {
     try {
@@ -71,16 +74,27 @@ abstract class CommentStoreBase with Store {
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          if (newTextComment.trim().contains('@${user.fullname}')) {
+          var startname = text.indexOf('‌@${user.fullname}‌');
+          if (startname == user.start!) {
             newTextComment = newTextComment.replaceRange(
               user.start! + newStartIndex,
               user.end! + newStartIndex,
               newString,
             );
+            newStartIndex =
+                newStartIndex + newString.length - (user.end! - user.start!);
+            user.end = user.start! + newString.length;
+          } else {
+            newTextComment = newTextComment.replaceRange(
+              startname + newStartIndex,
+              user.fullname.length + startname + newStartIndex + 2,
+              newString,
+            );
+            newStartIndex = newStartIndex +
+                newString.length -
+                ((user.fullname.length + startname + 2) - startname);
+            user.end = user.fullname.length + newString.length;
           }
-          newStartIndex =
-              newStartIndex + newString.length - (user.end! - user.start!);
-          user.end = user.start! + newString.length;
         });
       }
       await commentRepository.createComment(
@@ -109,12 +123,13 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<void> searchUser(String fullName) async {
+  Future<void> searchUser() async {
     try {
       if (viewState != ViewState.loadingNewData) {
         listAllUsers.clear();
+        viewState = ViewState.loading;
       }
-      viewState = ViewState.loading;
+
       var response = await userRepository.getAllUsersByName(
         fullName,
         currentPageUser,
@@ -129,14 +144,13 @@ abstract class CommentStoreBase with Store {
     }
   }
 
-  void updateOnScroll(
-      ScrollController scrollController, String fullname) async {
+  void updateOnScroll(ScrollController scrollController) async {
     if (scrollController.position.atEdge) {
       if (scrollController.position.pixels != 0) {
         if (hasMoreUsers) {
           currentPageUser++;
           viewState = ViewState.loadingNewData;
-          await searchUser(fullname);
+          await searchUser();
         }
       }
     }
