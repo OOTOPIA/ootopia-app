@@ -95,14 +95,15 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
     var name = '‌@${e.fullname}‌ ';
 
-    var s = 0, nameStartRange = 0;
+    var countAtEndName = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
-        _inputController.text = text.replaceRange(i, i + s + 1, name);
+        _inputController.text =
+            text.replaceRange(i, i + countAtEndName + 1, name);
         nameStartRange = i;
         break;
       }
-      s++;
+      countAtEndName++;
     }
 
     e.start = nameStartRange;
@@ -165,6 +166,19 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
+      for (var item in commentStore.listTaggedUsers!) {
+        if (!value.contains('@${item.fullname}')) {
+          if (commentStore.excludedIds!.contains(',${item.id}')) {
+            commentStore.excludedIds =
+                commentStore.excludedIds?.replaceAll(',${item.id}', '');
+          } else {
+            commentStore.excludedIds =
+                commentStore.excludedIds?.replaceAll('${item.id},', '');
+          }
+          commentStore.listTaggedUsers?.remove(item);
+          break;
+        }
+      }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
         var getLastString = value.split("‌@");
@@ -184,7 +198,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         }
       });
     } else {
-      commentStore.listTaggedUsers!.clear();
+      commentStore.listTaggedUsers?.clear();
       commentStore.excludedIds = '';
       commentStore.fullName = '';
       setState(() {
@@ -253,6 +267,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           }
         }
       } catch (e) {
+        print(e);
         showModalBottomSheet(
           context: context,
           barrierColor: Colors.black.withAlpha(1),

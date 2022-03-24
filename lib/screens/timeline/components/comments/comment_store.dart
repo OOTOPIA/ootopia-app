@@ -74,16 +74,27 @@ abstract class CommentStoreBase with Store {
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          if (newTextComment.trim().contains('@${user.fullname}')) {
+          var startname = text.indexOf('‌@${user.fullname}‌');
+          if (startname == user.start!) {
             newTextComment = newTextComment.replaceRange(
               user.start! + newStartIndex,
               user.end! + newStartIndex,
               newString,
             );
+            newStartIndex =
+                newStartIndex + newString.length - (user.end! - user.start!);
+            user.end = user.start! + newString.length;
+          } else {
+            newTextComment = newTextComment.replaceRange(
+              startname + newStartIndex,
+              user.fullname.length + startname + newStartIndex + 2,
+              newString,
+            );
+            newStartIndex = newStartIndex +
+                newString.length -
+                ((user.fullname.length + startname + 2) - startname);
+            user.end = user.fullname.length + newString.length;
           }
-          newStartIndex =
-              newStartIndex + newString.length - (user.end! - user.start!);
-          user.end = user.start! + newString.length;
         });
       }
       await commentRepository.createComment(
