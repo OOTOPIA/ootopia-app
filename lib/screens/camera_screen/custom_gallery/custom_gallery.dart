@@ -66,6 +66,8 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollControllerMedias.removeListener(_scrollListenerMedias);
     super.dispose();
   }
 
