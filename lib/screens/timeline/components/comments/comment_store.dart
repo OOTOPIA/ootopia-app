@@ -71,16 +71,18 @@ abstract class CommentStoreBase with Store {
       var newTextComment = text;
       if (listTaggedUsers != null) {
         int newStartIndex = 0;
+        int endNameUser = 0;
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          var startname = text.indexOf('‌@${user.fullname}‌');
+          var startname = text.indexOf('‌@${user.fullname}‌', endNameUser);
           if (startname == user.start!) {
             newTextComment = newTextComment.replaceRange(
               user.start! + newStartIndex,
               user.end! + newStartIndex,
               newString,
             );
+            endNameUser = user.end!;
             newStartIndex =
                 newStartIndex + newString.length - (user.end! - user.start!);
             user.end = user.start! + newString.length;
@@ -90,9 +92,9 @@ abstract class CommentStoreBase with Store {
               user.fullname.length + startname + newStartIndex + 2,
               newString,
             );
-            newStartIndex = newStartIndex +
-                newString.length -
-                ((user.fullname.length + startname + 2) - startname);
+            endNameUser = user.fullname.length + startname + 2;
+            newStartIndex =
+                newStartIndex + newString.length - (endNameUser - startname);
             user.end = user.fullname.length + newString.length;
           }
         });
