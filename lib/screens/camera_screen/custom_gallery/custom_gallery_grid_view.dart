@@ -52,15 +52,10 @@ class _CustomGalleryGridViewState extends State<CustomGalleryGridView> {
                     height: itemWidth,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: widget.mediaType == 'video'
-                          ? Image.memory(
-                              widget.media,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              widget.media,
-                              fit: BoxFit.cover,
-                            ),
+                      child: Image.memory(
+                        widget.media,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   if (widget.singleMode! == false)
