@@ -3,11 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ToastMessageWidget extends StatelessWidget {
   final String toastText;
-  const ToastMessageWidget({Key? key, required this.toastText}) : super(key: key);
+  const ToastMessageWidget({
+    Key? key,
+    required this.toastText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +33,14 @@ class ToastMessageWidget extends StatelessWidget {
               color: Colors.white,
             ),
             SizedBox(width: 10),
-            Text(
-              toastText,
-              style: GoogleFonts.roboto(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+            Flexible(
+              child: Text(
+                toastText,
+                style: GoogleFonts.roboto(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ],
