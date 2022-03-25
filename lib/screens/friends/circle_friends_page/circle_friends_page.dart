@@ -276,36 +276,41 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 child: ListView.builder(
                     itemCount: amountOfFriends(),
                     itemBuilder: (BuildContext context, int index) {
-                      return  Container(
-                        margin: EdgeInsets.only(
-                            bottom: (index == amountOfFriends() - 1) ? 80 : 0),
-                        child: itemFriend(
-                            isPageOfUserLogged() ?
-                            friendsStore.friendsDate!.friends![index]! :
-                            circleFriendsStore.friendsDate!.friends![index]!),
+                      return  Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                                bottom: (index == amountOfFriends() - 1) ? 80 : 0),
+                            child: itemFriend(
+                                isPageOfUserLogged() ?
+                                friendsStore.friendsDate!.friends![index]! :
+                                circleFriendsStore.friendsDate!.friends![index]!),
+                          ),
+                          Visibility(
+                              visible: (friendsStore.loadingMoreFriends || circleFriendsStore.loadingMoreFriends) &&
+                                  (index == amountOfFriends() - 1),
+                              child: Container(
+                                margin: EdgeInsets.only(top: 16),
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.transparent,
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ),
+                        ],
                       );
                     }
                 ),
               ),
-              Visibility(
-                  visible: friendsStore.loadingMoreFriends || circleFriendsStore.loadingMoreFriends,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 16),
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.transparent,
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
-                        ),
-                      ),
-                    ),
-                  )
-              ),
-              SizedBox(height: 50,),
+
             ],
 
             SizedBox(height: 16),

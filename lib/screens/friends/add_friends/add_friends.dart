@@ -194,33 +194,37 @@ class _AddFriendsState extends State<AddFriends> {
                           child: ListView.builder(
                               itemCount: friendsStore.usersSearch.friends!.length,
                               itemBuilder: (BuildContext context, int index) {
-                               return Container(
-                                    margin: EdgeInsets.only(bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0
+                                return Column(
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0),
+                                        child: itemFriend(friendsStore.usersSearch.friends![index]!)),
+                                    Visibility(
+                                        visible: friendsStore.loadingMoreUsersSearch && (index == friendsStore.usersSearch.friends!.length - 1),
+                                        child: Container(
+                                          margin: EdgeInsets.only(top: 16),
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                backgroundColor: Colors.transparent,
+                                                strokeWidth: 2,
+                                                valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                              ),
+                                            ),
+                                          ),
+                                        )
                                     ),
-                                    child: itemFriend(friendsStore.usersSearch.friends![index]!));
+                                  ],
+                                );
                               }
                           ),
                         ),
                       ],
-                      Visibility(
-                          visible: friendsStore.loadingMoreUsersSearch,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 16),
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.transparent,
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
-                                ),
-                              ),
-                            ),
-                          )
-                      ),
-                      SizedBox(height: 16),
+
                     ],
                   ),
                 ),
