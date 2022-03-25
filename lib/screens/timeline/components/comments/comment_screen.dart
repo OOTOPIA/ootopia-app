@@ -55,8 +55,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void initState() {
     super.initState();
     scrollController.addListener(
-      () =>
-          commentStore.updateOnScroll(scrollController, _inputController.text),
+      () => commentStore.updateOnScroll(scrollController),
     );
     _inputController = RichTextController(
       deleteOnBack: false,
@@ -94,20 +93,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void addUserInText(UserSearchModel e) {
     var text = _inputController.text;
 
-    var name = '‌@${e.fullname}‌';
+    var name = '‌@${e.fullname}‌ ';
 
-    var s = 0, nameStartRange = 0;
+    var countAtEndName = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
-        _inputController.text = text.replaceRange(i, i + s + 1, name);
+        _inputController.text =
+            text.replaceRange(i, i + countAtEndName + 1, name);
         nameStartRange = i;
         break;
       }
-      s++;
+      countAtEndName++;
     }
 
     e.start = nameStartRange;
-    e.end = nameStartRange + e.fullname.length + 2;
+    e.end = nameStartRange + e.fullname.length + 3;
     if (commentStore.excludedIds!.isEmpty) {
       commentStore.excludedIds = commentStore.excludedIds! + '${e.id}';
     } else {
@@ -166,6 +166,22 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
+      var endName = 0;
+      for (var item in commentStore.listTaggedUsers!) {
+        var startname = value.indexOf('‌@${item.fullname}', endName);
+        if (startname < 0) {
+          if (commentStore.excludedIds!.contains(',${item.id}')) {
+            commentStore.excludedIds =
+                commentStore.excludedIds?.replaceAll(',${item.id}', '');
+          } else {
+            commentStore.excludedIds =
+                commentStore.excludedIds?.replaceAll('${item.id}', '');
+          }
+          commentStore.listTaggedUsers?.remove(item);
+          break;
+        }
+        endName = item.end!;
+      }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
         var getLastString = value.split("‌@");
@@ -175,7 +191,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           });
           var startName = getLastString.last.split('@').last;
           var finishName = startName.split(RegExp("‌"));
-          await commentStore.searchUser(finishName.first);
+          commentStore.currentPageUser = 1;
+          commentStore.fullName = finishName.first;
+          await commentStore.searchUser();
         } else {
           setState(() {
             seSelectedUser = false;
@@ -183,8 +201,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         }
       });
     } else {
-      commentStore.listTaggedUsers!.clear();
+      commentStore.listTaggedUsers?.clear();
       commentStore.excludedIds = '';
+      commentStore.fullName = '';
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
@@ -224,6 +243,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
               ];
             }
             commentStore.excludedIds = '';
+            commentStore.fullName = '';
             _inputController.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
@@ -243,6 +263,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
             commentStore.excludedIds = '';
+            commentStore.fullName = '';
             seSelectedUser = false;
             _getData();
             commentStore.isLoading = false;
