@@ -760,7 +760,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-
   void _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -802,8 +801,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     return widget.userId == authStore.currentUser?.id;
   }
 
-
-
   bool allFriendsIsHide(){
 
     if(isPageOfUserLogged() && friendsStore.friendsDate != null){
@@ -841,10 +838,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
       return friendsStore.friendsDate?.friends?.length ?? 0;
     } else{
       return circleFriendsStore.friendsDate?.friends?.length ?? 0;
-
     }
   }
-
-
 
 }
