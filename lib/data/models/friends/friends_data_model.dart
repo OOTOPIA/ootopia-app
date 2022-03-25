@@ -7,10 +7,12 @@ class FriendsDataModel {
   int? total;
   List<FriendModel?>? friends;
   List<FriendModel?>? alreadyFriends;
+  List<FriendModel?>? searchFriends;
 
   FriendsDataModel({
     required this.total,
-    required this.friends
+    this.friends,
+    this.searchFriends
   });
 
   factory FriendsDataModel.fromJson(Map<String, dynamic> json) =>

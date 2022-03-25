@@ -97,13 +97,12 @@ class FriendsStore with ChangeNotifier {
       usersSearch = FriendsDataModel(total: 0, friends: []);
       lastName = name;
       usersSearch = await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
+      usersSearch.friends = [];
 
       if (usersSearch.alreadyFriends != null){
-        for(int i = usersSearch.alreadyFriends!.length-1; i >= 0; i--){
-          usersSearch.alreadyFriends![i]!.isFriend = true;
-          usersSearch.friends!.insert(0,  usersSearch.alreadyFriends![i]!);
-        }
+        usersSearch.friends!.addAll( usersSearch.alreadyFriends!);
       }
+      usersSearch.friends!.addAll(usersSearch.searchFriends!);
 
       searchIsEmpty = usersSearch.friends!.isEmpty;
       hasMoreUsersSearch = usersSearch.friends!.length < usersSearch.total!;
@@ -120,7 +119,7 @@ class FriendsStore with ChangeNotifier {
       pageSearch++;
       FriendsDataModel auxUsers = await friendsRepositoryImpl.
       searchFriends(lastName, pageSearch, limit);
-      usersSearch.friends!.addAll(auxUsers.friends!);
+      usersSearch.friends!.addAll(auxUsers.searchFriends!);
       usersSearch.friends =  usersSearch.friends!.toSet().toList();
       loadingMoreUsersSearch = false;
       hasMoreUsersSearch = usersSearch.friends!.length < usersSearch.total!;
