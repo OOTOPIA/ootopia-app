@@ -166,18 +166,21 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
+      var endName = 0;
       for (var item in commentStore.listTaggedUsers!) {
-        if (!value.contains('@${item.fullname}')) {
+        var startname = value.indexOf('‌@${item.fullname}', endName);
+        if (startname < 0) {
           if (commentStore.excludedIds!.contains(',${item.id}')) {
             commentStore.excludedIds =
                 commentStore.excludedIds?.replaceAll(',${item.id}', '');
           } else {
             commentStore.excludedIds =
-                commentStore.excludedIds?.replaceAll('${item.id},', '');
+                commentStore.excludedIds?.replaceAll('${item.id}', '');
           }
           commentStore.listTaggedUsers?.remove(item);
           break;
         }
+        endName = item.end!;
       }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {

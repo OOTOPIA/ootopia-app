@@ -75,7 +75,8 @@ abstract class CommentStoreBase with Store {
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          var startname = text.indexOf('‌@${user.fullname}‌', endNameUser);
+          var startname =
+              newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
           if (startname == user.start!) {
             newTextComment = newTextComment.replaceRange(
               user.start! + newStartIndex,
@@ -92,7 +93,7 @@ abstract class CommentStoreBase with Store {
               user.fullname.length + startname + newStartIndex + 2,
               newString,
             );
-            endNameUser = user.fullname.length + startname + 2;
+            endNameUser = user.id.length + startname + 2;
             newStartIndex =
                 newStartIndex + newString.length - (endNameUser - startname);
             user.end = user.fullname.length + newString.length;
