@@ -459,7 +459,7 @@ class _AddFriendsState extends State<AddFriends> {
                   height: 76,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                      itemCount: friendModel.friendsThumbs!.length,
+                      itemCount: amountOfPhotos(friendModel),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return  Stack(
@@ -527,6 +527,28 @@ class _AddFriendsState extends State<AddFriends> {
                                 ),
                               ),
                             ],
+                            Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Ink(
+                                padding: EdgeInsets.only(
+                                  left: index == 0 ? 25 : 8,
+                                  right: index == (amountOfPhotos(friendModel) - 1) ? 14 : 0,
+                                ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(10),
+                                  onTap: (){
+                                    Future.delayed(Duration(milliseconds: 80) , (){
+                                      _goToProfile(friendModel.id);
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    width: 74,
+                                    height: 76,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       }
@@ -555,6 +577,13 @@ class _AddFriendsState extends State<AddFriends> {
       }
     });
     return isFriend;
+  }
+
+  int amountOfPhotos(FriendModel friendModel) {
+    if(friendModel.friendsThumbs!.length > 4){
+      return 4;
+    }
+    return friendModel.friendsThumbs!.length;
   }
 
 }

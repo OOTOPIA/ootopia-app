@@ -376,7 +376,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
             height: 90,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
-                itemCount: 11,
+                itemCount: 4,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return  Container(
@@ -598,7 +598,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 height: 76,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
-                    itemCount: friendModel.friendsThumbs!.length,
+                    itemCount: amountOfPhotos(friendModel),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       return  Stack(
@@ -669,6 +669,30 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                               ),
                             ),
                           ],
+
+                          Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            child: Ink(
+                              padding: EdgeInsets.only(
+                                left: index == 0 ? 25 : 8,
+                                right: index == (amountOfPhotos(friendModel) - 1) ? 14 : 0,
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(10),
+                                onTap: (){
+                                  Future.delayed(Duration(milliseconds: 80) , (){
+                                    _goToProfile(friendModel.id);
+                                  });
+                                },
+                                child: SizedBox(
+                                  width: 74,
+                                  height: 76,
+                                ),
+                              ),
+                            ),
+                          ),
+
                         ],
                       );
                     }
@@ -814,11 +838,18 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   int amountOfFriends() {
     if(isPageOfUserLogged()){
-       return friendsStore.friendsDate?.friends?.length ?? 0;
+      return friendsStore.friendsDate?.friends?.length ?? 0;
     } else{
       return circleFriendsStore.friendsDate?.friends?.length ?? 0;
 
     }
+  }
+
+  int amountOfPhotos(friendModel) {
+    if(friendModel.friendsThumbs!.length > 4){
+      return 4;
+    }
+    return friendModel.friendsThumbs!.length;
   }
 
 }
