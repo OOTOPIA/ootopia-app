@@ -459,7 +459,7 @@ class _AddFriendsState extends State<AddFriends> {
                   height: 76,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                      itemCount: amountOfPhotos(friendModel),
+                      itemCount: friendModel.amountOfPhotos(),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return  Stack(
@@ -533,7 +533,7 @@ class _AddFriendsState extends State<AddFriends> {
                               child: Ink(
                                 padding: EdgeInsets.only(
                                   left: index == 0 ? 25 : 8,
-                                  right: index == (amountOfPhotos(friendModel) - 1) ? 14 : 0,
+                                  right: index == (friendModel.amountOfPhotos() - 1) ? 14 : 0,
                                 ),
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(10),
@@ -579,12 +579,7 @@ class _AddFriendsState extends State<AddFriends> {
     return isFriend;
   }
 
-  int amountOfPhotos(FriendModel friendModel) {
-    if(friendModel.friendsThumbs!.length > 4){
-      return 4;
-    }
-    return friendModel.friendsThumbs!.length;
-  }
+
 
 }
 
