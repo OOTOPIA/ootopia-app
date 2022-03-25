@@ -583,8 +583,6 @@ class _AddFriendsState extends State<AddFriends> {
     return (index == friendsStore.usersSearch.friends!.length - 1);
   }
 
-
-
 }
 
 
