@@ -46,7 +46,8 @@ class _CustomGalleryState extends State<CustomGallery> {
   var singleMode = true;
   static const selectLimit = 5;
   static const limitMedias = 30;
-  bool showToastMessage = false;
+  bool showToastMessageImageLimit = false;
+  bool showToastMessageNoImage = false;
 
   int countPage = 0;
   bool hasMoreMedias = false;
@@ -113,7 +114,7 @@ class _CustomGalleryState extends State<CustomGallery> {
         ],
         onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () {
-          if (selectedMedias != []) {
+          if (selectedMedias.isNotEmpty) {
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
@@ -121,6 +122,13 @@ class _CustomGalleryState extends State<CustomGallery> {
                 "mirrored": "false",
               },
             );
+          } else {
+            showToastMessageNoImage = true;
+            setState(() {});
+            Future.delayed(Duration(seconds: 3), () async {
+              showToastMessageNoImage = false;
+              setState(() {});
+            });
           }
         },
       ),
@@ -215,7 +223,16 @@ class _CustomGalleryState extends State<CustomGallery> {
                         ],
                       ),
                     ),
-          showToastMessage ? ToastMessageWidget() : Container()
+          showToastMessageNoImage
+              ? ToastMessageWidget(
+                  toastText: AppLocalizations.of(context)!.selectSomeImage,
+                )
+              : Container(),
+          showToastMessageImageLimit
+              ? ToastMessageWidget(
+                  toastText: AppLocalizations.of(context)!.limitSelectedImages,
+                )
+              : Container()
         ],
       ),
     );
@@ -323,9 +340,9 @@ class _CustomGalleryState extends State<CustomGallery> {
     if (hasMedia == null && selectedMedias.length < selectLimit) {
       selectedMedias.add(media);
     } else if (hasMedia == null && selectedMedias.length >= selectLimit) {
-      showToastMessage = true;
+      showToastMessageImageLimit = true;
       Future.delayed(Duration(seconds: 3), () async {
-        showToastMessage = false;
+        showToastMessageImageLimit = false;
         setState(() {});
       });
     } else {
