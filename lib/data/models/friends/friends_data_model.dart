@@ -6,6 +6,7 @@ part 'friends_data_model.g.dart';
 class FriendsDataModel {
   int? total;
   List<FriendModel?>? friends;
+  List<FriendModel?>? alreadyFriends;
 
   FriendsDataModel({
     required this.total,

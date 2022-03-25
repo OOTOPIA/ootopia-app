@@ -13,11 +13,15 @@ FriendsDataModel _$FriendsDataModelFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : FriendModel.fromJson(e as Map<String, dynamic>))
         .toList(),
-  );
+  )..alreadyFriends = (json['alreadyFriends'] as List<dynamic>?)
+      ?.map((e) =>
+          e == null ? null : FriendModel.fromJson(e as Map<String, dynamic>))
+      .toList();
 }
 
 Map<String, dynamic> _$FriendsDataModelToJson(FriendsDataModel instance) =>
     <String, dynamic>{
       'total': instance.total,
       'friends': instance.friends,
+      'alreadyFriends': instance.alreadyFriends,
     };

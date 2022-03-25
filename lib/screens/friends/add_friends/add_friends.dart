@@ -194,7 +194,7 @@ class _AddFriendsState extends State<AddFriends> {
                           child: ListView.builder(
                               itemCount: friendsStore.usersSearch.friends!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Container(
+                               return Container(
                                     margin: EdgeInsets.only(bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0
                                     ),
                                     child: itemFriend(friendsStore.usersSearch.friends![index]!));
@@ -398,46 +398,43 @@ class _AddFriendsState extends State<AddFriends> {
                             ),
                           ),
                           Spacer(),
-                          Visibility(
-                            visible: friendModel.isFriend != null,
-                            child: SizedBox(
-                              height: 24,
-                              child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular
-                                            (20),
-                                          side: BorderSide.none),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                    padding: MaterialStateProperty.all<EdgeInsets>(
-                                        EdgeInsets.symmetric(horizontal: 18)),
+                          SizedBox(
+                            height: 24,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular
+                                          (20),
+                                        side: BorderSide.none),
                                   ),
-                                  onPressed: () {
-                                    Future.delayed(Duration(milliseconds: 80),(){
-                                      if(friendModel.isFriend != true){
-                                        friendsStore.addFriend(friendModel);
-                                        friendModel.isFriend = true;
-                                        setState(() {});
-                                      }else{
-                                        _goToProfile(friendModel.id);
-                                      }
-                                    });
-                                  },
-                                  child: Text(
-                                    getIfIsFriend(friendModel) ?
-                                    AppLocalizations.of(context)!.friend:
-                                    AppLocalizations.of(context)!.add,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                            ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 18)),
+                                ),
+                                onPressed: () {
+                                  Future.delayed(Duration(milliseconds: 80),(){
+                                    if(friendModel.isFriend != true){
+                                      friendsStore.addFriend(friendModel);
+                                      friendModel.isFriend = true;
+                                      setState(() {});
+                                    }else{
+                                      _goToProfile(friendModel.id);
+                                    }
+                                  });
+                                },
+                                child: Text(
+                                  getIfIsFriend(friendModel) ?
+                                  AppLocalizations.of(context)!.friend:
+                                  AppLocalizations.of(context)!.add,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
                           )
                         ],
                       ),
