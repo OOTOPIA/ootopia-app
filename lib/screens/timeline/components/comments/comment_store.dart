@@ -77,27 +77,28 @@ abstract class CommentStoreBase with Store {
           String newString = "@[${user.id}]";
           var startname =
               newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
-          if (startname == user.start!) {
-            newTextComment = newTextComment.replaceRange(
-              user.start! + newStartIndex,
-              user.end! + newStartIndex,
-              newString,
-            );
-            endNameUser = user.end!;
-            newStartIndex =
-                newStartIndex + newString.length - (user.end! - user.start!);
-            user.end = user.start! + newString.length;
-          } else {
-            newTextComment = newTextComment.replaceRange(
-              startname + newStartIndex,
-              user.fullname.length + startname + newStartIndex + 2,
-              newString,
-            );
-            endNameUser = user.id.length + startname + 2;
-            newStartIndex =
-                newStartIndex + newString.length - (endNameUser - startname);
-            user.end = user.fullname.length + newString.length;
-          }
+
+          // if (startname == user.start!) {
+          //   newTextComment = newTextComment.replaceRange(
+          //     user.start! + newStartIndex,
+          //     user.end! + newStartIndex,
+          //     newString,
+          //   );
+          //   endNameUser =
+          //       startname + user.id.length - (user.end! - user.start!);
+          //   newStartIndex =
+          //       newStartIndex + newString.length - (user.end! - user.start!);
+          //   user.end = user.start! + newString.length;
+          // } else {
+          newTextComment = newTextComment.replaceRange(
+            startname + newStartIndex,
+            user.fullname.length + startname + newStartIndex + 2,
+            newString,
+          );
+          endNameUser = user.id.length + startname + 2;
+          newStartIndex =
+              newStartIndex + newString.length - (endNameUser - startname);
+          // }
         });
       }
       await commentRepository.createComment(
