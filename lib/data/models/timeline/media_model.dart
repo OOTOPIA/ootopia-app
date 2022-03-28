@@ -5,12 +5,12 @@ part "media_model.g.dart";
 @JsonSerializable()
 class Media {
   String? mediaUrl;
-  String? thumbnailUrl;
+  String? thumbUrl;
   String? type;
 
   Media({
     this.mediaUrl,
-    this.thumbnailUrl,
+    this.thumbUrl,
     this.type,
   });
 

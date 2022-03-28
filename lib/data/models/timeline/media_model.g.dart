@@ -9,13 +9,13 @@ part of 'media_model.dart';
 Media _$MediaFromJson(Map<String, dynamic> json) {
   return Media(
     mediaUrl: json['mediaUrl'] as String?,
-    thumbnailUrl: json['thumbnailUrl'] as String?,
+    thumbUrl: json['thumbUrl'] as String?,
     type: json['type'] as String?,
   );
 }
 
 Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
       'mediaUrl': instance.mediaUrl,
-      'thumbnailUrl': instance.thumbnailUrl,
+      'thumbUrl': instance.thumbUrl,
       'type': instance.type,
     };

@@ -113,7 +113,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimationEnd = true;
   bool canDoubleClick = true;
   SmartPageController controller = SmartPageController.getInstance();
-  int pagePosition = 0;
+  int mediaPosition = 0;
+  bool showPosition = false;
 
   @override
   void initState() {
@@ -448,7 +449,27 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ),
                   ),
                 ),
-              )
+              ),
+              if (this.post.type == 'gallery' &&
+                  this.post.medias!.length > 1 &&
+                  showPosition)
+                Positioned(
+                  right: 23,
+                  top: 22,
+                  child: Container(
+                    height: 20,
+                    width: 35,
+                    child: Center(
+                      child: Text(
+                        '${mediaPosition + 1}/${this.post.medias!.length}',
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ),
             ],
           ),
           if (this.post.type == 'gallery' && this.post.medias!.length > 1) ...[
@@ -888,7 +909,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           },
           onPageChanged: (value) {
             setState(() {
-              pagePosition = value;
+              mediaPosition = value;
+              showPosition = true;
+              Future.delayed(Duration(seconds: 2), () {
+                setState(() {
+                  showPosition = false;
+                });
+              });
             });
           },
         ),
@@ -902,13 +929,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         image: media.mediaUrl as String,
         onDoubleTapVideo: () => this._likePost(false, true),
       );
-    } else if (this.post.type == "video") {
+    } else if (media.type == "video") {
       return FlickMultiPlayer(
         userId: (user != null ? user!.id : null),
         postId: this.post.id,
         url: media.mediaUrl!,
         flickMultiManager: widget.flickMultiManager,
-        image: media.thumbnailUrl!,
+        image: media.thumbUrl!,
         onDoubleTapVideo: () => this._likePost(false, true),
       );
     }
@@ -921,7 +948,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         width: 8,
         height: 8,
         decoration: BoxDecoration(
-            color: pagePosition == index ? Colors.blue[900] : Colors.black26,
+            color: mediaPosition == index ? Colors.blue[900] : Colors.black26,
             shape: BoxShape.circle),
       );
     });
