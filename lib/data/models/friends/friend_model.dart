@@ -39,6 +39,13 @@ class FriendModel {
 
   }
 
+  int amountOfPhotos(){
+    if(friendsThumbs!.length > 4){
+      return 4;
+    }
+    return friendsThumbs!.length;
+  }
+
   factory FriendModel.fromJson(Map<String, dynamic> json) =>
       _$FriendModelFromJson(json);
 

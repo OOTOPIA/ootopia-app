@@ -194,33 +194,37 @@ class _AddFriendsState extends State<AddFriends> {
                           child: ListView.builder(
                               itemCount: friendsStore.usersSearch.friends!.length,
                               itemBuilder: (BuildContext context, int index) {
-                               return Container(
-                                    margin: EdgeInsets.only(bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0
+                                return Column(
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: isLastItem(index) ? 100 : 0),
+                                        child: itemFriend(friendsStore.usersSearch.friends![index]!)),
+                                    Visibility(
+                                        visible: friendsStore.loadingMoreUsersSearch && isLastItem(index),
+                                        child: Container(
+                                          margin: EdgeInsets.only(top: 16),
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                backgroundColor: Colors.transparent,
+                                                strokeWidth: 2,
+                                                valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                              ),
+                                            ),
+                                          ),
+                                        )
                                     ),
-                                    child: itemFriend(friendsStore.usersSearch.friends![index]!));
+                                  ],
+                                );
                               }
                           ),
                         ),
                       ],
-                      Visibility(
-                          visible: friendsStore.loadingMoreUsersSearch,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 16),
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.transparent,
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
-                                ),
-                              ),
-                            ),
-                          )
-                      ),
-                      SizedBox(height: 16),
+
                     ],
                   ),
                 ),
@@ -286,14 +290,14 @@ class _AddFriendsState extends State<AddFriends> {
             height: 90,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
-                itemCount: 5,
+                itemCount: 4,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return  Container(
                     margin: EdgeInsets.only(
                       left: index == 0 ? 25 : 8,
                       top: 14,
-                      right: index == 5 ? 14 : 0,
+                      right: index == 4 ? 14 : 0,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -455,7 +459,7 @@ class _AddFriendsState extends State<AddFriends> {
                   height: 76,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                      itemCount: friendModel.friendsThumbs!.length,
+                      itemCount: friendModel.amountOfPhotos(),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return  Stack(
@@ -523,6 +527,28 @@ class _AddFriendsState extends State<AddFriends> {
                                 ),
                               ),
                             ],
+                            Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Ink(
+                                padding: EdgeInsets.only(
+                                  left: index == 0 ? 25 : 8,
+                                  right: index == (friendModel.amountOfPhotos() - 1) ? 14 : 0,
+                                ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(10),
+                                  onTap: (){
+                                    Future.delayed(Duration(milliseconds: 80) , (){
+                                      _goToProfile(friendModel.id);
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    width: 74,
+                                    height: 76,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       }
@@ -551,6 +577,10 @@ class _AddFriendsState extends State<AddFriends> {
       }
     });
     return isFriend;
+  }
+
+  bool isLastItem(int index) {
+    return (index == friendsStore.usersSearch.friends!.length - 1);
   }
 
 }
