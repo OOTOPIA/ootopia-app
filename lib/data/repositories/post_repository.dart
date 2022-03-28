@@ -73,7 +73,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       queryParams['locale'] = lang;
 
       final response = await ApiClient.api().get(
-          dotenv.env['API_URL']! + "posts?/v2",
+          dotenv.env['API_URL']! + "posts/v2?",
           queryParameters: queryParams);
       if (response.statusCode == 200) {
         return (response.data as List)
