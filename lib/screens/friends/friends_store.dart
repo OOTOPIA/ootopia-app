@@ -101,6 +101,9 @@ class FriendsStore with ChangeNotifier {
 
       if (usersSearch.alreadyFriends != null){
         usersSearch.friends!.addAll( usersSearch.alreadyFriends!);
+        usersSearch.friends!.forEach((element) {
+          element?.isFriend = true;
+        });
       }
       usersSearch.friends!.addAll(usersSearch.searchFriends!);
 
