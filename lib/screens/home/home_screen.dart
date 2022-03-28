@@ -724,7 +724,6 @@ class _HomeScreenState extends State<HomeScreen>
       );
 
   Future<void> fcmSubscribe() async {
-    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -736,7 +735,5 @@ class _HomeScreenState extends State<HomeScreen>
       sound: true,
     );
 
-    String? uuid = await firebaseMessaging.getToken();
-    print('tokenPUSH : $uuid');
   }
 }
