@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +13,6 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
-import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CustomGallery extends StatefulWidget {
@@ -48,8 +46,6 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   int countPage = 0;
   bool hasMoreMedias = false;
-  late VideoPlayerController? _videoPlayerController;
-  FlickManager? flickManager;
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -64,8 +60,6 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
-    flickManager?.dispose();
     super.dispose();
   }
 
@@ -92,16 +86,11 @@ class _CustomGalleryState extends State<CustomGallery> {
         onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () {
           if (selectedMedias != []) {
-            final listFilesPaths =
-                selectedMedias.map((e) => e['mediaFile'].path);
-            flickManager?.flickControlManager?.pause();
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
-                "filePath": selectedMedias.first['mediaFile'].path,
-                "listFilesPaths": listFilesPaths,
+                "fileList": selectedMedias,
                 "mirrored": "false",
-                "type": selectedMedias.first['mediaType']
               },
             );
           }
@@ -130,11 +119,10 @@ class _CustomGalleryState extends State<CustomGallery> {
                         children: [
                           SizedBox(height: 20),
                           MediaViewWidget(
+                            key: ObjectKey(currentDirectory["mediaFile"].path),
                             mediaFilePath: currentDirectory["mediaFile"].path,
                             mediaType: currentDirectory["mediaType"],
                             mediaSize: currentDirectory["mediaSize"],
-                            flickManager: getFlickManager(),
-                            videoIsLoading: videoIsLoading,
                           ),
                           SizedBox(height: 10),
                           multipleImagesButton(),
@@ -183,11 +171,6 @@ class _CustomGalleryState extends State<CustomGallery> {
         ],
       ),
     );
-  }
-
-  FlickManager? getFlickManager() {
-    if (currentDirectory["mediaType"] == 'video') return flickManager;
-    return null;
   }
 
   Widget multipleImagesButton() {
@@ -314,13 +297,10 @@ class _CustomGalleryState extends State<CustomGallery> {
     if (selectedMedia['mediaType'] == 'video' &&
         (currentDirectory['mediaId'] == null ||
             selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
-      _videoPlayerController = null;
       currentDirectory = selectedMedia;
-      initVideoPlayer(currentDirectory['mediaFile']);
     } else if (selectedMedia['mediaType'] == 'image' &&
         (currentDirectory['mediaId'] == null ||
             selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
-      _videoPlayerController = null;
       currentDirectory = selectedMedia;
     }
   }
@@ -331,18 +311,5 @@ class _CustomGalleryState extends State<CustomGallery> {
               (element) => element["mediaId"] == media["mediaId"])) +
           1;
     }
-  }
-
-  initVideoPlayer(var file) {
-    videoIsLoading = true;
-    _videoPlayerController = VideoPlayerController.file(file)
-      ..initialize().then((value) {
-        setState(() {
-          videoIsLoading = false;
-        });
-        _videoPlayerController!.play();
-      });
-
-    flickManager = FlickManager(videoPlayerController: _videoPlayerController!);
   }
 }

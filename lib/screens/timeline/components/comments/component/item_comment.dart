@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
+import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
 import 'package:ootopia_app/shared/link_rich_text.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ItemComment extends StatelessWidget {
+class ItemComment extends StatefulWidget {
   final Comment comment;
   final bool visibleDelete;
   final CommentStore commentStore;
   final String postId;
   final Function() getData;
-  const ItemComment({
+  final Function replyComment;
+  final Function updateState;
+
+  ItemComment({
     Key? key,
     required this.comment,
     required this.visibleDelete,
     required this.commentStore,
     required this.postId,
     required this.getData,
+    required this.replyComment,
+    required this.updateState,
   }) : super(key: key);
 
+  @override
+  State<ItemComment> createState() => _ItemCommentState();
+}
+
+class _ItemCommentState extends State<ItemComment> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,14 +39,14 @@ class ItemComment extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            comment.photoUrl == 'null' || comment.photoUrl == null
+            widget.comment.photoUrl == null
                 ? CircleAvatar(
                     radius: 19,
                     backgroundImage: AssetImage('assets/icons/user.png'),
                   )
                 : CircleAvatar(
                     radius: 19,
-                    backgroundImage: NetworkImage(comment.photoUrl!),
+                    backgroundImage: NetworkImage(widget.comment.photoUrl!),
                   ),
             SizedBox(
               width: 16,
@@ -47,7 +58,7 @@ class ItemComment extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    comment.username!,
+                    widget.comment.username!,
                     style: TextStyle(
                       color: LightColors.black,
                       fontWeight: FontWeight.bold,
@@ -64,16 +75,16 @@ class ItemComment extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.60,
                         child: LinkRichText(
-                          comment.text,
-                          userCommentsList: comment.userComments,
+                          widget.comment.text,
+                          userCommentsList: widget.comment.userComments,
                           maxLines: 10,
                         ),
                       ),
                       Visibility(
-                        visible: visibleDelete,
+                        visible: widget.visibleDelete,
                         child: GestureDetector(
                           onTap: () {
-                            deleteComment(comment, context);
+                            deleteComment(widget.comment, context);
                           },
                           child: Text(
                             AppLocalizations.of(context)!.delete,
@@ -86,6 +97,23 @@ class ItemComment extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                  GestureDetector(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Text(
+                        AppLocalizations.of(context)!.reply,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    onTap: () {
+                      widget.replyComment(widget.comment);
+                    },
+                  ),
+                  CommentReplies(
+                    comment: widget.comment,
+                    updateState: widget.updateState,
+                    replyComment: widget.replyComment,
                   )
                 ],
               ),
@@ -93,7 +121,7 @@ class ItemComment extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 25,
+          height: 16,
         )
       ],
     );
@@ -128,10 +156,11 @@ class ItemComment extends StatelessWidget {
                 onPressed: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.of(context).pop();
-                  await commentStore.deleteComments(postId, comment.id);
-                  commentStore.listComments.clear();
-                  commentStore.currentPageComment = 1;
-                  getData();
+                  await widget.commentStore
+                      .deleteComments(widget.postId, comment.id);
+                  widget.commentStore.listComments.clear();
+                  widget.commentStore.currentPageComment = 1;
+                  widget.getData();
                 },
                 child: Text(
                   'OK',
