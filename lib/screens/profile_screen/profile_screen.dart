@@ -395,9 +395,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               GridCustomWidget(
                                                 discountSpacing: 10 * 3,
                                                 amountPadding: 0,
-                                                thumbnailUrl: post.thumbnailUrl,
+                                                thumbnailUrl:
+                                                    post.type != 'gallery'
+                                                        ? post.thumbnailUrl
+                                                        : post.medias!.first
+                                                            .thumbUrl!,
                                                 columnsCount: 4,
-                                                type: post.type,
+                                                type: store!.getPostType(post),
                                                 onTap: () {
                                                   store!.goToTimelinePost(
                                                     controller: controller,
@@ -450,8 +454,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         (controller.pages[controller.currentPageIndex]) is ProfileScreen;
   }
 
-  bool get  showButton{
-    return !isLoggedInUserProfile && store?.isFriend != null && authStore.currentUser != null;
+  bool get showButton {
+    return !isLoggedInUserProfile &&
+        store?.isFriend != null &&
+        authStore.currentUser != null;
   }
 
 
