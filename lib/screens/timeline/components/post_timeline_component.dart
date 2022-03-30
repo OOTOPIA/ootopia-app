@@ -304,14 +304,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     });
                               });
                         }),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: GlobalConstants.of(context).intermediateSpacing),
-                    child: PopupMenuPost(
-                      isAnabled: isUserOwnsPost,
-                      callbackReturnPopupMenu: _popupMenuReturn,
-                      post: post,
-                    ),
+                  PopupMenuPost(
+                    isAnabled: isUserOwnsPost,
+                    callbackReturnPopupMenu: _popupMenuReturn,
+                    post: post,
                   ),
                 ],
               )
