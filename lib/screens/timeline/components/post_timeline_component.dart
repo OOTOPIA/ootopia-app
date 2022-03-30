@@ -221,32 +221,36 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               radius: 16,
                             ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          this.post.username,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Visibility(
-                          visible: (this.post.city != null &&
-                                  this.post.city!.isNotEmpty) ||
-                              (this.post.state != null &&
-                                  this.post.state!.isNotEmpty),
-                          child: Text(
-                            '${this.post.city}' +
-                                (this.post.state != null &&
-                                        this.post.state!.isNotEmpty
-                                    ? ', ${this.post.state}'
-                                    : ''),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            this.post.username,
+                            overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                          Visibility(
+                            visible: (this.post.city != null &&
+                                    this.post.city!.isNotEmpty) ||
+                                (this.post.state != null &&
+                                    this.post.state!.isNotEmpty),
+                            child: Text(
+                              '${this.post.city}' +
+                                  (this.post.state != null &&
+                                          this.post.state!.isNotEmpty
+                                      ? ', ${this.post.state}'
+                                      : ''),
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -300,10 +304,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                     });
                               });
                         }),
-                  PopupMenuPost(
-                    isAnabled: isUserOwnsPost,
-                    callbackReturnPopupMenu: _popupMenuReturn,
-                    post: post,
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: GlobalConstants.of(context).intermediateSpacing),
+                    child: PopupMenuPost(
+                      isAnabled: isUserOwnsPost,
+                      callbackReturnPopupMenu: _popupMenuReturn,
+                      post: post,
+                    ),
                   ),
                 ],
               )
