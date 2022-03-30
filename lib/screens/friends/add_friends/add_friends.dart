@@ -572,7 +572,6 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   getIfIsFriend(FriendModel friendModel) {
-    print('friendModel ${friendModel.fullname} ${friendModel.isFriend}');
     if(friendModel.isFriend == true){
       return true;
     }
