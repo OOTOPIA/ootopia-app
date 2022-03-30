@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
+import '../../auth/auth_store.dart';
+
 
 
 class AddFriends extends StatefulWidget {
@@ -21,6 +23,7 @@ class AddFriends extends StatefulWidget {
 }
 
 class _AddFriendsState extends State<AddFriends> {
+  late AuthStore authStore;
   TextEditingController messageController = TextEditingController();
   SmartPageController controller = SmartPageController.getInstance();
   late FriendsStore friendsStore;
@@ -36,6 +39,7 @@ class _AddFriendsState extends State<AddFriends> {
   @override
   Widget build(BuildContext context) {
     friendsStore  = Provider.of<FriendsStore>(context);
+    authStore = Provider.of<AuthStore>(context);
     return Consumer<FriendsStore>(
         builder: (cont, counter, _) {
           return Stack(
@@ -425,7 +429,8 @@ class _AddFriendsState extends State<AddFriends> {
                                       friendModel.isFriend = true;
                                       setState(() {});
                                     }else{
-                                      _goToProfile(friendModel.id);
+                                      friendsStore.removeFriend(friendModel, authStore.currentUser!.id);
+                                      friendModel.isFriend = false;
                                     }
                                   });
                                 },
