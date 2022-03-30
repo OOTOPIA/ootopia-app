@@ -216,6 +216,22 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
     });
   }
 
+  final _$excludedIdsAtom =
+      Atom(name: '_PostPreviewScreenStoreBase.excludedIds');
+
+  @override
+  String? get excludedIds {
+    _$excludedIdsAtom.reportRead();
+    return super.excludedIds;
+  }
+
+  @override
+  set excludedIds(String? value) {
+    _$excludedIdsAtom.reportWrite(value, super.excludedIds, () {
+      super.excludedIds = value;
+    });
+  }
+
   final _$isSelectedAtom = Atom(name: '_PostPreviewScreenStoreBase.isSelected');
 
   @override
@@ -228,6 +244,21 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
   set isSelected(bool value) {
     _$isSelectedAtom.reportWrite(value, super.isSelected, () {
       super.isSelected = value;
+    });
+  }
+
+  final _$fullNameAtom = Atom(name: '_PostPreviewScreenStoreBase.fullName');
+
+  @override
+  String get fullName {
+    _$fullNameAtom.reportRead();
+    return super.fullName;
+  }
+
+  @override
+  set fullName(String value) {
+    _$fullNameAtom.reportWrite(value, super.fullName, () {
+      super.fullName = value;
     });
   }
 
@@ -262,8 +293,8 @@ mixin _$PostPreviewScreenStore on _PostPreviewScreenStoreBase, Store {
       AsyncAction('_PostPreviewScreenStoreBase.searchUser');
 
   @override
-  Future<void> searchUser(String fullName) {
-    return _$searchUserAsyncAction.run(() => super.searchUser(fullName));
+  Future<void> searchUser() {
+    return _$searchUserAsyncAction.run(() => super.searchUser());
   }
 
   final _$_PostPreviewScreenStoreBaseActionController =
@@ -351,7 +382,9 @@ oozToReward: ${oozToReward},
 viewState: ${viewState},
 listAllUsers: ${listAllUsers},
 filterValue: ${filterValue},
-isSelected: ${isSelected}
+excludedIds: ${excludedIds},
+isSelected: ${isSelected},
+fullName: ${fullName}
     ''';
   }
 }

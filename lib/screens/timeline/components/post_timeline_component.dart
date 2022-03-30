@@ -815,7 +815,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             child: Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(top: 3, bottom: 12),
-              child: ExpandableText(this.post.description, 3),
+              child: ExpandableText(
+                this.post.description,
+                3,
+                this.post.userComments,
+              ),
             ),
           ),
           GestureDetector(

@@ -61,7 +61,13 @@ abstract class _PostPreviewScreenStoreBase with Store {
   String filterValue = "";
 
   @observable
+  String? excludedIds = '';
+
+  @observable
   bool isSelected = false;
+
+  @observable
+  String fullName = '';
 
   _createPost(PostCreate post) async {
     return await this._repository.createPost(post);
@@ -181,14 +187,14 @@ abstract class _PostPreviewScreenStoreBase with Store {
   }
 
   @action
-  Future<void> searchUser(String fullName) async {
+  Future<void> searchUser() async {
     try {
       if (viewState != ViewState.loadingNewData) {
         listAllUsers.clear();
       }
       viewState = ViewState.loading;
-      var response =
-          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
+      var response = await userRepository.getAllUsersByName(
+          fullName, currentPageUser, 10, '');
       hasMoreUsers = response.length == 10;
       listAllUsers.addAll(response);
       viewState = ViewState.done;

@@ -39,7 +39,9 @@ TimelinePost _$TimelinePostFromJson(Map<String, dynamic> json) {
     medias: (json['medias'] as List<dynamic>?)
         ?.map((e) => Media.fromJson(e as Map<String, dynamic>))
         .toList(),
-  );
+  )..userComments = (json['userComments'] as List<dynamic>?)
+      ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
+      .toList();
 }
 
 Map<String, dynamic> _$TimelinePostToJson(TimelinePost instance) =>
@@ -67,4 +69,5 @@ Map<String, dynamic> _$TimelinePostToJson(TimelinePost instance) =>
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'badges': instance.badges,
       'medias': instance.medias,
+      'userComments': instance.userComments,
     };
