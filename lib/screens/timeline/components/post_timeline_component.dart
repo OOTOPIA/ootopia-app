@@ -7,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
+import 'package:ootopia_app/data/models/timeline/media_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
@@ -112,6 +113,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimationEnd = true;
   bool canDoubleClick = true;
   SmartPageController controller = SmartPageController.getInstance();
+  int mediaPosition = 0;
+  bool showPosition = false;
 
   @override
   void initState() {
@@ -218,32 +221,36 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               radius: 16,
                             ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          this.post.username,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Visibility(
-                          visible: (this.post.city != null &&
-                                  this.post.city!.isNotEmpty) ||
-                              (this.post.state != null &&
-                                  this.post.state!.isNotEmpty),
-                          child: Text(
-                            '${this.post.city}' +
-                                (this.post.state != null &&
-                                        this.post.state!.isNotEmpty
-                                    ? ', ${this.post.state}'
-                                    : ''),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            this.post.username,
+                            overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                          Visibility(
+                            visible: (this.post.city != null &&
+                                    this.post.city!.isNotEmpty) ||
+                                (this.post.state != null &&
+                                    this.post.state!.isNotEmpty),
+                            child: Text(
+                              '${this.post.city}' +
+                                  (this.post.state != null &&
+                                          this.post.state!.isNotEmpty
+                                      ? ', ${this.post.state}'
+                                      : ''),
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -400,19 +407,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20)),
                 ),
-                child: this.post.type == "image"
-                    ? ImagePostTimeline(
-                        image: this.post.imageUrl as String,
-                        onDoubleTapVideo: () => this._likePost(false, true),
-                      )
-                    : FlickMultiPlayer(
-                        userId: (user != null ? user!.id : null),
-                        postId: this.post.id,
-                        url: this.post.videoUrl!,
-                        flickMultiManager: widget.flickMultiManager,
-                        image: this.post.thumbnailUrl,
-                        onDoubleTapVideo: () => this._likePost(false, true),
-                      ),
+                child: mediaView(),
               ),
               Container(
                 width: double.infinity,
@@ -458,9 +453,36 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     ),
                   ),
                 ),
-              )
+              ),
+              if (this.post.type == 'gallery' &&
+                  this.post.medias!.length > 1 &&
+                  showPosition)
+                Positioned(
+                  right: 23,
+                  top: 22,
+                  child: Container(
+                    height: 20,
+                    width: 35,
+                    child: Center(
+                      child: Text(
+                        '${mediaPosition + 1}/${this.post.medias!.length}',
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ),
             ],
           ),
+          if (this.post.type == 'gallery' && this.post.medias!.length > 1) ...[
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: indexDots(this.post.medias!.length),
+            ),
+          ],
           Container(
             height: 32,
             width: double.infinity,
@@ -861,6 +883,79 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
         ],
       ),
     );
+  }
+
+  Widget mediaView() {
+    if (this.post.type == "image") {
+      return ImagePostTimeline(
+        image: this.post.imageUrl as String,
+        onDoubleTapVideo: () => this._likePost(false, true),
+      );
+    } else if (this.post.type == "video") {
+      return FlickMultiPlayer(
+        userId: (user != null ? user!.id : null),
+        postId: this.post.id,
+        url: this.post.videoUrl!,
+        flickMultiManager: widget.flickMultiManager,
+        image: this.post.thumbnailUrl,
+        onDoubleTapVideo: () => this._likePost(false, true),
+      );
+    } else {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width,
+        child: PageView.builder(
+          itemCount: this.post.medias!.length,
+          pageSnapping: true,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, pagePosition) {
+            return buildMediaRow(this.post.medias![pagePosition]);
+          },
+          onPageChanged: (value) {
+            setState(() {
+              mediaPosition = value;
+              showPosition = true;
+              Future.delayed(Duration(seconds: 2), () {
+                setState(() {
+                  showPosition = false;
+                });
+              });
+            });
+          },
+        ),
+      );
+    }
+  }
+
+  buildMediaRow(Media media) {
+    if (media.type == "image") {
+      return ImagePostTimeline(
+        image: media.mediaUrl as String,
+        onDoubleTapVideo: () => this._likePost(false, true),
+      );
+    } else if (media.type == "video") {
+      return FlickMultiPlayer(
+        userId: (user != null ? user!.id : null),
+        postId: this.post.id,
+        url: media.mediaUrl!,
+        flickMultiManager: widget.flickMultiManager,
+        image: media.thumbUrl!,
+        onDoubleTapVideo: () => this._likePost(false, true),
+      );
+    }
+  }
+
+  List<Widget> indexDots(int mediasLength) {
+    return List<Widget>.generate(mediasLength, (index) {
+      return Container(
+        margin: EdgeInsets.all(2),
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(
+            color: mediaPosition == index ? Colors.blue[900] : Colors.black26,
+            shape: BoxShape.circle),
+      );
+    });
   }
 
   void incrementOozToTransfer() {

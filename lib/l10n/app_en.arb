@@ -496,6 +496,7 @@
     "multiplesImages": "Multiples images",
     "limitSelectedImages": "The limit is 5 photos or videos",
     "hasntImageOnGallery": "This gallery has no any files",
+    "selectSomeImage": "You need to select an image to continue",
 
     "viewMoreReply": "View %amount% more reply",
     "reply": "Reply",

@@ -72,12 +72,30 @@ abstract class CommentRepliesStoreBase with Store {
       String replyToUserId, List<UserSearchModel>? listTaggedUsers) async {
     try {
       List<String> listUsersMarket = [];
-      listTaggedUsers?.forEach((element) {
-        listUsersMarket.add(element.id);
-      });
+      String newTextComment = text;
+
+      if (listTaggedUsers != null) {
+        int newStartIndex = 0;
+        listTaggedUsers.forEach((user) {
+          listUsersMarket.add(user.id);
+          String newString = "@[${user.id}]";
+          if (newTextComment.contains(user.fullname)) {
+            newTextComment = newTextComment.replaceRange(
+              user.start! + newStartIndex,
+              user.end! + newStartIndex,
+              newString,
+            );
+          }
+          newStartIndex =
+              newStartIndex + newString.length - (user.end! - user.start!);
+          user.end = user.start! + newString.length;
+        });
+      }
+
       isLoading = true;
-      CommentReply commentReply = await commentRepliesRepository
-          .createCommentReply(commentId, text, replyToUserId, listUsersMarket);
+      CommentReply commentReply =
+          await commentRepliesRepository.createCommentReply(
+              commentId, newTextComment, replyToUserId, listUsersMarket);
 
       isLoading = false;
       return commentReply;

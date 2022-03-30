@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -72,14 +72,14 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-
+    fcmSubscribe();
     WidgetsBinding.instance!.addObserver(this);
     homeStore?.prefs?.setShowSplash(false);
 
     controller = SmartPageController.newInstance(
       context: context,
       initialPages: [
-        TimelinePage(widget.args),
+        TimelinePage(null),
         LearningTracksScreen(),
         LearningTracksScreen(),
         MarketplaceScreen(),
@@ -722,4 +722,18 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       );
+
+  Future<void> fcmSubscribe() async {
+
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+  }
 }

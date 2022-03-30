@@ -84,6 +84,21 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
+  final _$excludedIdsAtom = Atom(name: 'CommentStoreBase.excludedIds');
+
+  @override
+  String? get excludedIds {
+    _$excludedIdsAtom.reportRead();
+    return super.excludedIds;
+  }
+
+  @override
+  set excludedIds(String? value) {
+    _$excludedIdsAtom.reportWrite(value, super.excludedIds, () {
+      super.excludedIds = value;
+    });
+  }
+
   final _$currentPageCommentAtom =
       Atom(name: 'CommentStoreBase.currentPageComment');
 
@@ -130,18 +145,33 @@ mixin _$CommentStore on CommentStoreBase, Store {
     });
   }
 
-  final _$hasMorePostsAtom = Atom(name: 'CommentStoreBase.hasMorePosts');
+  final _$hasMoreCommentsAtom = Atom(name: 'CommentStoreBase.hasMoreComments');
 
   @override
-  bool get hasMorePosts {
-    _$hasMorePostsAtom.reportRead();
-    return super.hasMorePosts;
+  bool get hasMoreComments {
+    _$hasMoreCommentsAtom.reportRead();
+    return super.hasMoreComments;
   }
 
   @override
-  set hasMorePosts(bool value) {
-    _$hasMorePostsAtom.reportWrite(value, super.hasMorePosts, () {
-      super.hasMorePosts = value;
+  set hasMoreComments(bool value) {
+    _$hasMoreCommentsAtom.reportWrite(value, super.hasMoreComments, () {
+      super.hasMoreComments = value;
+    });
+  }
+
+  final _$fullNameAtom = Atom(name: 'CommentStoreBase.fullName');
+
+  @override
+  String get fullName {
+    _$fullNameAtom.reportRead();
+    return super.fullName;
+  }
+
+  @override
+  set fullName(String value) {
+    _$fullNameAtom.reportWrite(value, super.fullName, () {
+      super.fullName = value;
     });
   }
 
@@ -173,8 +203,8 @@ mixin _$CommentStore on CommentStoreBase, Store {
   final _$searchUserAsyncAction = AsyncAction('CommentStoreBase.searchUser');
 
   @override
-  Future<void> searchUser(String fullName) {
-    return _$searchUserAsyncAction.run(() => super.searchUser(fullName));
+  Future<void> searchUser() {
+    return _$searchUserAsyncAction.run(() => super.searchUser());
   }
 
   @override
@@ -185,10 +215,12 @@ viewState: ${viewState},
 listComments: ${listComments},
 listAllUsers: ${listAllUsers},
 listTaggedUsers: ${listTaggedUsers},
+excludedIds: ${excludedIds},
 currentPageComment: ${currentPageComment},
 currentPageUser: ${currentPageUser},
 hasMoreUsers: ${hasMoreUsers},
-hasMorePosts: ${hasMorePosts}
+hasMoreComments: ${hasMoreComments},
+fullName: ${fullName}
     ''';
   }
 }

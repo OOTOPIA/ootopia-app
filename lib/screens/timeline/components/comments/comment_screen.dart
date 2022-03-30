@@ -49,15 +49,13 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   bool seSelectedUser = false;
   Timer? _debounce;
   final ScrollController scrollController = ScrollController();
-  String aux = '';
   String? userNameReply;
 
   @override
   void initState() {
     super.initState();
     scrollController.addListener(
-      () =>
-          commentStore.updateOnScroll(scrollController, _inputController.text),
+      () => commentStore.updateOnScroll(scrollController),
     );
     _inputController = RichTextController(
       deleteOnBack: false,
@@ -84,6 +82,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       "postOwnerId": widget.args['post'].userId,
       "commentsCount": widget.args['post'].commentsCount,
     });
+
     focusNode.addListener(() {
       setState(() {
         print(focusNode.hasFocus);
@@ -94,22 +93,26 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   void addUserInText(UserSearchModel e) {
     var text = _inputController.text;
 
-    var name = 'ㅤ@${e.fullname}ㅤ';
-    var s = 0, nameStartRange = 0;
+    var name = '‌@${e.fullname}‌ ';
+
+    var countAtEndName = 0, nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
-        aux = text.replaceRange(i, i + s + 1, name);
         _inputController.text =
-            text.replaceRange(i, i + s + 1, name.replaceAll('ㅤ', ''));
+            text.replaceRange(i, i + countAtEndName + 1, name);
         nameStartRange = i;
         break;
       }
-      s++;
+      countAtEndName++;
     }
 
     e.start = nameStartRange;
-    e.end = nameStartRange + e.fullname.length + 1;
-
+    e.end = nameStartRange + e.fullname.length + 3;
+    if (commentStore.excludedIds!.isEmpty) {
+      commentStore.excludedIds = commentStore.excludedIds! + '${e.id}';
+    } else {
+      commentStore.excludedIds = commentStore.excludedIds! + ',${e.id}';
+    }
     commentStore.listTaggedUsers?.add(e);
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
@@ -163,17 +166,40 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       setState(() {
         isIconBlue = true;
       });
-      aux += value;
+      var endName = 0;
+      for (var item in commentStore.listTaggedUsers!) {
+        var startname = value.indexOf('@${item.fullname}', endName);
+
+        if (startname < 0) {
+          if (commentStore.excludedIds!.contains(',${item.id}')) {
+            commentStore.excludedIds =
+                commentStore.excludedIds?.replaceAll(',${item.id}', '');
+          } else {
+            if (commentStore.excludedIds!.contains('${item.id},')) {
+              commentStore.excludedIds =
+                  commentStore.excludedIds?.replaceAll('${item.id},', '');
+            } else {
+              commentStore.excludedIds =
+                  commentStore.excludedIds?.replaceAll('${item.id}', '');
+            }
+          }
+          commentStore.listTaggedUsers?.remove(item);
+          break;
+        }
+        endName = startname + item.fullname.length + 2;
+      }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
-      _debounce = Timer(Duration(seconds: 1), () async {
-        var getLastString = aux.split(RegExp("ㅤ@"));
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
+        var getLastString = value.split("‌@");
         if (getLastString.last.contains('@')) {
           setState(() {
             seSelectedUser = true;
           });
           var startName = getLastString.last.split('@').last;
-          var finishName = startName.split(RegExp("ㅤ"));
-          await commentStore.searchUser(finishName.first);
+          var finishName = startName.split(RegExp("‌"));
+          commentStore.currentPageUser = 1;
+          commentStore.fullName = finishName.first;
+          await commentStore.searchUser();
         } else {
           setState(() {
             seSelectedUser = false;
@@ -181,11 +207,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
         }
       });
     } else {
-      commentStore.listTaggedUsers!.clear();
+      commentStore.listTaggedUsers?.clear();
+      commentStore.excludedIds = '';
+      commentStore.fullName = '';
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
-        aux = '';
       });
     }
   }
@@ -221,16 +248,17 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 createCommentReply
               ];
             }
+            commentStore.excludedIds = '';
+            commentStore.fullName = '';
             _inputController.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
             userNameReply = null;
             commentReply = null;
             indexComment = null;
+            seSelectedUser = false;
             commentStore.isLoading = false;
             setState(() {});
-
-            return;
           } else {
             await commentStore.createComment(
                 postId, _inputController.text.trim());
@@ -240,12 +268,15 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             commentStore.listComments.clear();
             commentStore.listAllUsers.clear();
             commentStore.listTaggedUsers?.clear();
-            aux = '';
+            commentStore.excludedIds = '';
+            commentStore.fullName = '';
+            seSelectedUser = false;
             _getData();
             commentStore.isLoading = false;
           }
         }
       } catch (e) {
+        print(e);
         showModalBottomSheet(
           context: context,
           barrierColor: Colors.black.withAlpha(1),
@@ -269,12 +300,20 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   replyComment(Comment comment) {
-    _inputController.text = "ㅤ@${comment.username}ㅤ";
     userNameReply = comment.username;
+    _inputController.text = "‌@${comment.username}‌";
     replyToUserId = comment.userId;
     _inputController.selection = TextSelection.fromPosition(
         TextPosition(offset: _inputController.text.length));
-    commentStore.listTaggedUsers!.addAll(comment.userComments!);
+    commentStore.listTaggedUsers = [
+      UserSearchModel(
+        fullname: "‌@${comment.username}‌",
+        id: comment.userId,
+        start: 0,
+        end: _inputController.text.length,
+      )
+    ].toList();
+
     commentReply = comment.id;
     indexComment = commentStore.listComments
         .indexWhere((_comment) => _comment.id == comment.id);
@@ -313,10 +352,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 Visibility(
                     visible: !focusNode.hasFocus,
                     child: BackgroundButterflyBottom(positioned: -50)),
-                SingleChildScrollView(
-                    child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.85),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    commentStore.isLoading = true;
+                    commentStore.listComments.clear();
+                    commentStore.currentPageComment = 1;
+                    await _getData();
+                    commentStore.isLoading = false;
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -353,7 +396,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                   //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
                                           scrollInfo.metrics.maxScrollExtent &&
-                                      commentStore.hasMorePosts &&
+                                      commentStore.hasMoreComments &&
                                       !commentStore.isLoading) {
                                     commentStore.currentPageComment++;
                                     commentStore.isLoading = true;
@@ -366,50 +409,41 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     return false;
                                   }
                                 },
-                                child: RefreshIndicator(
-                                  onRefresh: () async {
-                                    commentStore.isLoading = true;
-                                    commentStore.listComments.clear();
-                                    commentStore.currentPageComment = 1;
-                                    await _getData();
-                                    commentStore.isLoading = false;
-                                  },
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24),
-                                    itemCount: commentStore.listComments.length,
-                                    itemBuilder: (context, index) {
-                                      var comment =
-                                          commentStore.listComments[index];
-                                      bool visibleDelete;
-                                      if (authStore.currentUser == null) {
-                                        visibleDelete = false;
-                                      } else {
-                                        visibleDelete =
-                                            authStore.currentUser!.id! ==
-                                                commentStore
-                                                    .listComments[index].userId;
-                                      }
-                                      return ItemComment(
-                                        comment: comment,
-                                        visibleDelete: visibleDelete,
-                                        commentStore: commentStore,
-                                        getData: _getData,
-                                        postId: postId,
-                                        replyComment: replyComment,
-                                        updateState: () {
-                                          setState(() {});
-                                        },
-                                      );
-                                    },
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: Column(
+                                      children: commentStore.listComments
+                                          .map((comment) {
+                                        bool visibleDelete;
+                                        if (authStore.currentUser == null) {
+                                          visibleDelete = false;
+                                        } else {
+                                          visibleDelete =
+                                              authStore.currentUser!.id! ==
+                                                  comment.userId;
+                                        }
+                                        return ItemComment(
+                                          comment: comment,
+                                          visibleDelete: visibleDelete,
+                                          commentStore: commentStore,
+                                          getData: _getData,
+                                          postId: postId,
+                                          replyComment: replyComment,
+                                          updateState: () {
+                                            setState(() {});
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                     ],
                   ),
-                )),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(

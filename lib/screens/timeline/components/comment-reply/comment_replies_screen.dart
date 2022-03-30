@@ -4,6 +4,7 @@ import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:collection/collection.dart';
 import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comment-reply/component/item_reply.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
@@ -64,16 +65,22 @@ class CcommentStateReplies extends State<CommentReplies> {
       if (widget.comment.commentReplies != null) {
         int widgetIndex = widget.comment.commentReplies!
             .indexWhere((_reply) => _reply.id == reply.id);
+
         if (widgetIndex >= 0) {
           widget.comment.commentReplies!.removeAt(widgetIndex);
         }
       }
-      if (commentRepliesStore.listComments != null) {
-        int replyIndex = commentRepliesStore.listComments
-            .indexWhere((_reply) => _reply.id == reply.id);
-        if (replyIndex >= 0) {
-          commentRepliesStore.listComments.removeAt(replyIndex);
-        }
+
+      int replyIndex = commentRepliesStore.listComments
+          .indexWhere((_reply) => _reply.id == reply.id);
+
+      if (replyIndex >= 0) {
+        commentRepliesStore.listComments.removeAt(replyIndex);
+      }
+
+      if (widget.comment.totalReplies != null &&
+          widget.comment.totalReplies != 0) {
+        widget.comment.totalReplies = widget.comment.totalReplies! - 1;
       }
       widget.updateState();
     }
@@ -87,12 +94,12 @@ class CcommentStateReplies extends State<CommentReplies> {
   @mustCallSuper
   @protected
   void didUpdateWidget(covariant CommentReplies oldWidget) {
+    super.didUpdateWidget(oldWidget);
     if (widget.comment.commentReplies != null) {
       widget.comment.commentReplies!.forEach((element) {
-        if (commentRepliesStore.listComments != null &&
-            !commentRepliesStore.listComments.contains(element)) {
-          commentRepliesStore.listComments.add(element);
-        } else if (commentRepliesStore.listComments == null) {
+        if (commentRepliesStore.listComments
+                .firstWhereOrNull((comment) => comment.id == element.id) ==
+            null) {
           commentRepliesStore.listComments.add(element);
         }
       });
@@ -122,9 +129,8 @@ class CcommentStateReplies extends State<CommentReplies> {
                         ? AppLocalizations.of(context)!.loading
                         : AppLocalizations.of(context)!.viewMoreReply.replaceFirst(
                             "%amount%",
-                            (widget.comment.totalReplies! -
-                                        commentRepliesStore
-                                            .listComments.length) !=
+                            (commentRepliesStore.listComments.length -
+                                        widget.comment.totalReplies!) !=
                                     0
                                 ? "${widget.comment.totalReplies! - commentRepliesStore.listComments.length}"
                                 : "${widget.comment.totalReplies!}"),
