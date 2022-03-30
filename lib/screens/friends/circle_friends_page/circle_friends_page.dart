@@ -405,7 +405,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   Widget itemFriend(FriendModel friendModel){
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
-      height: friendModel.remove == true ? 0 : hasImages(friendModel) ? 150: 66,
+      height: (friendModel.remove == true && isPageOfUserLogged()) ? 0 : hasImages(friendModel) ? 150: 66,
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: Column(
