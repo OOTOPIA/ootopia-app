@@ -11,7 +11,7 @@ class PostGalleryCreateModel {
   double? addressLongitude;
   String? addressNumber;
   List<UserSearchModel>? userComments;
-  List<String>? idsUserTagged;
+  List<String>? taggedUsersId;
 
   PostGalleryCreateModel({
     this.mediaIds,
@@ -23,7 +23,7 @@ class PostGalleryCreateModel {
     this.addressLatitude,
     this.addressLongitude,
     this.addressNumber,
-    this.idsUserTagged,
+    this.taggedUsersId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +36,6 @@ class PostGalleryCreateModel {
         "addressNumber": addressNumber,
         "mediaIds": List<dynamic>.from(mediaIds!.map((x) => x)),
         "tagsIds": List<dynamic>.from(tagsIds!.map((x) => x)),
-        "taggedUsersId": List<dynamic>.from(idsUserTagged!.map((x) => x)),
+        "taggedUsersId": List<dynamic>.from(taggedUsersId!.map((x) => x)),
       };
 }

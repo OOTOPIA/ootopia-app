@@ -251,19 +251,6 @@ class _PostPreviewPageState extends State<PostPreviewPage>
         String newString = "@[${user.id}]";
         var startname =
             newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
-
-        // if (startname == user.start!) {
-        //   newTextComment = newTextComment.replaceRange(
-        //     user.start! + newStartIndex,
-        //     user.end! + newStartIndex,
-        //     newString,
-        //   );
-        //   endNameUser =
-        //       startname + user.id.length - (user.end! - user.start!);
-        //   newStartIndex =
-        //       newStartIndex + newString.length - (user.end! - user.start!);
-        //   user.end = user.start! + newString.length;
-        // } else {
         newTextComment = newTextComment.replaceRange(
           startname + newStartIndex,
           user.fullname.length + startname + newStartIndex + 2,
@@ -272,11 +259,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
         endNameUser = user.id.length + startname + 2;
         newStartIndex =
             newStartIndex + newString.length - (endNameUser - startname);
-        // }
       });
     }
 
-    postGallery.idsUserTagged = idsUsersTagged;
+    postGallery.taggedUsersId = idsUsersTagged;
     postGallery.description = newTextComment;
     sendingPost = true;
 
