@@ -39,8 +39,9 @@ class _ExpandableTextState extends State<ExpandableText>
                 constraints: BoxConstraints(
                   minWidth: MediaQuery.of(context).size.width,
                 ),
-                child:
-                    LinkRichText(widget.text, maxLines: isExpanded ? 1000 : 3),
+                child: LinkRichText(widget.text,
+                    userCommentsList: widget.userComments,
+                    maxLines: isExpanded ? 1000 : 3),
               )),
           if (isExpanded) ...[
             Visibility(

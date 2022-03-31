@@ -75,6 +75,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
       final response = await ApiClient.api().get(
           dotenv.env['API_URL']! + "posts/v2?",
           queryParameters: queryParams);
+
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((i) => TimelinePost.fromJson(i))
@@ -150,6 +151,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
 
   Future sendPost(PostGalleryCreateModel model) async {
     try {
+      print('allName ${jsonEncode(model.toJson())}');
       final response = await http.post(
         Uri.parse(dotenv.env['API_URL']! + "posts/gallery"),
         body: jsonEncode(model.toJson()),

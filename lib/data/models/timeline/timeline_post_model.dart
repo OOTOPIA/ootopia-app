@@ -30,35 +30,38 @@ class TimelinePost {
   DateTime? updatedAt;
   List<Badge>? badges;
   List<Media>? medias;
-  List<UserSearchModel>? userComments;
+  List<UserSearchModel>? usersTagged;
 
-  TimelinePost(
-      {required this.id,
-      required this.userId,
-      required this.description,
-      required this.type,
-      this.imageUrl,
-      this.videoUrl,
-      required this.thumbnailUrl,
-      this.photoUrl,
-      required this.username,
-      required this.likesCount,
-      required this.commentsCount,
-      required this.oozTotalCollected,
-      required this.liked,
-      required this.tags,
-      this.oozToTransfer,
-      this.oozRewarded,
-      this.city,
-      this.state,
-      this.country,
-      this.createdAt,
-      this.updatedAt,
-      this.badges,
-      this.medias});
+  TimelinePost({
+    required this.id,
+    required this.userId,
+    required this.description,
+    required this.type,
+    this.imageUrl,
+    this.videoUrl,
+    required this.thumbnailUrl,
+    this.photoUrl,
+    required this.username,
+    required this.likesCount,
+    required this.commentsCount,
+    required this.oozTotalCollected,
+    required this.liked,
+    required this.tags,
+    this.oozToTransfer,
+    this.oozRewarded,
+    this.city,
+    this.state,
+    this.country,
+    this.createdAt,
+    this.updatedAt,
+    this.badges,
+    this.medias,
+    this.usersTagged,
+  });
 
-  factory TimelinePost.fromJson(Map<String, dynamic> json) =>
-      _$TimelinePostFromJson(json);
+  factory TimelinePost.fromJson(Map<String, dynamic> json) {
+    return _$TimelinePostFromJson(json);
+  }
 
   Map<String, dynamic> toJson() => _$TimelinePostToJson(this);
 }

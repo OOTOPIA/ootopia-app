@@ -23,7 +23,7 @@ class PostGalleryCreateModel {
     this.addressLatitude,
     this.addressLongitude,
     this.addressNumber,
-    this.userComments,
+    this.idsUserTagged,
   });
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +36,6 @@ class PostGalleryCreateModel {
         "addressNumber": addressNumber,
         "mediaIds": List<dynamic>.from(mediaIds!.map((x) => x)),
         "tagsIds": List<dynamic>.from(tagsIds!.map((x) => x)),
-        "userComments": List<dynamic>.from(idsUserTagged!.map((x) => x)),
+        "taggedUsersId": List<dynamic>.from(idsUserTagged!.map((x) => x)),
       };
 }
