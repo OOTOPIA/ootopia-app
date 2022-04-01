@@ -1,3 +1,5 @@
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
+
 class PostGalleryCreateModel {
   List<String>? mediaIds;
   String? description;
@@ -8,6 +10,8 @@ class PostGalleryCreateModel {
   double? addressLatitude;
   double? addressLongitude;
   String? addressNumber;
+  List<UserSearchModel>? userComments;
+  List<String>? taggedUsersId;
 
   PostGalleryCreateModel({
     this.mediaIds,
@@ -19,6 +23,7 @@ class PostGalleryCreateModel {
     this.addressLatitude,
     this.addressLongitude,
     this.addressNumber,
+    this.taggedUsersId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -31,5 +36,6 @@ class PostGalleryCreateModel {
         "addressNumber": addressNumber,
         "mediaIds": List<dynamic>.from(mediaIds!.map((x) => x)),
         "tagsIds": List<dynamic>.from(tagsIds!.map((x) => x)),
+        "taggedUsersId": List<dynamic>.from(taggedUsersId!.map((x) => x)),
       };
 }

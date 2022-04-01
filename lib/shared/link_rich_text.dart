@@ -48,7 +48,6 @@ class LinkRichText extends StatelessWidget {
         }
       }
       var countText = 0;
-
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
       for (var i = 0; i < allName.length; i++) {
         var userInComment = allName[i];
