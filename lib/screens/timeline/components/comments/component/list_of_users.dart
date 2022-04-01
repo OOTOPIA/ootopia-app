@@ -24,11 +24,16 @@ class ListOfUsers extends StatefulWidget {
 class _ListOfUsersState extends State<ListOfUsers> {
   @override
   Widget build(BuildContext context) {
+    final sizeKeyboard = EdgeInsets.fromWindowPadding(
+      WidgetsBinding.instance!.window.viewInsets,
+      WidgetsBinding.instance!.window.devicePixelRatio,
+    ).bottom;
+    final multiple = MediaQuery.of(context).size.height > 650 ? 180 : 150;
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height * .30,
+        height: (MediaQuery.of(context).size.height - sizeKeyboard) - multiple,
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           controller: widget.scrollController,

@@ -186,7 +186,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
           commentStore.listTaggedUsers?.remove(item);
           break;
         }
-        endName = startname + item.fullname.length + 2;
+        endName = startname + item.fullname.length + 3;
       }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
