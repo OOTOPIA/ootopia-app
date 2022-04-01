@@ -511,6 +511,56 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           Navigator.popUntil(context, (route) => route.isFirst);
         },
       );
+  void onChanged(String value) {
+    value = value.trim();
+
+    if (value.length > 0) {
+      var endName = 0;
+      for (var item in postPreviewStore.listTaggedUsers!) {
+        var startname = value.indexOf('@${item.fullname}', endName);
+
+        if (startname < 0) {
+          if (postPreviewStore.excludedIds!.contains(',${item.id}')) {
+            postPreviewStore.excludedIds =
+                postPreviewStore.excludedIds?.replaceAll(',${item.id}', '');
+          } else {
+            if (postPreviewStore.excludedIds!.contains('${item.id},')) {
+              postPreviewStore.excludedIds =
+                  postPreviewStore.excludedIds?.replaceAll('${item.id},', '');
+            } else {
+              postPreviewStore.excludedIds =
+                  postPreviewStore.excludedIds?.replaceAll('${item.id}', '');
+            }
+          }
+          postPreviewStore.listTaggedUsers?.remove(item);
+          break;
+        }
+        endName = startname + item.fullname.length + 2;
+      }
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
+        var getLastString = value.split("‌@");
+        if (getLastString.last.contains('@')) {
+          setState(() {
+            seSelectedUser = true;
+          });
+          var startName = getLastString.last.split('@').last;
+          var finishName = startName.split(RegExp("‌"));
+          postPreviewStore.currentPageUser = 1;
+          postPreviewStore.fullName = finishName.first;
+          await postPreviewStore.searchUser();
+        } else {
+          setState(() {
+            seSelectedUser = false;
+          });
+        }
+      });
+    } else {
+      postPreviewStore.listTaggedUsers?.clear();
+      postPreviewStore.excludedIds = '';
+      postPreviewStore.fullName = '';
+    }
+  }
 
   Widget body() {
     return LoadingOverlay(
@@ -542,65 +592,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
                       controller: _descriptionInputController,
-                      onChanged: (value) {
-                        value = value.trim();
-
-                        if (value.length > 0) {
-                          var endName = 0;
-                          for (var item in postPreviewStore.listTaggedUsers!) {
-                            var startname =
-                                value.indexOf('@${item.fullname}', endName);
-
-                            if (startname < 0) {
-                              if (postPreviewStore.excludedIds!
-                                  .contains(',${item.id}')) {
-                                postPreviewStore.excludedIds = postPreviewStore
-                                    .excludedIds
-                                    ?.replaceAll(',${item.id}', '');
-                              } else {
-                                if (postPreviewStore.excludedIds!
-                                    .contains('${item.id},')) {
-                                  postPreviewStore.excludedIds =
-                                      postPreviewStore.excludedIds
-                                          ?.replaceAll('${item.id},', '');
-                                } else {
-                                  postPreviewStore.excludedIds =
-                                      postPreviewStore.excludedIds
-                                          ?.replaceAll('${item.id}', '');
-                                }
-                              }
-                              postPreviewStore.listTaggedUsers?.remove(item);
-                              break;
-                            }
-                            endName = startname + item.fullname.length + 2;
-                          }
-                          if (_debounce?.isActive ?? false) _debounce?.cancel();
-                          _debounce =
-                              Timer(Duration(seconds: 1, milliseconds: 700),
-                                  () async {
-                            var getLastString = value.split("‌@");
-                            if (getLastString.last.contains('@')) {
-                              setState(() {
-                                seSelectedUser = true;
-                              });
-                              var startName =
-                                  getLastString.last.split('@').last;
-                              var finishName = startName.split(RegExp("‌"));
-                              postPreviewStore.currentPageUser = 1;
-                              postPreviewStore.fullName = finishName.first;
-                              await postPreviewStore.searchUser();
-                            } else {
-                              setState(() {
-                                seSelectedUser = false;
-                              });
-                            }
-                          });
-                        } else {
-                          postPreviewStore.listTaggedUsers?.clear();
-                          postPreviewStore.excludedIds = '';
-                          postPreviewStore.fullName = '';
-                        }
-                      },
+                      onChanged: onChanged,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.normal),
