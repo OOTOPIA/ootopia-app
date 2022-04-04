@@ -16,7 +16,7 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
 import 'package:ootopia_app/screens/timeline/components/header_post_component.dart';
-import 'package:ootopia_app/screens/timeline/components/multiple_medias_component.dart';
+import 'package:ootopia_app/screens/timeline/components/show_media_component.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -347,72 +347,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               )
             ],
           ),
-          Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Color(0xff1A4188),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                ),
-                child: mediaView(),
-              ),
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: AnimatedContainer(
-                    height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 100
-                        : 0.0,
-                    width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 100
-                        : 0.0,
-                    curve: _bigLikeShowAnimation &&
-                            !_bigLikeShowAnimationEnd &&
-                            canDoubleClick
-                        ? Curves.easeOutBack
-                        : Curves.easeIn,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    child: AnimatedOpacity(
-                      opacity:
-                          _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                              ? 0.8
-                              : 0.0,
-                      duration: Duration(milliseconds: 300),
-                      child: Visibility(
-                        visible: _bigLikeShowAnimation,
-                        child: Image.asset(
-                          'assets/icons_profile/woow_90_deg.png',
-                          width:
-                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                                  ? 100
-                                  : 0.0,
-                          height:
-                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                                  ? 100
-                                  : 0.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          ShowMediaComponent(
+            post: post,
+            user: this.user,
+            flickMultiManager: widget.flickMultiManager, 
+            bigLikeShowAnimation: this._bigLikeShowAnimation,
+            bigLikeShowAnimationEnd: this._bigLikeShowAnimationEnd,
+            canDoubleClick: this.canDoubleClick,
+            likePost: this._likePost,
           ),
-          if (this.post.type == 'gallery' && this.post.medias!.length > 1) ...[
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: indexDots(this.post.medias!.length),
-            ),
-          ],
           Container(
             height: 32,
             width: double.infinity,
@@ -818,46 +761,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       ),
     );
   }
-
-  Widget mediaView() {
-    if (this.post.type == "image") {
-      return ImagePostTimeline(
-        image: this.post.imageUrl as String,
-        onDoubleTapVideo: () => this._likePost(false, true),
-      );
-    } else if (this.post.type == "video") {
-      return FlickMultiPlayer(
-        userId: (user != null ? user!.id : null),
-        postId: this.post.id,
-        url: this.post.videoUrl!,
-        flickMultiManager: widget.flickMultiManager,
-        image: this.post.thumbnailUrl,
-        onDoubleTapVideo: () => this._likePost(false, true),
-      );
-    } else {
-      return MultipleMediasComponent(
-        post: post,
-        user: this.user,
-        flickMultiManager: widget.flickMultiManager,
-        likePost: this._likePost,
-      );
-    }
-  }
-
-  List<Widget> indexDots(int mediasLength) {
-    return List<Widget>.generate(mediasLength, (index) {
-      return Container(
-        margin: EdgeInsets.all(2),
-        width: 8,
-        height: 8,
-        decoration: BoxDecoration(
-          color: mediaPosition == index ? Colors.blue[900] : Colors.black26,
-          shape: BoxShape.circle,
-        ),
-      );
-    });
-  }
-
+  
   void incrementOozToTransfer() {
     if (this.post.oozToTransfer == null) {
       this.post.oozToTransfer = 0;
