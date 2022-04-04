@@ -168,19 +168,25 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       });
       var endName = 0;
       for (var item in commentStore.listTaggedUsers!) {
-        var startname = value.indexOf('‌@${item.fullname}', endName);
+        var startname = value.indexOf('@${item.fullname}', endName);
+
         if (startname < 0) {
           if (commentStore.excludedIds!.contains(',${item.id}')) {
             commentStore.excludedIds =
                 commentStore.excludedIds?.replaceAll(',${item.id}', '');
           } else {
-            commentStore.excludedIds =
-                commentStore.excludedIds?.replaceAll('${item.id}', '');
+            if (commentStore.excludedIds!.contains('${item.id},')) {
+              commentStore.excludedIds =
+                  commentStore.excludedIds?.replaceAll('${item.id},', '');
+            } else {
+              commentStore.excludedIds =
+                  commentStore.excludedIds?.replaceAll('${item.id}', '');
+            }
           }
           commentStore.listTaggedUsers?.remove(item);
           break;
         }
-        endName = item.end!;
+        endName = startname + item.fullname.length + 3;
       }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {

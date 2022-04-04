@@ -247,7 +247,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.fromLTRB(30, 48, 30, 8),
-                child: Text(AppLocalizations.of(context)!.userNotFound,
+                child: Text(AppLocalizations.of(context)!.youDontHaveAnyFriends,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
@@ -260,7 +260,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.fromLTRB(48, 0, 48, 15),
-                child: Text(AppLocalizations.of(context)!.userNotFoundMsg,
+                child: Text(AppLocalizations.of(context)!.youDontHaveAnyFriendsSubtext,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -276,36 +276,41 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 child: ListView.builder(
                     itemCount: amountOfFriends(),
                     itemBuilder: (BuildContext context, int index) {
-                      return  Container(
-                        margin: EdgeInsets.only(
-                            bottom: (index == amountOfFriends() - 1) ? 80 : 0),
-                        child: itemFriend(
-                            isPageOfUserLogged() ?
-                            friendsStore.friendsDate!.friends![index]! :
-                            circleFriendsStore.friendsDate!.friends![index]!),
+                      return  Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                                bottom: (index == amountOfFriends() - 1) ? 80 : 0),
+                            child: itemFriend(
+                                isPageOfUserLogged() ?
+                                friendsStore.friendsDate!.friends![index]! :
+                                circleFriendsStore.friendsDate!.friends![index]!),
+                          ),
+                          Visibility(
+                              visible: (friendsStore.loadingMoreFriends || circleFriendsStore.loadingMoreFriends) &&
+                                  (index == amountOfFriends() - 1),
+                              child: Container(
+                                margin: EdgeInsets.only(top: 16),
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.transparent,
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ),
+                        ],
                       );
                     }
                 ),
               ),
-              Visibility(
-                  visible: friendsStore.loadingMoreFriends || circleFriendsStore.loadingMoreFriends,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 16),
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.transparent,
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
-                        ),
-                      ),
-                    ),
-                  )
-              ),
-              SizedBox(height: 50,),
+
             ],
 
             SizedBox(height: 16),
@@ -371,14 +376,14 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
             height: 90,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
-                itemCount: 11,
+                itemCount: 4,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return  Container(
                     margin: EdgeInsets.only(
                       left: index == 0 ? 25 : 8,
                       top: 14,
-                      right: index == 10 ? 14 : 0,
+                      right: index == 4 ? 14 : 0,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -400,7 +405,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   Widget itemFriend(FriendModel friendModel){
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
-      height: friendModel.remove == true ? 0 : hasImages(friendModel) ? 150: 66,
+      height: (friendModel.remove == true && isPageOfUserLogged()) ? 0 : hasImages(friendModel) ? 150: 66,
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: Column(
@@ -593,7 +598,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 height: 76,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
-                    itemCount: friendModel.friendsThumbs!.length,
+                    itemCount: friendModel.amountOfPhotos() ,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       return  Stack(
@@ -664,6 +669,30 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                               ),
                             ),
                           ],
+
+                          Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            child: Ink(
+                              padding: EdgeInsets.only(
+                                left: index == 0 ? 25 : 8,
+                                right: index == (friendModel.amountOfPhotos()  - 1) ? 14 : 0,
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(10),
+                                onTap: (){
+                                  Future.delayed(Duration(milliseconds: 80) , (){
+                                    _goToProfile(friendModel.id);
+                                  });
+                                },
+                                child: SizedBox(
+                                  width: 74,
+                                  height: 76,
+                                ),
+                              ),
+                            ),
+                          ),
+
                         ],
                       );
                     }
@@ -731,7 +760,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-
   void _showDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -773,8 +801,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     return widget.userId == authStore.currentUser?.id;
   }
 
-
-
   bool allFriendsIsHide(){
 
     if(isPageOfUserLogged() && friendsStore.friendsDate != null){
@@ -809,10 +835,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   int amountOfFriends() {
     if(isPageOfUserLogged()){
-       return friendsStore.friendsDate?.friends?.length ?? 0;
+      return friendsStore.friendsDate?.friends?.length ?? 0;
     } else{
       return circleFriendsStore.friendsDate?.friends?.length ?? 0;
-
     }
   }
 

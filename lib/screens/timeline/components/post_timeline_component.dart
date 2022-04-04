@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -747,7 +745,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             child: Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(top: 3, bottom: 12),
-              child: ExpandableText(this.post.description, 3),
+              child: ExpandableText(
+                this.post.description,
+                3,
+                this.post.usersTagged,
+              ),
             ),
           ),
           GestureDetector(

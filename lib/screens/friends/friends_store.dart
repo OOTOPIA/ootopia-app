@@ -97,8 +97,19 @@ class FriendsStore with ChangeNotifier {
       usersSearch = FriendsDataModel(total: 0, friends: []);
       lastName = name;
       usersSearch = await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
+      usersSearch.friends = [];
+
+      if (usersSearch.alreadyFriends != null){
+        usersSearch.friends!.addAll( usersSearch.alreadyFriends!);
+        usersSearch.friends!.forEach((element) {
+          element?.isFriend = true;
+        });
+      }
+      usersSearch.friends!.addAll(usersSearch.searchFriends!);
+
       searchIsEmpty = usersSearch.friends!.isEmpty;
-      hasMoreUsersSearch = usersSearch.friends!.length == limit;
+      hasMoreUsersSearch = usersSearch.friends!.length < usersSearch.total!;
+      usersSearch.friends =  usersSearch.friends!.toSet().toList();
       isLoadingSearch = false;
       notifyListeners();
     }
@@ -111,10 +122,10 @@ class FriendsStore with ChangeNotifier {
       pageSearch++;
       FriendsDataModel auxUsers = await friendsRepositoryImpl.
       searchFriends(lastName, pageSearch, limit);
-      usersSearch.friends!.addAll(auxUsers.friends!);
+      usersSearch.friends!.addAll(auxUsers.searchFriends!);
       usersSearch.friends =  usersSearch.friends!.toSet().toList();
       loadingMoreUsersSearch = false;
-      hasMoreUsersSearch = auxUsers.friends!.length == limit;
+      hasMoreUsersSearch = usersSearch.friends!.length < usersSearch.total!;
       notifyListeners();
     }
   }
@@ -131,10 +142,10 @@ class FriendsStore with ChangeNotifier {
   bool isLoadingGetAllFriends = false;
 
   void init(String userId) {
-      orderBy = listOrderBy[0];
-      sortingType = listSortingType[0];
-      notifyListeners();
-      getFriends(userId);
+    orderBy = listOrderBy[0];
+    sortingType = listSortingType[0];
+    notifyListeners();
+    getFriends(userId);
   }
 
   Future<void> getFriends(String userId) async{

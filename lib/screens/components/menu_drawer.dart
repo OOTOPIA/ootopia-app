@@ -188,11 +188,14 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.only(bottom: 4.0),
+                              padding: const EdgeInsets.only(bottom: 4.0, right: 12, left: 12),
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
                                   '${authStore!.currentUser!.fullname}',
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),

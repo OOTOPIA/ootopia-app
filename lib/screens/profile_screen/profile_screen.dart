@@ -186,18 +186,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                                 height:
                                     GlobalConstants.of(context).spacingSmall),
-                            Text(
-                              store == null ? "" : store!.profile!.fullname,
-                              style: GoogleFonts.roboto(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .color,
-                                  fontSize: 24,
-                                  fontWeight: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .fontWeight),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: Text(
+                                store == null ? "" : store!.profile!.fullname,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.roboto(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .color,
+                                    fontSize: 24,
+                                    fontWeight: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .fontWeight),
+                              ),
                             ),
                             SizedBox(
                                 height:

@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
+import '../../auth/auth_store.dart';
+
 
 
 class AddFriends extends StatefulWidget {
@@ -21,6 +23,7 @@ class AddFriends extends StatefulWidget {
 }
 
 class _AddFriendsState extends State<AddFriends> {
+  late AuthStore authStore;
   TextEditingController messageController = TextEditingController();
   SmartPageController controller = SmartPageController.getInstance();
   late FriendsStore friendsStore;
@@ -36,6 +39,7 @@ class _AddFriendsState extends State<AddFriends> {
   @override
   Widget build(BuildContext context) {
     friendsStore  = Provider.of<FriendsStore>(context);
+    authStore = Provider.of<AuthStore>(context);
     return Consumer<FriendsStore>(
         builder: (cont, counter, _) {
           return Stack(
@@ -194,33 +198,37 @@ class _AddFriendsState extends State<AddFriends> {
                           child: ListView.builder(
                               itemCount: friendsStore.usersSearch.friends!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                    margin: EdgeInsets.only(bottom: (index == friendsStore.usersSearch.total! - 1) ? 100 : 0
+                                return Column(
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: isLastItem(index) ? 100 : 0),
+                                        child: itemFriend(friendsStore.usersSearch.friends![index]!)),
+                                    Visibility(
+                                        visible: friendsStore.loadingMoreUsersSearch && isLastItem(index),
+                                        child: Container(
+                                          margin: EdgeInsets.only(top: 16),
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                backgroundColor: Colors.transparent,
+                                                strokeWidth: 2,
+                                                valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
+                                              ),
+                                            ),
+                                          ),
+                                        )
                                     ),
-                                    child: itemFriend(friendsStore.usersSearch.friends![index]!));
+                                  ],
+                                );
                               }
                           ),
                         ),
                       ],
-                      Visibility(
-                          visible: friendsStore.loadingMoreUsersSearch,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 16),
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.transparent,
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(LightColors.blue),
-                                ),
-                              ),
-                            ),
-                          )
-                      ),
-                      SizedBox(height: 16),
+
                     ],
                   ),
                 ),
@@ -286,14 +294,14 @@ class _AddFriendsState extends State<AddFriends> {
             height: 90,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
-                itemCount: 5,
+                itemCount: 4,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return  Container(
                     margin: EdgeInsets.only(
                       left: index == 0 ? 25 : 8,
                       top: 14,
-                      right: index == 5 ? 14 : 0,
+                      right: index == 4 ? 14 : 0,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -398,46 +406,44 @@ class _AddFriendsState extends State<AddFriends> {
                             ),
                           ),
                           Spacer(),
-                          Visibility(
-                            visible: friendModel.isFriend != null,
-                            child: SizedBox(
-                              height: 24,
-                              child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular
-                                            (20),
-                                          side: BorderSide.none),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                    padding: MaterialStateProperty.all<EdgeInsets>(
-                                        EdgeInsets.symmetric(horizontal: 18)),
+                          SizedBox(
+                            height: 24,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 10)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular
+                                          (20),
+                                        side: BorderSide.none),
                                   ),
-                                  onPressed: () {
-                                    Future.delayed(Duration(milliseconds: 80),(){
-                                      if(friendModel.isFriend != true){
-                                        friendsStore.addFriend(friendModel);
-                                        friendModel.isFriend = true;
-                                        setState(() {});
-                                      }else{
-                                        _goToProfile(friendModel.id);
-                                      }
-                                    });
-                                  },
-                                  child: Text(
-                                    getIfIsFriend(friendModel) ?
-                                    AppLocalizations.of(context)!.friend:
-                                    AppLocalizations.of(context)!.add,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                            ),
+                                  backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(horizontal: 18)),
+                                ),
+                                onPressed: () {
+                                  Future.delayed(Duration(milliseconds: 80),(){
+                                    if(friendModel.isFriend != true){
+                                      friendsStore.addFriend(friendModel);
+                                      friendModel.isFriend = true;
+                                      setState(() {});
+                                    }else{
+                                      friendsStore.removeFriend(friendModel, authStore.currentUser!.id);
+                                      friendModel.isFriend = false;
+                                    }
+                                  });
+                                },
+                                child: Text(
+                                  getIfIsFriend(friendModel) ?
+                                  AppLocalizations.of(context)!.friend:
+                                  AppLocalizations.of(context)!.add,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
                           )
                         ],
                       ),
@@ -458,7 +464,7 @@ class _AddFriendsState extends State<AddFriends> {
                   height: 76,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                      itemCount: friendModel.friendsThumbs!.length,
+                      itemCount: friendModel.amountOfPhotos(),
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return  Stack(
@@ -526,6 +532,28 @@ class _AddFriendsState extends State<AddFriends> {
                                 ),
                               ),
                             ],
+                            Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              child: Ink(
+                                padding: EdgeInsets.only(
+                                  left: index == 0 ? 25 : 8,
+                                  right: index == (friendModel.amountOfPhotos() - 1) ? 14 : 0,
+                                ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(10),
+                                  onTap: (){
+                                    Future.delayed(Duration(milliseconds: 80) , (){
+                                      _goToProfile(friendModel.id);
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    width: 74,
+                                    height: 76,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       }
@@ -554,6 +582,10 @@ class _AddFriendsState extends State<AddFriends> {
       }
     });
     return isFriend;
+  }
+
+  bool isLastItem(int index) {
+    return (index == friendsStore.usersSearch.friends!.length - 1);
   }
 
 }
