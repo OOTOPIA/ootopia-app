@@ -159,6 +159,19 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     });
   }
 
+  clearInpuntTextAndRemoveUsers() {
+    commentStore.excludedIds = '';
+    commentStore.fullName = '';
+    commentStore.listAllUsers.clear();
+    seSelectedUser = false;
+    _inputController.clear();
+    userNameReply = null;
+    replyToUserId = null;
+    commentStore.listTaggedUsers?.clear();
+    commentReply = null;
+    indexComment = null;
+  }
+
   void onChanged(String value) async {
     value = value.trim();
 
@@ -248,29 +261,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 createCommentReply
               ];
             }
-            commentStore.excludedIds = '';
-            commentStore.fullName = '';
-            _inputController.clear();
-            commentStore.listAllUsers.clear();
-            commentStore.listTaggedUsers?.clear();
-            userNameReply = null;
-            commentReply = null;
-            indexComment = null;
-            seSelectedUser = false;
+            clearInpuntTextAndRemoveUsers();
             commentStore.isLoading = false;
             setState(() {});
           } else {
             await commentStore.createComment(
                 postId, _inputController.text.trim());
             isIconBlue = false;
-            commentStore.currentPageComment = 1;
-            _inputController.clear();
-            commentStore.listComments.clear();
-            commentStore.listAllUsers.clear();
-            commentStore.listTaggedUsers?.clear();
-            commentStore.excludedIds = '';
-            commentStore.fullName = '';
-            seSelectedUser = false;
+            clearInpuntTextAndRemoveUsers();
             _getData();
             commentStore.isLoading = false;
           }
@@ -301,19 +299,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   replyComment(Comment comment) {
     userNameReply = comment.username;
-    _inputController.text = "‌@${comment.username}‌";
+    _inputController.text = "@";
+    addUserInText(
+      UserSearchModel(fullname: comment.username!, id: comment.userId),
+    );
     replyToUserId = comment.userId;
-    _inputController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _inputController.text.length));
-    commentStore.listTaggedUsers = [
-      UserSearchModel(
-        fullname: "‌@${comment.username}‌",
-        id: comment.userId,
-        start: 0,
-        end: _inputController.text.length,
-      )
-    ].toList();
-
     commentReply = comment.id;
     indexComment = commentStore.listComments
         .indexWhere((_comment) => _comment.id == comment.id);
@@ -454,12 +444,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                       commentStore: commentStore,
                       userNameReply: userNameReply,
                       removeReply: () {
-                        _inputController.clear();
-                        userNameReply = null;
-                        replyToUserId = null;
-                        commentStore.listTaggedUsers?.clear();
-                        commentReply = null;
-                        indexComment = null;
+                        clearInpuntTextAndRemoveUsers();
                         setState(() {});
                       },
                       focusNode: focusNode,
