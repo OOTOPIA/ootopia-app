@@ -270,6 +270,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             isIconBlue = false;
             clearInpuntTextAndRemoveUsers();
             commentStore.currentPageComment = 1;
+            commentStore.listComments.clear();
             _getData();
             commentStore.isLoading = false;
           }
