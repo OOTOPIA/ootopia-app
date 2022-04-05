@@ -501,7 +501,8 @@
     "hideReplies": "Ocultar respostas",
     "couldNotSend": "Não foi possivel enviar",
     "couldNotLoad": "Não foi possivel carregar",
-    "repliedToYourComment": "respondeu seu comentário"
+    "repliedToYourComment": "respondeu seu comentário",
+    "taggedUserInPost": "marcou você numa publicação"
 
 }
 

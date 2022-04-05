@@ -28,7 +28,7 @@ class _ListOfUsersState extends State<ListOfUsers> {
       alignment: Alignment.topCenter,
       child: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height * .30,
+        height: MediaQuery.of(context).size.height * .4,
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           controller: widget.scrollController,
