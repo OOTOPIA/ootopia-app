@@ -20,7 +20,7 @@ class NotificationMessageService {
   void createMessage(RemoteMessage message) async {
     try {
       bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
-      getUserData();
+      await getUserData();
 
       if (!isAllowed) {
         await AwesomeNotifications().requestPermissionToSendNotifications();
@@ -70,7 +70,7 @@ class NotificationMessageService {
 
   }
 
-  void getUserData() async {
+  Future<void> getUserData() async {
     await userRepository.getUserIsLoggedIn();
     user = await userRepository.getCurrentUser();
   }
