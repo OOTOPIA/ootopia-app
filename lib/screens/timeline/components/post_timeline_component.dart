@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
-import 'package:ootopia_app/data/models/timeline/media_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
@@ -16,6 +15,8 @@ import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
+import 'package:ootopia_app/screens/timeline/components/header_post_component.dart';
+import 'package:ootopia_app/screens/timeline/components/show_media_component.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -197,61 +198,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => _goToProfile(),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 6.0,
-                        right: 6.0,
-                        bottom: 6.0,
-                      ),
-                      child: this.post.photoUrl != null
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage("${this.post.photoUrl}"),
-                              radius: 16,
-                            )
-                          : CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/icons/user.png"),
-                              radius: 16,
-                            ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            this.post.username,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Visibility(
-                            visible: (this.post.city != null &&
-                                    this.post.city!.isNotEmpty) ||
-                                (this.post.state != null &&
-                                    this.post.state!.isNotEmpty),
-                            child: Text(
-                              '${this.post.city}' +
-                                  (this.post.state != null &&
-                                          this.post.state!.isNotEmpty
-                                      ? ', ${this.post.state}'
-                                      : ''),
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              HeaderPostComponent(
+                username: this.post.username,
+                photoUrl: this.post.photoUrl,
+                city: this.post.city,
+                state: this.post.state,
+                goToProfile: _goToProfile,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -395,92 +347,15 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               )
             ],
           ),
-          Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Color(0xff1A4188),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                ),
-                child: mediaView(),
-              ),
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: AnimatedContainer(
-                    height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 100
-                        : 0.0,
-                    width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 100
-                        : 0.0,
-                    curve: _bigLikeShowAnimation &&
-                            !_bigLikeShowAnimationEnd &&
-                            canDoubleClick
-                        ? Curves.easeOutBack
-                        : Curves.easeIn,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    child: AnimatedOpacity(
-                      opacity:
-                          _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                              ? 0.8
-                              : 0.0,
-                      duration: Duration(milliseconds: 300),
-                      child: Visibility(
-                        visible: _bigLikeShowAnimation,
-                        child: Image.asset(
-                          'assets/icons_profile/woow_90_deg.png',
-                          width:
-                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                                  ? 100
-                                  : 0.0,
-                          height:
-                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                                  ? 100
-                                  : 0.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (this.post.type == 'gallery' &&
-                  this.post.medias!.length > 1 &&
-                  showPosition)
-                Positioned(
-                  right: 23,
-                  top: 22,
-                  child: Container(
-                    height: 20,
-                    width: 35,
-                    child: Center(
-                      child: Text(
-                        '${mediaPosition + 1}/${this.post.medias!.length}',
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                ),
-            ],
+          ShowMediaComponent(
+            post: post,
+            user: this.user,
+            flickMultiManager: widget.flickMultiManager, 
+            bigLikeShowAnimation: this._bigLikeShowAnimation,
+            bigLikeShowAnimationEnd: this._bigLikeShowAnimationEnd,
+            canDoubleClick: this.canDoubleClick,
+            likePost: this._likePost,
           ),
-          if (this.post.type == 'gallery' && this.post.medias!.length > 1) ...[
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: indexDots(this.post.medias!.length),
-            ),
-          ],
           Container(
             height: 32,
             width: double.infinity,
@@ -886,80 +761,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       ),
     );
   }
-
-  Widget mediaView() {
-    if (this.post.type == "image") {
-      return ImagePostTimeline(
-        image: this.post.imageUrl as String,
-        onDoubleTapVideo: () => this._likePost(false, true),
-      );
-    } else if (this.post.type == "video") {
-      return FlickMultiPlayer(
-        userId: (user != null ? user!.id : null),
-        postId: this.post.id,
-        url: this.post.videoUrl!,
-        flickMultiManager: widget.flickMultiManager,
-        image: this.post.thumbnailUrl,
-        onDoubleTapVideo: () => this._likePost(false, true),
-      );
-    } else {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width,
-        child: PageView.builder(
-          itemCount: this.post.medias!.length,
-          pageSnapping: true,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, pagePosition) {
-            return buildMediaRow(this.post.medias![pagePosition]);
-          },
-          onPageChanged: (value) {
-            setState(() {
-              mediaPosition = value;
-              showPosition = true;
-              Future.delayed(Duration(seconds: 2), () {
-                setState(() {
-                  showPosition = false;
-                });
-              });
-            });
-          },
-        ),
-      );
-    }
-  }
-
-  buildMediaRow(Media media) {
-    if (media.type == "image") {
-      return ImagePostTimeline(
-        image: media.mediaUrl as String,
-        onDoubleTapVideo: () => this._likePost(false, true),
-      );
-    } else if (media.type == "video") {
-      return FlickMultiPlayer(
-        userId: (user != null ? user!.id : null),
-        postId: this.post.id,
-        url: media.mediaUrl!,
-        flickMultiManager: widget.flickMultiManager,
-        image: media.thumbUrl!,
-        onDoubleTapVideo: () => this._likePost(false, true),
-      );
-    }
-  }
-
-  List<Widget> indexDots(int mediasLength) {
-    return List<Widget>.generate(mediasLength, (index) {
-      return Container(
-        margin: EdgeInsets.all(2),
-        width: 8,
-        height: 8,
-        decoration: BoxDecoration(
-            color: mediaPosition == index ? Colors.blue[900] : Colors.black26,
-            shape: BoxShape.circle),
-      );
-    });
-  }
-
+  
   void incrementOozToTransfer() {
     if (this.post.oozToTransfer == null) {
       this.post.oozToTransfer = 0;

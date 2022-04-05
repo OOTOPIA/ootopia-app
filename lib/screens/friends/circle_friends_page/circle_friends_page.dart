@@ -247,7 +247,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.fromLTRB(30, 48, 30, 8),
-                child: Text(AppLocalizations.of(context)!.userNotFound,
+                child: Text(AppLocalizations.of(context)!.youDontHaveAnyFriends,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
@@ -260,7 +260,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.fromLTRB(48, 0, 48, 15),
-                child: Text(AppLocalizations.of(context)!.userNotFoundMsg,
+                child: Text(AppLocalizations.of(context)!.youDontHaveAnyFriendsSubtext,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
