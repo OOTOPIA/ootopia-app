@@ -10,6 +10,8 @@ import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+
 
 class NotificationMessageService {
   AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
@@ -65,7 +67,11 @@ class NotificationMessageService {
           ],
         );
       }
-    }catch(error){
+    }catch(error, stackTrace){
+      await Sentry.captureException(
+        error,
+        stackTrace: stackTrace,
+      );
       print('error: $error');
     }
 
