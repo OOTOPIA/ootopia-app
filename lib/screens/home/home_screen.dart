@@ -112,12 +112,18 @@ class _HomeScreenState extends State<HomeScreen>
       //   );
       // }
       AwesomeNotifications().actionStream.listen((event) {
+        if (event.channelKey == 'basic_channel' && Platform.isIOS) {
+          AwesomeNotifications().decrementGlobalBadgeCounter();
+        }
         final payload = event.payload!;
         if (payload != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
             navigateToTimelineProfileScreen(payload);
           });
         }
+      });
+      AwesomeNotifications().dismissedStream.listen((event) {
+        AwesomeNotifications().setGlobalBadgeCounter(0);
       });
     });
   }
