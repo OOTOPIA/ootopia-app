@@ -204,12 +204,8 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                       width: 8,
                                     ),
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width <
-                                              400
-                                          ? MediaQuery.of(context).size.width *
-                                              0.3
-                                          : MediaQuery.of(context).size.width *
-                                              0.4,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
