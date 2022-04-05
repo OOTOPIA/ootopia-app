@@ -78,27 +78,14 @@ abstract class CommentStoreBase with Store {
           var startname =
               newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
 
-          // if (startname == user.start!) {
-          //   newTextComment = newTextComment.replaceRange(
-          //     user.start! + newStartIndex,
-          //     user.end! + newStartIndex,
-          //     newString,
-          //   );
-          //   endNameUser =
-          //       startname + user.id.length - (user.end! - user.start!);
-          //   newStartIndex =
-          //       newStartIndex + newString.length - (user.end! - user.start!);
-          //   user.end = user.start! + newString.length;
-          // } else {
           newTextComment = newTextComment.replaceRange(
             startname + newStartIndex,
-            user.fullname.length + startname + newStartIndex + 2,
+            user.fullname.length + startname + newStartIndex + 3,
             newString,
           );
-          endNameUser = user.id.length + startname + 2;
+          endNameUser = user.id.length + startname + 3;
           newStartIndex =
               newStartIndex + newString.length - (endNameUser - startname);
-          // }
         });
       }
       await commentRepository.createComment(

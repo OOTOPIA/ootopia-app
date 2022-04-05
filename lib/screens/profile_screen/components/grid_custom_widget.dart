@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
 class GridCustomWidget extends StatelessWidget {
@@ -9,15 +10,15 @@ class GridCustomWidget extends StatelessWidget {
   int? discountSpacing = 0;
   double? amountPadding;
 
-  GridCustomWidget(
-      {Key? key,
-      required this.columnsCount,
-      required this.thumbnailUrl,
-      required this.onTap,
-      this.type,
-      this.discountSpacing = 0,
-      this.amountPadding})
-      : super(key: key);
+  GridCustomWidget({
+    Key? key,
+    required this.columnsCount,
+    required this.thumbnailUrl,
+    required this.onTap,
+    this.type,
+    this.discountSpacing = 0,
+    this.amountPadding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,13 @@ class GridCustomWidget extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (type == 'gallery')
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: SvgPicture.asset(
+                          "assets/icons/multiple_medias_icon.svg"),
+                    ),
                   Align(
                     child: type == 'video'
                         ? Image.asset("assets/icons/icon_play.png")

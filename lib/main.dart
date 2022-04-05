@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
-import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
@@ -292,11 +291,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (BuildContext context) =>
               InterestsTagsBloc(InterestsTagsRepositoryImpl()),
-        ),
-        BlocProvider(
-          create: (BuildContext context) => PostBloc(
-            PostRepositoryImpl(),
-          ),
         ),
         BlocProvider(
           create: (BuildContext context) => WalletBloc(

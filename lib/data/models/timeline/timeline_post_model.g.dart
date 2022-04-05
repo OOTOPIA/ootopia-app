@@ -36,6 +36,12 @@ TimelinePost _$TimelinePostFromJson(Map<String, dynamic> json) {
     badges: (json['badges'] as List<dynamic>?)
         ?.map((e) => Badge.fromJson(e as Map<String, dynamic>))
         .toList(),
+    medias: (json['medias'] as List<dynamic>?)
+        ?.map((e) => Media.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    usersTagged: (json['usersTagged'] as List<dynamic>?)
+        ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -63,4 +69,6 @@ Map<String, dynamic> _$TimelinePostToJson(TimelinePost instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'badges': instance.badges,
+      'medias': instance.medias,
+      'usersTagged': instance.usersTagged,
     };
