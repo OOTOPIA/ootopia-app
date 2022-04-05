@@ -1,13 +1,14 @@
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert';
+import 'package:ootopia_app/data/models/notifications/notification_model.dart' as model;
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ootopia_app/data/models/notifications/notification_model.dart' as model;
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class NotificationMessageService {
@@ -93,8 +94,7 @@ class NotificationMessageService {
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
     } else if (type == 'user-tagged-in-post') {
-      return value.notificationTitleCommentedPost
-          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
+      return value.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
     } else if (type == 'user-tagged-in-comment-reply') {
       return value.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
     } else if (type == "gratitude_reward") {
@@ -110,9 +110,10 @@ class NotificationMessageService {
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
     }
-   else if (type == 'user-tagged-in-post') {
-      return "${usersName!.first} " + value.repliedToYourComment;
-    } else if (type == 'user-tagged-in-comment-reply') {
+    else if (type == 'user-tagged-in-post') {
+      return "${usersName.first} " + value.repliedToYourComment;
+    }
+    else if (type == 'user-tagged-in-comment-reply') {
       return "${usersName.first} " + value.repliedToYourComment;
     }
     else if (type == "gratitude_reward") {
@@ -124,7 +125,7 @@ class NotificationMessageService {
         return value.notificationBodyOOzReceivedBySomePeople
             .replaceAll('%USER_NAME%', '${usersName.last}')
             .replaceAll(
-                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+            '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
       }
     }
     else {
@@ -136,7 +137,7 @@ class NotificationMessageService {
         return value.notificationBodyCommentedPostBySomePeople
             .replaceAll('%USER_NAME%', '${usersName.last}')
             .replaceAll(
-                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+            '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
       }
     }
     return '';
@@ -152,6 +153,6 @@ class NotificationMessageService {
     return buttonText;
   }
 
-  String formatNumber(double number, String locale) =>
-      NumberFormat("###,###,###.00", locale).format(number);
+  String formatNumber(double number, String locale) => NumberFormat("###,###,###.00", locale).format(number);
+
 }
