@@ -203,32 +203,37 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                                     SizedBox(
                                       width: 8,
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          learningTrack.userName,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: learningTrack.location !=
-                                                  'null' &&
-                                              learningTrack.location != null,
-                                          child: Text(
-                                            learningTrack.location!,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            learningTrack.userName,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
                                             ),
                                           ),
-                                        )
-                                      ],
+                                          Visibility(
+                                            visible: learningTrack.location !=
+                                                    'null' &&
+                                                learningTrack.location != null,
+                                            child: Text(
+                                              learningTrack.location!,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),
