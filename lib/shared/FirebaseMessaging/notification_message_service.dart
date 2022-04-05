@@ -92,6 +92,9 @@ class NotificationMessageService {
     }
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
+    } else if (type == 'user-tagged-in-post') {
+      return value.notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
     } else if (type == 'user-tagged-in-comment-reply') {
       return value.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
     } else if (type == "gratitude_reward") {
@@ -107,7 +110,9 @@ class NotificationMessageService {
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
     }
-    else if (type == 'user-tagged-in-comment-reply') {
+   else if (type == 'user-tagged-in-post') {
+      return "${usersName!.first} " + value.repliedToYourComment;
+    } else if (type == 'user-tagged-in-comment-reply') {
       return "${usersName.first} " + value.repliedToYourComment;
     }
     else if (type == "gratitude_reward") {

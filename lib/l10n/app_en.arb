@@ -491,11 +491,15 @@
     "userNotFound" : "User not found",
     "resultsFor" : "Results for",
     "userNotFoundMsg" : "Unfortunately the user you are looking for is not found or does not exist yet.",
+    "youDontHaveAnyFriends" : "You don't have any friends",
+    "youDontHaveAnyFriendsSubtext" : "Click the \"Add friend\" button and connect with people who are making a difference in the world",
+
 
 
     "multiplesImages": "Multiples images",
     "limitSelectedImages": "The limit is 5 photos or videos",
     "hasntImageOnGallery": "This gallery has no any files",
+    "selectSomeImage": "You need to select an image to continue",
 
     "viewMoreReply": "View %amount% more reply",
     "reply": "Reply",

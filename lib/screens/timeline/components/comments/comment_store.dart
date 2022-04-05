@@ -31,6 +31,9 @@ abstract class CommentStoreBase with Store {
   List<UserSearchModel>? listTaggedUsers = [];
 
   @observable
+  String? excludedIds = '';
+
+  @observable
   int currentPageComment = 1;
 
   @observable
@@ -41,6 +44,9 @@ abstract class CommentStoreBase with Store {
 
   @observable
   bool hasMoreComments = true;
+
+  @observable
+  String fullName = '';
 
   @action
   Future<void> getComments(String postId, int page) async {
@@ -63,22 +69,23 @@ abstract class CommentStoreBase with Store {
       isLoading = true;
       List<String> idsUsersTagged = [];
       var newTextComment = text;
-
       if (listTaggedUsers != null) {
         int newStartIndex = 0;
+        int endNameUser = 0;
         listTaggedUsers?.forEach((user) {
           idsUsersTagged.add(user.id);
           String newString = "@[${user.id}]";
-          if (newTextComment.contains(user.fullname)) {
-            newTextComment = newTextComment.replaceRange(
-              user.start! + newStartIndex,
-              user.end! + newStartIndex,
-              newString,
-            );
-          }
+          var startname =
+              newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
+
+          newTextComment = newTextComment.replaceRange(
+            startname + newStartIndex,
+            user.fullname.length + startname + newStartIndex + 3,
+            newString,
+          );
+          endNameUser = user.id.length + startname + 3;
           newStartIndex =
-              newStartIndex + newString.length - (user.end! - user.start!);
-          user.end = user.start! + newString.length;
+              newStartIndex + newString.length - (endNameUser - startname);
         });
       }
       await commentRepository.createComment(
@@ -107,14 +114,19 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<void> searchUser(String fullName) async {
+  Future<void> searchUser() async {
     try {
       if (viewState != ViewState.loadingNewData) {
         listAllUsers.clear();
+        viewState = ViewState.loading;
       }
-      viewState = ViewState.loading;
-      var response =
-          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
+
+      var response = await userRepository.getAllUsersByName(
+        fullName,
+        currentPageUser,
+        10,
+        excludedIds,
+      );
       hasMoreUsers = response.length == 10;
       listAllUsers.addAll(response);
       viewState = ViewState.done;
@@ -123,14 +135,13 @@ abstract class CommentStoreBase with Store {
     }
   }
 
-  void updateOnScroll(
-      ScrollController scrollController, String fullname) async {
+  void updateOnScroll(ScrollController scrollController) async {
     if (scrollController.position.atEdge) {
       if (scrollController.position.pixels != 0) {
         if (hasMoreUsers) {
           currentPageUser++;
           viewState = ViewState.loadingNewData;
-          await searchUser(fullname);
+          await searchUser();
         }
       }
     }

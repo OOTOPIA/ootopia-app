@@ -128,4 +128,11 @@ abstract class _ProfileScreenStoreBase with Store {
       ),
     );
   }
+
+  String getPostType(TimelinePost post) {
+    if (post.type == 'gallery' && post.medias!.length == 1) {
+      return post.medias!.first.type!;
+    }
+    return post.type;
+  }
 }

@@ -338,7 +338,11 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
   }
 
   Future<List<UserSearchModel>> getAllUsersByName(
-      String fullName, int page, int limit) async {
+    String fullName,
+    int page,
+    int limit,
+    String? excludedIds,
+  ) async {
     try {
       Response res = await ApiClient.api().get(
         "users/search",
@@ -346,6 +350,7 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
           'page': page,
           'limit': limit,
           'fullname': fullName,
+          'excludedUsers': excludedIds
         },
       );
       if (res.statusCode != 200) {

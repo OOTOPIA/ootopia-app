@@ -469,6 +469,7 @@
     "readMore" : "Leia mais",
     "multiplesImages": "Múltiplas imagens",
     "limitSelectedImages": "O limite são 5 fotos ou vídeos",
+    "selectSomeImage": "Você precisa selecionar uma imagem para continuar",
 
 
     "addFriends" : "Adicionar amigos",
@@ -487,6 +488,8 @@
     "userNotFound" : "Usuário não encontrado",
     "resultsFor" : "Resultados para",
     "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe.",
+    "youDontHaveAnyFriends" : "Você não possui nenhum amigo",
+    "youDontHaveAnyFriendsSubtext" : "Clique no botão \"Adicionar amigo\" e se conecte a pessoas que estão fazendo diferença no mundo",
     "userComment":"Você foi marcado em um comentário",
     "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
     "earnOOzWhenTheySignup":"ganham OOz quando eles se inscrevem",

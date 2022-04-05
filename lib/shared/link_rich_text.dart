@@ -36,7 +36,6 @@ class LinkRichText extends StatelessWidget {
     var allName = [];
     if (userCommentsList != null && userCommentsList!.isNotEmpty) {
       List<Map<String, dynamic>> textFragmented = [];
-      var countText = 0;
       for (var item in userCommentsList!) {
         var startName = text.indexOf('@[${item.id}]');
         if (startName != -1) {
@@ -48,8 +47,8 @@ class LinkRichText extends StatelessWidget {
           });
         }
       }
+      var countText = 0;
       allName.sort((actual, next) => actual["start"] > next["start"] ? 1 : -1);
-
       for (var i = 0; i < allName.length; i++) {
         var userInComment = allName[i];
         textFragmented.add({
@@ -76,7 +75,7 @@ class LinkRichText extends StatelessWidget {
         var comment = textFragmented[i];
         textSpanWidget.add(
           TextSpan(
-            text: comment['string'].replaceAll('ㅤ', ' '),
+            text: comment['string'],
             recognizer: new TapGestureRecognizer()
               ..onTap = () {
                 if (comment['id'] != null) {
