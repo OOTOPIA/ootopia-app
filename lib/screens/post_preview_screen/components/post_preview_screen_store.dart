@@ -194,7 +194,7 @@ abstract class _PostPreviewScreenStoreBase with Store {
       }
       viewState = ViewState.loading;
       var response = await userRepository.getAllUsersByName(
-          fullName, currentPageUser, 10, '');
+          fullName, currentPageUser, 10, excludedIds);
       hasMoreUsers = response.length == 10;
       listAllUsers.addAll(response);
       viewState = ViewState.done;

@@ -5,7 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/data/models/notifications/notification_model.dart' as model;
+import 'package:ootopia_app/data/models/notifications/notification_model.dart'
+    as model;
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
@@ -27,8 +28,8 @@ class NotificationMessageService {
         await AwesomeNotifications().requestPermissionToSendNotifications();
       }
 
-
-      if (message.data['usersName'] != null && message.data['usersName'] != '') {
+      if (message.data['usersName'] != null &&
+          message.data['usersName'] != '') {
         message.data["usersName"] = jsonDecode(message.data["usersName"]);
       } else {
         message.data["usersName"] = [];
@@ -39,8 +40,10 @@ class NotificationMessageService {
       setLocale();
 
       if (user != null) {
-        String title = await getNotificationTitleOfUserLogged(notification.type, oozReceived: notification.oozAmount);
-        String body = await getNotificationBodyOfUserLogged(notification.type, notification.usersName!);
+        String title = await getNotificationTitleOfUserLogged(notification.type,
+            oozReceived: notification.oozAmount);
+        String body = await getNotificationBodyOfUserLogged(
+            notification.type, notification.usersName!);
         String buttonText = await getNotificationButtonText();
 
         AwesomeNotifications().createNotification(
@@ -65,10 +68,9 @@ class NotificationMessageService {
           ],
         );
       }
-    }catch(error){
+    } catch (error) {
       print('error: $error');
     }
-
   }
 
   Future<void> getUserData() async {
@@ -84,60 +86,60 @@ class NotificationMessageService {
     this.locale = Locale(this.language.split("_").first);
   }
 
-  Future<String> getNotificationTitleOfUserLogged(String type, {String? oozReceived}) async {
+  Future<String> getNotificationTitleOfUserLogged(String type,
+      {String? oozReceived}) async {
     AppLocalizations value = await AppLocalizations.delegate.load(this.locale);
     late String formatOOz;
 
-    if (oozReceived != null){
+    if (oozReceived != null) {
       formatOOz = formatNumber(double.parse(oozReceived), language);
     }
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
     } else if (type == 'user-tagged-in-post') {
-      return value.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
+      return value.notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
     } else if (type == 'user-tagged-in-comment-reply') {
-      return value.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
+      return value.notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
     } else if (type == "gratitude_reward") {
-      return value.notificationTitleOOzReceived.replaceAll('%OOZ_RECEIVED%', formatOOz);
+      return value.notificationTitleOOzReceived
+          .replaceAll('%OOZ_RECEIVED%', formatOOz);
     } else {
-      return value.notificationTitleCommentedPost.replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
+      return value.notificationTitleCommentedPost
+          .replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
     }
   }
 
-  Future<String> getNotificationBodyOfUserLogged(String type, List<String> usersName) async {
+  Future<String> getNotificationBodyOfUserLogged(
+      String type, List<String> usersName) async {
     AppLocalizations value = await AppLocalizations.delegate.load(this.locale);
 
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
-    }
-    else if (type == 'user-tagged-in-post') {
+    } else if (type == 'user-tagged-in-post') {
+      return "${usersName.first} " + value.taggedUserInPost;
+    } else if (type == 'user-tagged-in-comment-reply') {
       return "${usersName.first} " + value.repliedToYourComment;
-    }
-    else if (type == 'user-tagged-in-comment-reply') {
-      return "${usersName.first} " + value.repliedToYourComment;
-    }
-    else if (type == "gratitude_reward") {
+    } else if (type == "gratitude_reward") {
       if (usersName.length == 1) {
         return value.notificationBodyOOzReceivedByOnePerson
             .replaceAll('%USER_NAME%', '${usersName.first}');
-      }
-      else {
+      } else {
         return value.notificationBodyOOzReceivedBySomePeople
             .replaceAll('%USER_NAME%', '${usersName.last}')
             .replaceAll(
-            '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
       }
-    }
-    else {
+    } else {
       if (usersName.length == 1) {
         return value.notificationBodyCommentedPostByOnePerson
             .replaceAll('%USER_NAME%', '${usersName.first}');
-      }
-      else if (usersName.length > 1) {
+      } else if (usersName.length > 1) {
         return value.notificationBodyCommentedPostBySomePeople
             .replaceAll('%USER_NAME%', '${usersName.last}')
             .replaceAll(
-            '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
+                '%PEOPLE_AMOUNT%', '${(usersName.length - 1).toString()}');
       }
     }
     return '';
@@ -153,6 +155,6 @@ class NotificationMessageService {
     return buttonText;
   }
 
-  String formatNumber(double number, String locale) => NumberFormat("###,###,###.00", locale).format(number);
-
+  String formatNumber(double number, String locale) =>
+      NumberFormat("###,###,###.00", locale).format(number);
 }
