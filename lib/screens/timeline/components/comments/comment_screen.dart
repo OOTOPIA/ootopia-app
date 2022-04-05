@@ -268,6 +268,8 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
             await commentStore.createComment(
                 postId, _inputController.text.trim());
             isIconBlue = false;
+            commentStore.currentPageComment = 1;
+            commentStore.listComments.clear();
             clearInpuntTextAndRemoveUsers();
             _getData();
             commentStore.isLoading = false;
