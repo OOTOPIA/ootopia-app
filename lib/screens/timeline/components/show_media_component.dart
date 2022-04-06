@@ -142,7 +142,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
         postId: widget.post.id,
         url: widget.post.videoUrl!,
         flickMultiManager: widget.flickMultiManager!,
-        image: widget.post.thumbnailUrl,
+        image: widget.post.thumbnailUrl!,
         onDoubleTapVideo: () => widget.likePost(false, true),
       );
     } else {

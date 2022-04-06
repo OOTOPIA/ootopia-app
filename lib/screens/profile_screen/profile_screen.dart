@@ -403,7 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 amountPadding: 0,
                                                 thumbnailUrl:
                                                     post.type != 'gallery'
-                                                        ? post.thumbnailUrl
+                                                        ? post.thumbnailUrl!
                                                         : post.medias!.first
                                                             .thumbUrl!,
                                                 columnsCount: 4,
