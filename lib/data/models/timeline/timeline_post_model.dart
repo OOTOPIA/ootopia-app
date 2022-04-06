@@ -13,7 +13,7 @@ class TimelinePost {
   String type;
   String? imageUrl;
   String? videoUrl;
-  String thumbnailUrl;
+  String? thumbnailUrl;
   String? photoUrl;
   String username;
   int likesCount;
@@ -39,7 +39,7 @@ class TimelinePost {
     required this.type,
     this.imageUrl,
     this.videoUrl,
-    required this.thumbnailUrl,
+    this.thumbnailUrl,
     this.photoUrl,
     required this.username,
     required this.likesCount,
