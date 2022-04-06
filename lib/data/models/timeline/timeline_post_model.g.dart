@@ -14,7 +14,7 @@ TimelinePost _$TimelinePostFromJson(Map<String, dynamic> json) {
     type: json['type'] as String,
     imageUrl: json['imageUrl'] as String?,
     videoUrl: json['videoUrl'] as String?,
-    thumbnailUrl: json['thumbnailUrl'] as String,
+    thumbnailUrl: json['thumbnailUrl'] as String?,
     photoUrl: json['photoUrl'] as String?,
     username: json['username'] as String,
     likesCount: json['likesCount'] as int,
