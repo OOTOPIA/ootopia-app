@@ -510,6 +510,6 @@
     "couldNotLoad": "Could not load",
     "repliedToYourComment": "replied to your comment",
     "taggedUserInPost": "tagged you in a post",
-    "userNotFoundInTaggedUser":"User not found. Check the name entered or enter another"
+    "userNotFoundInTaggedUser":"Check the name entered or enter another"
 
 }

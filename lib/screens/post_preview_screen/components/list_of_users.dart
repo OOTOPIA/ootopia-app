@@ -39,9 +39,38 @@ class _ListOfUsersState extends State<ListOfUsers> {
                 child: CircularProgressIndicator(),
               );
             } else if (widget.postPreviewScreenStore.listAllUsers.isEmpty) {
-              return Center(
-                child: Text(
-                    AppLocalizations.of(context)!.userNotFoundInTaggedUser),
+              return Container(
+                height: MediaQuery.of(context).size.height * .4,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    BackgroundButterflyTop(positioned: -59),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.userNotFound,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff707070),
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .userNotFoundInTaggedUser,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff707070),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             return Stack(
