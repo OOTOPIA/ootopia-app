@@ -511,5 +511,9 @@
     "repliedToYourComment": "replied to your comment",
     "taggedUserInPost": "tagged you in a post",
 
-    "addedAsFriend": "added you to the circle of friends."
+    "addedAsFriend": "added you to the circle of friends.",
+    
+    "userNotFoundInTaggedUser":"Check the name entered or enter another"
+
+    
 }
