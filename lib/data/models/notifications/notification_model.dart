@@ -11,6 +11,7 @@ class NotificationModel {
     required this.postId,
     this.userCommentFullname,
     this.oozAmount,
+    this.userId,
   });
 
   final String? photoURL;
@@ -19,6 +20,7 @@ class NotificationModel {
   final String postId;
   final String? userCommentFullname;
   final String? oozAmount;
+  final String? userId;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       _$NotificationModelFromJson(json);

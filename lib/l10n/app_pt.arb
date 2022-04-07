@@ -504,7 +504,9 @@
     "couldNotSend": "Não foi possivel enviar",
     "couldNotLoad": "Não foi possivel carregar",
     "repliedToYourComment": "respondeu seu comentário",
-    "taggedUserInPost": "marcou você numa publicação"
+    "taggedUserInPost": "marcou você numa publicação",
+
+    "addedAsFriend": "adicionou você no círculo de amigos."
 
 }
 
