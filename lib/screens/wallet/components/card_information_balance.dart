@@ -288,12 +288,12 @@ class CardInformationBalance extends StatelessWidget {
                     child: Text(
                       getTransactionTitle(context),
                       style: TextStyle(
-                          color:
-                              this.originTransaction == "market_place_transfer"
-                                  ? Color(0xff000000)
-                                  : Color(0xff018F9C),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12),
+                        color: this.originTransaction == "market_place_transfer"
+                            ? Color(0xff000000)
+                            : Color(0xff018F9C),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -317,26 +317,39 @@ class CardInformationBalance extends StatelessWidget {
                         ),
                       ),
                     ),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: '$typeActionFromOrTo',
-                        style:
-                            TextStyle(color: Color(0xff707070), fontSize: 12)),
-                    TextSpan(
-                        text:
-                            ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
-                        style: TextStyle(
-                            color: Color(0xff707070),
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                        recognizer: new TapGestureRecognizer()
-                          ..onTap = () {
-                            if (this.toOrFrom.isNotEmpty) {
-                              _goToProfile();
-                            }
-                          }),
-                  ]))
+                  Container(
+                    width: MediaQuery.of(context).size.width < 400
+                        ? MediaQuery.of(context).size.width * 0.3
+                        : MediaQuery.of(context).size.width * 0.4,
+                    child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '$typeActionFromOrTo',
+                            style: TextStyle(
+                              color: Color(0xff707070),
+                              fontSize: 12,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                ' ${this.toOrFrom.isEmpty ? "Ootopia" : this.toOrFrom}',
+                            style: TextStyle(
+                                color: Color(0xff707070),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                            recognizer: new TapGestureRecognizer()
+                              ..onTap = () {
+                                if (this.toOrFrom.isNotEmpty) {
+                                  _goToProfile();
+                                }
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
