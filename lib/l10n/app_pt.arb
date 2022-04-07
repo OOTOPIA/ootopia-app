@@ -504,7 +504,8 @@
     "couldNotSend": "Não foi possivel enviar",
     "couldNotLoad": "Não foi possivel carregar",
     "repliedToYourComment": "respondeu seu comentário",
-    "taggedUserInPost": "marcou você numa publicação"
+    "taggedUserInPost": "marcou você numa publicação",
+    "userNotFoundInTaggedUser":"O usuário não encontrado. Verifique o nome digitado ou digite outro"
 
 }
 
