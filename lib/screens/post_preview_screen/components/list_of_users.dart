@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfUsers extends StatefulWidget {
   final PostPreviewScreenStore postPreviewScreenStore;
@@ -36,6 +37,11 @@ class _ListOfUsersState extends State<ListOfUsers> {
             if (widget.postPreviewScreenStore.viewState == ViewState.loading) {
               return Center(
                 child: CircularProgressIndicator(),
+              );
+            } else if (widget.postPreviewScreenStore.listAllUsers.isEmpty) {
+              return Center(
+                child: Text(
+                    AppLocalizations.of(context)!.userNotFoundInTaggedUser),
               );
             }
             return Stack(
