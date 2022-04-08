@@ -505,6 +505,10 @@
     "couldNotLoad": "Não foi possivel carregar",
     "repliedToYourComment": "respondeu seu comentário",
     "taggedUserInPost": "marcou você numa publicação",
+
+    "addedAsFriend": "adicionou você no círculo de amigos.",
+    "notificationButtonTextOnNewFriend": "Ver perfil",
+    
     "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro"
 
 }

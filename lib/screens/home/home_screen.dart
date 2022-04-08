@@ -118,7 +118,11 @@ class _HomeScreenState extends State<HomeScreen>
         final payload = event.payload!;
         if (payload != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
-            navigateToTimelineProfileScreen(payload);
+            if (payload["type"] == 'new-follower') {
+              navigateToFriendProfileScreen(payload);
+            } else {
+              navigateToTimelineProfileScreen(payload);
+            }
           });
         }
       });
@@ -140,14 +144,23 @@ class _HomeScreenState extends State<HomeScreen>
         ?.updateDailyGoalStatsByMessage(updateAccumulatedOOZ.dailyGoalStats);
   }
 
+  navigateToFriendProfileScreen(payload) async {
+    String type = payload["type"];
+    String userId = payload["userId"];
+
+    trackClickEvent(type);
+
+    controller.insertPage(ProfileScreen({"id": userId}));
+  }
+
   navigateToTimelineProfileScreen(payload) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
     String type = payload["type"];
     String postId = payload["postId"];
     var post = await postsRepository.getPostById(postId);
 
-    AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-    trackingEvents.notificationClicked({"notificationType": type});
+    trackClickEvent(type);
+
     controller.insertPage(
       TimelineScreenProfileScreen(
         {
@@ -157,6 +170,11 @@ class _HomeScreenState extends State<HomeScreen>
         },
       ),
     );
+  }
+
+  trackClickEvent(String type) {
+    AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+    trackingEvents.notificationClicked({"notificationType": type});
   }
 
   @override
@@ -730,7 +748,6 @@ class _HomeScreenState extends State<HomeScreen>
       );
 
   Future<void> fcmSubscribe() async {
-
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
       announcement: false,
@@ -740,6 +757,5 @@ class _HomeScreenState extends State<HomeScreen>
       provisional: false,
       sound: true,
     );
-
   }
 }

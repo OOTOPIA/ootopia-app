@@ -8,6 +8,7 @@
 	<array>
 		<string>applinks:api-ootopia.devmagic.com.br</string>
 		<string>applinks:api.ootopia.org</string>
+		<string>applinks:share.ootopia.org</string>
 	</array>
 </dict>
 </plist>
