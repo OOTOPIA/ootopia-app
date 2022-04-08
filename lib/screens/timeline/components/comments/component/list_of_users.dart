@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfUsers extends StatefulWidget {
   final CommentStore commentStore;
@@ -41,6 +42,40 @@ class _ListOfUsersState extends State<ListOfUsers> {
             if (widget.commentStore.viewState == ViewState.loading) {
               return Center(
                 child: CircularProgressIndicator(),
+              );
+            } else if (widget.commentStore.listAllUsers.isEmpty) {
+              return Container(
+                height: MediaQuery.of(context).size.height * .4,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    BackgroundButterflyTop(positioned: -59),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.userNotFound,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff707070),
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .userNotFoundInTaggedUser,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff707070),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             return Stack(

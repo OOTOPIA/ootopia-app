@@ -508,6 +508,8 @@
     "hideReplies": "Hide replies",
     "couldNotSend": "Could not send",
     "couldNotLoad": "Could not load",
-    "repliedToYourComment": "replied to your comment"
+    "repliedToYourComment": "replied to your comment",
+    "taggedUserInPost": "tagged you in a post",
+    "userNotFoundInTaggedUser":"Check the name entered or enter another"
 
 }

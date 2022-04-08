@@ -253,10 +253,10 @@ class _PostPreviewPageState extends State<PostPreviewPage>
             newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
         newTextComment = newTextComment.replaceRange(
           startname + newStartIndex,
-          user.fullname.length + startname + newStartIndex + 2,
+          user.fullname.length + startname + newStartIndex + 3,
           newString,
         );
-        endNameUser = user.id.length + startname + 2;
+        endNameUser = user.id.length + startname + 3;
         newStartIndex =
             newStartIndex + newString.length - (endNameUser - startname);
       });
@@ -426,8 +426,6 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       s++;
     }
 
-    e.start = nameStartRange;
-    e.end = nameStartRange + e.fullname.length + 1;
     if (postPreviewStore.excludedIds!.isEmpty) {
       postPreviewStore.excludedIds = postPreviewStore.excludedIds! + '${e.id}';
     } else {
@@ -535,7 +533,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           postPreviewStore.listTaggedUsers?.remove(item);
           break;
         }
-        endName = startname + item.fullname.length + 2;
+        endName = startname + item.fullname.length + 3;
       }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
@@ -545,7 +543,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
             seSelectedUser = true;
           });
           var startName = getLastString.last.split('@').last;
-          var finishName = startName.split(RegExp("‌"));
+          var finishName = startName.split("‌");
           postPreviewStore.currentPageUser = 1;
           postPreviewStore.fullName = finishName.first;
           await postPreviewStore.searchUser();
