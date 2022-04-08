@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:contacts_service/contacts_service.dart';
 
-Future<void> askPermissions(BuildContext context) async {
+Future<void> askPermissions(BuildContext context, FriendsStore store) async {
   PermissionStatus permission = await Permission.contacts.status;
+  print(permission);
   if (permission != PermissionStatus.granted &&
       permission != PermissionStatus.permanentlyDenied) {
     await showDialog(
@@ -48,9 +50,27 @@ Future<void> askPermissions(BuildContext context) async {
                   onPressed: () async {
                     PermissionStatus permissionRequest =
                         await Permission.contacts.request();
+                    if (permission != PermissionStatus.granted &&
+                        permission != PermissionStatus.permanentlyDenied) {
+                      List<Contact> contacts =
+                          await ContactsService.getContacts();
+                      List<String> sendEmailToApi = [];
+                      List<String> sendPhoneToApi = [];
 
-                    List<Contact> contacts =
-                        await ContactsService.getContacts();
+                      contacts.forEach((element) {
+                        element.emails?.forEach((element) {
+                          sendEmailToApi.add(element.value!);
+                        });
+                        element.phones?.forEach((element) {
+                          sendPhoneToApi.add(element.value!);
+                        });
+                      });
+                      store.emailContact.addAll(sendEmailToApi);
+                      store.phoneContact.addAll(sendPhoneToApi);
+
+                      Navigator.pop(context);
+                      await store.sendContactsToApi();
+                    }
                   },
                   child: Text(
                     AppLocalizations.of(context)!.permittedAccess,

@@ -33,7 +33,7 @@ class _AddFriendsState extends State<AddFriends> {
     super.initState();
     Future.delayed(Duration.zero, () {
       friendsStore.cleanSearchPage();
-      if (widget.displayContacts) askPermissions(context);
+      if (widget.displayContacts) askPermissions(context, friendsStore);
     });
   }
 
@@ -52,7 +52,11 @@ class _AddFriendsState extends State<AddFriends> {
                   scrollInfo.metrics.pixels >=
                       scrollInfo.metrics.maxScrollExtent * 0.6 &&
                   friendsStore.hasMoreUsersSearch) {
-                friendsStore.getMoreUserBySearch();
+                if (widget.displayContacts) {
+                  friendsStore.getMoreUserByContact();
+                } else {
+                  friendsStore.getMoreUserBySearch();
+                }
               }
               return true;
             },
