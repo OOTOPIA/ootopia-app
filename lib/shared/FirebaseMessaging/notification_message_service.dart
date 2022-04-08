@@ -45,7 +45,7 @@ class NotificationMessageService {
             oozReceived: notification.oozAmount);
         String body = await getNotificationBodyOfUserLogged(
             notification.type, notification.usersName!);
-        String buttonText = await getNotificationButtonText();
+        String buttonText = await getNotificationButtonText(notification.type);
 
         AwesomeNotifications().createNotification(
           content: NotificationContent(
@@ -153,14 +153,14 @@ class NotificationMessageService {
     return '';
   }
 
-  Future<String> getNotificationButtonText() async {
-    String buttonText = "";
+  Future<String> getNotificationButtonText(String type) async {
+    AppLocalizations value = await AppLocalizations.delegate.load(this.locale);
 
-    AppLocalizations.delegate.load(this.locale).then((value) {
-      buttonText = value.notificationButtonText;
-    });
-
-    return buttonText;
+    if (type == "new-follower") {
+      return value.notificationButtonTextOnNewFriend;
+    } else {
+      return value.notificationButtonText;
+    }
   }
 
   String formatNumber(double number, String locale) =>

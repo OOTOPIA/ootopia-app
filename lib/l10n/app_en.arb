@@ -512,6 +512,7 @@
     "taggedUserInPost": "tagged you in a post",
 
     "addedAsFriend": "added you to the circle of friends.",
+    "notificationButtonTextOnNewFriend": "Open profile",
     
     "userNotFoundInTaggedUser":"Check the name entered or enter another"
 
