@@ -38,6 +38,7 @@ import 'package:ootopia_app/screens/edit_profile_screen/add_link/add_link_screen
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
+import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
@@ -412,6 +413,10 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
     PageRoute.Page.addLink: (args) => AddLinkScreen(args),
+    PageRoute.Page.addFriends: (args) => AddFriends(
+          displayContacts: true,
+          arguments: args,
+        ),
   };
 
   SharedExperienceService sharedExperienceService =
