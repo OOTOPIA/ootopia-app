@@ -12,7 +12,17 @@ import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum AppBarComponents { back, menu, ooz, save, edit, close, proceed, empty }
+enum AppBarComponents {
+  back,
+  menu,
+  ooz,
+  save,
+  edit,
+  close,
+  proceed,
+  empty,
+  keep
+}
 
 // ignore: must_be_immutable
 class DefaultAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -114,6 +124,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       if (hasComponent(AppBarComponents.save)) saveIcon,
       if (hasComponent(AppBarComponents.empty)) empty,
       if (hasComponent(AppBarComponents.proceed)) proceedIcon,
+      if (hasComponent(AppBarComponents.keep)) keepIcon,
     ];
   }
 
@@ -328,7 +339,29 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
           ),
         ),
       );
-
+  Widget get keepIcon => InkWell(
+        onTap: () async {
+          if (widget.onTapAction != null) {
+            widget.onTapAction!();
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: GlobalConstants.of(_buildContext).spacingNormal,
+          ),
+          child: Row(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.continueAccess,
+                style: GoogleFonts.roboto(
+                    color: LightColors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      );
   Widget get empty => Container();
 
   bool get hasNavigation =>
