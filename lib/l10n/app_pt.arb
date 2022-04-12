@@ -509,7 +509,13 @@
     "accessToContact":"Permitir acesso à sua agenda de contatos no seu celular",
     "discribeAccessToContact":"Ao permitir acesso a sua agenda de contatos o aplicativo irá periodicamente buscar por nomes, telefones e e-mails de pessoas que já estão cadastradas na Ootopia. Dessa forma, o app irá lhe sugerir pessoas que você já conhece para adicionar a sua rede de amigos.",
     "permittedAccess":"Permitir acesso",
-    "notPermittedAccess":"Não permitir acesso"
+    "notPermittedAccess":"Não permitir acesso",
+
+    "addedAsFriend": "adicionou você no círculo de amigos.",
+    "notificationButtonTextOnNewFriend": "Ver perfil",
+    
+    "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro"
+
 }
 
 

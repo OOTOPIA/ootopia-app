@@ -514,6 +514,12 @@
     "accessToContact":"Allow access to your address book on your mobile",
     "discribeAccessToContact":"By allowing access to your address book, the application will periodically search for names, telephone numbers and e-mails of people who are already registered in Ootopia. That way, the app will suggest people you already know to add to your network of friends.",
     "permittedAccess":"Allow access",
-    "notPermittedAccess":"Do not allow access"
+    "notPermittedAccess":"Do not allow access",
 
+    "addedAsFriend": "added you to the circle of friends.",
+    "notificationButtonTextOnNewFriend": "Open profile",
+    
+    "userNotFoundInTaggedUser":"Check the name entered or enter another"
+
+    
 }

@@ -13,7 +13,6 @@ import 'package:ootopia_app/shared/app_usage_splash_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-
 class NotificationMessageService {
   AppUsageSplashScreen appUsageSplashScreen = AppUsageSplashScreen();
   UserRepositoryImpl userRepository = UserRepositoryImpl();
@@ -46,7 +45,7 @@ class NotificationMessageService {
             oozReceived: notification.oozAmount);
         String body = await getNotificationBodyOfUserLogged(
             notification.type, notification.usersName!);
-        String buttonText = await getNotificationButtonText();
+        String buttonText = await getNotificationButtonText(notification.type);
 
         AwesomeNotifications().createNotification(
           content: NotificationContent(
@@ -54,12 +53,19 @@ class NotificationMessageService {
             channelKey: 'basic_channel',
             title: title,
             body: body,
-            largeIcon: notification.photoURL,
+            largeIcon: notification.photoURL!.isNotEmpty
+                ? notification.photoURL
+                : 'asset://assets/icons/user.png',
             icon: 'resource://mipmap/notification_icon',
             notificationLayout: NotificationLayout.BigText,
             color: LightColors.blue,
             backgroundColor: LightColors.blue,
-            payload: {"postId": notification.postId, "type": notification.type},
+            payload: {
+              "postId": notification.postId ?? '',
+              "type": notification.type,
+              "userId": notification.userId ?? '',
+            },
+            roundedLargeIcon: notification.type == "new-follower",
           ),
           actionButtons: [
             NotificationActionButton(
@@ -70,7 +76,7 @@ class NotificationMessageService {
           ],
         );
       }
-    }catch(error, stackTrace){
+    } catch (error, stackTrace) {
       await Sentry.captureException(
         error,
         stackTrace: stackTrace,
@@ -102,12 +108,6 @@ class NotificationMessageService {
     }
     if (type == 'user-tagged-in-comment') {
       return value.userComment;
-    } else if (type == 'user-tagged-in-post') {
-      return value.notificationTitleCommentedPost
-          .replaceAll('%YOUR_NAME%', '${user!.fullname!.split(" ").first}');
-    } else if (type == 'user-tagged-in-comment-reply') {
-      return value.notificationTitleCommentedPost
-          .replaceAll('%YOUR_NAME%', '${user!.fullname?.split(" ").first}');
     } else if (type == "gratitude_reward") {
       return value.notificationTitleOOzReceived
           .replaceAll('%OOZ_RECEIVED%', formatOOz);
@@ -127,6 +127,8 @@ class NotificationMessageService {
       return "${usersName.first} " + value.taggedUserInPost;
     } else if (type == 'user-tagged-in-comment-reply') {
       return "${usersName.first} " + value.repliedToYourComment;
+    } else if (type == 'new-follower') {
+      return "${usersName.first} " + value.addedAsFriend;
     } else if (type == "gratitude_reward") {
       if (usersName.length == 1) {
         return value.notificationBodyOOzReceivedByOnePerson
@@ -151,14 +153,14 @@ class NotificationMessageService {
     return '';
   }
 
-  Future<String> getNotificationButtonText() async {
-    String buttonText = "";
+  Future<String> getNotificationButtonText(String type) async {
+    AppLocalizations value = await AppLocalizations.delegate.load(this.locale);
 
-    AppLocalizations.delegate.load(this.locale).then((value) {
-      buttonText = value.notificationButtonText;
-    });
-
-    return buttonText;
+    if (type == "new-follower") {
+      return value.notificationButtonTextOnNewFriend;
+    } else {
+      return value.notificationButtonText;
+    }
   }
 
   String formatNumber(double number, String locale) =>
