@@ -21,7 +21,7 @@ class AddFriends extends StatefulWidget {
   final bool displayContacts;
   final dynamic arguments;
   AddFriends({
-    this.displayContacts = true,
+    this.displayContacts = false,
     this.arguments,
   });
   @override
@@ -240,7 +240,9 @@ class _AddFriendsState extends State<AddFriends> {
                 ] else ...[
                   Container(
                     margin: EdgeInsets.only(top: 4),
-                    height: MediaQuery.of(context).size.height - 250,
+                    height: widget.displayContacts
+                        ? MediaQuery.of(context).size.height
+                        : MediaQuery.of(context).size.height - 250,
                     child: ListView.builder(
                         itemCount: friendsStore.usersSearch.friends!.length,
                         itemBuilder: (BuildContext context, int index) {

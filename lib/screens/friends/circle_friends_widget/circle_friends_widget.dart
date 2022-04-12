@@ -323,11 +323,9 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             height: 56,
             child: RawMaterialButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'addFriends');
-                // Future.delayed(Duration(milliseconds: 100),()  {
-                //   controller.insertPage(
-                //       AddFriends());
-                // });
+                Future.delayed(Duration(milliseconds: 100), () {
+                  controller.insertPage(AddFriends());
+                });
               },
               elevation: 0,
               hoverElevation: 0,
