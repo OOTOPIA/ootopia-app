@@ -91,8 +91,6 @@ class _HomeScreenState extends State<HomeScreen>
       if (mounted) setState(() {});
     });
 
-    updateRecordTimeUsage.addListener(resetDailyGoalTimer);
-
     updateAccumulatedOOZ.addListener(updateDailyGoalStatsByMessage);
 
     Future.delayed(Duration(milliseconds: 1000), () async {
@@ -136,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen>
     homeStore?.stopDailyGoalTimer();
     AppUsageTime.instance.sendToApi();
     await homeStore?.getDailyGoalStats();
-    await homeStore?.startDailyGoalTimer();
+    //await homeStore?.startDailyGoalTimer();
   }
 
   updateDailyGoalStatsByMessage() {
@@ -521,8 +519,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   _checkStores() async {
-    await homeStore?.getDailyGoalStats();
-    homeStore?.startDailyGoalTimer();
     if (Platform.isIOS)
       homeStore?.getIphoneHasNotch(ui.window.physicalSize.height.toInt());
     if (authStore.currentUser == null) {

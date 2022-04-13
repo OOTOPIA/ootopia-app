@@ -16,7 +16,6 @@ import 'package:ootopia_app/screens/profile_screen/components/location_profile_i
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
-import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_details.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
@@ -79,7 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       }
 
-
       await store?.getProfileDetails(profileUserId);
       await homeStore.getCurrentUser(profileUserId);
       await store?.getUserPosts(profileUserId);
@@ -114,7 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return widget.args!["id"];
     }
   }
-
 
   get appBarProfile => DefaultAppBar(
     components: [
@@ -209,8 +206,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height:
                                     GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
-
-
                             if(store?.profile?.links != null)...[
                                 if(store!.profile!.links!.length == 1)...[
                                   Padding(
@@ -297,35 +292,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 16,
                               )
                             ],
-
-                            Text(
-                              AppLocalizations.of(context)!
-                                  .regenerationGame
-                                  .toUpperCase(),
-                              style: GoogleFonts.roboto(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .color,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .fontSize,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: 4),
-                            RegenerativeGameDetails(
-                              isVisible: isVisible,
-                              onArrowTap: () {
-                                setState(() {
-                                  if (isVisible) {
-                                    isVisible = false;
-                                  } else {
-                                    isVisible = true;
-                                  }
-                                });
-                              },
-                            ),
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
@@ -341,12 +307,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onTap: () =>
                                       controller.insertPage(WalletPage())),
                             ],
-
                             CircleOfFriendWidget(
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
-
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
@@ -465,6 +429,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
         store?.isFriend != null &&
         authStore.currentUser != null;
   }
-
-
 }

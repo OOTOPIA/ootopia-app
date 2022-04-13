@@ -52,7 +52,6 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
         },
       );
 
-
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -76,8 +75,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                     fillOverscroll: true,
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal:
-                              GlobalConstants.of(context).screenHorizontalSpace),
+                          horizontal: GlobalConstants.of(context)
+                              .screenHorizontalSpace),
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +88,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   height: 32,
                                 ),
                                 PhotoEdit(
-                                  photoPath: registerController.user!.photoFilePath,
+                                  photoPath:
+                                      registerController.user!.photoFilePath,
                                   updatePhoto: (String? imagePath) {
                                     if (imagePath != null) {
                                       registerController.getImage(
@@ -124,12 +124,14 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 TextFormField(
                                   autocorrect: true,
                                   enableSuggestions: true,
-                                  textCapitalization: TextCapitalization.sentences,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   controller: registerController.bioController,
                                   maxLines: 5,
                                   decoration: GlobalConstants.of(context)
                                       .loginInputTheme(
-                                          AppLocalizations.of(context)!.optional)
+                                          AppLocalizations.of(context)!
+                                              .optional)
                                       .copyWith(
                                           alignLabelWithHint: true,
                                           contentPadding: EdgeInsets.symmetric(
@@ -139,9 +141,6 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 SizedBox(
                                   height: 24,
                                 ),
-
-
-
                                 Container(
                                   width: double.infinity,
                                   child: Text(
@@ -150,8 +149,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                     style: GoogleFonts.roboto(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
-                                        color: LightColors.grey
-                                    ),
+                                        color: LightColors.grey),
                                   ),
                                 ),
                                 SizedBox(
@@ -159,74 +157,88 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    List<Link>? list = await  Navigator.of(context)
-                                        .pushNamed(
-                                        PageRoute.Page.addLink.route,
-                                        arguments: {
+                                    List<Link>? list =
+                                        await Navigator.of(context).pushNamed(
+                                            PageRoute.Page.addLink.route,
+                                            arguments: {
                                           "list": registerController.links
-                                        }
-                                    ) as List<Link>?;
-                                    if(list != null){
+                                        }) as List<Link>?;
+                                    if (list != null) {
                                       setState(() {
                                         registerController.links = list;
                                       });
                                     }
                                   },
                                   child: TextFormField(
-                                      textCapitalization: TextCapitalization.sentences,
-                                      style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
                                       maxLines: 1,
                                       enabled: false,
                                       decoration: GlobalConstants.of(context)
                                           .loginInputTheme(
-                                          AppLocalizations.of(context)!.addLinksInYourPage).copyWith(
-                                          prefixIcon: Container(
-                                            height: 21,
-                                            width: 21,
-                                            margin: EdgeInsets.all(15),
-                                            child: SvgPicture.asset(
-                                              'assets/icons/mais.svg',
-                                              height: 21,
-                                              width: 21,),
-                                          ),
-                                          suffixIcon:  Visibility(
-                                            visible: registerController.links.length > 0,
-                                            child: Container(
-                                              margin: EdgeInsets.symmetric
-                                                (horizontal: 16, vertical: 16),
-                                              child: Text(
-                                                "${registerController.links.length} "
-                                                    "${AppLocalizations.of(context)!
-                                                    .added}",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  color: LightColors.grey,
-                                                  fontSize: 16,
+                                              AppLocalizations.of(context)!
+                                                  .addLinksInYourPage)
+                                          .copyWith(
+                                              prefixIcon: Container(
+                                                height: 21,
+                                                width: 21,
+                                                margin: EdgeInsets.all(15),
+                                                child: SvgPicture.asset(
+                                                  'assets/icons/mais.svg',
+                                                  height: 21,
+                                                  width: 21,
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          labelStyle: TextStyle(color: Colors.black),
-                                          alignLabelWithHint: true,
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16))),
+                                              suffixIcon: Visibility(
+                                                visible: registerController
+                                                        .links.length >
+                                                    0,
+                                                child: Container(
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 16),
+                                                  child: Text(
+                                                    "${registerController.links.length} "
+                                                    "${AppLocalizations.of(context)!.added}",
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      color: LightColors.grey,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  color: Colors.black),
+                                              alignLabelWithHint: true,
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 16))),
                                 ),
                                 ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: registerController.links.length,
                                   itemBuilder: (context, index) {
-                                    return urlItem(registerController.links[index]);
+                                    return urlItem(
+                                        registerController.links[index]);
                                   },
                                 ),
                                 SizedBox(
                                   height: 16,
                                 ),
-
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(AppLocalizations.of(context)!.mobilePhone,
+                                    Text(
+                                        AppLocalizations.of(context)!
+                                            .mobilePhone,
                                         style: TextStyle(
                                             fontSize: 18,
                                             color: Color(0xff7F7F7F),
@@ -273,7 +285,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                         value.contains('+')) {
                                       return AppLocalizations.of(context)!
                                           .mobilephoneToExperience;
-                                    } else if (!registerController.validCellPhone) {
+                                    } else if (!registerController
+                                        .validCellPhone) {
                                       return AppLocalizations.of(context)!
                                           .insertValidCellPhone;
                                     }
@@ -311,13 +324,15 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5)),
                                       borderSide: BorderSide(
-                                          width: 0.25, color: Color(0xff8E1816)),
+                                          width: 0.25,
+                                          color: Color(0xff8E1816)),
                                     ),
                                     border: OutlineInputBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5)),
                                       borderSide: BorderSide(
-                                          width: 0.25, color: Color(0xff8E1816)),
+                                          width: 0.25,
+                                          color: Color(0xff8E1816)),
                                     ),
                                   ),
                                 ),
@@ -327,7 +342,9 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(AppLocalizations.of(context)!.dateOfBirth,
+                                    Text(
+                                        AppLocalizations.of(context)!
+                                            .dateOfBirth,
                                         style: TextStyle(
                                             fontSize: 18,
                                             color: Color(0xff7F7F7F),
@@ -348,7 +365,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   height: 16,
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       flex: 1,
@@ -374,10 +392,12 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                               int.parse(text) <= 31) {
                                             node.nextFocus();
                                           } else {
-                                            registerController.exibTextError = true;
+                                            registerController.exibTextError =
+                                                true;
                                           }
                                         },
-                                        onEditingComplete: () => node.nextFocus(),
+                                        onEditingComplete: () =>
+                                            node.nextFocus(),
                                       ),
                                     ),
                                     SizedBox(
@@ -408,10 +428,12 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                               int.parse(text) <= 12) {
                                             node.nextFocus();
                                           } else {
-                                            registerController.exibTextError = true;
+                                            registerController.exibTextError =
+                                                true;
                                           }
                                         },
-                                        onEditingComplete: () => node.nextFocus(),
+                                        onEditingComplete: () =>
+                                            node.nextFocus(),
                                       ),
                                     ),
                                     SizedBox(
@@ -434,7 +456,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                               int.parse(text) >= 1900) {
                                             node.nextFocus();
                                           } else {
-                                            registerController.exibTextError = true;
+                                            registerController.exibTextError =
+                                                true;
                                           }
                                         },
                                         decoration: GlobalConstants.of(context)
@@ -453,10 +476,10 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   visible: registerController.exibTextError,
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                      top:
-                                          GlobalConstants.of(context).spacingNormal,
-                                      bottom:
-                                          GlobalConstants.of(context).spacingSmall,
+                                      top: GlobalConstants.of(context)
+                                          .spacingNormal,
+                                      bottom: GlobalConstants.of(context)
+                                          .spacingSmall,
                                     ),
                                     child: Text(
                                       registerController
@@ -470,7 +493,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: GlobalConstants.of(context).spacingLarge,
+                                  height:
+                                      GlobalConstants.of(context).spacingLarge,
                                 ),
                               ],
                             ),
@@ -490,7 +514,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                         Size(60, 55),
                                       ),
                                       elevation:
-                                          MaterialStateProperty.all<double>(0.0),
+                                          MaterialStateProperty.all<double>(
+                                              0.0),
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
                                         registerController.firstStepIsValid()
@@ -529,7 +554,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                           Navigator.of(context).pushNamed(
                                             PageRoute
                                                 .Page
-                                                .registerDailyLearningGoalScreen
+                                                .registerGeolocationScreen
                                                 .route,
                                           );
                                         }
@@ -558,22 +583,17 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
           Container(
             height: 9,
             width: 9,
-            decoration: BoxDecoration(
-                color: Color(0xff03DAC5),
-                shape: BoxShape.circle
-            ),
+            decoration:
+                BoxDecoration(color: Color(0xff03DAC5), shape: BoxShape.circle),
           ),
           SizedBox(width: 8),
           Container(
             width: MediaQuery.of(context).size.width - 101,
-            child: Text(link.setTextWith3dots(MediaQuery.of(context).size.width - 101),
+            child: Text(
+              link.setTextWith3dots(MediaQuery.of(context).size.width - 101),
               maxLines: 1,
-              style: TextStyle(
-                  fontSize: 16,
-                  color: LightColors.grey
-
-
-              ),),
+              style: TextStyle(fontSize: 16, color: LightColors.grey),
+            ),
           ),
         ],
       ),
