@@ -125,7 +125,7 @@ class _TimelinePageState extends State<TimelinePage>
     });
     if (widget.args != null &&
         widget.args?['redirectToInvitationCode'] != null) {
-      Future.delayed(Duration(milliseconds: 300), () {
+      Future.delayed(Duration(milliseconds: 700), () {
         controller.insertPage(InvitationScreen());
       });
     }

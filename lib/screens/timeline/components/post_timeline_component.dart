@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/bloc/post/post_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
@@ -17,6 +15,8 @@ import 'package:ootopia_app/screens/components/popup_menu_post.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/custom_snackbar_widget.dart';
+import 'package:ootopia_app/screens/timeline/components/header_post_component.dart';
+import 'package:ootopia_app/screens/timeline/components/show_media_component.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_controller.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
@@ -112,6 +112,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimationEnd = true;
   bool canDoubleClick = true;
   SmartPageController controller = SmartPageController.getInstance();
+  int mediaPosition = 0;
+  bool showPosition = false;
 
   @override
   void initState() {
@@ -196,57 +198,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => _goToProfile(),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 6.0,
-                        right: 6.0,
-                        bottom: 6.0,
-                      ),
-                      child: this.post.photoUrl != null
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage("${this.post.photoUrl}"),
-                              radius: 16,
-                            )
-                          : CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/icons/user.png"),
-                              radius: 16,
-                            ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          this.post.username,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Visibility(
-                          visible: (this.post.city != null &&
-                                  this.post.city!.isNotEmpty) ||
-                              (this.post.state != null &&
-                                  this.post.state!.isNotEmpty),
-                          child: Text(
-                            '${this.post.city}' +
-                                (this.post.state != null &&
-                                        this.post.state!.isNotEmpty
-                                    ? ', ${this.post.state}'
-                                    : ''),
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              HeaderPostComponent(
+                username: this.post.username,
+                photoUrl: this.post.photoUrl,
+                city: this.post.city,
+                state: this.post.state,
+                goToProfile: _goToProfile,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -390,76 +347,14 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               )
             ],
           ),
-          Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Color(0xff1A4188),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                ),
-                child: this.post.type == "image"
-                    ? ImagePostTimeline(
-                        image: this.post.imageUrl as String,
-                        onDoubleTapVideo: () => this._likePost(false, true),
-                      )
-                    : FlickMultiPlayer(
-                        userId: (user != null ? user!.id : null),
-                        postId: this.post.id,
-                        url: this.post.videoUrl!,
-                        flickMultiManager: widget.flickMultiManager,
-                        image: this.post.thumbnailUrl,
-                        onDoubleTapVideo: () => this._likePost(false, true),
-                      ),
-              ),
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: AnimatedContainer(
-                    height: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 100
-                        : 0.0,
-                    width: _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                        ? 100
-                        : 0.0,
-                    curve: _bigLikeShowAnimation &&
-                            !_bigLikeShowAnimationEnd &&
-                            canDoubleClick
-                        ? Curves.easeOutBack
-                        : Curves.easeIn,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    child: AnimatedOpacity(
-                      opacity:
-                          _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                              ? 0.8
-                              : 0.0,
-                      duration: Duration(milliseconds: 300),
-                      child: Visibility(
-                        visible: _bigLikeShowAnimation,
-                        child: Image.asset(
-                          'assets/icons_profile/woow_90_deg.png',
-                          width:
-                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                                  ? 100
-                                  : 0.0,
-                          height:
-                              _bigLikeShowAnimation && !_bigLikeShowAnimationEnd
-                                  ? 100
-                                  : 0.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
+          ShowMediaComponent(
+            post: post,
+            user: this.user,
+            flickMultiManager: widget.flickMultiManager, 
+            bigLikeShowAnimation: this._bigLikeShowAnimation,
+            bigLikeShowAnimationEnd: this._bigLikeShowAnimationEnd,
+            canDoubleClick: this.canDoubleClick,
+            likePost: this._likePost,
           ),
           Container(
             height: 32,
@@ -793,7 +688,11 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             child: Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.only(top: 3, bottom: 12),
-              child: ExpandableText(this.post.description, 3),
+              child: ExpandableText(
+                this.post.description,
+                3,
+                this.post.usersTagged,
+              ),
             ),
           ),
           GestureDetector(
@@ -862,7 +761,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       ),
     );
   }
-
+  
   void incrementOozToTransfer() {
     if (this.post.oozToTransfer == null) {
       this.post.oozToTransfer = 0;

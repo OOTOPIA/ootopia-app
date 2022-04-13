@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
     controller = SmartPageController.newInstance(
       context: context,
       initialPages: [
-        TimelinePage(widget.args),
+        TimelinePage(null),
         LearningTracksScreen(),
         LearningTracksScreen(),
         MarketplaceScreen(),
@@ -112,12 +112,22 @@ class _HomeScreenState extends State<HomeScreen>
       //   );
       // }
       AwesomeNotifications().actionStream.listen((event) {
+        if (event.channelKey == 'basic_channel' && Platform.isIOS) {
+          AwesomeNotifications().decrementGlobalBadgeCounter();
+        }
         final payload = event.payload!;
         if (payload != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
-            navigateToTimelineProfileScreen(payload);
+            if (payload["type"] == 'new-follower') {
+              navigateToFriendProfileScreen(payload);
+            } else {
+              navigateToTimelineProfileScreen(payload);
+            }
           });
         }
+      });
+      AwesomeNotifications().dismissedStream.listen((event) {
+        AwesomeNotifications().setGlobalBadgeCounter(0);
       });
     });
   }
@@ -134,14 +144,23 @@ class _HomeScreenState extends State<HomeScreen>
         ?.updateDailyGoalStatsByMessage(updateAccumulatedOOZ.dailyGoalStats);
   }
 
+  navigateToFriendProfileScreen(payload) async {
+    String type = payload["type"];
+    String userId = payload["userId"];
+
+    trackClickEvent(type);
+
+    controller.insertPage(ProfileScreen({"id": userId}));
+  }
+
   navigateToTimelineProfileScreen(payload) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
     String type = payload["type"];
     String postId = payload["postId"];
     var post = await postsRepository.getPostById(postId);
 
-    AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
-    trackingEvents.notificationClicked({"notificationType": type});
+    trackClickEvent(type);
+
     controller.insertPage(
       TimelineScreenProfileScreen(
         {
@@ -151,6 +170,11 @@ class _HomeScreenState extends State<HomeScreen>
         },
       ),
     );
+  }
+
+  trackClickEvent(String type) {
+    AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
+    trackingEvents.notificationClicked({"notificationType": type});
   }
 
   @override
@@ -724,7 +748,6 @@ class _HomeScreenState extends State<HomeScreen>
       );
 
   Future<void> fcmSubscribe() async {
-
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
       announcement: false,
@@ -734,6 +757,5 @@ class _HomeScreenState extends State<HomeScreen>
       provisional: false,
       sound: true,
     );
-
   }
 }

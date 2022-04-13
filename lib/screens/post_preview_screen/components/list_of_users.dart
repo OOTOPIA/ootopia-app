@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/users/user_search_model.dart';
-import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfUsers extends StatefulWidget {
-  final CommentStore commentStore;
+  final PostPreviewScreenStore postPreviewScreenStore;
   final TextEditingController inputController;
   final ScrollController scrollController;
   final Function(UserSearchModel)? addUserInText;
   ListOfUsers({
     Key? key,
-    required this.commentStore,
+    required this.postPreviewScreenStore,
     required this.inputController,
     required this.scrollController,
     this.addUserInText,
@@ -25,25 +25,20 @@ class ListOfUsers extends StatefulWidget {
 class _ListOfUsersState extends State<ListOfUsers> {
   @override
   Widget build(BuildContext context) {
-    final sizeKeyboard = EdgeInsets.fromWindowPadding(
-      WidgetsBinding.instance!.window.viewInsets,
-      WidgetsBinding.instance!.window.devicePixelRatio,
-    ).bottom;
-    final multiple = MediaQuery.of(context).size.height > 650 ? 180 : 150;
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
         color: Colors.white,
-        height: (MediaQuery.of(context).size.height - sizeKeyboard) - multiple,
+        height: MediaQuery.of(context).size.height * .4,
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           controller: widget.scrollController,
           child: Observer(builder: (context) {
-            if (widget.commentStore.viewState == ViewState.loading) {
+            if (widget.postPreviewScreenStore.viewState == ViewState.loading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (widget.commentStore.listAllUsers.isEmpty) {
+            } else if (widget.postPreviewScreenStore.listAllUsers.isEmpty) {
               return Container(
                 height: MediaQuery.of(context).size.height * .4,
                 child: Stack(
@@ -85,7 +80,7 @@ class _ListOfUsersState extends State<ListOfUsers> {
                   padding: EdgeInsets.only(left: 16, top: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: widget.commentStore.listAllUsers
+                    children: widget.postPreviewScreenStore.listAllUsers
                         .map(
                           (e) => Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
@@ -118,7 +113,8 @@ class _ListOfUsersState extends State<ListOfUsers> {
                         .toList(),
                   ),
                 ),
-                if (widget.commentStore.viewState == ViewState.loadingNewData)
+                if (widget.postPreviewScreenStore.viewState ==
+                    ViewState.loadingNewData)
                   Center(
                     child: CircularProgressIndicator(),
                   ),

@@ -7,15 +7,8 @@ class Badge {
   String name;
   String icon;
 
-  Badge({
-    required this.name,
-    required this.icon
-  });
-  
-  @override
-  List<Object?> get props => [name, icon];
-  
-  factory Badge.fromJson(Map<String, dynamic> json) =>
-      _$BadgeFromJson(json);
+  Badge({required this.name, required this.icon});
+
+  factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
   Map<String, dynamic> toJson() => _$BadgeToJson(this);
 }
