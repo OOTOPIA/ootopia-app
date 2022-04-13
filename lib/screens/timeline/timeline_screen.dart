@@ -120,7 +120,7 @@ class _TimelinePageState extends State<TimelinePage>
 
     Future.delayed(Duration.zero, () {
       timelineStore.init(controller);
-      timelineStore.startTimelineViewTimer();
+      //timelineStore.startTimelineViewTimer();
     });
     if (widget.args != null &&
         widget.args?['redirectToInvitationCode'] != null) {
@@ -303,7 +303,7 @@ class _TimelinePageState extends State<TimelinePage>
     // These are the callbacks
     switch (state) {
       case AppLifecycleState.resumed:
-        timelineStore.startTimelineViewTimer();
+        //timelineStore.startTimelineViewTimer();
         break;
       case AppLifecycleState.inactive:
         timelineStore.stopTimelineViewTimer();
