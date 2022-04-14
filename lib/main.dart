@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:awesome_notifications/awesome_notifications.dart'
     as awesomeNotification;
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +90,7 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   FlutterBackgroundService.initialize(onStartService);
-
+  await CountryCodes.init();
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',

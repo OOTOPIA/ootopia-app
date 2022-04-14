@@ -3,6 +3,7 @@ import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:country_codes/country_codes.dart';
 
 Future<void> askPermissions(BuildContext context, FriendsStore store) async {
   await showDialog(
@@ -31,9 +32,16 @@ Future<void> askPermissions(BuildContext context, FriendsStore store) async {
               IconButton(
                   onPressed: () async {
                     PermissionStatus permission =
-                        await Permission.contacts.request();
-
-                    if (permission != PermissionStatus.granted &&
+                        await Permission.contacts.status;
+                    print('permission $permission');
+                    final CountryDetails details =
+                        CountryCodes.detailsForLocale();
+                    if ((permission == PermissionStatus.permanentlyDenied ||
+                            permission == PermissionStatus.denied) &&
+                        permission != PermissionStatus.granted) {
+                      permission = await Permission.contacts.request();
+                    }
+                    if (permission == PermissionStatus.granted &&
                         permission != PermissionStatus.permanentlyDenied) {
                       List<Contact> contacts =
                           await ContactsService.getContacts();
@@ -44,8 +52,20 @@ Future<void> askPermissions(BuildContext context, FriendsStore store) async {
                         element.emails?.forEach((element) {
                           sendEmailToApi.add(element.value!);
                         });
+
                         element.phones?.forEach((element) {
-                          sendPhoneToApi.add(element.value!);
+                          String contact;
+                          if (element.value!.contains('+')) {
+                            contact = element.value!
+                                .replaceAll(' ', '')
+                                .replaceAll('-', '');
+                          } else {
+                            contact = details.dialCode! +
+                                element.value!
+                                    .replaceAll(' ', '')
+                                    .replaceAll('-', '');
+                          }
+                          sendPhoneToApi.add(contact);
                         });
                       });
                       store.emailContact.addAll(sendEmailToApi);
