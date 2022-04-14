@@ -376,8 +376,8 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.registerFormScreen: (args) => RegisterFormScreen(args),
     PageRoute.Page.registerPhoneNumberScreen: (args) =>
         RegisterPhoneNumberScreen(args),
-    PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
-        RegisterDailyLearningGoalScreen(args),
+    // PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
+    //     RegisterDailyLearningGoalScreen(args),
     PageRoute.Page.registerGeolocationScreen: (args) =>
         RegisterGeolocationScreen(args),
     PageRoute.Page.registerTopInterestsScreen: (args) =>

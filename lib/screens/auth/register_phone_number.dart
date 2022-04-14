@@ -556,7 +556,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                           Navigator.of(context).pushNamed(
                                             PageRoute
                                                 .Page
-                                                .registerDailyLearningGoalScreen
+                                                .registerGeolocationScreen
                                                 .route,
                                           );
                                         }

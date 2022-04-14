@@ -20,7 +20,7 @@ abstract class PostRepository {
   Future<LikePostResult> likePost(String id);
   Future<void> createPost(PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
-  Future recordTimelineWatched(int timeInMilliseconds);
+  //Future recordTimelineWatched(int timeInMilliseconds);
   Future<TimelinePost> getPostById(String id);
 }
 
@@ -208,24 +208,24 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     }
   }
 
-  @override
-  Future recordTimelineWatched(int timeInMilliseconds) async {
-    try {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (!loggedIn) {
-        return;
-      }
+  // @override
+  // Future recordTimelineWatched(int timeInMilliseconds) async {
+  //   try {
+  //     bool loggedIn = await getUserIsLoggedIn();
+  //     if (!loggedIn) {
+  //       return;
+  //     }
 
-      await ApiClient.api().post(
-        "posts/timeline-watched",
-        data: {
-          "timeInMilliseconds": timeInMilliseconds,
-        },
-      );
-    } catch (e) {
-      print('Error send watched post: $e');
-    }
-  }
+  //     await ApiClient.api().post(
+  //       "posts/timeline-watched",
+  //       data: {
+  //         "timeInMilliseconds": timeInMilliseconds,
+  //       },
+  //     );
+  //   } catch (e) {
+  //     print('Error send watched post: $e');
+  //   }
+  // }
 
   @override
   Future<TimelinePost> getPostById(String id) async {
