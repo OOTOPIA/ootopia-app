@@ -75,8 +75,9 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
         GeneralConfigModel? generalConfigMode = await secureStoreMixin
             .getGeneralConfigByName("user_received_sower_invitation_code_ooz");
         registerController.cleanTextEditingControllers();
-        Navigator.of(context).pushNamed(
+        Navigator.of(context).pushNamedAndRemoveUntil(
           PageRoute.Page.addFriends.route,
+          (Route<dynamic> route) => false,
           arguments: {
             "returnToPageWithArgs": {
               'currentPageName': registerController.returnToPage
@@ -89,8 +90,9 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
         );
       } else {
         registerController.cleanTextEditingControllers();
-        Navigator.of(context).pushNamed(
+        Navigator.of(context).pushNamedAndRemoveUntil(
           PageRoute.Page.addFriends.route,
+          (Route<dynamic> route) => false,
           arguments: {
             "returnToPageWithArgs": {
               'currentPageName': registerController.returnToPage
