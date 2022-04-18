@@ -36,7 +36,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
 
-  ProfileScreen( [this.args]);
+  ProfileScreen([this.args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -73,8 +73,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!profileUserIsLoggedUser) {
         store = ProfileScreenStore();
-        if(authStore.currentUser != null){
+        if (authStore.currentUser != null) {
           await store!.getIfIsFriend(profileUserId);
+        } else {
+          if (widget.args!.containsKey('isGetContacts')) {
+            await authStore.checkUserIsLogged();
+            await store!.getIfIsFriend(profileUserId);
+          }
         }
       }
 
@@ -85,7 +90,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Future.delayed(Duration.zero, () {
         if (profileUserIsLoggedUser) walletStore.getWallet();
       });
-
       this.trackingEvents.profileViewedAProfile(
         widget.args == null ||
                 (widget.args != null && widget.args!["id"] == null)
@@ -114,13 +118,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   get appBarProfile => DefaultAppBar(
-    components: [
-      AppBarComponents.back,
-      isLoggedInUserProfile ? AppBarComponents.edit : AppBarComponents.empty,
-    ],
-    onTapAction: () => isLoggedInUserProfile ? controller.insertPage(EditProfileScreen()) : null,
-    onTapLeading: () => controller.back(),
-  );
+        components: [
+          AppBarComponents.back,
+          isLoggedInUserProfile
+              ? AppBarComponents.edit
+              : AppBarComponents.empty,
+        ],
+        onTapAction: () => isLoggedInUserProfile
+            ? controller.insertPage(EditProfileScreen())
+            : null,
+        onTapLeading: () => widget.args!.containsKey('isGetContacts')
+            ? Navigator.pop(context)
+            : controller.back(),
+      );
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
@@ -153,11 +163,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     homeStore = Provider.of<HomeStore>(context);
     if (profileUserIsLoggedUser) {
       store = Provider.of<ProfileScreenStore>(context);
-    }else{
-      friendsStore  = Provider.of<FriendsStore>(context);
+    } else {
+      friendsStore = Provider.of<FriendsStore>(context);
     }
     return Scaffold(
-      appBar: showAppBar() ? appBarProfile : null,
+      appBar: showAppBar()
+          ? appBarProfile
+          : widget.args!.containsKey('isGetContacts')
+              ? appBarProfile
+              : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -184,7 +198,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height:
                                     GlobalConstants.of(context).spacingSmall),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: Text(
                                 store == null ? "" : store!.profile!.fullname,
                                 maxLines: 2,
@@ -206,82 +221,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height:
                                     GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
-                            if(store?.profile?.links != null)...[
-                                if(store!.profile!.links!.length == 1)...[
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: GlobalConstants.of(context).screenHorizontalSpace),                                    child: TextButton(
-                                      onPressed: () async{
-                                        _launchURL(store!.profile!.links![0].URL);
-                                      },
-                                      child: Text(store!.profile!.links![0].title,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 13,
-                                          color: Color(0xff018F9C),
-                                        ),),
-                                    ),
-                                  ),
-                                ]else if (store!.profile!.links!.length > 1)...[
-                                  TextButton(
-                                    onPressed: (){
-                                      controller.insertPage(ViewLinksScreen(
-                                        {
-                                          'store': store,
-                                          'user_id': 1,
-                                          'list': store!.profile!.links!,
-                                        },
-                                      ));
+                            if (store?.profile?.links != null) ...[
+                              if (store!.profile!.links!.length == 1) ...[
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: GlobalConstants.of(context)
+                                          .screenHorizontalSpace),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      _launchURL(store!.profile!.links![0].URL);
                                     },
-                                    child: Text(AppLocalizations.of(context)!.relatedLinks,
+                                    child: Text(
+                                      store!.profile!.links![0].title,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 13,
                                         color: Color(0xff018F9C),
-                                      ),),
+                                      ),
+                                    ),
                                   ),
-                                ]else...[
-                                  SizedBox(
-                                    height: GlobalConstants.of(context).spacingNormal,
-                                  )
-                                ],
+                                ),
+                              ] else if (store!.profile!.links!.length > 1) ...[
+                                TextButton(
+                                  onPressed: () {
+                                    controller.insertPage(ViewLinksScreen(
+                                      {
+                                        'store': store,
+                                        'user_id': 1,
+                                        'list': store!.profile!.links!,
+                                      },
+                                    ));
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!.relatedLinks,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 13,
+                                      color: Color(0xff018F9C),
+                                    ),
+                                  ),
+                                ),
+                              ] else ...[
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingNormal,
+                                )
+                              ],
                             ],
-
-                            if(showButton)...[
+                            if (showButton ||
+                                (widget.args != null &&
+                                    widget.args!
+                                        .containsKey('isGetContacts'))) ...[
                               ElevatedButton(
                                   style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                                    fixedSize: MaterialStateProperty.all<Size>(
+                                        Size(double.infinity, 35)),
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular
-                                            (20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           side: BorderSide.none),
                                     ),
-                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            LightColors.blue),
+                                    padding: MaterialStateProperty.all<
+                                            EdgeInsets>(
                                         EdgeInsets.symmetric(horizontal: 24)),
                                   ),
                                   onPressed: () {
-                                    Future.delayed(Duration(milliseconds: 100),(){
+                                    Future.delayed(Duration(milliseconds: 100),
+                                        () {
                                       final friend = FriendModel(
                                         id: store!.profile!.id,
                                         fullname: store!.profile!.fullname,
                                         photoUrl: store!.profile!.photoUrl,
                                       );
 
-                                     if( store!.isFriend == false){
-                                       store!.addFriend();
-                                       friendsStore.addFriend(friend);
-                                     }else{
-                                       store!.removeFriend();
-                                       friendsStore.removeFriend(friend, authStore.currentUser!.id);
-                                     }
+                                      if (store!.isFriend == false) {
+                                        store!.addFriend();
+                                        friendsStore.addFriend(friend);
+                                      } else {
+                                        store!.removeFriend();
+                                        friendsStore.removeFriend(
+                                            friend, authStore.currentUser!.id);
+                                      }
                                     });
                                   },
-                                  child: Text(store!.isFriend == false ?
-                                  AppLocalizations.of(context)!.addFriend:
-                                  AppLocalizations.of(context)!.removeFriend,
+                                  child: Text(
+                                    store!.isFriend == false
+                                        ? AppLocalizations.of(context)!
+                                            .addFriend
+                                        : AppLocalizations.of(context)!
+                                            .removeFriend,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -299,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isVisible: isVisible,
                               profileScreenStore: store,
                             ),
-                            if(isLoggedInUserProfile)...[
+                            if (isLoggedInUserProfile) ...[
                               WalletBarWidget(
                                   totalBalance: walletStore.wallet != null
                                       ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
@@ -414,13 +448,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _launchURL(String _url) async {
-    if(await canLaunch(_url)){
+    if (await canLaunch(_url)) {
       await launch(_url);
     }
   }
 
   bool showAppBar() {
-    return controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE &&
+    return controller.currentBottomIndex ==
+            PageViewController.TAB_INDEX_PROFILE &&
         (controller.pages[controller.currentPageIndex]) is ProfileScreen;
   }
 
