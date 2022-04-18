@@ -263,6 +263,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                     setState(() {
                                       registerController.countryCode =
                                           number.isoCode.toString();
+                                      registerController.dialCode =
+                                          number.dialCode.toString();
                                     });
                                     registerController.getPhoneNumber(
                                         number.toString(),

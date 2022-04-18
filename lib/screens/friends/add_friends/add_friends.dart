@@ -78,11 +78,11 @@ class _AddFriendsState extends State<AddFriends> {
 
   get defaultAppBar => DefaultAppBar(
         components: [
-          AppBarComponents.back,
+          // AppBarComponents.back,
           AppBarComponents.keep,
         ],
         onTapAction: redirectToHomePage,
-        onTapLeading: () => Navigator.pop(context),
+        //onTapLeading: () => Navigator.pop(context),
       );
   Widget body(BuildContext context) {
     return Stack(
@@ -182,24 +182,25 @@ class _AddFriendsState extends State<AddFriends> {
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: !friendsStore.isLoading &&
-                      !(friendsStore.usersSearch.friends?.isEmpty ?? true),
-                  child: Container(
-                    margin: EdgeInsets.only(left: 25, top: 8),
-                    child: Text(
-                      '${friendsStore.usersSearch.total} '
-                      '${AppLocalizations.of(context)!.resultsFor} '
-                      '\"${friendsStore.lastName}\"',
-                      maxLines: 1,
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: LightColors.blue,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w400),
+                if (!widget.displayContacts)
+                  Visibility(
+                    visible: !friendsStore.isLoading &&
+                        !(friendsStore.usersSearch.friends?.isEmpty ?? true),
+                    child: Container(
+                      margin: EdgeInsets.only(left: 25, top: 8),
+                      child: Text(
+                        '${friendsStore.usersSearch.total} '
+                        '${AppLocalizations.of(context)!.resultsFor} '
+                        '\"${friendsStore.lastName}\"',
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: LightColors.blue,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ),
-                ),
                 if (friendsStore.isLoadingSearch) ...[
                   SizedBox(
                     height: 6,
@@ -244,7 +245,7 @@ class _AddFriendsState extends State<AddFriends> {
                   Container(
                     margin: EdgeInsets.only(top: 4),
                     height: widget.displayContacts
-                        ? MediaQuery.of(context).size.height
+                        ? MediaQuery.of(context).size.height - 100
                         : MediaQuery.of(context).size.height - 250,
                     child: ListView.builder(
                         itemCount: friendsStore.usersSearch.friends!.length,
@@ -620,11 +621,21 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen(
-      {
-        "id": userId,
-      },
-    ));
+    if (widget.displayContacts) {
+      Navigator.of(context).pushNamed(
+        PageRoute.Page.profileScreen.route,
+        arguments: {
+          "id": userId,
+          "isGetContacts": true,
+        },
+      );
+    } else {
+      controller.insertPage(ProfileScreen(
+        {
+          "id": userId,
+        },
+      ));
+    }
   }
 
   getIfIsFriend(FriendModel friendModel) {
