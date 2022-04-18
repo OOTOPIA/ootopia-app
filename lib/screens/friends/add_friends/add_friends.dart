@@ -45,7 +45,8 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   void redirectToHomePage() async {
-    if (widget.arguments['isInvitationCode'] != null) {
+    if (widget.arguments['goal'] != null &&
+        widget.arguments['goal'] == 'invitationCode') {
       Navigator.of(context).pushNamed(
         PageRoute.Page.celebration.route,
         arguments: widget.arguments,
