@@ -10,6 +10,7 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -73,6 +74,37 @@ class _AddFriendsState extends State<AddFriends> {
     });
   }
 
+  teste() {
+    showModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withAlpha(1),
+      backgroundColor: Colors.black.withAlpha(1),
+      builder: (BuildContext context) {
+        return SnackBarWidget(
+          menu: AppLocalizations.of(context)!.areYouEnjoyingTheOotopiaApp,
+          automaticClosing: false,
+          text:
+              "TESTE DE ARGUMENTS: ${widget.arguments} invitationcode: ${widget.arguments['isInvitationCode']}",
+          buttons: [
+            ButtonSnackBar(
+              text: "shareMyOpinion",
+              onTapAbout: () {
+                Navigator.pop(context);
+              },
+            ),
+            ButtonSnackBar(
+              text: AppLocalizations.of(context)!.notNow,
+              onTapAbout: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+          marginBottom: true,
+        );
+      },
+    );
+  }
+
   get defaultAppBar => DefaultAppBar(
         components: [
           AppBarComponents.back,
@@ -124,6 +156,20 @@ class _AddFriendsState extends State<AddFriends> {
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
                       color: Colors.black,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0, left: 28),
+                  child: GestureDetector(
+                    onTap: () => teste(),
+                    child: Text(
+                      AppLocalizations.of(context)!.searchFriendsMsg,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
