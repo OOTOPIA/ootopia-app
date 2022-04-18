@@ -455,7 +455,7 @@ class _LoginPageState extends State<LoginPage> {
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2!
-                                  .copyWith(color: LightColors.grey),
+                                  .copyWith(color: LightColors.blue),
                             ),
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
