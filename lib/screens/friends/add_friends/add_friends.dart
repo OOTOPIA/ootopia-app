@@ -243,7 +243,7 @@ class _AddFriendsState extends State<AddFriends> {
                   Container(
                     margin: EdgeInsets.only(top: 4),
                     height: widget.displayContacts
-                        ? MediaQuery.of(context).size.height - 150
+                        ? MediaQuery.of(context).size.height - 100
                         : MediaQuery.of(context).size.height - 250,
                     child: ListView.builder(
                         itemCount: friendsStore.usersSearch.friends!.length,
@@ -622,7 +622,10 @@ class _AddFriendsState extends State<AddFriends> {
     if (widget.displayContacts) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.profileScreen.route,
-        arguments: {"id": userId},
+        arguments: {
+          "id": userId,
+          "isGetContacts": true,
+        },
       );
     } else {
       controller.insertPage(ProfileScreen(

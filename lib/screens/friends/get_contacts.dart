@@ -33,7 +33,6 @@ Future<void> askPermissions(BuildContext context, FriendsStore store) async {
                   onPressed: () async {
                     PermissionStatus permission =
                         await Permission.contacts.status;
-                    print('permission $permission');
                     final CountryDetails details =
                         CountryCodes.detailsForLocale();
                     if ((permission == PermissionStatus.permanentlyDenied ||
@@ -41,6 +40,8 @@ Future<void> askPermissions(BuildContext context, FriendsStore store) async {
                         permission != PermissionStatus.granted) {
                       permission = await Permission.contacts.request();
                     }
+                    Navigator.pop(context);
+
                     if (permission == PermissionStatus.granted &&
                         permission != PermissionStatus.permanentlyDenied) {
                       List<Contact> contacts =
@@ -71,10 +72,8 @@ Future<void> askPermissions(BuildContext context, FriendsStore store) async {
                       store.emailContact.addAll(sendEmailToApi);
                       store.phoneContact.addAll(sendPhoneToApi);
 
-                      Navigator.pop(context);
                       await store.sendContactsToApi();
                     } else {
-                      Navigator.pop(context);
                       await store.sendContactsToApi();
                     }
                   },
