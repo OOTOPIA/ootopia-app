@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
@@ -35,10 +36,17 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
   LearningTracksRepositoryImpl learningTracksStore =
       LearningTracksRepositoryImpl();
   MarketplaceRepositoryImpl marketplaceRepository = MarketplaceRepositoryImpl();
-
+  get appBarProfile => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.empty,
+        ],
+        onTapLeading: () => Navigator.pop(context),
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: widget.args.containsKey('displayContacts') ? appBarProfile : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

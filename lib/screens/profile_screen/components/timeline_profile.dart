@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
@@ -50,9 +51,17 @@ class _TimelineScreenProfileScreenState
             });
   }
 
+  get appBarProfile => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.empty,
+        ],
+        onTapLeading: () => Navigator.pop(context),
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: widget.args.containsKey('displayContacts') ? appBarProfile : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -229,8 +238,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                       return Column(
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 24),
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: PhotoTimeline(
                               key: ObjectKey(timelineStore.allPosts[index]),
                               post: timelineStore.allPosts[index],

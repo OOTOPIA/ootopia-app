@@ -167,6 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       friendsStore = Provider.of<FriendsStore>(context);
     }
+
     return Scaffold(
       appBar: showAppBar()
           ? appBarProfile
@@ -248,8 +249,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onPressed: () {
                                     if (widget.args!
                                         .containsKey('isGetContacts')) {
-                                      Navigator.pushNamed(context,
-                                          PageRoute.Page.viewLinksScreen.route);
+                                      Navigator.pushNamed(
+                                        context,
+                                        PageRoute.Page.viewLinksScreen.route,
+                                        arguments: {
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      );
                                     } else {
                                       controller.insertPage(ViewLinksScreen(
                                         {
@@ -349,6 +357,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       controller.insertPage(WalletPage())),
                             ],
                             CircleOfFriendWidget(
+                              displayContacts: widget.args != null &&
+                                  widget.args!.containsKey('isGetContacts'),
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
@@ -418,12 +428,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 columnsCount: 4,
                                                 type: store!.getPostType(post),
                                                 onTap: () {
-                                                  store!.goToTimelinePost(
-                                                    controller: controller,
-                                                    userId: _getUserId(),
-                                                    posts: store!.postsList,
-                                                    postSelected: index,
-                                                  );
+                                                  if (widget.args != null &&
+                                                      widget.args!.containsKey(
+                                                          'isGetContacts')) {
+                                                    Navigator.pushNamed(
+                                                        context,
+                                                        PageRoute
+                                                            .Page
+                                                            .timelineProfileScreen
+                                                            .route,
+                                                        arguments: {
+                                                          "displayContacts":
+                                                              true,
+                                                          "userId":
+                                                              _getUserId(),
+                                                          "posts":
+                                                              store!.postsList,
+                                                          "postSelected": index,
+                                                        });
+                                                  } else {
+                                                    store!.goToTimelinePost(
+                                                      controller: controller,
+                                                      userId: _getUserId(),
+                                                      posts: store!.postsList,
+                                                      postSelected: index,
+                                                    );
+                                                  }
                                                 },
                                               ),
                                             );
