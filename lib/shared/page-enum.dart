@@ -38,6 +38,7 @@ enum Page {
   aboutEthicalMarketPlace,
   addLink,
   addFriends,
+  viewLinksScreen,
 }
 
 extension PageRoute on Page {
