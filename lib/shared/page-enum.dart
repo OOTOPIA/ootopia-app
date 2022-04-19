@@ -39,6 +39,7 @@ enum Page {
   addLink,
   addFriends,
   viewLinksScreen,
+  circleFriends
 }
 
 extension PageRoute on Page {
