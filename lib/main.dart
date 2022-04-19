@@ -36,6 +36,7 @@ import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart'
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/create_categories/create_categories_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/add_link_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
@@ -418,6 +419,7 @@ class _mainPageState extends State<MainPage> {
           displayContacts: true,
           arguments: args,
         ),
+    PageRoute.Page.viewLinksScreen: (args) => ViewLinksScreen(args),
   };
 
   SharedExperienceService sharedExperienceService =

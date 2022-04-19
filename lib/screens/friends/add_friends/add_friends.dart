@@ -37,14 +37,18 @@ class _AddFriendsState extends State<AddFriends> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       friendsStore.cleanSearchPage();
-      if (widget.displayContacts) askPermissions(context, friendsStore);
+      if (widget.displayContacts) {
+        askPermissions(context, friendsStore);
+        await authStore.checkUserIsLogged();
+      }
     });
   }
 
   void redirectToHomePage() async {
-    if (widget.arguments != null) {
+    if (widget.arguments['goal'] != null &&
+        widget.arguments['goal'] == 'invitationCode') {
       Navigator.of(context).pushNamedAndRemoveUntil(
         PageRoute.Page.celebration.route,
         (Route<dynamic> route) => false,
@@ -76,11 +80,9 @@ class _AddFriendsState extends State<AddFriends> {
 
   get defaultAppBar => DefaultAppBar(
         components: [
-          // AppBarComponents.back,
           AppBarComponents.keep,
         ],
         onTapAction: redirectToHomePage,
-        //onTapLeading: () => Navigator.pop(context),
       );
   Widget body(BuildContext context) {
     return Stack(

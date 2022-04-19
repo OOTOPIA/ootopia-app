@@ -32,6 +32,7 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/empty_posts_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -146,13 +147,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      setState(() {
-        if (store!.hasMorePosts && store!.loadingPosts == false) {
-          Future.delayed(Duration.zero, () async {
-            await store?.getUserPosts(profileUserId);
-          });
-        }
-      });
+      // setState(() {
+      if (store!.hasMorePosts && store!.loadingPosts == false) {
+        Future.delayed(Duration.zero, () async {
+          await store?.getUserPosts(profileUserId);
+        });
+      }
+      // });
     }
   }
 
@@ -245,13 +246,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ] else if (store!.profile!.links!.length > 1) ...[
                                 TextButton(
                                   onPressed: () {
-                                    controller.insertPage(ViewLinksScreen(
-                                      {
-                                        'store': store,
-                                        'user_id': 1,
-                                        'list': store!.profile!.links!,
-                                      },
-                                    ));
+                                    if (widget.args!
+                                        .containsKey('isGetContacts')) {
+                                      Navigator.pushNamed(context,
+                                          PageRoute.Page.viewLinksScreen.route);
+                                    } else {
+                                      controller.insertPage(ViewLinksScreen(
+                                        {
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      ));
+                                    }
                                   },
                                   child: Text(
                                     AppLocalizations.of(context)!.relatedLinks,
@@ -393,8 +400,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       runSpacing: 20, // gap between lines
                                       children: store!.postsList
                                           .asMap()
-                                          .map(
-                                            (index, post) => MapEntry(
+                                          .map((index, post) {
+                                            return MapEntry(
                                               index,
                                               GridCustomWidget(
                                                 discountSpacing: 10 * 3,
@@ -402,8 +409,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 thumbnailUrl:
                                                     post.type != 'gallery'
                                                         ? post.thumbnailUrl!
-                                                        : post.medias!.first
-                                                            .thumbUrl!,
+                                                        : post.medias != [] &&
+                                                                post.medias!
+                                                                    .isNotEmpty
+                                                            ? post.medias!.first
+                                                                .thumbUrl!
+                                                            : '',
                                                 columnsCount: 4,
                                                 type: store!.getPostType(post),
                                                 onTap: () {
@@ -415,8 +426,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   );
                                                 },
                                               ),
-                                            ),
-                                          )
+                                            );
+                                          })
                                           .values
                                           .toList(),
                                     ),
