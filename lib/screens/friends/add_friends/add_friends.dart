@@ -45,7 +45,8 @@ class _AddFriendsState extends State<AddFriends> {
   }
 
   void redirectToHomePage() async {
-    if (widget.arguments != null) {
+    if (widget.arguments['goal'] != null &&
+        widget.arguments['goal'] == 'invitationCode') {
       Navigator.of(context).pushNamedAndRemoveUntil(
         PageRoute.Page.celebration.route,
         (Route<dynamic> route) => false,
@@ -73,37 +74,6 @@ class _AddFriendsState extends State<AddFriends> {
       }
       return body(context);
     });
-  }
-
-  teste() {
-    showModalBottomSheet(
-      context: context,
-      barrierColor: Colors.black.withAlpha(1),
-      backgroundColor: Colors.black.withAlpha(1),
-      builder: (BuildContext context) {
-        return SnackBarWidget(
-          menu: AppLocalizations.of(context)!.areYouEnjoyingTheOotopiaApp,
-          automaticClosing: false,
-          text:
-              "TESTE DE ARGUMENTS: ${widget.arguments} invitationcode: ${widget.arguments['isInvitationCode']}",
-          buttons: [
-            ButtonSnackBar(
-              text: "shareMyOpinion",
-              onTapAbout: () {
-                Navigator.pop(context);
-              },
-            ),
-            ButtonSnackBar(
-              text: AppLocalizations.of(context)!.notNow,
-              onTapAbout: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-          marginBottom: true,
-        );
-      },
-    );
   }
 
   get defaultAppBar => DefaultAppBar(
@@ -157,20 +127,6 @@ class _AddFriendsState extends State<AddFriends> {
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
                       color: Colors.black,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0, left: 28),
-                  child: GestureDetector(
-                    onTap: () => teste(),
-                    child: Text(
-                      AppLocalizations.of(context)!.searchFriendsMsg,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13,
-                        color: Colors.black,
-                      ),
                     ),
                   ),
                 ),
