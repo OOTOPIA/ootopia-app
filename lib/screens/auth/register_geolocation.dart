@@ -76,7 +76,7 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
             .getGeneralConfigByName("user_received_sower_invitation_code_ooz");
         registerController.cleanTextEditingControllers();
         Navigator.of(context).pushNamed(
-          PageRoute.Page.celebration.route,
+          PageRoute.Page.addFriends.route,
           arguments: {
             "returnToPageWithArgs": {
               'currentPageName': registerController.returnToPage
@@ -89,13 +89,12 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
         );
       } else {
         registerController.cleanTextEditingControllers();
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          PageRoute.Page.homeScreen.route,
-          (Route<dynamic> route) => false,
+        Navigator.of(context).pushNamed(
+          PageRoute.Page.addFriends.route,
           arguments: {
             "returnToPageWithArgs": {
               'currentPageName': registerController.returnToPage
-            }
+            },
           },
         );
       }
@@ -134,15 +133,16 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                       flex: 1,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal:
-                                GlobalConstants.of(context).screenHorizontalSpace),
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
                         child: CustomScrollView(
                           slivers: [
                             SliverFillRemaining(
                               hasScrollBody: false,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     children: [
@@ -182,19 +182,21 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                               .geolocationController,
                                           keyboardType: TextInputType.number,
                                           autofocus: false,
-                                          decoration: GlobalConstants.of(context)
-                                              .loginInputTheme(registerController
-                                                  .geolocationMessage)
-                                              .copyWith(
-                                                  prefixIcon: Icon(
-                                                FeatherIcons.mapPin,
-                                                color: registerController
-                                                            .geolocationController
-                                                            .text !=
-                                                        null
-                                                    ? LightColors.blue
-                                                    : Colors.black,
-                                              )),
+                                          decoration:
+                                              GlobalConstants.of(context)
+                                                  .loginInputTheme(
+                                                      registerController
+                                                          .geolocationMessage)
+                                                  .copyWith(
+                                                      prefixIcon: Icon(
+                                                    FeatherIcons.mapPin,
+                                                    color: registerController
+                                                                .geolocationController
+                                                                .text !=
+                                                            null
+                                                        ? LightColors.blue
+                                                        : Colors.black,
+                                                  )),
                                           onEditingComplete: () =>
                                               Geolocation.determinePosition(
                                                   context),
@@ -203,14 +205,16 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                       Visibility(
                                         visible: !isLoadingLocation &&
                                             registerController
-                                                .geolocationErrorMessage.isNotEmpty,
+                                                .geolocationErrorMessage
+                                                .isNotEmpty,
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.only(
                                               top: GlobalConstants.of(context)
                                                   .spacingNormal,
-                                              bottom: GlobalConstants.of(context)
-                                                  .spacingSmall,
+                                              bottom:
+                                                  GlobalConstants.of(context)
+                                                      .spacingSmall,
                                             ),
                                             child: Text(
                                               registerController
@@ -237,7 +241,8 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                       ),
                                       SizedBox(
                                         height: registerController
-                                                .geolocationErrorMessage.isNotEmpty
+                                                .geolocationErrorMessage
+                                                .isNotEmpty
                                             ? GlobalConstants.of(context)
                                                 .spacingNormal
                                             : GlobalConstants.of(context)
@@ -277,7 +282,8 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                               width: 2,
                                               style: BorderStyle.solid,
                                             ),
-                                            borderRadius: BorderRadius.circular(50),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
                                           ),
                                         ),
                                       ),
@@ -306,17 +312,17 @@ class _RegisterGeolocationScreenState extends State<RegisterGeolocationScreen> {
                                           Size(60, 55),
                                         ),
                                         elevation:
-                                            MaterialStateProperty.all<double>(0.0),
+                                            MaterialStateProperty.all<double>(
+                                                0.0),
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
                                                 isLoadingLocation
                                                     ? Color(0xff5d7fbb)
                                                     : Color(0xff003694)),
-                                        padding:
-                                            MaterialStateProperty.all<EdgeInsets>(
-                                                EdgeInsets.all(
-                                                    GlobalConstants.of(context)
-                                                        .spacingNormal)),
+                                        padding: MaterialStateProperty
+                                            .all<EdgeInsets>(EdgeInsets.all(
+                                                GlobalConstants.of(context)
+                                                    .spacingNormal)),
                                       ),
                                       child: Text(
                                         AppLocalizations.of(context)!

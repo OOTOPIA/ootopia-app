@@ -68,13 +68,9 @@ class FlickMultiManager {
         _activeManager = flickManager;
       }
 
-      if (_isMute) {
-        _activeManager?.flickControlManager?.mute();
-      } else {
-        _activeManager?.flickControlManager?.unmute();
-      }
-
       _activeManager?.flickControlManager?.play();
+
+      _activeManager?.flickControlManager?.mute();
     });
   }
 
