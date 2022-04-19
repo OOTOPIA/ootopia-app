@@ -56,6 +56,9 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                   SizedBox(height: GlobalConstants.of(context).spacingSmall),
                   Text(
                     widget.store.profile!.fullname,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.roboto(
                         color: Theme.of(context).textTheme.subtitle1!.color,
                         fontSize: 24,

@@ -8,7 +8,7 @@ class NotificationModel {
     this.photoURL,
     required this.type,
     this.usersName,
-    required this.postId,
+    this.postId,
     this.userCommentFullname,
     this.oozAmount,
     this.userId,
@@ -17,7 +17,7 @@ class NotificationModel {
   final String? photoURL;
   final String type;
   final List<String>? usersName;
-  final String postId;
+  final String? postId;
   final String? userCommentFullname;
   final String? oozAmount;
   final String? userId;
