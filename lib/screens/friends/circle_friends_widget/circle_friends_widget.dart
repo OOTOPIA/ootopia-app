@@ -140,7 +140,6 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 ] else if (listIsNotEmpty()) ...[
                   TextButton(
                     onPressed: () {
-                      print(widget.displayContacts);
                       if (widget.displayContacts!) {
                         Navigator.pushNamed(
                           context,
