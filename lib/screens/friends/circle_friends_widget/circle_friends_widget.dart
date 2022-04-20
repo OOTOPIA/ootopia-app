@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_page/circle_friends_page.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
@@ -334,10 +335,10 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             height: 56,
             child: RawMaterialButton(
               onPressed: () {
-                Navigator.pushNamed(context, PageRoute.Page.addFriends.route);
-                // Future.delayed(Duration(milliseconds: 100), () {
-                //   controller.insertPage(AddFriends());
-                // });
+                // Navigator.pushNamed(context, PageRoute.Page.addFriends.route);
+                Future.delayed(Duration(milliseconds: 100), () {
+                  controller.insertPage(AddFriends());
+                });
               },
               elevation: 0,
               hoverElevation: 0,

@@ -253,6 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         context,
                                         PageRoute.Page.viewLinksScreen.route,
                                         arguments: {
+                                          'displayContacts': true,
                                           'store': store,
                                           'user_id': 1,
                                           'list': store!.profile!.links!,

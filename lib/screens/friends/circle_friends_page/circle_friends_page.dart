@@ -13,7 +13,7 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'circle_friends_store.dart';
 
 class CircleOfFriendPage extends StatefulWidget {
@@ -719,11 +719,22 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen(
-      {
-        "id": userId,
-      },
-    ));
+    if (widget.displayContacts != null) {
+      Navigator.pushNamed(
+        context,
+        PageRoute.Page.profileScreen.route,
+        arguments: {
+          "id": userId,
+          "isGetContacts": true,
+        },
+      );
+    } else {
+      controller.insertPage(ProfileScreen(
+        {
+          "id": userId,
+        },
+      ));
+    }
   }
 
   bool hasImages(FriendModel friendModel) {
