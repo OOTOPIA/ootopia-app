@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
-import 'package:crop_image/crop_image.dart';
+import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,10 +22,31 @@ class CustomCrop extends StatefulWidget {
 }
 
 class _CustomCropState extends State<CustomCrop> {
-  final controller = CropController(
-    aspectRatio: 1,
-    defaultCrop: Rect.fromLTRB(0.0, 0.0, 1, 1),
-  );
+  final _controller = CropController();
+  var imageData;
+  Uint8List? _croppedData;
+  @override
+  void initState() {
+    super.initState();
+    imageData = fileToBytes();
+  }
+
+  var _isProcessing = false;
+  set isProcessing(bool value) {
+    setState(() {
+      _isProcessing = value;
+    });
+  }
+
+  set croppedData(Uint8List? value) {
+    _croppedData = value;
+    saveFileOnDirectory(_croppedData);
+  }
+
+  fileToBytes() {
+    Uint8List bytes = widget.image.readAsBytesSync();
+    return bytes;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +60,15 @@ class _CustomCropState extends State<CustomCrop> {
               child: Container(
                 color: Colors.black,
                 padding: const EdgeInsets.all(20.0),
-                child: _buildCropImage(controller),
+                child: Crop(
+                  controller: _controller,
+                  image: imageData,
+                  baseColor: Colors.black,
+                  onCropped: (cropped) {
+                    croppedData = cropped;
+                    isProcessing = false;
+                  },
+                ),
               ),
             ),
             Expanded(
@@ -51,41 +79,34 @@ class _CustomCropState extends State<CustomCrop> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    TextButton(
-                      child: Text(
-                        AppLocalizations.of(context)?.cropButton ?? "",
-                        style: Theme.of(context).textTheme.button,
-                      ),
-                      onPressed: () => _cropImage(),
-                    ),
+                    _isProcessing
+                        ? Center(child: CircularProgressIndicator())
+                        : TextButton(
+                            child: Text(
+                              AppLocalizations.of(context)?.cropButton ?? "",
+                              style: Theme.of(context).textTheme.button,
+                            ),
+                            onPressed: () => _cropImage(),
+                          ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  _buildCropImage(controller) {
-    return CropImage(
-      controller: controller,
-      image: Image(image: FileImage(widget.image)),
-    );
-  }
-
   Future<void> _cropImage() async {
-    final croppedBitmap = await controller.croppedBitmap();
-    saveFileOnDirectory(
-        await croppedBitmap.toByteData(format: ImageByteFormat.png));
+    isProcessing = true;
+    _controller.crop();
   }
 
-  saveFileOnDirectory(ByteData? imageBytes) async {
+  saveFileOnDirectory(Uint8List? imageBytes) async {
     String appPath = (await getApplicationDocumentsDirectory()).path;
     File newFile = File('$appPath/${imageBytes.hashCode}.png');
-    await newFile.writeAsBytes(imageBytes!.buffer
-        .asUint8List(imageBytes.offsetInBytes, imageBytes.lengthInBytes));
+    await newFile.writeAsBytes(imageBytes!.toList());
 
     if (widget.onChanged != null) widget.onChanged!(newFile);
 

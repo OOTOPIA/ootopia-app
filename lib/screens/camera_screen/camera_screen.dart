@@ -16,7 +16,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'components/custom_crop.dart';
+import 'package:ootopia_app/screens/camera_screen/components/custom_crop.dart';
 
 class CameraApp extends StatefulWidget {
   @override
