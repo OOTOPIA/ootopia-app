@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/data/models/timeline/media_model.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/friends/get_contacts.dart';
@@ -240,7 +241,11 @@ class _AddFriendsState extends State<AddFriends> {
                         color: LightColors.grey.withOpacity(0.7),
                       ),
                     ),
-                  )
+                  ),
+                  if (widget.displayContacts)
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                    ),
                 ] else ...[
                   Container(
                     margin: EdgeInsets.only(top: 4),

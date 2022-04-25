@@ -318,9 +318,20 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen({
-      "id": userId,
-    }));
+    if (widget.displayContacts != null) {
+      Navigator.pushNamed(
+        context,
+        PageRoute.Page.profileScreen.route,
+        arguments: {
+          'id': widget.userId,
+          "isGetContacts": true,
+        },
+      );
+    } else {
+      controller.insertPage(ProfileScreen({
+        "id": userId,
+      }));
+    }
   }
 
   Widget buttonToAddFriends() {
@@ -335,7 +346,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             height: 56,
             child: RawMaterialButton(
               onPressed: () {
-                // Navigator.pushNamed(context, PageRoute.Page.addFriends.route);
+                //Navigator.pushNamed(context, PageRoute.Page.addFriends.route);
                 Future.delayed(Duration(milliseconds: 100), () {
                   controller.insertPage(AddFriends());
                 });
