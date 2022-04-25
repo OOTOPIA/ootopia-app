@@ -171,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: showAppBar()
           ? appBarProfile
-          : widget.args!.containsKey('isGetContacts')
+          : widget.args != null && widget.args!.containsKey('isGetContacts')
               ? appBarProfile
               : null,
       body: Container(
