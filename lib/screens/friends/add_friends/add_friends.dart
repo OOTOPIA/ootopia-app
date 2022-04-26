@@ -649,7 +649,7 @@ class _AddFriendsState extends State<AddFriends> {
       return true;
     }
     bool isFriend = false;
-    friendsStore.myFriendsDate?.friends?.forEach((element) {
+    friendsStore.myFriendsDate.friends?.forEach((element) {
       if (element!.id == friendModel.id) {
         isFriend = true;
       }
