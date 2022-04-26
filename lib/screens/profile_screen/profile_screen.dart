@@ -128,9 +128,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onTapAction: () => isLoggedInUserProfile
             ? controller.insertPage(EditProfileScreen())
             : null,
-        onTapLeading: () => widget.args!.containsKey('isGetContacts')
-            ? Navigator.pop(context)
-            : controller.back(),
+        onTapLeading: () =>
+            widget.args != null && widget.args!.containsKey('isGetContacts')
+                ? Navigator.pop(context)
+                : controller.back(),
       );
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');

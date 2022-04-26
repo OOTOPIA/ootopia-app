@@ -17,6 +17,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLinksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -153,19 +154,43 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
     if (_url.contains("market-place/shared/")) {
       ProductModel productModel = await marketplaceRepository
           .getProductById(_url.split('market-place/shared/').last);
-      controller.insertPage(ProductDetailScreen(productModel: productModel));
+      if (widget.args.containsKey('displayContacts')) {
+        Navigator.pushNamed(
+          context,
+          PageRoute.Page.productDetails.route,
+          arguments: {
+            'productModel': productModel,
+            'displayContacts': true,
+          },
+        );
+      } else {
+        controller.insertPage(ProductDetailScreen(productModel: productModel));
+      }
       return;
     }
     if (_url.contains("learning-tracks/shared/")) {
       LearningTracksModel learningTrack = await learningTracksStore
           .getLearningTrackById(_url.split('learning-tracks/shared/').last);
-      controller.insertPage(ViewLearningTracksScreen(
-        {
-          'list_chapters': learningTrack.chapters,
-          'learning_tracks': learningTrack,
-          'updateLearningTrack': () {},
-        },
-      ));
+      if (widget.args.containsKey('displayContacts')) {
+        Navigator.pushNamed(
+          context,
+          PageRoute.Page.viewLearningTracksScreen.route,
+          arguments: {
+            'displayContacts': true,
+            'list_chapters': learningTrack.chapters,
+            'learning_tracks': learningTrack,
+            'updateLearningTrack': () {},
+          },
+        );
+      } else {
+        controller.insertPage(ViewLearningTracksScreen(
+          {
+            'list_chapters': learningTrack.chapters,
+            'learning_tracks': learningTrack,
+            'updateLearningTrack': () {},
+          },
+        ));
+      }
       return;
     }
     if (await canLaunch(_url)) {

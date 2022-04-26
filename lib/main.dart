@@ -45,6 +45,8 @@ import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/about_quiz_screen.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/ooz_current/ooz_current_page.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -424,6 +426,12 @@ class _mainPageState extends State<MainPage> {
           userId: args['id'],
           displayContacts: true,
         ),
+    PageRoute.Page.productDetails: (args) => ProductDetailScreen(
+          productModel: args['productModel'],
+          displayContacts: args['displayContacts'],
+        ),
+    PageRoute.Page.viewLearningTracksScreen: (args) =>
+        ViewLearningTracksScreen(args)
   };
 
   SharedExperienceService sharedExperienceService =

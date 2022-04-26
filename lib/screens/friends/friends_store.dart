@@ -53,15 +53,18 @@ class FriendsStore with ChangeNotifier {
   Future<bool> addFriend(FriendModel friend) async {
     if (myFriendsDate != null) {
       myFriendsDate!.total = (myFriendsDate?.total ?? 0) + 1;
+      friend.isFriend = true;
       myFriendsDate!.friends!.add(friend);
     }
 
     if (friendsDate != null) {
       friendsDate!.total = (friendsDate?.total ?? 0) + 1;
+      friend.isFriend = true;
       friendsDate!.friends!.add(friend);
     }
+    var response = await friendsRepositoryImpl.addFriend(friend.id);
     notifyListeners();
-    return await friendsRepositoryImpl.addFriend(friend.id);
+    return response;
   }
 
   Future<bool> removeFriend(FriendModel friend, userLoggedId) async {
@@ -138,7 +141,6 @@ class FriendsStore with ChangeNotifier {
   Future<void> getMoreUserByContact() async {
     if (hasMoreUsersSearch) {
       loadingMoreUsersSearch = true;
-      notifyListeners();
       pageContacts++;
       FriendsDataModel auxUsers = await friendsRepositoryImpl.sendContacts(
         emailContact,

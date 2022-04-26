@@ -476,8 +476,9 @@ class _AddFriendsState extends State<AddFriends> {
                             onPressed: () {
                               Future.delayed(Duration(milliseconds: 80), () {
                                 if (friendModel.isFriend != true) {
-                                  friendsStore.addFriend(friendModel);
                                   friendModel.isFriend = true;
+
+                                  friendsStore.addFriend(friendModel);
                                   setState(() {});
                                 } else {
                                   friendsStore.removeFriend(
