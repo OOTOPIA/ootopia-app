@@ -503,7 +503,7 @@ class _AddFriendsState extends State<AddFriends> {
                 ),
                 onTap: () {
                   Future.delayed(Duration(milliseconds: 100), () {
-                    _goToProfile(friendModel.id, friendModel);
+                    _goToProfile(friendModel.id);
                   });
                 },
               ),
@@ -606,7 +606,7 @@ class _AddFriendsState extends State<AddFriends> {
                               borderRadius: BorderRadius.circular(10),
                               onTap: () {
                                 Future.delayed(Duration(milliseconds: 80), () {
-                                  _goToProfile(friendModel.id, friendModel);
+                                  _goToProfile(friendModel.id);
                                 });
                               },
                               child: SizedBox(
@@ -626,7 +626,7 @@ class _AddFriendsState extends State<AddFriends> {
     });
   }
 
-  void _goToProfile(userId, FriendModel friendModel) async {
+  void _goToProfile(userId) async {
     if (widget.displayContacts) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.profileScreen.route,
@@ -634,9 +634,7 @@ class _AddFriendsState extends State<AddFriends> {
           "id": userId,
           "isGetContacts": true,
         },
-      ).then((value) {
-        friendsStore.sendContactsToApi();
-      });
+      );
     } else {
       controller.insertPage(ProfileScreen(
         {
