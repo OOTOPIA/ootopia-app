@@ -10,7 +10,11 @@ class FriendsStore with ChangeNotifier {
   bool isLoading = false;
   int page = 0;
   final int limit = 40;
-  FriendsDataModel? myFriendsDate;
+  FriendsDataModel myFriendsDate = FriendsDataModel(
+    total: 0,
+    friends: [],
+    searchFriends: [],
+  );
   int pageContacts = 1;
   List<String> emailContact = [];
   List<String> phoneContact = [];
@@ -51,11 +55,9 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<bool> addFriend(FriendModel friend) async {
-    if (myFriendsDate != null) {
-      myFriendsDate!.total = (myFriendsDate?.total ?? 0) + 1;
-      friend.isFriend = true;
-      myFriendsDate!.friends!.add(friend);
-    }
+    myFriendsDate.total = (myFriendsDate.total ?? 0) + 1;
+    friend.isFriend = true;
+    myFriendsDate.friends!.add(friend);
 
     if (friendsDate != null) {
       friendsDate!.total = (friendsDate?.total ?? 0) + 1;
@@ -75,11 +77,8 @@ class FriendsStore with ChangeNotifier {
       friendsDate!.total = friendsDate!.total! - 1;
     }
 
-    if (myFriendsDate != null) {
-      myFriendsDate!.total = (myFriendsDate?.total ?? 0) - 1;
-      myFriendsDate!.friends!
-          .removeWhere((element) => element!.id == friend.id);
-    }
+    myFriendsDate.total = (myFriendsDate.total ?? 0) - 1;
+    myFriendsDate.friends!.removeWhere((element) => element!.id == friend.id);
 
     if (hasMoreFriends && !loadingMoreFriends && orderBy != null) {
       getMoreFriends(userLoggedId);

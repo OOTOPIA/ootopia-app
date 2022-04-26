@@ -96,7 +96,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                         text: TextSpan(children: [
                       TextSpan(
                           text: widget.isUserLogged
-                              ? '${friendsStore.myFriendsDate?.total ?? 0} '
+                              ? '${friendsStore.myFriendsDate.total ?? 0} '
                               : '${circleFriendsWidgetStore.friendsDate?.total ?? 0} ',
                           style: TextStyle(
                               fontSize: 16,
@@ -201,7 +201,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
     late int size;
 
     if (widget.isUserLogged) {
-      items = friendsStore.myFriendsDate?.friends ?? [];
+      items = friendsStore.myFriendsDate.friends ?? [];
       size = items.length + 1;
     } else {
       items = circleFriendsWidgetStore.friendsDate?.friends ?? [];
@@ -386,7 +386,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   bool listIsNotEmptyOrLoading() {
     if (widget.isUserLogged) {
       return (friendsStore.isLoading ||
-          (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false));
+          (friendsStore.myFriendsDate.friends?.isNotEmpty ?? false));
     } else {
       return (circleFriendsWidgetStore.isLoading ||
           (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ?? false));
@@ -398,6 +398,6 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             (circleFriendsWidgetStore.friendsDate?.friends?.isNotEmpty ??
                 false)) ||
         (widget.isUserLogged &&
-            (friendsStore.myFriendsDate?.friends?.isNotEmpty ?? false));
+            (friendsStore.myFriendsDate.friends?.isNotEmpty ?? false));
   }
 }
