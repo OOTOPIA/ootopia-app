@@ -476,8 +476,9 @@ class _AddFriendsState extends State<AddFriends> {
                             onPressed: () {
                               Future.delayed(Duration(milliseconds: 80), () {
                                 if (friendModel.isFriend != true) {
-                                  friendsStore.addFriend(friendModel);
                                   friendModel.isFriend = true;
+
+                                  friendsStore.addFriend(friendModel);
                                   setState(() {});
                                 } else {
                                   friendsStore.removeFriend(
@@ -502,7 +503,7 @@ class _AddFriendsState extends State<AddFriends> {
                 ),
                 onTap: () {
                   Future.delayed(Duration(milliseconds: 100), () {
-                    _goToProfile(friendModel.id);
+                    _goToProfile(friendModel.id, friendModel);
                   });
                 },
               ),
@@ -605,7 +606,7 @@ class _AddFriendsState extends State<AddFriends> {
                               borderRadius: BorderRadius.circular(10),
                               onTap: () {
                                 Future.delayed(Duration(milliseconds: 80), () {
-                                  _goToProfile(friendModel.id);
+                                  _goToProfile(friendModel.id, friendModel);
                                 });
                               },
                               child: SizedBox(
@@ -625,7 +626,7 @@ class _AddFriendsState extends State<AddFriends> {
     });
   }
 
-  void _goToProfile(userId) async {
+  void _goToProfile(userId, FriendModel friendModel) async {
     if (widget.displayContacts) {
       Navigator.of(context).pushNamed(
         PageRoute.Page.profileScreen.route,
@@ -633,7 +634,9 @@ class _AddFriendsState extends State<AddFriends> {
           "id": userId,
           "isGetContacts": true,
         },
-      );
+      ).then((value) {
+        friendsStore.sendContactsToApi();
+      });
     } else {
       controller.insertPage(ProfileScreen(
         {

@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/learning_tracks/chapters_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/watch_video_learning_tracks.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -65,11 +66,18 @@ class _ViewLearningTracksScreenState extends State<ViewLearningTracksScreen> {
   }
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
-
+  get appBar => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.empty,
+        ],
+        onTapLeading: () => Navigator.pop(context),
+      );
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     return Scaffold(
+      appBar: widget.args.containsKey('displayContacts') ? appBar : null,
       backgroundColor: Colors.white,
       body: Container(
         height: MediaQuery.of(context).size.height,
