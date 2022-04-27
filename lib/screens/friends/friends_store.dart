@@ -58,24 +58,19 @@ class FriendsStore with ChangeNotifier {
     myFriendsDate.total = (myFriendsDate.total ?? 0) + 1;
     friend.isFriend = true;
     myFriendsDate.friends!.add(friend);
-
-    if (friendsDate != null) {
-      friendsDate!.total = (friendsDate?.total ?? 0) + 1;
-      friend.isFriend = true;
-      friendsDate!.friends!.add(friend);
-    }
+    friendsDate.total = (friendsDate.total ?? 0) + 1;
+    friend.isFriend = true;
+    friendsDate.friends!.add(friend);
     var response = await friendsRepositoryImpl.addFriend(friend.id);
     notifyListeners();
     return response;
   }
 
   Future<bool> removeFriend(FriendModel friend, userLoggedId) async {
-    if (friendsDate != null) {
-      int index = friendsDate!.friends!
-          .indexWhere((element) => element?.id == friend.id);
-      friendsDate!.friends![index]!.remove = true;
-      friendsDate!.total = friendsDate!.total! - 1;
-    }
+    int index =
+        friendsDate.friends!.indexWhere((element) => element?.id == friend.id);
+    friendsDate.friends![index]!.remove = true;
+    friendsDate.total = friendsDate.total! - 1;
 
     myFriendsDate.total = (myFriendsDate.total ?? 0) - 1;
     myFriendsDate.friends!.removeWhere((element) => element!.id == friend.id);
@@ -175,7 +170,8 @@ class FriendsStore with ChangeNotifier {
   String? sortingType;
   List<String> listOrderBy = ['name', 'created'];
   List<String> listSortingType = ['asc', 'desc'];
-  FriendsDataModel? friendsDate;
+  FriendsDataModel friendsDate =
+      FriendsDataModel(total: 0, friends: [], searchFriends: []);
   bool hasMoreFriends = true;
   bool loadingMoreFriends = false;
   bool isLoadingGetAllFriends = false;
@@ -190,7 +186,7 @@ class FriendsStore with ChangeNotifier {
   Future<void> getFriends(String userId) async {
     isLoadingGetAllFriends = true;
     notifyListeners();
-    friendsDate?.friends = [];
+    friendsDate.friends = [];
     page = 0;
     FriendsDataModel friendsDateAux =
         await friendsRepositoryImpl.getFriendsWhenIsLogged(
@@ -219,8 +215,8 @@ class FriendsStore with ChangeNotifier {
         orderBy: orderBy!,
         sortingType: sortingType!,
       );
-      friendsDate!.friends!.addAll(auxUsers.friends!);
-      friendsDate!.friends = friendsDate!.friends!.toSet().toList();
+      friendsDate.friends!.addAll(auxUsers.friends!);
+      friendsDate.friends = friendsDate.friends!.toSet().toList();
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;
       notifyListeners();
