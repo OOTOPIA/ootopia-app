@@ -22,7 +22,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CommentScreen extends StatefulWidget {
   final Map<String, dynamic> args;

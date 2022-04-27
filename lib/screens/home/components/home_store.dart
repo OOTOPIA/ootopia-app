@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/shared/app_usage_time.dart';
 import 'package:ootopia_app/shared/shared_preferences.dart';
 
 part 'home_store.g.dart';

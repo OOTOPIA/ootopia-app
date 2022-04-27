@@ -20,8 +20,6 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -105,7 +103,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: GlobalConstants.of(context).spacingNormal,
                           ),
-
                           Center(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 30.0),
@@ -150,7 +147,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: 16,
                           ),
-
                           Text(
                             AppLocalizations.of(context)!.bio,
                             style: GoogleFonts.roboto(
@@ -177,7 +173,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(
                             height: 16,
                           ),
-
                           Text(
                             AppLocalizations.of(context)!.links,
                             style: GoogleFonts.roboto(
@@ -254,7 +249,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         contentPadding: EdgeInsets.symmetric(
                                             horizontal: 16, vertical: 16))),
                           ),
-
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -263,7 +257,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               return urlItem(editProfileStore.links[index]);
                             },
                           ),
-
                           SizedBox(
                             height: 16,
                           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';

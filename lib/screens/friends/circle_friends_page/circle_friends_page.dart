@@ -284,7 +284,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 bottom:
                                     (index == amountOfFriends() - 1) ? 80 : 0),
                             child: itemFriend(isPageOfUserLogged()
-                                ? friendsStore.friendsDate!.friends![index]!
+                                ? friendsStore.friendsDate.friends![index]!
                                 : circleFriendsStore
                                     .friendsDate!.friends![index]!),
                           ),
@@ -827,9 +827,9 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
   }
 
   bool allFriendsIsHide() {
-    if (isPageOfUserLogged() && friendsStore.friendsDate != null) {
+    if (isPageOfUserLogged()) {
       bool allFriendsIsHide = true;
-      friendsStore.friendsDate!.friends!.forEach((element) {
+      friendsStore.friendsDate.friends!.forEach((element) {
         if (element?.remove != true) {
           allFriendsIsHide = false;
         }
@@ -841,7 +841,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   String getAmountOfFriends() {
     if (isPageOfUserLogged()) {
-      return '${friendsStore.friendsDate?.total ?? 0}';
+      return '${friendsStore.friendsDate.total ?? 0}';
     } else {
       return '${circleFriendsStore.friendsDate?.total ?? 0}';
     }
@@ -861,7 +861,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
 
   int amountOfFriends() {
     if (isPageOfUserLogged()) {
-      return friendsStore.friendsDate?.friends?.length ?? 0;
+      return friendsStore.friendsDate.friends?.length ?? 0;
     } else {
       return circleFriendsStore.friendsDate?.friends?.length ?? 0;
     }
