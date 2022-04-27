@@ -12,13 +12,13 @@ mixin _$CircleFriendsStore on CircleFriendsStoreBase, Store {
   final _$friendsDateAtom = Atom(name: 'CircleFriendsStoreBase.friendsDate');
 
   @override
-  FriendsDataModel? get friendsDate {
+  FriendsDataModel get friendsDate {
     _$friendsDateAtom.reportRead();
     return super.friendsDate;
   }
 
   @override
-  set friendsDate(FriendsDataModel? value) {
+  set friendsDate(FriendsDataModel value) {
     _$friendsDateAtom.reportWrite(value, super.friendsDate, () {
       super.friendsDate = value;
     });

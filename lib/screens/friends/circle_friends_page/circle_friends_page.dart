@@ -286,7 +286,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                             child: itemFriend(isPageOfUserLogged()
                                 ? friendsStore.friendsDate.friends![index]!
                                 : circleFriendsStore
-                                    .friendsDate!.friends![index]!),
+                                    .friendsDate.friends![index]!),
                           ),
                           Visibility(
                               visible: (friendsStore.loadingMoreFriends ||
@@ -549,7 +549,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   ),
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                          friendModel.isFriend == true
+                                          getIfIsFriend(friendModel)
                                               ? Colors.transparent
                                               : LightColors.blue),
                                   padding:
@@ -571,11 +571,11 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                   });
                                 },
                                 child: Text(
-                                  friendModel.isFriend == true
+                                  getIfIsFriend(friendModel)
                                       ? AppLocalizations.of(context)!.remove
                                       : AppLocalizations.of(context)!.add,
                                   style: TextStyle(
-                                    color: friendModel.isFriend == true
+                                    color: getIfIsFriend(friendModel)
                                         ? LightColors.blue
                                         : LightColors.white,
                                     fontSize: 12,
@@ -718,6 +718,19 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
+  bool getIfIsFriend(FriendModel friendModel) {
+    if (friendModel.isFriend == true) {
+      return true;
+    }
+    bool isFriend = false;
+    friendsStore.myFriendsDate.friends?.forEach((element) {
+      if (element!.id == friendModel.id) {
+        isFriend = true;
+      }
+    });
+    return isFriend;
+  }
+
   void _goToProfile(userId) async {
     if (widget.displayContacts != null) {
       Navigator.pushNamed(
@@ -843,7 +856,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     if (isPageOfUserLogged()) {
       return '${friendsStore.friendsDate.total ?? 0}';
     } else {
-      return '${circleFriendsStore.friendsDate?.total ?? 0}';
+      return '${circleFriendsStore.friendsDate.total ?? 0}';
     }
   }
 
@@ -863,7 +876,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     if (isPageOfUserLogged()) {
       return friendsStore.friendsDate.friends?.length ?? 0;
     } else {
-      return circleFriendsStore.friendsDate?.friends?.length ?? 0;
+      return circleFriendsStore.friendsDate.friends?.length ?? 0;
     }
   }
 }
