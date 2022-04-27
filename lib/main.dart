@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:awesome_notifications/awesome_notifications.dart'
     as awesomeNotification;
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ import 'package:ootopia_app/screens/edit_profile_screen/add_link/add_link_screen
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
+import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
@@ -88,7 +90,7 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   //FlutterBackgroundService.initialize(onStartService);
-
+  await CountryCodes.init();
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',
@@ -374,8 +376,8 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.registerFormScreen: (args) => RegisterFormScreen(args),
     PageRoute.Page.registerPhoneNumberScreen: (args) =>
         RegisterPhoneNumberScreen(args),
-    PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
-        RegisterDailyLearningGoalScreen(args),
+    // PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
+    //     RegisterDailyLearningGoalScreen(args),
     PageRoute.Page.registerGeolocationScreen: (args) =>
         RegisterGeolocationScreen(args),
     PageRoute.Page.registerTopInterestsScreen: (args) =>
@@ -412,6 +414,10 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
     PageRoute.Page.addLink: (args) => AddLinkScreen(args),
+    PageRoute.Page.addFriends: (args) => AddFriends(
+          displayContacts: true,
+          arguments: args,
+        ),
   };
 
   SharedExperienceService sharedExperienceService =

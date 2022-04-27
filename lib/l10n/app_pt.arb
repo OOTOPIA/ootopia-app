@@ -27,7 +27,7 @@
     "weSentYouALinkToCreateANewPassword": "Nós te enviamos um link referente a solcititação da nova senha para: ",
 
     "regenerationGame": "Jogo de regeneração",
-    "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",
+    "aboutRegenerationGame": "O Jogo da Regeneração é uma forma de contribuir para o movimento regenerativo através da aplicação OOTOPIA. Sempre que você criar conteúdos você receberá em OOz.",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
     "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "A meta diária escolhida foi de %GOAL_CHOSEN% minutos e está sendo usada para o jogo de regeneração.",
@@ -505,6 +505,11 @@
     "couldNotLoad": "Não foi possivel carregar",
     "repliedToYourComment": "respondeu seu comentário",
     "taggedUserInPost": "marcou você numa publicação",
+    "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro",
+    "accessToContact":"Permitir acesso à sua agenda de contatos no seu celular",
+    "discribeAccessToContact":"Ao permitir acesso a sua agenda de contatos o aplicativo irá periodicamente buscar por nomes, telefones e e-mails de pessoas que já estão cadastradas na Ootopia. Dessa forma, o app irá lhe sugerir pessoas que você já conhece para adicionar a sua rede de amigos.",
+    "permittedAccess":"Permitir acesso",
+    "notPermittedAccess":"Não permitir acesso",
 
     "addedAsFriend": "adicionou você no círculo de amigos.",
     "notificationButtonTextOnNewFriend": "Ver perfil",

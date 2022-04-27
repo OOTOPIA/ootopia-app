@@ -91,6 +91,8 @@ dependencies:
   firebase_core: ^1.10.6
   device_info: ^2.0.3
   awesome_notifications: ^0.6.21
+  contacts_service: ^0.6.3
+  country_codes: ^2.1.1
 
 dev_dependencies:
   flutter_test:

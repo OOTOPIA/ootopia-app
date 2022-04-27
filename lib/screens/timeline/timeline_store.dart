@@ -83,42 +83,42 @@ abstract class TimelineStoreBase with Store {
     _smartPageController = controller;
   }
 
-  @action
-  startTimelineViewTimer() async {
-    if (prefs == null) {
-      prefs = await SharedPreferencesInstance.getInstance();
-    }
+  // @action
+  // startTimelineViewTimer() async {
+  //   if (prefs == null) {
+  //     prefs = await SharedPreferencesInstance.getInstance();
+  //   }
 
-    if (!_watch.isRunning) {
-      _watch.start();
-    }
+  //   if (!_watch.isRunning) {
+  //     _watch.start();
+  //   }
 
-    if (prefs!.getTimelineViewTime() != null) {
-      _timelineViewtimeSoFarInMs = prefs!.getTimelineViewTime()!;
-      if (_timelineViewtimeSoFarInMs > 0) {
-        if (_watch.isRunning) {
-          _watch.stop();
-        }
-        await _sendToApi();
-        if (!_watch.isRunning) {
-          _watch.start();
-        }
-      }
-    }
+  //   if (prefs!.getTimelineViewTime() != null) {
+  //     _timelineViewtimeSoFarInMs = prefs!.getTimelineViewTime()!;
+  //     if (_timelineViewtimeSoFarInMs > 0) {
+  //       if (_watch.isRunning) {
+  //         _watch.stop();
+  //       }
+  //       await _sendToApi();
+  //       if (!_watch.isRunning) {
+  //         _watch.start();
+  //       }
+  //     }
+  //   }
 
-    if (_timelineViewTimer == null) {
-      _timelineViewTimer =
-          Timer.periodic(Duration(milliseconds: 1), (Timer timer) {
-        if (_watch.isRunning && _smartPageController?.currentPageIndex == 0) {
-          _timelineViewtimeSoFarInMs++;
-          if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
-            //A cada 5 segundos armazenamos no storage o tempo cronometrado
-            prefs!.setTimelineViewTime(_timelineViewtimeSoFarInMs);
-          }
-        }
-      });
-    }
-  }
+  //   if (_timelineViewTimer == null) {
+  //     _timelineViewTimer =
+  //         Timer.periodic(Duration(milliseconds: 1), (Timer timer) {
+  //       if (_watch.isRunning && _smartPageController?.currentPageIndex == 0) {
+  //         _timelineViewtimeSoFarInMs++;
+  //         if ((_timelineViewtimeSoFarInMs / 5000) % 1 == 0) {
+  //           //A cada 5 segundos armazenamos no storage o tempo cronometrado
+  //           prefs!.setTimelineViewTime(_timelineViewtimeSoFarInMs);
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
   @action
   stopTimelineViewTimer() {
@@ -180,18 +180,18 @@ abstract class TimelineStoreBase with Store {
     getTimelinePosts(null, null, userId);
   }
 
-  _sendToApi() async {
-    if (_timelineViewtimeSoFarInMs > 0 && !_sendingToApi) {
-      _sendingToApi = true;
-      //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
-      //Sendo assim o registro será enviado quando o app for aberto novamente
-      Future.delayed(Duration.zero, () async {
-        final repository = PostRepositoryImpl();
-        await repository.recordTimelineWatched(_timelineViewtimeSoFarInMs);
-        _timelineViewtimeSoFarInMs = 0;
-        prefs!.setTimelineViewTime(0);
-        _sendingToApi = false;
-      });
-    }
-  }
+  // _sendToApi() async {
+  //   if (_timelineViewtimeSoFarInMs > 0 && !_sendingToApi) {
+  //     _sendingToApi = true;
+  //     //Usamos o timer pois ele não será concluído caso o app seja fechado, evitando que a requisição seja encerrada pela metade (sem o app identificar se concluiu ou não)
+  //     //Sendo assim o registro será enviado quando o app for aberto novamente
+  //     Future.delayed(Duration.zero, () async {
+  //       //final repository = PostRepositoryImpl();
+  //       //await repository.recordTimelineWatched(_timelineViewtimeSoFarInMs);
+  //       _timelineViewtimeSoFarInMs = 0;
+  //       prefs!.setTimelineViewTime(0);
+  //       _sendingToApi = false;
+  //     });
+  //   }
+  // }
 }

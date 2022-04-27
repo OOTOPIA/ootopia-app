@@ -153,15 +153,6 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
-  final _$startTimelineViewTimerAsyncAction =
-      AsyncAction('TimelineStoreBase.startTimelineViewTimer');
-
-  @override
-  Future startTimelineViewTimer() {
-    return _$startTimelineViewTimerAsyncAction
-        .run(() => super.startTimelineViewTimer());
-  }
-
   final _$getTimelinePostsAsyncAction =
       AsyncAction('TimelineStoreBase.getTimelinePosts');
 

@@ -188,7 +188,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.only(bottom: 4.0, right: 12, left: 12),
+                              padding: const EdgeInsets.only(
+                                  bottom: 4.0, right: 12, left: 12),
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
@@ -199,55 +200,6 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 0),
-                              child: Card(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  side: BorderSide(
-                                    color: Colors.grey.shade300,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${AppLocalizations.of(context)!.personalGoal}:',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      Text(
-                                        '${authStore!.currentUser!.dailyLearningGoalInMinutes}min',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('|'),
-                                      SvgPicture.asset(
-                                        "assets/icons_profile/laurel_wreath.svg",
-                                        width: 18,
-                                        height: 17,
-                                        color: Color(0xff018f9c),
-                                      ),
-                                      Text(
-                                        '${authStore!.currentUser!.totalTrophyQuantity}',
-                                        style: TextStyle(
-                                            color: Color(0xff018F9C),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      )
-                                    ],
-                                  ),
                                 ),
                               ),
                             ),

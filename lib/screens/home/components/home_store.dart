@@ -71,88 +71,88 @@ abstract class HomeStoreBase with Store {
   @observable
   bool resizeToAvoidBottomInset = false;
 
-  @action
-  startDailyGoalTimer() async {
-    _totalAppUsageTimeSoFarInMs = 0;
-    if (prefs == null) {
-      prefs = await SharedPreferencesInstance.getInstance();
-    }
+  // @action
+  // startDailyGoalTimer() async {
+  //   _totalAppUsageTimeSoFarInMs = 0;
+  //   if (prefs == null) {
+  //     prefs = await SharedPreferencesInstance.getInstance();
+  //   }
 
-    if (prefs!.getLastPendingUsageTime() != null) {
-      int? usageTimeSoFarInMilliseconds = prefs!.getLastPendingUsageTime()!;
-      if (usageTimeSoFarInMilliseconds > 0) {
-        try {
-          await AppUsageTime.instance.sendToApi(usageTimeSoFarInMilliseconds);
-          await getDailyGoalStats();
-        } catch (e) {}
-      }
-    }
-    if (!_watch.isRunning) {
-      _watch.start();
-    }
-    if (dailyGoalStats != null) {
-      percentageOfDailyGoalAchieved =
-          dailyGoalStats!.percentageOfDailyGoalAchieved;
-      _totalAppUsageTimeSoFarInMs = dailyGoalStats!.totalAppUsageTimeSoFarInMs;
-      _getDailyGoalStats = true;
-    }
-    if (_dailyGoalTimer == null ||
-        (_dailyGoalTimer != null && !_dailyGoalTimer!.isActive)) {
-      _dailyGoalTimer =
-          Timer.periodic(Duration(seconds: 1), (Timer timer) async {
-        if (_watch.isRunning && dailyGoalStats != null) {
-          _remainingTimeInMs = dailyGoalStats!.remainingTimeUntilEndOfGameInMs;
-          _totalAppUsageTimeSoFarInMs =
-              dailyGoalStats!.totalAppUsageTimeSoFarInMs;
-          percentageOfDailyGoalAchieved =
-              dailyGoalStats!.percentageOfDailyGoalAchieved;
-          _totalAppUsageTimeSoFarInMs +=
-              AppUsageTime.instance.usageTimeSoFarInMilliseconds;
-          _remainingTimeInMs -=
-              AppUsageTime.instance.usageTimeSoFarInMilliseconds;
-          var progressPerc = (_totalAppUsageTimeSoFarInMs /
-                  (dailyGoalStats!.dailyGoalInMinutes * 60000)) *
-              100;
-          percentageOfDailyGoalAchieved =
-              (progressPerc >= 100 ? 100 : progressPerc);
+  //   if (prefs!.getLastPendingUsageTime() != null) {
+  //     int? usageTimeSoFarInMilliseconds = prefs!.getLastPendingUsageTime()!;
+  //     if (usageTimeSoFarInMilliseconds > 0) {
+  //       try {
+  //         await AppUsageTime.instance.sendToApi(usageTimeSoFarInMilliseconds);
+  //         await getDailyGoalStats();
+  //       } catch (e) {}
+  //     }
+  //   }
+  //   if (!_watch.isRunning) {
+  //     _watch.start();
+  //   }
+  //   if (dailyGoalStats != null) {
+  //     percentageOfDailyGoalAchieved =
+  //         dailyGoalStats!.percentageOfDailyGoalAchieved;
+  //     _totalAppUsageTimeSoFarInMs = dailyGoalStats!.totalAppUsageTimeSoFarInMs;
+  //     _getDailyGoalStats = true;
+  //   }
+  //   if (_dailyGoalTimer == null ||
+  //       (_dailyGoalTimer != null && !_dailyGoalTimer!.isActive)) {
+  //     _dailyGoalTimer =
+  //         Timer.periodic(Duration(seconds: 1), (Timer timer) async {
+  //       if (_watch.isRunning && dailyGoalStats != null) {
+  //         _remainingTimeInMs = dailyGoalStats!.remainingTimeUntilEndOfGameInMs;
+  //         _totalAppUsageTimeSoFarInMs =
+  //             dailyGoalStats!.totalAppUsageTimeSoFarInMs;
+  //         percentageOfDailyGoalAchieved =
+  //             dailyGoalStats!.percentageOfDailyGoalAchieved;
+  //         _totalAppUsageTimeSoFarInMs +=
+  //             AppUsageTime.instance.usageTimeSoFarInMilliseconds;
+  //         _remainingTimeInMs -=
+  //             AppUsageTime.instance.usageTimeSoFarInMilliseconds;
+  //         var progressPerc = (_totalAppUsageTimeSoFarInMs /
+  //                 (dailyGoalStats!.dailyGoalInMinutes * 60000)) *
+  //             100;
+  //         percentageOfDailyGoalAchieved =
+  //             (progressPerc >= 100 ? 100 : progressPerc);
 
-          if (percentageOfDailyGoalAchieved >= 100) {
-            prefs?.setPersonalCelebratePageEnabled(true);
-            if (prefs?.getPersonalCelebratePageAlreadyOpened() == false &&
-                !totalIsSentToApi) {
-              if (_watch.isRunning) {
-                _watch.stop();
-              }
-              totalIsSentToApi = true;
-              await AppUsageTime.instance.sendToApi();
-              await getDailyGoalStats();
-              if (!_watch.isRunning) {
-                _watch.start();
-              }
-            }
-          } else {
-            prefs?.setPersonalCelebratePageEnabled(false);
-            prefs?.setPersonalCelebratePageAlreadyOpened(false);
-          }
+  //         if (percentageOfDailyGoalAchieved >= 100) {
+  //           prefs?.setPersonalCelebratePageEnabled(true);
+  //           if (prefs?.getPersonalCelebratePageAlreadyOpened() == false &&
+  //               !totalIsSentToApi) {
+  //             if (_watch.isRunning) {
+  //               _watch.stop();
+  //             }
+  //             totalIsSentToApi = true;
+  //             await AppUsageTime.instance.sendToApi();
+  //             await getDailyGoalStats();
+  //             if (!_watch.isRunning) {
+  //               _watch.start();
+  //             }
+  //           }
+  //         } else {
+  //           prefs?.setPersonalCelebratePageEnabled(false);
+  //           prefs?.setPersonalCelebratePageAlreadyOpened(false);
+  //         }
 
-          if (_totalAppUsageTimeSoFarInMs >= _updateAppUsageTime) {
-            if (_watch.isRunning) {
-              _watch.stop();
-            }
-            await AppUsageTime.instance.sendToApi();
-            await getDailyGoalStats();
-            if (!_watch.isRunning) {
-              _watch.start();
-            }
-          }
+  //         if (_totalAppUsageTimeSoFarInMs >= _updateAppUsageTime) {
+  //           if (_watch.isRunning) {
+  //             _watch.stop();
+  //           }
+  //           await AppUsageTime.instance.sendToApi();
+  //           await getDailyGoalStats();
+  //           if (!_watch.isRunning) {
+  //             _watch.start();
+  //           }
+  //         }
 
-          remainingTime = _msToTime(_remainingTimeInMs);
-          totalAppUsageTimeSoFar =
-              _msToTime(_totalAppUsageTimeSoFarInMs, showSeconds: true);
-        }
-      });
-    }
-  }
+  //         remainingTime = _msToTime(_remainingTimeInMs);
+  //         totalAppUsageTimeSoFar =
+  //             _msToTime(_totalAppUsageTimeSoFarInMs, showSeconds: true);
+  //       }
+  //     });
+  //   }
+  // }
 
   @action
   getIphoneHasNotch(int iosScreenSize) async {

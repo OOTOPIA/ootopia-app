@@ -231,15 +231,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
-  final _$startDailyGoalTimerAsyncAction =
-      AsyncAction('HomeStoreBase.startDailyGoalTimer');
-
-  @override
-  Future startDailyGoalTimer() {
-    return _$startDailyGoalTimerAsyncAction
-        .run(() => super.startDailyGoalTimer());
-  }
-
   final _$getIphoneHasNotchAsyncAction =
       AsyncAction('HomeStoreBase.getIphoneHasNotch');
 
