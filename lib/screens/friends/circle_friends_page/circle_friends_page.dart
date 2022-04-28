@@ -556,17 +556,19 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                       MaterialStateProperty.all<EdgeInsets>(
                                           EdgeInsets.symmetric(horizontal: 14)),
                                 ),
-                                onPressed: () {
-                                  Future.delayed(Duration(milliseconds: 100),
-                                      () {
+                                onPressed: () async {
+                                  await Future.delayed(
+                                      Duration(milliseconds: 100), () async {
                                     if (friendModel.isFriend == true) {
-                                      friendsStore.removeFriend(friendModel,
+                                      await friendsStore.removeFriend(
+                                          friendModel,
                                           authStore.currentUser!.id);
+                                      friendModel.isFriend = false;
                                     } else {
-                                      friendsStore.addFriend(friendModel);
+                                      await friendsStore.addFriend(friendModel);
+                                      friendModel.isFriend = true;
                                     }
-                                    friendModel.isFriend =
-                                        !friendModel.isFriend!;
+
                                     setState(() {});
                                   });
                                 },
