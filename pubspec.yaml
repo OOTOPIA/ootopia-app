@@ -74,7 +74,7 @@ dependencies:
     git:
       url: https://github.com/OOTOPIA/flutter_tags.git
       ref: master
-  crop_image: ^1.0.2
+  crop_your_image: ^0.7.1
   flutter_feather_icons: ^2.0.0+1
   json_annotation: ^4.0.1
   crisp: ^0.2.0

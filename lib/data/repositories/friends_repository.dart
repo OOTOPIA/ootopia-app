@@ -1,6 +1,4 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
 
 import 'api.dart';

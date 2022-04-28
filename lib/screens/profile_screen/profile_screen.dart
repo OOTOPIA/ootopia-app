@@ -32,6 +32,7 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/empty_posts_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
@@ -146,13 +147,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      setState(() {
-        if (store!.hasMorePosts && store!.loadingPosts == false) {
-          Future.delayed(Duration.zero, () async {
-            await store?.getUserPosts(profileUserId);
-          });
-        }
-      });
+      // setState(() {
+      if (store!.hasMorePosts && store!.loadingPosts == false) {
+        Future.delayed(Duration.zero, () async {
+          await store?.getUserPosts(profileUserId);
+        });
+      }
+      // });
     }
   }
 
@@ -166,10 +167,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       friendsStore = Provider.of<FriendsStore>(context);
     }
+
     return Scaffold(
       appBar: showAppBar()
           ? appBarProfile
-          : widget.args!.containsKey('isGetContacts')
+          : widget.args != null && widget.args!.containsKey('isGetContacts')
               ? appBarProfile
               : null,
       body: Container(
@@ -245,13 +247,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ] else if (store!.profile!.links!.length > 1) ...[
                                 TextButton(
                                   onPressed: () {
-                                    controller.insertPage(ViewLinksScreen(
-                                      {
-                                        'store': store,
-                                        'user_id': 1,
-                                        'list': store!.profile!.links!,
-                                      },
-                                    ));
+                                    if (widget.args!
+                                        .containsKey('isGetContacts')) {
+                                      Navigator.pushNamed(
+                                        context,
+                                        PageRoute.Page.viewLinksScreen.route,
+                                        arguments: {
+                                          'displayContacts': true,
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      );
+                                    } else {
+                                      controller.insertPage(ViewLinksScreen(
+                                        {
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      ));
+                                    }
                                   },
                                   child: Text(
                                     AppLocalizations.of(context)!.relatedLinks,
@@ -342,6 +358,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       controller.insertPage(WalletPage())),
                             ],
                             CircleOfFriendWidget(
+                              displayContacts: widget.args != null &&
+                                  widget.args!.containsKey('isGetContacts'),
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
@@ -393,8 +411,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       runSpacing: 20, // gap between lines
                                       children: store!.postsList
                                           .asMap()
-                                          .map(
-                                            (index, post) => MapEntry(
+                                          .map((index, post) {
+                                            return MapEntry(
                                               index,
                                               GridCustomWidget(
                                                 discountSpacing: 10 * 3,
@@ -402,21 +420,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 thumbnailUrl:
                                                     post.type != 'gallery'
                                                         ? post.thumbnailUrl!
-                                                        : post.medias!.first
-                                                            .thumbUrl!,
+                                                        : post.medias != [] &&
+                                                                post.medias!
+                                                                    .isNotEmpty
+                                                            ? post.medias!.first
+                                                                .thumbUrl!
+                                                            : '',
                                                 columnsCount: 4,
                                                 type: store!.getPostType(post),
                                                 onTap: () {
-                                                  store!.goToTimelinePost(
-                                                    controller: controller,
-                                                    userId: _getUserId(),
-                                                    posts: store!.postsList,
-                                                    postSelected: index,
-                                                  );
+                                                  if (widget.args != null &&
+                                                      widget.args!.containsKey(
+                                                          'isGetContacts')) {
+                                                    Navigator.pushNamed(
+                                                        context,
+                                                        PageRoute
+                                                            .Page
+                                                            .timelineProfileScreen
+                                                            .route,
+                                                        arguments: {
+                                                          "displayContacts":
+                                                              true,
+                                                          "userId":
+                                                              _getUserId(),
+                                                          "posts":
+                                                              store!.postsList,
+                                                          "postSelected": index,
+                                                        });
+                                                  } else {
+                                                    store!.goToTimelinePost(
+                                                      controller: controller,
+                                                      userId: _getUserId(),
+                                                      posts: store!.postsList,
+                                                      postSelected: index,
+                                                    );
+                                                  }
                                                 },
                                               ),
-                                            ),
-                                          )
+                                            );
+                                          })
                                           .values
                                           .toList(),
                                     ),

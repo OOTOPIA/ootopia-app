@@ -12,16 +12,20 @@ import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'circle_friends_widget_store.dart';
 
 class CircleOfFriendWidget extends StatefulWidget {
+  final bool? displayContacts;
   final bool isUserLogged;
   final String userId;
 
-  const CircleOfFriendWidget(
-      {Key? key, required this.isUserLogged, required this.userId})
-      : super(key: key);
+  const CircleOfFriendWidget({
+    Key? key,
+    required this.isUserLogged,
+    required this.userId,
+    this.displayContacts,
+  }) : super(key: key);
 
   @override
   State<CircleOfFriendWidget> createState() => _CircleOfFriendWidgetState();
@@ -136,11 +140,19 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                 ] else if (listIsNotEmpty()) ...[
                   TextButton(
                     onPressed: () {
-                      Future.delayed(Duration(milliseconds: 100), () {
-                        controller.insertPage(CircleOfFriendPage(
-                          userId: widget.userId,
-                        ));
-                      });
+                      if (widget.displayContacts!) {
+                        Navigator.pushNamed(
+                          context,
+                          PageRoute.Page.circleFriends.route,
+                          arguments: {'id': widget.userId},
+                        );
+                      } else {
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          controller.insertPage(CircleOfFriendPage(
+                            userId: widget.userId,
+                          ));
+                        });
+                      }
                     },
                     child: Row(
                       children: [
@@ -306,9 +318,20 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
   }
 
   void _goToProfile(userId) async {
-    controller.insertPage(ProfileScreen({
-      "id": userId,
-    }));
+    if (widget.displayContacts != null) {
+      Navigator.pushNamed(
+        context,
+        PageRoute.Page.profileScreen.route,
+        arguments: {
+          'id': widget.userId,
+          "isGetContacts": true,
+        },
+      );
+    } else {
+      controller.insertPage(ProfileScreen({
+        "id": userId,
+      }));
+    }
   }
 
   Widget buttonToAddFriends() {
@@ -323,6 +346,7 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             height: 56,
             child: RawMaterialButton(
               onPressed: () {
+                //Navigator.pushNamed(context, PageRoute.Page.addFriends.route);
                 Future.delayed(Duration(milliseconds: 100), () {
                   controller.insertPage(AddFriends());
                 });
