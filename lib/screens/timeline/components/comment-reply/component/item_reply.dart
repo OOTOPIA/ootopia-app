@@ -101,6 +101,7 @@ class ItemReplyState extends State<ItemReply> {
                           widget.commentReplies.text,
                           userCommentsList: widget.commentReplies.usersComments,
                           maxLines: 10,
+                          isRegister: false,
                         ),
                       ),
                       Visibility(

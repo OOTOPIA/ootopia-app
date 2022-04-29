@@ -4,10 +4,16 @@ import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'link_rich_text.dart';
 
 class ExpandableText extends StatefulWidget {
-  ExpandableText(this.text, this.maxLines, this.userComments);
+  ExpandableText(
+    this.text,
+    this.maxLines,
+    this.userComments,
+    this.isRegister,
+  );
   final List<UserSearchModel>? userComments;
   final String text;
   final int maxLines;
+  final bool isRegister;
 
   @override
   _ExpandableTextState createState() => _ExpandableTextState();
@@ -39,9 +45,12 @@ class _ExpandableTextState extends State<ExpandableText>
                 constraints: BoxConstraints(
                   minWidth: MediaQuery.of(context).size.width,
                 ),
-                child: LinkRichText(widget.text,
-                    userCommentsList: widget.userComments,
-                    maxLines: isExpanded ? 1000 : 3),
+                child: LinkRichText(
+                  widget.text,
+                  userCommentsList: widget.userComments,
+                  maxLines: isExpanded ? 1000 : 3,
+                  isRegister: widget.isRegister,
+                ),
               )),
           if (isExpanded) ...[
             Visibility(
