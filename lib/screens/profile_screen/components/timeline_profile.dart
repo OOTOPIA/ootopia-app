@@ -73,6 +73,7 @@ class _TimelineScreenProfileScreenState
               child: Visibility(
                 visible: !isLoading,
                 child: ListPostProfileComponent(
+                  isRegister: widget.args.containsKey('displayContacts'),
                   posts: this.posts,
                   postSelected: this.widget.args["postSelected"],
                   userId: this.widget.args["userId"],
@@ -93,11 +94,13 @@ class ListPostProfileComponent extends StatefulWidget {
   final int postSelected;
   final String userId;
   final String? postId;
+  final bool isRegister;
 
   ListPostProfileComponent({
     required this.userId,
     required this.posts,
     required this.postSelected,
+    required this.isRegister,
     this.postId,
   });
 
@@ -170,6 +173,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: PhotoTimeline(
+                isRegister: widget.isRegister,
                 key: ObjectKey(timelineStore.allPosts[index]),
                 post: timelineStore.allPosts[index],
                 timelineStore: this.timelineStore,
@@ -240,6 +244,7 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             child: PhotoTimeline(
+                              isRegister: widget.isRegister,
                               key: ObjectKey(timelineStore.allPosts[index]),
                               post: timelineStore.allPosts[index],
                               timelineStore: this.timelineStore,

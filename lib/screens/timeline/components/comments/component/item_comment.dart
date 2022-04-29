@@ -78,6 +78,7 @@ class _ItemCommentState extends State<ItemComment> {
                           widget.comment.text,
                           userCommentsList: widget.comment.userComments,
                           maxLines: 10,
+                          isRegister: false,
                         ),
                       ),
                       Visibility(

@@ -32,8 +32,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 import 'feed_player/multi_manager/flick_multi_manager.dart';
-import 'feed_player/multi_manager/flick_multi_player.dart';
-import 'image_post_timeline_component.dart';
 
 // ignore: must_be_immutable
 class PhotoTimeline extends StatefulWidget {
@@ -45,7 +43,7 @@ class PhotoTimeline extends StatefulWidget {
   final FlickMultiManager flickMultiManager;
   bool isProfile;
   Function onDelete;
-
+  bool isRegister;
   PhotoTimeline({
     required Key key,
     this.index,
@@ -56,6 +54,7 @@ class PhotoTimeline extends StatefulWidget {
     required this.flickMultiManager,
     required this.isProfile,
     required this.onDelete,
+    this.isRegister = false,
   }) : super(key: key);
 
   @override
@@ -350,7 +349,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
           ShowMediaComponent(
             post: post,
             user: this.user,
-            flickMultiManager: widget.flickMultiManager, 
+            flickMultiManager: widget.flickMultiManager,
             bigLikeShowAnimation: this._bigLikeShowAnimation,
             bigLikeShowAnimationEnd: this._bigLikeShowAnimationEnd,
             canDoubleClick: this.canDoubleClick,
@@ -692,6 +691,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 this.post.description,
                 3,
                 this.post.usersTagged,
+                widget.isRegister,
               ),
             ),
           ),
@@ -761,7 +761,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       ),
     );
   }
-  
+
   void incrementOozToTransfer() {
     if (this.post.oozToTransfer == null) {
       this.post.oozToTransfer = 0;
