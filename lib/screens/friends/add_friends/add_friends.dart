@@ -20,8 +20,10 @@ import '../../auth/auth_store.dart';
 class AddFriends extends StatefulWidget {
   final bool displayContacts;
   final dynamic arguments;
+  final bool displayModal;
   AddFriends({
     this.displayContacts = false,
+    this.displayModal = false,
     this.arguments,
   });
   @override
@@ -39,8 +41,8 @@ class _AddFriendsState extends State<AddFriends> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       friendsStore.cleanSearchPage();
-      if (widget.displayContacts) {
-        askPermissions(context, friendsStore);
+      if (widget.displayContacts || widget.displayModal) {
+        askPermissions(context, friendsStore, widget.displayModal);
         await authStore.checkUserIsLogged();
       }
     });
@@ -182,7 +184,7 @@ class _AddFriendsState extends State<AddFriends> {
                     ),
                   ),
                 ),
-                if (!widget.displayContacts)
+                if (!widget.displayContacts && !widget.displayModal)
                   Visibility(
                     visible: !friendsStore.isLoading &&
                         !(friendsStore.usersSearch.friends?.isEmpty ?? true),

@@ -10,6 +10,7 @@ import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_scree
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
+import 'package:ootopia_app/screens/friends/suggestion_friends/suggestion_friends_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
@@ -163,11 +164,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    if (profileUserIsLoggedUser) {
-      store = Provider.of<ProfileScreenStore>(context);
-    } else {
-      friendsStore = Provider.of<FriendsStore>(context);
-    }
+    store = Provider.of<ProfileScreenStore>(context);
+    friendsStore = Provider.of<FriendsStore>(context);
 
     return Scaffold(
       appBar: showAppBar()
@@ -364,6 +362,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
+                            if (authStore.currentUser!.id == store!.profile!.id)
+                              SuggestionFriends(
+                                friendsStore: friendsStore,
+                                userId: store!.profile!.id,
+                              ),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
