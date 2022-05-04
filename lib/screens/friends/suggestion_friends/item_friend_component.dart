@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
+import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
@@ -7,7 +8,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ItemFriend extends StatelessWidget {
   final FriendModel friend;
-  ItemFriend({Key? key, required this.friend}) : super(key: key);
+  final FriendsStore friendsStore;
+  ItemFriend({
+    Key? key,
+    required this.friend,
+    required this.friendsStore,
+  }) : super(key: key);
   final SmartPageController controller = SmartPageController.getInstance();
 
   @override
@@ -83,7 +89,7 @@ class ItemFriend extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Text(
-            friend.isFriend != null && friend.isFriend!
+            getIfIsFriend(friend)
                 ? AppLocalizations.of(context)!.joinedOotopia
                 : AppLocalizations.of(context)!.suggestedbyOotopia,
             style: TextStyle(
@@ -96,6 +102,19 @@ class ItemFriend extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool getIfIsFriend(FriendModel friendModel) {
+    if (friendModel.isFriend == true) {
+      return true;
+    }
+    bool isFriend = false;
+    friendsStore.myFriendsDate.friends?.forEach((element) {
+      if (element!.id == friendModel.id) {
+        isFriend = true;
+      }
+    });
+    return isFriend;
   }
 
   void _goToProfile(userId) async {

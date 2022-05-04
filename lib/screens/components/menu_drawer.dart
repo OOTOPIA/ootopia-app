@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
