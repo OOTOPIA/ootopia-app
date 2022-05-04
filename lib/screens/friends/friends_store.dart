@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -15,17 +16,27 @@ class FriendsStore with ChangeNotifier {
     friends: [],
     searchFriends: [],
   );
+  FriendsDataModel suggestionFriends = FriendsDataModel(
+    total: 0,
+    friends: [],
+    searchFriends: [],
+  );
   int pageContacts = 1;
   List<String> emailContact = [];
   List<String> phoneContact = [];
-  Future<void> sendContactsToApi() async {
+  Future<void> sendContactsToApi(bool isSearch) async {
     isLoadingSearch = true;
     var response = await friendsRepositoryImpl.sendContacts(
       emailContact,
       phoneContact,
       pageContacts,
     );
-    usersSearch = response;
+    if (isSearch) {
+      suggestionFriends = response;
+      usersSearch = suggestionFriends;
+    } else {
+      usersSearch = response;
+    }
     searchIsEmpty = response.friends!.isEmpty;
     hasMoreUsersSearch = usersSearch.friends!.length <= 100;
     isLoadingSearch = false;
