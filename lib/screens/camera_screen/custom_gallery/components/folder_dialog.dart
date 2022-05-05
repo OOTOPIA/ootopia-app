@@ -40,7 +40,7 @@ Future<MediaPathEntity?> showFolderModalBottomSheet(
                         bottom: 15.0,
                         left: 8,
                       ),
-                      child: Text(folderList[index].path),
+                      child: Text(folderList[index].name),
                     ),
                   );
                 }),
