@@ -456,6 +456,8 @@
     "yourOOZWallet" : "Sua carteira de OOz",
     "giveYourOpinion" : "Dê sua opinião sobre o app",
     "itIsVeryImportant" : "Ela é muito importante para nós!",
+    "forumAccess": "Acesse o Fórum",
+    "ootWeb3AndMore": "OOTOPIA, Web3 e muito mais",
 
     "notificationTitleOOzReceived": "Você recebeu %OOZ_RECEIVED% OOz!",
     "notificationBodyOOzReceivedByOnePerson": "%USER_NAME% enviou uma recompensa de gratidão por sua publicação.",

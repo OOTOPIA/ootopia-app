@@ -326,6 +326,18 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                       ),
                                       CustomListTile(
                                         title: AppLocalizations.of(context)!
+                                            .forumAccess,
+                                        label: AppLocalizations.of(context)!
+                                            .ootWeb3AndMore,
+                                        leadingPath:
+                                            'assets/icons/conversation_icon.png',
+                                        onTap: () async {
+                                          await launch(
+                                              "https://discord.gg/Pq95gbvh");
+                                        },
+                                      ),
+                                      CustomListTile(
+                                        title: AppLocalizations.of(context)!
                                             .giveYourOpinion,
                                         label: AppLocalizations.of(context)!
                                             .itIsVeryImportant,
