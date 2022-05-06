@@ -36,33 +36,6 @@ class LanguageUnderstoodWidget extends StatelessWidget {
           Row(
             children: [
               ...flags.map(languageFlag).toList(),
-              // Container(
-              //   margin: EdgeInsets.symmetric(horizontal: 1),
-              //   height: 17,
-              //   width: 17,
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     color: Colors.red,
-              //   ),
-              // ),
-              // Container(
-              //   margin: EdgeInsets.symmetric(horizontal: 1),
-              //   height: 17,
-              //   width: 17,
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     color: Colors.blue,
-              //   ),
-              // ),
-              // Container(
-              //   margin: EdgeInsets.symmetric(horizontal: 1),
-              //   height: 17,
-              //   width: 17,
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     color: Colors.green,
-              //   ),
-              // ),
             ],
           ),
         ],

@@ -10,6 +10,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
+import 'package:ootopia_app/screens/components/language_select_widget.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -376,9 +377,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 60,
-                          ),
+                          SizedBox(height: 16),
+                          LanguageSelectWidget(),
+                          SizedBox(height: 60),
                         ],
                       ),
                     ),
