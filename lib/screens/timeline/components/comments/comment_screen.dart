@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
+import 'package:ootopia_app/data/models/comment_replies/comment_reply_model.dart';
+import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
+import 'package:ootopia_app/screens/timeline/components/comment-reply/comment_replies_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/component/item_comment.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/component/list_of_users.dart';
@@ -14,9 +19,9 @@ import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/snackbar_component.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CommentScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -30,21 +35,26 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   late RichTextController _inputController;
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   CommentStore commentStore = CommentStore();
+  CommentRepliesStore commentRepliesStore = CommentRepliesStore();
   late HomeStore homeStore;
   late AuthStore authStore;
   int postCommentsCount = 0;
   String postId = '';
+  String? commentReply;
+  int? indexComment;
+  String? replyToUserId;
   bool isIconBlue = false;
   FocusNode focusNode = FocusNode();
   bool seSelectedUser = false;
+  Timer? _debounce;
   final ScrollController scrollController = ScrollController();
+  String? userNameReply;
 
   @override
   void initState() {
     super.initState();
     scrollController.addListener(
-      () =>
-          commentStore.updateOnScroll(scrollController, _inputController.text),
+      () => commentStore.updateOnScroll(scrollController),
     );
     _inputController = RichTextController(
       deleteOnBack: false,
@@ -71,6 +81,7 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       "postOwnerId": widget.args['post'].userId,
       "commentsCount": widget.args['post'].commentsCount,
     });
+
     focusNode.addListener(() {
       setState(() {
         print(focusNode.hasFocus);
@@ -79,22 +90,32 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
   }
 
   void addUserInText(UserSearchModel e) {
-    commentStore.listUsersMarket?.add(e.id);
-    setState(() {
-      var list = _inputController.text.trim().split(' ');
-      list.removeLast();
-      list.add('ㅤ@${e.fullname}ㅤ');
-      _inputController.clear();
-      for (var item in list) {
-        if (item.contains('@')) {
-          _inputController.text += '$item';
-        } else {
-          _inputController.text += ' $item';
-        }
-      }
+    var text = _inputController.text;
 
-      _inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: _inputController.text.length - 1));
+    var name = '‌@${e.fullname}‌ ';
+
+    var countAtEndName = 0, nameStartRange = 0;
+    for (var i = text.length - 1; i >= 0; i--) {
+      if (text[i].contains('@')) {
+        _inputController.text =
+            text.replaceRange(i, i + countAtEndName + 1, name);
+        nameStartRange = i;
+        break;
+      }
+      countAtEndName++;
+    }
+
+    e.start = nameStartRange;
+    e.end = nameStartRange + e.fullname.length + 3;
+    if (commentStore.excludedIds!.isEmpty) {
+      commentStore.excludedIds = commentStore.excludedIds! + '${e.id}';
+    } else {
+      commentStore.excludedIds = commentStore.excludedIds! + ',${e.id}';
+    }
+    commentStore.listTaggedUsers?.add(e);
+    _inputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _inputController.text.length));
+    setState(() {
       seSelectedUser = false;
     });
   }
@@ -137,28 +158,70 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     });
   }
 
-  void onChanged(String value) {
+  clearInpuntTextAndRemoveUsers() {
+    commentStore.excludedIds = '';
+    commentStore.fullName = '';
+    commentStore.listAllUsers.clear();
+    seSelectedUser = false;
+    _inputController.clear();
+    userNameReply = null;
+    replyToUserId = null;
+    commentStore.listTaggedUsers?.clear();
+    commentReply = null;
+    indexComment = null;
+  }
+
+  void onChanged(String value) async {
     value = value.trim();
 
     if (value.length > 0) {
-      var getLastString = value.split(RegExp("ㅤ@"));
-      if (getLastString.last.contains('@')) {
-        setState(() {
-          seSelectedUser = true;
-        });
-        var startName = getLastString.last.split('@').last;
-        var finishName = startName.split(RegExp("ㅤ"));
-        Future.delayed(Duration(milliseconds: 500), () {
-          commentStore.searchUser(finishName.first);
-        });
-      } else {
-        setState(() {
-          seSelectedUser = false;
-          isIconBlue = true;
-        });
+      setState(() {
+        isIconBlue = true;
+      });
+      var endName = 0;
+      for (var item in commentStore.listTaggedUsers!) {
+        var startname = value.indexOf('@${item.fullname}', endName);
+
+        if (startname < 0) {
+          if (commentStore.excludedIds!.contains(',${item.id}')) {
+            commentStore.excludedIds =
+                commentStore.excludedIds?.replaceAll(',${item.id}', '');
+          } else {
+            if (commentStore.excludedIds!.contains('${item.id},')) {
+              commentStore.excludedIds =
+                  commentStore.excludedIds?.replaceAll('${item.id},', '');
+            } else {
+              commentStore.excludedIds =
+                  commentStore.excludedIds?.replaceAll('${item.id}', '');
+            }
+          }
+          commentStore.listTaggedUsers?.remove(item);
+          break;
+        }
+        endName = startname + item.fullname.length + 3;
       }
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
+        var getLastString = value.split("‌@");
+        if (getLastString.last.contains('@')) {
+          setState(() {
+            seSelectedUser = true;
+          });
+          var startName = getLastString.last.split('@').last;
+          var finishName = startName.split(RegExp("‌"));
+          commentStore.currentPageUser = 1;
+          commentStore.fullName = finishName.first;
+          await commentStore.searchUser();
+        } else {
+          setState(() {
+            seSelectedUser = false;
+          });
+        }
+      });
     } else {
-      commentStore.listUsersMarket!.clear();
+      commentStore.listTaggedUsers?.clear();
+      commentStore.excludedIds = '';
+      commentStore.fullName = '';
       setState(() {
         seSelectedUser = false;
         isIconBlue = false;
@@ -168,18 +231,63 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
 
   void onTap() async {
     if (isIconBlue) {
-      if (_inputController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(AppLocalizations.of(context)!.writeYourComment)));
-      } else {
-        FocusManager.instance.primaryFocus?.unfocus();
-        commentStore.isLoading = true;
-        commentStore.currentPageComment = 1;
-        isIconBlue = false;
-        await commentStore.createComment(postId, _inputController.text.trim());
-        _inputController.clear();
-        commentStore.listComments.clear();
-        _getData();
+      try {
+        if (_inputController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!.writeYourComment)));
+        } else {
+          FocusManager.instance.primaryFocus?.unfocus();
+          commentStore.isLoading = true;
+
+          if (commentReply != null) {
+            CommentReply createCommentReply =
+                await commentRepliesStore.createComment(
+                    commentReply!,
+                    _inputController.text.trim(),
+                    replyToUserId!,
+                    commentStore.listTaggedUsers);
+            isIconBlue = false;
+            commentStore.listComments[indexComment!].totalReplies =
+                commentStore.listComments[indexComment!].totalReplies != null
+                    ? commentStore.listComments[indexComment!].totalReplies! + 1
+                    : 1;
+            if (commentStore.listComments[indexComment!].commentReplies !=
+                null) {
+              commentStore.listComments[indexComment!].commentReplies!
+                  .add(createCommentReply);
+            } else {
+              commentStore.listComments[indexComment!].commentReplies = [
+                createCommentReply
+              ];
+            }
+            clearInpuntTextAndRemoveUsers();
+            commentStore.isLoading = false;
+            setState(() {});
+          } else {
+            await commentStore.createComment(
+                postId, _inputController.text.trim());
+            isIconBlue = false;
+            commentStore.currentPageComment = 1;
+            commentStore.listComments.clear();
+            clearInpuntTextAndRemoveUsers();
+            _getData();
+            commentStore.isLoading = false;
+          }
+        }
+      } catch (e) {
+        print(e);
+        showModalBottomSheet(
+          context: context,
+          barrierColor: Colors.black.withAlpha(1),
+          backgroundColor: Colors.black.withAlpha(1),
+          builder: (BuildContext context) {
+            return SnackBarWidget(
+              menu: AppLocalizations.of(context)!.couldNotSend,
+              text: AppLocalizations.of(context)!.tryAgain,
+              automaticClosing: true,
+            );
+          },
+        );
         commentStore.isLoading = false;
       }
     }
@@ -190,9 +298,23 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
     commentStore.isLoading = false;
   }
 
+  replyComment(Comment comment) {
+    userNameReply = comment.username;
+    _inputController.text = "@";
+    addUserInText(
+      UserSearchModel(fullname: comment.username!, id: comment.userId),
+    );
+    replyToUserId = comment.userId;
+    commentReply = comment.id;
+    indexComment = commentStore.listComments
+        .indexWhere((_comment) => _comment.id == comment.id);
+    setState(() {});
+  }
+
   @override
   void dispose() {
     Future.delayed(Duration(milliseconds: 300), () async {
+      _debounce?.cancel();
       homeStore.setSeeCrip(true);
       homeStore.setResizeToAvoidBottomInset(false);
     });
@@ -208,7 +330,12 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
       return LoadingOverlay(
         isLoading: commentStore.isLoading,
         child: GestureDetector(
-          onTap: () => focusNode.unfocus(),
+          onTap: () {
+            setState(() {
+              seSelectedUser = false;
+            });
+            focusNode.unfocus();
+          },
           child: Scaffold(
             body: Stack(
               children: [
@@ -216,10 +343,14 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                 Visibility(
                     visible: !focusNode.hasFocus,
                     child: BackgroundButterflyBottom(positioned: -50)),
-                SingleChildScrollView(
-                    child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.85),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    commentStore.isLoading = true;
+                    commentStore.listComments.clear();
+                    commentStore.currentPageComment = 1;
+                    await _getData();
+                    commentStore.isLoading = false;
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -255,7 +386,9 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     (ScrollNotification scrollInfo) {
                                   //FocusScope.of(context).requestFocus(newFocusNode());
                                   if (scrollInfo.metrics.pixels ==
-                                      scrollInfo.metrics.maxScrollExtent) {
+                                          scrollInfo.metrics.maxScrollExtent &&
+                                      commentStore.hasMoreComments &&
+                                      !commentStore.isLoading) {
                                     commentStore.currentPageComment++;
                                     commentStore.isLoading = true;
 
@@ -267,46 +400,41 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                                     return false;
                                   }
                                 },
-                                child: RefreshIndicator(
-                                  onRefresh: () async {
-                                    commentStore.isLoading = true;
-                                    commentStore.listComments.clear();
-                                    commentStore.currentPageComment = 1;
-                                    await _getData();
-                                    commentStore.isLoading = false;
-                                  },
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 24),
-                                    itemCount: commentStore.listComments.length,
-                                    itemBuilder: (context, index) {
-                                      var comment =
-                                          commentStore.listComments[index];
-                                      bool visibleDelete;
-                                      if (authStore.currentUser == null) {
-                                        visibleDelete = false;
-                                      } else {
-                                        visibleDelete =
-                                            authStore.currentUser!.id! ==
-                                                commentStore
-                                                    .listComments[index].userId;
-                                      }
-                                      return ItemComment(
-                                        comment: comment,
-                                        visibleDelete: visibleDelete,
-                                        commentStore: commentStore,
-                                        getData: _getData,
-                                        postId: postId,
-                                      );
-                                    },
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    child: Column(
+                                      children: commentStore.listComments
+                                          .map((comment) {
+                                        bool visibleDelete;
+                                        if (authStore.currentUser == null) {
+                                          visibleDelete = false;
+                                        } else {
+                                          visibleDelete =
+                                              authStore.currentUser!.id! ==
+                                                  comment.userId;
+                                        }
+                                        return ItemComment(
+                                          comment: comment,
+                                          visibleDelete: visibleDelete,
+                                          commentStore: commentStore,
+                                          getData: _getData,
+                                          postId: postId,
+                                          replyComment: replyComment,
+                                          updateState: () {
+                                            setState(() {});
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                     ],
                   ),
-                )),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -315,6 +443,11 @@ class _CommentScreenState extends State<CommentScreen> with SecureStoreMixin {
                     child: TextFieldComment(
                       authStore: authStore,
                       commentStore: commentStore,
+                      userNameReply: userNameReply,
+                      removeReply: () {
+                        clearInpuntTextAndRemoveUsers();
+                        setState(() {});
+                      },
                       focusNode: focusNode,
                       inputController: _inputController,
                       onChange: onChanged,

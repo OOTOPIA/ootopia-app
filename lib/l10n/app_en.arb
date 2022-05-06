@@ -35,7 +35,7 @@
 
 
     "regenerationGame": "Regeneration game",
-    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to regenerative movement through the OOTOPIA app. Personal Goal refers to the amount of time you want to engage in the game. Every day, a new round of the game starts at 20h. Everytime you meet your daily goal, you receive rewards in OOz currency.",
+    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to the regenerative movement through the OOTOPIA application. Whenever you create content you will receive it in OOz.",
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
@@ -57,7 +57,7 @@
     "year": "YYYY",
     "pleaseEnterAValidBirthdateInFormat": "Please enter a valid birthdate in format DD/MM/YYYY",
     "pleaseEnterAValidBirthdate": "Please enter a valid birthdate",
-"userComment":"%USER_NAME_MARKET% tagged you in a comment",
+    "userComment":"You have been tagged in a comment",
     "others": "Others",
 
     "favoriteThemes": "Favorite Themes",
@@ -475,7 +475,57 @@
 
     "hide" : "Hide",
     "readMore" : "Read more",
+
+
+    "addFriends" : "Add friends",
+    "friend" : "Friend",
+    "addFriend" : "Add friend",
+    "remove" : "Remove",
+    "removeFriend" : "Remove friend",
+    "seeProfile" : "See profile",
+    "searchFriendsMsg" : "Search and add people to your circle of friends",
+    "searchFriends" : "Search friends",
+    "friends" : "Friends",
+    "orderBy" : "Ranked By:",
+    "alphabeticalOrder" : "Alphabetical order",
+    "mostRecent" : "Most recent",
+    "older" : "Older",
+    "userNotFound" : "User not found",
+    "resultsFor" : "Results for",
+    "userNotFoundMsg" : "Unfortunately the user you are looking for is not found or does not exist yet.",
+    "youDontHaveAnyFriends" : "You don't have any friends",
+    "youDontHaveAnyFriendsSubtext" : "Click the \"Add friend\" button and connect with people who are making a difference in the world",
+
+
+
     "multiplesImages": "Multiples images",
     "limitSelectedImages": "The limit is 5 photos or videos",
-    "hasntImageOnGallery": "This gallery has no any files"
+    "hasntImageOnGallery": "This gallery has no any files",
+    "selectSomeImage": "You need to select an image to continue",
+
+    "viewMoreReply": "View %amount% more reply",
+    "reply": "Reply",
+    "replyingTo": "Replying To %user_name%",
+    "loading": "Loading...",
+    "hideReplies": "Hide replies",
+    "couldNotSend": "Could not send",
+    "couldNotLoad": "Could not load",
+    "repliedToYourComment": "replied to your comment",
+    "taggedUserInPost": "tagged you in a post",
+    "userNotFoundInTaggedUser":"Check the name entered or enter another",
+    "accessToContact":"Allow access to your address book on your mobile",
+    "discribeAccessToContact":"By allowing access to your address book, the application will periodically search for names, telephone numbers and e-mails of people who are already registered in Ootopia. That way, the app will suggest people you already know to add to your network of friends.",
+    "permittedAccess":"Allow access",
+    "notPermittedAccess":"Do not allow access",
+    "search":"Search",
+    "friendSuggestions":"Friend suggestions",
+
+
+    "addedAsFriend": "added you to the circle of friends.",
+    "notificationButtonTextOnNewFriend": "Open profile",
+    
+    "userNotFoundInTaggedUser":"Check the name entered or enter another",
+    "joinedOotopia":"Joined Ootopia",
+    "suggestedbyOotopia":"Suggested by Ootopia"
+
 }

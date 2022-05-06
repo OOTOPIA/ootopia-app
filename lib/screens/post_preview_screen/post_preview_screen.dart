@@ -10,15 +10,18 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/interests_tags/interests_tags_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
+import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/confirm_post_button_widget.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/hashtag_select_search_dialog_widget.dart';
+import 'package:ootopia_app/screens/post_preview_screen/components/list_of_users.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
@@ -60,6 +63,9 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   late WalletStore walletStore;
   late PostPreviewScreenStore postPreviewStore;
 
+  bool seSelectedUser = false;
+  Timer? _debounce;
+  final ScrollController scrollController = ScrollController();
   bool _isLoading = true;
   bool _errorOnGetTags = false;
   bool _createdPost = false;
@@ -80,6 +86,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
   bool sendingPost = false;
 
   PostCreate postData = PostCreate();
+  PostGalleryCreateModel postGallery = PostGalleryCreateModel();
 
   List<MultiSelectItem<InterestsTagsModel>> _items = [];
 
@@ -122,17 +129,17 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           _geolocationInputController.text =
               "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
-          postData.addressCity = placemark.subAdministrativeArea != null
+          postGallery.addressCity = placemark.subAdministrativeArea != null
               ? placemark.subAdministrativeArea!
               : "";
-          postData.addressState = placemark.administrativeArea != null
+          postGallery.addressState = placemark.administrativeArea != null
               ? placemark.administrativeArea!
               : "";
-          postData.addressCountryCode =
+          postGallery.addressCountryCode =
               placemark.isoCountryCode != null ? placemark.isoCountryCode! : "";
-          postData.addressLatitude = position.latitude;
-          postData.addressLongitude = position.longitude;
-          postData.addressNumber =
+          postGallery.addressLatitude = position.latitude;
+          postGallery.addressLongitude = position.longitude;
+          postGallery.addressNumber =
               placemark.name != null ? placemark.name! : "";
         } else {
           geolocationMessage =
@@ -203,7 +210,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     return returnDialog;
   }
 
-  void _sendPost() async {
+  void sendPost() async {
     if (_processingVideoInBackgroundError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -231,31 +238,47 @@ class _PostPreviewPageState extends State<PostPreviewPage>
       postPreviewStore.uploadIsLoading = true;
     }
 
-    postData.tagsIds = _selectedTags.map((tag) => tag.id).toList();
-    postData.type = widget.args["type"] == "image" ? "image" : "video";
-    postData.description = _descriptionInputController.text;
+    postGallery.tagsIds = _selectedTags.map((tag) => tag.id).toList();
+    String mediaType = widget.args["type"] == "image" ? "image" : "video";
+    var newTextComment = _descriptionInputController.text;
+    List<String>? idsUsersTagged = [];
 
-    if (postData.type == "video") {
-      postData.durationInSecs = (flickManager!.flickVideoManager!
-                  .videoPlayerValue!.duration.inMilliseconds %
-              60000) /
-          1000;
+    if (postPreviewStore.listTaggedUsers != null) {
+      int newStartIndex = 0;
+      int endNameUser = 0;
+      postPreviewStore.listTaggedUsers?.forEach((user) {
+        idsUsersTagged.add(user.id);
+        String newString = "@[${user.id}]";
+        var startname =
+            newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
+        newTextComment = newTextComment.replaceRange(
+          startname + newStartIndex,
+          user.fullname.length + startname + newStartIndex + 3,
+          newString,
+        );
+        endNameUser = user.id.length + startname + 3;
+        newStartIndex =
+            newStartIndex + newString.length - (endNameUser - startname);
+      });
     }
 
-    print("ready to start upload");
-
-    GeneralConfigModel? oozToRewardForVideo = await this
-        .secureStoreMixin
-        .getGeneralConfigByName("creator_reward_per_minute_of_posted_video");
-    GeneralConfigModel? oozToRewardForImage = await this
-        .secureStoreMixin
-        .getGeneralConfigByName("creator_reward_for_posted_photo");
+    postGallery.taggedUsersId = idsUsersTagged;
+    postGallery.description = newTextComment;
     sendingPost = true;
 
     try {
-      await this.postPreviewStore.createPost(postData,
-          oozToRewardForVideo?.value ?? 0, oozToRewardForImage?.value ?? 0);
+      List<Map> fileList = widget.args["fileList"] != null
+          ? widget.args["fileList"]
+          : [
+              {
+                "mediaFile": File(widget.args["filePath"]),
+                "mediaType": widget.args["type"]
+              }
+            ];
+
+      await this.postPreviewStore.sendMedia(fileList, postGallery);
       sendingPost = false;
+
       await this.walletStore.getWallet();
 
       if (this.postPreviewStore.successOnUpload) {
@@ -272,13 +295,13 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           SnackBar(
             content: Text(AppLocalizations.of(context)!
                 .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain
-                .replaceAll("video", postData.type!)),
+                .replaceAll("video", mediaType)),
           ),
         );
       }
 
       postPreviewStore.clearhashtags();
-    } catch (err) {
+    } catch (e) {
       sendingPost = false;
     }
   }
@@ -337,7 +360,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
             if (_readyToSendPost) {
               postPreviewStore.uploadIsLoading = false;
               _readyToSendPost = false;
-              _sendPost();
+              sendPost();
             }
           });
         }
@@ -377,6 +400,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
 
   @override
   void dispose() {
+    _debounce?.cancel();
     if (widget.args["type"] == "video") {
       flickManager!.dispose();
       flickMultiManager.remove(flickManager!);
@@ -385,6 +409,34 @@ class _PostPreviewPageState extends State<PostPreviewPage>
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
+  }
+
+  void addUserInText(UserSearchModel e) {
+    var text = _descriptionInputController.text;
+
+    var name = "‌@${e.fullname}‌";
+    var s = 0, nameStartRange = 0;
+    for (var i = text.length - 1; i >= 0; i--) {
+      if (text[i].contains('@')) {
+        _descriptionInputController.text =
+            text.replaceRange(i, i + s + 1, name);
+        nameStartRange = i;
+        break;
+      }
+      s++;
+    }
+
+    if (postPreviewStore.excludedIds!.isEmpty) {
+      postPreviewStore.excludedIds = postPreviewStore.excludedIds! + '${e.id}';
+    } else {
+      postPreviewStore.excludedIds = postPreviewStore.excludedIds! + ',${e.id}';
+    }
+    postPreviewStore.listTaggedUsers?.add(e);
+    _descriptionInputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _descriptionInputController.text.length));
+    setState(() {
+      seSelectedUser = false;
+    });
   }
 
   void _getSizeImage() {
@@ -424,8 +476,20 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                 visible: MediaQuery.of(context).viewInsets.bottom == 0,
                 child: BackgroundButterflyBottom()),
             GestureDetector(
-                onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+                onTap: () {
+                  setState(() {
+                    seSelectedUser = false;
+                  });
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
                 child: Observer(builder: (_) => body())),
+            if (seSelectedUser)
+              ListOfUsers(
+                postPreviewScreenStore: postPreviewStore,
+                inputController: _descriptionInputController,
+                scrollController: scrollController,
+                addUserInText: addUserInText,
+              ),
           ],
         ),
       ),
@@ -445,118 +509,78 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           Navigator.popUntil(context, (route) => route.isFirst);
         },
       );
+  void onChanged(String value) {
+    value = value.trim();
+
+    if (value.length > 0) {
+      var endName = 0;
+      for (var item in postPreviewStore.listTaggedUsers!) {
+        var startname = value.indexOf('@${item.fullname}', endName);
+
+        if (startname < 0) {
+          if (postPreviewStore.excludedIds!.contains(',${item.id}')) {
+            postPreviewStore.excludedIds =
+                postPreviewStore.excludedIds?.replaceAll(',${item.id}', '');
+          } else {
+            if (postPreviewStore.excludedIds!.contains('${item.id},')) {
+              postPreviewStore.excludedIds =
+                  postPreviewStore.excludedIds?.replaceAll('${item.id},', '');
+            } else {
+              postPreviewStore.excludedIds =
+                  postPreviewStore.excludedIds?.replaceAll('${item.id}', '');
+            }
+          }
+          postPreviewStore.listTaggedUsers?.remove(item);
+          break;
+        }
+        endName = startname + item.fullname.length + 3;
+      }
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
+        var getLastString = value.split("‌@");
+        if (getLastString.last.contains('@')) {
+          setState(() {
+            seSelectedUser = true;
+          });
+          var startName = getLastString.last.split('@').last;
+          var finishName = startName.split("‌");
+          postPreviewStore.currentPageUser = 1;
+          postPreviewStore.fullName = finishName.first;
+          await postPreviewStore.searchUser();
+        } else {
+          setState(() {
+            seSelectedUser = false;
+          });
+        }
+      });
+    } else {
+      postPreviewStore.listTaggedUsers?.clear();
+      postPreviewStore.excludedIds = '';
+      postPreviewStore.fullName = '';
+    }
+  }
 
   Widget body() {
     return LoadingOverlay(
-        isLoading: postPreviewStore.uploadIsLoading,
-        child: Observer(builder: (context) {
+      isLoading: postPreviewStore.uploadIsLoading,
+      child: Observer(
+        builder: (context) {
           return SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
               child: Column(
                 children: [
-                  Container(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: widget.args["type"] == "video"
-                            ? MediaQuery.of(context).size.height * .6
-                            : MediaQuery.of(context).size.width + GlobalConstants.of(context).spacingNormal*2,
-                      ),
-                      child: Stack(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: GlobalConstants.of(context).spacingNormal,
-                              right: GlobalConstants.of(context).spacingNormal,
-                              top: GlobalConstants.of(context).spacingNormal,
-                              bottom: GlobalConstants.of(context)
-                                  .screenHorizontalSpace,
-                            ),
-                            child: widget.args["type"] == "video"
-                                ? ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(21)),
-                                    child: Transform(
-                                      alignment: Alignment.center,
-                                      child: FlickVideoPlayer(
-                                        preferredDeviceOrientationFullscreen: [],
-                                        flickManager: flickManager!,
-                                        flickVideoWithControls:
-                                            FlickVideoWithControls(
-                                          controls: null,
-                                        ),
-                                      ),
-                                      transform: Matrix4.rotationY(mirror),
-                                    ),
-                                  )
-                                : Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff000000),
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(20),
-                                          bottomRight: Radius.circular(20),
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20),
-                                        ),
-                                        image: DecorationImage(
-                                          fit: this.imageSize!.height >
-                                                  imageSize!.width
-                                              ? BoxFit.fitHeight
-                                              : BoxFit.fitWidth,
-                                          alignment: FractionalOffset.center,
-                                          image: FileImage(
-                                              File(widget.args["filePath"])),
-                                        )),
-                                  ),
-                          ),
-                          widget.args["type"] == "video"
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.all(
-                                          GlobalConstants.of(context)
-                                              .spacingMedium),
-                                      padding: EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black38,
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      child: SizedBox(
-                                        width: 28,
-                                        height: 28,
-                                        child: IconButton(
-                                          padding: EdgeInsets.all(0),
-                                          icon: Icon(
-                                              flickManager!.flickControlManager!
-                                                      .isMute
-                                                  ? Icons.volume_off
-                                                  : Icons.volume_up,
-                                              size: 20),
-                                          onPressed: () {
-                                            setState(() {
-                                              //flickMultiManager.toggleMute();
-                                              if(!flickManager!.flickControlManager!.isMute){
-                                                flickManager!.flickControlManager!.mute();
-                                              }else{
-                                                flickManager!.flickControlManager!.unmute();
-                                              }
-                                            });
-                                          },
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-                  ),
+                  widget.args["fileList"] == null
+                      ? MediaViewWidget(
+                          mediaFilePath: widget.args["filePath"],
+                          mediaType: widget.args["type"],
+                          shouldCustomFlickManager: true,
+                          mediaSize: widget.args["type"] == "video"
+                              ? null
+                              : this.imageSize!,
+                        )
+                      : buildListOfMedias(),
+                  SizedBox(height: 50),
                   Container(
                     margin: EdgeInsets.symmetric(
                         horizontal: GlobalConstants.of(context).spacingNormal),
@@ -566,6 +590,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
                       controller: _descriptionInputController,
+                      onChanged: onChanged,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.normal),
@@ -610,7 +635,6 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                             horizontal:
                                 GlobalConstants.of(context).spacingNormal),
                         width: double.infinity,
-
                         child: FlatButton(
                           height: 57,
                           child: Padding(
@@ -815,7 +839,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
                                       _selectedTags =
                                           postPreviewStore.selectedTags;
                                     });
-                                    _sendPost();
+                                    sendPost();
                                   }),
                             )
                           ],
@@ -873,6 +897,43 @@ class _PostPreviewPageState extends State<PostPreviewPage>
               ),
             ),
           );
-        }));
+        },
+      ),
+    );
+  }
+
+  Widget buildListOfMedias() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          ...widget.args["fileList"].map(buildMediaRow).toList(),
+        ],
+      ),
+    );
+  }
+
+  void changeMediaFile(File newImage, var oldImage) {
+    int index = widget.args["fileList"]
+        .indexWhere((element) => element["mediaId"] == oldImage["mediaId"]);
+
+    widget.args["fileList"][index]["mediaFile"] = newImage;
+  }
+
+  buildMediaRow(dynamic file) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 60,
+      height: MediaQuery.of(context).size.width - 60,
+      child: MediaViewWidget(
+        mediaFilePath: file["mediaFile"].path,
+        mediaType: file["mediaType"],
+        mediaSize: file["mediaSize"],
+        shouldCustomFlickManager: true,
+        showCropWidget: true,
+        onChanged: (value) {
+          changeMediaFile(value, file);
+        },
+      ),
+    );
   }
 }

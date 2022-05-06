@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 
 class TryAgain extends StatefulWidget {
   final Function onClickButton;
@@ -48,7 +49,7 @@ class _TryAgainState extends State<TryAgain> {
                           fontWeight: FontWeight.bold,
                           color: widget.buttonBackgroundColor != null
                               ? widget.buttonBackgroundColor
-                              : Theme.of(context).accentColor,
+                              : LightColors.blue,
                         ),
                       ),
                     ),
@@ -125,13 +126,13 @@ class _TryAgainState extends State<TryAgain> {
                       },
                       color: widget.buttonBackgroundColor != null
                           ? widget.buttonBackgroundColor
-                          : Theme.of(context).accentColor,
+                          : LightColors.blue,
                       splashColor: Colors.black54,
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
                           color: widget.buttonBackgroundColor != null
                               ? widget.buttonBackgroundColor!
-                              : Theme.of(context).accentColor,
+                              : LightColors.blue,
                           width: 2,
                           style: BorderStyle.solid,
                         ),

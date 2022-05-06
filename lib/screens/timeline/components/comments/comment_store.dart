@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:mobx/mobx.dart";
 import 'package:ootopia_app/data/models/comments/comment_post_model.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/data/repositories/comment_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 
@@ -28,7 +28,10 @@ abstract class CommentStoreBase with Store {
   List<UserSearchModel> listAllUsers = [];
 
   @observable
-  List<String>? listUsersMarket = [];
+  List<UserSearchModel>? listTaggedUsers = [];
+
+  @observable
+  String? excludedIds = '';
 
   @observable
   int currentPageComment = 1;
@@ -39,23 +42,54 @@ abstract class CommentStoreBase with Store {
   @observable
   bool hasMoreUsers = false;
 
+  @observable
+  bool hasMoreComments = true;
+
+  @observable
+  String fullName = '';
+
   @action
   Future<void> getComments(String postId, int page) async {
     try {
       var response = await commentRepository.getComments(postId, page);
+      hasMoreComments = response.length > 0;
       if (response.isEmpty) {
         currentPageComment = currentPageComment;
       } else {
         listComments.addAll(response);
       }
-    } catch (e) {}
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   @action
   Future<void> createComment(String postId, String text) async {
     try {
       isLoading = true;
-      await commentRepository.createComment(postId, text, listUsersMarket);
+      List<String> idsUsersTagged = [];
+      var newTextComment = text;
+      if (listTaggedUsers != null) {
+        int newStartIndex = 0;
+        int endNameUser = 0;
+        listTaggedUsers?.forEach((user) {
+          idsUsersTagged.add(user.id);
+          String newString = "@[${user.id}]";
+          var startname =
+              newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
+
+          newTextComment = newTextComment.replaceRange(
+            startname + newStartIndex,
+            user.fullname.length + startname + newStartIndex + 3,
+            newString,
+          );
+          endNameUser = user.id.length + startname + 3;
+          newStartIndex =
+              newStartIndex + newString.length - (endNameUser - startname);
+        });
+      }
+      await commentRepository.createComment(
+          postId, newTextComment, idsUsersTagged);
       isLoading = false;
     } catch (e) {
       isLoading = false;
@@ -80,14 +114,19 @@ abstract class CommentStoreBase with Store {
   }
 
   @action
-  Future<void> searchUser(String fullName) async {
-    if (viewState != ViewState.loadingNewData) {
-      listAllUsers.clear();
-    }
+  Future<void> searchUser() async {
     try {
-      viewState = ViewState.loading;
-      var response =
-          await userRepository.getAllUsersByName(fullName, currentPageUser, 10);
+      if (viewState != ViewState.loadingNewData) {
+        listAllUsers.clear();
+        viewState = ViewState.loading;
+      }
+
+      var response = await userRepository.getAllUsersByName(
+        fullName,
+        currentPageUser,
+        10,
+        excludedIds,
+      );
       hasMoreUsers = response.length == 10;
       listAllUsers.addAll(response);
       viewState = ViewState.done;
@@ -96,14 +135,13 @@ abstract class CommentStoreBase with Store {
     }
   }
 
-  void updateOnScroll(
-      ScrollController scrollController, String fullname) async {
+  void updateOnScroll(ScrollController scrollController) async {
     if (scrollController.position.atEdge) {
       if (scrollController.position.pixels != 0) {
         if (hasMoreUsers) {
           currentPageUser++;
           viewState = ViewState.loadingNewData;
-          await searchUser(fullname);
+          await searchUser();
         }
       }
     }

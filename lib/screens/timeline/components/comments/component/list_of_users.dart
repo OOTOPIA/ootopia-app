@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:ootopia_app/data/models/users/user_comment.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfUsers extends StatefulWidget {
   final CommentStore commentStore;
@@ -23,12 +25,16 @@ class ListOfUsers extends StatefulWidget {
 class _ListOfUsersState extends State<ListOfUsers> {
   @override
   Widget build(BuildContext context) {
+    final sizeKeyboard = EdgeInsets.fromWindowPadding(
+      WidgetsBinding.instance!.window.viewInsets,
+      WidgetsBinding.instance!.window.devicePixelRatio,
+    ).bottom;
+    final multiple = MediaQuery.of(context).size.height > 650 ? 180 : 150;
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height * .30,
-        padding: EdgeInsets.only(left: 16, top: 16),
+        height: (MediaQuery.of(context).size.height - sizeKeyboard) - multiple,
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           controller: widget.scrollController,
@@ -37,41 +43,80 @@ class _ListOfUsersState extends State<ListOfUsers> {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            }
-            return Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: widget.commentStore.listAllUsers
-                      .map(
-                        (e) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              widget.addUserInText!(e);
-                            },
-                            child: Row(
-                              children: [
-                                if (e.photoUrl != null)
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(e.photoUrl!),
-                                  )
-                                else
-                                  CircleAvatar(
-                                    radius: 25,
-                                    child: Image.asset(
-                                      'assets/icons/user.png',
-                                    ),
-                                  ),
-                                SizedBox(width: 8),
-                                Text(e.fullname),
-                              ],
+            } else if (widget.commentStore.listAllUsers.isEmpty) {
+              return Container(
+                height: MediaQuery.of(context).size.height * .4,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    BackgroundButterflyTop(positioned: -59),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.userNotFound,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff707070),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .userNotFoundInTaggedUser,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff707070),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Stack(
+              children: [
+                BackgroundButterflyTop(positioned: -59),
+                Padding(
+                  padding: EdgeInsets.only(left: 16, top: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: widget.commentStore.listAllUsers
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: InkWell(
+                              onTap: () {
+                                widget.addUserInText!(e);
+                              },
+                              child: Row(
+                                children: [
+                                  if (e.photoUrl != null)
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage:
+                                          NetworkImage(e.photoUrl!),
+                                    )
+                                  else
+                                    CircleAvatar(
+                                      radius: 25,
+                                      child: Image.asset(
+                                        'assets/icons/user.png',
+                                      ),
+                                    ),
+                                  SizedBox(width: 8),
+                                  Text(e.fullname),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
                 if (widget.commentStore.viewState == ViewState.loadingNewData)
                   Center(

@@ -12,7 +12,17 @@ import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum AppBarComponents { back, menu, ooz, save, edit, close, proceed }
+enum AppBarComponents {
+  back,
+  menu,
+  ooz,
+  save,
+  edit,
+  close,
+  proceed,
+  empty,
+  keep
+}
 
 // ignore: must_be_immutable
 class DefaultAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -112,7 +122,9 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
       if (hasComponent(AppBarComponents.close)) closeIcon,
       if (hasComponent(AppBarComponents.edit)) editIcon,
       if (hasComponent(AppBarComponents.save)) saveIcon,
+      if (hasComponent(AppBarComponents.empty)) empty,
       if (hasComponent(AppBarComponents.proceed)) proceedIcon,
+      if (hasComponent(AppBarComponents.keep)) keepIcon,
     ];
   }
 
@@ -191,7 +203,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                       children: [
                         SvgPicture.asset(
                           'assets/icons/ooz-coin-blue-small.svg',
-                          color: Theme.of(context).accentColor,
+                          color: LightColors.blue,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8),
@@ -200,7 +212,7 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
                                 ? '${walletStore.wallet!.totalBalance.toString().length > 6 ? NumberFormat.compact().format(walletStore.wallet?.totalBalance).replaceAll('.', ',') : walletStore.wallet?.totalBalance.toStringAsFixed(2).replaceAll('.', ',')}'
                                 : '0,00',
                             style: TextStyle(
-                              color: Theme.of(context).accentColor,
+                              color: LightColors.blue,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
@@ -327,6 +339,30 @@ class _DefaultAppBarState extends State<DefaultAppBar> {
           ),
         ),
       );
+  Widget get keepIcon => InkWell(
+        onTap: () async {
+          if (widget.onTapAction != null) {
+            widget.onTapAction!();
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: GlobalConstants.of(_buildContext).spacingNormal,
+          ),
+          child: Row(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.continueAccess,
+                style: GoogleFonts.roboto(
+                    color: LightColors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      );
+  Widget get empty => Container();
 
   bool get hasNavigation =>
       controller.pages.length > controller.initialPages.length;

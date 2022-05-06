@@ -1,21 +1,23 @@
 import 'dart:async';
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_image.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/folder_dialog.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
-import 'package:ootopia_app/screens/camera_screen/custom_gallery/custom_gallery_grid_view.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/toast_message_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/list_folders.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart';
-import 'package:video_player/video_player.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:visibility_detector/visibility_detector.dart';
 
 class CustomGallery extends StatefulWidget {
   const CustomGallery({Key? key}) : super(key: key);
@@ -40,22 +42,30 @@ class _CustomGalleryState extends State<CustomGallery> {
   bool isLoading = false;
   bool videoIsLoading = true;
   bool isLoadingMoreMedia = false;
+  bool isReloadingMoreMedia = false;
   bool hasError = false;
+  bool showImageTop = true;
   var singleMode = true;
   static const selectLimit = 5;
-  static const limitMedias = 15;
-  bool showToastMessage = false;
+  static const limitMedias = 30;
+  bool showToastMessageImageLimit = false;
+  bool showToastMessageNoImage = false;
 
   int countPage = 0;
   bool hasMoreMedias = false;
-  late VideoPlayerController? _videoPlayerController;
-  FlickManager? flickManager;
   ScrollController _scrollController = ScrollController();
+  ScrollController _scrollControllerMedias = ScrollController();
+
+  ///Use null to show all images
+  MediaPathEntity? currentFolder;
+
+  bool deviceHasImages = false;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    _scrollControllerMedias.addListener(_scrollListenerMedias);
     setState(() {
       isLoading = true;
     });
@@ -64,20 +74,40 @@ class _CustomGalleryState extends State<CustomGallery> {
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
-    flickManager?.dispose();
+    _scrollController.removeListener(_scrollListener);
+    _scrollControllerMedias.removeListener(_scrollListenerMedias);
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      if (hasMoreMedias) {
-        Future.delayed(Duration.zero, () async {
-          await getImageList(countPage);
-        });
-      }
+        !_scrollController.position.outOfRange &&
+        hasMoreMedias &&
+        !isLoadingMoreMedia) {
+      Future.delayed(Duration.zero, () async {
+        await getImageList(countPage);
+      });
+    }
+  }
+
+  void _scrollListenerMedias() {
+    if (_scrollControllerMedias.offset >=
+            _scrollControllerMedias.position.maxScrollExtent &&
+        !_scrollControllerMedias.position.outOfRange &&
+        hasMoreMedias &&
+        !isLoadingMoreMedia) {
+      Future.delayed(Duration.zero, () async {
+        await getImageList(countPage);
+      });
+    }
+    if (_scrollControllerMedias.position.userScrollDirection ==
+            ScrollDirection.forward &&
+        _scrollControllerMedias.offset <= 5) {
+      _scrollControllerMedias.animateTo(0,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
+      _scrollController.animateTo(0,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
 
@@ -91,19 +121,21 @@ class _CustomGalleryState extends State<CustomGallery> {
         ],
         onTapLeading: () => Navigator.of(context).pop(),
         onTapAction: () {
-          if (selectedMedias != []) {
-            final listFilesPaths =
-                selectedMedias.map((e) => e['mediaFile'].path);
-            flickManager?.flickControlManager?.pause();
+          if (selectedMedias.isNotEmpty) {
             Navigator.of(this.context).pushNamed(
               PageRoute.Page.postPreviewScreen.route,
               arguments: {
-                "filePath": selectedMedias.first['mediaFile'].path,
-                "listFilesPaths": listFilesPaths,
+                "fileList": selectedMedias,
                 "mirrored": "false",
-                "type": selectedMedias.first['mediaType']
               },
             );
+          } else {
+            showToastMessageNoImage = true;
+            setState(() {});
+            Future.delayed(Duration(seconds: 3), () async {
+              showToastMessageNoImage = false;
+              setState(() {});
+            });
           }
         },
       ),
@@ -127,50 +159,69 @@ class _CustomGalleryState extends State<CustomGallery> {
                   : SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
+                        key: Key('Column'),
                         children: [
-                          SizedBox(height: 20),
-                          MediaViewWidget(
-                            mediaFilePath: currentDirectory["mediaFile"].path,
-                            mediaType: currentDirectory["mediaType"],
-                            mediaSize: currentDirectory["mediaSize"],
-                            flickManager: getFlickManager(),
-                            videoIsLoading: videoIsLoading,
-                          ),
-                          SizedBox(height: 10),
-                          multipleImagesButton(),
-                          SizedBox(height: 10),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: GlobalConstants.of(context)
-                                      .screenHorizontalSpace -
-                                  5,
+                          VisibilityDetector(
+                            key: Key('Column'),
+                            onVisibilityChanged: (visibilityInfo) {
+                              if (visibilityInfo.visibleFraction <= 0.05) {
+                                showImageTop = false;
+                                setState(() {});
+                              } else if (visibilityInfo.visibleFraction >= 0 &&
+                                  showImageTop == false) {
+                                showImageTop = true;
+                                setState(() {});
+                              }
+                            },
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  MediaViewWidget(
+                                    key: ObjectKey(
+                                        currentDirectory["mediaFile"].path),
+                                    mediaFilePath:
+                                        currentDirectory["mediaFile"].path,
+                                    mediaType: currentDirectory["mediaType"],
+                                    mediaSize: currentDirectory["mediaSize"],
+                                  ),
+                                  SizedBox(height: 10),
+                                  multipleImagesButton(),
+                                  SizedBox(height: 10),
+                                ],
+                              ),
                             ),
-                            width: double.infinity,
-                            child: Center(
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                spacing: 8, // gap between adjacent chips
-                                runSpacing: 8, // gap between lines
-                                children: mediaList
-                                    .asMap()
-                                    .map(
-                                      (index, media) => MapEntry(
-                                        index,
-                                        CustomGalleryGridView(
-                                          discountSpacing: 10 * 3,
-                                          amountPadding: 0,
-                                          media: handleMediaOnGridView(media),
-                                          mediaType: media["mediaType"],
-                                          columnsCount: 3,
-                                          singleMode: singleMode,
-                                          positionOnList: returnPosition(media),
-                                          onTap: () => selectMedia(media),
-                                        ),
-                                      ),
-                                    )
-                                    .values
-                                    .toList(),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height,
+                            child: GridView.builder(
+                              controller: _scrollControllerMedias,
+                              physics: showImageTop
+                                  ? NeverScrollableScrollPhysics()
+                                  : null,
+                              primary: false,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: GlobalConstants.of(context)
+                                          .screenHorizontalSpace -
+                                      10,
+                                  vertical: showImageTop ? 0 : 50),
+                              itemCount: mediaList.length,
+                              itemBuilder: (BuildContext ctx, index) {
+                                return CustomImage(
+                                  media: mediaList[index]["mediaBytes"],
+                                  mediaType: mediaList[index]["mediaType"],
+                                  singleMode: singleMode,
+                                  positionOnList:
+                                      returnPosition(mediaList[index]),
+                                  onTap: () => selectMedia(mediaList[index]),
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 150,
+                                childAspectRatio: 2 / 2,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 0,
                               ),
                             ),
                           ),
@@ -179,15 +230,19 @@ class _CustomGalleryState extends State<CustomGallery> {
                         ],
                       ),
                     ),
-          showToastMessage ? ToastMessageWidget() : Container()
+          showToastMessageNoImage
+              ? ToastMessageWidget(
+                  toastText: AppLocalizations.of(context)!.selectSomeImage,
+                )
+              : Container(),
+          showToastMessageImageLimit
+              ? ToastMessageWidget(
+                  toastText: AppLocalizations.of(context)!.limitSelectedImages,
+                )
+              : Container()
         ],
       ),
     );
-  }
-
-  FlickManager? getFlickManager() {
-    if (currentDirectory["mediaType"] == 'video') return flickManager;
-    return null;
   }
 
   Widget multipleImagesButton() {
@@ -195,43 +250,96 @@ class _CustomGalleryState extends State<CustomGallery> {
       padding: EdgeInsets.symmetric(
         horizontal: GlobalConstants.of(context).screenHorizontalSpace,
       ),
-      child: GestureDetector(
-        onTap: switchMode,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.multiplesImages,
-              style: GoogleFonts.roboto(
-                color: LightColors.blue,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: selectFolder,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  currentFolder?.name ?? AppLocalizations.of(context)!.all,
+                  style: GoogleFonts.roboto(
+                    color: LightColors.grey,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Icon(
+                  Icons.expand_more,
+                  color: LightColors.grey,
+                ),
+              ],
             ),
-            SizedBox(width: 2),
-            SvgPicture.asset(
-              'assets/icons/multiples_images.svg',
-              height: 18,
-              width: 18,
-            ),
-          ],
-        ),
+          ),
+          GestureDetector(
+              onTap: switchMode,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.multiplesImages,
+                    style: GoogleFonts.roboto(
+                      color: LightColors.blue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(width: 2),
+                  SvgPicture.asset(
+                    'assets/icons/multiples_images.svg',
+                    height: 18,
+                    width: 18,
+                  ),
+                ],
+              )),
+        ],
       ),
     );
   }
 
-  Future<void> getAlbum() async {
+  void selectFolder() async {
+    mediaList.clear();
+    singleMode = true;
+    countPage = 0;
+    final folder = await showFolderModalBottomSheet(context);
+    if (folder != null) {
+      currentFolder = folder;
+    } else {
+      currentFolder = null;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    getAlbum();
+  }
+
+  Future<void> getAlbum([bool firstRun = false]) async {
     Future.delayed(Duration.zero, () async {
       albums = await PhotoManager.getAssetPathList(onlyAll: true);
-      initializeImageList();
+      try {
+        initializeImageList();
+      } catch (e) {
+        if (firstRun) {
+          deviceHasImages = false;
+        } else {
+          rethrow;
+        }
+      }
     });
   }
 
   initializeImageList() async {
     await getImageList(countPage);
 
-    selectedMedias = [mediaList.first];
-    initialMedia(mediaList.first);
+    if (mediaList.length > 0) {
+      selectedMedias = [mediaList.first];
+      initialMedia(mediaList.first);
+    } else {
+      selectedMedias = [];
+    }
 
     setState(() {
       isLoading = false;
@@ -244,8 +352,12 @@ class _CustomGalleryState extends State<CustomGallery> {
     setState(() {});
 
     try {
-      _assetEntityList = await albums.first.getAssetListRange(
-          start: initialPage, end: initialPage + limitMedias);
+      if (currentFolder != null) {
+        _assetEntityList = await currentFolder!
+            .getAssetListRange(0, initialPage + limitMedias);
+      } else
+        _assetEntityList = await albums.first.getAssetListRange(
+            start: initialPage, end: initialPage + limitMedias);
     } catch (e) {
       setState(() {
         hasError = true;
@@ -270,12 +382,6 @@ class _CustomGalleryState extends State<CustomGallery> {
     setState(() {});
   }
 
-  handleMediaOnGridView(Map media) {
-    return media["mediaType"] == 'video'
-        ? media["mediaBytes"]
-        : media["mediaFile"];
-  }
-
   switchMode() {
     selectedMedias = [mediaList.first];
     initialMedia(mediaList.first);
@@ -287,7 +393,7 @@ class _CustomGalleryState extends State<CustomGallery> {
   void selectMedia(Map media) {
     singleMode ? selectedMedias = [media] : handleMultipleMedia(media);
 
-    initialMedia(selectedMedias.last);
+    if (selectedMedias.isNotEmpty) initialMedia(selectedMedias.last);
     setState(() {});
   }
 
@@ -298,15 +404,18 @@ class _CustomGalleryState extends State<CustomGallery> {
     if (hasMedia == null && selectedMedias.length < selectLimit) {
       selectedMedias.add(media);
     } else if (hasMedia == null && selectedMedias.length >= selectLimit) {
-      showToastMessage = true;
+      showToastMessageImageLimit = true;
       Future.delayed(Duration(seconds: 3), () async {
-        showToastMessage = false;
+        showToastMessageImageLimit = false;
         setState(() {});
       });
     } else {
-      selectedMedias
-          .removeWhere((element) => element["mediaId"] == media["mediaId"]);
-      if (selectedMedias.length == 0) initialMedia(mediaList.first);
+      selectedMedias.removeWhere(
+        (element) => element["mediaId"] == media["mediaId"],
+      );
+      if (selectedMedias.isEmpty) {
+        initialMedia(mediaList.first);
+      }
     }
   }
 
@@ -314,13 +423,10 @@ class _CustomGalleryState extends State<CustomGallery> {
     if (selectedMedia['mediaType'] == 'video' &&
         (currentDirectory['mediaId'] == null ||
             selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
-      _videoPlayerController = null;
       currentDirectory = selectedMedia;
-      initVideoPlayer(currentDirectory['mediaFile']);
     } else if (selectedMedia['mediaType'] == 'image' &&
         (currentDirectory['mediaId'] == null ||
             selectedMedia['mediaId'] != currentDirectory['mediaId'])) {
-      _videoPlayerController = null;
       currentDirectory = selectedMedia;
     }
   }
@@ -331,18 +437,5 @@ class _CustomGalleryState extends State<CustomGallery> {
               (element) => element["mediaId"] == media["mediaId"])) +
           1;
     }
-  }
-
-  initVideoPlayer(var file) {
-    videoIsLoading = true;
-    _videoPlayerController = VideoPlayerController.file(file)
-      ..initialize().then((value) {
-        setState(() {
-          videoIsLoading = false;
-        });
-        _videoPlayerController!.play();
-      });
-
-    flickManager = FlickManager(videoPlayerController: _videoPlayerController!);
   }
 }

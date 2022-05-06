@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:ootopia_app/data/BD/watch_video/watch_video_model.dart';
 import 'package:ootopia_app/data/models/post/post_create_model.dart';
+import 'package:ootopia_app/data/models/post/post_gallery_create_model.dart';
 import 'package:ootopia_app/data/models/timeline/like_post_result_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +20,7 @@ abstract class PostRepository {
   Future<LikePostResult> likePost(String id);
   Future<void> createPost(PostCreate post);
   Future recordWatchedPosts(List<WatchVideoModel> watchedPosts);
-  Future recordTimelineWatched(int timeInMilliseconds);
+  //Future recordTimelineWatched(int timeInMilliseconds);
   Future<TimelinePost> getPostById(String id);
 }
 
@@ -71,8 +72,10 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
 
       queryParams['locale'] = lang;
 
-      final response = await ApiClient.api()
-          .get(dotenv.env['API_URL']! + "posts?", queryParameters: queryParams);
+      final response = await ApiClient.api().get(
+          dotenv.env['API_URL']! + "posts/v2?",
+          queryParameters: queryParams);
+
       if (response.statusCode == 200) {
         return (response.data as List)
             .map((i) => TimelinePost.fromJson(i))
@@ -124,6 +127,41 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     );
   }
 
+  Future sendMedia(String type, File file) async {
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        file.path,
+        filename: fileName,
+      ),
+    });
+    try {
+      final response = await ApiClient.api().post(
+        dotenv.env['API_URL']! + "posts/file",
+        data: formData,
+        queryParameters: {
+          "type": type,
+        },
+      );
+      return response;
+    } catch (e) {
+      print('ERRO $e');
+    }
+  }
+
+  Future sendPost(PostGalleryCreateModel model) async {
+    try {
+      final response = await http.post(
+        Uri.parse(dotenv.env['API_URL']! + "posts/gallery"),
+        body: jsonEncode(model.toJson()),
+        headers: (await this.getHeaders()),
+      );
+      return response;
+    } catch (e) {
+      print('ERRO $e');
+    }
+  }
+
   @override
   Future<String> deletePost(String postId) async {
     try {
@@ -170,24 +208,24 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     }
   }
 
-  @override
-  Future recordTimelineWatched(int timeInMilliseconds) async {
-    try {
-      bool loggedIn = await getUserIsLoggedIn();
-      if (!loggedIn) {
-        return;
-      }
+  // @override
+  // Future recordTimelineWatched(int timeInMilliseconds) async {
+  //   try {
+  //     bool loggedIn = await getUserIsLoggedIn();
+  //     if (!loggedIn) {
+  //       return;
+  //     }
 
-      await ApiClient.api().post(
-        "posts/timeline-watched",
-        data: {
-          "timeInMilliseconds": timeInMilliseconds,
-        },
-      );
-    } catch (e) {
-      print('Error send watched post: $e');
-    }
-  }
+  //     await ApiClient.api().post(
+  //       "posts/timeline-watched",
+  //       data: {
+  //         "timeInMilliseconds": timeInMilliseconds,
+  //       },
+  //     );
+  //   } catch (e) {
+  //     print('Error send watched post: $e');
+  //   }
+  // }
 
   @override
   Future<TimelinePost> getPostById(String id) async {

@@ -37,6 +37,10 @@ enum Page {
   aboutOOzCurrentScreen,
   aboutEthicalMarketPlace,
   addLink,
+  addFriends,
+  viewLinksScreen,
+  circleFriends,
+  productDetails,
 }
 
 extension PageRoute on Page {

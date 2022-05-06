@@ -27,7 +27,7 @@
     "weSentYouALinkToCreateANewPassword": "Nós te enviamos um link referente a solcititação da nova senha para: ",
 
     "regenerationGame": "Jogo de regeneração",
-    "aboutRegenerationGame": "O jogo de regeneração é uma forma de contribuir para o movimento regenerativo por meio do aplicativo OOTOPIA. A Meta Pessoal refere-se à quantidade de tempo que você deseja se envolver no jogo. Todos os dias, uma nova rodada do jogo começa às 20h. Sempre que você atingir sua meta diária, receberá recompensas na moeda OOz.",
+    "aboutRegenerationGame": "O Jogo da Regeneração é uma forma de contribuir para o movimento regenerativo através da aplicação OOTOPIA. Sempre que você criar conteúdos você receberá em OOz.",
     "setTheTimeForYourDailyLearningGoal": "Defina o tempo para sua meta de aprendizado diária:",
     "isNotLearningGoalRating": "Ao definir a meta diária como \"zero\", você não participará do jogo de regeneração - suas atividades não gerarão Ooz (a moeda do jogo)",
     "theDailyGoalChosenWas10MinutesAndIsBeingUsedForTheRegenerationGame" : "A meta diária escolhida foi de %GOAL_CHOSEN% minutos e está sendo usada para o jogo de regeneração.",
@@ -471,9 +471,59 @@
     "readMore" : "Leia mais",
     "multiplesImages": "Múltiplas imagens",
     "limitSelectedImages": "O limite são 5 fotos ou vídeos",
-    "userComment":"%USER_NAME_MARKET% marcou você em um comentário",
-    "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
-    "earnOOzWhenTheySignup":"ganham OOz quando se inscrevem"
+    "selectSomeImage": "Você precisa selecionar uma imagem para continuar",
 
+
+    "addFriends" : "Adicionar amigos",
+    "friend" : "Amigo",
+    "addFriend" : "Adicionar amigo",
+    "remove" : "Remover",
+    "removeFriend" : "Remover amigo",
+    "seeProfile" : "Ver perfil",
+    "searchFriendsMsg" : "Pesquise e adicione pessoas ao seu círculo de amigos",
+    "searchFriends" : "Buscar amigos",
+    "friends" : "Amigos",
+    "orderBy" : "Classificar por:",
+    "alphabeticalOrder" : "Ordem Alfabética",
+    "mostRecent" : "Mais recentes",
+    "older" : "Mais antigos",
+    "userNotFound" : "Usuário não encontrado",
+    "resultsFor" : "Resultados para",
+    "userNotFoundMsg" : "Infelizmente o usuário que você buscou não foi encontrado ou ainda não existe.",
+    "youDontHaveAnyFriends" : "Você não possui nenhum amigo",
+    "youDontHaveAnyFriendsSubtext" : "Clique no botão \"Adicionar amigo\" e se conecte a pessoas que estão fazendo diferença no mundo",
+    "userComment":"Você foi marcado em um comentário",
+    "hasntImageOnGallery": "Esta galeria não possui nenhum arquivo",
+    "earnOOzWhenTheySignup":"ganham OOz quando eles se inscrevem",
+
+
+
+    "viewMoreReply": "Ver mais %amount% resposta",
+    "reply": "Responder",
+    "replyingTo": "Respondendo para %user_name%",
+    "loading": "Carregando...",
+    "hideReplies": "Ocultar respostas",
+    "couldNotSend": "Não foi possivel enviar",
+    "couldNotLoad": "Não foi possivel carregar",
+    "repliedToYourComment": "respondeu seu comentário",
+    "taggedUserInPost": "marcou você numa publicação",
+    "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro",
+    "accessToContact":"Permitir acesso à sua agenda de contatos no seu celular",
+    "discribeAccessToContact":"Ao permitir acesso a sua agenda de contatos o aplicativo irá periodicamente buscar por nomes, telefones e e-mails de pessoas que já estão cadastradas na Ootopia. Dessa forma, o app irá lhe sugerir pessoas que você já conhece para adicionar a sua rede de amigos.",
+    "permittedAccess":"Permitir acesso",
+    "notPermittedAccess":"Não permitir acesso",
+    "search":"Pesquisar",
+    "friendSuggestions":"Sugestões de amigos",
+
+    "addedAsFriend": "adicionou você no círculo de amigos.",
+    "notificationButtonTextOnNewFriend": "Ver perfil",
+    
+    "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro",
+    "joinedOotopia":"Entrou para a Ootopia",
+    "suggestedbyOotopia":"Sugerido pela Ootopia"
 
 }
+
+
+
+

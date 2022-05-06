@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/data/repositories/learning_tracks_repository.dart';
 import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
@@ -16,6 +17,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLinksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -35,10 +37,17 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
   LearningTracksRepositoryImpl learningTracksStore =
       LearningTracksRepositoryImpl();
   MarketplaceRepositoryImpl marketplaceRepository = MarketplaceRepositoryImpl();
-
+  get appBarProfile => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.empty,
+        ],
+        onTapLeading: () => Navigator.pop(context),
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: widget.args.containsKey('displayContacts') ? appBarProfile : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -56,6 +65,9 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                   SizedBox(height: GlobalConstants.of(context).spacingSmall),
                   Text(
                     widget.store.profile!.fullname,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.roboto(
                         color: Theme.of(context).textTheme.subtitle1!.color,
                         fontSize: 24,
@@ -142,19 +154,43 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
     if (_url.contains("market-place/shared/")) {
       ProductModel productModel = await marketplaceRepository
           .getProductById(_url.split('market-place/shared/').last);
-      controller.insertPage(ProductDetailScreen(productModel: productModel));
+      if (widget.args.containsKey('displayContacts')) {
+        Navigator.pushNamed(
+          context,
+          PageRoute.Page.productDetails.route,
+          arguments: {
+            'productModel': productModel,
+            'displayContacts': true,
+          },
+        );
+      } else {
+        controller.insertPage(ProductDetailScreen(productModel: productModel));
+      }
       return;
     }
     if (_url.contains("learning-tracks/shared/")) {
       LearningTracksModel learningTrack = await learningTracksStore
           .getLearningTrackById(_url.split('learning-tracks/shared/').last);
-      controller.insertPage(ViewLearningTracksScreen(
-        {
-          'list_chapters': learningTrack.chapters,
-          'learning_tracks': learningTrack,
-          'updateLearningTrack': () {},
-        },
-      ));
+      if (widget.args.containsKey('displayContacts')) {
+        Navigator.pushNamed(
+          context,
+          PageRoute.Page.viewLearningTracksScreen.route,
+          arguments: {
+            'displayContacts': true,
+            'list_chapters': learningTrack.chapters,
+            'learning_tracks': learningTrack,
+            'updateLearningTrack': () {},
+          },
+        );
+      } else {
+        controller.insertPage(ViewLearningTracksScreen(
+          {
+            'list_chapters': learningTrack.chapters,
+            'learning_tracks': learningTrack,
+            'updateLearningTrack': () {},
+          },
+        ));
+      }
       return;
     }
     if (await canLaunch(_url)) {

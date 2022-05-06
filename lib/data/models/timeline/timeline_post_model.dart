@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ootopia_app/data/models/timeline/media_model.dart';
+import 'package:ootopia_app/data/models/users/user_search_model.dart';
 import './../users/badges_model.dart';
 
 part "timeline_post_model.g.dart";
@@ -11,7 +13,7 @@ class TimelinePost {
   String type;
   String? imageUrl;
   String? videoUrl;
-  String thumbnailUrl;
+  String? thumbnailUrl;
   String? photoUrl;
   String username;
   int likesCount;
@@ -27,6 +29,8 @@ class TimelinePost {
   DateTime? createdAt;
   DateTime? updatedAt;
   List<Badge>? badges;
+  List<Media>? medias;
+  List<UserSearchModel>? usersTagged;
 
   TimelinePost({
     required this.id,
@@ -35,7 +39,7 @@ class TimelinePost {
     required this.type,
     this.imageUrl,
     this.videoUrl,
-    required this.thumbnailUrl,
+    this.thumbnailUrl,
     this.photoUrl,
     required this.username,
     required this.likesCount,
@@ -51,10 +55,13 @@ class TimelinePost {
     this.createdAt,
     this.updatedAt,
     this.badges,
+    this.medias,
+    this.usersTagged,
   });
 
-  factory TimelinePost.fromJson(Map<String, dynamic> json) =>
-      _$TimelinePostFromJson(json);
+  factory TimelinePost.fromJson(Map<String, dynamic> json) {
+    return _$TimelinePostFromJson(json);
+  }
 
   Map<String, dynamic> toJson() => _$TimelinePostToJson(this);
 }
