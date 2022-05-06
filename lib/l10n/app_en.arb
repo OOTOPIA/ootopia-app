@@ -524,6 +524,8 @@
     
     "userNotFoundInTaggedUser":"Check the name entered or enter another",
     "joinedOotopia":"Joined Ootopia",
-    "suggestedbyOotopia":"Suggested by Ootopia"
+    "suggestedbyOotopia":"Suggested by Ootopia",
+
+    "languageUnderstood" : "Language understood"
 
 }

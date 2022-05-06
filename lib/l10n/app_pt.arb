@@ -518,7 +518,9 @@
     
     "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro",
     "joinedOotopia":"Entrou para a Ootopia",
-    "suggestedbyOotopia":"Sugerido pela Ootopia"
+    "suggestedbyOotopia":"Sugerido pela Ootopia",
+
+    "languageUnderstood" : "Idioma compreendido"
 
 }
 
