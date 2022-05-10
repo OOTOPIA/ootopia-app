@@ -99,6 +99,8 @@ class _AddFriendsState extends State<AddFriends> {
                 friendsStore.hasMoreUsersSearch) {
               if (widget.displayContacts) {
                 friendsStore.getMoreUserByContact();
+              } else if (widget.displayModal) {
+                friendsStore.getMoreUserByContactProfile();
               } else {
                 friendsStore.getMoreUserBySearch();
               }
@@ -266,6 +268,7 @@ class _AddFriendsState extends State<AddFriends> {
                               Visibility(
                                   visible:
                                       friendsStore.loadingMoreUsersSearch &&
+                                          friendsStore.hasMoreFriends &&
                                           isLastItem(index),
                                   child: Container(
                                     margin: EdgeInsets.only(top: 16),

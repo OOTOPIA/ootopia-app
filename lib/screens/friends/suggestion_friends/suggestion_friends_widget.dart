@@ -27,7 +27,7 @@ class _SuggestionFriendsState extends State<SuggestionFriends> {
   @override
   void initState() {
     super.initState();
-    widget.friendsStore.sendContactsToApi(true);
+    widget.friendsStore.sendContactsToApiProfile();
   }
 
   @override

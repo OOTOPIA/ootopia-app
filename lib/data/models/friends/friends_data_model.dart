@@ -9,16 +9,10 @@ class FriendsDataModel {
   List<FriendModel?>? alreadyFriends;
   List<FriendModel?>? searchFriends;
 
-  FriendsDataModel({
-    required this.total,
-    this.friends,
-    this.searchFriends
-  });
+  FriendsDataModel({required this.total, this.friends, this.searchFriends});
 
   factory FriendsDataModel.fromJson(Map<String, dynamic> json) =>
       _$FriendsDataModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$FriendsDataModelToJson(this);
 }
-
-

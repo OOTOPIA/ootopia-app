@@ -24,21 +24,31 @@ class FriendsStore with ChangeNotifier {
   int pageContacts = 1;
   List<String> emailContact = [];
   List<String> phoneContact = [];
-  Future<void> sendContactsToApi(bool isSearch) async {
+  Future<void> sendContactsToApi() async {
     isLoadingSearch = true;
     var response = await friendsRepositoryImpl.sendContacts(
       emailContact,
       phoneContact,
       pageContacts,
     );
-    if (isSearch) {
-      suggestionFriends = response;
-      usersSearch = suggestionFriends;
-    } else {
-      usersSearch = response;
-    }
+    usersSearch = suggestionFriends;
     searchIsEmpty = response.friends!.isEmpty;
     hasMoreUsersSearch = usersSearch.friends!.length <= 100;
+    isLoadingSearch = false;
+    notifyListeners();
+  }
+
+  Future<void> sendContactsToApiProfile() async {
+    isLoadingSearch = true;
+    var response = await friendsRepositoryImpl.sendContactsProfile(
+      emailContact,
+      phoneContact,
+      pageContacts,
+    );
+    suggestionFriends = response;
+    usersSearch = response;
+    searchIsEmpty = response.friends!.isEmpty;
+    hasMoreUsersSearch = usersSearch.friends!.length < response.friends!.length;
     isLoadingSearch = false;
     notifyListeners();
   }
@@ -155,6 +165,26 @@ class FriendsStore with ChangeNotifier {
       usersSearch.friends!.addAll(auxUsers.searchFriends!);
       usersSearch.friends = usersSearch.friends!.toSet().toList();
       hasMoreUsersSearch = usersSearch.friends!.length <= 100;
+      loadingMoreUsersSearch = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getMoreUserByContactProfile() async {
+    if (hasMoreUsersSearch) {
+      loadingMoreUsersSearch = true;
+      pageContacts++;
+      FriendsDataModel auxUsers =
+          await friendsRepositoryImpl.sendContactsProfile(
+        emailContact,
+        phoneContact,
+        pageContacts,
+      );
+
+      usersSearch.friends!.addAll(auxUsers.searchFriends!);
+      usersSearch.friends = usersSearch.friends!.toSet().toList();
+      hasMoreUsersSearch =
+          usersSearch.friends!.length < auxUsers.friends!.length;
       loadingMoreUsersSearch = false;
       notifyListeners();
     }

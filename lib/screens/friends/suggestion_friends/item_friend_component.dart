@@ -89,7 +89,7 @@ class ItemFriend extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Text(
-            getIfIsFriend(friend)
+            friend.isContact == true
                 ? AppLocalizations.of(context)!.joinedOotopia
                 : AppLocalizations.of(context)!.suggestedbyOotopia,
             style: TextStyle(
@@ -102,19 +102,6 @@ class ItemFriend extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  bool getIfIsFriend(FriendModel friendModel) {
-    if (friendModel.isFriend == true) {
-      return true;
-    }
-    bool isFriend = false;
-    friendsStore.myFriendsDate.friends?.forEach((element) {
-      if (element!.id == friendModel.id) {
-        isFriend = true;
-      }
-    });
-    return isFriend;
   }
 
   void _goToProfile(userId) async {
