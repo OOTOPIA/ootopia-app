@@ -42,6 +42,9 @@ abstract class EditProfileStoreBase with Store {
   @observable
   List<Link> links = [];
 
+  @observable
+  List<String> languages = [];
+
   @action
   Future<void> updateUser() async {
     isloading = true;
@@ -53,6 +56,7 @@ abstract class EditProfileStoreBase with Store {
     currentUser?.countryCode = countryCode;
     currentUser?.dialCode = dialCode;
     currentUser?.links = links;
+    currentUser?.languages = languages;
 
     if (photoFilePathLocal != null) {
       currentUser?.photoFilePath = photoFilePathLocal;
@@ -113,6 +117,9 @@ abstract class EditProfileStoreBase with Store {
       }
       countryCode = currentUser!.countryCode;
       photoUrl = currentUser!.photoUrl;
+      if (currentUser!.languages != null) {
+        languages = currentUser!.languages!;
+      }
     }
     isloading = false;
   }
