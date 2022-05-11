@@ -117,6 +117,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   @override
   void initState() {
     super.initState();
+    //FirebaseCrashlytics.instance.crash();
     _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
     if (this.post.oozToTransfer == null) {
