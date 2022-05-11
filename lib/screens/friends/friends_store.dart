@@ -24,21 +24,31 @@ class FriendsStore with ChangeNotifier {
   int pageContacts = 1;
   List<String> emailContact = [];
   List<String> phoneContact = [];
-  Future<void> sendContactsToApi(bool isSearch) async {
+  Future<void> sendContactsToApi() async {
     isLoadingSearch = true;
     var response = await friendsRepositoryImpl.sendContacts(
       emailContact,
       phoneContact,
       pageContacts,
     );
-    if (isSearch) {
-      suggestionFriends = response;
-      usersSearch = suggestionFriends;
-    } else {
-      usersSearch = response;
-    }
+    usersSearch = response;
     searchIsEmpty = response.friends!.isEmpty;
     hasMoreUsersSearch = usersSearch.friends!.length <= 100;
+    isLoadingSearch = false;
+    notifyListeners();
+  }
+
+  Future<void> sendContactsToApiProfile() async {
+    isLoadingSearch = true;
+    var response = await friendsRepositoryImpl.sendContactsProfile(
+      emailContact,
+      phoneContact,
+      pageContacts,
+    );
+    suggestionFriends = response;
+    usersSearch = response;
+    searchIsEmpty = response.friends!.isEmpty;
+    hasMoreUsersSearch = usersSearch.friends!.length < response.friends!.length;
     isLoadingSearch = false;
     notifyListeners();
   }
@@ -66,6 +76,8 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<bool> addFriend(FriendModel friend) async {
+    suggestionFriends.friends
+        ?.removeWhere((element) => element?.id == friend.id);
     myFriendsDate.total = (myFriendsDate.total ?? 0) + 1;
     friend.isFriend = true;
     myFriendsDate.friends!.add(friend);
@@ -155,6 +167,26 @@ class FriendsStore with ChangeNotifier {
       usersSearch.friends!.addAll(auxUsers.searchFriends!);
       usersSearch.friends = usersSearch.friends!.toSet().toList();
       hasMoreUsersSearch = usersSearch.friends!.length <= 100;
+      loadingMoreUsersSearch = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getMoreUserByContactProfile() async {
+    if (hasMoreUsersSearch) {
+      loadingMoreUsersSearch = true;
+      pageContacts++;
+      FriendsDataModel auxUsers =
+          await friendsRepositoryImpl.sendContactsProfile(
+        emailContact,
+        phoneContact,
+        pageContacts,
+      );
+
+      usersSearch.friends!.addAll(auxUsers.searchFriends!);
+      usersSearch.friends = usersSearch.friends!.toSet().toList();
+      hasMoreUsersSearch =
+          usersSearch.friends!.length < auxUsers.friends!.length;
       loadingMoreUsersSearch = false;
       notifyListeners();
     }

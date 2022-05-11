@@ -14,6 +14,7 @@ class FriendModel {
   final String? state;
   final String? country;
   bool? isFriend;
+  bool? isContact;
   bool? remove = false;
 
   FriendModel({
@@ -24,23 +25,23 @@ class FriendModel {
     this.city,
     this.state,
     this.isFriend,
-    this.country, });
+    this.country,
+    this.isContact,
+  });
 
-
-  String location(){
-    if((state?.isNotEmpty ?? false) && (country?.isNotEmpty ?? false)){
+  String location() {
+    if ((state?.isNotEmpty ?? false) && (country?.isNotEmpty ?? false)) {
       return '$state - $country';
-    }else  if((state?.isNotEmpty ?? false)){
+    } else if ((state?.isNotEmpty ?? false)) {
       return state!;
-    }else if((country?.isNotEmpty ?? false)){
+    } else if ((country?.isNotEmpty ?? false)) {
       return country!;
     }
     return '';
-
   }
 
-  int amountOfPhotos(){
-    if(friendsThumbs!.length > 4){
+  int amountOfPhotos() {
+    if (friendsThumbs!.length > 4) {
       return 4;
     }
     return friendsThumbs!.length;
@@ -51,5 +52,3 @@ class FriendModel {
 
   Map<String, dynamic> toJson() => _$FriendModelToJson(this);
 }
-
-

@@ -9,8 +9,35 @@ Future<void> askPermissions(
     BuildContext context, FriendsStore store, bool isSearch) async {
   PermissionStatus permission = await Permission.contacts.status;
   final CountryDetails details = CountryCodes.detailsForLocale();
-  if (permission != PermissionStatus.granted &&
-      permission != PermissionStatus.denied &&
+  if (permission == PermissionStatus.granted) {
+    List<Contact> contacts = await ContactsService.getContacts();
+    List<String> sendEmailToApi = [];
+    List<String> sendPhoneToApi = [];
+
+    contacts.forEach((element) {
+      element.emails?.forEach((element) {
+        sendEmailToApi.add(element.value!);
+      });
+
+      element.phones?.forEach((element) {
+        String contact;
+        if (element.value!.contains('+')) {
+          contact = element.value!.replaceAll(' ', '').replaceAll('-', '');
+        } else {
+          contact = details.dialCode! +
+              element.value!.replaceAll(' ', '').replaceAll('-', '');
+        }
+        sendPhoneToApi.add(contact);
+      });
+    });
+    store.emailContact.addAll(sendEmailToApi);
+    store.phoneContact.addAll(sendPhoneToApi);
+    if (isSearch) {
+      store.sendContactsToApiProfile();
+    } else {
+      store.sendContactsToApi();
+    }
+  } else if (permission == PermissionStatus.denied &&
       permission != PermissionStatus.permanentlyDenied) {
     await showDialog(
         context: context,
@@ -37,14 +64,7 @@ Future<void> askPermissions(
                 ),
                 IconButton(
                     onPressed: () async {
-                      PermissionStatus permission =
-                          await Permission.contacts.status;
-
-                      if ((permission == PermissionStatus.permanentlyDenied ||
-                              permission == PermissionStatus.denied) &&
-                          permission != PermissionStatus.granted) {
-                        permission = await Permission.contacts.request();
-                      }
+                      permission = await Permission.contacts.request();
                       Navigator.pop(context);
 
                       if (permission == PermissionStatus.granted &&
@@ -76,10 +96,11 @@ Future<void> askPermissions(
                         });
                         store.emailContact.addAll(sendEmailToApi);
                         store.phoneContact.addAll(sendPhoneToApi);
-
-                        await store.sendContactsToApi(isSearch);
+                      }
+                      if (isSearch) {
+                        store.sendContactsToApiProfile();
                       } else {
-                        await store.sendContactsToApi(isSearch);
+                        await store.sendContactsToApi();
                       }
                     },
                     icon: Icon(Icons.close))
@@ -95,34 +116,5 @@ Future<void> askPermissions(
             ),
           );
         });
-  } else {
-    if (permission == PermissionStatus.granted) {
-      List<Contact> contacts = await ContactsService.getContacts();
-      List<String> sendEmailToApi = [];
-      List<String> sendPhoneToApi = [];
-
-      contacts.forEach((element) {
-        element.emails?.forEach((element) {
-          sendEmailToApi.add(element.value!);
-        });
-
-        element.phones?.forEach((element) {
-          String contact;
-          if (element.value!.contains('+')) {
-            contact = element.value!.replaceAll(' ', '').replaceAll('-', '');
-          } else {
-            contact = details.dialCode! +
-                element.value!.replaceAll(' ', '').replaceAll('-', '');
-          }
-          sendPhoneToApi.add(contact);
-        });
-      });
-      store.emailContact.addAll(sendEmailToApi);
-      store.phoneContact.addAll(sendPhoneToApi);
-
-      await store.sendContactsToApi(isSearch);
-    } else {
-      await store.sendContactsToApi(isSearch);
-    }
   }
 }
