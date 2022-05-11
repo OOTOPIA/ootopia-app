@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/components/select_language/language_select_controller.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 
 class LanguageSelectWidget extends StatefulWidget {
-  final LanguageSelectController languageSelectController =
-      LanguageSelectController();
+  final LanguageSelectController languageSelectController;
   final List<String>? languages;
-  LanguageSelectWidget({Key? key, this.languages}) : super(key: key);
+  LanguageSelectWidget({Key? key, this.languages, required this.languageSelectController}) : super(key: key);
 
   @override
   State<LanguageSelectWidget> createState() => _LanguageSelectWidgetState();

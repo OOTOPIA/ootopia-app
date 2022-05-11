@@ -4,8 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 
 class LanguageUnderstoodWidget extends StatelessWidget {
-  final List flags = [Colors.red, Colors.blue, Colors.green];
-  LanguageUnderstoodWidget({Key? key}) : super(key: key);
+  final List<String>? languages;
+  LanguageUnderstoodWidget({Key? key, this.languages}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class LanguageUnderstoodWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              ...flags.map(languageFlag).toList(),
+              if (languages != null) ...languages!.map(languageFlag).toList(),
             ],
           ),
         ],
@@ -43,15 +43,13 @@ class LanguageUnderstoodWidget extends StatelessWidget {
     );
   }
 
-  Widget languageFlag(dynamic flag) {
+  Widget languageFlag(dynamic lang) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 1),
       height: 24,
       width: 24,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: flag,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle),
+      child: Image.asset('assets/images/${lang}_flag.png'),
     );
   }
 }

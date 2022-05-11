@@ -128,4 +128,8 @@ abstract class EditProfileStoreBase with Store {
   Future<void> getPhoneNumber(String phoneNumber, String codeCountry) async {
     await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, codeCountry);
   }
+
+  updateLanguages(List<String> languagesSelected) {
+    languages = languagesSelected;
+  }
 }

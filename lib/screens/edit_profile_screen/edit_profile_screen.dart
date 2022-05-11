@@ -10,6 +10,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
+import 'package:ootopia_app/screens/components/select_language/language_select_controller.dart';
 import 'package:ootopia_app/screens/components/select_language/language_select_widget.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
@@ -35,6 +36,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late EditProfileStore editProfileStore;
   PhoneNumber? codeCountryPhoneNnumber;
   SmartPageController controller = SmartPageController.getInstance();
+  LanguageSelectController languageSelectController =
+      LanguageSelectController();
   @override
   void initState() {
     super.initState();
@@ -76,6 +79,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             },
             onTapAction: () async {
               if (formKey.currentState!.validate()) {
+                editProfileStore.updateLanguages(languageSelectController.languages);
                 await editProfileStore.updateUser();
                 await profileStore
                     .getProfileDetails(editProfileStore.currentUser!.id!);
@@ -381,6 +385,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           LanguageSelectWidget(
                             key: UniqueKey(),
                             languages: editProfileStore.languages,
+                            languageSelectController: languageSelectController,
                           ),
                           SizedBox(height: 220),
                         ],

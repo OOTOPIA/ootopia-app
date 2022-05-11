@@ -46,6 +46,8 @@ Auth _$AuthFromJson(Map<String, dynamic> json) {
     links: (json['links'] as List<dynamic>?)
         ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
         .toList(),
+    languages:
+        (json['languages'] as List<dynamic>?)?.map((e) => e as String).toList(),
   );
 }
 
@@ -84,4 +86,5 @@ Map<String, dynamic> _$AuthToJson(Auth instance) => <String, dynamic>{
       'updatedAt': instance.updatedAt,
       'badges': instance.badges,
       'links': instance.links,
+      'languages': instance.languages,
     };
