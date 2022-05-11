@@ -268,7 +268,6 @@ class _AddFriendsState extends State<AddFriends> {
                               Visibility(
                                   visible:
                                       friendsStore.loadingMoreUsersSearch &&
-                                          friendsStore.hasMoreFriends &&
                                           isLastItem(index),
                                   child: Container(
                                     margin: EdgeInsets.only(top: 16),

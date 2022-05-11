@@ -40,7 +40,7 @@ abstract class _ProfileScreenStoreBase with Store {
   bool _hasMorePosts = false;
 
   @observable
-  bool? isFriend;
+  bool isFriend = false;
 
   @computed
   int get postsOffset => _postsOffset;
@@ -64,13 +64,12 @@ abstract class _ProfileScreenStoreBase with Store {
   }
 
   @action
-  Future<bool> getIfIsFriend(String userId) async {
-    isFriend =  await friendsRepositoryImpl.getIfIsFriends(userId);
-    return isFriend!;
+  Future<void> getIfIsFriend(String userId) async {
+    isFriend = await friendsRepositoryImpl.getIfIsFriends(userId);
   }
 
   @action
-  cleanPage(){
+  cleanPage() {
     postsList.clear();
     _postsOffset = 0;
   }

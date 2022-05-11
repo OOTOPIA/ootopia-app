@@ -31,7 +31,7 @@ class FriendsStore with ChangeNotifier {
       phoneContact,
       pageContacts,
     );
-    usersSearch = suggestionFriends;
+    usersSearch = response;
     searchIsEmpty = response.friends!.isEmpty;
     hasMoreUsersSearch = usersSearch.friends!.length <= 100;
     isLoadingSearch = false;
@@ -76,6 +76,8 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<bool> addFriend(FriendModel friend) async {
+    suggestionFriends.friends
+        ?.removeWhere((element) => element?.id == friend.id);
     myFriendsDate.total = (myFriendsDate.total ?? 0) + 1;
     friend.isFriend = true;
     myFriendsDate.friends!.add(friend);

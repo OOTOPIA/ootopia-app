@@ -68,11 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     Future.delayed(Duration.zero, () async {
       profileUserId = _getUserId();
-
       if (store != null && profileUserIsLoggedUser) {
         store!.profile = null;
       }
-
       if (!profileUserIsLoggedUser) {
         store = ProfileScreenStore();
         if (authStore.currentUser != null) {
@@ -105,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     store!.cleanPage();
     super.dispose();
   }
@@ -164,7 +162,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -334,18 +331,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       }
                                     });
                                   },
-                                  child: Text(
-                                    store!.isFriend == false
-                                        ? AppLocalizations.of(context)!
-                                            .addFriend
-                                        : AppLocalizations.of(context)!
-                                            .removeFriend,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
+                                  child: Observer(builder: (context) {
+                                    return Text(
+                                      store!.isFriend == false
+                                          ? AppLocalizations.of(context)!
+                                              .addFriend
+                                          : AppLocalizations.of(context)!
+                                              .removeFriend,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  })),
                               SizedBox(
                                 height: 16,
                               )
@@ -371,9 +370,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
-                            if (profileUserIsLoggedUser &&  isLoggedInUserProfile)...[
+                            if (profileUserIsLoggedUser &&
+                                isLoggedInUserProfile) ...[
                               SuggestionFriends(
-                                friendsStore: Provider.of<FriendsStore>(context),
+                                friendsStore:
+                                    Provider.of<FriendsStore>(context),
                                 userId: store!.profile!.id,
                               ),
                             ],
@@ -386,14 +387,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Color(0xff707070).withOpacity(.5),
                               ),
                             ),
-                            if (store != null && store!.postsList.isNotEmpty)...[
+                            if (store != null &&
+                                store!.postsList.isNotEmpty) ...[
                               SizedBox(
                                   height: GlobalConstants.of(context)
                                       .spacingNormal),
                               ProfileAlbumListWidget(),
                               SizedBox(
                                 height:
-                                GlobalConstants.of(context).spacingNormal,
+                                    GlobalConstants.of(context).spacingNormal,
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
@@ -408,85 +410,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
-                            if(store != null && store!.postsList.isNotEmpty)...[
+                            if (store != null &&
+                                store!.postsList.isNotEmpty) ...[
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: GlobalConstants.of(context)
-                                        .screenHorizontalSpace -
+                                            .screenHorizontalSpace -
                                         5), // compensating for the internal spacing of each item
                                 width: double.infinity,
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
-                                  crossAxisAlignment:
-                                  WrapCrossAlignment.start,
+                                  crossAxisAlignment: WrapCrossAlignment.start,
                                   spacing: 10, // gap between adjacent chips
                                   runSpacing: 20, // gap between lines
                                   children: store!.postsList
                                       .asMap()
                                       .map((index, post) {
-                                    return MapEntry(
-                                      index,
-                                      GridCustomWidget(
-                                        discountSpacing: 10 * 3,
-                                        amountPadding: 0,
-                                        thumbnailUrl:
-                                        post.type != 'gallery'
-                                            ? post.thumbnailUrl!
-                                            : post.medias != [] &&
-                                            post.medias!
-                                                .isNotEmpty
-                                            ? post.medias!.first
-                                            .thumbUrl!
-                                            : '',
-                                        columnsCount: 4,
-                                        type: store!.getPostType(post),
-                                        onTap: () {
-                                          if (widget.args != null &&
-                                              widget.args!.containsKey(
-                                                  'isGetContacts')) {
-                                            Navigator.pushNamed(
-                                                context,
-                                                PageRoute
-                                                    .Page
-                                                    .timelineProfileScreen
-                                                    .route,
-                                                arguments: {
-                                                  "displayContacts":
-                                                  true,
-                                                  "userId":
-                                                  _getUserId(),
-                                                  "posts":
-                                                  store!.postsList,
-                                                  "postSelected": index,
-                                                });
-                                          } else {
-                                            store!.goToTimelinePost(
-                                              controller: controller,
-                                              userId: _getUserId(),
-                                              posts: store!.postsList,
-                                              postSelected: index,
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    );
-                                  })
+                                        return MapEntry(
+                                          index,
+                                          GridCustomWidget(
+                                            discountSpacing: 10 * 3,
+                                            amountPadding: 0,
+                                            thumbnailUrl: post.type != 'gallery'
+                                                ? post.thumbnailUrl!
+                                                : post.medias != [] &&
+                                                        post.medias!.isNotEmpty
+                                                    ? post
+                                                        .medias!.first.thumbUrl!
+                                                    : '',
+                                            columnsCount: 4,
+                                            type: store!.getPostType(post),
+                                            onTap: () {
+                                              if (widget.args != null &&
+                                                  widget.args!.containsKey(
+                                                      'isGetContacts')) {
+                                                Navigator.pushNamed(
+                                                    context,
+                                                    PageRoute
+                                                        .Page
+                                                        .timelineProfileScreen
+                                                        .route,
+                                                    arguments: {
+                                                      "displayContacts": true,
+                                                      "userId": _getUserId(),
+                                                      "posts": store!.postsList,
+                                                      "postSelected": index,
+                                                    });
+                                              } else {
+                                                store!.goToTimelinePost(
+                                                  controller: controller,
+                                                  userId: _getUserId(),
+                                                  posts: store!.postsList,
+                                                  postSelected: index,
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      })
                                       .values
                                       .toList(),
                                 ),
                               )
-                            ]else...[
+                            ] else ...[
                               EmptyPostsWidget()
                             ],
-
-                            if(store!.loadingPosts && store!.hasMorePosts)...[
-                                  SizedBox(
-                              width: double.infinity,
-                              height: 90,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
+                            if (store!.loadingPosts && store!.hasMorePosts) ...[
+                              SizedBox(
+                                width: double.infinity,
+                                height: 90,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
                             ],
                             SizedBox(
                                 height: GlobalConstants.of(context)
@@ -515,8 +511,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool get showButton {
-    return !isLoggedInUserProfile &&
-        store?.isFriend != null &&
-        authStore.currentUser != null;
+    return !isLoggedInUserProfile;
   }
 }
