@@ -70,6 +70,12 @@ abstract class _ProfileScreenStoreBase with Store {
   }
 
   @action
+  cleanPage(){
+    postsList.clear();
+    _postsOffset = 0;
+  }
+
+  @action
   Future<Profile?> getProfileDetails(String userId) async {
     loadingProfile = true;
     loadingProfileError = false;

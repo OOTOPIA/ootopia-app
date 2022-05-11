@@ -104,6 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  @override
+  void dispose(){
+    store!.cleanPage();
+    super.dispose();
+  }
+
   String _getUserId() {
     if (widget.args == null || widget.args!["id"] == null) {
       setState(() {
@@ -164,9 +170,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    store = Provider.of<ProfileScreenStore>(context);
-    friendsStore = Provider.of<FriendsStore>(context);
-
+    if (profileUserIsLoggedUser) {
+      store = Provider.of<ProfileScreenStore>(context);
+    } else {
+      friendsStore = Provider.of<FriendsStore>(context);
+    }
     return Scaffold(
       appBar: showAppBar()
           ? appBarProfile
@@ -362,9 +370,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
-                            if (authStore.currentUser!.id == store!.profile!.id)
+                            if (profileUserIsLoggedUser &&  isLoggedInUserProfile)
                               SuggestionFriends(
-                                friendsStore: friendsStore,
+                                friendsStore: Provider.of<FriendsStore>(context),
                                 userId: store!.profile!.id,
                               ),
                             Padding(
