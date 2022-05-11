@@ -4,12 +4,14 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/custom_image.dart';
+import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/folder_dialog.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/toast_message_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/list_folders.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -53,6 +55,11 @@ class _CustomGalleryState extends State<CustomGallery> {
   bool hasMoreMedias = false;
   ScrollController _scrollController = ScrollController();
   ScrollController _scrollControllerMedias = ScrollController();
+
+  ///Use null to show all images
+  MediaPathEntity? currentFolder;
+
+  bool deviceHasImages = false;
 
   @override
   void initState() {
@@ -243,43 +250,96 @@ class _CustomGalleryState extends State<CustomGallery> {
       padding: EdgeInsets.symmetric(
         horizontal: GlobalConstants.of(context).screenHorizontalSpace,
       ),
-      child: GestureDetector(
-        onTap: switchMode,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.multiplesImages,
-              style: GoogleFonts.roboto(
-                color: LightColors.blue,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: selectFolder,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  currentFolder?.name ?? AppLocalizations.of(context)!.all,
+                  style: GoogleFonts.roboto(
+                    color: LightColors.grey,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Icon(
+                  Icons.expand_more,
+                  color: LightColors.grey,
+                ),
+              ],
             ),
-            SizedBox(width: 2),
-            SvgPicture.asset(
-              'assets/icons/multiples_images.svg',
-              height: 18,
-              width: 18,
-            ),
-          ],
-        ),
+          ),
+          GestureDetector(
+              onTap: switchMode,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.multiplesImages,
+                    style: GoogleFonts.roboto(
+                      color: LightColors.blue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(width: 2),
+                  SvgPicture.asset(
+                    'assets/icons/multiples_images.svg',
+                    height: 18,
+                    width: 18,
+                  ),
+                ],
+              )),
+        ],
       ),
     );
   }
 
-  Future<void> getAlbum() async {
+  void selectFolder() async {
+    mediaList.clear();
+    singleMode = true;
+    countPage = 0;
+    final folder = await showFolderModalBottomSheet(context);
+    if (folder != null) {
+      currentFolder = folder;
+    } else {
+      currentFolder = null;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    getAlbum();
+  }
+
+  Future<void> getAlbum([bool firstRun = false]) async {
     Future.delayed(Duration.zero, () async {
       albums = await PhotoManager.getAssetPathList(onlyAll: true);
-      initializeImageList();
+      try {
+        initializeImageList();
+      } catch (e) {
+        if (firstRun) {
+          deviceHasImages = false;
+        } else {
+          rethrow;
+        }
+      }
     });
   }
 
   initializeImageList() async {
     await getImageList(countPage);
 
-    selectedMedias = [mediaList.first];
-    initialMedia(mediaList.first);
+    if (mediaList.length > 0) {
+      selectedMedias = [mediaList.first];
+      initialMedia(mediaList.first);
+    } else {
+      selectedMedias = [];
+    }
 
     setState(() {
       isLoading = false;
@@ -292,8 +352,12 @@ class _CustomGalleryState extends State<CustomGallery> {
     setState(() {});
 
     try {
-      _assetEntityList = await albums.first.getAssetListRange(
-          start: initialPage, end: initialPage + limitMedias);
+      if (currentFolder != null) {
+        _assetEntityList = await currentFolder!
+            .getAssetListRange(0, initialPage + limitMedias);
+      } else
+        _assetEntityList = await albums.first.getAssetListRange(
+            start: initialPage, end: initialPage + limitMedias);
     } catch (e) {
       setState(() {
         hasError = true;
