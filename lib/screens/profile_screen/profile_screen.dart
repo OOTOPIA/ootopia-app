@@ -349,9 +349,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isVisible: isVisible,
                               profileScreenStore: store,
                             ),
-                            LanguageUnderstoodWidget(
-                              languages: store!.profile?.languages,
-                            ),
+                            if (store!.profile?.languages != null)
+                              LanguageUnderstoodWidget(
+                                languages: store!.profile?.languages,
+                              ),
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
