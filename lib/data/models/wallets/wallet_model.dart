@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 class Wallet extends Equatable {
-  String id;
-  String userId;
-  double totalBalance;
-  String createdAt;
-  String updatedAt;
+  final String id;
+  final String userId;
+  final double totalBalance;
+  final String createdAt;
+  final String updatedAt;
 
   Wallet({
     required this.id,

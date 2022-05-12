@@ -99,6 +99,8 @@ class _AddFriendsState extends State<AddFriends> {
                 friendsStore.hasMoreUsersSearch) {
               if (widget.displayContacts) {
                 friendsStore.getMoreUserByContact();
+              } else if (widget.displayModal) {
+                friendsStore.getMoreUserByContactProfile();
               } else {
                 friendsStore.getMoreUserBySearch();
               }

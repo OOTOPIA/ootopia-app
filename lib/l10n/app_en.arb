@@ -526,6 +526,13 @@
     
     "userNotFoundInTaggedUser":"Check the name entered or enter another",
     "joinedOotopia":"Joined Ootopia",
-    "suggestedbyOotopia":"Suggested by Ootopia"
+    "suggestedbyOotopia":"Suggested by Ootopia",
+
+    "languageUnderstood" : "Language understood",
+    "accessOthersLanguages": "Do you want access to content in other languages?",
+    "selecLanguages": "Select the ones you prefer.",
+    "portuguese": "Portuguese",
+    "english": "English",
+    "french": "French"
 
 }

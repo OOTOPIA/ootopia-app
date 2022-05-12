@@ -5,6 +5,8 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/photo_edit.dart';
+import 'package:ootopia_app/screens/components/select_language/language_select_controller.dart';
+import 'package:ootopia_app/screens/components/select_language/language_select_widget.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -30,6 +32,8 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
       RegisterSecondPhaseController.getInstance();
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   SmartPageController pageController = SmartPageController.getInstance();
+  LanguageSelectController languageSelectController =
+      LanguageSelectController();
 
   @override
   void initState() {
@@ -338,9 +342,12 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 24,
+                                SizedBox(height: 24),
+                                LanguageSelectWidget(
+                                  languageSelectController:
+                                      languageSelectController,
                                 ),
+                                SizedBox(height: 16),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -545,6 +552,7 @@ class _RegisterPhoneNumberScreenState extends State<RegisterPhoneNumberScreen> {
                                   ),
                                   onPressed: registerController.firstStepIsValid()
                                       ? () {
+                                        registerController.languages = languageSelectController.languages;
                                           registerController
                                               .setBirthDateAndCountryCode();
                                           this

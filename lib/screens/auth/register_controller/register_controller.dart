@@ -47,6 +47,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
   TextEditingController bioController = TextEditingController();
   TextEditingController cellPhoneController = TextEditingController();
   List<lk.Link> links = [];
+  List<String> languages = [];
 
   //Step 04
   TextEditingController geolocationController = TextEditingController();
@@ -275,6 +276,7 @@ class RegisterSecondPhaseController with SecureStoreMixin {
       photoFilePath: photoFilePath,
       registerPhase: 2,
       links: links,
+      languages: languages,
     );
 
     List<String> tagsIds = selectedTags.map((e) => e.id).toList();
