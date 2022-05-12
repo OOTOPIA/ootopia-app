@@ -346,9 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     );
                                   })),
-                              SizedBox(
-                                height: 16,
-                              )
+                              SizedBox(height: 16)
                             ],
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
