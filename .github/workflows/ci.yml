@@ -26,6 +26,7 @@ jobs:
         run: 'sed -i "s/version: 0.1.23+28/version: 0.1.23+$GITHUB_RUN_NUMBER/1" pubspec.yaml'
       - uses: subosito/flutter-action@v1
         with:
+          flutter-version: '2.10.5'
           channel: "stable"
       - run: flutter pub get
       - run: flutter clean
