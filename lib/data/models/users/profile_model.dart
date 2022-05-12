@@ -14,6 +14,7 @@ class Profile extends Equatable {
   int? globalTrophyQuantity;
   int? totalTrophyQuantity;
   List<Link>? links;
+  List<String>? languages;
 
   Profile({
     required this.id,
@@ -27,6 +28,7 @@ class Profile extends Equatable {
     this.globalTrophyQuantity,
     this.totalTrophyQuantity,
     this.links,
+    this.languages,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
@@ -64,8 +66,11 @@ class Profile extends Equatable {
       links: (json['links'] == null
           ? []
           : (json['links'] as List<dynamic>)
-          .map((e) => Link.fromJson(e as Map<String, dynamic>))
-          .toList()),
+              .map((e) => Link.fromJson(e as Map<String, dynamic>))
+              .toList()),
+      languages: json["languages"] == null
+          ? null
+          : List<String>.from(json["languages"].map((x) => x)),
     );
   }
 
@@ -81,5 +86,6 @@ class Profile extends Equatable {
         cityTrophyQuantity,
         globalTrophyQuantity,
         totalTrophyQuantity,
+        languages,
       ];
 }

@@ -100,6 +100,21 @@ mixin _$EditProfileStore on EditProfileStoreBase, Store {
     });
   }
 
+  final _$languagesAtom = Atom(name: 'EditProfileStoreBase.languages');
+
+  @override
+  List<String> get languages {
+    _$languagesAtom.reportRead();
+    return super.languages;
+  }
+
+  @override
+  set languages(List<String> value) {
+    _$languagesAtom.reportWrite(value, super.languages, () {
+      super.languages = value;
+    });
+  }
+
   final _$updateUserAsyncAction =
       AsyncAction('EditProfileStoreBase.updateUser');
 
@@ -132,7 +147,8 @@ validCellPhone: ${validCellPhone},
 countryCode: ${countryCode},
 dialCode: ${dialCode},
 currentUser: ${currentUser},
-links: ${links}
+links: ${links},
+languages: ${languages}
     ''';
   }
 }

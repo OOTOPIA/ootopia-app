@@ -36,39 +36,42 @@ class User extends Equatable {
   String? countryCode;
   String? dialCode;
   List<Link>? links;
+  List<String>? languages;
 
-  User(
-      {this.id,
-      this.fullname,
-      this.email,
-      this.invitationCode,
-      this.birthdate,
-      this.photoUrl,
-      this.addressCountryCode,
-      this.addressState,
-      this.addressCity,
-      this.addressLatitude,
-      this.addressLongitude,
-      this.dailyLearningGoalInMinutes,
-      this.enableSustainableAds,
-      this.dontAskAgainToConfirmGratitudeReward,
-      this.registerPhase,
-      this.token,
-      this.createdAt,
-      this.updatedAt,
-      this.badges,
-      this.personalDialogOpened,
-      this.cityDialogOpened,
-      this.globalDialogOpened,
-      this.personalTrophyQuantity,
-      this.cityTrophyQuantity,
-      this.globalTrophyQuantity,
-      this.totalTrophyQuantity,
-      this.bio,
-      this.phone,
-      this.countryCode,
-      this.dialCode,
-      this.links});
+  User({
+    this.id,
+    this.fullname,
+    this.email,
+    this.invitationCode,
+    this.birthdate,
+    this.photoUrl,
+    this.addressCountryCode,
+    this.addressState,
+    this.addressCity,
+    this.addressLatitude,
+    this.addressLongitude,
+    this.dailyLearningGoalInMinutes,
+    this.enableSustainableAds,
+    this.dontAskAgainToConfirmGratitudeReward,
+    this.registerPhase,
+    this.token,
+    this.createdAt,
+    this.updatedAt,
+    this.badges,
+    this.personalDialogOpened,
+    this.cityDialogOpened,
+    this.globalDialogOpened,
+    this.personalTrophyQuantity,
+    this.cityTrophyQuantity,
+    this.globalTrophyQuantity,
+    this.totalTrophyQuantity,
+    this.bio,
+    this.phone,
+    this.countryCode,
+    this.dialCode,
+    this.links,
+    this.languages,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -150,6 +153,9 @@ class User extends Equatable {
               .map((e) =>
                   Link.fromJson(e.runtimeType == String ? js.jsonDecode(e) : e))
               .toList()),
+      languages: json["languages"] == null
+          ? null
+          : List<String>.from(json["languages"].map((x) => x)),
     );
   }
 
@@ -182,6 +188,7 @@ class User extends Equatable {
         'countryCode': countryCode,
         'dialCode': dialCode,
         'links': links,
+        'languages': languages,
       };
 
   @override
@@ -216,5 +223,6 @@ class User extends Equatable {
         phone,
         dialCode,
         links,
+        languages,
       ];
 }

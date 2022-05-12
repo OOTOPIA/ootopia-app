@@ -13,6 +13,7 @@ import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/friends/suggestion_friends/suggestion_friends_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/components/language_understood_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
@@ -355,6 +356,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             LocationProfileInfoWidget(
                               isVisible: isVisible,
                               profileScreenStore: store,
+                            ),
+                            if (store!.profile?.languages != null)
+                              LanguageUnderstoodWidget(
+                                languages: store!.profile?.languages,
+                              ),
+                            SizedBox(
+                              height: GlobalConstants.of(context).spacingNormal,
                             ),
                             if (isLoggedInUserProfile) ...[
                               WalletBarWidget(
