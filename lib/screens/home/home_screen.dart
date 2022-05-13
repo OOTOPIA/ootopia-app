@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
       initialPages: [
         TimelinePage(null),
         LearningTracksScreen(),
-        VAZIO(),
+        Empty(),
         MarketplaceScreen(),
         ProfileScreen(null),
       ],
@@ -756,15 +756,15 @@ class _HomeScreenState extends State<HomeScreen>
 
 
 
-class VAZIO extends StatefulWidget {
+class Empty extends StatefulWidget {
   final Widget? child;
-  const VAZIO({Key? key, this.child}) : super(key: key);
+  const Empty({Key? key, this.child}) : super(key: key);
 
   @override
-  _VAZIOState createState() => _VAZIOState();
+  _EmptyState createState() => _EmptyState();
 }
 
-class _VAZIOState extends State<VAZIO> {
+class _EmptyState extends State<Empty> {
 
 
   @override
