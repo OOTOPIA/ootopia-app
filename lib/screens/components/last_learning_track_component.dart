@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
-import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -22,18 +20,15 @@ class _LastLearningTrackComponentsState
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
-  late AuthStore authStore;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      learningTracksStore.getLastLearningTracks();
-    });
+    learningTracksStore.getLastLearningTracks();
   }
 
   @override
   Widget build(BuildContext context) {
-    authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (_) {
       if (learningTracksStore.lastLearningTracks == null) {
         return Container();
