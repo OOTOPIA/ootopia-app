@@ -39,6 +39,7 @@ class Auth {
   String? updatedAt;
   List<Badge>? badges;
   List<Link>? links;
+  List<String>? languages;
 
   Auth(
       {this.id,
@@ -73,7 +74,9 @@ class Auth {
       this.createdAt,
       this.updatedAt,
       List<Badge>? badges,
-      this.links});
+      this.links,
+      this.languages,
+      });
 
   factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
   Map<String, dynamic> toJson() => _$AuthToJson(this);

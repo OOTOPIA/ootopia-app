@@ -131,6 +131,32 @@ class FriendsRepositoryImpl implements FriendsRepository {
     }
   }
 
+  Future<FriendsDataModel> sendContactsProfile(
+    List<String> emailContact,
+    List<String> phoneContact,
+    int page,
+  ) async {
+    try {
+      final response = await ApiClient.api().post(
+        dotenv.env['API_URL']! + "users/friends-suggested-profile",
+        data: {
+          'importedContactEmails': emailContact,
+          'importedContactNumbers': phoneContact,
+          'limit': 100,
+          'page': page,
+        },
+      );
+      if (response.statusCode == 200) {
+        return FriendsDataModel.fromJson(response.data);
+      } else {
+        return throw Exception('Failed to load friends');
+      }
+    } catch (error) {
+      print('error: $error');
+      return throw Exception('Failed to load friends');
+    }
+  }
+
   Future<bool> removeFriend(String userId) async {
     try {
       final response = await ApiClient.api().delete(

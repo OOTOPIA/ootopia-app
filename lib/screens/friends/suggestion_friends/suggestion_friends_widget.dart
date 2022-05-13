@@ -27,7 +27,7 @@ class _SuggestionFriendsState extends State<SuggestionFriends> {
   @override
   void initState() {
     super.initState();
-    widget.friendsStore.sendContactsToApi(true);
+    widget.friendsStore.sendContactsToApiProfile();
   }
 
   @override
@@ -114,7 +114,7 @@ class _SuggestionFriendsState extends State<SuggestionFriends> {
                 children: [
                   buttonToSuggestionFriends(),
                   Row(
-                    children: widget.friendsStore.suggestionFriends.friends!
+                    children: friendsStore.suggestionFriends.friends!
                         .map((e) => ItemFriend(
                               friend: e!,
                               friendsStore: widget.friendsStore,

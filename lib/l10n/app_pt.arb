@@ -520,7 +520,14 @@
     
     "userNotFoundInTaggedUser":"Verifique o nome digitado ou digite outro",
     "joinedOotopia":"Entrou para a Ootopia",
-    "suggestedbyOotopia":"Sugerido pela Ootopia"
+    "suggestedbyOotopia":"Sugerido pela Ootopia",
+
+    "languageUnderstood" : "Idioma compreendido",
+    "accessOthersLanguages": "Você quer ter acesso a conteúdos em outros idiomas?",
+    "selecLanguages": "Selecione os de sua preferência.",
+    "portuguese": "Português",
+    "english": "Inglês",
+    "french": "Francês"
 
 }
 

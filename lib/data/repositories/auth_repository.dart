@@ -97,6 +97,8 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
         "tagsIds": tagsIds!.join(","),
         "registerPhase": user.registerPhase.toString(),
         "links": user.links!.length > 0 ? jsonEncode(user.links!) : null,
+        "languages":
+            user.languages!.length > 0 ? user.languages!.join(",") : '',
       };
       final jsonData;
       if (user.photoFilePath != null) {

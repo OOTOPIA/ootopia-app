@@ -159,13 +159,13 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
   final _$isFriendAtom = Atom(name: '_ProfileScreenStoreBase.isFriend');
 
   @override
-  bool? get isFriend {
+  bool get isFriend {
     _$isFriendAtom.reportRead();
     return super.isFriend;
   }
 
   @override
-  set isFriend(bool? value) {
+  set isFriend(bool value) {
     _$isFriendAtom.reportWrite(value, super.isFriend, () {
       super.isFriend = value;
     });
@@ -191,7 +191,7 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
       AsyncAction('_ProfileScreenStoreBase.getIfIsFriend');
 
   @override
-  Future<bool> getIfIsFriend(String userId) {
+  Future<void> getIfIsFriend(String userId) {
     return _$getIfIsFriendAsyncAction.run(() => super.getIfIsFriend(userId));
   }
 
