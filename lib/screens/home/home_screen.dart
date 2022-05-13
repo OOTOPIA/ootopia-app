@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
       initialPages: [
         TimelinePage(null),
         LearningTracksScreen(),
-        LearningTracksScreen(),
+        VAZIO(),
         MarketplaceScreen(),
         ProfileScreen(null),
       ],
@@ -753,3 +753,29 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 }
+
+
+
+class VAZIO extends StatefulWidget {
+  final Widget? child;
+  const VAZIO({Key? key, this.child}) : super(key: key);
+
+  @override
+  _VAZIOState createState() => _VAZIOState();
+}
+
+class _VAZIOState extends State<VAZIO> {
+
+
+  @override
+  void dispose() {
+    print('dispose');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child != null ? widget.child!: Container();
+  }
+}
+
