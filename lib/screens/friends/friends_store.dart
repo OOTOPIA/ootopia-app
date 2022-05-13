@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -10,18 +11,50 @@ class FriendsStore with ChangeNotifier {
   bool isLoading = false;
   int page = 0;
   final int limit = 40;
-  FriendsDataModel? myFriendsDate;
+  FriendsDataModel myFriendsDate = FriendsDataModel(
+    total: 0,
+    friends: [],
+    searchFriends: [],
+  );
+  FriendsDataModel suggestionFriends = FriendsDataModel(
+    total: 0,
+    friends: [],
+    searchFriends: [],
+  );
+  int pageContacts = 1;
+  List<String> emailContact = [];
+  List<String> phoneContact = [];
+  Future<void> sendContactsToApi(bool isSearch) async {
+    isLoadingSearch = true;
+    var response = await friendsRepositoryImpl.sendContacts(
+      emailContact,
+      phoneContact,
+      pageContacts,
+    );
+    if (isSearch) {
+      suggestionFriends = response;
+      usersSearch = suggestionFriends;
+    } else {
+      usersSearch = response;
+    }
+    searchIsEmpty = response.friends!.isEmpty;
+    hasMoreUsersSearch = usersSearch.friends!.length <= 100;
+    isLoadingSearch = false;
+    notifyListeners();
+  }
 
-  Future<void> getRandomFriends(String userId) async{
+  Future<void> getRandomFriends(String userId) async {
     isLoading = true;
     notifyListeners();
-    List<String> listOrderBy = ['name','created'];
-    List<String> listSortingType = ['asc','desc'];
+    List<String> listOrderBy = ['name', 'created'];
+    List<String> listSortingType = ['asc', 'desc'];
     Random random = new Random();
 
-    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.
-    getFriendsWhenIsLogged(
-      userId, 0, limit,
+    FriendsDataModel friendsDateAux =
+        await friendsRepositoryImpl.getFriendsWhenIsLogged(
+      userId,
+      0,
+      limit,
       orderBy: listOrderBy[random.nextInt(2)],
       sortingType: listSortingType[random.nextInt(2)],
     );
@@ -33,32 +66,27 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<bool> addFriend(FriendModel friend) async {
-    if(myFriendsDate != null) {
-      myFriendsDate!.total = (myFriendsDate?.total ?? 0) + 1;
-      myFriendsDate!.friends!.add(friend);
-    }
-
-    if(friendsDate != null){
-      friendsDate!.total = (friendsDate?.total ?? 0) + 1;
-      friendsDate!.friends!.add(friend);
-    }
+    myFriendsDate.total = (myFriendsDate.total ?? 0) + 1;
+    friend.isFriend = true;
+    myFriendsDate.friends!.add(friend);
+    friendsDate.total = (friendsDate.total ?? 0) + 1;
+    friend.isFriend = true;
+    friendsDate.friends!.add(friend);
+    var response = await friendsRepositoryImpl.addFriend(friend.id);
     notifyListeners();
-    return await friendsRepositoryImpl.addFriend(friend.id);
+    return response;
   }
 
   Future<bool> removeFriend(FriendModel friend, userLoggedId) async {
-    if(friendsDate != null){
-      int index = friendsDate!.friends!.indexWhere((element) => element?.id == friend.id);
-      friendsDate!.friends![index]!.remove = true;
-      friendsDate!.total = friendsDate!.total! - 1;
-    }
+    int index =
+        friendsDate.friends!.indexWhere((element) => element?.id == friend.id);
+    friendsDate.friends![index]!.remove = true;
+    friendsDate.total = friendsDate.total! - 1;
 
-    if(myFriendsDate != null){
-      myFriendsDate!.total = (myFriendsDate?.total ?? 0) - 1;
-      myFriendsDate!.friends!.removeWhere((element) => element!.id == friend.id);
-    }
+    myFriendsDate.total = (myFriendsDate.total ?? 0) - 1;
+    myFriendsDate.friends!.removeWhere((element) => element!.id == friend.id);
 
-    if(hasMoreFriends && !loadingMoreFriends && orderBy!= null){
+    if (hasMoreFriends && !loadingMoreFriends && orderBy != null) {
       getMoreFriends(userLoggedId);
     }
 
@@ -66,7 +94,6 @@ class FriendsStore with ChangeNotifier {
 
     return await friendsRepositoryImpl.removeFriend(friend.id);
   }
-
 
   //SEARCH PAGE
   FriendsDataModel usersSearch = FriendsDataModel(total: 0, friends: []);
@@ -89,18 +116,19 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<void> searchNewName(String name) async {
-    if (name.replaceAll(' ', '').isNotEmpty ) {
+    if (name.replaceAll(' ', '').isNotEmpty) {
       FocusManager.instance.primaryFocus?.unfocus();
       isLoadingSearch = true;
       notifyListeners();
       pageSearch = 0;
       usersSearch = FriendsDataModel(total: 0, friends: []);
       lastName = name;
-      usersSearch = await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
+      usersSearch =
+          await friendsRepositoryImpl.searchFriends(name, pageSearch, limit);
       usersSearch.friends = [];
 
-      if (usersSearch.alreadyFriends != null){
-        usersSearch.friends!.addAll( usersSearch.alreadyFriends!);
+      if (usersSearch.alreadyFriends != null) {
+        usersSearch.friends!.addAll(usersSearch.alreadyFriends!);
         usersSearch.friends!.forEach((element) {
           element?.isFriend = true;
         });
@@ -109,21 +137,38 @@ class FriendsStore with ChangeNotifier {
 
       searchIsEmpty = usersSearch.friends!.isEmpty;
       hasMoreUsersSearch = usersSearch.friends!.length < usersSearch.total!;
-      usersSearch.friends =  usersSearch.friends!.toSet().toList();
+      usersSearch.friends = usersSearch.friends!.toSet().toList();
       isLoadingSearch = false;
       notifyListeners();
     }
   }
 
+  Future<void> getMoreUserByContact() async {
+    if (hasMoreUsersSearch) {
+      loadingMoreUsersSearch = true;
+      pageContacts++;
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.sendContacts(
+        emailContact,
+        phoneContact,
+        pageContacts,
+      );
+      usersSearch.friends!.addAll(auxUsers.searchFriends!);
+      usersSearch.friends = usersSearch.friends!.toSet().toList();
+      hasMoreUsersSearch = usersSearch.friends!.length <= 100;
+      loadingMoreUsersSearch = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> getMoreUserBySearch() async {
-    if(hasMoreUsersSearch && lastName.isNotEmpty) {
+    if (hasMoreUsersSearch && lastName.isNotEmpty) {
       loadingMoreUsersSearch = true;
       notifyListeners();
       pageSearch++;
-      FriendsDataModel auxUsers = await friendsRepositoryImpl.
-      searchFriends(lastName, pageSearch, limit);
+      FriendsDataModel auxUsers = await friendsRepositoryImpl.searchFriends(
+          lastName, pageSearch, limit);
       usersSearch.friends!.addAll(auxUsers.searchFriends!);
-      usersSearch.friends =  usersSearch.friends!.toSet().toList();
+      usersSearch.friends = usersSearch.friends!.toSet().toList();
       loadingMoreUsersSearch = false;
       hasMoreUsersSearch = usersSearch.friends!.length < usersSearch.total!;
       notifyListeners();
@@ -134,9 +179,10 @@ class FriendsStore with ChangeNotifier {
   //GET ALL FRIEND BY USER LOGGED
   String? orderBy;
   String? sortingType;
-  List<String> listOrderBy = ['name','created'];
-  List<String> listSortingType = ['asc','desc'];
-  FriendsDataModel? friendsDate;
+  List<String> listOrderBy = ['name', 'created'];
+  List<String> listSortingType = ['asc', 'desc'];
+  FriendsDataModel friendsDate =
+      FriendsDataModel(total: 0, friends: [], searchFriends: []);
   bool hasMoreFriends = true;
   bool loadingMoreFriends = false;
   bool isLoadingGetAllFriends = false;
@@ -148,13 +194,19 @@ class FriendsStore with ChangeNotifier {
     getFriends(userId);
   }
 
-  Future<void> getFriends(String userId) async{
+  Future<void> getFriends(String userId) async {
     isLoadingGetAllFriends = true;
     notifyListeners();
-    friendsDate?.friends = [];
+    friendsDate.friends = [];
     page = 0;
-    FriendsDataModel friendsDateAux = await friendsRepositoryImpl.getFriendsWhenIsLogged(
-      userId, page, limit, orderBy: orderBy!, sortingType: sortingType!,);
+    FriendsDataModel friendsDateAux =
+        await friendsRepositoryImpl.getFriendsWhenIsLogged(
+      userId,
+      page,
+      limit,
+      orderBy: orderBy!,
+      sortingType: sortingType!,
+    );
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
     isLoadingGetAllFriends = false;
@@ -162,31 +214,36 @@ class FriendsStore with ChangeNotifier {
   }
 
   Future<void> getMoreFriends(userId) async {
-    if(hasMoreFriends) {
+    if (hasMoreFriends) {
       loadingMoreFriends = true;
       notifyListeners();
       page++;
-      FriendsDataModel auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged(
-        userId, page, limit, orderBy: orderBy!, sortingType: sortingType!,);
-      friendsDate!.friends!.addAll(auxUsers.friends!);
-      friendsDate!.friends =  friendsDate!.friends!.toSet().toList();
+      FriendsDataModel auxUsers =
+          await friendsRepositoryImpl.getFriendsWhenIsLogged(
+        userId,
+        page,
+        limit,
+        orderBy: orderBy!,
+        sortingType: sortingType!,
+      );
+      friendsDate.friends!.addAll(auxUsers.friends!);
+      friendsDate.friends = friendsDate.friends!.toSet().toList();
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;
       notifyListeners();
     }
   }
 
-  void changeOrderBy(int index){
-    if(index == 0){
+  void changeOrderBy(int index) {
+    if (index == 0) {
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
-    }else if(index == 1){
+    } else if (index == 1) {
       orderBy = listOrderBy[1];
       sortingType = listSortingType[1];
-    }else{
+    } else {
       orderBy = listOrderBy[1];
       sortingType = listSortingType[0];
     }
   }
-
 }

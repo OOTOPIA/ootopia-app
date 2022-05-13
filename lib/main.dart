@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:awesome_notifications/awesome_notifications.dart'
     as awesomeNotification;
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,6 @@ import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_m
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
 import 'package:ootopia_app/screens/auth/login_screen.dart';
-import 'package:ootopia_app/screens/auth/register_daily_learning_goal_screen.dart';
 import 'package:ootopia_app/screens/auth/register_geolocation.dart';
 import 'package:ootopia_app/screens/auth/register_phone_number.dart';
 import 'package:ootopia_app/screens/auth/register_top_interests.dart';
@@ -35,13 +35,18 @@ import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart'
 import 'package:ootopia_app/screens/chat_with_users/chat_with_users_screen.dart';
 import 'package:ootopia_app/screens/create_categories/create_categories_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/add_link/add_link_screen.dart';
+import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/initial_screen.dart';
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_store.dart';
+import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
+import 'package:ootopia_app/screens/friends/circle_friends_page/circle_friends_page.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/about_quiz_screen.dart';
+import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
+import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/ooz_current/ooz_current_page.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
@@ -88,7 +93,7 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   //FlutterBackgroundService.initialize(onStartService);
-
+  await CountryCodes.init();
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
     flavorName: 'production',
@@ -374,8 +379,8 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.registerFormScreen: (args) => RegisterFormScreen(args),
     PageRoute.Page.registerPhoneNumberScreen: (args) =>
         RegisterPhoneNumberScreen(args),
-    PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
-        RegisterDailyLearningGoalScreen(args),
+    // PageRoute.Page.registerDailyLearningGoalScreen: (args) =>
+    //     RegisterDailyLearningGoalScreen(args),
     PageRoute.Page.registerGeolocationScreen: (args) =>
         RegisterGeolocationScreen(args),
     PageRoute.Page.registerTopInterestsScreen: (args) =>
@@ -412,6 +417,21 @@ class _mainPageState extends State<MainPage> {
     PageRoute.Page.aboutOOzCurrentScreen: (args) => AboutOOzCurrentScreen(),
     PageRoute.Page.aboutEthicalMarketPlace: (args) => AboutEthicalMarketPlace(),
     PageRoute.Page.addLink: (args) => AddLinkScreen(args),
+    PageRoute.Page.addFriends: (args) => AddFriends(
+          displayContacts: true,
+          arguments: args,
+        ),
+    PageRoute.Page.viewLinksScreen: (args) => ViewLinksScreen(args),
+    PageRoute.Page.circleFriends: (args) => CircleOfFriendPage(
+          userId: args['id'],
+          displayContacts: true,
+        ),
+    PageRoute.Page.productDetails: (args) => ProductDetailScreen(
+          productModel: args['productModel'],
+          displayContacts: args['displayContacts'],
+        ),
+    PageRoute.Page.viewLearningTracksScreen: (args) =>
+        ViewLearningTracksScreen(args)
   };
 
   SharedExperienceService sharedExperienceService =

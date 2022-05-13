@@ -35,7 +35,7 @@
 
 
     "regenerationGame": "Regeneration game",
-    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to regenerative movement through the OOTOPIA app. Personal Goal refers to the amount of time you want to engage in the game. Every day, a new round of the game starts at 20h. Everytime you meet your daily goal, you receive rewards in OOz currency.",
+    "aboutRegenerationGame": "The Regeneration Game is a way to contribute to the regenerative movement through the OOTOPIA application. Whenever you create content you will receive it in OOz.",
     "setTheTimeForYourDailyLearningGoal": "Set the time for your daily learning goal:",
     "isNotLearningGoalRating": "By setting the daily goal to \"zero\" you will not participate in the regeneration game - your activities will not generate Ooz (the game currency)",
     "confirm": "Confirm",
@@ -462,6 +462,8 @@
     "yourOOZWallet" : "OOz Wallet",
     "giveYourOpinion" : "Give your opinion about the app",
     "itIsVeryImportant" : "It is very important to us!",
+    "forumAccess": "Forum Access",
+    "ootWeb3AndMore": "OOTOPIA, Web3 and more",
 
     "notificationTitleOOzReceived": "You received %OOZ_RECEIVED% OOz!", 
     "notificationBodyOOzReceivedByOnePerson": "%USER_NAME% sent you a gratitude reward for your post.",
@@ -510,11 +512,20 @@
     "couldNotLoad": "Could not load",
     "repliedToYourComment": "replied to your comment",
     "taggedUserInPost": "tagged you in a post",
+    "userNotFoundInTaggedUser":"Check the name entered or enter another",
+    "accessToContact":"Allow access to your address book on your mobile",
+    "discribeAccessToContact":"By allowing access to your address book, the application will periodically search for names, telephone numbers and e-mails of people who are already registered in Ootopia. That way, the app will suggest people you already know to add to your network of friends.",
+    "permittedAccess":"Allow access",
+    "notPermittedAccess":"Do not allow access",
+    "search":"Search",
+    "friendSuggestions":"Friend suggestions",
+
 
     "addedAsFriend": "added you to the circle of friends.",
     "notificationButtonTextOnNewFriend": "Open profile",
     
-    "userNotFoundInTaggedUser":"Check the name entered or enter another"
+    "userNotFoundInTaggedUser":"Check the name entered or enter another",
+    "joinedOotopia":"Joined Ootopia",
+    "suggestedbyOotopia":"Suggested by Ootopia"
 
-    
 }

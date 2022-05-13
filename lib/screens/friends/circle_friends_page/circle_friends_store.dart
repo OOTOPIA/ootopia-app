@@ -8,10 +8,14 @@ class CircleFriendsStore = CircleFriendsStoreBase with _$CircleFriendsStore;
 
 abstract class CircleFriendsStoreBase with Store {
   FriendsRepositoryImpl friendsRepositoryImpl = FriendsRepositoryImpl();
-  List<String> listOrderBy = ['name','created'];
-  List<String> listSortingType = ['asc','desc'];
+  List<String> listOrderBy = ['name', 'created'];
+  List<String> listSortingType = ['asc', 'desc'];
   @observable
-  FriendsDataModel? friendsDate;
+  FriendsDataModel friendsDate = FriendsDataModel(
+    total: 0,
+    friends: [],
+    searchFriends: [],
+  );
 
   @observable
   bool isLoading = false;
@@ -35,7 +39,7 @@ abstract class CircleFriendsStoreBase with Store {
 
   @action
   void init(String userId, bool userLogged) {
-    if(orderBy == null){
+    if (orderBy == null) {
       this.userLogged = userLogged;
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
@@ -46,15 +50,17 @@ abstract class CircleFriendsStoreBase with Store {
   @action
   Future<void> getFriends(String userId) async {
     isLoading = true;
-    friendsDate?.friends = [];
+    friendsDate.friends = [];
     page = 0;
     late FriendsDataModel friendsDateAux;
     if (userLogged) {
       friendsDateAux = await friendsRepositoryImpl.getFriendsWhenIsLogged(
-          userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
-    } else{
+          userId, page, limit,
+          orderBy: orderBy!, sortingType: sortingType!);
+    } else {
       friendsDateAux = await friendsRepositoryImpl.getFriendsWhenNotIsLogged(
-          userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
+          userId, page, limit,
+          orderBy: orderBy!, sortingType: sortingType!);
     }
     friendsDate = friendsDateAux;
     hasMoreFriends = friendsDateAux.friends!.length == limit;
@@ -63,33 +69,34 @@ abstract class CircleFriendsStoreBase with Store {
 
   @action
   Future<void> getMoreFriends(userId) async {
-    if(hasMoreFriends) {
+    if (hasMoreFriends) {
       loadingMoreFriends = true;
       page++;
       late FriendsDataModel auxUsers;
       if (userLogged) {
-        auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged
-          (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
-      }else {
-        auxUsers = await friendsRepositoryImpl.getFriendsWhenNotIsLogged
-          (userId, page, limit, orderBy: orderBy!, sortingType: sortingType!);
+        auxUsers = await friendsRepositoryImpl.getFriendsWhenIsLogged(
+            userId, page, limit,
+            orderBy: orderBy!, sortingType: sortingType!);
+      } else {
+        auxUsers = await friendsRepositoryImpl.getFriendsWhenNotIsLogged(
+            userId, page, limit,
+            orderBy: orderBy!, sortingType: sortingType!);
       }
-      friendsDate!.friends!.addAll(auxUsers.friends!);
+      friendsDate.friends!.addAll(auxUsers.friends!);
       loadingMoreFriends = false;
       hasMoreFriends = auxUsers.friends!.length == limit;
     }
   }
 
-
   @action
-  void changeOrderBy(int index){
-    if(index == 0){
+  void changeOrderBy(int index) {
+    if (index == 0) {
       orderBy = listOrderBy[0];
       sortingType = listSortingType[0];
-    }else if(index == 1){
+    } else if (index == 1) {
       orderBy = listOrderBy[1];
       sortingType = listSortingType[1];
-    }else{
+    } else {
       orderBy = listOrderBy[1];
       sortingType = listSortingType[0];
     }

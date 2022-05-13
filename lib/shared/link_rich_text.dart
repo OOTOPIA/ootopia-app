@@ -5,28 +5,43 @@ import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
-class LinkRichText extends StatelessWidget {
+class LinkRichText extends StatefulWidget {
   final String text;
   final List<UserSearchModel>? userCommentsList;
   final int? maxLines;
   final Key? key;
-  final RegExp regExp = RegExp(
-      r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
-  final List<InlineSpan> textSpanWidget = <TextSpan>[];
-  final RegExp regExpUser = RegExp('');
+  final bool isRegister;
   LinkRichText(
     this.text, {
     this.userCommentsList,
     this.maxLines,
     this.key,
-  }) {
+    required this.isRegister,
+  });
+
+  @override
+  State<LinkRichText> createState() => _LinkRichTextState();
+}
+
+class _LinkRichTextState extends State<LinkRichText> {
+  final RegExp regExp = RegExp(
+      r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?");
+
+  final List<InlineSpan> textSpanWidget = <TextSpan>[];
+
+  final RegExp regExpUser = RegExp('');
+
+  @override
+  void initState() {
+    super.initState();
     _initialize();
   }
 
   _initialize() {
     colorUserInText();
-    if (regExp.hasMatch(text)) {
+    if (regExp.hasMatch(widget.text)) {
       _hasLink();
     }
   }
@@ -34,10 +49,11 @@ class LinkRichText extends StatelessWidget {
   void colorUserInText() {
     SmartPageController controller = SmartPageController.getInstance();
     var allName = [];
-    if (userCommentsList != null && userCommentsList!.isNotEmpty) {
+    if (widget.userCommentsList != null &&
+        widget.userCommentsList!.isNotEmpty) {
       List<Map<String, dynamic>> textFragmented = [];
-      for (var item in userCommentsList!) {
-        var startName = text.indexOf('@[${item.id}]');
+      for (var item in widget.userCommentsList!) {
+        var startName = widget.text.indexOf('@[${item.id}]');
         if (startName != -1) {
           allName.add({
             'id': item.id,
@@ -53,21 +69,21 @@ class LinkRichText extends StatelessWidget {
         var userInComment = allName[i];
         textFragmented.add({
           'isName': false,
-          'string': text.substring(countText, userInComment['start']),
+          'string': widget.text.substring(countText, userInComment['start']),
         });
         countText = userInComment['id'].length + userInComment['start'] + 3;
         textFragmented.add({
           'id': userInComment['id'],
           'isName': true,
-          'string': text
+          'string': widget.text
               .substring(userInComment['start'], countText)
               .replaceAll('@[${userInComment['id']}]', userInComment['name']),
         });
       }
-      if (text.length > countText) {
+      if (widget.text.length > countText) {
         textFragmented.add({
           'isName': false,
-          'string': text.substring(countText, text.length),
+          'string': widget.text.substring(countText, widget.text.length),
         });
       }
 
@@ -79,11 +95,22 @@ class LinkRichText extends StatelessWidget {
             recognizer: new TapGestureRecognizer()
               ..onTap = () {
                 if (comment['id'] != null) {
-                  controller.insertPage(
-                    ProfileScreen({
-                      "id": comment['id'],
-                    }),
-                  );
+                  if (widget.isRegister) {
+                    Navigator.pushNamed(
+                      context,
+                      PageRoute.Page.profileScreen.route,
+                      arguments: {
+                        "id": comment['id'],
+                        "isGetContacts": true,
+                      },
+                    );
+                  } else {
+                    controller.insertPage(
+                      ProfileScreen({
+                        "id": comment['id'],
+                      }),
+                    );
+                  }
                 }
               },
             style: TextStyle(
@@ -102,13 +129,13 @@ class LinkRichText extends StatelessWidget {
 
   _hasntLink() {
     textSpanWidget.add(TextSpan(
-      text: this.text,
+      text: this.widget.text,
       style: handleTextStyle(false),
     ));
   }
 
   _hasLink() {
-    final splitedText = this.text.split(RegExp(r"((?<= |\n)|(?= |\n))"));
+    final splitedText = this.widget.text.split(RegExp(r"((?<= |\n)|(?= |\n))"));
 
     splitedText.forEach((element) {
       _checkTextStyleType(element);
@@ -166,7 +193,7 @@ class LinkRichText extends StatelessWidget {
     return Container(
       child: RichText(
         textAlign: TextAlign.start,
-        maxLines: maxLines,
+        maxLines: widget.maxLines,
         overflow: TextOverflow.ellipsis,
         text: TextSpan(children: textSpanWidget),
       ),

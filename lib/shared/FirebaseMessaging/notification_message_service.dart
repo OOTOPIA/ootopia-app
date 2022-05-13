@@ -61,7 +61,7 @@ class NotificationMessageService {
             color: LightColors.blue,
             backgroundColor: LightColors.blue,
             payload: {
-              "postId": notification.postId,
+              "postId": notification.postId ?? '',
               "type": notification.type,
               "userId": notification.userId ?? '',
             },

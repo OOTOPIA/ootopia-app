@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
+import 'package:ootopia_app/screens/components/custom_icon_text_button.dart';
+import 'package:ootopia_app/screens/components/custom_list_tile.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/push_notification.service.dart';
@@ -188,7 +189,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.only(bottom: 4.0, right: 12, left: 12),
+                              padding: const EdgeInsets.only(
+                                  bottom: 4.0, right: 12, left: 12),
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
@@ -199,55 +201,6 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 0),
-                              child: Card(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  side: BorderSide(
-                                    color: Colors.grey.shade300,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${AppLocalizations.of(context)!.personalGoal}:',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      Text(
-                                        '${authStore!.currentUser!.dailyLearningGoalInMinutes}min',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('|'),
-                                      SvgPicture.asset(
-                                        "assets/icons_profile/laurel_wreath.svg",
-                                        width: 18,
-                                        height: 17,
-                                        color: Color(0xff018f9c),
-                                      ),
-                                      Text(
-                                        '${authStore!.currentUser!.totalTrophyQuantity}',
-                                        style: TextStyle(
-                                            color: Color(0xff018F9C),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      )
-                                    ],
-                                  ),
                                 ),
                               ),
                             ),
@@ -267,247 +220,116 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                     scrollDirection: Axis.vertical,
                                     controller: _firstController,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: Colors.grey.shade300,
-                                              width: 1.0,
-                                            ),
-                                          ),
+                                      CustomListTile(
+                                        title: AppLocalizations.of(context)!
+                                            .inviteYourFriends,
+                                        labelWidget: RichText(
+                                          text: TextSpan(
+                                              text:
+                                                  AppLocalizations.of(context)!
+                                                      .earn,
+                                              style: TextStyle(
+                                                  color: LightColors.grey,
+                                                  fontSize: 10),
+                                              children: [
+                                                TextSpan(
+                                                  text: " OOz ",
+                                                  style: TextStyle(
+                                                      color: LightColors.grey,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                TextSpan(
+                                                  text: AppLocalizations.of(
+                                                          context)!
+                                                      .whenTheySignup,
+                                                  style: TextStyle(
+                                                      color: LightColors.grey,
+                                                      fontSize: 10),
+                                                )
+                                              ]),
                                         ),
-                                        child: ListTile(
-                                          title: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${AppLocalizations.of(context)!.inviteYourFriends}',
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                              RichText(
-                                                text: TextSpan(
-                                                    text: AppLocalizations.of(
-                                                            context)!
-                                                        .earn,
-                                                    style: TextStyle(
-                                                        color: LightColors.grey,
-                                                        fontSize: 10),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: " OOz ",
-                                                        style: TextStyle(
-                                                            color: LightColors
-                                                                .grey,
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      TextSpan(
-                                                        text:
-                                                            AppLocalizations.of(
-                                                                    context)!
-                                                                .whenTheySignup,
-                                                        style: TextStyle(
-                                                            color: LightColors
-                                                                .grey,
-                                                            fontSize: 10),
-                                                      )
-                                                    ]),
-                                              ),
-                                            ],
-                                          ),
-                                          leading: Padding(
-                                            padding: MediaQuery.of(context)
-                                                        .size
-                                                        .width >
+                                        leadingPath:
+                                            'assets/icons/add-user-plus.png',
+                                        leadingPadding:
+                                            MediaQuery.of(context).size.width >
                                                     300
                                                 ? const EdgeInsets.only(
                                                     bottom: 3.0, left: 4)
                                                 : EdgeInsets.all(0),
-                                            child: Image.asset(
-                                              'assets/icons/add-user-plus.png',
-                                              color: Colors.black,
-                                              width: 24,
-                                              height: 24,
-                                            ),
-                                          ),
-                                          trailing: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 15,
-                                            color: Colors.black,
-                                          ),
-                                          onTap: () {
-                                            controller
-                                                .insertPage(InvitationScreen());
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
+                                        onTap: () {
+                                          controller
+                                              .insertPage(InvitationScreen());
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                          color: Colors.grey.shade300,
-                                          width: 1.0,
-                                        ))),
-                                        child: ListTile(
-                                          title: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${AppLocalizations.of(context)!.yourOOZWallet}',
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                              Text(
-                                                '${AppLocalizations.of(context)!.checkYourTransactions}',
-                                                style: TextStyle(
-                                                    color: LightColors.grey,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                          leading: Image.asset(
+                                      CustomListTile(
+                                        title: AppLocalizations.of(context)!
+                                            .yourOOZWallet,
+                                        label: AppLocalizations.of(context)!
+                                            .checkYourTransactions,
+                                        leadingPath:
                                             'assets/icons/ooz-black.png',
-                                            width: 24,
-                                          ),
-                                          trailing: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 15,
-                                            color: Colors.black,
-                                          ),
-                                          onTap: () {
-                                            if (widget.onTapWalletItem !=
-                                                null) {
-                                              widget.onTapWalletItem!();
-                                            }
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
+                                        onTap: () {
+                                          if (widget.onTapWalletItem != null) {
+                                            widget.onTapWalletItem!();
+                                          }
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                          color: Colors.grey.shade300,
-                                          width: 1.0,
-                                        ))),
-                                        child: ListTile(
-                                          title: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${AppLocalizations.of(context)!.giveYourOpinion}',
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                              Text(
-                                                '${AppLocalizations.of(context)!.itIsVeryImportant}',
-                                                style: TextStyle(
-                                                    color: LightColors.grey,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                          leading: Image.asset(
+                                      CustomListTile(
+                                        title: AppLocalizations.of(context)!
+                                            .forumAccess,
+                                        label: AppLocalizations.of(context)!
+                                            .ootWeb3AndMore,
+                                        leadingPath:
+                                            'assets/icons/conversation_icon.png',
+                                        onTap: () async {
+                                          await launch(
+                                              "https://discord.gg/Pq95gbvh");
+                                        },
+                                      ),
+                                      CustomListTile(
+                                        title: AppLocalizations.of(context)!
+                                            .giveYourOpinion,
+                                        label: AppLocalizations.of(context)!
+                                            .itIsVeryImportant,
+                                        leadingPath:
                                             'assets/icons/icon_apptest.png',
-                                            width: 24,
-                                          ),
-                                          trailing: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 15,
-                                            color: Colors.black,
-                                          ),
-                                          onTap: () async {
-                                            await launch(
-                                                "https://forms.gle/6qWokM6ipf7ac4fL8");
-                                          },
-                                        ),
+                                        onTap: () async {
+                                          await launch(
+                                              "https://forms.gle/6qWokM6ipf7ac4fL8");
+                                        },
                                       ),
-                                      Container(
-                                        child: ListTile(
-                                          title: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${AppLocalizations.of(context)!.supportCenter}',
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                              Text(
-                                                '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
-                                                style: TextStyle(
-                                                    color: LightColors.grey,
-                                                    fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                          leading: Image.asset(
+                                      CustomListTile(
+                                        title: AppLocalizations.of(context)!
+                                            .supportCenter,
+                                        label:
+                                            '${AppLocalizations.of(context)!.questions} / ${AppLocalizations.of(context)!.suggestions}',
+                                        leadingPath:
                                             'assets/icons/chat-small.png',
-                                            width: 24,
-                                          ),
-                                          trailing: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 15,
-                                            color: Colors.black,
-                                          ),
-                                          onTap: () {
-                                            Navigator.of(context).pushNamed(
-                                                PageRoute.Page
-                                                    .chatWithUsersScreen.route);
-                                          },
-                                        ),
+                                        hasBottomDivider: false,
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                              PageRoute.Page.chatWithUsersScreen
+                                                  .route);
+                                        },
                                       ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            openTermsOfUse(context, true, true);
-                                          },
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                              Image.asset(
-                                                'assets/icons/icon_lock.png',
-                                                width: 18.22,
-                                                height: 19.05,
-                                              ),
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Text(
-                                                AppLocalizations.of(context)!
-                                                    .yourPrivacyInformation,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                      CustomIconTextButton(
+                                        text: AppLocalizations.of(context)!
+                                            .yourPrivacyInformation,
+                                        iconPath: 'assets/icons/icon_lock.png',
+                                        onTap: () {
+                                          openTermsOfUse(context, true, true);
+                                        },
                                       ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                        child: Row(
+                                      CustomIconTextButton(
+                                        text: AppLocalizations.of(context)!
+                                            .termsOfUseDrawer,
+                                        iconPath: 'assets/icons/icon_info.png',
+                                        textWidget: Row(
                                           children: [
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Image.asset(
-                                              'assets/icons/icon_info.png',
-                                              width: 18.22,
-                                              height: 19.05,
-                                            ),
-                                            SizedBox(
-                                              width: 16,
-                                            ),
                                             GestureDetector(
                                               onTap: () {
                                                 openTermsOfUse(
@@ -555,40 +377,18 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                             ),
                                           ],
                                         ),
+                                        onTap: () {},
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 8),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            // if (widget.onTapLogoutItem != null) {
-                                            //   widget.onTapLogoutItem!();
-                                            // }
-                                            clearAuth(context);
-                                          },
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                              Image.asset(
-                                                'assets/icons/logout.png',
-                                                width: 18.22,
-                                                height: 19.05,
-                                              ),
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Text(
-                                                AppLocalizations.of(context)!
-                                                    .exit,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                      CustomIconTextButton(
+                                        text:
+                                            AppLocalizations.of(context)!.exit,
+                                        iconPath: 'assets/icons/logout.png',
+                                        onTap: () async {
+                                          // if (widget.onTapLogoutItem != null) {
+                                          //   widget.onTapLogoutItem!();
+                                          // }
+                                          clearAuth(context);
+                                        },
                                       ),
                                     ],
                                   ),

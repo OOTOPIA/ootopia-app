@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/data/models/marketplace/product_model.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
+import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/screens/marketplace/components/horizontal_expanded_image_widget.dart';
 import 'package:ootopia_app/screens/marketplace/components/product_information_widget.dart';
@@ -17,7 +18,9 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductModel productModel;
-  ProductDetailScreen({required this.productModel});
+  final bool displayContacts;
+  ProductDetailScreen(
+      {required this.productModel, this.displayContacts = false});
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
@@ -25,10 +28,18 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final pageController = SmartPageController.getInstance();
   late AuthStore authStore;
+  get appBar => DefaultAppBar(
+        components: [
+          AppBarComponents.back,
+          AppBarComponents.empty,
+        ],
+        onTapLeading: () => Navigator.pop(context),
+      );
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     return Scaffold(
+      appBar: widget.displayContacts ? appBar : null,
       body: Stack(
         children: [
           BackgroundButterflyTop(positioned: -59),

@@ -10,13 +10,13 @@ import 'package:ootopia_app/screens/edit_profile_screen/add_link/view_link_scree
 import 'package:ootopia_app/screens/edit_profile_screen/edit_profile_screen.dart';
 import 'package:ootopia_app/screens/friends/circle_friends_widget/circle_friends_widget.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
+import 'package:ootopia_app/screens/friends/suggestion_friends/suggestion_friends_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
-import 'package:ootopia_app/screens/profile_screen/components/regenerative_game_details.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
@@ -33,11 +33,12 @@ import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/empty_posts_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? args;
 
-  ProfileScreen( [this.args]);
+  ProfileScreen([this.args]);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -74,11 +75,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!profileUserIsLoggedUser) {
         store = ProfileScreenStore();
-        if(authStore.currentUser != null){
+        if (authStore.currentUser != null) {
           await store!.getIfIsFriend(profileUserId);
+        } else {
+          if (widget.args!.containsKey('isGetContacts')) {
+            await authStore.checkUserIsLogged();
+            await store!.getIfIsFriend(profileUserId);
+          }
         }
       }
-
 
       await store?.getProfileDetails(profileUserId);
       await homeStore.getCurrentUser(profileUserId);
@@ -87,7 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Future.delayed(Duration.zero, () {
         if (profileUserIsLoggedUser) walletStore.getWallet();
       });
-
       this.trackingEvents.profileViewedAProfile(
         widget.args == null ||
                 (widget.args != null && widget.args!["id"] == null)
@@ -115,15 +119,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
   get appBarProfile => DefaultAppBar(
-    components: [
-      AppBarComponents.back,
-      isLoggedInUserProfile ? AppBarComponents.edit : AppBarComponents.empty,
-    ],
-    onTapAction: () => isLoggedInUserProfile ? controller.insertPage(EditProfileScreen()) : null,
-    onTapLeading: () => controller.back(),
-  );
+        components: [
+          AppBarComponents.back,
+          isLoggedInUserProfile
+              ? AppBarComponents.edit
+              : AppBarComponents.empty,
+        ],
+        onTapAction: () => isLoggedInUserProfile
+            ? controller.insertPage(EditProfileScreen())
+            : null,
+        onTapLeading: () =>
+            widget.args != null && widget.args!.containsKey('isGetContacts')
+                ? Navigator.pop(context)
+                : controller.back(),
+      );
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
@@ -139,13 +149,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      setState(() {
-        if (store!.hasMorePosts && store!.loadingPosts == false) {
-          Future.delayed(Duration.zero, () async {
-            await store?.getUserPosts(profileUserId);
-          });
-        }
-      });
+      // setState(() {
+      if (store!.hasMorePosts && store!.loadingPosts == false) {
+        Future.delayed(Duration.zero, () async {
+          await store?.getUserPosts(profileUserId);
+        });
+      }
+      // });
     }
   }
 
@@ -154,13 +164,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
     homeStore = Provider.of<HomeStore>(context);
-    if (profileUserIsLoggedUser) {
-      store = Provider.of<ProfileScreenStore>(context);
-    }else{
-      friendsStore  = Provider.of<FriendsStore>(context);
-    }
+    store = Provider.of<ProfileScreenStore>(context);
+    friendsStore = Provider.of<FriendsStore>(context);
+
     return Scaffold(
-      appBar: showAppBar() ? appBarProfile : null,
+      appBar: showAppBar()
+          ? appBarProfile
+          : widget.args != null && widget.args!.containsKey('isGetContacts')
+              ? appBarProfile
+              : null,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(
@@ -187,7 +199,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height:
                                     GlobalConstants.of(context).spacingSmall),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: Text(
                                 store == null ? "" : store!.profile!.fullname,
                                 maxLines: 2,
@@ -209,27 +222,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height:
                                     GlobalConstants.of(context).spacingNormal),
                             ProfileBioWidget(bio: store?.profile?.bio),
-
-
-                            if(store?.profile?.links != null)...[
-                                if(store!.profile!.links!.length == 1)...[
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: GlobalConstants.of(context).screenHorizontalSpace),                                    child: TextButton(
-                                      onPressed: () async{
-                                        _launchURL(store!.profile!.links![0].URL);
-                                      },
-                                      child: Text(store!.profile!.links![0].title,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 13,
-                                          color: Color(0xff018F9C),
-                                        ),),
+                            if (store?.profile?.links != null) ...[
+                              if (store!.profile!.links!.length == 1) ...[
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: GlobalConstants.of(context)
+                                          .screenHorizontalSpace),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      _launchURL(store!.profile!.links![0].URL);
+                                    },
+                                    child: Text(
+                                      store!.profile!.links![0].title,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: Color(0xff018F9C),
+                                      ),
                                     ),
                                   ),
-                                ]else if (store!.profile!.links!.length > 1)...[
-                                  TextButton(
-                                    onPressed: (){
+                                ),
+                              ] else if (store!.profile!.links!.length > 1) ...[
+                                TextButton(
+                                  onPressed: () {
+                                    if (widget.args!
+                                        .containsKey('isGetContacts')) {
+                                      Navigator.pushNamed(
+                                        context,
+                                        PageRoute.Page.viewLinksScreen.route,
+                                        arguments: {
+                                          'displayContacts': true,
+                                          'store': store,
+                                          'user_id': 1,
+                                          'list': store!.profile!.links!,
+                                        },
+                                      );
+                                    } else {
                                       controller.insertPage(ViewLinksScreen(
                                         {
                                           'store': store,
@@ -237,56 +266,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'list': store!.profile!.links!,
                                         },
                                       ));
-                                    },
-                                    child: Text(AppLocalizations.of(context)!.relatedLinks,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 13,
-                                        color: Color(0xff018F9C),
-                                      ),),
+                                    }
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!.relatedLinks,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 13,
+                                      color: Color(0xff018F9C),
+                                    ),
                                   ),
-                                ]else...[
-                                  SizedBox(
-                                    height: GlobalConstants.of(context).spacingNormal,
-                                  )
-                                ],
+                                ),
+                              ] else ...[
+                                SizedBox(
+                                  height:
+                                      GlobalConstants.of(context).spacingNormal,
+                                )
+                              ],
                             ],
-
-                            if(showButton)...[
+                            if (showButton ||
+                                (widget.args != null &&
+                                    widget.args!
+                                        .containsKey('isGetContacts'))) ...[
                               ElevatedButton(
                                   style: ButtonStyle(
-                                    fixedSize: MaterialStateProperty.all<Size>(Size(double.infinity, 35)),
+                                    fixedSize: MaterialStateProperty.all<Size>(
+                                        Size(double.infinity, 35)),
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular
-                                            (20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           side: BorderSide.none),
                                     ),
-                                    backgroundColor: MaterialStateProperty.all<Color>(LightColors.blue),
-                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            LightColors.blue),
+                                    padding: MaterialStateProperty.all<
+                                            EdgeInsets>(
                                         EdgeInsets.symmetric(horizontal: 24)),
                                   ),
                                   onPressed: () {
-                                    Future.delayed(Duration(milliseconds: 100),(){
+                                    Future.delayed(Duration(milliseconds: 100),
+                                        () {
                                       final friend = FriendModel(
                                         id: store!.profile!.id,
                                         fullname: store!.profile!.fullname,
                                         photoUrl: store!.profile!.photoUrl,
                                       );
 
-                                     if( store!.isFriend == false){
-                                       store!.addFriend();
-                                       friendsStore.addFriend(friend);
-                                     }else{
-                                       store!.removeFriend();
-                                       friendsStore.removeFriend(friend, authStore.currentUser!.id);
-                                     }
+                                      if (store!.isFriend == false) {
+                                        store!.addFriend();
+                                        friendsStore.addFriend(friend);
+                                      } else {
+                                        store!.removeFriend();
+                                        friendsStore.removeFriend(
+                                            friend, authStore.currentUser!.id);
+                                      }
                                     });
                                   },
-                                  child: Text(store!.isFriend == false ?
-                                  AppLocalizations.of(context)!.addFriend:
-                                  AppLocalizations.of(context)!.removeFriend,
+                                  child: Text(
+                                    store!.isFriend == false
+                                        ? AppLocalizations.of(context)!
+                                            .addFriend
+                                        : AppLocalizations.of(context)!
+                                            .removeFriend,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -297,35 +341,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 16,
                               )
                             ],
-
-                            Text(
-                              AppLocalizations.of(context)!
-                                  .regenerationGame
-                                  .toUpperCase(),
-                              style: GoogleFonts.roboto(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .color,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .fontSize,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: 4),
-                            RegenerativeGameDetails(
-                              isVisible: isVisible,
-                              onArrowTap: () {
-                                setState(() {
-                                  if (isVisible) {
-                                    isVisible = false;
-                                  } else {
-                                    isVisible = true;
-                                  }
-                                });
-                              },
-                            ),
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
@@ -333,7 +348,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isVisible: isVisible,
                               profileScreenStore: store,
                             ),
-                            if(isLoggedInUserProfile)...[
+                            if (isLoggedInUserProfile) ...[
                               WalletBarWidget(
                                   totalBalance: walletStore.wallet != null
                                       ? '${currencyFormatter.format(walletStore.wallet!.totalBalance)}'
@@ -341,12 +356,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onTap: () =>
                                       controller.insertPage(WalletPage())),
                             ],
-
                             CircleOfFriendWidget(
+                              displayContacts: widget.args != null &&
+                                  widget.args!.containsKey('isGetContacts'),
                               isUserLogged: isLoggedInUserProfile,
                               userId: store!.profile!.id,
                             ),
-
+                            if (authStore.currentUser!.id == store!.profile!.id)
+                              SuggestionFriends(
+                                friendsStore: friendsStore,
+                                userId: store!.profile!.id,
+                              ),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: GlobalConstants.of(context)
@@ -395,8 +415,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       runSpacing: 20, // gap between lines
                                       children: store!.postsList
                                           .asMap()
-                                          .map(
-                                            (index, post) => MapEntry(
+                                          .map((index, post) {
+                                            return MapEntry(
                                               index,
                                               GridCustomWidget(
                                                 discountSpacing: 10 * 3,
@@ -404,21 +424,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 thumbnailUrl:
                                                     post.type != 'gallery'
                                                         ? post.thumbnailUrl!
-                                                        : post.medias!.first
-                                                            .thumbUrl!,
+                                                        : post.medias != [] &&
+                                                                post.medias!
+                                                                    .isNotEmpty
+                                                            ? post.medias!.first
+                                                                .thumbUrl!
+                                                            : '',
                                                 columnsCount: 4,
                                                 type: store!.getPostType(post),
                                                 onTap: () {
-                                                  store!.goToTimelinePost(
-                                                    controller: controller,
-                                                    userId: _getUserId(),
-                                                    posts: store!.postsList,
-                                                    postSelected: index,
-                                                  );
+                                                  if (widget.args != null &&
+                                                      widget.args!.containsKey(
+                                                          'isGetContacts')) {
+                                                    Navigator.pushNamed(
+                                                        context,
+                                                        PageRoute
+                                                            .Page
+                                                            .timelineProfileScreen
+                                                            .route,
+                                                        arguments: {
+                                                          "displayContacts":
+                                                              true,
+                                                          "userId":
+                                                              _getUserId(),
+                                                          "posts":
+                                                              store!.postsList,
+                                                          "postSelected": index,
+                                                        });
+                                                  } else {
+                                                    store!.goToTimelinePost(
+                                                      controller: controller,
+                                                      userId: _getUserId(),
+                                                      posts: store!.postsList,
+                                                      postSelected: index,
+                                                    );
+                                                  }
                                                 },
                                               ),
-                                            ),
-                                          )
+                                            );
+                                          })
                                           .values
                                           .toList(),
                                     ),
@@ -450,13 +494,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _launchURL(String _url) async {
-    if(await canLaunch(_url)){
+    if (await canLaunch(_url)) {
       await launch(_url);
     }
   }
 
   bool showAppBar() {
-    return controller.currentBottomIndex == PageViewController.TAB_INDEX_PROFILE &&
+    return controller.currentBottomIndex ==
+            PageViewController.TAB_INDEX_PROFILE &&
         (controller.pages[controller.currentPageIndex]) is ProfileScreen;
   }
 
@@ -465,6 +510,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
         store?.isFriend != null &&
         authStore.currentUser != null;
   }
-
-
 }
