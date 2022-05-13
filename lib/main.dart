@@ -10,17 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/bloc/interests_tags/interests_tags_bloc.dart';
-import 'package:ootopia_app/bloc/user/user_bloc.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
-import 'package:ootopia_app/bloc/wallet/wallet_bloc.dart';
-import 'package:ootopia_app/bloc/wallet_transfer/wallet_transfer_bloc.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
-import 'package:ootopia_app/data/repositories/interests_tags_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
-import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/data/repositories/wallet_repository.dart';
-import 'package:ootopia_app/data/repositories/wallet_transfers_repository.dart';
 import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_marketplace.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
@@ -289,24 +281,6 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
             PostRepositoryImpl(),
           ),
         ),
-        BlocProvider(
-          create: (BuildContext context) =>
-              UserBloc(UserRepositoryImpl(), PostRepositoryImpl()),
-        ),
-        BlocProvider(
-          create: (BuildContext context) =>
-              InterestsTagsBloc(InterestsTagsRepositoryImpl()),
-        ),
-        BlocProvider(
-          create: (BuildContext context) => WalletBloc(
-            WalletRepositoryImpl(),
-          ),
-        ),
-        BlocProvider(
-          create: (BuildContext context) => WalletTransferBloc(
-            WalletTransfersRepositoryImpl(),
-          ),
-        ),
       ],
       child: MultiProvider(
         providers: [
@@ -362,10 +336,10 @@ class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
 
   @override
-  _mainPageState createState() => _mainPageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _mainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> {
   final Map<PageRoute.Page, Widget Function(dynamic)> _fragments = {
     PageRoute.Page.homeScreen: (args) => HomeScreen(args: args),
     PageRoute.Page.timelineScreen: (args) => TimelinePage(args),

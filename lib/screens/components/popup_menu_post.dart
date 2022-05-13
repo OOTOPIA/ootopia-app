@@ -48,7 +48,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
       return;
     }
 
-    if (isUserOwnsPost && optionSelected == 'delete') {
+    if ((isUserOwnsPost && optionSelected == 'delete') || user!.isAdmin) {
       widget.callbackReturnPopupMenu(optionSelected);
     }
   }
