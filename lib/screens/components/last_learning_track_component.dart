@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
-import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,27 +20,17 @@ class _LastLearningTrackComponentsState
   LearningTracksStore learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
-  late AuthStore authStore;
-  bool hasError = false;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      learningTracksStore
-          .lastLearningTracks(locale: Platform.localeName)
-          .onError((error, stackTrace) {
-        setState(() {
-          hasError = true;
-        });
-      });
-    });
+    learningTracksStore.getLastLearningTracks();
   }
 
   @override
   Widget build(BuildContext context) {
-    authStore = Provider.of<AuthStore>(context);
     return Observer(builder: (_) {
-      if (learningTracksStore.getLastLearningTracks == null) {
+      if (learningTracksStore.lastLearningTracks == null) {
         return Container();
       } else {
         return Container(
@@ -116,9 +102,9 @@ class _LastLearningTrackComponentsState
                     onTap: () {
                       controller.insertPage(ViewLearningTracksScreen({
                         'list_chapters':
-                            learningTracksStore.getLastLearningTracks!.chapters,
+                            learningTracksStore.lastLearningTracks!.chapters,
                         'learning_tracks':
-                            learningTracksStore.getLastLearningTracks,
+                            learningTracksStore.lastLearningTracks,
                       }));
                     },
                     child: Row(
@@ -129,18 +115,18 @@ class _LastLearningTrackComponentsState
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             child: learningTracksStore
-                                    .getLastLearningTracks!.imageUrl
+                                    .lastLearningTracks!.imageUrl
                                     .contains('.svg')
                                 ? SvgPicture.network(
                                     learningTracksStore
-                                        .getLastLearningTracks!.imageUrl,
+                                        .lastLearningTracks!.imageUrl,
                                     width: 52,
                                     height: 52,
                                     fit: BoxFit.cover,
                                   )
                                 : Image.network(
                                     learningTracksStore
-                                        .getLastLearningTracks!.imageUrl,
+                                        .lastLearningTracks!.imageUrl,
                                     width: 52,
                                     height: 52,
                                     fit: BoxFit.cover,
@@ -157,7 +143,7 @@ class _LastLearningTrackComponentsState
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   learningTracksStore
-                                      .getLastLearningTracks!.title,
+                                      .lastLearningTracks!.title,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
@@ -169,7 +155,7 @@ class _LastLearningTrackComponentsState
                                 children: [
                                   Text(
                                     learningTracksStore
-                                        .getLastLearningTracks!.time,
+                                        .lastLearningTracks!.time,
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -196,7 +182,7 @@ class _LastLearningTrackComponentsState
                                     width: 8,
                                   ),
                                   Text(
-                                    '${AppLocalizations.of(context)!.receive} ${currencyFormatter.format(learningTracksStore.getLastLearningTracks!.ooz)}',
+                                    '${AppLocalizations.of(context)!.receive} ${currencyFormatter.format(learningTracksStore.lastLearningTracks!.ooz)}',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,

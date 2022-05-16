@@ -25,55 +25,107 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: 'LearningTracksStoreBase.isLoading');
+  final _$isLoadingMoreAtom =
+      Atom(name: 'LearningTracksStoreBase.isLoadingMore');
 
   @override
-  bool get isLoading {
-    _$isLoadingAtom.reportRead();
-    return super.isLoading;
+  bool get isLoadingMore {
+    _$isLoadingMoreAtom.reportRead();
+    return super.isLoadingMore;
   }
 
   @override
-  set isLoading(bool value) {
-    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
-      super.isLoading = value;
+  set isLoadingMore(bool value) {
+    _$isLoadingMoreAtom.reportWrite(value, super.isLoadingMore, () {
+      super.isLoadingMore = value;
     });
   }
 
-  final _$getLastLearningTracksAtom =
-      Atom(name: 'LearningTracksStoreBase.getLastLearningTracks');
+  final _$hasMoreItemsAtom = Atom(name: 'LearningTracksStoreBase.hasMoreItems');
 
   @override
-  LearningTracksModel? get getLastLearningTracks {
-    _$getLastLearningTracksAtom.reportRead();
-    return super.getLastLearningTracks;
+  bool get hasMoreItems {
+    _$hasMoreItemsAtom.reportRead();
+    return super.hasMoreItems;
   }
 
   @override
-  set getLastLearningTracks(LearningTracksModel? value) {
-    _$getLastLearningTracksAtom.reportWrite(value, super.getLastLearningTracks,
-        () {
-      super.getLastLearningTracks = value;
+  set hasMoreItems(bool value) {
+    _$hasMoreItemsAtom.reportWrite(value, super.hasMoreItems, () {
+      super.hasMoreItems = value;
     });
   }
 
-  final _$listLearningTracksAsyncAction =
-      AsyncAction('LearningTracksStoreBase.listLearningTracks');
+  final _$welcomeGuideLearningTrackAtom =
+      Atom(name: 'LearningTracksStoreBase.welcomeGuideLearningTrack');
 
   @override
-  Future<void> listLearningTracks(
-      {int? limit, int? offset, required String locale}) {
-    return _$listLearningTracksAsyncAction.run(() =>
-        super.listLearningTracks(limit: limit, offset: offset, locale: locale));
+  LearningTracksModel? get welcomeGuideLearningTrack {
+    _$welcomeGuideLearningTrackAtom.reportRead();
+    return super.welcomeGuideLearningTrack;
   }
 
-  final _$lastLearningTracksAsyncAction =
-      AsyncAction('LearningTracksStoreBase.lastLearningTracks');
+  @override
+  set welcomeGuideLearningTrack(LearningTracksModel? value) {
+    _$welcomeGuideLearningTrackAtom
+        .reportWrite(value, super.welcomeGuideLearningTrack, () {
+      super.welcomeGuideLearningTrack = value;
+    });
+  }
+
+  final _$viewStateAtom = Atom(name: 'LearningTracksStoreBase.viewState');
 
   @override
-  Future<void> lastLearningTracks({required String locale}) {
-    return _$lastLearningTracksAsyncAction
-        .run(() => super.lastLearningTracks(locale: locale));
+  TimelineViewState get viewState {
+    _$viewStateAtom.reportRead();
+    return super.viewState;
+  }
+
+  @override
+  set viewState(TimelineViewState value) {
+    _$viewStateAtom.reportWrite(value, super.viewState, () {
+      super.viewState = value;
+    });
+  }
+
+  final _$lastLearningTracksAtom =
+      Atom(name: 'LearningTracksStoreBase.lastLearningTracks');
+
+  @override
+  LearningTracksModel? get lastLearningTracks {
+    _$lastLearningTracksAtom.reportRead();
+    return super.lastLearningTracks;
+  }
+
+  @override
+  set lastLearningTracks(LearningTracksModel? value) {
+    _$lastLearningTracksAtom.reportWrite(value, super.lastLearningTracks, () {
+      super.lastLearningTracks = value;
+    });
+  }
+
+  final _$initAsyncAction = AsyncAction('LearningTracksStoreBase.init');
+
+  @override
+  Future<void> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
+  final _$getLearningTracksAsyncAction =
+      AsyncAction('LearningTracksStoreBase.getLearningTracks');
+
+  @override
+  Future<List<LearningTracksModel>> getLearningTracks() {
+    return _$getLearningTracksAsyncAction.run(() => super.getLearningTracks());
+  }
+
+  final _$getLastLearningTracksAsyncAction =
+      AsyncAction('LearningTracksStoreBase.getLastLearningTracks');
+
+  @override
+  Future<void> getLastLearningTracks() {
+    return _$getLastLearningTracksAsyncAction
+        .run(() => super.getLastLearningTracks());
   }
 
   final _$getWelcomeGuideAsyncAction =
@@ -84,12 +136,32 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
     return _$getWelcomeGuideAsyncAction.run(() => super.getWelcomeGuide());
   }
 
+  final _$refreshPageAsyncAction =
+      AsyncAction('LearningTracksStoreBase.refreshPage');
+
+  @override
+  Future<void> refreshPage() {
+    return _$refreshPageAsyncAction.run(() => super.refreshPage());
+  }
+
+  final _$loadMoreLearningTracksAsyncAction =
+      AsyncAction('LearningTracksStoreBase.loadMoreLearningTracks');
+
+  @override
+  Future<void> loadMoreLearningTracks() {
+    return _$loadMoreLearningTracksAsyncAction
+        .run(() => super.loadMoreLearningTracks());
+  }
+
   @override
   String toString() {
     return '''
 allLearningTracks: ${allLearningTracks},
-isLoading: ${isLoading},
-getLastLearningTracks: ${getLastLearningTracks}
+isLoadingMore: ${isLoadingMore},
+hasMoreItems: ${hasMoreItems},
+welcomeGuideLearningTrack: ${welcomeGuideLearningTrack},
+viewState: ${viewState},
+lastLearningTracks: ${lastLearningTracks}
     ''';
   }
 }
