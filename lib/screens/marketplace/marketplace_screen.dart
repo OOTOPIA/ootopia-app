@@ -134,7 +134,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     int itemsPerLine = getItemsPerLine();
     int amount = getSizeOfList(list, itemsPerLine);
     return Container(
-        height: MediaQuery.of(context).size.height - (_getWidgetInfo() ) ,
+        height: MediaQuery.of(context).size.height - (_getHeadSize() ) ,
         width: MediaQuery.of(context).size.width,
         child: ListView.builder(
             controller: _scrollController,
@@ -144,13 +144,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               bool isLastNine = index + 1 == amount;
               return Empty(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: isLastNine ? _getWidgetInfo() : 0),
+                  padding: EdgeInsets.only(bottom: isLastNine ? _getHeadSize() : 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Wrap(
                         children: [
-                          for (int i=0; i < xxx(isLastNine, list, itemsPerLine); i++)...[
+                          for (int i=0; i < getAmountOfItems(isLastNine, list, itemsPerLine); i++)...[
                             ProductItem(productModel: list[index * itemsPerLine + i]),
                           ],
                           if(isLastNine)...[
@@ -161,7 +161,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       .Page.aboutEthicalMarketPlace.route);
                                 }),
                             SizedBox(
-                              width: size(itemsPerLine, list),
+                              width: _size(itemsPerLine, list),
                             )
                           ]
                         ],
@@ -191,31 +191,29 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         },
       ));
 
-  double _getWidgetInfo() {
-    final RenderBox? renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox?;
-    final Size? size = renderBox?.size;
-    return size?.height ?? 300;
-  }
 
   int getItemsPerLine(){
     return MediaQuery.of(context).size.width >= 760 ? 4 : 2;
+  }
+
+  int getAmountOfItems(lastNine, list, itemsPerLine) {
+    return (lastNine ? list.length % itemsPerLine : itemsPerLine);
   }
 
   int getSizeOfList(List list,int itemsPerLine ) {
     return list.length % itemsPerLine == 0 ? (list.length/itemsPerLine).round() + 1 : (list.length/itemsPerLine).ceil();
   }
 
-
-
-  double size(int itemsPerLine, list){
+  double _size(int itemsPerLine, list){
     return (MediaQuery.of(context).size.width >= 760
         ? (MediaQuery.of(context).size.width / 4) - 6
         : (MediaQuery.of(context).size.width / 2) - 12) * (itemsPerLine - list.length % itemsPerLine - 1);
   }
 
-
-
-  int xxx(lastNine, list, itemsPerLine) {
-    return (lastNine ? list.length % itemsPerLine : itemsPerLine);
+  double _getHeadSize() {
+    final RenderBox? renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox?;
+    final Size? size = renderBox?.size;
+    return size?.height ?? 300;
   }
+
 }
