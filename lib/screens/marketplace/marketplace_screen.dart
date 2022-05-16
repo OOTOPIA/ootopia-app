@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
+import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
-import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
-import 'package:ootopia_app/shared/background_butterfly_top.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
+import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
+import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MarketplaceScreen extends StatefulWidget {
   @override
@@ -28,16 +29,19 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final ScrollController _scrollController = ScrollController();
   LearningTracksStore learningTracksStore = LearningTracksStore();
   LearningTracksModel? welcomeGuideLearningTrack;
+  final GlobalKey _widgetKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    marketplaceStore.getProductList(
-        limit: marketplaceStore.itemsPerPageCount, offset: 0);
+    marketplaceStore.getProducts();
     pageController = SmartPageController.getInstance();
-    _scrollController.addListener(
-      () => marketplaceStore.updateOnScroll(_scrollController),
-    );
+    _scrollController.addListener(() async {
+      if(_scrollController.offset >= _scrollController.position.maxScrollExtent*0.95 &&
+          marketplaceStore.canLoadMoreProducts() ){
+        await marketplaceStore.getMoreProducts();
+      }
+    },);
     Future.delayed(Duration.zero).then((value) async {
       walletStore.getWallet();
       welcomeGuideLearningTrack = await learningTracksStore.getWelcomeGuide();
@@ -47,19 +51,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   @override
   Widget build(BuildContext context) {
     walletStore = Provider.of<WalletStore>(context);
-    return RefreshIndicator(
-      onRefresh: () async {
-        await walletStore.getWallet();
-        await marketplaceStore.refreshData();
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            BackgroundButterflyTop(positioned: -59),
-            BackgroundButterflyBottom(positioned: -50),
-            body()
-          ],
-        ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          BackgroundButterflyTop(positioned: -59),
+          BackgroundButterflyBottom(positioned: -50),
+          body()
+        ],
       ),
     );
   }
@@ -72,85 +70,115 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             marketplaceStore.refreshData,
           );
         }
-        return LoadingOverlay(
-          isLoading: marketplaceStore.viewState == ViewState.loading,
-          child: Provider(
-            create: (_) => marketplaceStore,
-            child: Column(
-              children: [
-                InformationWidget(
-                  icon: Image.asset(
-                    "assets/icons/marketplace_icon_bottomless.png",
-                    width: 24,
-                  ),
-                  title: AppLocalizations.of(context)!.ethicalMarketplace,
-                  text: AppLocalizations.of(context)!
-                      .ethicalMarketplaceHeaderDescription,
-                  onTap: () async {
-                    if (welcomeGuideLearningTrack == null) {
-                      welcomeGuideLearningTrack =
-                      await learningTracksStore.getWelcomeGuide();
-                    }
-                    if (welcomeGuideLearningTrack != null) {
-                      openLearningTrack(welcomeGuideLearningTrack!);
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Divider(
-                  color: Colors.grey,
-                ),
-                MarketplaceBarWidget(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 50,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            direction: Axis.horizontal,
-                            children: [
-                              ...productList(marketplaceStore.productList),
-                              Visibility(
-                                visible: marketplaceStore.viewState !=
-                                    ViewState.loading &&
-                                    marketplaceStore.viewState !=
-                                        ViewState.refresh,
-                                child: CreateOfferButtonWidget(onTap: () {
-                                  Navigator.of(context).pushNamed(PageRoute
-                                      .Page.aboutEthicalMarketPlace.route);
-                                }),
-                              ),
-                            ],
+        else{
+          return LoadingOverlay(
+            isLoading: marketplaceStore.viewState == ViewState.loading,
+            child: Provider(
+              create: (_) => marketplaceStore,
+              child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    Column(
+                      key: _widgetKey,
+                      children: [
+                        InformationWidget(
+                          icon: Image.asset(
+                            "assets/icons/marketplace_icon_bottomless.png",
+                            width: 24,
                           ),
-                          Visibility(
-                            visible: marketplaceStore.viewState ==
-                                ViewState.loadingNewData,
-                            child:
-                            Center(child: CircularProgressIndicator()),
-                          ),
-                        ],
-                      ),
+                          title: AppLocalizations.of(context)!.ethicalMarketplace,
+                          text: AppLocalizations.of(context)!
+                              .ethicalMarketplaceHeaderDescription,
+                          onTap: () async {
+                            if (welcomeGuideLearningTrack == null) {
+                              welcomeGuideLearningTrack =
+                              await learningTracksStore.getWelcomeGuide();
+                            }
+                            if (welcomeGuideLearningTrack != null) {
+                              openLearningTrack(welcomeGuideLearningTrack!);
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Divider(
+                          color: Colors.grey,
+                        ),
+                        MarketplaceBarWidget(),
+                      ],
                     ),
-                  ),
+                    Visibility(
+                      visible: !marketplaceStore.loadingPage(),
+                      child: RefreshIndicator(
+                          onRefresh: () async {
+                            await marketplaceStore.refreshData();
+                            await walletStore.getWallet();
+                          },
+                          child: listWidget(marketplaceStore.productList)
+                      ),
+
+                    )
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        );
+          );
+        }
       },
     );
   }
 
-  List<Widget> productList(List<dynamic> list) =>
-      list.map((product) => ProductItem(productModel: product)).toList();
+  Widget listWidget(List list){
+    int itemsPerLine = getItemsPerLine();
+    int amount = getSizeOfList(list, itemsPerLine);
+    return Container(
+        height: MediaQuery.of(context).size.height - (_getWidgetInfo() ) ,
+        width: MediaQuery.of(context).size.width,
+        child: ListView.builder(
+            controller: _scrollController,
+            itemCount: amount,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              bool isLastNine = index + 1 == amount;
+              return Empty(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: isLastNine ? _getWidgetInfo() : 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Wrap(
+                        children: [
+                          for (int i=0; i < xxx(isLastNine, list, itemsPerLine); i++)...[
+                            ProductItem(productModel: list[index * itemsPerLine + i]),
+                          ],
+                          if(isLastNine)...[
+                            CreateOfferButtonWidget(
+                                topMargin: list.length % itemsPerLine != 0,
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(PageRoute
+                                      .Page.aboutEthicalMarketPlace.route);
+                                }),
+                            SizedBox(
+                              width: size(itemsPerLine, list),
+                            )
+                          ]
+                        ],
+                      ),
+                      if(isLastNine && marketplaceStore.loadingMoreItems())...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: CircularProgressIndicator(),
+                        )
+                      ]
+                    ],
+                  ),
+                ),
+              );
+            })
+    );
+  }
 
   void openLearningTrack(LearningTracksModel learningTrack) =>
       pageController.insertPage(ViewLearningTracksScreen(
@@ -162,4 +190,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           },
         },
       ));
+
+  double _getWidgetInfo() {
+    final RenderBox? renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox?;
+    final Size? size = renderBox?.size;
+    return size?.height ?? 300;
+  }
+
+  int getItemsPerLine(){
+    return MediaQuery.of(context).size.width >= 760 ? 4 : 2;
+  }
+
+  int getSizeOfList(List list,int itemsPerLine ) {
+    return list.length % itemsPerLine == 0 ? (list.length/itemsPerLine).round() + 1 : (list.length/itemsPerLine).ceil();
+  }
+
+
+
+  double size(int itemsPerLine, list){
+    return (MediaQuery.of(context).size.width >= 760
+        ? (MediaQuery.of(context).size.width / 4) - 6
+        : (MediaQuery.of(context).size.width / 2) - 12) * (itemsPerLine - list.length % itemsPerLine - 1);
+  }
+
+
+
+  int xxx(lastNine, list, itemsPerLine) {
+    return (lastNine ? list.length % itemsPerLine : itemsPerLine);
+  }
 }
