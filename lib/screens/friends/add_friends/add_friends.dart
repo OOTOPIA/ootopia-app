@@ -35,7 +35,6 @@ class _AddFriendsState extends State<AddFriends> {
   TextEditingController messageController = TextEditingController();
   SmartPageController controller = SmartPageController.getInstance();
   late FriendsStore friendsStore;
-
   @override
   void initState() {
     super.initState();
@@ -158,7 +157,10 @@ class _AddFriendsState extends State<AddFriends> {
                         prefixIcon: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            friendsStore.searchNewName(messageController.text);
+                            if (friendsStore.isLoadingSearch == false) {
+                              friendsStore
+                                  .searchNewName(messageController.text);
+                            }
                           },
                           icon: Container(
                             margin: EdgeInsets.symmetric(horizontal: 12),
@@ -301,6 +303,7 @@ class _AddFriendsState extends State<AddFriends> {
 
   Widget itemShimmer() {
     double size = MediaQuery.of(context).size.width - (25 + 14 + 48 + 82);
+
     return Shimmer.fromColors(
       baseColor: Colors.grey[300] ?? Colors.blue,
       highlightColor: Colors.grey[100] ?? Colors.blue,
