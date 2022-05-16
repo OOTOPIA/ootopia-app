@@ -29,7 +29,8 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
     loggedIn = await getUserIsLoggedIn();
     if (loggedIn) {
       user = await getCurrentUser();
-      isUserOwnsPost = user!.id == widget.post.userId;
+      isUserOwnsPost =
+          (user!.id == widget.post.userId) || user!.isAdmin == true;
     } else {
       isUserOwnsPost = false;
     }
@@ -47,8 +48,10 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
       modalSharedCopyLink(Type.posts, context);
       return;
     }
+    print((user!.id == widget.post.userId) || user!.isAdmin == true);
 
-    if ((isUserOwnsPost && optionSelected == 'delete') || user!.isAdmin) {
+    if ((isUserOwnsPost && optionSelected == 'delete') ||
+        (user != null && user!.isAdmin == true)) {
       widget.callbackReturnPopupMenu(optionSelected);
     }
   }
