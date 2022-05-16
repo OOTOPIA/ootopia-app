@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
@@ -62,12 +61,12 @@ class AppUsageTime with SecureStoreMixin {
           } catch (e) {}
         }
         prefs!.setFeedbackTime(lastTime + 1000);
-        if (await FlutterBackgroundService().isServiceRunning()) {
-          FlutterBackgroundService().sendData({
-            "action": "ON_UPDATE_USAGE_TIME",
-            "value": new DateTime.now().millisecondsSinceEpoch,
-          });
-        }
+        // if (await FlutterBackgroundService().isServiceRunning()) {
+        //   FlutterBackgroundService().sendData({
+        //     "action": "ON_UPDATE_USAGE_TIME",
+        //     "value": new DateTime.now().millisecondsSinceEpoch,
+        //   });
+        // }
       }
     }
   }
