@@ -5,7 +5,6 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:ootopia_app/screens/components/information_widget.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
-import 'package:ootopia_app/screens/home/home_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
@@ -72,7 +71,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         }
         else{
           return LoadingOverlay(
-            isLoading: marketplaceStore.viewState == ViewState.loading,
+            isLoading: marketplaceStore.loadingPage(),
             child: Provider(
               create: (_) => marketplaceStore,
               child: SingleChildScrollView(
@@ -132,48 +131,47 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   Widget listWidget(List list){
     int itemsPerLine = getItemsPerLine();
-    int amount = getSizeOfList(list, itemsPerLine);
+    int amount = getSizeOfList(list.length, itemsPerLine);
+    double headerSize = _getHeaderSize();
     return Container(
-        height: MediaQuery.of(context).size.height - (_getHeadSize() ) ,
+        height: MediaQuery.of(context).size.height - (headerSize ) ,
         width: MediaQuery.of(context).size.width,
         child: ListView.builder(
             controller: _scrollController,
             itemCount: amount,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              bool isLastNine = index + 1 == amount;
-              return Empty(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: isLastNine ? _getHeadSize() : 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Wrap(
-                        children: [
-                          for (int i=0; i < getAmountOfItems(isLastNine, list, itemsPerLine); i++)...[
-                            ProductItem(productModel: list[index * itemsPerLine + i]),
-                          ],
-                          if(isLastNine)...[
-                            CreateOfferButtonWidget(
-                                topMargin: list.length % itemsPerLine != 0,
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(PageRoute
-                                      .Page.aboutEthicalMarketPlace.route);
-                                }),
-                            SizedBox(
-                              width: _size(itemsPerLine, list),
-                            )
-                          ]
+              bool isLastItem = index + 1 == amount;
+              return Padding(
+                padding: EdgeInsets.only(bottom: isLastItem ? headerSize : 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Wrap(
+                      children: [
+                        for (int i=0; i < getAmountOfItems(isLastItem, list.length, itemsPerLine); i++)...[
+                          ProductItem(productModel: list[index * itemsPerLine + i]),
                         ],
-                      ),
-                      if(isLastNine && marketplaceStore.loadingMoreItems())...[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 12.0),
-                          child: CircularProgressIndicator(),
-                        )
-                      ]
-                    ],
-                  ),
+                        if(isLastItem)...[
+                          CreateOfferButtonWidget(
+                              topMargin: list.length % itemsPerLine != 0,
+                              onTap: () {
+                                Navigator.of(context).pushNamed(PageRoute
+                                    .Page.aboutEthicalMarketPlace.route);
+                              }),
+                          SizedBox(
+                            width: _size(itemsPerLine, list.length),
+                          )
+                        ]
+                      ],
+                    ),
+                    if(isLastItem && marketplaceStore.loadingMoreItems())...[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: CircularProgressIndicator(),
+                      )
+                    ]
+                  ],
                 ),
               );
             })
@@ -196,21 +194,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     return MediaQuery.of(context).size.width >= 760 ? 4 : 2;
   }
 
-  int getAmountOfItems(lastNine, list, itemsPerLine) {
-    return (lastNine ? list.length % itemsPerLine : itemsPerLine);
+  int getAmountOfItems(bool lastNine, int length, itemsPerLine) {
+    return (lastNine ? length % itemsPerLine : itemsPerLine);
   }
 
-  int getSizeOfList(List list,int itemsPerLine ) {
-    return list.length % itemsPerLine == 0 ? (list.length/itemsPerLine).round() + 1 : (list.length/itemsPerLine).ceil();
+  int getSizeOfList(int length,int itemsPerLine ) {
+    return length % itemsPerLine == 0 ? (length/itemsPerLine).round() + 1 : (length/itemsPerLine).ceil();
   }
 
-  double _size(int itemsPerLine, list){
+  double _size(int itemsPerLine, int length){
     return (MediaQuery.of(context).size.width >= 760
         ? (MediaQuery.of(context).size.width / 4) - 6
-        : (MediaQuery.of(context).size.width / 2) - 12) * (itemsPerLine - list.length % itemsPerLine - 1);
+        : (MediaQuery.of(context).size.width / 2) - 12) * (itemsPerLine - length % itemsPerLine - 1);
   }
 
-  double _getHeadSize() {
+  double _getHeaderSize() {
     final RenderBox? renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox?;
     final Size? size = renderBox?.size;
     return size?.height ?? 300;
