@@ -9,7 +9,8 @@ import 'package:ootopia_app/theme/light/colors.dart';
 
 class CreateOfferButtonWidget extends StatelessWidget {
   final Function onTap;
-  const CreateOfferButtonWidget({Key? key, required this.onTap})
+  final bool topMargin;
+  const CreateOfferButtonWidget({Key? key, required this.onTap, this.topMargin = true})
       : super(key: key);
 
   @override
@@ -26,7 +27,9 @@ class CreateOfferButtonWidget extends StatelessWidget {
                 : (constraints.maxWidth / 2) - 24;
             return Column(
               children: [
-                SizedBox(height: 44.6),
+                Visibility(
+                  visible: topMargin,
+                    child: SizedBox(height: 44.6)),
                 DottedBorder(
                   strokeCap: StrokeCap.square,
                   dashPattern: [10, 10],

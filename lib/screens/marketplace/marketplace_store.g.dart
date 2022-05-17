@@ -9,21 +9,6 @@ part of 'marketplace_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
-  final _$currentPageAtom = Atom(name: 'MarketplaceStoreBase.currentPage');
-
-  @override
-  int get currentPage {
-    _$currentPageAtom.reportRead();
-    return super.currentPage;
-  }
-
-  @override
-  set currentPage(int value) {
-    _$currentPageAtom.reportWrite(value, super.currentPage, () {
-      super.currentPage = value;
-    });
-  }
-
   final _$viewStateAtom = Atom(name: 'MarketplaceStoreBase.viewState');
 
   @override
@@ -69,20 +54,21 @@ mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
     });
   }
 
-  final _$getProductListAsyncAction =
-      AsyncAction('MarketplaceStoreBase.getProductList');
+  final _$getProductsAsyncAction =
+      AsyncAction('MarketplaceStoreBase.getProducts');
 
   @override
-  Future<void> getProductList({int? limit, int? offset}) {
-    return _$getProductListAsyncAction
-        .run(() => super.getProductList(limit: limit, offset: offset));
+  Future<void> getProducts({bool clearList = false}) {
+    return _$getProductsAsyncAction
+        .run(() => super.getProducts(clearList: clearList));
   }
 
-  final _$getDataAsyncAction = AsyncAction('MarketplaceStoreBase.getData');
+  final _$getMoreProductsAsyncAction =
+      AsyncAction('MarketplaceStoreBase.getMoreProducts');
 
   @override
-  Future<void> getData() {
-    return _$getDataAsyncAction.run(() => super.getData());
+  Future<void> getMoreProducts() {
+    return _$getMoreProductsAsyncAction.run(() => super.getMoreProducts());
   }
 
   final _$refreshDataAsyncAction =
@@ -96,7 +82,6 @@ mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
   @override
   String toString() {
     return '''
-currentPage: ${currentPage},
 viewState: ${viewState},
 productList: ${productList},
 hasMoreItems: ${hasMoreItems}

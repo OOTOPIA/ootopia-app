@@ -92,7 +92,6 @@ dependencies:
   awesome_notifications: ^0.6.21
   contacts_service: ^0.6.3
   country_codes: ^2.1.1
-  firebase_crashlytics:
 
 dev_dependencies:
   flutter_test:
