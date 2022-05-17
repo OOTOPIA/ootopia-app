@@ -48,7 +48,6 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
       modalSharedCopyLink(Type.posts, context);
       return;
     }
-    print((user!.id == widget.post.userId) || user!.isAdmin == true);
 
     if ((isUserOwnsPost && optionSelected == 'delete') ||
         (user != null && user!.isAdmin == true)) {
