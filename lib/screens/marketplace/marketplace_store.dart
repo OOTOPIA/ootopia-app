@@ -30,7 +30,7 @@ abstract class MarketplaceStoreBase with Store {
   Future<void> getProducts({bool clearList = false}) async {
     try {
       final List<ProductModel> response = await _marketplaceRepository
-          .getProducts(limit: itemsPerPageCount, offset: currentPage);
+          .getProducts(limit: itemsPerPageCount, offset: currentPage*itemsPerPageCount);
       hasMoreItems = response.length == itemsPerPageCount;
       if(clearList){
         productList.clear();
