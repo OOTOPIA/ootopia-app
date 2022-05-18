@@ -44,7 +44,7 @@ abstract class LearningTracksStoreBase with Store {
     String lang = setLocale(Platform.localeName);
     try{
       var response = await repository.listLearningTracks(
-          limit: limit, offset: offset, locale: lang);
+          limit: limit, offset: offset*limit, locale: lang);
       viewState = TimelineViewState.ok;
       return response;
     }catch(error){
