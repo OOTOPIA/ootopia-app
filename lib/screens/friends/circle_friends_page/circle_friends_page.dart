@@ -423,40 +423,44 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Stack(
-                          children: [
-                            Shimmer.fromColors(
-                              baseColor: Colors.grey[300] ?? Colors.blue,
-                              highlightColor: Colors.grey[100] ?? Colors.blue,
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                              ),
-                            ),
-                            SizedBox(
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              friendModel.photoUrl ?? '',
+                              fit: BoxFit.cover,
                               width: 40,
                               height: 40,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(
-                                  friendModel.photoUrl ?? '',
-                                  fit: BoxFit.cover,
-                                  width: 40,
-                                  height: 40,
-                                  errorBuilder: (context, url, error) =>
-                                      Image.asset(
-                                    'assets/icons/user.png',
-                                    fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[300] ?? Colors.blue,
+                                  highlightColor: Colors.grey[100] ?? Colors.blue,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
                                     width: 40,
                                     height: 40,
                                   ),
-                                ),
+                                );
+                              },
+                              errorBuilder: (context, url, error) =>
+                                  Image.asset(
+                                'assets/icons/user.png',
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
                               ),
                             ),
-                          ],
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 12),
@@ -610,28 +614,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return Stack(
                         children: [
-                          Shimmer.fromColors(
-                            baseColor: Colors.grey[300] ?? Colors.blue,
-                            highlightColor: Colors.grey[100] ?? Colors.blue,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: index == 0 ? 25 : 8,
-                                top: 2,
-                                right: index ==
-                                        (friendModel.friendsThumbs!.length - 1)
-                                    ? 14
-                                    : 0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              height: 76,
-                              width: 74,
-                            ),
-                          ),
                           Container(
                             width: 74,
                             height: 76,
@@ -651,6 +633,25 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 fit: BoxFit.cover,
                                 width: 74,
                                 height: 76,
+                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey[300] ?? Colors.blue,
+                                    highlightColor: Colors.grey[100] ?? Colors.blue,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      height: 76,
+                                      width: 74,
+                                    ),
+                                  );
+                                },
                                 errorBuilder: (context, url, error) =>
                                     Container(
                                   decoration: BoxDecoration(color: Colors.grey),

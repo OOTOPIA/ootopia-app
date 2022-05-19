@@ -234,10 +234,11 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
                     right: index == size - 1 ? 24 : 0),
                 child: Stack(
                   children: [
-                    itemShimmer(),
                     if (items.isNotEmpty) ...[
                       itemFriend(
                           items[widget.isUserLogged ? index - 1 : index]),
+                    ]else...[
+                      itemShimmer(),
                     ]
                   ],
                 )),

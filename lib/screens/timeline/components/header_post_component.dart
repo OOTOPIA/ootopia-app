@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class HeaderPostComponent extends StatelessWidget {
   final String username;
   final String? photoUrl;
-  
   final String? city;
   final String? state;
   final Function()? goToProfile;
-  const HeaderPostComponent({
+  late bool hasCity;
+  late bool hasState;
+  HeaderPostComponent({
     Key? key,
     required this.username,
     this.photoUrl,
@@ -16,8 +17,15 @@ class HeaderPostComponent extends StatelessWidget {
     this.goToProfile,
   }) : super(key: key);
 
+
+  init(){
+    hasCity = city?.isNotEmpty ?? false;
+    hasState = city?.isNotEmpty ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    init();
     return GestureDetector(
       onTap: () => goToProfile!(),
       child: Row(
@@ -39,7 +47,7 @@ class HeaderPostComponent extends StatelessWidget {
                   ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width / 1.5,
+            width: MediaQuery.of(context).size.width - (44 + 90),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -52,11 +60,10 @@ class HeaderPostComponent extends StatelessWidget {
                   ),
                 ),
                 Visibility(
-                  visible: (this.city != null && this.city!.isNotEmpty) ||
-                      (this.state != null && this.state!.isNotEmpty),
+                  visible: hasCity || hasState,
                   child: Text(
                     '${this.city}' +
-                        (this.state != null && this.state!.isNotEmpty
+                        (hasState
                             ? ', ${this.state}'
                             : ''),
                     textAlign: TextAlign.start,
