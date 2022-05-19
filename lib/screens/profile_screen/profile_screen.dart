@@ -164,6 +164,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  dale() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            content: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: AppLocalizations.of(context)!.removeUser,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400)),
+                TextSpan(
+                    text: ' ${store!.profile!.fullname} ',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
+                TextSpan(
+                  text: AppLocalizations.of(context)!.permanently,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                )
+              ]),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  )),
+              TextButton(
+                  onPressed: () {
+                    store!.deleteUser();
+                  },
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
@@ -197,11 +255,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         controller: _scrollController,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
-                            ProfileAvatarWidget(profileScreenStore: store),
+                            Stack(
+                              children: [
+                                ProfileAvatarWidget(
+                                  profileScreenStore: store,
+                                ),
+                                if (authStore.currentUser!.isAdmin)
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: PopupMenuButton(
+                                      icon: Icon(Icons.more_vert),
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            onTap: dale,
+                                            title: RichText(
+                                              text: TextSpan(children: [
+                                                TextSpan(
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                    ),
+                                                    text: AppLocalizations.of(
+                                                            context)!
+                                                        .remove),
+                                                TextSpan(
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14,
+                                                    ),
+                                                    text:
+                                                        ' ${store!.profile!.fullname}')
+                                              ]),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
                             SizedBox(
                                 height:
                                     GlobalConstants.of(context).spacingSmall),

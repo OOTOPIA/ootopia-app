@@ -203,7 +203,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "dialCode": user.dialCode.toString(),
         "tagsIds": tagsIds.join(","),
         "links": user.links!.length > 0 ? jsonEncode(user.links!) : '',
-        "languages": user.languages!.length > 0 ? user.languages!.join(",") : '',
+        "languages":
+            user.languages!.length > 0 ? user.languages!.join(",") : '',
       };
 
       if (user.photoFilePath != null && uploader != null) {
@@ -259,6 +260,18 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "timeInMilliseconds": timeInMilliseconds,
       },
     );
+  }
+
+  Future<bool> deleteUser(String id) async {
+    try {
+      var response = await ApiClient.api().delete(
+        "users/$id",
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to delete user, please try again');
+    }
   }
 
   @override

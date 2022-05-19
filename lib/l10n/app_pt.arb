@@ -527,7 +527,9 @@
     "selecLanguages": "Selecione os de sua preferência.",
     "portuguese": "Português",
     "english": "Inglês",
-    "french": "Francês"
+    "french": "Francês",
+    "removeUser": "Remover",
+    "permanently":"permanentemente"
 
 }
 

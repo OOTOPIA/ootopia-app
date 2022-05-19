@@ -21,7 +21,7 @@ class AvatarPhotoWidget extends StatefulWidget {
 class _AvatarPhotoWidgetState extends State<AvatarPhotoWidget> {
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
+    return Stack(alignment: Alignment.center, children: [
       Container(
         width: widget.sizePhotoUrl != null ? widget.sizePhotoUrl : 124,
         height: widget.sizePhotoUrl != null ? widget.sizePhotoUrl : 124,

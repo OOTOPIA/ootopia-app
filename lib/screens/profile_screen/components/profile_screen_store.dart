@@ -42,6 +42,9 @@ abstract class _ProfileScreenStoreBase with Store {
   @observable
   bool isFriend = false;
 
+  @observable
+  bool _deletedUser = false;
+
   @computed
   int get postsOffset => _postsOffset;
 
@@ -50,6 +53,9 @@ abstract class _ProfileScreenStoreBase with Store {
 
   @computed
   bool get loadingPosts => _loadingPosts;
+
+  @computed
+  bool get deletedUser => _deletedUser;
 
   int get maxPostsPerPage => 12;
 
@@ -139,5 +145,9 @@ abstract class _ProfileScreenStoreBase with Store {
       return post.medias!.first.type!;
     }
     return post.type;
+  }
+
+  Future<void> deleteUser() async {
+    _deletedUser = await repository.deleteUser(profile!.id);
   }
 }
