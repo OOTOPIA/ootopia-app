@@ -65,7 +65,7 @@ class _TimelinePageState extends State<TimelinePage>
   late TimelineStore timelineStore;
 
   late FlickMultiManager flickMultiManager;
-  late StreamSubscription _sub;
+  //late StreamSubscription _sub;
   late AuthStore authStore;
   bool showRemainingTime = false;
   bool showRemainingTimeEnd = false;
@@ -118,10 +118,10 @@ class _TimelinePageState extends State<TimelinePage>
     _handleIncomingLinks();
     _handleInitialUri();
 
-    Future.delayed(Duration.zero, () {
-      timelineStore.init(controller);
+    //Future.delayed(Duration.zero, () {
+      //timelineStore.init(controller);
       //timelineStore.startTimelineViewTimer();
-    });
+    //});
     if (widget.args != null &&
         widget.args?['redirectToInvitationCode'] != null) {
       Future.delayed(Duration(milliseconds: 700), () {
@@ -131,7 +131,8 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   void _handleIncomingLinks() {
-    _sub = linkStream.listen((link) {
+    //_sub =
+    linkStream.listen((link) {
       if (link == null) return;
       if (link.contains("posts/shared")) goToPost(link);
       if (link.contains("market-place/shared")) goToMarketPlace(link);
@@ -168,14 +169,14 @@ class _TimelinePageState extends State<TimelinePage>
     );
   }
 
-  goToMarketPlace(String link) async {
+  void goToMarketPlace(String link) async {
     ProductModel productModel = await marketplaceRepository
         .getProductById(link.split('market-place/shared/').last);
 
     controller.insertPage(ProductDetailScreen(productModel: productModel));
   }
 
-  goToLearningTracks(String link) async {
+  void goToLearningTracks(String link) async {
     LearningTracksModel learningTrack = await learningTracksStore
         .getLearningTrackById(link.split('learning-tracks/shared/').last);
 
@@ -212,13 +213,13 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  goToResetPassword() async {
+  void goToResetPassword() async {
     await Navigator.of(context).pushNamed(
       PageRoute.Page.resetPasswordScreen.route,
     );
   }
 
-  performAllRequests() async {
+  void performAllRequests() async {
     print("PERFORM ALL BEFORE");
     await _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
@@ -359,11 +360,13 @@ class _TimelinePageState extends State<TimelinePage>
     return Observer(builder: (_) {
       if (timelineStore.viewState == TimelineViewState.loading) {
         return Center(child: CircularProgressIndicator());
-      } else if (timelineStore.viewState == TimelineViewState.error) {
+      }
+      else if (timelineStore.viewState == TimelineViewState.error) {
         return TryAgain(
           () => timelineStore.getTimelinePosts(),
         );
-      } else if (timelineStore.viewState == TimelineViewState.ok &&
+      }
+      else if (timelineStore.viewState == TimelineViewState.ok &&
           timelineStore.allPosts.length == 0) {
         return Center(
           child: Column(
