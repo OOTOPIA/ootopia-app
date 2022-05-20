@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -41,9 +40,9 @@ class PhotoTimeline extends StatefulWidget {
   final User? user;
   bool loggedIn = false;
   final FlickMultiManager flickMultiManager;
-  bool isProfile;
-  Function onDelete;
-  bool isRegister;
+  final bool isProfile;
+  final Function onDelete;
+  final bool isRegister;
   PhotoTimeline({
     required Key key,
     this.index,
@@ -160,7 +159,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     ));
   }
 
-  _popupMenuReturn(String selectedOption) {
+  void _popupMenuReturn(String selectedOption) {
     if (selectedOption == 'delete') {
       _showMyDialog();
     }
@@ -180,7 +179,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     );
   }
 
-  _deletePost() async {
+  void _deletePost() async {
     await timelineStore.removePost(this.post);
     widget.onDelete();
   }
@@ -303,11 +302,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                               scrollDirection: Axis.horizontal,
                               itemCount: this.post.tags.length,
                               itemBuilder: (ctx, index) {
-                                return Opacity(
-                                  opacity: 0.8,
-                                  child: HashtagName(
-                                    hashtagName: this.post.tags[index],
-                                  ),
+                                return HashtagName(
+                                  hashtagName: this.post.tags[index],
                                 );
                               },
                             ),
@@ -706,19 +702,16 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             child: Container(
               margin: EdgeInsets.only(bottom: 8),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 12, left: 12),
-                        child: Text(
-                          this.post.commentsCount.toString() +
-                              " ${AppLocalizations.of(context)!.comments}",
-                          style:
-                              TextStyle(color: Colors.black.withOpacity(0.4)),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 12, left: 12),
+                    child: Text(
+                      this.post.commentsCount.toString() +
+                          " ${AppLocalizations.of(context)!.comments}",
+                      style:
+                      TextStyle(color: Colors.black.withOpacity(0.4)),
+                    ),
                   ),
                   Row(
                     children: [
@@ -782,7 +775,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     });
   }
 
-  _showConfirmGratitudeReward() {
+  void _showConfirmGratitudeReward() {
     var dontAskIsChecked = false;
     showDialog(
       context: context,
@@ -1250,7 +1243,7 @@ class HashtagName extends StatelessWidget {
           "#$hashtagName",
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white,
+            color: Colors.white.withOpacity(0.8),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -1259,70 +1252,70 @@ class HashtagName extends StatelessWidget {
   }
 }
 
-class CustomContainerShapeBorder extends CustomPainter {
-  final double x;
-
-  CustomContainerShapeBorder({this.x = 0});
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.blue.shade900;
-
-    double calcPosition = x >= 36 ? x - 36 : 0;
-
-    canvas.translate(calcPosition, 0);
-
-    canvas.drawRRect(
-      RRect.fromRectAndCorners(
-        Rect.fromLTRB(
-          0,
-          0,
-          32,
-          30,
-        ),
-        bottomLeft: Radius.circular(100),
-        topLeft: Radius.circular(100),
-        topRight: Radius.circular(12),
-        bottomRight: Radius.circular(12),
-      ),
-      paint,
-    );
-
-    canvas.translate(31, 0);
-
-    var path = Path();
-    path.lineTo(0, 15);
-    path.lineTo(15, 15);
-    path.close();
-    canvas.drawPath(path, paint);
-
-    var path2 = Path();
-    path2.lineTo(15, 15);
-    path2.lineTo(0, 30);
-    path2.close();
-    canvas.drawPath(path2, paint);
-    //var path = createPath(3, 36);
-    //canvas.drawPath(path, paint..color = Colors.green);
-    //canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-
-  Path createPath(int sides, double radius) {
-    var path = Path();
-    var angle = (math.pi * 2) / sides;
-    path.moveTo(radius * math.cos(0.0), radius * math.sin(0.0));
-    for (int i = 1; i <= sides; i++) {
-      double x = radius * math.cos(angle * i);
-      double y = radius * math.sin(angle * i);
-      path.lineTo(x, y);
-    }
-    path.close();
-    return path;
-  }
-}
+// class CustomContainerShapeBorder extends CustomPainter {
+//   final double x;
+//
+//   CustomContainerShapeBorder({this.x = 0});
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()..color = Colors.blue.shade900;
+//
+//     double calcPosition = x >= 36 ? x - 36 : 0;
+//
+//     canvas.translate(calcPosition, 0);
+//
+//     canvas.drawRRect(
+//       RRect.fromRectAndCorners(
+//         Rect.fromLTRB(
+//           0,
+//           0,
+//           32,
+//           30,
+//         ),
+//         bottomLeft: Radius.circular(100),
+//         topLeft: Radius.circular(100),
+//         topRight: Radius.circular(12),
+//         bottomRight: Radius.circular(12),
+//       ),
+//       paint,
+//     );
+//
+//     canvas.translate(31, 0);
+//
+//     var path = Path();
+//     path.lineTo(0, 15);
+//     path.lineTo(15, 15);
+//     path.close();
+//     canvas.drawPath(path, paint);
+//
+//     var path2 = Path();
+//     path2.lineTo(15, 15);
+//     path2.lineTo(0, 30);
+//     path2.close();
+//     canvas.drawPath(path2, paint);
+//     //var path = createPath(3, 36);
+//     //canvas.drawPath(path, paint..color = Colors.green);
+//     //canvas.restore();
+//   }
+//
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return true;
+//   }
+//
+//   Path createPath(int sides, double radius) {
+//     var path = Path();
+//     var angle = (math.pi * 2) / sides;
+//     path.moveTo(radius * math.cos(0.0), radius * math.sin(0.0));
+//     for (int i = 1; i <= sides; i++) {
+//       double x = radius * math.cos(angle * i);
+//       double y = radius * math.sin(angle * i);
+//       path.lineTo(x, y);
+//     }
+//     path.close();
+//     return path;
+//   }
+// }
 
 // Usar caso seja necessário no futuro, atualmente o player do youtube será desabilitado
 // YoutubePlayer(
