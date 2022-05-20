@@ -20,7 +20,6 @@ class ItemFriend extends StatelessWidget {
   Widget build(BuildContext context) {
     final double size = 56;
     return Container(
-      height: 150,
       width: 100,
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(8),

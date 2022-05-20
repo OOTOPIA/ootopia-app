@@ -141,7 +141,7 @@ class _SuggestionFriendsState extends State<SuggestionFriends> {
       },
       child: Container(
         width: 100,
-        height: 150,
+        height: 130,
         decoration: BoxDecoration(
           color: LightColors.grey.withOpacity(0.05),
           borderRadius: BorderRadius.all(Radius.circular(8)),
