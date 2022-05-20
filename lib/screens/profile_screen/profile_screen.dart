@@ -357,7 +357,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               isVisible: isVisible,
                               profileScreenStore: store,
                             ),
-                            if (store!.profile?.languages != null)
+                            if (store!.profile?.languages?.isNotEmpty == true)
                               LanguageUnderstoodWidget(
                                 languages: store!.profile?.languages,
                               ),

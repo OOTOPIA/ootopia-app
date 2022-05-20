@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen>
       initialPages: [
         TimelinePage(null),
         LearningTracksScreen(),
-        LearningTracksScreen(),
+        Empty(),
         MarketplaceScreen(),
         ProfileScreen(null),
       ],
@@ -753,5 +753,26 @@ class _HomeScreenState extends State<HomeScreen>
       provisional: false,
       sound: true,
     );
+  }
+}
+
+class Empty extends StatefulWidget {
+  final Widget? child;
+  const Empty({Key? key, this.child}) : super(key: key);
+
+  @override
+  _EmptyState createState() => _EmptyState();
+}
+
+class _EmptyState extends State<Empty> {
+  @override
+  void dispose() {
+    print('dispose');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child != null ? widget.child! : Container();
   }
 }

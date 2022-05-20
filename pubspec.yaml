@@ -36,11 +36,11 @@ dependencies:
   gallery_saver: ^2.1.0
   flutter_uploader: ^3.0.0-beta.2
   http: ^0.13.3
-  rxdart: ^0.27.1
+  #rxdart: ^0.27.1
   intl: ^0.17.0
   flutter_dotenv: ^5.0.0
   flutter_bloc: ^7.0.1
-  equatable: ^2.0.3
+  #equatable: ^2.0.3
   loading_overlay: ^0.3.0
   flutter_secure_storage: ^4.2.0
   email_validator: ^2.0.1
@@ -50,7 +50,7 @@ dependencies:
   geolocator: 8.0.1
   geocoding: ^2.0.0
   image_picker: ^0.8.4+4
-  flutter_hooks: ^0.18.0
+  #flutter_hooks: ^0.18.0
   video_player: 2.2.6
   provider: ^5.0.0
   flick_video_player: ^0.3.1
@@ -80,13 +80,12 @@ dependencies:
   crisp: ^0.2.0
   share_extend: "^2.0.0"
   intl_phone_number_input: ^0.7.0+2
-  syncfusion_flutter_sliders: ^19.2.62
+  #syncfusion_flutter_sliders: ^19.2.62
   #firebase_dynamic_links: ^2.0.9
   webview_flutter: ^2.0.14
   smart_page_navigation: ^1.1.2
   dotted_border: ^2.0.0+1
-  flutter_background_service: ^0.1.5
-  wakelock: ^0.5.6
+  #wakelock: ^0.5.6
   firebase_messaging: ^11.2.4
   firebase_core: ^1.10.6
   device_info: ^2.0.3
