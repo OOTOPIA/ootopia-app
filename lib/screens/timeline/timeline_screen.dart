@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ootopia_app/data/models/general_config/general_config_model.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
@@ -12,29 +14,26 @@ import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
-import 'package:ootopia_app/screens/components/last_learning_track_component.dart';
 import 'package:ootopia_app/screens/components/try_again.dart';
 import 'package:ootopia_app/screens/invitation_screen/invitation_screen.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
-import 'package:ootopia_app/screens/timeline/components/post_timeline_component.dart';
+import 'package:ootopia_app/screens/timeline/components/post_widget/post_widget.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/distribution_system.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:flutter/services.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:visibility_detector/visibility_detector.dart';
 
+import 'components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'components/invite_your_friends.dart';
 
 bool _initialUriIsHandled = false;
@@ -58,7 +57,7 @@ class _TimelinePageState extends State<TimelinePage>
   User? user;
   bool showUploadedVideoMessage = false;
   GeneralConfigRepositoryImpl generalConfigRepositoryImpl =
-      GeneralConfigRepositoryImpl();
+  GeneralConfigRepositoryImpl();
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
   SecureStoreMixin secureStoreMixin = SecureStoreMixin();
@@ -67,11 +66,10 @@ class _TimelinePageState extends State<TimelinePage>
   late FlickMultiManager flickMultiManager;
   //late StreamSubscription _sub;
   late AuthStore authStore;
-  bool showRemainingTime = false;
-  bool showRemainingTimeEnd = false;
+  //bool showRemainingTime = false;
+  //bool showRemainingTimeEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
-  LearningTracksRepositoryImpl learningTracksStore =
-      LearningTracksRepositoryImpl();
+  LearningTracksRepositoryImpl learningTracksStore = LearningTracksRepositoryImpl();
   MarketplaceRepositoryImpl marketplaceRepository = MarketplaceRepositoryImpl();
 
   @override
@@ -94,8 +92,8 @@ class _TimelinePageState extends State<TimelinePage>
         onReceiveVideoFromAnotherApp(value);
       });
     });
-    setTimelineVideosMuted();
 
+    setTimelineVideosMuted();
     performAllRequests();
     flickMultiManager = FlickMultiManager();
 
@@ -105,7 +103,7 @@ class _TimelinePageState extends State<TimelinePage>
       });
       Timer(
         Duration(milliseconds: 5000),
-        () {
+            () {
           setState(() {
             showUploadedVideoMessage = false;
           });
@@ -119,8 +117,8 @@ class _TimelinePageState extends State<TimelinePage>
     _handleInitialUri();
 
     //Future.delayed(Duration.zero, () {
-      //timelineStore.init(controller);
-      //timelineStore.startTimelineViewTimer();
+    //timelineStore.init(controller);
+    //timelineStore.startTimelineViewTimer();
     //});
     if (widget.args != null &&
         widget.args?['redirectToInvitationCode'] != null) {
@@ -153,7 +151,7 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  void goToPost(String link) async {
+  Future<void> goToPost(String link) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
     String postId = link.split("/").last;
     var post = await postsRepository.getPostById(postId);
@@ -169,14 +167,14 @@ class _TimelinePageState extends State<TimelinePage>
     );
   }
 
-  void goToMarketPlace(String link) async {
+  Future<void> goToMarketPlace(String link) async {
     ProductModel productModel = await marketplaceRepository
         .getProductById(link.split('market-place/shared/').last);
 
     controller.insertPage(ProductDetailScreen(productModel: productModel));
   }
 
-  void goToLearningTracks(String link) async {
+  Future<void> goToLearningTracks(String link) async {
     LearningTracksModel learningTrack = await learningTracksStore
         .getLearningTrackById(link.split('learning-tracks/shared/').last);
 
@@ -213,7 +211,7 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  void goToResetPassword() async {
+  Future<void> goToResetPassword() async {
     await Navigator.of(context).pushNamed(
       PageRoute.Page.resetPasswordScreen.route,
     );
@@ -234,7 +232,6 @@ class _TimelinePageState extends State<TimelinePage>
       setTransferOOZToPostLimit(transferOozToPostLimitConfig?.value ?? 0);
       timelineStore.getTimelinePosts();
     } catch (e) {
-      //error
       print("Erro!!! ${e.toString()}");
     }
   }
@@ -304,7 +301,7 @@ class _TimelinePageState extends State<TimelinePage>
     // These are the callbacks
     switch (state) {
       case AppLifecycleState.resumed:
-        //timelineStore.startTimelineViewTimer();
+      //timelineStore.startTimelineViewTimer();
         break;
       case AppLifecycleState.inactive:
         timelineStore.stopTimelineViewTimer();
@@ -334,20 +331,15 @@ class _TimelinePageState extends State<TimelinePage>
             BackgroundButterflyTop(positioned: -59),
             BackgroundButterflyBottom(positioned: -50),
             SafeArea(
-              child: NestedScrollView(
-                headerSliverBuilder: (BuildContext context, bool _) {
-                  return [];
-                },
-                body: Column(
-                  children: [
-                    InviteYourFriends(),
-                    Expanded(
-                      child: Center(
-                        child: body(),
-                      ),
+              child: Column(
+                children: [
+                  InviteYourFriends(),
+                  Expanded(
+                    child: Center(
+                      child: body(),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -363,7 +355,7 @@ class _TimelinePageState extends State<TimelinePage>
       }
       else if (timelineStore.viewState == TimelineViewState.error) {
         return TryAgain(
-          () => timelineStore.getTimelinePosts(),
+              () => timelineStore.getTimelinePosts(),
         );
       }
       else if (timelineStore.viewState == TimelineViewState.ok &&
@@ -409,44 +401,20 @@ class _TimelinePageState extends State<TimelinePage>
                       timelineStore.reloadPosts();
                     },
                     child: ListView.separated(
+                      addAutomaticKeepAlives: false,
+                      addRepaintBoundaries: false,
                       itemCount: timelineStore.allPosts.length,
                       separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
+                      const Divider(),
                       itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            if (index == 0) LastLearningTrackComponents(),
-                            PhotoTimeline(
-                              key: ObjectKey(timelineStore.allPosts[index]),
-                              index: index,
-                              post: timelineStore.allPosts[index],
-                              timelineStore: this.timelineStore,
-                              loggedIn: this.loggedIn,
-                              user: user,
-                              flickMultiManager: flickMultiManager,
-                              isProfile: false,
-                              onDelete: () => setState(() {}),
-                            ),
-                            Observer(
-                              builder: (_) => (timelineStore.loadingMorePosts &&
-                                      index ==
-                                          timelineStore.allPosts.length - 1 &&
-                                      timelineStore.hasMorePosts
-                                  ? SizedBox(
-                                      width: double.infinity,
-                                      height: 90,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )
-                                  : Container(
-                                      padding: index ==
-                                              timelineStore.allPosts.length - 1
-                                          ? EdgeInsets.only(bottom: 90)
-                                          : null,
-                                    )),
-                            ),
-                          ],
+                        return PostWidget(
+                          index: index,
+                          post: timelineStore.allPosts[index],
+                          action: () => setState(() {}),
+                          timelineStore: timelineStore,
+                          flickMultiManager: flickMultiManager,
+                          user: user,
+                          loggedIn: loggedIn,
                         );
                       },
                     ),
@@ -460,59 +428,59 @@ class _TimelinePageState extends State<TimelinePage>
     });
   }
 
-  // Widget get remainingTime => Padding(
-  //       padding: EdgeInsets.only(
-  //         right: 19,
-  //       ),
-  //       child: GestureDetector(
-  //         onTap: () => setState(() {
-  //           if (dailyGoalStats != null) {
-  //             showRemainingTime = !showRemainingTime;
-  //             showRemainingTimeEnd = !showRemainingTime;
-  //           }
-  //         }),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             Icon(
-  //               FeatherIcons.clock,
-  //               color: Theme.of(context).iconTheme.color,
-  //             ),
-  //             AnimatedOpacity(
-  //               opacity: showRemainingTime ? 1 : 0,
-  //               duration: Duration(milliseconds: 500),
-  //               onEnd: () {},
-  //               child: Visibility(
-  //                 visible: showRemainingTime,
-  //                 child: Padding(
-  //                   padding: EdgeInsets.only(left: 4),
-  //                   child: Column(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       Text(
-  //                         store.remainingTime,
-  //                         style:
-  //                             Theme.of(context).textTheme.bodyText2!.copyWith(
-  //                                   fontWeight: FontWeight.bold,
-  //                                   color: Color(0xff707070),
-  //                                 ),
-  //                       ),
-  //                       Text(
-  //                         AppLocalizations.of(context)!.remaining,
-  //                         style:
-  //                             Theme.of(context).textTheme.bodyText2!.copyWith(
-  //                                   fontSize: 12,
-  //                                   color: Color(0xff707070),
-  //                                 ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     );
+// Widget get remainingTime => Padding(
+//       padding: EdgeInsets.only(
+//         right: 19,
+//       ),
+//       child: GestureDetector(
+//         onTap: () => setState(() {
+//           if (dailyGoalStats != null) {
+//             showRemainingTime = !showRemainingTime;
+//             showRemainingTimeEnd = !showRemainingTime;
+//           }
+//         }),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.end,
+//           children: [
+//             Icon(
+//               FeatherIcons.clock,
+//               color: Theme.of(context).iconTheme.color,
+//             ),
+//             AnimatedOpacity(
+//               opacity: showRemainingTime ? 1 : 0,
+//               duration: Duration(milliseconds: 500),
+//               onEnd: () {},
+//               child: Visibility(
+//                 visible: showRemainingTime,
+//                 child: Padding(
+//                   padding: EdgeInsets.only(left: 4),
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Text(
+//                         store.remainingTime,
+//                         style:
+//                             Theme.of(context).textTheme.bodyText2!.copyWith(
+//                                   fontWeight: FontWeight.bold,
+//                                   color: Color(0xff707070),
+//                                 ),
+//                       ),
+//                       Text(
+//                         AppLocalizations.of(context)!.remaining,
+//                         style:
+//                             Theme.of(context).textTheme.bodyText2!.copyWith(
+//                                   fontSize: 12,
+//                                   color: Color(0xff707070),
+//                                 ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
 
 }
