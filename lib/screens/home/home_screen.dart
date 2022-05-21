@@ -764,6 +764,12 @@ class Empty extends StatefulWidget {
 
 class _EmptyState extends State<Empty> {
 
+  @override
+  void initState() {
+    print('initState');
+    super.initState();
+  }
+
 
   @override
   void dispose() {

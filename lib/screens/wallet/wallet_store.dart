@@ -35,7 +35,7 @@ abstract class _WalletStoreBase with Store {
   Future getWalletTransfersHistory(int offset,
       [String? walletTransferAction]) async {
     var resultTransactions = await walletRepositoryImpl.getTransactionHistory(
-        50, offset, walletTransferAction);
+        12, offset*12, walletTransferAction);
     var map = groupBy(
       resultTransactions,
       (WalletTransfer obj) => DateFormat('MMM d, y')
