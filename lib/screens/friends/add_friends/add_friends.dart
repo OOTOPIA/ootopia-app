@@ -153,14 +153,19 @@ class _AddFriendsState extends State<AddFriends> {
                       style: GoogleFonts.roboto(
                           fontSize: 14, fontWeight: FontWeight.normal),
                       onEditingComplete: () {
-                        friendsStore.searchNewName(messageController.text);
+                        if (friendsStore.isLoadingSearch == false) {
+                          friendsStore.searchNewName(messageController.text);
+                        }
                       },
                       decoration: InputDecoration(
                         fillColor: Colors.white.withOpacity(0.3),
                         prefixIcon: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            friendsStore.searchNewName(messageController.text);
+                            if (friendsStore.isLoadingSearch == false) {
+                              friendsStore
+                                  .searchNewName(messageController.text);
+                            }
                           },
                           icon: Container(
                             margin: EdgeInsets.symmetric(horizontal: 12),
