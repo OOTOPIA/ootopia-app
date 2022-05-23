@@ -262,18 +262,6 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
     );
   }
 
-  Future<bool> deleteUser(String id) async {
-    try {
-      var response = await ApiClient.api().delete(
-        "users/$id",
-      );
-      return response.statusCode == 200;
-    } catch (e) {
-      print(e);
-      throw Exception('Failed to delete user, please try again');
-    }
-  }
-
   @override
   Future updateUserRegenerarionGameLearningAlert(String type) async {
     bool loggedIn = await getUserIsLoggedIn();

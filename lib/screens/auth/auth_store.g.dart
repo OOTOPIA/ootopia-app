@@ -77,6 +77,21 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$deletedUserAtom = Atom(name: 'AuthStoreBase.deletedUser');
+
+  @override
+  bool get deletedUser {
+    _$deletedUserAtom.reportRead();
+    return super.deletedUser;
+  }
+
+  @override
+  set deletedUser(bool value) {
+    _$deletedUserAtom.reportWrite(value, super.deletedUser, () {
+      super.deletedUser = value;
+    });
+  }
+
   final _$checkEmailExistAsyncAction =
       AsyncAction('AuthStoreBase.checkEmailExist');
 
@@ -153,6 +168,7 @@ mixin _$AuthStore on AuthStoreBase, Store {
 isLoading: ${isLoading},
 errorOnGetTags: ${errorOnGetTags},
 emailExist: ${emailExist},
+deletedUser: ${deletedUser},
 currentUser: ${currentUser}
     ''';
   }

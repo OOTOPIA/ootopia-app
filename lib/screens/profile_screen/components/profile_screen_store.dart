@@ -146,8 +146,4 @@ abstract class _ProfileScreenStoreBase with Store {
     }
     return post.type;
   }
-
-  Future<void> deleteUser() async {
-    _deletedUser = await repository.deleteUser(profile!.id);
-  }
 }

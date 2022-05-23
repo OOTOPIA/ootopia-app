@@ -164,8 +164,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  dale() {
-    showDialog(
+  void showModalProfile() async {
+    Navigator.pop(context);
+    await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -207,8 +208,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   )),
               TextButton(
-                  onPressed: () {
-                    store!.deleteUser();
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    controller.back();
+                    await authStore.deleteUser();
+                    if (authStore.deletedUser) {
+                      print('hahaha');
+                      controller.back();
+                    } else {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('content')));
+                    }
                   },
                   child: Text(
                     'Ok',
@@ -274,7 +284,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           <PopupMenuEntry>[
                                         PopupMenuItem(
                                           child: ListTile(
-                                            onTap: dale,
+                                            onTap: showModalProfile,
                                             title: RichText(
                                               text: TextSpan(children: [
                                                 TextSpan(

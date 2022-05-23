@@ -40,6 +40,9 @@ abstract class AuthStoreBase with Store {
   @observable
   bool emailExist = false;
 
+  @observable
+  bool deletedUser = false;
+
   @action
   Future<void> checkEmailExist(String email) async =>
       emailExist = await authRepository.emailExist(email);
@@ -134,6 +137,14 @@ abstract class AuthStoreBase with Store {
       } else {
         throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
       }
+    }
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      deletedUser = await authRepository.deleteUser(currentUser!.id!);
+    } catch (e) {
+      throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
     }
   }
 }
