@@ -144,7 +144,7 @@ abstract class AuthStoreBase with Store {
     try {
       deletedUser = await authRepository.deleteUser(currentUser!.id!);
     } catch (e) {
-      throw ("Ocorreu um erro ao recuperar a senha. Tente novamente.");
+      throw ("Ocorreu um erro ao deletar o usuario. Tente novamente.");
     }
   }
 }
