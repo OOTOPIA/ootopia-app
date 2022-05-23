@@ -6,6 +6,7 @@ import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/friends/get_contacts.dart';
+import 'package:ootopia_app/screens/friends/shimmer/item_shimmer.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -35,6 +36,7 @@ class _AddFriendsState extends State<AddFriends> {
   TextEditingController messageController = TextEditingController();
   SmartPageController controller = SmartPageController.getInstance();
   late FriendsStore friendsStore;
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +87,7 @@ class _AddFriendsState extends State<AddFriends> {
         ],
         onTapAction: redirectToHomePage,
       );
+
   Widget body(BuildContext context) {
     return Stack(
       children: [
@@ -218,7 +221,7 @@ class _AddFriendsState extends State<AddFriends> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        return itemShimmer();
+                        return ItemShimmer();
                       }),
                 ] else if (friendsStore.searchIsEmpty) ...[
                   Container(
@@ -260,6 +263,8 @@ class _AddFriendsState extends State<AddFriends> {
                         ? MediaQuery.of(context).size.height - 100
                         : MediaQuery.of(context).size.height - 250,
                     child: ListView.builder(
+                        addAutomaticKeepAlives: false,
+                        addRepaintBoundaries: false,
                         itemCount: friendsStore.usersSearch.friends!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Column(
@@ -300,84 +305,6 @@ class _AddFriendsState extends State<AddFriends> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget itemShimmer() {
-    double size = MediaQuery.of(context).size.width - (25 + 14 + 48 + 82);
-
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300] ?? Colors.blue,
-      highlightColor: Colors.grey[100] ?? Colors.blue,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(25, 16, 25, 0),
-            child: Row(
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white, shape: BoxShape.circle),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 11,
-                        width: size * 0.35,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 6),
-                        height: 8,
-                        width: size * 0.23,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  height: 24,
-                  width: 80,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 90,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                itemCount: 4,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                      left: index == 0 ? 25 : 8,
-                      top: 14,
-                      right: index == 4 ? 14 : 0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    height: 76,
-                    width: 74,
-                  );
-                }),
-          )
-        ],
-      ),
     );
   }
 
@@ -652,7 +579,7 @@ class _AddFriendsState extends State<AddFriends> {
     }
   }
 
-  getIfIsFriend(FriendModel friendModel) {
+  bool getIfIsFriend(FriendModel friendModel) {
     if (friendModel.isFriend == true) {
       return true;
     }

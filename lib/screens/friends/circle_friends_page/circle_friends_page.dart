@@ -6,6 +6,7 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/friends/add_friends/add_friends.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
+import 'package:ootopia_app/screens/friends/shimmer/item_shimmer.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -239,7 +240,7 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    return itemShimmer();
+                    return ItemShimmer();
                   }),
             ] else if (isPageOfUserLogged() && allFriendsIsHide()) ...[
               Container(
@@ -275,6 +276,8 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                 margin: EdgeInsets.only(top: 4),
                 height: MediaQuery.of(context).size.height - 220,
                 child: ListView.builder(
+                    addAutomaticKeepAlives: false,
+                    addRepaintBoundaries: false,
                     itemCount: amountOfFriends(),
                     itemBuilder: (BuildContext context, int index) {
                       return Column(
@@ -320,82 +323,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
     );
   }
 
-  Widget itemShimmer() {
-    double size = MediaQuery.of(context).size.width - (25 + 14 + 48 + 82);
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300] ?? Colors.blue,
-      highlightColor: Colors.grey[100] ?? Colors.blue,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(25, 31, 25, 0),
-            child: Row(
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white, shape: BoxShape.circle),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 11,
-                        width: size * 0.35,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 6),
-                        height: 8,
-                        width: size * 0.23,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  height: 24,
-                  width: 80,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 90,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                itemCount: 4,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                      left: index == 0 ? 25 : 8,
-                      top: 14,
-                      right: index == 4 ? 14 : 0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    height: 76,
-                    width: 74,
-                  );
-                }),
-          )
-        ],
-      ),
-    );
-  }
 
   Widget itemFriend(FriendModel friendModel) {
     return AnimatedContainer(
@@ -423,40 +350,44 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Stack(
-                          children: [
-                            Shimmer.fromColors(
-                              baseColor: Colors.grey[300] ?? Colors.blue,
-                              highlightColor: Colors.grey[100] ?? Colors.blue,
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                              ),
-                            ),
-                            SizedBox(
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              friendModel.photoUrl ?? '',
+                              fit: BoxFit.cover,
                               width: 40,
                               height: 40,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(
-                                  friendModel.photoUrl ?? '',
-                                  fit: BoxFit.cover,
-                                  width: 40,
-                                  height: 40,
-                                  errorBuilder: (context, url, error) =>
-                                      Image.asset(
-                                    'assets/icons/user.png',
-                                    fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[300] ?? Colors.blue,
+                                  highlightColor: Colors.grey[100] ?? Colors.blue,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
                                     width: 40,
                                     height: 40,
                                   ),
-                                ),
+                                );
+                              },
+                              errorBuilder: (context, url, error) =>
+                                  Image.asset(
+                                'assets/icons/user.png',
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
                               ),
                             ),
-                          ],
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 12),
@@ -610,28 +541,6 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return Stack(
                         children: [
-                          Shimmer.fromColors(
-                            baseColor: Colors.grey[300] ?? Colors.blue,
-                            highlightColor: Colors.grey[100] ?? Colors.blue,
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: index == 0 ? 25 : 8,
-                                top: 2,
-                                right: index ==
-                                        (friendModel.friendsThumbs!.length - 1)
-                                    ? 14
-                                    : 0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              height: 76,
-                              width: 74,
-                            ),
-                          ),
                           Container(
                             width: 74,
                             height: 76,
@@ -651,6 +560,25 @@ class _CircleOfFriendPageState extends State<CircleOfFriendPage> {
                                 fit: BoxFit.cover,
                                 width: 74,
                                 height: 76,
+                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey[300] ?? Colors.blue,
+                                    highlightColor: Colors.grey[100] ?? Colors.blue,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      height: 76,
+                                      width: 74,
+                                    ),
+                                  );
+                                },
                                 errorBuilder: (context, url, error) =>
                                     Container(
                                   decoration: BoxDecoration(color: Colors.grey),

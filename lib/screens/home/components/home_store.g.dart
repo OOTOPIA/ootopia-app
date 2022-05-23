@@ -9,68 +9,6 @@ part of 'home_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeStore on HomeStoreBase, Store {
-  final _$currentPageIndexAtom = Atom(name: 'HomeStoreBase.currentPageIndex');
-
-  @override
-  int get currentPageIndex {
-    _$currentPageIndexAtom.reportRead();
-    return super.currentPageIndex;
-  }
-
-  @override
-  set currentPageIndex(int value) {
-    _$currentPageIndexAtom.reportWrite(value, super.currentPageIndex, () {
-      super.currentPageIndex = value;
-    });
-  }
-
-  final _$currentPageWidgetAtom = Atom(name: 'HomeStoreBase.currentPageWidget');
-
-  @override
-  StatefulWidget? get currentPageWidget {
-    _$currentPageWidgetAtom.reportRead();
-    return super.currentPageWidget;
-  }
-
-  @override
-  set currentPageWidget(StatefulWidget? value) {
-    _$currentPageWidgetAtom.reportWrite(value, super.currentPageWidget, () {
-      super.currentPageWidget = value;
-    });
-  }
-
-  final _$showRemainingTimeAtom = Atom(name: 'HomeStoreBase.showRemainingTime');
-
-  @override
-  bool get showRemainingTime {
-    _$showRemainingTimeAtom.reportRead();
-    return super.showRemainingTime;
-  }
-
-  @override
-  set showRemainingTime(bool value) {
-    _$showRemainingTimeAtom.reportWrite(value, super.showRemainingTime, () {
-      super.showRemainingTime = value;
-    });
-  }
-
-  final _$showRemainingTimeEndAtom =
-      Atom(name: 'HomeStoreBase.showRemainingTimeEnd');
-
-  @override
-  bool get showRemainingTimeEnd {
-    _$showRemainingTimeEndAtom.reportRead();
-    return super.showRemainingTimeEnd;
-  }
-
-  @override
-  set showRemainingTimeEnd(bool value) {
-    _$showRemainingTimeEndAtom.reportWrite(value, super.showRemainingTimeEnd,
-        () {
-      super.showRemainingTimeEnd = value;
-    });
-  }
-
   final _$dailyGoalStatsAtom = Atom(name: 'HomeStoreBase.dailyGoalStats');
 
   @override
@@ -83,23 +21,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
   set dailyGoalStats(DailyGoalStatsModel? value) {
     _$dailyGoalStatsAtom.reportWrite(value, super.dailyGoalStats, () {
       super.dailyGoalStats = value;
-    });
-  }
-
-  final _$percentageOfDailyGoalAchievedAtom =
-      Atom(name: 'HomeStoreBase.percentageOfDailyGoalAchieved');
-
-  @override
-  double get percentageOfDailyGoalAchieved {
-    _$percentageOfDailyGoalAchievedAtom.reportRead();
-    return super.percentageOfDailyGoalAchieved;
-  }
-
-  @override
-  set percentageOfDailyGoalAchieved(double value) {
-    _$percentageOfDailyGoalAchievedAtom
-        .reportWrite(value, super.percentageOfDailyGoalAchieved, () {
-      super.percentageOfDailyGoalAchieved = value;
     });
   }
 
@@ -257,15 +178,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
         .run(() => super.updateDailyGoalStatsByMessage(dailyGoalStats));
   }
 
-  final _$readyToShowCelebratePageAsyncAction =
-      AsyncAction('HomeStoreBase.readyToShowCelebratePage');
-
-  @override
-  Future<bool> readyToShowCelebratePage() {
-    return _$readyToShowCelebratePageAsyncAction
-        .run(() => super.readyToShowCelebratePage());
-  }
-
   final _$getCurrentUserAsyncAction =
       AsyncAction('HomeStoreBase.getCurrentUser');
 
@@ -289,17 +201,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
-  dynamic setCurrentPageWidget(StatefulWidget pageWidget) {
-    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
-        name: 'HomeStoreBase.setCurrentPageWidget');
-    try {
-      return super.setCurrentPageWidget(pageWidget);
-    } finally {
-      _$HomeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setShowCreatedPostAlert(bool value) {
     final _$actionInfo = _$HomeStoreBaseActionController.startAction(
         name: 'HomeStoreBase.setShowCreatedPostAlert');
@@ -316,17 +217,6 @@ mixin _$HomeStore on HomeStoreBase, Store {
         name: 'HomeStoreBase.setCreatedPostAlertAlreadyShowed');
     try {
       return super.setCreatedPostAlertAlreadyShowed(value);
-    } finally {
-      _$HomeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic setCelebratePageAlreadyOpened(bool show) {
-    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
-        name: 'HomeStoreBase.setCelebratePageAlreadyOpened');
-    try {
-      return super.setCelebratePageAlreadyOpened(show);
     } finally {
       _$HomeStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -357,12 +247,7 @@ mixin _$HomeStore on HomeStoreBase, Store {
   @override
   String toString() {
     return '''
-currentPageIndex: ${currentPageIndex},
-currentPageWidget: ${currentPageWidget},
-showRemainingTime: ${showRemainingTime},
-showRemainingTimeEnd: ${showRemainingTimeEnd},
 dailyGoalStats: ${dailyGoalStats},
-percentageOfDailyGoalAchieved: ${percentageOfDailyGoalAchieved},
 remainingTime: ${remainingTime},
 totalAppUsageTimeSoFar: ${totalAppUsageTimeSoFar},
 showCreatedPostAlert: ${showCreatedPostAlert},

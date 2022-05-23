@@ -164,36 +164,36 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 // void onStartService() async {
 //   WidgetsFlutterBinding.ensureInitialized();
-//   final service = FlutterBackgroundService();
+//   //final service = FlutterBackgroundService();
 //   int lastUpdateUsageTimeInMs = 0;
 //   const int maxAttempts = 5;
 //   int currentAttempt = 1;
-//   service.onDataReceived.listen((event) {
-//     if (event!["action"] == "setAsForeground") {
-//       service.setForegroundMode(true);
-//       return;
-//     }
-
-//     if (event["action"] == "setAsBackground") {
-//       service.setForegroundMode(false);
-//     }
-
-//     if (event["action"] == "stopService") {
-//       service.stopBackgroundService();
-//     }
-
-//     if (event["action"] == "START_SYNC") {
-//       service.setNotificationInfo(
-//         title: "OOTOPIA",
-//         content: event["message"],
-//       );
-//     }
-
-//     if (event["action"] == "ON_UPDATE_USAGE_TIME") {
-//       lastUpdateUsageTimeInMs = event["value"];
-//     }
-//   });
-//   service.setForegroundMode(true);
+//   // service.onDataReceived.listen((event) {
+//   //   if (event!["action"] == "setAsForeground") {
+//   //     service.setForegroundMode(true);
+//   //     return;
+//   //   }
+//   //
+//   //   if (event["action"] == "setAsBackground") {
+//   //     service.setForegroundMode(false);
+//   //   }
+//   //
+//   //   if (event["action"] == "stopService") {
+//   //     service.stopBackgroundService();
+//   //   }
+//   //
+//   //   if (event["action"] == "START_SYNC") {
+//   //     service.setNotificationInfo(
+//   //       title: "OOTOPIA",
+//   //       content: event["message"],
+//   //     );
+//   //   }
+//   //
+//   //   if (event["action"] == "ON_UPDATE_USAGE_TIME") {
+//   //     lastUpdateUsageTimeInMs = event["value"];
+//   //   }
+//   // });
+//   // service.setForegroundMode(true);
 //   //Quando o aplicativo fechar, iremos verificar se a ultima atualização do
 //   //tempo de visualização da timeline foi há mais de 30 segundos atrás
 //   //Se for, enviamos o tempo de visualização para a api, pois esse tempo será convertido em OOZ
@@ -207,12 +207,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //       try {
 //         await AppUsageTime.instance.sendToApi();
 //         timer.cancel();
-//         service.stopBackgroundService();
+//         //service.stopBackgroundService();
 //       } catch (err) {
 //         currentAttempt++;
 //         if (currentAttempt >= maxAttempts) {
 //           timer.cancel();
-//           service.stopBackgroundService();
+//           //service.stopBackgroundService();
 //         }
 //       }
 //     }
