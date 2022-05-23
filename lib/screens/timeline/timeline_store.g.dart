@@ -93,21 +93,6 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
-  final _$_sendingToApiAtom = Atom(name: 'TimelineStoreBase._sendingToApi');
-
-  @override
-  bool get _sendingToApi {
-    _$_sendingToApiAtom.reportRead();
-    return super._sendingToApi;
-  }
-
-  @override
-  set _sendingToApi(bool value) {
-    _$_sendingToApiAtom.reportWrite(value, super._sendingToApi, () {
-      super._sendingToApi = value;
-    });
-  }
-
   final _$_postsOffsetAtom = Atom(name: 'TimelineStoreBase._postsOffset');
 
   @override
@@ -135,21 +120,6 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   set viewState(TimelineViewState value) {
     _$viewStateAtom.reportWrite(value, super.viewState, () {
       super.viewState = value;
-    });
-  }
-
-  final _$dailyGoalStatsAtom = Atom(name: 'TimelineStoreBase.dailyGoalStats');
-
-  @override
-  ObservableFuture<DailyGoalStatsModel?>? get dailyGoalStats {
-    _$dailyGoalStatsAtom.reportRead();
-    return super.dailyGoalStats;
-  }
-
-  @override
-  set dailyGoalStats(ObservableFuture<DailyGoalStatsModel?>? value) {
-    _$dailyGoalStatsAtom.reportWrite(value, super.dailyGoalStats, () {
-      super.dailyGoalStats = value;
     });
   }
 
@@ -218,7 +188,6 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
 scrollController: ${scrollController},
 allPosts: ${allPosts},
 viewState: ${viewState},
-dailyGoalStats: ${dailyGoalStats},
 hasMorePosts: ${hasMorePosts},
 loadingMorePosts: ${loadingMorePosts},
 postsOffset: ${postsOffset}

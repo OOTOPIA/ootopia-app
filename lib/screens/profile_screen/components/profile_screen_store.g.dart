@@ -214,6 +214,20 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
         .run(() => super.getUserPosts(userId, limit: limit, offset: offset));
   }
 
+  final _$_ProfileScreenStoreBaseActionController =
+      ActionController(name: '_ProfileScreenStoreBase');
+
+  @override
+  dynamic cleanPage() {
+    final _$actionInfo = _$_ProfileScreenStoreBaseActionController.startAction(
+        name: '_ProfileScreenStoreBase.cleanPage');
+    try {
+      return super.cleanPage();
+    } finally {
+      _$_ProfileScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

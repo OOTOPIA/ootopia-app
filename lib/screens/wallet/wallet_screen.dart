@@ -60,7 +60,6 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
 
   Future<void> _performAllRequests() async {
     await walletStore.getWallet();
-
     switch (_activeTabIndex) {
       case 0:
         await walletStore.getWalletTransfersHistory(0); //all
@@ -293,15 +292,12 @@ class _WalletPageState extends State<WalletPage> with TickerProviderStateMixin {
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                              TabHistory(walletStore, "all"),
-                              TabHistory(walletStore, "sent"),
-                              TabHistory(walletStore, "received"),
+                              TabHistory(walletStore, "all",  walletStore.getTabBarHeight(screenHeight)),
+                              TabHistory(walletStore, "sent",   walletStore.getTabBarHeight(screenHeight)),
+                              TabHistory(walletStore, "received",   walletStore.getTabBarHeight(screenHeight)),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 40,
-                        )
                       ],
                     ),
                   ),

@@ -1,7 +1,5 @@
-import 'dart:async';
-import 'dart:ui' as ui;
-
-
+// import 'dart:async';
+// import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class ImagePostTimeline extends StatefulWidget {
@@ -21,18 +19,15 @@ class ImagePostTimeline extends StatefulWidget {
 class _ImagePostTimeline extends State<ImagePostTimeline> {
   @override
   Widget build(BuildContext context) {
-    Image image = Image.network(
-      widget.image,
-    );
-    Completer<ui.Image> completer = Completer<ui.Image>();
-    image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
-      (ImageInfo image, bool synchronousCall) {
-        completer.complete(image.image);
-      },
-    ));
-
-
-
+    // Image image = Image.network(
+    //   widget.image,
+    // );
+    // Completer<ui.Image> completer = Completer<ui.Image>();
+    // image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
+    //   (ImageInfo image, bool synchronousCall) {
+    //     completer.complete(image.image);
+    //   },
+    // ));
     return GestureDetector(
       onDoubleTap: () {
         if (this.widget.onDoubleTapVideo != null) {
