@@ -180,11 +180,11 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
       ActionController(name: 'TimelineStoreBase');
 
   @override
-  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+  void goToTopTimeline() {
     final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
         name: 'TimelineStoreBase.goToTopTimeline');
     try {
-      return super.goToTopTimeline(timelinePostBloc);
+      return super.goToTopTimeline();
     } finally {
       _$TimelineStoreBaseActionController.endAction(_$actionInfo);
     }

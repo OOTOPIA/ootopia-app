@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
-import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_marketplace.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/auth/insert_invitation_code.dart';
@@ -83,6 +81,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
+
   ///FlutterBackgroundService.initialize(onStartService);
   await CountryCodes.init();
   var configuredApp = new AppConfig(
@@ -274,13 +273,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (BuildContext context) => TimelinePostBloc(
-            PostRepositoryImpl(),
-          ),
-        ),
-      ],
+      providers: [],
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => FriendsStore()),

@@ -4,13 +4,11 @@ import 'dart:ui' as ui;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
@@ -58,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen>
   late AuthStore authStore;
   HomeStore? homeStore;
   late TimelineStore timelineStore;
-  late TimelinePostBloc timelinePostBloc;
 
   late ProfileScreenStore profileStore;
   Widget? currentPageWidget;
@@ -111,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen>
         if (event.channelKey == 'basic_channel' && Platform.isIOS) {
           AwesomeNotifications().decrementGlobalBadgeCounter();
         }
-        final payload = event.payload!;
+        final payload = event.payload;
         if (payload != null) {
           Future.delayed(Duration(seconds: 3)).then((h) async {
             if (payload["type"] == 'new-follower') {
@@ -212,7 +209,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    timelinePostBloc = BlocProvider.of<TimelinePostBloc>(context);
     Color selectedIconColor = LightColors.blue;
     Color unselectedIconColor = Color(0XFF3A4046);
     authStore = Provider.of<AuthStore>(context);
@@ -452,8 +448,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   if (controller
                                           .pages[controller.currentPageIndex]
                                       is TimelinePage)
-                                    timelineStore
-                                        .goToTopTimeline(timelinePostBloc);
+                                    timelineStore.goToTopTimeline();
 
                                   controller.resetNavigation();
                                   break;
@@ -668,7 +663,7 @@ class _HomeScreenState extends State<HomeScreen>
         onTapTitle: () {
           if (controller.currentBottomIndex ==
               PageViewController.TAB_INDEX_TIMELINE) {
-            timelineStore.goToTopTimeline(timelinePostBloc);
+            timelineStore.goToTopTimeline();
           }
         },
       );
@@ -754,8 +749,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-
-
 class Empty extends StatefulWidget {
   final Widget? child;
   const Empty({Key? key, this.child}) : super(key: key);
@@ -765,8 +758,6 @@ class Empty extends StatefulWidget {
 }
 
 class _EmptyState extends State<Empty> {
-
-
   @override
   void dispose() {
     print('dispose');
@@ -775,7 +766,6 @@ class _EmptyState extends State<Empty> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child != null ? widget.child!: Container();
+    return widget.child != null ? widget.child! : Container();
   }
 }
-
