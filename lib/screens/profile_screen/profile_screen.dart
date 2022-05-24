@@ -13,10 +13,10 @@ import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/friends/suggestion_friends/suggestion_friends_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/language_understood_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
-import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -164,6 +164,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void showModalProfile() async {
+    Navigator.pop(context);
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            content: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: AppLocalizations.of(context)!.removeUser,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400)),
+                TextSpan(
+                    text: ' ${store!.profile!.fullname} ',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
+                TextSpan(
+                  text: AppLocalizations.of(context)!.permanently,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                )
+              ]),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  )),
+              TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    controller.back();
+                    await authStore.deleteUser(profileUserId);
+                    if (authStore.deletedUser) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          AppLocalizations.of(context)!.userDeleted,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ));
+                      controller.back();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            AppLocalizations.of(context)!
+                                .somethingWentWrongInDeleteUser,
+                            style: TextStyle(color: Colors.white),
+                          )));
+                    }
+                  },
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
@@ -197,11 +276,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         controller: _scrollController,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
                               height: GlobalConstants.of(context).spacingNormal,
                             ),
-                            ProfileAvatarWidget(profileScreenStore: store),
+                            Stack(
+                              children: [
+                                AvatarPhotoWidget(
+                                  photoUrl: store?.profile!.photoUrl,
+                                  sizePhotoUrl: 114,
+                                ),
+                                if (authStore.currentUser!.isAdmin)
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: PopupMenuButton(
+                                      icon: Icon(Icons.more_vert),
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          child: ListTile(
+                                            onTap: showModalProfile,
+                                            title: RichText(
+                                              text: TextSpan(children: [
+                                                TextSpan(
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                    ),
+                                                    text: AppLocalizations.of(
+                                                            context)!
+                                                        .remove),
+                                                TextSpan(
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14,
+                                                    ),
+                                                    text:
+                                                        ' ${store!.profile!.fullname}')
+                                              ]),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
                             SizedBox(
                                 height:
                                     GlobalConstants.of(context).spacingSmall),

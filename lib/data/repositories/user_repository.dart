@@ -203,7 +203,8 @@ class UserRepositoryImpl with SecureStoreMixin implements UserRepository {
         "dialCode": user.dialCode.toString(),
         "tagsIds": tagsIds.join(","),
         "links": user.links!.length > 0 ? jsonEncode(user.links!) : '',
-        "languages": user.languages!.length > 0 ? user.languages!.join(",") : '',
+        "languages":
+            user.languages!.length > 0 ? user.languages!.join(",") : '',
       };
 
       if (user.photoFilePath != null && uploader != null) {

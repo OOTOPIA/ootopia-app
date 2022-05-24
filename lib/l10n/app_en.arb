@@ -534,6 +534,10 @@
     "selecLanguages": "Select the ones you prefer.",
     "portuguese": "Portuguese",
     "english": "English",
-    "french": "French"
+    "french": "French",
+    "removeUser": "Remove",
+    "permanently":"permanently",
+    "userDeleted":"User successfully deleted!",
+    "somethingWentWrongInDeleteUser":"Something went wrong deleting the user, try again."
 
 }
