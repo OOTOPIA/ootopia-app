@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+//import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
@@ -81,8 +82,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
-
-  ///FlutterBackgroundService.initialize(onStartService);
+  //FlutterBackgroundService.initialize(onStartService);
   await CountryCodes.init();
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',

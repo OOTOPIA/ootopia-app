@@ -104,6 +104,9 @@ class CardInformationBalance extends StatelessWidget {
       case 'learning_track':
         text = AppLocalizations.of(context)!.learningTracks;
         break;
+      case 'posted_gallery':
+        text = AppLocalizations.of(context)!.newPost;
+        break;
     }
 
     return text;
@@ -298,7 +301,8 @@ class CardInformationBalance extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (this.originTransaction != "gratitude_reward")
+                  if (this.originTransaction != "gratitude_reward" &&
+                      this.originTransaction != "posted_gallery")
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                       child: Container(
