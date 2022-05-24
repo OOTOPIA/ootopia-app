@@ -23,7 +23,6 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   late final ScrollController _scrollController;
 
-
   @override
   void initState() {
     store.init();
@@ -45,65 +44,60 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
   }
 
   Widget body() {
-    return Observer(
-        builder: (_) {
-          if (store.pageError()) {
-            return TryAgain(
-              store.getLearningTracks,
-              buttonBackgroundColor: Colors.white,
-              messageTextColor: Colors.white,
-              buttonTextColor: Colors.black,
-            );
-          }
-          else if(store.pageLoading()){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          else if (store.allLearningTracks.isEmpty) {
-            return Center(
-              child: Text(
-                AppLocalizations.of(context)!.dontExistLearningTracks,
-              ),
-            );
-          }
-          else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                await store.refreshPage();
-              },
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                child: ListView.builder(
-                    addAutomaticKeepAlives: false,
-                    addRepaintBoundaries: false,
-                    controller: _scrollController,
-                    itemCount: store.allLearningTracks.length + 1,
-                    itemBuilder: (context, index) {
-                      if(index == 0 ){
-                        return LearningTrackInformation(
-                          onTap: () async {
-                            if (store.welcomeGuideLearningTrack == null) {
-                              await store.getWelcomeGuide();
-                            }
-                            if (store.welcomeGuideLearningTrack != null) {
-                              openLearningTrack(store.welcomeGuideLearningTrack!);
-                            }
-                          },
-                        );
-                      }
-                      var learningTrack = store.allLearningTracks[index - 1];
-                      return LearningTrackWidget(
-                        learningTrack: learningTrack,
-                        currencyFormatter: currencyFormatter,
-                        onTap: () => openLearningTrack(learningTrack),
-                      );
-                    }),
-              ),
-            );
-          }
-        }
-    );
+    return Observer(builder: (_) {
+      if (store.pageError()) {
+        return TryAgain(
+          store.getLearningTracks,
+          buttonBackgroundColor: Colors.white,
+          messageTextColor: Colors.white,
+          buttonTextColor: Colors.black,
+        );
+      } else if (store.pageLoading()) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (store.allLearningTracks.isEmpty) {
+        return Center(
+          child: Text(
+            AppLocalizations.of(context)!.dontExistLearningTracks,
+          ),
+        );
+      } else {
+        return RefreshIndicator(
+          onRefresh: () async {
+            await store.refreshPage();
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: ListView.builder(
+                addAutomaticKeepAlives: false,
+                addRepaintBoundaries: false,
+                controller: _scrollController,
+                itemCount: store.allLearningTracks.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return LearningTrackInformation(
+                      onTap: () async {
+                        if (store.welcomeGuideLearningTrack == null) {
+                          await store.getWelcomeGuide();
+                        }
+                        if (store.welcomeGuideLearningTrack != null) {
+                          openLearningTrack(store.welcomeGuideLearningTrack!);
+                        }
+                      },
+                    );
+                  }
+                  var learningTrack = store.allLearningTracks[index - 1];
+                  return LearningTrackWidget(
+                    learningTrack: learningTrack,
+                    currencyFormatter: currencyFormatter,
+                    onTap: () => openLearningTrack(learningTrack),
+                  );
+                }),
+          ),
+        );
+      }
+    });
   }
 
   void updateWidget() {
@@ -122,8 +116,10 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
   void scrollControllerConfig() {
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
-      if(_scrollController.offset >= _scrollController.position.maxScrollExtent*0.8 &&
-          store.hasMoreItems && !store.isLoadingMore){
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent * 0.8 &&
+          store.hasMoreItems &&
+          !store.isLoadingMore) {
         await store.loadMoreLearningTracks();
       }
     });

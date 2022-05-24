@@ -3,26 +3,121 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
+import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/share_link.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class LearningTrackWidget extends StatelessWidget {
+class LearningTrackWidget extends StatefulWidget {
   final LearningTracksModel learningTrack;
   final onTap;
   final NumberFormat currencyFormatter;
-  const LearningTrackWidget({Key? key,
-    required this.learningTrack,
-    required this.onTap,
-    required this.currencyFormatter}) : super(key: key);
+  LearningTrackWidget(
+      {Key? key,
+      required this.learningTrack,
+      required this.onTap,
+      required this.currencyFormatter})
+      : super(key: key);
+
+  @override
+  State<LearningTrackWidget> createState() => _LearningTrackWidgetState();
+}
+
+class _LearningTrackWidgetState extends State<LearningTrackWidget> {
+  final LearningTracksStore _learningTracksStore = LearningTracksStore();
+  SmartPageController controller = SmartPageController.getInstance();
+  void showModalDeleteLearningTrack() async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            content: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: AppLocalizations.of(context)!.removeUser,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400)),
+                TextSpan(
+                    text: ' ${widget.learningTrack.title} ',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
+                TextSpan(
+                  text: AppLocalizations.of(context)!.permanently,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                )
+              ]),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  )),
+              TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await _learningTracksStore
+                        .deleteLearningTrack(widget.learningTrack.id);
+                    if (_learningTracksStore.deleteLearning) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          AppLocalizations.of(context)!.userDeleted,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ));
+                      controller.back();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            AppLocalizations.of(context)!
+                                .somethingWentWrongInDeleteUser,
+                            style: TextStyle(color: Colors.white),
+                          )));
+                    }
+                  },
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ))
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
+    AuthStore authStore = Provider.of<AuthStore>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: InkWell(
-        key: Key(learningTrack.id.toString()),
+        key: Key(widget.learningTrack.id.toString()),
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
-        onTap: onTap,
+        onTap: widget.onTap,
+        onLongPress: authStore.currentUser!.isAdmin
+            ? showModalDeleteLearningTrack
+            : null,
         child: Column(
           children: [
             Row(
@@ -34,20 +129,20 @@ class LearningTrackWidget extends StatelessWidget {
                     CircleAvatar(
                       radius: 16,
                       backgroundImage: NetworkImage(
-                        learningTrack.userPhotoUrl,
+                        widget.learningTrack.userPhotoUrl,
                       ),
                     ),
                     SizedBox(
                       width: 8,
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width - (48  + 140) ,
+                      width: MediaQuery.of(context).size.width - (48 + 140),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            learningTrack.userName,
+                            widget.learningTrack.userName,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -55,11 +150,10 @@ class LearningTrackWidget extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: learningTrack.location !=
-                                'null' &&
-                                learningTrack.location != null,
+                            visible: widget.learningTrack.location != 'null' &&
+                                widget.learningTrack.location != null,
                             child: Text(
-                              learningTrack.location!,
+                              widget.learningTrack.location!,
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
@@ -73,7 +167,7 @@ class LearningTrackWidget extends StatelessWidget {
                 ),
                 ShareLink(
                   type: Type.learning_track,
-                  id: learningTrack.id,
+                  id: widget.learningTrack.id,
                 )
               ],
             ),
@@ -86,27 +180,24 @@ class LearningTrackWidget extends StatelessWidget {
                   width: double.infinity,
                   height: 200,
                   decoration: BoxDecoration(
-                    border: learningTrack.completed == true
+                    border: widget.learningTrack.completed == true
                         ? Border.all(
-                      color: Color(0xff018F9C),
-                      width: 3,
-                    )
+                            color: Color(0xff018F9C),
+                            width: 3,
+                          )
                         : Border.all(
-                        color: Color.fromARGB(1, 0, 0, 0),
-                        width: 0),
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(12)),
+                            color: Color.fromARGB(1, 0, 0, 0), width: 0),
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                     image: DecorationImage(
                       image: NetworkImage(
-                        learningTrack.imageUrl,
+                        widget.learningTrack.imageUrl,
                       ),
                       fit: BoxFit.cover,
                     ),
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(12)),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -121,11 +212,10 @@ class LearningTrackWidget extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   child: Container(
-                    width: MediaQuery.of(context).size.width  - 48,
-                    padding: const EdgeInsets.only(
-                        bottom: 16.0, left: 16),
+                    width: MediaQuery.of(context).size.width - 48,
+                    padding: const EdgeInsets.only(bottom: 16.0, left: 16),
                     child: Text(
-                      learningTrack.title,
+                      widget.learningTrack.title,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -143,7 +233,7 @@ class LearningTrackWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${learningTrack.chapters.length.toString()} ${AppLocalizations.of(context)!.lessons}',
+                  '${widget.learningTrack.chapters.length.toString()} ${AppLocalizations.of(context)!.lessons}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -153,15 +243,15 @@ class LearningTrackWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      learningTrack.completed == true
+                      widget.learningTrack.completed == true
                           ? AppLocalizations.of(context)!
-                          .completed
-                          .toUpperCase()
-                          : learningTrack.time,
+                              .completed
+                              .toUpperCase()
+                          : widget.learningTrack.time,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: learningTrack.completed == true
+                        color: widget.learningTrack.completed == true
                             ? Color(0xff018F9C)
                             : Colors.grey,
                       ),
@@ -176,7 +266,7 @@ class LearningTrackWidget extends StatelessWidget {
                     SizedBox(
                       width: 8,
                     ),
-                    if (!learningTrack.completed)...[
+                    if (!widget.learningTrack.completed) ...[
                       Text(
                         AppLocalizations.of(context)!.receive,
                         style: TextStyle(
@@ -193,7 +283,7 @@ class LearningTrackWidget extends StatelessWidget {
                       'assets/icons/ooz_mini_blue.svg',
                       height: 10,
                       width: 19.33,
-                      color: learningTrack.completed == true
+                      color: widget.learningTrack.completed == true
                           ? Color(0xff018F9C)
                           : Color(0xffA3A3A3),
                     ),
@@ -201,11 +291,11 @@ class LearningTrackWidget extends StatelessWidget {
                       width: 8,
                     ),
                     Text(
-                      '${currencyFormatter.format(learningTrack.ooz)}',
+                      '${widget.currencyFormatter.format(widget.learningTrack.ooz)}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: learningTrack.completed == true
+                        color: widget.learningTrack.completed == true
                             ? Color(0xff018F9C)
                             : Colors.grey,
                       ),
@@ -220,11 +310,10 @@ class LearningTrackWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                learningTrack.description,
+                widget.learningTrack.description,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w400),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
             ),
             SizedBox(

@@ -29,6 +29,9 @@ abstract class LearningTracksStoreBase with Store {
   @observable
   LearningTracksModel? lastLearningTracks;
 
+  @observable
+  bool deleteLearning = true;
+
   final int limit = 10;
   int offset = 0;
 
@@ -42,12 +45,12 @@ abstract class LearningTracksStoreBase with Store {
   @action
   Future<List<LearningTracksModel>> getLearningTracks() async {
     String lang = setLocale(Platform.localeName);
-    try{
+    try {
       var response = await repository.listLearningTracks(
-          limit: limit, offset: offset*limit, locale: lang);
+          limit: limit, offset: offset * limit, locale: lang);
       viewState = TimelineViewState.ok;
       return response;
-    }catch(error){
+    } catch (error) {
       viewState = TimelineViewState.error;
       return [];
     }
@@ -56,9 +59,9 @@ abstract class LearningTracksStoreBase with Store {
   @action
   Future<void> getLastLearningTracks() async {
     String lang = setLocale(Platform.localeName);
-    try{
+    try {
       lastLearningTracks = await repository.lastLearningTracks(locale: lang);
-    }catch(e){
+    } catch (e) {
       viewState = TimelineViewState.error;
     }
   }
@@ -86,23 +89,27 @@ abstract class LearningTracksStoreBase with Store {
     isLoadingMore = false;
   }
 
-  bool pageError(){
+  @action
+  Future<void> deleteLearningTrack(String id) async {
+    deleteLearning = await repository.deleteLearningTrack(id);
+  }
+
+  bool pageError() {
     return viewState == TimelineViewState.error;
   }
 
-  bool pageLoading(){
+  bool pageLoading() {
     return viewState == TimelineViewState.loading;
   }
 
-  String setLocale(String locale){
+  String setLocale(String locale) {
     if (locale.startsWith('pt')) {
       return 'pt-BR';
     }
     return "en";
   }
 
-  void setHasMoreItem(List list){
+  void setHasMoreItem(List list) {
     hasMoreItems = list.length >= limit;
   }
-
 }

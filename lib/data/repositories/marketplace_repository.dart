@@ -71,5 +71,17 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
     }
   }
 
+  Future<bool> deleteProduct(String id) async {
+    try {
+      var response = await ApiClient.api().delete("users/$id");
+      return response.statusCode == 200;
+    } catch (e) {
+      if (e is DioError) {
+        print('${e.error} ${e.response} ${e.message}');
+      }
+      throw Exception('Failed to delete product, please try again');
+    }
+  }
+
   String getLocale() => Platform.localeName == 'pt_BR' ? 'pt-BR' : 'en';
 }
