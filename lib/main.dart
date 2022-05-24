@@ -272,53 +272,50 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [],
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => FriendsStore()),
-          Provider<AuthStore>(
-            create: (_) => AuthStore(),
-          ),
-          Provider<HomeStore>(
-            create: (_) => HomeStore(),
-          ),
-          Provider<TimelineStore>(
-            create: (_) => TimelineStore(),
-          ),
-          Provider<WalletStore>(
-            create: (_) => WalletStore(),
-          ),
-          Provider<TimelineProfileStore>(
-            create: (_) => TimelineProfileStore(),
-          ),
-          Provider<PostPreviewScreenStore>(
-            create: (_) => PostPreviewScreenStore(),
-          ),
-          Provider<InvitationStore>(
-            create: (_) => InvitationStore(),
-          ),
-          Provider<ProfileScreenStore>(
-            create: (_) => ProfileScreenStore(),
-          ),
-          Provider<EditProfileStore>(
-            create: (_) => EditProfileStore(),
-          ),
-          Provider<PostTimelineComponentController>(
-            create: (_) => PostTimelineComponentController(),
-          )
-        ],
-        child: MaterialApp(
-          supportedLocales: L10n.all,
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          theme: AppTheme.instance(context).light,
-          home: MainPage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => FriendsStore()),
+        Provider<AuthStore>(
+          create: (_) => AuthStore(),
         ),
+        Provider<HomeStore>(
+          create: (_) => HomeStore(),
+        ),
+        Provider<TimelineStore>(
+          create: (_) => TimelineStore(),
+        ),
+        Provider<WalletStore>(
+          create: (_) => WalletStore(),
+        ),
+        Provider<TimelineProfileStore>(
+          create: (_) => TimelineProfileStore(),
+        ),
+        Provider<PostPreviewScreenStore>(
+          create: (_) => PostPreviewScreenStore(),
+        ),
+        Provider<InvitationStore>(
+          create: (_) => InvitationStore(),
+        ),
+        Provider<ProfileScreenStore>(
+          create: (_) => ProfileScreenStore(),
+        ),
+        Provider<EditProfileStore>(
+          create: (_) => EditProfileStore(),
+        ),
+        Provider<PostTimelineComponentController>(
+          create: (_) => PostTimelineComponentController(),
+        )
+      ],
+      child: MaterialApp(
+        supportedLocales: L10n.all,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        theme: AppTheme.instance(context).light,
+        home: MainPage(),
       ),
     );
   }

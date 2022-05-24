@@ -211,13 +211,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () async {
                     Navigator.pop(context);
                     controller.back();
-                    await authStore.deleteUser();
+                    await authStore.deleteUser(profileUserId);
                     if (authStore.deletedUser) {
-                      print('hahaha');
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          AppLocalizations.of(context)!.userDeleted,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ));
                       controller.back();
                     } else {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('content')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            AppLocalizations.of(context)!
+                                .somethingWentWrongInDeleteUser,
+                            style: TextStyle(color: Colors.white),
+                          )));
                     }
                   },
                   child: Text(

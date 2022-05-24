@@ -148,6 +148,13 @@ mixin _$AuthStore on AuthStoreBase, Store {
         .run(() => super.recoverPassword(email, lang));
   }
 
+  final _$deleteUserAsyncAction = AsyncAction('AuthStoreBase.deleteUser');
+
+  @override
+  Future<void> deleteUser(String id) {
+    return _$deleteUserAsyncAction.run(() => super.deleteUser(id));
+  }
+
   final _$AuthStoreBaseActionController =
       ActionController(name: 'AuthStoreBase');
 

@@ -536,6 +536,8 @@
     "english": "English",
     "french": "French",
     "removeUser": "Remove",
-    "permanently":"permanently"
+    "permanently":"permanently",
+    "userDeleted":"User successfully deleted!",
+    "somethingWentWrongInDeleteUser":"Something went wrong deleting the user, try again."
 
 }

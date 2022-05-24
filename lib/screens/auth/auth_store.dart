@@ -140,9 +140,10 @@ abstract class AuthStoreBase with Store {
     }
   }
 
-  Future<void> deleteUser() async {
+  @action
+  Future<void> deleteUser(String id) async {
     try {
-      deletedUser = await authRepository.deleteUser(currentUser!.id!);
+      deletedUser = await authRepository.deleteUser(id);
     } catch (e) {
       throw ("Ocorreu um erro ao deletar o usuario. Tente novamente.");
     }
