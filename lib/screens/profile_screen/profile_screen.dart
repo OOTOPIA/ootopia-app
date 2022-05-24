@@ -13,10 +13,10 @@ import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/friends/suggestion_friends/suggestion_friends_widget.dart';
 import 'package:ootopia_app/screens/home/components/home_store.dart';
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
+import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/language_understood_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/location_profile_info_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_album_list_widget.dart';
-import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_bio_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/wallet_bar_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
@@ -283,8 +283,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             Stack(
                               children: [
-                                ProfileAvatarWidget(
-                                  profileScreenStore: store,
+                                AvatarPhotoWidget(
+                                  photoUrl: store?.profile!.photoUrl,
+                                  sizePhotoUrl: 114,
                                 ),
                                 if (authStore.currentUser!.isAdmin)
                                   Align(
