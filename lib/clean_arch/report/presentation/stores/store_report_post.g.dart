@@ -54,18 +54,65 @@ mixin _$StoreReportPost on StoreReportPostBase, Store {
     });
   }
 
-  final _$outherAtom = Atom(name: 'StoreReportPostBase.outher');
+  final _$otherAtom = Atom(name: 'StoreReportPostBase.other');
 
   @override
-  bool get outher {
-    _$outherAtom.reportRead();
-    return super.outher;
+  bool get other {
+    _$otherAtom.reportRead();
+    return super.other;
   }
 
   @override
-  set outher(bool value) {
-    _$outherAtom.reportWrite(value, super.outher, () {
-      super.outher = value;
+  set other(bool value) {
+    _$otherAtom.reportWrite(value, super.other, () {
+      super.other = value;
+    });
+  }
+
+  final _$errorAtom = Atom(name: 'StoreReportPostBase.error');
+
+  @override
+  String get error {
+    _$errorAtom.reportRead();
+    return super.error;
+  }
+
+  @override
+  set error(String value) {
+    _$errorAtom.reportWrite(value, super.error, () {
+      super.error = value;
+    });
+  }
+
+  final _$successAtom = Atom(name: 'StoreReportPostBase.success');
+
+  @override
+  bool get success {
+    _$successAtom.reportRead();
+    return super.success;
+  }
+
+  @override
+  set success(bool value) {
+    _$successAtom.reportWrite(value, super.success, () {
+      super.success = value;
+    });
+  }
+
+  final _$seeMorePostsAboutThisUserAtom =
+      Atom(name: 'StoreReportPostBase.seeMorePostsAboutThisUser');
+
+  @override
+  bool get seeMorePostsAboutThisUser {
+    _$seeMorePostsAboutThisUserAtom.reportRead();
+    return super.seeMorePostsAboutThisUser;
+  }
+
+  @override
+  set seeMorePostsAboutThisUser(bool value) {
+    _$seeMorePostsAboutThisUserAtom
+        .reportWrite(value, super.seeMorePostsAboutThisUser, () {
+      super.seeMorePostsAboutThisUser = value;
     });
   }
 
@@ -75,7 +122,10 @@ mixin _$StoreReportPost on StoreReportPostBase, Store {
 spam: ${spam},
 nudez: ${nudez},
 violence: ${violence},
-outher: ${outher}
+other: ${other},
+error: ${error},
+success: ${success},
+seeMorePostsAboutThisUser: ${seeMorePostsAboutThisUser}
     ''';
   }
 }

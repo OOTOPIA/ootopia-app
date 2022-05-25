@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/report/domain/entity/report_posts_entity.dart';
 import 'package:ootopia_app/clean_arch/report/domain/entity/state_report.dart';
@@ -11,14 +12,29 @@ abstract class StoreReportPostBase with Store {
   final ReportPostUseCase _reportPostUsecase;
   StoreReportPostBase({required ReportPostUseCase reportPost})
       : _reportPostUsecase = reportPost;
+
   @observable
   bool spam = false;
+
   @observable
   bool nudez = false;
+
   @observable
   bool violence = false;
+
   @observable
-  bool outher = false;
+  bool other = false;
+
+  @observable
+  String error = '';
+
+  @observable
+  bool success = true;
+
+  @observable
+  bool seeMorePostsAboutThisUser = false;
+
+  TextEditingController reportController = TextEditingController();
 
   void setSpam(bool? value) {
     spam = value!;
@@ -32,14 +48,25 @@ abstract class StoreReportPostBase with Store {
     violence = value!;
   }
 
-  void setOuther(bool? value) {
-    outher = value!;
+  void setOther(bool? value) {
+    other = value!;
+  }
+
+  void setSeeMorePostsAboutThisUser(bool? value) {
+    seeMorePostsAboutThisUser = value!;
   }
 
   Future<void> sendReport() async {
-    ReportPostsEntity postsEntity =
-        ReportPostsEntity(idUser: 'idUser', stateReport: StateReport.dale);
+    error = '';
+    ReportPostsEntity postsEntity = ReportPostsEntity(
+      idUser: 'idUser',
+      stateReport: StateReport.dale,
+      text: reportController.text,
+    );
     var response = await _reportPostUsecase.call(postsEntity);
-    response.fold((failure) => null, (result) => null);
+    response.fold(
+      (failure) => error = failure.message,
+      (result) => success = true,
+    );
   }
 }

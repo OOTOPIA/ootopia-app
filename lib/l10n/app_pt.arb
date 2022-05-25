@@ -532,7 +532,15 @@
     "removeUser": "Remover",
     "permanently":"permanentemente",
     "userDeleted":"Usuário deletado com sucesso!",
-     "somethingWentWrongInDeleteUser":"Algo deu errado ao deletar o usuario, tente novamente."
+     "somethingWentWrongInDeleteUser":"Algo deu errado ao deletar o usuario, tente novamente.",
+       "nudity":"Nudez",
+    "violence":"Violencia",
+    "spam":"Spam",
+    "other":"Outro",
+     "messageReportUser":"Iremos analisar a denúncia, obrigado por tornar a OOTOPIA um lugar melhor.",
+     "sendReport":"A denuncia foi enviada",
+     "dontSeeMorePosts":"Não visualizar mais postagens de %USERNAME%",
+     "report":"Denunciar"
 
 }
 
