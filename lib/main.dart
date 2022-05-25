@@ -92,7 +92,6 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
-  //FlutterBackgroundService.initialize(onStartService);
   ///FlutterBackgroundService.initialize(onStartService);
   await CountryCodes.init();
   var configuredApp = new AppConfig(

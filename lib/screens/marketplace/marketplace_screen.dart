@@ -9,10 +9,10 @@ import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/components/components.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
+import 'package:ootopia_app/screens/marketplace/product_widget/product_widget.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -137,42 +137,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         height: MediaQuery.of(context).size.height - (headerSize ) ,
         width: MediaQuery.of(context).size.width,
         child: ListView.builder(
+            addAutomaticKeepAlives: false,
+            addRepaintBoundaries: false,
             controller: _scrollController,
             itemCount: amount,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               bool isLastItem = index + 1 == amount;
-              return Padding(
-                padding: EdgeInsets.only(bottom: isLastItem ? headerSize : 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Wrap(
-                      children: [
-                        for (int i=0; i < getAmountOfItems(isLastItem, list.length, itemsPerLine); i++)...[
-                          ProductItem(productModel: list[index * itemsPerLine + i]),
-                        ],
-                        if(isLastItem)...[
-                          CreateOfferButtonWidget(
-                              topMargin: list.length % itemsPerLine != 0,
-                              onTap: () {
-                                Navigator.of(context).pushNamed(PageRoute
-                                    .Page.aboutEthicalMarketPlace.route);
-                              }),
-                          SizedBox(
-                            width: _size(itemsPerLine, list.length),
-                          )
-                        ]
-                      ],
-                    ),
-                    if(isLastItem && marketplaceStore.loadingMoreItems())...[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: CircularProgressIndicator(),
-                      )
-                    ]
-                  ],
-                ),
+              final size = _size(itemsPerLine, list.length);
+              return ProductWidget(
+                headerSize: headerSize,
+                size: size,
+                list: list,
+                index: index,
+                marketplaceStore: marketplaceStore,
+                itemsPerLine: itemsPerLine,
+                isLastItem: isLastItem,
               );
             })
     );
@@ -192,10 +172,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   int getItemsPerLine(){
     return MediaQuery.of(context).size.width >= 760 ? 4 : 2;
-  }
-
-  int getAmountOfItems(bool lastNine, int length, itemsPerLine) {
-    return (lastNine ? length % itemsPerLine : itemsPerLine);
   }
 
   int getSizeOfList(int length,int itemsPerLine ) {

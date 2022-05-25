@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChipSumForDate extends StatefulWidget {
   final String date;
-  final lengthItemMapSumOfDayTransfer;
   final String sumFormated;
   const ChipSumForDate(
       {required this.date,
-      required this.lengthItemMapSumOfDayTransfer,
       required this.sumFormated});
 
   @override
@@ -25,7 +24,7 @@ class _ChipSumForDateState extends State<ChipSumForDate> {
       children: [
         Text(
           // day
-          '${today == widget.date ? 'Today' : widget.date}',
+          '${today == widget.date ? AppLocalizations.of(context)!.today : widget.date}',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Color(0xff003694),

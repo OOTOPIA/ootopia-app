@@ -4,16 +4,13 @@ import 'dart:ui' as ui;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
-//import 'package:ootopia_app/main.dart' as main;
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
@@ -24,7 +21,6 @@ import 'package:ootopia_app/screens/home/components/new_post_uploaded_message.da
 import 'package:ootopia_app/screens/home/components/page_view_controller.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_screen.dart';
 import 'package:ootopia_app/screens/marketplace/marketplace_screen.dart';
-import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile.dart';
 import 'package:ootopia_app/screens/profile_screen/profile_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_screen.dart';
@@ -62,12 +58,14 @@ class _HomeScreenState extends State<HomeScreen>
   late TimelineStore timelineStore;
   late TimelinePostBloc timelinePostBloc;
 
-  late ProfileScreenStore profileStore;
-  Widget? currentPageWidget;
+  //late ProfileScreenStore profileStore;
+  //Widget? currentPageWidget;
   bool createdPostAlertAlreadyShowed = false;
   double oozToRewardAfterSendPost = 0;
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
   late SmartPageController controller;
+  Color selectedIconColor = LightColors.blue;
+  Color unselectedIconColor = Color(0XFF3A4046);
 
   @override
   void initState() {
@@ -130,19 +128,19 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  resetDailyGoalTimer() async {
+  void resetDailyGoalTimer() async {
     homeStore?.stopDailyGoalTimer();
     AppUsageTime.instance.sendToApi();
     await homeStore?.getDailyGoalStats();
     //await homeStore?.startDailyGoalTimer();
   }
 
-  updateDailyGoalStatsByMessage() {
+  void updateDailyGoalStatsByMessage() {
     homeStore
         ?.updateDailyGoalStatsByMessage(updateAccumulatedOOZ.dailyGoalStats);
   }
 
-  navigateToFriendProfileScreen(payload) async {
+  void navigateToFriendProfileScreen(payload) async {
     String type = payload["type"];
     String userId = payload["userId"];
 
@@ -215,10 +213,8 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     timelinePostBloc = BlocProvider.of<TimelinePostBloc>(context);
-    Color selectedIconColor = LightColors.blue;
-    Color unselectedIconColor = Color(0XFF3A4046);
     authStore = Provider.of<AuthStore>(context);
-    profileStore = Provider.of<ProfileScreenStore>(context);
+    //profileStore = Provider.of<ProfileScreenStore>(context);
     timelineStore = Provider.of<TimelineStore>(context);
 
     if (homeStore == null) {
@@ -518,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen>
     return result;
   }
 
-  _checkStores() async {
+  void _checkStores() async {
     if (Platform.isIOS)
       homeStore?.getIphoneHasNotch(ui.window.physicalSize.height.toInt());
     if (authStore.currentUser == null) {
@@ -527,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {});
   }
 
-  _checkPageParams() {
+  void _checkPageParams() {
     Timer(Duration(milliseconds: 300), () {
       try {
         if (widget.args != null &&
@@ -629,14 +625,14 @@ class _HomeScreenState extends State<HomeScreen>
         onTapLeading: () => controller.back(),
       );
 
-  get appBarProfile => DefaultAppBar(
-        components: [
-          AppBarComponents.back,
-          AppBarComponents.edit,
-        ],
-        onTapAction: () => controller.insertPage(EditProfileScreen()),
-        onTapLeading: () => controller.back(),
-      );
+  // get appBarProfile => DefaultAppBar(
+  //       components: [
+  //         AppBarComponents.back,
+  //         AppBarComponents.edit,
+  //       ],
+  //       onTapAction: () => controller.insertPage(EditProfileScreen()),
+  //       onTapLeading: () => controller.back(),
+  //     );
 
   get appBarBackFromMap => DefaultAppBar(
         components: [
@@ -675,73 +671,73 @@ class _HomeScreenState extends State<HomeScreen>
         },
       );
 
-  Widget get remainingTime => Observer(
-        builder: (_) => Visibility(
-          visible: authStore.currentUser != null,
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: 19,
-            ),
-            child: GestureDetector(
-              onTap: () => setState(() {
-                if (homeStore != null && homeStore!.dailyGoalStats != null) {
-                  homeStore?.showRemainingTime = !homeStore!.showRemainingTime;
-                  homeStore?.showRemainingTimeEnd =
-                      !homeStore!.showRemainingTime;
-                }
-              }),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: homeStore != null && homeStore!.showRemainingTime
-                          ? 4
-                          : 11,
-                    ),
-                    child: Icon(
-                      FeatherIcons.clock,
-                      color: Theme.of(context).iconTheme.color,
-                    ),
-                  ),
-                  AnimatedOpacity(
-                    opacity: homeStore != null && homeStore!.showRemainingTime
-                        ? 1
-                        : 0,
-                    duration: Duration(milliseconds: 500),
-                    onEnd: () {},
-                    child: Visibility(
-                      visible:
-                          homeStore != null && homeStore!.showRemainingTime,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            homeStore != null ? homeStore!.remainingTime : "",
-                            style:
-                                Theme.of(context).textTheme.bodyText2!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff707070),
-                                    ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.remaining,
-                            style:
-                                Theme.of(context).textTheme.bodyText2!.copyWith(
-                                      fontSize: 12,
-                                      color: Color(0xff707070),
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
+  // Widget get remainingTime => Observer(
+  //       builder: (_) => Visibility(
+  //         visible: authStore.currentUser != null,
+  //         child: Padding(
+  //           padding: EdgeInsets.only(
+  //             right: 19,
+  //           ),
+  //           child: GestureDetector(
+  //             onTap: () => setState(() {
+  //               if (homeStore != null && homeStore!.dailyGoalStats != null) {
+  //                 homeStore?.showRemainingTime = !homeStore!.showRemainingTime;
+  //                 homeStore?.showRemainingTimeEnd =
+  //                     !homeStore!.showRemainingTime;
+  //               }
+  //             }),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.end,
+  //               children: [
+  //                 Padding(
+  //                   padding: EdgeInsets.only(
+  //                     right: homeStore != null && homeStore!.showRemainingTime
+  //                         ? 4
+  //                         : 11,
+  //                   ),
+  //                   child: Icon(
+  //                     FeatherIcons.clock,
+  //                     color: Theme.of(context).iconTheme.color,
+  //                   ),
+  //                 ),
+  //                 AnimatedOpacity(
+  //                   opacity: homeStore != null && homeStore!.showRemainingTime
+  //                       ? 1
+  //                       : 0,
+  //                   duration: Duration(milliseconds: 500),
+  //                   onEnd: () {},
+  //                   child: Visibility(
+  //                     visible:
+  //                         homeStore != null && homeStore!.showRemainingTime,
+  //                     child: Column(
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       children: [
+  //                         Text(
+  //                           homeStore != null ? homeStore!.remainingTime : "",
+  //                           style:
+  //                               Theme.of(context).textTheme.bodyText2!.copyWith(
+  //                                     fontWeight: FontWeight.bold,
+  //                                     color: Color(0xff707070),
+  //                                   ),
+  //                         ),
+  //                         Text(
+  //                           AppLocalizations.of(context)!.remaining,
+  //                           style:
+  //                               Theme.of(context).textTheme.bodyText2!.copyWith(
+  //                                     fontSize: 12,
+  //                                     color: Color(0xff707070),
+  //                                   ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     );
 
   Future<void> fcmSubscribe() async {
     await FirebaseMessaging.instance.requestPermission(
@@ -765,6 +761,8 @@ class Empty extends StatefulWidget {
 }
 
 class _EmptyState extends State<Empty> {
+
+
   @override
   void dispose() {
     print('dispose');
@@ -773,6 +771,7 @@ class _EmptyState extends State<Empty> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child != null ? widget.child! : Container();
+    return widget.child != null ? widget.child!: Container();
   }
 }
+
