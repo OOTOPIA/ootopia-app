@@ -3,13 +3,18 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/report/presentation/stores/store_report_post.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class ReportPostPage extends StatefulWidget {
-  const ReportPostPage({Key? key}) : super(key: key);
+  final TimelinePost timelinePost;
+  const ReportPostPage({
+    Key? key,
+    required this.timelinePost,
+  }) : super(key: key);
 
   @override
   State<ReportPostPage> createState() => _ReportPostPageState();
@@ -21,15 +26,15 @@ class _ReportPostPageState extends State<ReportPostPage> {
       SmartPageController.getInstance();
   void sendReport() async {
     await _storeReportPost.sendReport();
-    // if (_storeReportPost.error.isNotEmpty) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       backgroundColor: Colors.red,
-    //       content: Text(_storeReportPost.error),
-    //     ),
-    //   );
-    //   return;
-    // }
+    if (_storeReportPost.error.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(_storeReportPost.error),
+        ),
+      );
+      return;
+    }
     if (_storeReportPost.success) {
       await showDialog(
         context: context,
@@ -198,7 +203,8 @@ class _ReportPostPageState extends State<ReportPostPage> {
                       ),
                       Text(AppLocalizations.of(context)!
                           .dontSeeMorePosts
-                          .replaceAll('%USERNAME%', 'replace')),
+                          .replaceAll(
+                              '%USERNAME%', widget.timelinePost.username)),
                     ],
                   ),
                 ],
