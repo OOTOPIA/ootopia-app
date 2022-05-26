@@ -538,6 +538,8 @@
     "removeUser": "Remove",
     "permanently":"permanently",
     "userDeleted":"User successfully deleted!",
-    "somethingWentWrongInDeleteUser":"Something went wrong deleting the user, try again."
+    "somethingWentWrongInDeleteUser":"Something went wrong deleting the user, try again.",
+      "successDeletePost":"Post deleted successfully!",
+     "somethingWentWrongInDeletePost":"Something went wrong deleting this post, try again."
 
 }
