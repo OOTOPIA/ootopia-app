@@ -48,6 +48,9 @@ abstract class TimelineStoreBase with Store {
 
   int get maxPostsPerPage => 10;
 
+  @observable
+  bool deletePost = false;
+
   @action
   void goToTopTimeline() {
     if (scrollController.hasClients)

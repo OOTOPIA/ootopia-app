@@ -540,7 +540,9 @@
      "messageReportUser":"Iremos analisar a denúncia, obrigado por tornar a OOTOPIA um lugar melhor.",
      "sendReport":"A denuncia foi enviada",
      "dontSeeMorePosts":"Não visualizar mais postagens de %USERNAME%",
-     "report":"Denunciar"
+     "report":"Denunciar",
+     "successDeletePost":"Post deletado com sucesso!",
+     "somethingWentWrongInDeletePost":"Algo deu errado ao deletar o usuario, tente novamente."
 
 }
 

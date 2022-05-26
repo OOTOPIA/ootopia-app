@@ -182,6 +182,22 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void _deletePost() async {
     await timelineStore.removePost(this.post);
     widget.onDelete();
+    if (timelineStore.deletePost) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(AppLocalizations.of(context)!.successDeletePost),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+              AppLocalizations.of(context)!.somethingWentWrongInDeletePost),
+        ),
+      );
+    }
   }
 
   @override
@@ -709,8 +725,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     child: Text(
                       this.post.commentsCount.toString() +
                           " ${AppLocalizations.of(context)!.comments}",
-                      style:
-                      TextStyle(color: Colors.black.withOpacity(0.4)),
+                      style: TextStyle(color: Colors.black.withOpacity(0.4)),
                     ),
                   ),
                   Row(

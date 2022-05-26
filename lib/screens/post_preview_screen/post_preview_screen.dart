@@ -291,7 +291,7 @@ class _PostPreviewPageState extends State<PostPreviewPage>
           },
         );
       } else if (this.postPreviewStore.errorOnUpload) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!
                 .thereWasAProblemUploadingTheVideoPleaseTryToUploadTheVideoAgain

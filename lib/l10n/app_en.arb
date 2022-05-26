@@ -546,6 +546,8 @@
     "messageReportUser":"We will review the report, thanks for making OOTOPIA a better place.",
      "sendReport":"The complaint has been sent",
      "dontSeeMorePosts":"Don't see more posts from %USERNAME%",
-     "report":"Report"
+     "report":"Report",
+      "successDeletePost":"Post deleted successfully!",
+     "somethingWentWrongInDeletePost":"Something went wrong deleting this post, try again."
 
 }

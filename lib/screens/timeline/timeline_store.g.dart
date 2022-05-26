@@ -123,6 +123,21 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
+  final _$deletePostAtom = Atom(name: 'TimelineStoreBase.deletePost');
+
+  @override
+  bool get deletePost {
+    _$deletePostAtom.reportRead();
+    return super.deletePost;
+  }
+
+  @override
+  set deletePost(bool value) {
+    _$deletePostAtom.reportWrite(value, super.deletePost, () {
+      super.deletePost = value;
+    });
+  }
+
   final _$getTimelinePostsAsyncAction =
       AsyncAction('TimelineStoreBase.getTimelinePosts');
 
@@ -135,7 +150,7 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   final _$removePostAsyncAction = AsyncAction('TimelineStoreBase.removePost');
 
   @override
-  Future<dynamic> removePost(TimelinePost post) {
+  Future<void> removePost(TimelinePost post) {
     return _$removePostAsyncAction.run(() => super.removePost(post));
   }
 
@@ -199,6 +214,7 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
 scrollController: ${scrollController},
 allPosts: ${allPosts},
 viewState: ${viewState},
+deletePost: ${deletePost},
 hasMorePosts: ${hasMorePosts},
 loadingMorePosts: ${loadingMorePosts},
 postsOffset: ${postsOffset}
