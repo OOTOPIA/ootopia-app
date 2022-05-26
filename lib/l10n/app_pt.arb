@@ -532,7 +532,9 @@
     "removeUser": "Remover",
     "permanently":"permanentemente",
     "userDeleted":"Usuário deletado com sucesso!",
-     "somethingWentWrongInDeleteUser":"Algo deu errado ao deletar o usuario, tente novamente."
+     "somethingWentWrongInDeleteUser":"Algo deu errado ao deletar o usuario, tente novamente.",
+     "successDeletePost":"Post deletado com sucesso!",
+     "somethingWentWrongInDeletePost":"Algo deu errado ao deletar o usuario, tente novamente."
 
 }
 
