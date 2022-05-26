@@ -11,12 +11,12 @@ class ReportPostRepositoryImpl extends ReportPostsRepository {
       : _remoteDataSource = remoteDataSource;
 
   @override
-  Future<Either<Failure, void>> reportPost(
+  Future<Either<Failure, bool>> reportPost(
       {required ReportPostsEntity reportPostEntity}) async {
     var response = await _remoteDataSource
         .sendReportPost(ReportPostsModel.fromEntity(reportPostEntity));
     if (response) {
-      return Right('');
+      return Right(response);
     }
     return Left(Failure(message: 'Something went Wrong'));
   }

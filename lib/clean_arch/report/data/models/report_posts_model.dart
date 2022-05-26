@@ -1,26 +1,32 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:ootopia_app/clean_arch/report/domain/entity/report_posts_entity.dart';
-import 'package:ootopia_app/clean_arch/report/domain/entity/state_report.dart';
 
+part 'report_posts_model.g.dart';
+
+@JsonSerializable()
 class ReportPostsModel extends ReportPostsEntity {
   ReportPostsModel({
-    required String idUser,
-    required StateReport stateReport,
-    String? text,
+    required bool visualizerPostUser,
+    required String denouncedId,
+    String? postId,
+    required String reason,
   }) : super(
-          idUser: idUser,
-          stateReport: stateReport,
-          text: text,
+          denouncedId: denouncedId,
+          postId: postId,
+          visualizerPostUser: visualizerPostUser,
+          reason: reason,
         );
 
   factory ReportPostsModel.fromEntity(ReportPostsEntity reportPostsEntity) {
     return ReportPostsModel(
-      idUser: reportPostsEntity.idUser,
-      stateReport: reportPostsEntity.stateReport,
-      text: reportPostsEntity.text,
+      denouncedId: reportPostsEntity.denouncedId,
+      postId: reportPostsEntity.postId,
+      visualizerPostUser: reportPostsEntity.visualizerPostUser,
+      reason: reportPostsEntity.reason,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {};
+    return _$ReportPostsModelToJson(this);
   }
 }

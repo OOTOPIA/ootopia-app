@@ -1,13 +1,12 @@
-import 'package:ootopia_app/clean_arch/report/domain/entity/state_report.dart';
-
 class ReportPostsEntity {
-  final String idUser;
-  final StateReport stateReport;
-  final String? text;
-
+  final bool visualizerPostUser;
+  final String denouncedId;
+  final String? postId;
+  final String reason;
   ReportPostsEntity({
-    this.text,
-    required this.idUser,
-    required this.stateReport,
+    required this.denouncedId,
+    required this.visualizerPostUser,
+    this.postId,
+    required this.reason,
   });
 }

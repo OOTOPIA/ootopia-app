@@ -9,7 +9,7 @@ class ReportPostUseCase {
   ReportPostUseCase({required ReportPostsRepository reportPostRepository})
       : _reportPostRepository = reportPostRepository;
 
-  Future<Either<Failure, void>> call(
+  Future<Either<Failure, bool>> call(
       ReportPostsEntity reportPostsEntity) async {
     return _reportPostRepository.reportPost(
         reportPostEntity: reportPostsEntity);

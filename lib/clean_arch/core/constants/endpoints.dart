@@ -1,3 +1,3 @@
 class Endpoints {
-  static const String reportPosts = '/reportPost';
+  static const String reportPosts = 'posts/complaint';
 }

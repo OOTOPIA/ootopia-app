@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/report/domain/entity/report_posts_entity.dart';
-import 'package:ootopia_app/clean_arch/report/domain/entity/state_report.dart';
 import 'package:ootopia_app/clean_arch/report/domain/usecases/report_post_usecase.dart';
 
 part "store_report_post.g.dart";
@@ -29,23 +28,28 @@ abstract class StoreReportPostBase with Store {
   String error = '';
 
   @observable
-  bool success = true;
+  bool success = false;
 
   @observable
   bool seeMorePostsAboutThisUser = false;
+
+  String reason = '';
 
   TextEditingController reportController = TextEditingController();
 
   void setSpam(bool? value) {
     spam = value!;
+    reason = 'spam';
   }
 
   void setNudez(bool? value) {
     nudez = value!;
+    reason = 'nudez';
   }
 
   void setViolence(bool? value) {
     violence = value!;
+    reason = 'violence';
   }
 
   void setOther(bool? value) {
@@ -56,18 +60,36 @@ abstract class StoreReportPostBase with Store {
     seeMorePostsAboutThisUser = value!;
   }
 
-  @action
-  Future<void> sendReport({required String idUser}) async {
+  void clearVariables() {
+    spam = false;
+    nudez = false;
+    violence = false;
+    other = false;
     error = '';
+    success = false;
+    seeMorePostsAboutThisUser = false;
+    reason = '';
+  }
+
+  @action
+  Future<void> sendReport(
+      {required String idUser, required String idPost}) async {
+    error = '';
+
+    if (other) {
+      reason = reportController.text;
+    }
+
     ReportPostsEntity postsEntity = ReportPostsEntity(
-      idUser: idUser,
-      stateReport: StateReport.dale,
-      text: reportController.text,
+      denouncedId: idUser,
+      postId: idPost,
+      visualizerPostUser: seeMorePostsAboutThisUser,
+      reason: reason,
     );
     var response = await _reportPostUsecase.call(postsEntity);
     response.fold(
       (failure) => error = failure.message,
-      (result) => success = true,
+      (result) => success = result,
     );
   }
 }

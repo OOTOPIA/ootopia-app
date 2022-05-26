@@ -4,9 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/report/presentation/stores/store_report_post.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
+import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/theme/light/colors.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 class ReportPostPage extends StatefulWidget {
@@ -24,17 +26,10 @@ class _ReportPostPageState extends State<ReportPostPage> {
   final StoreReportPost _storeReportPost = GetIt.I.get();
   final SmartPageController _smartPageController =
       SmartPageController.getInstance();
+  late TimelineStore timelineStore;
   void sendReport() async {
-    await _storeReportPost.sendReport(idUser: widget.timelinePost.userId);
-    if (_storeReportPost.error.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(_storeReportPost.error),
-        ),
-      );
-      return;
-    }
+    await _storeReportPost.sendReport(
+        idUser: widget.timelinePost.userId, idPost: widget.timelinePost.id);
     if (_storeReportPost.success) {
       await showDialog(
         context: context,
@@ -63,7 +58,9 @@ class _ReportPostPageState extends State<ReportPostPage> {
               ),
               onPressed: () {
                 Navigator.pop(context);
-                _smartPageController.back();
+                _smartPageController.back().whenComplete(
+                      () => timelineStore.removePost(widget.timelinePost),
+                    );
               },
               child: Text('OK'),
             ),
@@ -71,11 +68,26 @@ class _ReportPostPageState extends State<ReportPostPage> {
         ),
       );
       return;
+    } else if (_storeReportPost.error.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(_storeReportPost.error),
+        ),
+      );
+      return;
     }
   }
 
   @override
+  void dispose() {
+    _storeReportPost.clearVariables();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    timelineStore = Provider.of<TimelineStore>(context);
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
@@ -154,6 +166,7 @@ class _ReportPostPageState extends State<ReportPostPage> {
                   if (_storeReportPost.other)
                     Container(
                       height: constraints.maxHeight * .25,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: TextFormField(
                         textAlignVertical: TextAlignVertical.top,
                         decoration: InputDecoration(
