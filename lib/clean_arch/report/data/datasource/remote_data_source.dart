@@ -14,14 +14,12 @@ class ReportRemoteDataSourceImpl extends ReportRemoteDataSource {
       : _dioClient = dioClient;
   @override
   Future<bool> sendReportPost(ReportPostsModel reportPostsModel) async {
-    print(reportPostsModel.toJson());
     try {
       var response = await ApiClient.api().post(
         Endpoints.reportPosts,
         data: reportPostsModel.toJson(),
       );
-      print(response);
-      return response.statusCode == 200;
+      return response.statusCode == 201;
     } catch (e) {
       return false;
     }
