@@ -25,7 +25,7 @@ class _ReportPostPageState extends State<ReportPostPage> {
   final SmartPageController _smartPageController =
       SmartPageController.getInstance();
   void sendReport() async {
-    await _storeReportPost.sendReport();
+    await _storeReportPost.sendReport(idUser: widget.timelinePost.userId);
     if (_storeReportPost.error.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

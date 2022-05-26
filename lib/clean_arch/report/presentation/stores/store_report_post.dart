@@ -56,10 +56,11 @@ abstract class StoreReportPostBase with Store {
     seeMorePostsAboutThisUser = value!;
   }
 
-  Future<void> sendReport() async {
+  @action
+  Future<void> sendReport({required String idUser}) async {
     error = '';
     ReportPostsEntity postsEntity = ReportPostsEntity(
-      idUser: 'idUser',
+      idUser: idUser,
       stateReport: StateReport.dale,
       text: reportController.text,
     );

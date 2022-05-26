@@ -116,6 +116,13 @@ mixin _$StoreReportPost on StoreReportPostBase, Store {
     });
   }
 
+  final _$sendReportAsyncAction = AsyncAction('StoreReportPostBase.sendReport');
+
+  @override
+  Future<void> sendReport({required String idUser}) {
+    return _$sendReportAsyncAction.run(() => super.sendReport(idUser: idUser));
+  }
+
   @override
   String toString() {
     return '''
