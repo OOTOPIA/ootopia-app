@@ -69,7 +69,7 @@ abstract class StoreReportPostBase with Store {
     success = false;
     seeMorePostsAboutThisUser = false;
     reason = '';
-    reportController.dispose();
+    reportController.clear();
   }
 
   @action
