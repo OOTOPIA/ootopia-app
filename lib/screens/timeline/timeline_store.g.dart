@@ -198,6 +198,17 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   }
 
   @override
+  void removePostInList(TimelinePost post) {
+    final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
+        name: 'TimelineStoreBase.removePostInList');
+    try {
+      return super.removePostInList(post);
+    } finally {
+      _$TimelineStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 scrollController: ${scrollController},
