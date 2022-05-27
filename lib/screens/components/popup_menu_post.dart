@@ -7,6 +7,7 @@ import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class PopupMenuPost extends StatefulWidget {
   final bool isAnabled;
@@ -111,26 +112,27 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
           ),
           value: 'delete',
         ),
-        PopupMenuItem<String>(
-          child: Column(
-            children: [
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Padding(
-                    child: Icon(Icons.report),
-                    padding: EdgeInsets.fromLTRB(3, 0, 7, 0),
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.report,
-                    style: TextStyle(color: Colors.black, fontSize: 14),
-                  ),
-                ],
-              ),
-            ],
+        if (user != null && user!.id != widget.post.userId)
+          PopupMenuItem<String>(
+            child: Column(
+              children: [
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Padding(
+                      child: Icon(Icons.report),
+                      padding: EdgeInsets.fromLTRB(3, 0, 7, 0),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.report,
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            value: 'report',
           ),
-          value: 'report',
-        ),
       ],
       onSelected: (String value) => _selectedOption(value),
     );
