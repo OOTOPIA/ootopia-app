@@ -60,13 +60,7 @@ class _PopupMenuPostState extends State<PopupMenuPost> with SecureStoreMixin {
     }
 
     if (optionSelected == 'report') {
-      if (loggedIn) {
-        _controller.insertPage(ReportPostPage(timelinePost: widget.post));
-      } else {
-        Navigator.of(context).pushNamed(
-          PageRoute.Page.loginScreen.route,
-        );
-      }
+      _controller.insertPage(ReportPostPage(timelinePost: widget.post));
       return;
     }
   }
