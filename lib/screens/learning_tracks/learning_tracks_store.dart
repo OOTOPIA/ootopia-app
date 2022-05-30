@@ -92,6 +92,8 @@ abstract class LearningTracksStoreBase with Store {
   @action
   Future<void> deleteLearningTrack(String id) async {
     deleteLearning = await repository.deleteLearningTrack(id);
+    allLearningTracks =
+        allLearningTracks.where((element) => element.id != id).toList();
   }
 
   bool pageError() {

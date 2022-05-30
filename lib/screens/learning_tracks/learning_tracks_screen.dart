@@ -89,6 +89,7 @@ class _LearningTracksScreenState extends State<LearningTracksScreen> {
                   }
                   var learningTrack = store.allLearningTracks[index - 1];
                   return LearningTrackWidget(
+                    learningTracksStore: store,
                     learningTrack: learningTrack,
                     currencyFormatter: currencyFormatter,
                     onTap: () => openLearningTrack(learningTrack),

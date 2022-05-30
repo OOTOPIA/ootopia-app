@@ -7,7 +7,6 @@ import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
-import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class PopupMenuPost extends StatefulWidget {
   final bool isAnabled;

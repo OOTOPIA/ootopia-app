@@ -32,6 +32,10 @@ abstract class MarketplaceStoreBase with Store {
   @action
   Future<void> deleteProductMarketingPlace(String id) async {
     isDeleteProduct = await _marketplaceRepository.deleteProduct(id);
+    productList = productList
+        .where((element) => element.id != id)
+        .toList()
+        .asObservable();
   }
 
   @action

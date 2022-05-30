@@ -35,88 +35,90 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
     }
   }
 
+  late MarketplaceStore _marketplaceStore;
   SmartPageController controller = SmartPageController.getInstance();
-  MarketplaceStore _marketPlace = MarketplaceStore();
   void showModalDeleteProduct() async {
     await showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            content: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                    text: AppLocalizations.of(context)!.removeUser,
+          return StatefulBuilder(builder: (context, setstate) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              content: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: AppLocalizations.of(context)!.removeUser,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400)),
+                  TextSpan(
+                      text: ' ${widget.productModel.title} ',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                  TextSpan(
+                    text: AppLocalizations.of(context)!.permanently,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
-                        fontWeight: FontWeight.w400)),
-                TextSpan(
-                    text: ' ${widget.productModel.title} ',
-                    style: TextStyle(
+                        fontWeight: FontWeight.w400),
+                  )
+                ]),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
-                        fontWeight: FontWeight.w700)),
-                TextSpan(
-                  text: AppLocalizations.of(context)!.permanently,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
-                )
-              ]),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    AppLocalizations.of(context)!.cancel,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-              TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await _marketPlace
-                        .deleteProductMarketingPlace(widget.productModel.id);
-                    if (_marketPlace.isDeleteProduct) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text(
-                          AppLocalizations.of(context)!.userDeleted,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ));
-                      controller.back();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.red,
+                      ),
+                    )),
+                TextButton(
+                    onPressed: () async {
+                      await _marketplaceStore
+                          .deleteProductMarketingPlace(widget.productModel.id);
+                      if (_marketplaceStore.isDeleteProduct) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.green,
                           content: Text(
-                            AppLocalizations.of(context)!
-                                .somethingWentWrongInDeleteUser,
+                            AppLocalizations.of(context)!.successDeleteProduct,
                             style: TextStyle(color: Colors.white),
-                          )));
-                    }
-                  },
-                  child: Text(
-                    'Ok',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ))
-            ],
-          );
+                          ),
+                        ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              AppLocalizations.of(context)!
+                                  .somethingWentWrongInDeleteProduct,
+                              style: TextStyle(color: Colors.white),
+                            )));
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Ok',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ))
+              ],
+            );
+          });
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    _marketplaceStore = Provider.of<MarketplaceStore>(context);
     AuthStore authStore = Provider.of<AuthStore>(context);
     return PopupMenuButton(
       child: Icon(Icons.more_vert),

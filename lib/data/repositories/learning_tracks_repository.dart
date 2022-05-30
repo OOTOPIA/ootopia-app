@@ -95,7 +95,7 @@ class LearningTracksRepositoryImpl
 
   Future<bool> deleteLearningTrack(String id) async {
     try {
-      var response = await ApiClient.api().delete("users/$id");
+      var response = await ApiClient.api().delete("learning-tracks/$id");
       return response.statusCode == 200;
     } catch (e) {
       if (e is DioError) {

@@ -73,7 +73,7 @@ class MarketplaceRepositoryImpl implements MarketplaceRepository {
 
   Future<bool> deleteProduct(String id) async {
     try {
-      var response = await ApiClient.api().delete("users/$id");
+      var response = await ApiClient.api().delete("market-place/$id");
       return response.statusCode == 200;
     } catch (e) {
       if (e is DioError) {

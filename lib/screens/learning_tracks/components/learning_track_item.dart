@@ -13,95 +13,98 @@ class LearningTrackWidget extends StatefulWidget {
   final LearningTracksModel learningTrack;
   final onTap;
   final NumberFormat currencyFormatter;
-  LearningTrackWidget(
-      {Key? key,
-      required this.learningTrack,
-      required this.onTap,
-      required this.currencyFormatter})
-      : super(key: key);
+  final LearningTracksStore learningTracksStore;
+  LearningTrackWidget({
+    Key? key,
+    required this.learningTrack,
+    required this.learningTracksStore,
+    required this.onTap,
+    required this.currencyFormatter,
+  }) : super(key: key);
 
   @override
   State<LearningTrackWidget> createState() => _LearningTrackWidgetState();
 }
 
 class _LearningTrackWidgetState extends State<LearningTrackWidget> {
-  final LearningTracksStore _learningTracksStore = LearningTracksStore();
   SmartPageController controller = SmartPageController.getInstance();
   void showModalDeleteLearningTrack() async {
     await showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            content: RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                    text: AppLocalizations.of(context)!.removeUser,
+          return StatefulBuilder(builder: (context, setstate) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              content: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: AppLocalizations.of(context)!.removeUser,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400)),
+                  TextSpan(
+                      text: ' ${widget.learningTrack.title} ',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700)),
+                  TextSpan(
+                    text: AppLocalizations.of(context)!.permanently,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
-                        fontWeight: FontWeight.w400)),
-                TextSpan(
-                    text: ' ${widget.learningTrack.title} ',
-                    style: TextStyle(
+                        fontWeight: FontWeight.w400),
+                  )
+                ]),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
-                        fontWeight: FontWeight.w700)),
-                TextSpan(
-                  text: AppLocalizations.of(context)!.permanently,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
-                )
-              ]),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    AppLocalizations.of(context)!.cancel,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  )),
-              TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    await _learningTracksStore
-                        .deleteLearningTrack(widget.learningTrack.id);
-                    if (_learningTracksStore.deleteLearning) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text(
-                          AppLocalizations.of(context)!.userDeleted,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ));
-                      controller.back();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.red,
+                      ),
+                    )),
+                TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      await widget.learningTracksStore
+                          .deleteLearningTrack(widget.learningTrack.id);
+                      if (widget.learningTracksStore.deleteLearning) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.green,
                           content: Text(
                             AppLocalizations.of(context)!
-                                .somethingWentWrongInDeleteUser,
+                                .successDeleteLearningTrack,
                             style: TextStyle(color: Colors.white),
-                          )));
-                    }
-                  },
-                  child: Text(
-                    'Ok',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ))
-            ],
-          );
+                          ),
+                        ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              AppLocalizations.of(context)!
+                                  .somethingWentWrongInLearningTrack,
+                              style: TextStyle(color: Colors.white),
+                            )));
+                      }
+                    },
+                    child: Text(
+                      'Ok',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ))
+              ],
+            );
+          });
         });
   }
 

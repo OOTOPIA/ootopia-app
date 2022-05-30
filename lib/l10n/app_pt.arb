@@ -542,7 +542,11 @@
      "dontSeeMorePosts":"Não visualizar mais postagens de %USERNAME%",
      "report":"Denunciar",
      "successDeletePost":"Post deletado com sucesso!",
-     "somethingWentWrongInDeletePost":"Algo deu errado ao deletar o usuario, tente novamente."
+     "successDeleteLearningTrack":"Trilhas de aprendizagem deletada com sucesso!",
+     "successDeleteProduct":"Produto deletada com sucesso!",
+     "somethingWentWrongInDeletePost":"Algo deu errado ao deletar o usuario, tente novamente.",
+     "somethingWentWrongInLearningTrack":"Algo deu errado ao deletar a trilha de aprendizagem, tente novamente.",
+      "somethingWentWrongInDeleteProduct":"Algo deu errado ao deletar esse produto, tente novamente."
 
 }
 
