@@ -123,6 +123,21 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
+  final _$deletePostAtom = Atom(name: 'TimelineStoreBase.deletePost');
+
+  @override
+  bool get deletePost {
+    _$deletePostAtom.reportRead();
+    return super.deletePost;
+  }
+
+  @override
+  set deletePost(bool value) {
+    _$deletePostAtom.reportWrite(value, super.deletePost, () {
+      super.deletePost = value;
+    });
+  }
+
   final _$getTimelinePostsAsyncAction =
       AsyncAction('TimelineStoreBase.getTimelinePosts');
 
@@ -150,11 +165,11 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
       ActionController(name: 'TimelineStoreBase');
 
   @override
-  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+  void goToTopTimeline() {
     final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
         name: 'TimelineStoreBase.goToTopTimeline');
     try {
-      return super.goToTopTimeline(timelinePostBloc);
+      return super.goToTopTimeline();
     } finally {
       _$TimelineStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -183,11 +198,23 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   }
 
   @override
+  void removePostInList(TimelinePost post) {
+    final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
+        name: 'TimelineStoreBase.removePostInList');
+    try {
+      return super.removePostInList(post);
+    } finally {
+      _$TimelineStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 scrollController: ${scrollController},
 allPosts: ${allPosts},
 viewState: ${viewState},
+deletePost: ${deletePost},
 hasMorePosts: ${hasMorePosts},
 loadingMorePosts: ${loadingMorePosts},
 postsOffset: ${postsOffset}

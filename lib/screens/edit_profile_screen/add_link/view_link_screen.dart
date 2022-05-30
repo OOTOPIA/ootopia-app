@@ -9,7 +9,7 @@ import 'package:ootopia_app/data/repositories/marketplace_repository.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/learning_tracks/view_learning_tracks/view_learning_tracks.dart';
 import 'package:ootopia_app/screens/marketplace/product_detail_screen.dart';
-import 'package:ootopia_app/screens/profile_screen/components/profile_avatar_widget.dart';
+import 'package:ootopia_app/screens/profile_screen/components/avatar_photo_widget.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
@@ -61,7 +61,10 @@ class _ViewLinksScreenState extends State<ViewLinksScreen> {
                   SizedBox(
                     height: GlobalConstants.of(context).spacingNormal,
                   ),
-                  ProfileAvatarWidget(profileScreenStore: widget.store),
+                  AvatarPhotoWidget(
+                    photoUrl: widget.store.profile!.photoUrl,
+                    sizePhotoUrl: 114,
+                  ),
                   SizedBox(height: GlobalConstants.of(context).spacingSmall),
                   Text(
                     widget.store.profile!.fullname,

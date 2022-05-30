@@ -77,6 +77,21 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
+  final _$deletedUserAtom = Atom(name: 'AuthStoreBase.deletedUser');
+
+  @override
+  bool get deletedUser {
+    _$deletedUserAtom.reportRead();
+    return super.deletedUser;
+  }
+
+  @override
+  set deletedUser(bool value) {
+    _$deletedUserAtom.reportWrite(value, super.deletedUser, () {
+      super.deletedUser = value;
+    });
+  }
+
   final _$checkEmailExistAsyncAction =
       AsyncAction('AuthStoreBase.checkEmailExist');
 
@@ -133,6 +148,13 @@ mixin _$AuthStore on AuthStoreBase, Store {
         .run(() => super.recoverPassword(email, lang));
   }
 
+  final _$deleteUserAsyncAction = AsyncAction('AuthStoreBase.deleteUser');
+
+  @override
+  Future<void> deleteUser(String id) {
+    return _$deleteUserAsyncAction.run(() => super.deleteUser(id));
+  }
+
   final _$AuthStoreBaseActionController =
       ActionController(name: 'AuthStoreBase');
 
@@ -153,6 +175,7 @@ mixin _$AuthStore on AuthStoreBase, Store {
 isLoading: ${isLoading},
 errorOnGetTags: ${errorOnGetTags},
 emailExist: ${emailExist},
+deletedUser: ${deletedUser},
 currentUser: ${currentUser}
     ''';
   }

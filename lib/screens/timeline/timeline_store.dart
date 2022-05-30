@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import "package:mobx/mobx.dart";
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
 
@@ -49,8 +48,11 @@ abstract class TimelineStoreBase with Store {
 
   int get maxPostsPerPage => 10;
 
+  @observable
+  bool deletePost = false;
+
   @action
-  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+  void goToTopTimeline() {
     if (scrollController.hasClients)
       scrollController.animateTo(
         scrollController.position.minScrollExtent,
@@ -164,7 +166,12 @@ abstract class TimelineStoreBase with Store {
 
   @action
   Future removePost(TimelinePost post) async {
-    await this.postRepository.deletePost(post.id);
+    deletePost = await this.postRepository.deletePost(post.id);
+    removePostInList(post);
+  }
+
+  @action
+  void removePostInList(TimelinePost post) {
     allPosts = allPosts.where((element) => element.id != post.id).toList();
   }
 
