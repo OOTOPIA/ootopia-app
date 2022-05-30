@@ -76,24 +76,7 @@ class _LearningTrackWidgetState extends State<LearningTrackWidget> {
                       Navigator.pop(context);
                       await widget.learningTracksStore
                           .deleteLearningTrack(widget.learningTrack.id);
-                      if (widget.learningTracksStore.deleteLearning) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Text(
-                            AppLocalizations.of(context)!
-                                .successDeleteLearningTrack,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text(
-                              AppLocalizations.of(context)!
-                                  .somethingWentWrongInLearningTrack,
-                              style: TextStyle(color: Colors.white),
-                            )));
-                      }
+                      scaffoldMensage();
                     },
                     child: Text(
                       'Ok',
@@ -106,6 +89,25 @@ class _LearningTrackWidgetState extends State<LearningTrackWidget> {
             );
           });
         });
+  }
+
+  void scaffoldMensage() {
+    if (widget.learningTracksStore.deleteLearning) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text(
+          AppLocalizations.of(context)!.successDeleteLearningTrack,
+          style: TextStyle(color: Colors.white),
+        ),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            AppLocalizations.of(context)!.somethingWentWrongInLearningTrack,
+            style: TextStyle(color: Colors.white),
+          )));
+    }
   }
 
   @override
