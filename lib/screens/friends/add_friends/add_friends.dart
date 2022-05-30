@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/screens/friends/friends_store.dart';
 import 'package:ootopia_app/screens/friends/get_contacts.dart';
-import 'package:ootopia_app/screens/friends/shimmer/item_shimmer.dart';
+import 'package:ootopia_app/screens/friends/shimmer/list_items_shimmer.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -211,13 +211,7 @@ class _AddFriendsState extends State<AddFriends> {
                   SizedBox(
                     height: 6,
                   ),
-                  ListView.builder(
-                      itemCount: 11,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return ItemShimmer();
-                      }),
+                  ListItemsShimmer(),
                 ] else if (friendsStore.searchIsEmpty) ...[
                   Container(
                     alignment: Alignment.center,
