@@ -519,6 +519,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool get showButton {
-    return !isLoggedInUserProfile;
+    return !isLoggedInUserProfile && authStore.currentUser != null;
   }
 }
