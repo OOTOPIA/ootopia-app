@@ -151,7 +151,7 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
           ),
           value: 'shared',
         ),
-        if (authStore.currentUser!.isAdmin)
+        if (authStore.currentUser!.isAdmin == true)
           PopupMenuItem<String>(
             child: Column(
               children: [
