@@ -162,8 +162,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
     }
   }
 
-  @override
-  Future<String> deletePost(String postId) async {
+  Future<bool> deletePost(String postId) async {
     try {
       final request = http.Request(
           "DELETE", Uri.parse(dotenv.env['API_URL']! + 'posts/$postId'));
@@ -171,11 +170,7 @@ class PostRepositoryImpl with SecureStoreMixin implements PostRepository {
 
       final response = await request.send();
 
-      if (response.statusCode == 200) {
-        return "ALL_DELETED";
-      } else {
-        throw Exception('Failed to delete post');
-      }
+      return response.statusCode == 200;
     } catch (error) {
       throw Exception('Failed to delete post $error');
     }

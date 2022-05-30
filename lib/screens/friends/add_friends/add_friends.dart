@@ -193,7 +193,7 @@ class _AddFriendsState extends State<AddFriends> {
                     ),
                   ),
                 ),
-                if (!widget.displayContacts && !widget.displayModal)
+                if (!widget.displayContacts && !widget.displayModal && (friendsStore.usersSearch.total != null))
                   Visibility(
                     visible: !friendsStore.isLoading &&
                         !(friendsStore.usersSearch.friends?.isEmpty ?? true),

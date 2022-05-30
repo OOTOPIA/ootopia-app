@@ -534,6 +534,20 @@
     "selecLanguages": "Select the ones you prefer.",
     "portuguese": "Portuguese",
     "english": "English",
-    "french": "French"
+    "french": "French",
+    "removeUser": "Remove",
+    "permanently":"permanently",
+    "userDeleted":"User successfully deleted!",
+    "somethingWentWrongInDeleteUser":"Something went wrong deleting the user, try again.",
+    "nudity":"Nudity",
+    "violence":"Violence",
+    "spam":"Spam",
+    "other":"Other",
+    "messageReportUser":"We will review the report, thanks for making OOTOPIA a better place.",
+     "sendReport":"The complaint has been sent",
+     "dontSeeMorePosts":"Don't see more posts from %USERNAME%",
+     "report":"Report",
+      "successDeletePost":"Post deleted successfully!",
+     "somethingWentWrongInDeletePost":"Something went wrong deleting this post, try again."
 
 }
