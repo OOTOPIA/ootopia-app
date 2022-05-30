@@ -150,7 +150,7 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   final _$removePostAsyncAction = AsyncAction('TimelineStoreBase.removePost');
 
   @override
-  Future<void> removePost(TimelinePost post) {
+  Future<dynamic> removePost(TimelinePost post) {
     return _$removePostAsyncAction.run(() => super.removePost(post));
   }
 

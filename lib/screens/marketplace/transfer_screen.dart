@@ -79,8 +79,8 @@ class _TransferScreenState extends State<TransferScreen> {
                                                 MainAxisAlignment.start,
                                             children: [
                                               RoundedThumbnailImageWidget(
-                                                imageUrl:
-                                                    widget.productModel.imageUrl,
+                                                imageUrl: widget
+                                                    .productModel.imageUrl,
                                                 radius: 12,
                                               ),
                                               Container(
@@ -98,7 +98,8 @@ class _TransferScreenState extends State<TransferScreen> {
                                                                 .width *
                                                             0.65,
                                                 child: ProductInformationWidget(
-                                                  productModel: widget.productModel,
+                                                  productModel:
+                                                      widget.productModel,
                                                   marginTopTitle: 0,
                                                   marginBottom: 32,
                                                   marginLeft: 16,
