@@ -8,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/clean_arch/core/di/report_di.dart';
+import 'package:ootopia_app/clean_arch/report/presentation/stores/store_report_post.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_marketplace.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
@@ -79,6 +81,7 @@ import 'l10n/l10n.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  ReportDi.injectionDI();
   await Firebase.initializeApp();
   //FlutterBackgroundService.initialize(onStartService);
   await CountryCodes.init();
@@ -273,6 +276,9 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => FriendsStore()),
+        Provider<StoreReportPost>(
+          create: (_) => StoreReportPost(reportPost: Provider.of(context)),
+        ),
         Provider<AuthStore>(
           create: (_) => AuthStore(),
         ),

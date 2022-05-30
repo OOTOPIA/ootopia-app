@@ -48,6 +48,9 @@ abstract class TimelineStoreBase with Store {
 
   int get maxPostsPerPage => 10;
 
+  @observable
+  bool deletePost = false;
+
   @action
   void goToTopTimeline() {
     if (scrollController.hasClients)
@@ -164,6 +167,11 @@ abstract class TimelineStoreBase with Store {
   @action
   Future removePost(TimelinePost post) async {
     await this.postRepository.deletePost(post.id);
+    removePostInList(post);
+  }
+
+  @action
+  void removePostInList(TimelinePost post) {
     allPosts = allPosts.where((element) => element.id != post.id).toList();
   }
 

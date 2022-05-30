@@ -1,4 +1,5 @@
 //Packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -209,9 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )),
               TextButton(
                   onPressed: () async {
-                    Navigator.pop(context);
-                    controller.back();
                     await authStore.deleteUser(profileUserId);
+                    Navigator.pop(context);
+
                     if (authStore.deletedUser) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: Colors.green,
@@ -291,6 +292,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Align(
                                     alignment: Alignment.topRight,
                                     child: PopupMenuButton(
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          color: Colors.white,
+                                          width: 2,
+                                          style: BorderStyle.solid,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
                                       icon: Icon(Icons.more_vert),
                                       itemBuilder: (BuildContext context) =>
                                           <PopupMenuEntry>[

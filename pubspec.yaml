@@ -92,6 +92,8 @@ dependencies:
   awesome_notifications: ^0.6.21
   contacts_service: ^0.6.3
   country_codes: ^2.1.1
+  either_dart: ^0.1.4
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:
