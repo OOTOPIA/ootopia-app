@@ -120,7 +120,7 @@ class _LearningTrackWidgetState extends State<LearningTrackWidget> {
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         onTap: widget.onTap,
-        onLongPress: authStore.currentUser!.isAdmin
+        onLongPress: authStore.currentUser!.isAdmin == true
             ? showModalDeleteLearningTrack
             : null,
         child: Column(

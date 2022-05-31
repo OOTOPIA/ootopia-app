@@ -99,6 +99,12 @@ class FriendsStore with ChangeNotifier {
     myFriendsDate.total = (myFriendsDate.total ?? 0) - 1;
     myFriendsDate.friends!.removeWhere((element) => element!.id == friend.id);
 
+    int indexSearch = usersSearch.alreadyFriends?.indexWhere((element) => element?.id == friend.id) ?? -1;
+
+    if(indexSearch != -1){
+      usersSearch.alreadyFriends![indexSearch]!.isFriend = false;
+    }
+
     if (hasMoreFriends && !loadingMoreFriends && orderBy != null) {
       getMoreFriends(userLoggedId);
     }
