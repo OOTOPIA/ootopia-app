@@ -43,44 +43,39 @@ class ItemFriend extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Stack(
-                        children: [
-
-                          SizedBox(
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.network(
+                            friendModel.photoUrl ?? '',
+                            fit: BoxFit.cover,
                             width: 40,
                             height: 40,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image.network(
-                                friendModel.photoUrl ?? '',
-                                fit: BoxFit.cover,
-                                width: 40,
-                                height: 40,
-                                errorBuilder: (context, url, error) => Image.asset(
-                                      'assets/icons/user.png',
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
-                                    ),
-                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                  if (loadingProgress == null) {
-                                    return child;
-                                  }
-                                  return Shimmer.fromColors(
-                                    baseColor: Colors.grey[300] ?? Colors.blue,
-                                    highlightColor: Colors.grey[100] ?? Colors.blue,
-                                    child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white, shape: BoxShape.circle),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                            errorBuilder: (context, url, error) => Image.asset(
+                                  'assets/icons/user.png',
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                ),
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey[300] ?? Colors.blue,
+                                highlightColor: Colors.grey[100] ?? Colors.blue,
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white, shape: BoxShape.circle),
+                                ),
+                              );
+                            },
                           ),
-                        ],
+                        ),
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 12),
