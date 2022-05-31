@@ -253,6 +253,7 @@
     "publish": "Publicar",
     "cropButton":"Cortar imagem",
     "all": "Todas",
+    "today": "Hoje",
     "shared":"Compartilhadas",
     "copyLink":"Copiar link",
     "linkCopied":"Link copiado",
@@ -527,7 +528,21 @@
     "selecLanguages": "Selecione os de sua preferência.",
     "portuguese": "Português",
     "english": "Inglês",
-    "french": "Francês"
+    "french": "Francês",
+    "removeUser": "Remover",
+    "permanently":"permanentemente",
+    "userDeleted":"Usuário deletado com sucesso!",
+     "somethingWentWrongInDeleteUser":"Algo deu errado ao deletar o usuario, tente novamente.",
+       "nudity":"Nudez",
+    "violence":"Violencia",
+    "spam":"Spam",
+    "other":"Outro",
+     "messageReportUser":"Iremos analisar a denúncia, obrigado por tornar a OOTOPIA um lugar melhor.",
+     "sendReport":"A denuncia foi enviada",
+     "dontSeeMorePosts":"Não visualizar mais postagens de %USERNAME%",
+     "report":"Denunciar",
+     "successDeletePost":"Post deletado com sucesso!",
+     "somethingWentWrongInDeletePost":"Algo deu errado ao deletar o usuario, tente novamente."
 
 }
 

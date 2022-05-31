@@ -138,6 +138,18 @@ class AuthRepositoryImpl with SecureStoreMixin implements AuthRepository {
     }
   }
 
+  Future<bool> deleteUser(String id) async {
+    try {
+      var response = await ApiClient.api().delete("users/$id");
+      return response.statusCode == 200;
+    } catch (e) {
+      if (e is DioError) {
+        print('${e.error} ${e.response} ${e.message}');
+      }
+      throw Exception('Failed to delete user, please try again');
+    }
+  }
+
   @override
   Future recoverPassword(String email, String lang) async {
     final response = await http.post(

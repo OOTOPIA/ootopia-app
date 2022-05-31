@@ -373,7 +373,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.16;
+				MARKETING_VERSION = 0.1.32;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ootopia.beta2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "OOTOPIA Beta Prod (New Profile for notifications)";
@@ -508,7 +508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.16;
+				MARKETING_VERSION = 0.1.32;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ootopia.beta2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "OOTOPIA Beta Prod (New Profile for notifications)";
@@ -537,7 +537,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.16;
+				MARKETING_VERSION = 0.1.32;
 				PRODUCT_BUNDLE_IDENTIFIER = org.ootopia.beta2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "OOTOPIA Beta Prod (New Profile for notifications)";

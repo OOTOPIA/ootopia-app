@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/friends/friend_model.dart';
 import 'package:ootopia_app/data/models/friends/friends_data_model.dart';
@@ -92,7 +90,10 @@ class FriendsStore with ChangeNotifier {
   Future<bool> removeFriend(FriendModel friend, userLoggedId) async {
     int index =
         friendsDate.friends!.indexWhere((element) => element?.id == friend.id);
-    friendsDate.friends![index]!.remove = true;
+
+   if(index != -1){
+     friendsDate.friends![index]!.remove = true;
+   }
     friendsDate.total = friendsDate.total! - 1;
 
     myFriendsDate.total = (myFriendsDate.total ?? 0) - 1;

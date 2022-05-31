@@ -93,21 +93,6 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
-  final _$_sendingToApiAtom = Atom(name: 'TimelineStoreBase._sendingToApi');
-
-  @override
-  bool get _sendingToApi {
-    _$_sendingToApiAtom.reportRead();
-    return super._sendingToApi;
-  }
-
-  @override
-  set _sendingToApi(bool value) {
-    _$_sendingToApiAtom.reportWrite(value, super._sendingToApi, () {
-      super._sendingToApi = value;
-    });
-  }
-
   final _$_postsOffsetAtom = Atom(name: 'TimelineStoreBase._postsOffset');
 
   @override
@@ -138,18 +123,18 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
     });
   }
 
-  final _$dailyGoalStatsAtom = Atom(name: 'TimelineStoreBase.dailyGoalStats');
+  final _$deletePostAtom = Atom(name: 'TimelineStoreBase.deletePost');
 
   @override
-  ObservableFuture<DailyGoalStatsModel?>? get dailyGoalStats {
-    _$dailyGoalStatsAtom.reportRead();
-    return super.dailyGoalStats;
+  bool get deletePost {
+    _$deletePostAtom.reportRead();
+    return super.deletePost;
   }
 
   @override
-  set dailyGoalStats(ObservableFuture<DailyGoalStatsModel?>? value) {
-    _$dailyGoalStatsAtom.reportWrite(value, super.dailyGoalStats, () {
-      super.dailyGoalStats = value;
+  set deletePost(bool value) {
+    _$deletePostAtom.reportWrite(value, super.deletePost, () {
+      super.deletePost = value;
     });
   }
 
@@ -165,7 +150,7 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   final _$removePostAsyncAction = AsyncAction('TimelineStoreBase.removePost');
 
   @override
-  Future<dynamic> removePost(TimelinePost post) {
+  Future<void> removePost(TimelinePost post) {
     return _$removePostAsyncAction.run(() => super.removePost(post));
   }
 
@@ -180,11 +165,11 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
       ActionController(name: 'TimelineStoreBase');
 
   @override
-  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+  void goToTopTimeline() {
     final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
         name: 'TimelineStoreBase.goToTopTimeline');
     try {
-      return super.goToTopTimeline(timelinePostBloc);
+      return super.goToTopTimeline();
     } finally {
       _$TimelineStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -213,12 +198,23 @@ mixin _$TimelineStore on TimelineStoreBase, Store {
   }
 
   @override
+  void removePostInList(TimelinePost post) {
+    final _$actionInfo = _$TimelineStoreBaseActionController.startAction(
+        name: 'TimelineStoreBase.removePostInList');
+    try {
+      return super.removePostInList(post);
+    } finally {
+      _$TimelineStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 scrollController: ${scrollController},
 allPosts: ${allPosts},
 viewState: ${viewState},
-dailyGoalStats: ${dailyGoalStats},
+deletePost: ${deletePost},
 hasMorePosts: ${hasMorePosts},
 loadingMorePosts: ${loadingMorePosts},
 postsOffset: ${postsOffset}

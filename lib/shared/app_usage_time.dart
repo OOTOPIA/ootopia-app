@@ -9,8 +9,8 @@ import 'package:ootopia_app/shared/shared_preferences.dart';
 class AppUsageTime with SecureStoreMixin {
   static AppUsageTime? _instance;
 
-  Stopwatch _watch = Stopwatch();
-  Timer? _timer;
+  //Stopwatch _watch = Stopwatch();
+  //Timer? _timer;
   int usageTimeSoFarInMilliseconds = 0;
   SharedPreferencesInstance? prefs;
   SharedExperienceService sharedExperienceService =
@@ -33,44 +33,44 @@ class AppUsageTime with SecureStoreMixin {
   static AppUsageTime get instance =>
       _instance == null ? _instance = AppUsageTime() : _instance!;
 
-  _updateUsageTime(Timer timer) async {
-    if (_watch.isRunning) {
-      usageTimeSoFarInMilliseconds += 1000;
-      await prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
-      if (prefs == null) {
-        prefs = await SharedPreferencesInstance.getInstance();
-      }
-      //A cada segundo armazenamos no storage o tempo cronometrado
-      if (await getUserIsLoggedIn()) {
-        int lastTime = prefs!.getFeedbackTime() ?? 0;
-        bool displayedToday = prefs!.getFeedbackToday() ?? false;
-        String? displayedDate = prefs!.getFeedbackLastUsageDate();
-        String today = dateNowFormat;
-
-        if (displayedDate == null || displayedDate != today) {
-          prefs!.setFeedbackLastUsageDate(today);
-          prefs!.setFeedbackToday(false);
-          sharedExperienceService.displayedToday = false;
-          lastTime = 0;
-          displayedToday = false;
-        }
-        if (lastTime >= 600000 && !displayedToday) {
-          try {
-            prefs!.setFeedbackToday(true);
-            sharedExperienceService.displayedToday = true;
-            sharedExperienceService.notify();
-          } catch (e) {}
-        }
-        prefs!.setFeedbackTime(lastTime + 1000);
-        // if (await FlutterBackgroundService().isServiceRunning()) {
-        //   FlutterBackgroundService().sendData({
-        //     "action": "ON_UPDATE_USAGE_TIME",
-        //     "value": new DateTime.now().millisecondsSinceEpoch,
-        //   });
-        // }
-      }
-    }
-  }
+  // _updateUsageTime(Timer timer) async {
+  //   if (_watch.isRunning) {
+  //     usageTimeSoFarInMilliseconds += 1000;
+  //     await prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
+  //     if (prefs == null) {
+  //       prefs = await SharedPreferencesInstance.getInstance();
+  //     }
+  //     //A cada segundo armazenamos no storage o tempo cronometrado
+  //     if (await getUserIsLoggedIn()) {
+  //       int lastTime = prefs!.getFeedbackTime() ?? 0;
+  //       bool displayedToday = prefs!.getFeedbackToday() ?? false;
+  //       String? displayedDate = prefs!.getFeedbackLastUsageDate();
+  //       String today = dateNowFormat;
+  //
+  //       if (displayedDate == null || displayedDate != today) {
+  //         prefs!.setFeedbackLastUsageDate(today);
+  //         prefs!.setFeedbackToday(false);
+  //         sharedExperienceService.displayedToday = false;
+  //         lastTime = 0;
+  //         displayedToday = false;
+  //       }
+  //       if (lastTime >= 600000 && !displayedToday) {
+  //         try {
+  //           prefs!.setFeedbackToday(true);
+  //           sharedExperienceService.displayedToday = true;
+  //           sharedExperienceService.notify();
+  //         } catch (e) {}
+  //       }
+  //       prefs!.setFeedbackTime(lastTime + 1000);
+  //       // if (await FlutterBackgroundService().isServiceRunning()) {
+  //       //   FlutterBackgroundService().sendData({
+  //       //     "action": "ON_UPDATE_USAGE_TIME",
+  //       //     "value": new DateTime.now().millisecondsSinceEpoch,
+  //       //   });
+  //       // }
+  //     }
+  //   }
+  // }
 
   String get dateNowFormat {
     DateTime date = DateTime.now();
@@ -95,18 +95,20 @@ class AppUsageTime with SecureStoreMixin {
   }
 
   startTimer() {
-    if (!_watch.isRunning) {
-      _watch.start();
-    }
-    if (_timer == null) {
-      _timer = Timer.periodic(Duration(seconds: 1), _updateUsageTime);
-    }
+    ///REMOVED TO INCREASE APP PERFORMANCE
+    ///AND BECAUSE THE REGENERATION GAME HAS BEEN REMOVED
+    // if (!_watch.isRunning) {
+    //   _watch.start();
+    // }
+    // if (_timer == null) {
+    //   _timer = Timer.periodic(Duration(seconds: 1), _updateUsageTime);
+    // }
   }
 
   stopTimer() async {
-    if (_watch.isRunning) {
-      _watch.stop();
-    }
+    // if (_watch.isRunning) {
+    //   _watch.stop();
+    // }
     prefs!.setLastPendingUsageTime(usageTimeSoFarInMilliseconds);
   }
 

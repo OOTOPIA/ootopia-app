@@ -30,6 +30,13 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
       (_$loadingPostsComputed ??= Computed<bool>(() => super.loadingPosts,
               name: '_ProfileScreenStoreBase.loadingPosts'))
           .value;
+  Computed<bool>? _$deletedUserComputed;
+
+  @override
+  bool get deletedUser =>
+      (_$deletedUserComputed ??= Computed<bool>(() => super.deletedUser,
+              name: '_ProfileScreenStoreBase.deletedUser'))
+          .value;
 
   final _$loadingProfileAtom =
       Atom(name: '_ProfileScreenStoreBase.loadingProfile');
@@ -171,6 +178,21 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
     });
   }
 
+  final _$_deletedUserAtom = Atom(name: '_ProfileScreenStoreBase._deletedUser');
+
+  @override
+  bool get _deletedUser {
+    _$_deletedUserAtom.reportRead();
+    return super._deletedUser;
+  }
+
+  @override
+  set _deletedUser(bool value) {
+    _$_deletedUserAtom.reportWrite(value, super._deletedUser, () {
+      super._deletedUser = value;
+    });
+  }
+
   final _$addFriendAsyncAction =
       AsyncAction('_ProfileScreenStoreBase.addFriend');
 
@@ -214,6 +236,20 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
         .run(() => super.getUserPosts(userId, limit: limit, offset: offset));
   }
 
+  final _$_ProfileScreenStoreBaseActionController =
+      ActionController(name: '_ProfileScreenStoreBase');
+
+  @override
+  dynamic cleanPage() {
+    final _$actionInfo = _$_ProfileScreenStoreBaseActionController.startAction(
+        name: '_ProfileScreenStoreBase.cleanPage');
+    try {
+      return super.cleanPage();
+    } finally {
+      _$_ProfileScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -225,7 +261,8 @@ postsList: ${postsList},
 isFriend: ${isFriend},
 postsOffset: ${postsOffset},
 hasMorePosts: ${hasMorePosts},
-loadingPosts: ${loadingPosts}
+loadingPosts: ${loadingPosts},
+deletedUser: ${deletedUser}
     ''';
   }
 }

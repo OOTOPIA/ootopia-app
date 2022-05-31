@@ -172,12 +172,6 @@ class _MenuDrawerState extends State<MenuDrawer> with SecureStoreMixin {
                                                 sizePhotoUrl: 100,
                                                 photoUrl: authStore!
                                                     .currentUser!.photoUrl,
-                                                isBadges: authStore!
-                                                        .currentUser!
-                                                        .badges!
-                                                        .length >
-                                                    0,
-                                                onTap: () {},
                                               ),
                                             ],
                                           ),

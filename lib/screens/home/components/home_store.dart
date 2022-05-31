@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import "package:mobx/mobx.dart";
-import 'package:flutter/material.dart';
 import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/data/repositories/user_repository.dart';
@@ -15,36 +13,36 @@ abstract class HomeStoreBase with Store {
   final UserRepositoryImpl userRepository = UserRepositoryImpl();
   SharedPreferencesInstance? prefs;
 
-  BuildContext? context;
+  //BuildContext? context;
 
-  @observable
-  int currentPageIndex = 0;
+  // @observable
+  // int currentPageIndex = 0;
 
-  bool totalIsSentToApi = false;
+  // bool totalIsSentToApi = false;
 
-  @observable
-  StatefulWidget? currentPageWidget;
+  // @observable
+  // StatefulWidget? currentPageWidget;
 
-  @observable
-  bool showRemainingTime = false;
-
-  @observable
-  bool showRemainingTimeEnd = false;
+  // @observable
+  // bool showRemainingTime = false;
+  //
+  // @observable
+  // bool showRemainingTimeEnd = false;
 
   @observable
   DailyGoalStatsModel? dailyGoalStats;
 
-  @observable
-  double percentageOfDailyGoalAchieved = 0;
+  // @observable
+  // double percentageOfDailyGoalAchieved = 0;
 
   Stopwatch _watch = Stopwatch();
-  Timer? _dailyGoalTimer;
+  //Timer? _dailyGoalTimer;
 
-  int _remainingTimeInMs = 0;
-  int _totalAppUsageTimeSoFarInMs = 0;
-  int _updateAppUsageTime = 0;
-  bool _timerIsStarted = false;
-  bool _getDailyGoalStats = false;
+  // int _remainingTimeInMs = 0;
+  // int _totalAppUsageTimeSoFarInMs = 0;
+   //int _updateAppUsageTime = 0;
+  // bool _timerIsStarted = false;
+  // bool _getDailyGoalStats = false;
 
   @observable
   String remainingTime = "";
@@ -162,13 +160,13 @@ abstract class HomeStoreBase with Store {
   @action
   stopDailyGoalTimer() {
     _watch.stop();
-    _dailyGoalTimer?.cancel();
+    //_dailyGoalTimer?.cancel();
   }
 
-  @action
-  setCurrentPageWidget(StatefulWidget pageWidget) {
-    currentPageWidget = pageWidget;
-  }
+  // @action
+  // setCurrentPageWidget(StatefulWidget pageWidget) {
+  //   currentPageWidget = pageWidget;
+  // }
 
   @action
   setShowCreatedPostAlert(bool value) {
@@ -184,7 +182,7 @@ abstract class HomeStoreBase with Store {
   Future<DailyGoalStatsModel?> getDailyGoalStats() async {
     try {
       this.dailyGoalStats = await userRepository.getDailyGoalStats();
-      _updateAppUsageTime = dailyGoalStats!.totalAppUsageTimeSoFarInMs + 180000;
+      //_updateAppUsageTime = dailyGoalStats!.totalAppUsageTimeSoFarInMs + 180000;
     } catch (err) {}
     return this.dailyGoalStats;
   }
@@ -208,45 +206,45 @@ abstract class HomeStoreBase with Store {
     );
   }
 
-  @action
-  Future<bool> readyToShowCelebratePage() async {
-    if (percentageOfDailyGoalAchieved >= 100 && prefs != null) {
-      final result = prefs?.getPersonalCelebratePageEnabled();
-      final alreadyOpened = prefs?.getPersonalCelebratePageAlreadyOpened();
-      return (result != null &&
-              result &&
-              (alreadyOpened == null || !alreadyOpened))
-          ? true
-          : false;
-    }
-    return false;
-  }
+  // @action
+  // Future<bool> readyToShowCelebratePage() async {
+  //   if (percentageOfDailyGoalAchieved >= 100 && prefs != null) {
+  //     final result = prefs?.getPersonalCelebratePageEnabled();
+  //     final alreadyOpened = prefs?.getPersonalCelebratePageAlreadyOpened();
+  //     return (result != null &&
+  //             result &&
+  //             (alreadyOpened == null || !alreadyOpened))
+  //         ? true
+  //         : false;
+  //   }
+  //   return false;
+  // }
 
-  @action
-  setCelebratePageAlreadyOpened(bool show) {
-    if (prefs != null) {
-      prefs?.setPersonalCelebratePageAlreadyOpened(show);
-    }
-  }
+  // @action
+  // setCelebratePageAlreadyOpened(bool show) {
+  //   if (prefs != null) {
+  //     prefs?.setPersonalCelebratePageAlreadyOpened(show);
+  //   }
+  // }
 
-  _msToTime(duration, {bool? showSeconds}) {
-    try {
-      int seconds = ((duration / 1000) % 60).floor();
-      int minutes = ((duration / (1000 * 60)) % 60).floor();
-      int hours = ((duration / (1000 * 60 * 60)) % 24).floor();
-
-      String strHours = (hours < 10) ? "0$hours" : "$hours";
-      String strMinutes = (minutes < 10) ? "0$minutes" : "$minutes";
-      String strSeconds = (seconds < 10) ? "0$seconds" : "$seconds";
-
-      return (strHours != "00" ? strHours + "h " : "") +
-          strMinutes +
-          "min " +
-          (showSeconds == true && strHours == "00" ? strSeconds + "s" : "");
-    } catch (err) {
-      return "error";
-    }
-  }
+  // _msToTime(duration, {bool? showSeconds}) {
+  //   try {
+  //     int seconds = ((duration / 1000) % 60).floor();
+  //     int minutes = ((duration / (1000 * 60)) % 60).floor();
+  //     int hours = ((duration / (1000 * 60 * 60)) % 24).floor();
+  //
+  //     String strHours = (hours < 10) ? "0$hours" : "$hours";
+  //     String strMinutes = (minutes < 10) ? "0$minutes" : "$minutes";
+  //     String strSeconds = (seconds < 10) ? "0$seconds" : "$seconds";
+  //
+  //     return (strHours != "00" ? strHours + "h " : "") +
+  //         strMinutes +
+  //         "min " +
+  //         (showSeconds == true && strHours == "00" ? strSeconds + "s" : "");
+  //   } catch (err) {
+  //     return "error";
+  //   }
+  // }
 
   @action
   Future<void> getCurrentUser(String id) async {

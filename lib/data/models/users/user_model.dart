@@ -37,6 +37,7 @@ class User extends Equatable {
   String? dialCode;
   List<Link>? links;
   List<String>? languages;
+  bool? isAdmin;
 
   User({
     this.id,
@@ -71,6 +72,7 @@ class User extends Equatable {
     this.dialCode,
     this.links,
     this.languages,
+    this.isAdmin = false,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -147,6 +149,7 @@ class User extends Equatable {
       phone: json['phone'],
       dialCode: json['dialCode'],
       countryCode: json['countryCode'],
+      isAdmin: json["isAdmin"] == null ? null : json['isAdmin'],
       links: (json['links'] == null || json['links'] == '[{}]'
           ? []
           : (json['links'] as List<dynamic>)
@@ -189,6 +192,7 @@ class User extends Equatable {
         'dialCode': dialCode,
         'links': links,
         'languages': languages,
+        'isAdmin': isAdmin,
       };
 
   @override
@@ -224,5 +228,6 @@ class User extends Equatable {
         dialCode,
         links,
         languages,
+        isAdmin,
       ];
 }

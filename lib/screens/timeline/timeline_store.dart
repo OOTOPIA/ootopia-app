@@ -2,13 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import "package:mobx/mobx.dart";
-import 'package:ootopia_app/bloc/timeline/timeline_bloc.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
-import 'package:ootopia_app/data/models/users/daily_goal_stats_model.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
-import 'package:ootopia_app/data/repositories/user_repository.dart';
-import 'package:ootopia_app/shared/shared_preferences.dart';
-import 'package:smart_page_navigation/smart_page_navigation.dart';
 
 part "timeline_store.g.dart";
 
@@ -17,7 +12,7 @@ class TimelineStore = TimelineStoreBase with _$TimelineStore;
 enum TimelineViewState { ok, loading, error, loadingMorePosts }
 
 abstract class TimelineStoreBase with Store {
-  final UserRepositoryImpl userRepository = UserRepositoryImpl();
+  //final UserRepositoryImpl userRepository = UserRepositoryImpl();
   final PostRepositoryImpl postRepository = PostRepositoryImpl();
 
   @observable
@@ -39,8 +34,8 @@ abstract class TimelineStoreBase with Store {
   @computed
   bool get loadingMorePosts => _loadingMorePosts;
 
-  @observable
-  bool _sendingToApi = false;
+  // @observable
+  // bool _sendingToApi = false;
 
   @observable
   int _postsOffset = 0;
@@ -53,8 +48,11 @@ abstract class TimelineStoreBase with Store {
 
   int get maxPostsPerPage => 10;
 
+  @observable
+  bool deletePost = false;
+
   @action
-  void goToTopTimeline(TimelinePostBloc timelinePostBloc) {
+  void goToTopTimeline() {
     if (scrollController.hasClients)
       scrollController.animateTo(
         scrollController.position.minScrollExtent,
@@ -67,21 +65,21 @@ abstract class TimelineStoreBase with Store {
     });
   }
 
-  @observable
-  ObservableFuture<DailyGoalStatsModel?>? dailyGoalStats;
+  // @observable
+  // ObservableFuture<DailyGoalStatsModel?>? dailyGoalStats;
 
   Stopwatch _watch = Stopwatch();
-  Timer? _timelineViewTimer;
-  String _prefsKey = "timeline_view_time";
-  SharedPreferencesInstance? prefs;
+  //Timer? _timelineViewTimer;
+  // String _prefsKey = "timeline_view_time";
+  //SharedPreferencesInstance? prefs;
 
-  SmartPageController? _smartPageController;
-
-  int _timelineViewtimeSoFarInMs = 0;
-
-  init(SmartPageController controller) {
-    _smartPageController = controller;
-  }
+  // SmartPageController? _smartPageController;
+  //
+  // int _timelineViewtimeSoFarInMs = 0;
+  //
+  // init(SmartPageController controller) {
+  //   _smartPageController = controller;
+  // }
 
   // @action
   // startTimelineViewTimer() async {
@@ -125,7 +123,7 @@ abstract class TimelineStoreBase with Store {
     if (_watch.isRunning) {
       _watch.stop();
     }
-    _timelineViewTimer = null;
+    //_timelineViewTimer = null;
   }
 
   @action
@@ -169,6 +167,11 @@ abstract class TimelineStoreBase with Store {
   @action
   Future removePost(TimelinePost post) async {
     await this.postRepository.deletePost(post.id);
+    removePostInList(post);
+  }
+
+  @action
+  void removePostInList(TimelinePost post) {
     allPosts = allPosts.where((element) => element.id != post.id).toList();
   }
 
