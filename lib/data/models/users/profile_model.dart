@@ -3,18 +3,18 @@ import 'package:ootopia_app/data/models/users/link_model.dart';
 import 'badges_model.dart';
 
 class Profile extends Equatable {
-  String id;
-  String fullname;
-  String? birthdate;
-  String? bio;
-  String? photoUrl;
-  List<Badge>? badges;
-  int? personalTrophyQuantity;
-  int? cityTrophyQuantity;
-  int? globalTrophyQuantity;
-  int? totalTrophyQuantity;
-  List<Link>? links;
-  List<String>? languages;
+  final String id;
+  final String fullname;
+  final String? birthdate;
+  final String? bio;
+  final String? photoUrl;
+  final List<Badge>? badges;
+  final int? personalTrophyQuantity;
+  final int? cityTrophyQuantity;
+  final int? globalTrophyQuantity;
+  final int? totalTrophyQuantity;
+  final List<Link>? links;
+  final List<String>? languages;
 
   Profile({
     required this.id,

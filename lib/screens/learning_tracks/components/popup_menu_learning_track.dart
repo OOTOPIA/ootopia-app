@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ootopia_app/data/models/marketplace/product_model.dart';
+import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/share_link.dart';
-import 'package:ootopia_app/screens/marketplace/marketplace_store.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class PopupMenuMarkeplace extends StatefulWidget {
-  final ProductModel productModel;
-
-  PopupMenuMarkeplace({
-    required this.productModel,
+class PopMenuLearningTrack extends StatefulWidget {
+  final LearningTracksModel learningTrack;
+  final LearningTracksStore learningTracksStore;
+  PopMenuLearningTrack({
+    required this.learningTrack,
+    required this.learningTracksStore,
   });
   @override
-  _PopupMenuMarkeplaceState createState() => _PopupMenuMarkeplaceState();
+  _PopMenuLearningTrackState createState() => _PopMenuLearningTrackState();
 }
 
-class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
+class _PopMenuLearningTrackState extends State<PopMenuLearningTrack> {
   @override
   void initState() {
     super.initState();
@@ -26,18 +27,16 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
 
   _selectedOption(String optionSelected) {
     if (optionSelected == 'shared') {
-      copyLink(Type.offer, widget.productModel.id, context);
-      modalSharedCopyLink(Type.offer, context);
+      copyLink(Type.learning_track, widget.learningTrack.id, context);
+      modalSharedCopyLink(Type.learning_track, context);
       return;
     }
     if (optionSelected == 'delete') {
-      showModalDeleteProduct();
+      showModalDeleteLearningTrack();
     }
   }
 
-  late MarketplaceStore _marketplaceStore;
-  SmartPageController controller = SmartPageController.getInstance();
-  void showModalDeleteProduct() async {
+  void showModalDeleteLearningTrack() async {
     await showDialog(
         context: context,
         builder: (context) {
@@ -56,7 +55,7 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
                           fontSize: 16,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
-                      text: ' ${widget.productModel.title} ',
+                      text: ' ${widget.learningTrack.title} ',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -82,26 +81,10 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
                     )),
                 TextButton(
                     onPressed: () async {
-                      await _marketplaceStore
-                          .deleteProductMarketingPlace(widget.productModel.id);
-                      if (_marketplaceStore.isDeleteProduct) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Text(
-                            AppLocalizations.of(context)!.successDeleteProduct,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text(
-                              AppLocalizations.of(context)!
-                                  .somethingWentWrongInDeleteProduct,
-                              style: TextStyle(color: Colors.white),
-                            )));
-                      }
                       Navigator.pop(context);
+                      await widget.learningTracksStore
+                          .deleteLearningTrack(widget.learningTrack.id);
+                      scaffoldMensage();
                     },
                     child: Text(
                       'Ok',
@@ -116,9 +99,29 @@ class _PopupMenuMarkeplaceState extends State<PopupMenuMarkeplace> {
         });
   }
 
+  void scaffoldMensage() {
+    if (widget.learningTracksStore.deleteLearning) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text(
+          AppLocalizations.of(context)!.successDeleteLearningTrack,
+          style: TextStyle(color: Colors.white),
+        ),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            AppLocalizations.of(context)!.somethingWentWrongInLearningTrack,
+            style: TextStyle(color: Colors.white),
+          )));
+    }
+  }
+
+  SmartPageController controller = SmartPageController.getInstance();
+
   @override
   Widget build(BuildContext context) {
-    _marketplaceStore = Provider.of<MarketplaceStore>(context);
     AuthStore authStore = Provider.of<AuthStore>(context);
     return PopupMenuButton(
       child: Icon(Icons.more_vert),
