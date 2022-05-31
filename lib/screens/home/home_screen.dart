@@ -10,7 +10,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/repositories/post_repository.dart';
-//import 'package:ootopia_app/main.dart' as main;
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/chat_with_users/chat_dialog_controller.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';

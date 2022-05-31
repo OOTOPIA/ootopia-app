@@ -288,7 +288,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   photoUrl: store?.profile!.photoUrl,
                                   sizePhotoUrl: 114,
                                 ),
-                                if (authStore.currentUser!.isAdmin)
+                                if (authStore.currentUser!.isAdmin != null &&
+                                    authStore.currentUser!.isAdmin!)
                                   Align(
                                     alignment: Alignment.topRight,
                                     child: PopupMenuButton(

@@ -37,7 +37,7 @@ class User extends Equatable {
   String? dialCode;
   List<Link>? links;
   List<String>? languages;
-  bool isAdmin;
+  bool? isAdmin;
 
   User({
     this.id,
@@ -149,7 +149,7 @@ class User extends Equatable {
       phone: json['phone'],
       dialCode: json['dialCode'],
       countryCode: json['countryCode'],
-      isAdmin: json['isAdmin'],
+      isAdmin: json["isAdmin"] == null ? null : json['isAdmin'],
       links: (json['links'] == null || json['links'] == '[{}]'
           ? []
           : (json['links'] as List<dynamic>)

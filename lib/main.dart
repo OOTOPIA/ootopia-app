@@ -83,7 +83,8 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   ReportDi.injectionDI();
   await Firebase.initializeApp();
-  //FlutterBackgroundService.initialize(onStartService);
+
+  ///FlutterBackgroundService.initialize(onStartService);
   await CountryCodes.init();
   var configuredApp = new AppConfig(
     appName: 'OOTOPIA',
@@ -197,7 +198,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //       try {
 //         await AppUsageTime.instance.sendToApi();
 //         timer.cancel();
-//         //service.stopBackgroundService();
+//         service.stopBackgroundService();
 //       } catch (err) {
 //         currentAttempt++;
 //         if (currentAttempt >= maxAttempts) {
