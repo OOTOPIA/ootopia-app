@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../data/repositories/learning_tracks_repository.dart';
 
 class WatchVideoLeaningTracks extends StatefulWidget {
-  List<ChaptersModel>? listChapters;
+  final List<ChaptersModel>? listChapters;
   final ChaptersModel chapter;
   final LearningTracksModel? learningTrack;
   final Function updateStatusVideoChapter;

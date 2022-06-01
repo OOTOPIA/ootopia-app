@@ -2,16 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomSnackbars {
-  CustomSnackbars? _instance;
-  late BuildContext _context;
-
   TextStyle _textStyle = TextStyle(color: Colors.white);
-
-  CustomSnackbars(
-    BuildContext context,
-  ) {
-    this._context = context;
-  }
 
   CustomSnackbars setTextStyle(TextStyle textStyle) {
     this._textStyle = textStyle;

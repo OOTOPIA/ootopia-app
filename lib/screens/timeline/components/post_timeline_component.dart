@@ -27,6 +27,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
 import 'package:ootopia_app/shared/snackbar_component.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -185,7 +186,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     if (timelineStore.deletePost) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.green,
+          backgroundColor: LightColors.cyan,
           content: Text(AppLocalizations.of(context)!.successDeletePost),
         ),
       );
@@ -660,7 +661,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                   child: GestureDetector(
                     onHorizontalDragEnd: (_) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        CustomSnackbars(context).defaultSnackbar(
+                        CustomSnackbars().defaultSnackbar(
                           text:
                               AppLocalizations.of(context)!.tooltipBlockedField,
                           backgroundColor: Color(0xff03DAC5),
@@ -672,7 +673,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     },
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        CustomSnackbars(context).defaultSnackbar(
+                        CustomSnackbars().defaultSnackbar(
                           text:
                               AppLocalizations.of(context)!.tooltipBlockedField,
                           backgroundColor: Color(0xff03DAC5),
@@ -1100,10 +1101,10 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
 }
 
 class GratitudeRewardDialog extends StatefulWidget {
-  String title;
-  String message;
-  Function onClickPositiveButton;
-  Function onCheckChanged;
+  final String title;
+  final String message;
+  final Function onClickPositiveButton;
+  final Function onCheckChanged;
 
   GratitudeRewardDialog({
     required this.title,
@@ -1126,7 +1127,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
   String title;
   String message;
   Function onClickPositiveButton;
-  Function onCheckChanged;
+  Function? onCheckChanged;
   bool _isChecked = false;
 
   _GratitudeRewardDialogState({
@@ -1207,7 +1208,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                 _isChecked = !_isChecked;
               });
               if (this.onCheckChanged != null) {
-                this.onCheckChanged(this._isChecked);
+                this.onCheckChanged!(this._isChecked);
               }
             },
             child: Row(
@@ -1220,7 +1221,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
                       _isChecked = !_isChecked;
                     });
                     if (this.onCheckChanged != null) {
-                      this.onCheckChanged(this._isChecked);
+                      this.onCheckChanged!(this._isChecked);
                     }
                   },
                 ),
@@ -1244,7 +1245,7 @@ class _GratitudeRewardDialogState extends State<GratitudeRewardDialog> {
 }
 
 class HashtagName extends StatelessWidget {
-  String hashtagName;
+  final String hashtagName;
 
   HashtagName({required this.hashtagName});
 

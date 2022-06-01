@@ -9,8 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum Type { posts, offer, learning_track }
 
 class ShareLink extends StatefulWidget {
-  String id;
-  Type type;
+  final String id;
+  final Type type;
 
   ShareLink({
     Key? key,

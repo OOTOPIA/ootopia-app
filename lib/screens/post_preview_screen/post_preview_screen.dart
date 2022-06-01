@@ -42,7 +42,7 @@ import 'dart:math' as math;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PostPreviewPage extends StatefulWidget {
-  Map<String, dynamic> args;
+  final Map<String, dynamic> args;
   PostPreviewPage(this.args);
 
   @override

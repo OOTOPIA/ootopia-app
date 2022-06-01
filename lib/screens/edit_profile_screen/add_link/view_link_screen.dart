@@ -21,8 +21,8 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class ViewLinksScreen extends StatefulWidget {
   final Map<String, dynamic> args;
-  late ProfileScreenStore store;
-  late List<Link> links;
+  late final ProfileScreenStore store;
+  late final List<Link> links;
   ViewLinksScreen(this.args) {
     store = args['store'];
     links = args['list'];

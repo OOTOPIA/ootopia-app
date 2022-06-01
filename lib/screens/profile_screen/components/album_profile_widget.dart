@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class AlbumProfileWidget extends StatelessWidget {
-  VoidCallback onTap;
-  String albumName;
-  String? photoAlbumUrl;
+  final VoidCallback onTap;
+  final String albumName;
+  final String? photoAlbumUrl;
 
   AlbumProfileWidget({
     Key? key,

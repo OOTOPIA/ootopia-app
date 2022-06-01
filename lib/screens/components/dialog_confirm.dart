@@ -18,21 +18,36 @@ class DialogConfirm extends StatelessWidget {
           children: <Widget>[
             Text(
               this.textAlert,
-              style: TextStyle(color: Colors.grey),
-              
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ],
         ),
       ),
       actions: <Widget>[
         TextButton(
-          child: Text(AppLocalizations.of(context)!.decline),
+          child: Text(
+            AppLocalizations.of(context)!.cancel.toUpperCase(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context)!.confirm),
+          child: Text(
+            AppLocalizations.of(context)!.confirm.toUpperCase(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
           onPressed: () {
             this.callbackConfirmAlertDialog();
             Navigator.of(context).pop();

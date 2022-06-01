@@ -1,23 +1,23 @@
 import 'package:equatable/equatable.dart';
 
 class WalletTransfer extends Equatable {
-  String id;
-  String userId;
-  String walletId;
-  String? icon;
-  String? otherUserId;
-  String? postId;
-  String? otherUsername;
-  String? learningTrackId;
-  String origin;
-  String action;
-  double balance;
-  String createdAt;
-  String updatedAt;
-  String? photoUrl;
-  bool fromPlatform = false;
-  dynamic dateTransaction;
-  String? description;
+  final String id;
+  final String userId;
+  final String walletId;
+  final String? icon;
+  final String? otherUserId;
+  final String? postId;
+  final String? otherUsername;
+  final String? learningTrackId;
+  final String origin;
+  final String action;
+  final double balance;
+  final String createdAt;
+  final String updatedAt;
+  final String? photoUrl;
+  final bool fromPlatform;
+  final dynamic dateTransaction;
+  final String? description;
 
   WalletTransfer(
       {required this.id,
@@ -35,7 +35,7 @@ class WalletTransfer extends Equatable {
       required this.updatedAt,
       this.photoUrl,
       this.dateTransaction,
-      required this.fromPlatform,
+      this.fromPlatform = false,
       this.description}) {
     // this.dateTransaction =
     //     DateFormat('dd-MM-yyyy').format(DateTime.parse(createdAt));
