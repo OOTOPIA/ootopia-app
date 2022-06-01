@@ -166,7 +166,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void showModalProfile() async {
-    Navigator.pop(context);
     await showDialog(
         context: context,
         builder: (context) {
@@ -178,11 +177,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             content: RichText(
               text: TextSpan(children: [
                 TextSpan(
-                    text: AppLocalizations.of(context)!.removeUser,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400)),
+                  text: AppLocalizations.of(context)!.removeUser,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
                 TextSpan(
                     text: ' ${store!.profile!.fullname} ',
                     style: TextStyle(
@@ -202,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    AppLocalizations.of(context)!.cancel,
+                    AppLocalizations.of(context)!.cancel.toUpperCase(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -242,6 +243,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           );
         });
+  }
+
+  void _selectedOption(String optionSelected) {
+    if (optionSelected == 'delete') {
+      showModalProfile();
+    }
   }
 
   @override
@@ -292,43 +299,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     authStore.currentUser!.isAdmin!)
                                   Align(
                                     alignment: Alignment.topRight,
-                                    child: PopupMenuButton(
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                          color: Colors.white,
-                                          width: 2,
-                                          style: BorderStyle.solid,
-                                        ),
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
+                                    child: PopupMenuButton<String>(
+                                      padding: EdgeInsets.zero,
+                                      onSelected: _selectedOption,
                                       icon: Icon(Icons.more_vert),
                                       itemBuilder: (BuildContext context) =>
-                                          <PopupMenuEntry>[
+                                          <PopupMenuEntry<String>>[
                                         PopupMenuItem(
-                                          child: ListTile(
-                                            onTap: showModalProfile,
-                                            title: RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                    ),
-                                                    text: AppLocalizations.of(
-                                                            context)!
-                                                        .remove),
-                                                TextSpan(
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14,
-                                                    ),
-                                                    text:
-                                                        ' ${store!.profile!.fullname}')
-                                              ]),
+                                          value: 'delete',
+                                          child: Row(children: [
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .remove,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
-                                          ),
+                                            Text(
+                                              ' ${store!.profile!.fullname}',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14,
+                                              ),
+                                            )
+                                          ]),
                                         ),
                                       ],
                                     ),

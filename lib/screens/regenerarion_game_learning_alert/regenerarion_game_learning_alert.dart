@@ -22,7 +22,7 @@ class RegenerationGameLearningAlert extends StatefulWidget {
 class _RegenerationGameLearningAlertState
     extends State<RegenerationGameLearningAlert> {
   late String _imagePath;
-  late Color _backgroundColorIcon;
+  //late Color _backgroundColorIcon;
   late String _icon;
   late String _title;
   late String _firstText;
@@ -53,7 +53,7 @@ class _RegenerationGameLearningAlertState
     switch (widget.args["type"]) {
       case "personal":
         _imagePath = "assets/images/personal_background.png";
-        _backgroundColorIcon = Color(0xff00A5FC);
+//_backgroundColorIcon = Color(0xff00A5FC);
         _icon = "assets/icons/user_blue.png";
         _title = AppLocalizations.of(widget.args["context"])!.personalLevel;
         _firstText =
@@ -65,7 +65,7 @@ class _RegenerationGameLearningAlertState
 
       case "city":
         _imagePath = "assets/images/city_background.png";
-        _backgroundColorIcon = Color(0xff0072C5);
+        //    _backgroundColorIcon = Color(0xff0072C5);
         _icon = "assets/icons/local_blue.png";
         _title = AppLocalizations.of(widget.args["context"])!.cityLevel;
         _firstText =
@@ -78,7 +78,7 @@ class _RegenerationGameLearningAlertState
 
       case "global":
         _imagePath = "assets/images/planetary_background.png";
-        _backgroundColorIcon = Color(0xff012588);
+        // _backgroundColorIcon = Color(0xff012588);
         _icon = "assets/icons/globo_blue.png";
         _title = AppLocalizations.of(widget.args["context"])!.planetaryLevel;
         _firstText =

@@ -81,14 +81,13 @@ abstract class _ProfileScreenStoreBase with Store {
   }
 
   @action
-  Future<Profile?> getProfileDetails(String userId) async {
+  Future<void> getProfileDetails(String userId) async {
     loadingProfile = true;
     loadingProfileError = false;
     profile = null;
     try {
       this.profile = await repository.getProfile(userId);
       loadingProfile = false;
-      return this.profile;
     } catch (err) {
       loadingProfile = false;
       loadingProfileError = true;
@@ -96,8 +95,7 @@ abstract class _ProfileScreenStoreBase with Store {
   }
 
   @action
-  Future<List<TimelinePost>?> getUserPosts(String userId,
-      {int? limit, int? offset}) async {
+  Future<void> getUserPosts(String userId, {int? limit, int? offset}) async {
     loadingPostsError = false;
     try {
       if (postsList.length != 0) {
@@ -117,7 +115,6 @@ abstract class _ProfileScreenStoreBase with Store {
 
       postsList.addAll(posts);
       _loadingPosts = false;
-      return this.postsList;
     } catch (err) {
       _loadingPosts = false;
       loadingPostsError = true;

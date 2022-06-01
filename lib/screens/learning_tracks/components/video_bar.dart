@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class VideoBar extends StatefulWidget {
-  String totalTimeVideoText;
-  String positionVideoText;
-  int currentPosition;
-  double maxDurationVideo;
-  Timer? timerOpacity;
-  Function onChangeStart;
-  Function onChanged;
-  Function onChangeEnd;
-  Function fullScreenEvent;
-  bool fullScreenVideo;
+  final String totalTimeVideoText;
+  final String positionVideoText;
+  final int currentPosition;
+  final double maxDurationVideo;
+  late final Timer? timerOpacity;
+  final Function onChangeStart;
+  final Function onChanged;
+  final Function onChangeEnd;
+  final Function fullScreenEvent;
+  final bool fullScreenVideo;
 
   VideoBar({
     Key? key,

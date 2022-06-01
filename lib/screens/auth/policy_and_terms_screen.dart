@@ -11,13 +11,13 @@ import 'package:ootopia_app/shared/design_guide/buttons.dart';
 class PolicyAndTermsScreen extends StatefulWidget {
   final String filename;
   final Function onAccept;
-  String? buttonText = "";
-  String? fileSuffix = "";
+  final String? buttonText;
+  final String? fileSuffix;
   PolicyAndTermsScreen({
     required this.filename,
     required this.onAccept,
-    this.buttonText,
-    this.fileSuffix,
+    this.buttonText = "",
+    this.fileSuffix = "",
     Key? key,
   }) : super(key: key);
 

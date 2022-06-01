@@ -82,7 +82,7 @@ class LearningTracksRepositoryImpl
     try {
       var response =
           await ApiClient.api().get("learning-tracks/welcome-guide/$locale");
-
+      print(response);
       if (response.statusCode == 200) {
         return LearningTracksModel.fromJson(response.data);
       }
