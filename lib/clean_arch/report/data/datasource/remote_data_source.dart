@@ -1,5 +1,5 @@
 import 'package:ootopia_app/clean_arch/core/constants/endpoints.dart';
-import 'package:ootopia_app/clean_arch/core/drivers/dio/dio_client.dart';
+import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart';
 import 'package:ootopia_app/clean_arch/report/data/models/report_posts_model.dart';
 import 'package:ootopia_app/data/repositories/api.dart';
 
@@ -8,9 +8,9 @@ abstract class ReportRemoteDataSource {
 }
 
 class ReportRemoteDataSourceImpl extends ReportRemoteDataSource {
-  final DioClient _dioClient;
+  final HttpClient _dioClient;
 
-  ReportRemoteDataSourceImpl({required DioClient dioClient})
+  ReportRemoteDataSourceImpl({required HttpClient dioClient})
       : _dioClient = dioClient;
   @override
   Future<bool> sendReportPost(ReportPostsModel reportPostsModel) async {

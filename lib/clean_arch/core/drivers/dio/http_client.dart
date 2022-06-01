@@ -1,8 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class DioClient {
-  final Dio _dio;
-  DioClient({required Dio dio}) : _dio = dio;
+class HttpClient {
+  late Dio _dio;
+  HttpClient({required Dio dio}) {
+    _dio = Dio(BaseOptions(
+      baseUrl: dotenv.env['API_URL']!,
+      connectTimeout: 30 * 1000,
+    ));
+  }
 
   Future<Response> get(
     String endpoint, {
