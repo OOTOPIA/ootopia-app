@@ -6,6 +6,7 @@ import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/creat
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/create_post_entity.dart';
 import 'package:ootopia_app/clean_arch/core/exception/failure.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/repositories/create_post_repository.dart';
 
 class CreatePostRepositoryImpl extends CreatePostRepository {
@@ -41,5 +42,15 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
     } catch (e) {
       return Left(Failure(message: ''));
     }
+  }
+
+  @override
+  Future<Either<Failure, List<UsersEntity>>> getUsers({
+    required String fullName,
+    required int currentPage,
+    String? excludedIds,
+  }) {
+    // TODO: implement getUsers
+    throw UnimplementedError();
   }
 }

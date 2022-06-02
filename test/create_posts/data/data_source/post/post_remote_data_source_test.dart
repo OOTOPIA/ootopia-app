@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/datasource/create_post_remote_datasource.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/create_post_model.dart';
+import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/interest_tags_model.dart';
 
 import 'post_remote_data_source_test.mocks.dart';
 
@@ -51,5 +52,24 @@ void main() {
         () async =>
             await dataSource.createPost(createPostModel: createPostModel),
         throwsA(isA<Exception>()));
+  });
+
+  test("When try get tags then return interesting hashtags", () async {
+    const String url = 'https://api-ootopia.devmagic.com.br/interests-tags';
+
+    when(httpClient.get(url)).thenAnswer(
+      (_) async => Response(
+        statusCode: 201,
+        requestOptions: RequestOptions(path: url),
+      ),
+    );
+    var response = await dataSource.getTags();
+    expect(response, isA<List<InterestTagsModel>>());
+  });
+  test("When try get a interesting then return a left Failure", () async {
+    const String url = 'https://api-ootopia.devmagic.com.br/interests-tags';
+
+    when(httpClient.get(url)).thenThrow(Exception('error'));
+    expect(() async => await dataSource.getTags(), throwsA(isA<Exception>()));
   });
 }
