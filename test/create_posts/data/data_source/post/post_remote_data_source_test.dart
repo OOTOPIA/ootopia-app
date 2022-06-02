@@ -7,6 +7,7 @@ import 'package:ootopia_app/clean_arch/create_post/data/datasource/create_post_r
 import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/create_post_model.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/interest_tags_model.dart';
 
+import '../../../../fixtures/posts/posts_fixtures.dart';
 import 'post_remote_data_source_test.mocks.dart';
 
 @GenerateMocks([HttpClient])
@@ -24,8 +25,9 @@ void main() {
   });
 
   test("When try SEND post then return a bool", () async {
-    const String url = 'https://api-ootopia.devmagic.com.br/posts';
-
+    //mocks
+    const String url = 'posts/gallery';
+    //Mock
     when(httpClient.post(
       url,
       data: createPostModel.toJson(),
@@ -35,14 +37,15 @@ void main() {
         requestOptions: RequestOptions(path: url),
       ),
     );
-
+    //action
     final response =
         await dataSource.createPost(createPostModel: createPostModel);
+    //assert
     expect(response, isA<bool>());
   });
 
   test("When try send post then return a left Failure", () async {
-    const String url = 'https://api-ootopia.devmagic.com.br/posts';
+    const String url = 'posts/gallery';
 
     when(httpClient.post(
       url,
@@ -55,21 +58,24 @@ void main() {
   });
 
   test("When try get tags then return interesting hashtags", () async {
-    const String url = 'https://api-ootopia.devmagic.com.br/interests-tags';
+    const String url = 'interests-tags';
 
-    when(httpClient.get(url)).thenAnswer(
+    when(httpClient.get(url, queryParameters: {})).thenAnswer(
       (_) async => Response(
-        statusCode: 201,
+        statusCode: 200,
+        data: postsMap,
         requestOptions: RequestOptions(path: url),
       ),
     );
     var response = await dataSource.getTags();
     expect(response, isA<List<InterestTagsModel>>());
+    expect(response.length, postsMap.length);
   });
   test("When try get a interesting then return a left Failure", () async {
-    const String url = 'https://api-ootopia.devmagic.com.br/interests-tags';
+    const String url = 'interests-tags';
 
-    when(httpClient.get(url)).thenThrow(Exception('error'));
+    when(httpClient.get(url, queryParameters: {}))
+        .thenThrow(Exception('error'));
     expect(() async => await dataSource.getTags(), throwsA(isA<Exception>()));
   });
 }

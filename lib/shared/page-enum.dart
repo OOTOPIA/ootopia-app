@@ -41,6 +41,7 @@ enum Page {
   viewLinksScreen,
   circleFriends,
   productDetails,
+  interstingTags,
 }
 
 extension PageRoute on Page {

@@ -47,10 +47,18 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
   @override
   Future<Either<Failure, List<UsersEntity>>> getUsers({
     required String fullName,
-    required int currentPage,
+    required int page,
     String? excludedIds,
-  }) {
-    // TODO: implement getUsers
-    throw UnimplementedError();
+  }) async {
+    try {
+      var response = await _createPostRemoteDatasource.getUsers(
+        page: page,
+        fullname: fullName,
+        excludedIds: excludedIds,
+      );
+      return Right(response);
+    } catch (e) {
+      return Left(Failure(message: ''));
+    }
   }
 }

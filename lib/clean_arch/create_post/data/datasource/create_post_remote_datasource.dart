@@ -1,11 +1,18 @@
 import 'package:ootopia_app/clean_arch/core/constants/endpoints.dart';
+import 'package:ootopia_app/clean_arch/core/constants/globals.dart';
 import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/create_post_model.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/interest_tags_model.dart';
+import 'package:ootopia_app/clean_arch/create_post/data/models/users/users_model.dart';
 
 abstract class CreatePostRemoteDatasource {
   Future<bool> createPost({required CreatePostModel createPostModel});
   Future<List<InterestTagsModel>> getTags({String? language});
+  Future<List<UsersModel>> getUsers({
+    required int page,
+    required String fullname,
+    String? excludedIds,
+  });
 }
 
 class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
@@ -36,11 +43,34 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         queryParams['language'] = language.replaceFirst('_', '-');
       }
       var response = await _httpClient.get(
-        Endpoints.createPost,
+        Endpoints.interestingTags,
         queryParameters: queryParams,
       );
-      return (response as List)
-          .map((e) => InterestTagsModel.fromJson(e))
+      var _list =
+          (response as List).map((e) => InterestTagsModel.fromJson(e)).toList();
+      return _list;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<UsersModel>> getUsers({
+    required int page,
+    required String fullname,
+    String? excludedIds,
+  }) async {
+    try {
+      var response = await _httpClient.get(
+        Endpoints.searchUsers,
+        queryParameters: {
+          'page': page,
+          'limit': Globals.limitList,
+          'fullname': fullname,
+          'excludedUsers': excludedIds
+        },
+      );
+      return (response.data as List)
+          .map((e) => UsersModel.fromJson(e))
           .toList();
     } catch (e) {
       rethrow;

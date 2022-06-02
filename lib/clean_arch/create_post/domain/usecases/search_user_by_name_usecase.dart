@@ -9,10 +9,13 @@ class SearchUserByNameUsecase {
       : _createPostRepository = createPostRepository;
   Future<Either<Failure, List<UsersEntity>>> call({
     required String fullName,
-    required int currentPage,
+    required int page,
     String? excludedIds,
   }) async {
     return _createPostRepository.getUsers(
-        fullName: fullName, currentPage: currentPage, excludedIds: excludedIds);
+      fullName: fullName,
+      page: page,
+      excludedIds: excludedIds,
+    );
   }
 }

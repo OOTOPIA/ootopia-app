@@ -9,7 +9,7 @@ abstract class CreatePostRepository {
   Future<Either<Failure, List<InterestsTagsEntity>>> getTags();
   Future<Either<Failure, List<UsersEntity>>> getUsers({
     required String fullName,
-    required int currentPage,
+    required int page,
     String? excludedIds,
   });
 }

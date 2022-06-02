@@ -11,6 +11,8 @@ import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/creat
     as _i4;
 import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/interest_tags_model.dart'
     as _i5;
+import 'package:ootopia_app/clean_arch/create_post/data/models/users/users_model.dart'
+    as _i6;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -41,6 +43,18 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
               returnValue: Future<List<_i5.InterestTagsModel>>.value(
                   <_i5.InterestTagsModel>[]))
       as _i3.Future<List<_i5.InterestTagsModel>>);
+  @override
+  _i3.Future<List<_i6.UsersModel>> getUsers(
+          {int? page, String? fullname, String? excludedIds}) =>
+      (super.noSuchMethod(
+              Invocation.method(#getUsers, [], {
+                #page: page,
+                #fullname: fullname,
+                #excludedIds: excludedIds
+              }),
+              returnValue:
+                  Future<List<_i6.UsersModel>>.value(<_i6.UsersModel>[]))
+          as _i3.Future<List<_i6.UsersModel>>);
   @override
   String toString() => super.toString();
 }

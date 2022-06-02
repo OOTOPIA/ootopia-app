@@ -8,7 +8,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ootopia_app/clean_arch/core/di/create_post_di.dart';
 import 'package:ootopia_app/clean_arch/core/di/report_di.dart';
+import 'package:ootopia_app/clean_arch/core/routes/app_routes.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/ui/create_post.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/ui/interesting_tags_page.dart';
 import 'package:ootopia_app/clean_arch/report/presentation/stores/store_report_post.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_marketplace.dart';
@@ -82,6 +86,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   ReportDi.injectionDI();
+  CreatePostDi.injectionDI();
   await Firebase.initializeApp();
 
   ///FlutterBackgroundService.initialize(onStartService);
@@ -319,6 +324,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
+        routes: appRoutes,
         theme: AppTheme.instance(context).light,
         home: MainPage(),
       ),
@@ -355,7 +361,7 @@ class _MainPageState extends State<MainPage> {
         RegisterTopInterestsScreen(args),
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
-    PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
+    PageRoute.Page.postPreviewScreen: (args) => CreatePostPage(args),
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
@@ -399,7 +405,8 @@ class _MainPageState extends State<MainPage> {
           displayContacts: args['displayContacts'],
         ),
     PageRoute.Page.viewLearningTracksScreen: (args) =>
-        ViewLearningTracksScreen(args)
+        ViewLearningTracksScreen(args),
+    PageRoute.Page.interstingTags: (args) => InterestingTagsPage()
   };
 
   SharedExperienceService sharedExperienceService =

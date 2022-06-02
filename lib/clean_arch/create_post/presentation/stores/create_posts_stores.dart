@@ -6,9 +6,8 @@ import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/create_post_entity.dart';
-import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
-import 'package:ootopia_app/clean_arch/create_post/domain/usecases/get_interest_tags_usecase.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_post_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/search_user_by_name_usecase.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
@@ -19,7 +18,7 @@ class StoreCreatePosts = StoreCreatePostsBase with _$StoreCreatePosts;
 
 abstract class StoreCreatePostsBase with Store {
   final SearchUserByNameUsecase _searchUserByNameUsecase;
-  final GetInterestTagsUsecase _getInterestTagsUsecase;
+  final CreatePostUsecase _createPostUsecase;
 
   RichTextController _descriptionInputController = RichTextController(
     deleteOnBack: false,
@@ -31,22 +30,17 @@ abstract class StoreCreatePostsBase with Store {
     },
     onMatch: (List<String> matches) {},
   );
-  final TextEditingController geolocationInputController =
-      TextEditingController();
   StoreCreatePostsBase({
     required SearchUserByNameUsecase searchUser,
-    required GetInterestTagsUsecase getTags,
+    required CreatePostUsecase createPostUsecase,
   })  : _searchUserByNameUsecase = searchUser,
-        _getInterestTagsUsecase = getTags;
+        _createPostUsecase = createPostUsecase;
 
   @observable
   List<UsersEntity>? listTaggedUsers = ObservableList.of([]);
 
   @observable
   List<UsersEntity> users = ObservableList.of([]);
-
-  @observable
-  List<InterestsTagsEntity> tags = ObservableList.of([]);
 
   @observable
   String fullName = '';
@@ -153,8 +147,6 @@ abstract class StoreCreatePostsBase with Store {
 
   void _startLoading() => viewState = AsyncStates.loading;
 
-  void _reseTags() => tags = ObservableList.of([]);
-
   void _resetUsers() => users = ObservableList.of([]);
 
   void cancelTimer() => _debounce!.cancel();
@@ -171,22 +163,17 @@ abstract class StoreCreatePostsBase with Store {
     }
   }
 
-  void _setTags(List<InterestsTagsEntity> list) {
-    if (list.isNotEmpty) {
-      tags = ObservableList.of([...tags, ...list]);
-    }
-  }
-
   void _stopGetPost(List<UsersEntity> list) {
     lastPage = list.isEmpty;
   }
 
   @action
   Future<void> searchUser() async {
+    _resetUsers();
     _startLoading();
     var _response = await _searchUserByNameUsecase.call(
       fullName: fullName,
-      currentPage: page,
+      page: page,
       excludedIds: excludedIds,
     );
     _response.fold(
@@ -197,15 +184,6 @@ abstract class StoreCreatePostsBase with Store {
         _stopLoading();
       },
     );
-  }
-
-  @action
-  Future<void> getTags() async {
-    var _response = await _getInterestTagsUsecase.call();
-    _response.fold((l) => _stopLoading(hasError: true), (result) {
-      _setTags(result);
-      _stopLoading();
-    });
   }
 
   @action
@@ -251,8 +229,6 @@ abstract class StoreCreatePostsBase with Store {
           await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.length > 0) {
         var placemark = placemarks[0];
-        geolocationInputController.text =
-            "${placemark.subAdministrativeArea}, ${placemark.administrativeArea} - ${placemark.country}";
 
         postEntity.addressCity = placemark.subAdministrativeArea ?? "";
         postEntity.addressState = placemark.administrativeArea ?? "";

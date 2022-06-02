@@ -772,13 +772,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.15"
-  mocktail:
-    dependency: "direct main"
-    description:
-      name: mocktail
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1-dev.12"
   multi_select_flutter:
     dependency: "direct main"
     description:
