@@ -6,7 +6,6 @@ import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -116,9 +115,11 @@ class _PopMenuLearningTrackState extends State<PopMenuLearningTrack> {
           children: [
             Icon(Icons.done, color: Colors.white),
             SizedBox(width: 8),
-            Text(
-              AppLocalizations.of(context)!.successDeleteLearningTrack,
-              style: TextStyle(color: Colors.white),
+            Expanded(
+              child: Text(
+                AppLocalizations.of(context)!.successDeleteLearningTrack,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
