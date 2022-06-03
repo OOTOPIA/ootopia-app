@@ -224,9 +224,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        content: Text(
-                          AppLocalizations.of(context)!.userDeleted,
-                          style: TextStyle(color: Colors.white),
+                        content: Row(
+                          children: [
+                            Icon(Icons.done, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.of(context)!.userDeleted,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
                         ),
                       ));
                       controller.back();
