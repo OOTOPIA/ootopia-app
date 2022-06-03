@@ -196,11 +196,12 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
     return _$searchUserAsyncAction.run(() => super.searchUser());
   }
 
-  final _$getMoreAsyncAction = AsyncAction('StoreCreatePostsBase.getMore');
+  final _$getMoreUsersAsyncAction =
+      AsyncAction('StoreCreatePostsBase.getMoreUsers');
 
   @override
-  Future<void> getMore() {
-    return _$getMoreAsyncAction.run(() => super.getMore());
+  Future<void> getMoreUsers() {
+    return _$getMoreUsersAsyncAction.run(() => super.getMoreUsers());
   }
 
   final _$StoreCreatePostsBaseActionController =

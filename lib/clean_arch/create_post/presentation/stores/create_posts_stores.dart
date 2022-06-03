@@ -42,6 +42,12 @@ abstract class StoreCreatePostsBase with Store {
   @observable
   List<UsersEntity> users = ObservableList.of([]);
 
+  List<String>? idsUsersTagged = [];
+
+  List<String>? tagsId = [];
+
+  List<String>? mediasIds = [];
+
   @observable
   String fullName = '';
 
@@ -105,8 +111,7 @@ abstract class StoreCreatePostsBase with Store {
   @action
   void onChanged(String value) {
     value = value.trim();
-
-    if (value.length > 0) {
+    if (value.length >= 1) {
       var endName = 0;
       for (var item in listTaggedUsers!) {
         var startname = value.indexOf('@${item.fullname}', endName);
@@ -174,7 +179,6 @@ abstract class StoreCreatePostsBase with Store {
 
   @action
   Future<void> searchUser() async {
-    _resetUsers();
     _startLoading();
     var _response = await _searchUserByNameUsecase.call(
       fullName: fullName,
@@ -192,7 +196,7 @@ abstract class StoreCreatePostsBase with Store {
   }
 
   @action
-  Future<void> getMore() async {
+  Future<void> getMoreUsers() async {
     if (!lastPage) {
       _incrementPage();
       searchUser();
@@ -201,14 +205,13 @@ abstract class StoreCreatePostsBase with Store {
 
   @action
   void taggedUserInText() {
-    List<String>? idsUsersTagged = [];
     var newTextComment = _descriptionInputController.text;
 
     if (listTaggedUsers != null) {
       int newStartIndex = 0;
       int endNameUser = 0;
       listTaggedUsers?.forEach((user) {
-        idsUsersTagged.add(user.id);
+        idsUsersTagged!.add(user.id);
         String newString = "@[${user.id}]";
         var startname =
             newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
@@ -252,10 +255,13 @@ abstract class StoreCreatePostsBase with Store {
           AppLocalizations.of(context)!.failedToGetCurrentLocation;
       geolocationErrorMessage = error.toString();
     }
-    print(postEntity);
   }
 
   Future<void> sendPost() async {
+    postEntity.description = _descriptionInputController.text;
+    postEntity.taggedUsersId = idsUsersTagged;
+    postEntity.tagsIds = tagsId;
+    postEntity.mediaIds = mediasIds;
     var response = await _createPostUsecase.call(postEntity);
     response.fold((left) => null, (right) => null);
   }

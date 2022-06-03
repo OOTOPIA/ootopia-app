@@ -32,8 +32,6 @@ class CreatePostPage extends StatefulWidget {
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
-  final ScrollController scrollController = ScrollController();
-
   Image? image;
   Size? imageSize;
 
@@ -83,37 +81,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
     ));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appbar(),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          BackgroundButterflyTop(positioned: -59),
-          Visibility(
-              visible: MediaQuery.of(context).viewInsets.bottom == 0,
-              child: BackgroundButterflyBottom()),
-          GestureDetector(
-              onTap: () {
-                storeCreatePosts.openSelectedUser = false;
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              child: body()),
-          if (storeCreatePosts.openSelectedUser)
-            Observer(builder: (context) {
-              return ListOfUsers(
-                createPosts: storeCreatePosts,
-                inputController: storeCreatePosts.descriptionInputController,
-                scrollController: scrollController,
-                addUserInText: storeCreatePosts.addUserInText,
-              );
-            }),
-        ],
-      ),
-    );
-  }
-
   PreferredSizeWidget appbar() => DefaultAppBar(
         components: [
           AppBarComponents.back,
@@ -127,49 +94,74 @@ class _CreatePostPageState extends State<CreatePostPage> {
         },
       );
 
-  Widget body() {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(GlobalConstants.of(context).spacingSmall),
-        child: Column(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appbar(),
+      body: Observer(builder: (context) {
+        return Stack(
+          fit: StackFit.expand,
           children: [
-            widget.args["fileList"] == null
-                ? MediaViewWidget(
-                    mediaFilePath: widget.args["filePath"],
-                    mediaType: widget.args["type"],
-                    shouldCustomFlickManager: true,
-                    mediaSize:
-                        widget.args["type"] == "video" ? null : this.imageSize!,
-                  )
-                : ListOfMidias(args: widget.args),
-            SizedBox(height: 50),
-            if (storeCreatePosts.geolocationErrorMessage.isNotEmpty)
-              ErrorGetGeolocation(storeCreatePosts: storeCreatePosts),
-            SizedBox(
-              height: GlobalConstants.of(context).screenHorizontalSpace,
-            ),
-            ButtonOpenInterestingTags(),
-            TextFormFieldCreatePost(
-              storeCreatePosts: storeCreatePosts,
-            ),
-            SizedBox(height: GlobalConstants.of(context).screenHorizontalSpace),
-            Container(
-              margin: EdgeInsets.only(top: 28),
-              child: ConfirmButtonWidget(
-                  content: Text(
-                    AppLocalizations.of(context)!.publish,
-                    style: GoogleFonts.roboto(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
+            BackgroundButterflyTop(positioned: -59),
+            Visibility(
+                visible: MediaQuery.of(context).viewInsets.bottom == 0,
+                child: BackgroundButterflyBottom()),
+            GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  storeCreatePosts.openSelectedUser = false;
+                },
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(
+                        GlobalConstants.of(context).spacingSmall),
+                    child: Column(
+                      children: [
+                        widget.args["fileList"] == null
+                            ? MediaViewWidget(
+                                mediaFilePath: widget.args["filePath"],
+                                mediaType: widget.args["type"],
+                                shouldCustomFlickManager: true,
+                                mediaSize: widget.args["type"] == "video"
+                                    ? null
+                                    : this.imageSize!,
+                              )
+                            : ListOfMidias(args: widget.args),
+                        SizedBox(height: 50),
+                        if (storeCreatePosts.geolocationErrorMessage.isNotEmpty)
+                          ErrorGetGeolocation(),
+                        SizedBox(
+                          height:
+                              GlobalConstants.of(context).screenHorizontalSpace,
+                        ),
+                        ButtonOpenInterestingTags(),
+                        TextFormFieldCreatePost(),
+                        SizedBox(
+                            height: GlobalConstants.of(context)
+                                .screenHorizontalSpace),
+                        Container(
+                          margin: EdgeInsets.only(top: 28),
+                          child: ConfirmButtonWidget(
+                              content: Text(
+                                AppLocalizations.of(context)!.publish,
+                                style: GoogleFonts.roboto(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
 
-                    // sendPost();
-                  }),
-            )
+                                // sendPost();
+                              }),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+            if (storeCreatePosts.openSelectedUser) ListOfUsers()
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorGetGeolocation extends StatelessWidget {
-  const ErrorGetGeolocation({
+  ErrorGetGeolocation({
     Key? key,
-    required this.storeCreatePosts,
   }) : super(key: key);
 
-  final StoreCreatePosts storeCreatePosts;
+  final StoreCreatePosts _storeCreatePosts = GetIt.I.get();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ErrorGetGeolocation extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                storeCreatePosts.getLocation(context);
+                _storeCreatePosts.getLocation(context);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -53,7 +53,7 @@ class ErrorGetGeolocation extends StatelessWidget {
                 horizontal: GlobalConstants.of(context).screenHorizontalSpace,
               ),
               child: Text(
-                storeCreatePosts.geolocationErrorMessage +
+                _storeCreatePosts.geolocationErrorMessage +
                     AppLocalizations.of(context)!
                         .tryToRetrieveYourCurrentLocationClickingByGetLocationAgain,
                 textAlign: TextAlign.left,

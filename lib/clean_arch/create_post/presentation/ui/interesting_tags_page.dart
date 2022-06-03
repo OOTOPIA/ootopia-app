@@ -5,6 +5,7 @@ import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesti
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InterestingTagsPage extends StatefulWidget {
   const InterestingTagsPage({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                   children: [
                     SizedBox(height: 16),
                     Text(
-                      'Adicione hashtags',
+                      AppLocalizations.of(context)!.addHashtags,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 21,
@@ -56,7 +57,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Inclua pelo menos uma hashtag',
+                      AppLocalizations.of(context)!.selectAtLeastOneHashtag,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 13,
