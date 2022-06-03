@@ -39,16 +39,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
       children: [
         Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Color(0xff1A4188),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20)),
-              ),
-              child: mediaView(),
-            ),
+            mediaView(),
             Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.width,
@@ -120,7 +111,6 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
         ),
         if (widget.post.type == 'gallery' &&
             widget.post.medias!.length > 1) ...[
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: indexDots(widget.post.medias!.length),
@@ -151,7 +141,6 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
         height: MediaQuery.of(context).size.width,
         child: PageView.builder(
           itemCount: widget.post.medias!.length,
-          pageSnapping: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, pagePosition) {
             return buildMediaRow(widget.post.medias![pagePosition]);
@@ -193,7 +182,6 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
   List<Widget> indexDots(int mediasLength) {
     return List<Widget>.generate(mediasLength, (index) {
       return Container(
-        margin: EdgeInsets.all(2),
         width: 8,
         height: 8,
         decoration: BoxDecoration(
