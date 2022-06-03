@@ -5,6 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/screens/auth/auth_store.dart';
 import 'package:ootopia_app/screens/components/share_link.dart';
 import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:ootopia_app/shared/global-constants.dart';
+import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -73,7 +75,7 @@ class _PopMenuLearningTrackState extends State<PopMenuLearningTrack> {
                 TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      AppLocalizations.of(context)!.cancel,
+                      AppLocalizations.of(context)!.cancel.toUpperCase(),
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -87,7 +89,7 @@ class _PopMenuLearningTrackState extends State<PopMenuLearningTrack> {
                       scaffoldMensage();
                     },
                     child: Text(
-                      'Ok',
+                      'OK',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -102,15 +104,38 @@ class _PopMenuLearningTrackState extends State<PopMenuLearningTrack> {
   void scaffoldMensage() {
     if (widget.learningTracksStore.deleteLearning) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.green,
-        content: Text(
-          AppLocalizations.of(context)!.successDeleteLearningTrack,
-          style: TextStyle(color: Colors.white),
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.all(
+          GlobalConstants.of(context).spacingNormal,
+        ),
+        backgroundColor: Color(0xff03DAC5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        content: Row(
+          children: [
+            Icon(Icons.done, color: Colors.white),
+            SizedBox(width: 8),
+            Text(
+              AppLocalizations.of(context)!.successDeleteLearningTrack,
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
         ),
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(
+            GlobalConstants.of(context).spacingNormal,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
           backgroundColor: Colors.red,
+          padding: EdgeInsets.all(
+            GlobalConstants.of(context).spacingNormal,
+          ),
           content: Text(
             AppLocalizations.of(context)!.somethingWentWrongInLearningTrack,
             style: TextStyle(color: Colors.white),

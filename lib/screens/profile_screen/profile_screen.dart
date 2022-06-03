@@ -216,7 +216,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     if (authStore.deletedUser) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.green,
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.all(
+                          GlobalConstants.of(context).spacingNormal,
+                        ),
+                        backgroundColor: Color(0xff03DAC5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         content: Text(
                           AppLocalizations.of(context)!.userDeleted,
                           style: TextStyle(color: Colors.white),
@@ -225,6 +232,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       controller.back();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          margin: EdgeInsets.all(
+                            GlobalConstants.of(context).spacingNormal,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           backgroundColor: Colors.red,
                           content: Text(
                             AppLocalizations.of(context)!
@@ -234,7 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }
                   },
                   child: Text(
-                    'Ok',
+                    'OK',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -297,12 +310,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 if (authStore.currentUser!.isAdmin != null &&
                                     authStore.currentUser!.isAdmin!)
+                                  //&& authStore.currentUser!.id != profileUserId)
                                   Align(
                                     alignment: Alignment.topRight,
                                     child: PopupMenuButton<String>(
                                       padding: EdgeInsets.zero,
+                                      offset: Offset(-25, 36),
                                       onSelected: _selectedOption,
+                                      enabled: true,
                                       icon: Icon(Icons.more_vert),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8))),
                                       itemBuilder: (BuildContext context) =>
                                           <PopupMenuEntry<String>>[
                                         PopupMenuItem(

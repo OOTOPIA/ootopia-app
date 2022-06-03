@@ -13,6 +13,9 @@ class DialogConfirm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
