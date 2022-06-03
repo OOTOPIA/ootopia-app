@@ -186,13 +186,33 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
     if (timelineStore.deletePost) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: LightColors.cyan,
-          content: Text(AppLocalizations.of(context)!.successDeletePost),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(
+            GlobalConstants.of(context).spacingNormal,
+          ),
+          backgroundColor: Color(0xff03DAC5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          content: Row(
+            children: [
+              Icon(Icons.done, color: Colors.white),
+              SizedBox(width: 8),
+              Text(AppLocalizations.of(context)!.successDeletePost),
+            ],
+          ),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.all(
+            GlobalConstants.of(context).spacingNormal,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
           backgroundColor: Colors.red,
           content: Text(
               AppLocalizations.of(context)!.somethingWentWrongInDeletePost),
