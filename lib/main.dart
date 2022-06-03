@@ -58,7 +58,6 @@ import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/celebrate_component.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
-import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/notification_message_service.dart';

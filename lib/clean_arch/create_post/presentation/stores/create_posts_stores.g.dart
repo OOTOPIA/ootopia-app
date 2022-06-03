@@ -207,6 +207,28 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
       ActionController(name: 'StoreCreatePostsBase');
 
   @override
+  void addUserInText(UsersEntity e) {
+    final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
+        name: 'StoreCreatePostsBase.addUserInText');
+    try {
+      return super.addUserInText(e);
+    } finally {
+      _$StoreCreatePostsBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void onChanged(String value) {
+    final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
+        name: 'StoreCreatePostsBase.onChanged');
+    try {
+      return super.onChanged(value);
+    } finally {
+      _$StoreCreatePostsBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void taggedUserInText() {
     final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
         name: 'StoreCreatePostsBase.taggedUserInText');

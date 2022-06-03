@@ -75,6 +75,7 @@ abstract class StoreCreatePostsBase with Store {
   RichTextController get descriptionInputController =>
       _descriptionInputController;
 
+  @action
   void addUserInText(UsersEntity e) {
     var text = _descriptionInputController.text;
 
@@ -101,6 +102,7 @@ abstract class StoreCreatePostsBase with Store {
     openSelectedUser = false;
   }
 
+  @action
   void onChanged(String value) {
     value = value.trim();
 
@@ -139,6 +141,7 @@ abstract class StoreCreatePostsBase with Store {
         }
       });
     } else {
+      openSelectedUser = false;
       listTaggedUsers?.clear();
       excludedIds = '';
       fullName = '';
@@ -149,7 +152,9 @@ abstract class StoreCreatePostsBase with Store {
 
   void _resetUsers() => users = ObservableList.of([]);
 
-  void cancelTimer() => _debounce!.cancel();
+  void cancelTimer() {
+    if (_debounce != null) _debounce!.cancel();
+  }
 
   void _incrementPage() => page += 1;
 
@@ -247,5 +252,11 @@ abstract class StoreCreatePostsBase with Store {
           AppLocalizations.of(context)!.failedToGetCurrentLocation;
       geolocationErrorMessage = error.toString();
     }
+    print(postEntity);
+  }
+
+  Future<void> sendPost() async {
+    var response = await _createPostUsecase.call(postEntity);
+    response.fold((left) => null, (right) => null);
   }
 }

@@ -39,7 +39,8 @@ class _ListOfUsersState extends State<ListOfUsers> {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (widget.createPosts.users.isEmpty) {
+            } else if (widget.createPosts.users.isEmpty &&
+                widget.createPosts.openSelectedUser) {
               return Container(
                 height: MediaQuery.of(context).size.height * .4,
                 child: Stack(
