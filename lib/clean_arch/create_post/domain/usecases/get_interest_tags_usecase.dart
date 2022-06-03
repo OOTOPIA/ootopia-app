@@ -8,7 +8,8 @@ class GetInterestTagsUsecase {
   GetInterestTagsUsecase({required CreatePostRepository createPostRepository})
       : _createPostRepository = createPostRepository;
 
-  Future<Either<Failure, List<InterestsTagsEntity>>> call() async {
-    return _createPostRepository.getTags();
+  Future<Either<Failure, List<InterestsTagsEntity>>> call(
+      {required String tags}) async {
+    return _createPostRepository.getTags(tags: tags);
   }
 }

@@ -59,23 +59,23 @@ void main() {
 
   test("When try get tags then return interesting hashtags", () async {
     const String url = 'interests-tags';
-
-    when(httpClient.get(url, queryParameters: {})).thenAnswer(
+    const String tags = 'hello';
+    when(httpClient.get(url, queryParameters: {'tags': tags})).thenAnswer(
       (_) async => Response(
-        statusCode: 200,
-        data: postsMap,
+        data: interestingTagsMap,
         requestOptions: RequestOptions(path: url),
       ),
     );
-    var response = await dataSource.getTags();
+    var response = await dataSource.getTags(tags: tags);
     expect(response, isA<List<InterestTagsModel>>());
-    expect(response.length, postsMap.length);
+    expect(response.length, interestingTagsMap.length);
   });
   test("When try get a interesting then return a left Failure", () async {
     const String url = 'interests-tags';
-
-    when(httpClient.get(url, queryParameters: {}))
+    const String tags = 'hello';
+    when(httpClient.get(url, queryParameters: {'tags': tags}))
         .thenThrow(Exception('error'));
-    expect(() async => await dataSource.getTags(), throwsA(isA<Exception>()));
+    expect(() async => await dataSource.getTags(tags: tags),
+        throwsA(isA<Exception>()));
   });
 }

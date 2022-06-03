@@ -32,11 +32,13 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
   }
 
   @override
-  Future<Either<Failure, List<InterestsTagsEntity>>> getTags() async {
+  Future<Either<Failure, List<InterestsTagsEntity>>> getTags(
+      {required String tags}) async {
     try {
       String currenLocalization = Platform.localeName.substring(0, 2);
       var response = await _createPostRemoteDatasource.getTags(
         language: currenLocalization,
+        tags: tags,
       );
       return Right(response);
     } catch (e) {

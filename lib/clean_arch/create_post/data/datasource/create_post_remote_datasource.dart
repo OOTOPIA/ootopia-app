@@ -7,7 +7,10 @@ import 'package:ootopia_app/clean_arch/create_post/data/models/users/users_model
 
 abstract class CreatePostRemoteDatasource {
   Future<bool> createPost({required CreatePostModel createPostModel});
-  Future<List<InterestTagsModel>> getTags({String? language});
+  Future<List<InterestTagsModel>> getTags({
+    String? language,
+    required String tags,
+  });
   Future<List<UsersModel>> getUsers({
     required int page,
     required String fullname,
@@ -35,9 +38,13 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
   }
 
   @override
-  Future<List<InterestTagsModel>> getTags({String? language}) async {
+  Future<List<InterestTagsModel>> getTags({
+    String? language,
+    required String tags,
+  }) async {
     try {
       Map<String, String> queryParams = {};
+      queryParams['tags'] = tags;
 
       if (language != null) {
         queryParams['language'] = language.replaceFirst('_', '-');
@@ -46,8 +53,9 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         Endpoints.interestingTags,
         queryParameters: queryParams,
       );
-      var _list =
-          (response as List).map((e) => InterestTagsModel.fromJson(e)).toList();
+      var _list = (response.data as List)
+          .map((e) => InterestTagsModel.fromJson(e))
+          .toList();
       return _list;
     } catch (e) {
       rethrow;

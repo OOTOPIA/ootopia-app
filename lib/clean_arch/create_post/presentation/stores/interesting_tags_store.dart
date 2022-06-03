@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
@@ -19,9 +21,13 @@ abstract class InterestingTagsStoreBase with Store {
   @observable
   AsyncStates viewState = AsyncStates.loading;
 
+  Timer? _debounce;
+
   void _reseTags() => tags = ObservableList.of([]);
 
   void _startLoading() => viewState = AsyncStates.loading;
+
+  void cancelTimer() => _debounce!.cancel();
 
   void _setTags(List<InterestsTagsEntity> list) {
     if (list.isNotEmpty) {
@@ -34,16 +40,18 @@ abstract class InterestingTagsStoreBase with Store {
   }
 
   @action
-  Future<void> getTags() async {
+  Future<void> getTags(String value) async {
     _reseTags();
     _startLoading();
-    var _response = await _getInterestTagsUsecase.call();
-    _response.fold(
-      (l) => _stopLoading(hasError: true),
-      (result) {
-        _setTags(result);
-        _stopLoading();
-      },
-    );
+    _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
+      var _response = await _getInterestTagsUsecase.call(tags: value);
+      _response.fold(
+        (l) => _stopLoading(hasError: true),
+        (result) {
+          _setTags(result);
+          _stopLoading();
+        },
+      );
+    });
   }
 }

@@ -42,8 +42,8 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
   final _$getTagsAsyncAction = AsyncAction('InterestingTagsStoreBase.getTags');
 
   @override
-  Future<void> getTags() {
-    return _$getTagsAsyncAction.run(() => super.getTags());
+  Future<void> getTags(String value) {
+    return _$getTagsAsyncAction.run(() => super.getTags(value));
   }
 
   @override

@@ -22,7 +22,7 @@ void main() {
     createPostEntity = CreatePostEntity();
   });
 
-  test("When try send post then return a right List<PostEntity>", () async {
+  test("When try send post then return a right bool", () async {
     when(dataSource.createPost(
             createPostModel: CreatePostModel.fromEntity(createPostEntity)))
         .thenAnswer((_) async => true);
@@ -31,7 +31,8 @@ void main() {
       post: CreatePostModel.fromEntity(createPostEntity),
     );
     final result = response.fold((l) => l, (r) => r);
-    expect(result, isA<List<CreatePostEntity>>());
+    print(result);
+    expect(result, isA<bool>());
   });
 
   test("When try send a new post then return a left Failure", () async {

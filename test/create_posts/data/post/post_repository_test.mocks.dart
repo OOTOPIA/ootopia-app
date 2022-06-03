@@ -38,11 +38,13 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
               #createPost, [], {#createPostModel: createPostModel}),
           returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
   @override
-  _i3.Future<List<_i5.InterestTagsModel>> getTags({String? language}) => (super
-          .noSuchMethod(Invocation.method(#getTags, [], {#language: language}),
-              returnValue: Future<List<_i5.InterestTagsModel>>.value(
-                  <_i5.InterestTagsModel>[]))
-      as _i3.Future<List<_i5.InterestTagsModel>>);
+  _i3.Future<List<_i5.InterestTagsModel>> getTags(
+          {String? language, String? tags}) =>
+      (super.noSuchMethod(
+          Invocation.method(#getTags, [], {#language: language, #tags: tags}),
+          returnValue: Future<List<_i5.InterestTagsModel>>.value(
+              <_i5.InterestTagsModel>[])) as _i3
+          .Future<List<_i5.InterestTagsModel>>);
   @override
   _i3.Future<List<_i6.UsersModel>> getUsers(
           {int? page, String? fullname, String? excludedIds}) =>
