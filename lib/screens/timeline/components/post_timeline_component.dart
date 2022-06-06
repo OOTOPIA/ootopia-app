@@ -598,6 +598,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               },
             ),
           ),
+          SizedBox(height: 8),
           Visibility(
             visible: this.post.description.isNotEmpty,
             child: Container(
@@ -1156,9 +1157,6 @@ class HashtagName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       backgroundColor: Colors.white,
-      labelPadding: EdgeInsets.symmetric(
-        horizontal: 8,
-      ),
       shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 1,

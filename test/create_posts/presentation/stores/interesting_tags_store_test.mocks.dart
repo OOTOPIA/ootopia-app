@@ -33,13 +33,13 @@ class MockGetInterestTagsUsecase extends _i1.Mock
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.InterestsTagsEntity>>> call(
-          {String? tags}) =>
-      (super.noSuchMethod(Invocation.method(#call, [], {#tags: tags}),
-              returnValue: Future<
-                      _i2.Either<_i5.Failure,
-                          List<_i6.InterestsTagsEntity>>>.value(
-                  _FakeEither_0<_i5.Failure, List<_i6.InterestsTagsEntity>>()))
-          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.InterestsTagsEntity>>>);
+          {String? tags, int? page}) =>
+      (super.noSuchMethod(
+          Invocation.method(#call, [], {#tags: tags, #page: page}),
+          returnValue: Future<
+                  _i2.Either<_i5.Failure, List<_i6.InterestsTagsEntity>>>.value(
+              _FakeEither_0<_i5.Failure, List<_i6.InterestsTagsEntity>>())) as _i4
+          .Future<_i2.Either<_i5.Failure, List<_i6.InterestsTagsEntity>>>);
   @override
   String toString() => super.toString();
 }

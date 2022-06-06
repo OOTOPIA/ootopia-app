@@ -85,9 +85,7 @@ class _FlickMultiPlayerState extends State<FlickMultiPlayer>
         constraints:
             BoxConstraints(maxHeight: MediaQuery.of(context).size.height * .6),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
           child: FlickVideoPlayer(
             preferredDeviceOrientationFullscreen: [
               flickManager.flickVideoManager!.videoPlayerValue!.size.width >

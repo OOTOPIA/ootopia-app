@@ -34,12 +34,13 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
 
   @override
   Future<Either<Failure, List<InterestsTagsEntity>>> getTags(
-      {required String tags}) async {
+      {required String tags, required int page}) async {
     try {
       String currenLocalization = Platform.localeName.substring(0, 2);
       var response = await _createPostRemoteDatasource.getTags(
         language: currenLocalization,
         tags: tags,
+        page: page,
       );
       return Right(response);
     } catch (e) {
@@ -63,5 +64,11 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
     } catch (e) {
       return Left(Failure(message: ''));
     }
+  }
+
+  @override
+  Future<Either<Failure, void>> createTag({required String name}) {
+    // TODO: implement createTag
+    throw UnimplementedError();
   }
 }

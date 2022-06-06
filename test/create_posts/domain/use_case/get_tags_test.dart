@@ -22,20 +22,22 @@ void main() {
   test("When try get tags then return a right List of interestingTags",
       () async {
     String tags = 'opa';
-    when(repository.getTags(tags: tags))
+    const int page = 1;
+    when(repository.getTags(tags: tags, page: page))
         .thenAnswer((_) async => Right(interestingTagsFixture));
 
-    final response = await useCase(tags: tags);
+    final response = await useCase(tags: tags, page: page);
     final result = response.fold((l) => l, (r) => r);
     expect(result, isA<List<InterestsTagsEntity>>());
   });
 
   test("When try get tags then return a left Failure", () async {
     String tags = 'opa';
-    when(repository.getTags(tags: tags)).thenAnswer(
+    const int page = 1;
+    when(repository.getTags(tags: tags, page: page)).thenAnswer(
         (_) async => Left(Failure(message: 'appMessage.failures.listPost')));
 
-    final response = await useCase(tags: tags);
+    final response = await useCase(tags: tags, page: page);
     final result = response.fold((l) => l, (r) => r);
     expect(result, isA<Failure>());
   });

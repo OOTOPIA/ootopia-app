@@ -10,14 +10,17 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.da
 abstract class CreatePostRemoteDatasource {
   Future<bool> createPost({required CreatePostModel createPostModel});
   Future<List<InterestsTagsEntity>> getTags({
-    String? language,
+    required String language,
     required String tags,
+    required int page,
   });
   Future<List<UsersEntity>> getUsers({
     required int page,
     required String fullname,
     String? excludedIds,
   });
+
+  Future<void> createTag({required String name});
 }
 
 class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
@@ -41,19 +44,19 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
 
   @override
   Future<List<InterestTagsModel>> getTags({
-    String? language,
+    required String language,
     required String tags,
+    required int page,
   }) async {
     try {
-      Map<String, String> queryParams = {};
-      queryParams['tags'] = tags;
-
-      if (language != null) {
-        queryParams['language'] = language.replaceFirst('_', '-');
-      }
       var response = await _httpClient.get(
         Endpoints.interestingTags,
-        queryParameters: queryParams,
+        queryParameters: {
+          'page': page,
+          'limit': Globals.limitList,
+          'language': language.replaceFirst('_', '-'),
+          'name': tags
+        },
       );
       var _list = (response.data as List)
           .map((e) => InterestTagsModel.fromJson(e))
@@ -86,5 +89,11 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<void> createTag({required String name}) {
+    // TODO: implement createTag
+    throw UnimplementedError();
   }
 }

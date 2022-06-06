@@ -23,11 +23,29 @@ abstract class InterestingTagsStoreBase with Store {
 
   Timer? _debounce;
 
+  int _page = 0;
+
+  @observable
+  String tag = '';
+
+  @observable
+  bool lastPage = false;
+
+  void _incrementPage() => _page += 1;
+
   void _startLoading() => viewState = AsyncStates.loading;
 
   void cancelTimer() {
     if (_debounce != null) {
       _debounce!.cancel();
+    }
+  }
+
+  @action
+  Future<void> getMoreTags() async {
+    if (!lastPage) {
+      _incrementPage();
+      getTags(tag);
     }
   }
 
@@ -37,6 +55,8 @@ abstract class InterestingTagsStoreBase with Store {
     }
   }
 
+  void _stopGetTags(List<InterestsTagsEntity> list) => lastPage = list.isEmpty;
+
   void _stopLoading({bool hasError = false}) {
     viewState = hasError ? AsyncStates.error : AsyncStates.done;
   }
@@ -45,11 +65,14 @@ abstract class InterestingTagsStoreBase with Store {
   Future<void> getTags(String value) async {
     _startLoading();
     _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
-      var _response = await _getInterestTagsUsecase.call(tags: value);
+      tag = value;
+      var _response =
+          await _getInterestTagsUsecase.call(tags: value, page: _page);
       _response.fold(
         (l) => _stopLoading(hasError: true),
         (result) {
           _setTags(result);
+          _stopGetTags(result);
           _stopLoading();
         },
       );

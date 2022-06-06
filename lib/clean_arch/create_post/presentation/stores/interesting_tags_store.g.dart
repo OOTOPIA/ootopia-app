@@ -39,6 +39,44 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
     });
   }
 
+  final _$tagAtom = Atom(name: 'InterestingTagsStoreBase.tag');
+
+  @override
+  String get tag {
+    _$tagAtom.reportRead();
+    return super.tag;
+  }
+
+  @override
+  set tag(String value) {
+    _$tagAtom.reportWrite(value, super.tag, () {
+      super.tag = value;
+    });
+  }
+
+  final _$lastPageAtom = Atom(name: 'InterestingTagsStoreBase.lastPage');
+
+  @override
+  bool get lastPage {
+    _$lastPageAtom.reportRead();
+    return super.lastPage;
+  }
+
+  @override
+  set lastPage(bool value) {
+    _$lastPageAtom.reportWrite(value, super.lastPage, () {
+      super.lastPage = value;
+    });
+  }
+
+  final _$getMoreTagsAsyncAction =
+      AsyncAction('InterestingTagsStoreBase.getMoreTags');
+
+  @override
+  Future<void> getMoreTags() {
+    return _$getMoreTagsAsyncAction.run(() => super.getMoreTags());
+  }
+
   final _$getTagsAsyncAction = AsyncAction('InterestingTagsStoreBase.getTags');
 
   @override
@@ -50,7 +88,9 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
   String toString() {
     return '''
 tags: ${tags},
-viewState: ${viewState}
+viewState: ${viewState},
+tag: ${tag},
+lastPage: ${lastPage}
     ''';
   }
 }

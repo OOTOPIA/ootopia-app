@@ -38,6 +38,7 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
+            color: Colors.black,
             borderRadius: BorderRadius.all(Radius.circular(20)),
             image: DecorationImage(
               fit: BoxFit.contain,

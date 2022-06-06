@@ -24,7 +24,6 @@ import 'package:ootopia_app/clean_arch/create_post/domain/repositories/create_po
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 
-// ignore: camel_case_types
 class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
 /// A class which mocks [CreatePostRepository].
@@ -45,8 +44,9 @@ class MockCreatePostRepository extends _i1.Mock
           as _i4.Future<_i2.Either<_i5.Failure, bool>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i7.InterestsTagsEntity>>> getTags(
-          {String? tags}) =>
-      (super.noSuchMethod(Invocation.method(#getTags, [], {#tags: tags}),
+          {String? tags, int? page}) =>
+      (super.noSuchMethod(
+          Invocation.method(#getTags, [], {#tags: tags, #page: page}),
           returnValue: Future<
                   _i2.Either<_i5.Failure, List<_i7.InterestsTagsEntity>>>.value(
               _FakeEither_0<_i5.Failure, List<_i7.InterestsTagsEntity>>())) as _i4
@@ -64,6 +64,12 @@ class MockCreatePostRepository extends _i1.Mock
                   Future<_i2.Either<_i5.Failure, List<_i8.UsersEntity>>>.value(
                       _FakeEither_0<_i5.Failure, List<_i8.UsersEntity>>()))
           as _i4.Future<_i2.Either<_i5.Failure, List<_i8.UsersEntity>>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> createTag({String? name}) =>
+      (super.noSuchMethod(Invocation.method(#createTag, [], {#name: name}),
+              returnValue: Future<_i2.Either<_i5.Failure, void>>.value(
+                  _FakeEither_0<_i5.Failure, void>()))
+          as _i4.Future<_i2.Either<_i5.Failure, void>>);
   @override
   String toString() => super.toString();
 }

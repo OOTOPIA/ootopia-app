@@ -39,9 +39,10 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
           returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
   @override
   _i3.Future<List<_i5.InterestsTagsEntity>> getTags(
-          {String? language, String? tags}) =>
+          {String? language, String? tags, int? page}) =>
       (super.noSuchMethod(
-          Invocation.method(#getTags, [], {#language: language, #tags: tags}),
+          Invocation.method(
+              #getTags, [], {#language: language, #tags: tags, #page: page}),
           returnValue: Future<List<_i5.InterestsTagsEntity>>.value(
               <_i5.InterestsTagsEntity>[])) as _i3
           .Future<List<_i5.InterestsTagsEntity>>);
@@ -57,6 +58,11 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
               returnValue:
                   Future<List<_i6.UsersEntity>>.value(<_i6.UsersEntity>[]))
           as _i3.Future<List<_i6.UsersEntity>>);
+  @override
+  _i3.Future<void> createTag({String? name}) =>
+      (super.noSuchMethod(Invocation.method(#createTag, [], {#name: name}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
   @override
   String toString() => super.toString();
 }

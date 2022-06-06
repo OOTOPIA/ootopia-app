@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -60,25 +62,48 @@ void main() {
   });
 
   test("When try get tags then return interesting hashtags", () async {
-    const String url = 'interests-tags';
+    const String url = 'interests-tags/search';
     const String tags = 'hello';
-    when(httpClient.get(url, queryParameters: {'tags': tags})).thenAnswer(
+    const int page = 1;
+    String currenLocalization = Platform.localeName.substring(0, 2);
+
+    when(httpClient.get(url, queryParameters: {
+      'page': page,
+      'limit': Globals.limitList,
+      'language': currenLocalization,
+      'name': tags
+    })).thenAnswer(
       (_) async => Response(
         data: interestingTagsMap,
         requestOptions: RequestOptions(path: url),
       ),
     );
-    var response = await dataSource.getTags(tags: tags);
+    var response = await dataSource.getTags(
+      tags: tags,
+      page: page,
+      language: currenLocalization,
+    );
     expect(response, isA<List<InterestTagsModel>>());
     expect(response.length, interestingTagsMap.length);
   });
 
   test("When try get a interesting then return a left Failure", () async {
-    const String url = 'interests-tags';
+    const String url = 'interests-tags/search';
     const String tags = 'hello';
-    when(httpClient.get(url, queryParameters: {'tags': tags}))
-        .thenThrow(Exception('error'));
-    expect(() async => await dataSource.getTags(tags: tags),
+    const int page = 1;
+    String currenLocalization = Platform.localeName.substring(0, 2);
+    when(httpClient.get(url, queryParameters: {
+      'page': page,
+      'limit': Globals.limitList,
+      'language': currenLocalization,
+      'name': tags
+    })).thenThrow(Exception('error'));
+    expect(
+        () async => await dataSource.getTags(
+              tags: tags,
+              page: page,
+              language: currenLocalization,
+            ),
         throwsA(isA<Exception>()));
   });
 

@@ -136,7 +136,10 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
         onDoubleTapVideo: () => widget.likePost(false, true),
       );
     } else {
-      return SizedBox(
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
         child: PageView.builder(

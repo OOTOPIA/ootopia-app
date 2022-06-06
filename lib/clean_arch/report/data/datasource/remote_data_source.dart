@@ -1,7 +1,6 @@
 import 'package:ootopia_app/clean_arch/core/constants/endpoints.dart';
 import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart';
 import 'package:ootopia_app/clean_arch/report/data/models/report_posts_model.dart';
-import 'package:ootopia_app/data/repositories/api.dart';
 
 abstract class ReportRemoteDataSource {
   Future<bool> sendReportPost(ReportPostsModel reportPostsModel);
@@ -15,7 +14,7 @@ class ReportRemoteDataSourceImpl extends ReportRemoteDataSource {
   @override
   Future<bool> sendReportPost(ReportPostsModel reportPostsModel) async {
     try {
-      var response = await ApiClient.api().post(
+      var response = await _dioClient.post(
         Endpoints.reportPosts,
         data: reportPostsModel.toJson(),
       );

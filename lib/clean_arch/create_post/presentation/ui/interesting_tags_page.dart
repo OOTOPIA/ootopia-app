@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesting_tags_store.dart';
@@ -50,66 +51,69 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 16),
-                    Text(
-                      AppLocalizations.of(context)!.addHashtags,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 21,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      AppLocalizations.of(context)!.selectAtLeastOneHashtag,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    if (_interestingTags.tags.isNotEmpty)
-                      Column(
-                        children: [],
-                      ),
-                    TextField(
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                      ),
-                      decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.close),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: LightColors.blue,
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                        hintStyle: TextStyle(
-                            color: Colors.black.withOpacity(.3),
-                            fontWeight: FontWeight.normal),
-                        border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black54, width: 1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xff707070), width: 1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xff707070), width: 1),
-                          borderRadius: BorderRadius.circular(8),
+                child: Observer(builder: (context) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      Text(
+                        AppLocalizations.of(context)!.addHashtags,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 21,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(height: 4),
+                      Text(
+                        AppLocalizations.of(context)!.selectAtLeastOneHashtag,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      if (_interestingTags.tags.isNotEmpty)
+                        Column(
+                          children: [],
+                        ),
+                      TextField(
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                        onChanged: _interestingTags.getTags,
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.close),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: LightColors.blue,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          hintStyle: TextStyle(
+                              color: Colors.black.withOpacity(.3),
+                              fontWeight: FontWeight.normal),
+                          border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black54, width: 1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Color(0xff707070), width: 1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Color(0xff707070), width: 1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ),
             ),
           ],

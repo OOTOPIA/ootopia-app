@@ -6,11 +6,15 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.da
 
 abstract class CreatePostRepository {
   Future<Either<Failure, bool>> createPost({required CreatePostEntity post});
-  Future<Either<Failure, List<InterestsTagsEntity>>> getTags(
-      {required String tags});
+  Future<Either<Failure, List<InterestsTagsEntity>>> getTags({
+    required String tags,
+    required int page,
+  });
   Future<Either<Failure, List<UsersEntity>>> getUsers({
     required String fullName,
     required int page,
     String? excludedIds,
   });
+
+  Future<Either<Failure, void>> createTag({required String name});
 }

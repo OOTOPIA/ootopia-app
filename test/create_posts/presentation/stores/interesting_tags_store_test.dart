@@ -22,7 +22,8 @@ void main() {
 
   test('when try get a list of tags, then we have a success', () async {
     String tags = '';
-    when(getTagsUsecase.call(tags: tags))
+    const int page = 1;
+    when(getTagsUsecase.call(tags: tags, page: page))
         .thenAnswer((_) async => Right(interestingTagsFixture));
     fakeAsync((async) async {
       expect(controller.viewState, AsyncStates.loading);
@@ -36,7 +37,9 @@ void main() {
   });
   test('when try get a list of tags, then we have a list empty', () async {
     String tags = '';
-    when(getTagsUsecase.call(tags: tags)).thenAnswer((_) async => Right([]));
+    const int page = 1;
+    when(getTagsUsecase.call(tags: tags, page: page))
+        .thenAnswer((_) async => Right([]));
     fakeAsync((async) async {
       expect(controller.viewState, AsyncStates.loading);
       expect(controller.tags.isEmpty, true);
@@ -49,7 +52,8 @@ void main() {
   });
   test('when try get a list of tags, then we have a error', () async {
     String tags = 'tags';
-    when(getTagsUsecase.call(tags: tags))
+    const int page = 1;
+    when(getTagsUsecase.call(tags: tags, page: page))
         .thenAnswer((_) async => Left(Failure(message: '')));
     fakeAsync((async) async {
       expect(controller.viewState, AsyncStates.loading);
