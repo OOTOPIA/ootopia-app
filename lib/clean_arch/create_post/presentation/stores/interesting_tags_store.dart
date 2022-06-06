@@ -23,11 +23,13 @@ abstract class InterestingTagsStoreBase with Store {
 
   Timer? _debounce;
 
-  void _reseTags() => tags = ObservableList.of([]);
-
   void _startLoading() => viewState = AsyncStates.loading;
 
-  void cancelTimer() => _debounce!.cancel();
+  void cancelTimer() {
+    if (_debounce != null) {
+      _debounce!.cancel();
+    }
+  }
 
   void _setTags(List<InterestsTagsEntity> list) {
     if (list.isNotEmpty) {
@@ -41,7 +43,6 @@ abstract class InterestingTagsStoreBase with Store {
 
   @action
   Future<void> getTags(String value) async {
-    _reseTags();
     _startLoading();
     _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
       var _response = await _getInterestTagsUsecase.call(tags: value);

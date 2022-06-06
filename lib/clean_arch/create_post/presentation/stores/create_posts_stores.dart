@@ -261,8 +261,12 @@ abstract class StoreCreatePostsBase with Store {
     postEntity.tagsIds = tagsId;
     postEntity.mediaIds = mediasIds;
     var response = await _createPostUsecase.call(postEntity);
-    response.fold((left) => null, (right) => null);
-    _stopLoading();
+    response.fold(
+      (left) => _stopLoading(hasError: true),
+      (right) {
+        _stopLoading();
+      },
+    );
   }
 
   void clearVariable() {
