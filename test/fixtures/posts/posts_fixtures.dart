@@ -1,4 +1,5 @@
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
 
 List<Map<String, dynamic>> interestingTagsMap = [
   {
@@ -10,6 +11,13 @@ List<Map<String, dynamic>> interestingTagsMap = [
     'tagOrder': 1,
     'type': '',
     'updatedAt': '',
+  },
+];
+
+List<Map<String, dynamic>> usersMap = [
+  {
+    'fullname': 'hello',
+    'id': '1',
   },
 ];
 
@@ -34,4 +42,10 @@ List<InterestsTagsEntity> interestingTagsFixture = [
     type: '',
     updatedAt: '',
   ),
+];
+List<UsersEntity> usersFixture = [
+  UsersEntity(
+      fullname: 'hello', id: '1', email: 'anderson.barros@devmagic.com.br'),
+  UsersEntity(
+      fullname: 'hello 2', id: '2', email: 'anderson.barros@devmagic.com.br'),
 ];

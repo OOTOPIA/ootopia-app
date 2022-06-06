@@ -19,8 +19,9 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
   Future<Either<Failure, bool>> createPost(
       {required CreatePostEntity post}) async {
     try {
+      var createPostModel = CreatePostModel.fromEntity(post);
       var response = await _createPostRemoteDatasource.createPost(
-        createPostModel: CreatePostModel.fromEntity(post),
+        createPostModel: createPostModel,
       );
       if (response) {
         return Right(response);

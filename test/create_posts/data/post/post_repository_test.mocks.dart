@@ -9,9 +9,9 @@ import 'package:ootopia_app/clean_arch/create_post/data/datasource/create_post_r
     as _i2;
 import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/create_post_model.dart'
     as _i4;
-import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/interest_tags_model.dart'
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart'
     as _i5;
-import 'package:ootopia_app/clean_arch/create_post/data/models/users/users_model.dart'
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart'
     as _i6;
 
 // ignore_for_file: avoid_redundant_argument_values
@@ -38,15 +38,15 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
               #createPost, [], {#createPostModel: createPostModel}),
           returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
   @override
-  _i3.Future<List<_i5.InterestTagsModel>> getTags(
+  _i3.Future<List<_i5.InterestsTagsEntity>> getTags(
           {String? language, String? tags}) =>
       (super.noSuchMethod(
           Invocation.method(#getTags, [], {#language: language, #tags: tags}),
-          returnValue: Future<List<_i5.InterestTagsModel>>.value(
-              <_i5.InterestTagsModel>[])) as _i3
-          .Future<List<_i5.InterestTagsModel>>);
+          returnValue: Future<List<_i5.InterestsTagsEntity>>.value(
+              <_i5.InterestsTagsEntity>[])) as _i3
+          .Future<List<_i5.InterestsTagsEntity>>);
   @override
-  _i3.Future<List<_i6.UsersModel>> getUsers(
+  _i3.Future<List<_i6.UsersEntity>> getUsers(
           {int? page, String? fullname, String? excludedIds}) =>
       (super.noSuchMethod(
               Invocation.method(#getUsers, [], {
@@ -55,8 +55,8 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
                 #excludedIds: excludedIds
               }),
               returnValue:
-                  Future<List<_i6.UsersModel>>.value(<_i6.UsersModel>[]))
-          as _i3.Future<List<_i6.UsersModel>>);
+                  Future<List<_i6.UsersEntity>>.value(<_i6.UsersEntity>[]))
+          as _i3.Future<List<_i6.UsersEntity>>);
   @override
   String toString() => super.toString();
 }

@@ -4,14 +4,16 @@ import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/create_post_model.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/interest_tags_model.dart';
 import 'package:ootopia_app/clean_arch/create_post/data/models/users/users_model.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
 
 abstract class CreatePostRemoteDatasource {
   Future<bool> createPost({required CreatePostModel createPostModel});
-  Future<List<InterestTagsModel>> getTags({
+  Future<List<InterestsTagsEntity>> getTags({
     String? language,
     required String tags,
   });
-  Future<List<UsersModel>> getUsers({
+  Future<List<UsersEntity>> getUsers({
     required int page,
     required String fullname,
     String? excludedIds,
@@ -62,6 +64,7 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
     }
   }
 
+  @override
   Future<List<UsersModel>> getUsers({
     required int page,
     required String fullname,

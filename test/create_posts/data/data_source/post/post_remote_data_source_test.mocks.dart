@@ -17,6 +17,7 @@ import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart'
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 
+// ignore: camel_case_types
 class _FakeResponse_0<T> extends _i1.Fake implements _i2.Response<T> {}
 
 /// A class which mocks [HttpClient].
