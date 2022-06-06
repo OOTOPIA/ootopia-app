@@ -15,7 +15,7 @@ class InterestingTagsPage extends StatefulWidget {
 }
 
 class _InterestingTagsPageState extends State<InterestingTagsPage> {
-  PreferredSizeWidget appbar() => DefaultAppBar(
+  PreferredSizeWidget get appbar => DefaultAppBar(
         components: [
           AppBarComponents.back,
           AppBarComponents.close,
@@ -27,10 +27,17 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
       );
 
   final InterestingTagsStore _interestingTags = GetIt.I.get();
+
+  @override
+  void dispose() {
+    _interestingTags.clearVariables();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(),
+      appBar: appbar,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());

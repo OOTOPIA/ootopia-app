@@ -204,6 +204,13 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
     return _$getMoreUsersAsyncAction.run(() => super.getMoreUsers());
   }
 
+  final _$sendPostAsyncAction = AsyncAction('StoreCreatePostsBase.sendPost');
+
+  @override
+  Future<void> sendPost() {
+    return _$sendPostAsyncAction.run(() => super.sendPost());
+  }
+
   final _$StoreCreatePostsBaseActionController =
       ActionController(name: 'StoreCreatePostsBase');
 

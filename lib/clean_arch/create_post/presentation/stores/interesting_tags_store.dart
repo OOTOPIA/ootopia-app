@@ -54,4 +54,9 @@ abstract class InterestingTagsStoreBase with Store {
       );
     });
   }
+
+  void clearVariables() {
+    tags = ObservableList.of([]);
+    viewState = AsyncStates.loading;
+  }
 }

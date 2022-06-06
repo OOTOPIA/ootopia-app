@@ -153,15 +153,15 @@ abstract class StoreCreatePostsBase with Store {
     }
   }
 
-  void _startLoading() => viewState = AsyncStates.loading;
-
-  void _resetUsers() => users = ObservableList.of([]);
-
   void cancelTimer() {
     if (_debounce != null) _debounce!.cancel();
   }
 
+  void _startLoading() => viewState = AsyncStates.loading;
+
   void _incrementPage() => page += 1;
+
+  void _stopGetPost(List<UsersEntity> list) => lastPage = list.isEmpty;
 
   void _stopLoading({bool hasError = false}) {
     viewState = hasError ? AsyncStates.error : AsyncStates.done;
@@ -171,10 +171,6 @@ abstract class StoreCreatePostsBase with Store {
     if (list.isNotEmpty) {
       users = ObservableList.of([...users, ...list]);
     }
-  }
-
-  void _stopGetPost(List<UsersEntity> list) {
-    lastPage = list.isEmpty;
   }
 
   @action
@@ -257,12 +253,32 @@ abstract class StoreCreatePostsBase with Store {
     }
   }
 
+  @action
   Future<void> sendPost() async {
+    _startLoading();
     postEntity.description = _descriptionInputController.text;
     postEntity.taggedUsersId = idsUsersTagged;
     postEntity.tagsIds = tagsId;
     postEntity.mediaIds = mediasIds;
     var response = await _createPostUsecase.call(postEntity);
     response.fold((left) => null, (right) => null);
+    _stopLoading();
+  }
+
+  void clearVariable() {
+    _descriptionInputController.clear();
+    listTaggedUsers = ObservableList.of([]);
+    users = ObservableList.of([]);
+    idsUsersTagged = [];
+    tagsId = [];
+    mediasIds = [];
+    fullName = '';
+    excludedIds = '';
+    geolocationErrorMessage = "";
+    geolocationMessage = "Please, wait...";
+    lastPage = false;
+    openSelectedUser = false;
+    viewState = AsyncStates.loading;
+    page = 0;
   }
 }

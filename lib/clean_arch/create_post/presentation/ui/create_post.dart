@@ -54,6 +54,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   @override
   void dispose() {
     storeCreatePosts.cancelTimer();
+    storeCreatePosts.clearVariable();
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.restoreSystemUIOverlays();
     super.dispose();
@@ -81,7 +82,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     ));
   }
 
-  PreferredSizeWidget appbar() => DefaultAppBar(
+  PreferredSizeWidget get appbar => DefaultAppBar(
         components: [
           AppBarComponents.back,
           AppBarComponents.close,
@@ -97,7 +98,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar(),
+      appBar: appbar,
       body: Observer(builder: (context) {
         return Stack(
           fit: StackFit.expand,
