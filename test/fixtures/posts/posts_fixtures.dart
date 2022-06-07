@@ -25,22 +25,12 @@ List<InterestsTagsEntity> interestingTagsFixture = [
   InterestsTagsEntity(
     name: 'hello',
     id: '1',
-    active: true,
-    createdAt: '',
-    language: '',
-    tagOrder: 1,
-    type: '',
-    updatedAt: '',
+    numberOfPosts: 150,
   ),
   InterestsTagsEntity(
     name: 'hello 2',
     id: '2',
-    active: true,
-    createdAt: '',
-    language: '',
-    tagOrder: 1,
-    type: '',
-    updatedAt: '',
+    numberOfPosts: 150,
   ),
 ];
 List<UsersEntity> usersFixture = [

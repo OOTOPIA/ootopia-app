@@ -76,7 +76,7 @@ void main() {
     String name = 'tags';
     when(createTagUsecase(name: name)).thenAnswer((_) async => Right(true));
 
-    await controller.createTag(name);
+    await controller.createTag();
     expect(controller.createHasTags, true);
   });
 
@@ -85,7 +85,7 @@ void main() {
     when(createTagUsecase(name: name))
         .thenAnswer((_) async => Left(Failure(message: '')));
 
-    await controller.createTag(name);
+    await controller.createTag();
     expect(controller.error, '');
   });
 }

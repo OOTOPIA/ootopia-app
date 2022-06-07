@@ -36,7 +36,7 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
   Future<Either<Failure, List<InterestsTagsEntity>>> getTags(
       {required String tags, required int page}) async {
     try {
-      String currenLocalization = Platform.localeName.substring(0, 2);
+      String currenLocalization = Platform.localeName;
       var response = await _createPostRemoteDatasource.getTags(
         language: currenLocalization,
         tags: tags,
@@ -69,7 +69,11 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
   @override
   Future<Either<Failure, bool>> createTag({required String name}) async {
     try {
-      var response = await _createPostRemoteDatasource.createTag(name: name);
+      String currenLocalization = Platform.localeName.replaceAll('_', '-');
+      var response = await _createPostRemoteDatasource.createTag(
+        name: name,
+        language: currenLocalization,
+      );
       return Right(response);
     } catch (e) {
       return Left(Failure(message: ''));

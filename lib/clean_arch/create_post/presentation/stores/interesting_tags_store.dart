@@ -24,11 +24,14 @@ abstract class InterestingTagsStoreBase with Store {
   List<InterestsTagsEntity> tags = ObservableList.of([]);
 
   @observable
+  List<InterestsTagsEntity> selectedTags = ObservableList.of([]);
+
+  @observable
   AsyncStates viewState = AsyncStates.loading;
 
   Timer? _debounce;
 
-  int _page = 0;
+  int _page = 1;
 
   @observable
   String tag = '';
@@ -46,6 +49,8 @@ abstract class InterestingTagsStoreBase with Store {
 
   void _startLoading() => viewState = AsyncStates.loading;
 
+  void _startLoadingNewData() => viewState = AsyncStates.loadingNewData;
+
   void cancelTimer() {
     if (_debounce != null) {
       _debounce!.cancel();
@@ -55,6 +60,7 @@ abstract class InterestingTagsStoreBase with Store {
   @action
   Future<void> getMoreTags() async {
     if (!lastPage) {
+      _startLoadingNewData();
       _incrementPage();
       getTags(tag);
     }
@@ -66,15 +72,26 @@ abstract class InterestingTagsStoreBase with Store {
     }
   }
 
+  void _resetTags() {
+    tags = ObservableList.of([]);
+  }
+
   void _stopGetTags(List<InterestsTagsEntity> list) => lastPage = list.isEmpty;
 
   void _stopLoading({bool hasError = false}) {
     viewState = hasError ? AsyncStates.error : AsyncStates.done;
   }
 
+  void addTag(InterestsTagsEntity value) {
+    selectedTags.add(value);
+  }
+
   @action
   Future<void> getTags(String value) async {
-    _startLoading();
+    if (viewState != AsyncStates.loadingNewData) {
+      _resetTags();
+      _startLoading();
+    }
     _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
       tag = value;
       var _response =
@@ -82,6 +99,7 @@ abstract class InterestingTagsStoreBase with Store {
       _response.fold(
         (l) => _stopLoading(hasError: true),
         (result) {
+          tags.add(InterestsTagsEntity(id: '0', name: value, numberOfPosts: 0));
           _setTags(result);
           _stopGetTags(result);
           _stopLoading();
@@ -91,8 +109,8 @@ abstract class InterestingTagsStoreBase with Store {
   }
 
   @action
-  Future<void> createTag(String name) async {
-    var response = await _createTagUsecase(name: name);
+  Future<void> createTag() async {
+    var response = await _createTagUsecase(name: tag);
     response.fold(
       (left) => error = left.message,
       (right) => createHasTags = right,

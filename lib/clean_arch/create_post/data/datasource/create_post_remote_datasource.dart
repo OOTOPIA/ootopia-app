@@ -20,7 +20,10 @@ abstract class CreatePostRemoteDatasource {
     String? excludedIds,
   });
 
-  Future<bool> createTag({required String name});
+  Future<bool> createTag({
+    required String name,
+    required String language,
+  });
 }
 
 class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
@@ -63,6 +66,7 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
           .toList();
       return _list;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -92,10 +96,16 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
   }
 
   @override
-  Future<bool> createTag({required String name}) async {
+  Future<bool> createTag({
+    required String name,
+    required String language,
+  }) async {
     try {
-      var response = await _httpClient
-          .post(Endpoints.createInterestingTags, data: {'name': name});
+      var response =
+          await _httpClient.post(Endpoints.createInterestingTags, data: {
+        'name': name,
+        'language': language,
+      });
       return response.statusCode == 201;
     } catch (e) {
       rethrow;

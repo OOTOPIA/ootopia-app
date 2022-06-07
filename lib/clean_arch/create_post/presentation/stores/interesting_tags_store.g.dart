@@ -24,6 +24,22 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
     });
   }
 
+  final _$selectedTagsAtom =
+      Atom(name: 'InterestingTagsStoreBase.selectedTags');
+
+  @override
+  List<InterestsTagsEntity> get selectedTags {
+    _$selectedTagsAtom.reportRead();
+    return super.selectedTags;
+  }
+
+  @override
+  set selectedTags(List<InterestsTagsEntity> value) {
+    _$selectedTagsAtom.reportWrite(value, super.selectedTags, () {
+      super.selectedTags = value;
+    });
+  }
+
   final _$viewStateAtom = Atom(name: 'InterestingTagsStoreBase.viewState');
 
   @override
@@ -119,14 +135,15 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
       AsyncAction('InterestingTagsStoreBase.createTag');
 
   @override
-  Future<void> createTag(String name) {
-    return _$createTagAsyncAction.run(() => super.createTag(name));
+  Future<void> createTag() {
+    return _$createTagAsyncAction.run(() => super.createTag());
   }
 
   @override
   String toString() {
     return '''
 tags: ${tags},
+selectedTags: ${selectedTags},
 viewState: ${viewState},
 tag: ${tag},
 error: ${error},

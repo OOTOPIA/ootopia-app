@@ -73,10 +73,24 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      if (_interestingTags.tags.isNotEmpty)
-                        Column(
-                          children: [],
+                      if (_interestingTags.selectedTags.isNotEmpty)
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _interestingTags.selectedTags.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var tagSelected =
+                                _interestingTags.selectedTags[index];
+                            return Chip(
+                              label: Text(tagSelected.name),
+                              deleteIcon: Icon(Icons.close),
+                              onDeleted: () {
+                                _interestingTags.selectedTags
+                                    .remove(tagSelected);
+                              },
+                            );
+                          },
                         ),
+                      SizedBox(height: 16),
                       TextField(
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -111,6 +125,43 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                           ),
                         ),
                       ),
+                      if (_interestingTags.tags.isNotEmpty)
+                        NotificationListener(
+                          onNotification: (ScrollNotification scrollInfo) {
+                            if (scrollInfo.metrics.pixels ==
+                                    scrollInfo.metrics.maxScrollExtent &&
+                                !_interestingTags.lastPage) {
+                              _interestingTags.getMoreTags();
+                            }
+                            return true;
+                          },
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _interestingTags.tags.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var tag = _interestingTags.tags[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  if (tag.id == '0') {
+                                    _interestingTags.createTag();
+                                    _interestingTags.addTag(tag);
+                                  } else {
+                                    _interestingTags.addTag(tag);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Text('#${tag.name}'),
+                                    SizedBox(width: 32),
+                                    if (tag.id != 0)
+                                      Text(
+                                          '${tag.numberOfPosts} ${AppLocalizations.of(context)!.publications}'),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                     ],
                   );
                 }),

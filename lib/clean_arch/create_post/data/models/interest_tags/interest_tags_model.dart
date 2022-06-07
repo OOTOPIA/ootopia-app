@@ -8,21 +8,11 @@ class InterestTagsModel extends InterestsTagsEntity {
   InterestTagsModel({
     required String id,
     required String name,
-    required String type,
-    required bool active,
-    required int tagOrder,
-    required String language,
-    required String createdAt,
-    required String updatedAt,
+    required int numberOfPosts,
   }) : super(
           id: id,
           name: name,
-          type: type,
-          active: active,
-          tagOrder: tagOrder,
-          language: language,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
+          numberOfPosts: numberOfPosts,
         );
   factory InterestTagsModel.fromJson(Map<String, dynamic> json) {
     return _$InterestTagsModelFromJson(json);

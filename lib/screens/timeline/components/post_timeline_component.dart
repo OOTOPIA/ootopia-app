@@ -93,7 +93,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _sendOOZIsLoading = false;
   bool _oozIsSent = false;
   bool _oozError = false;
-  String _oozErrorMessage = "";
+  String _oozErrorMessage = '';
   bool _oozSlidingOut = false;
   late AuthStore authStore;
 
@@ -152,7 +152,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void _goToProfile() async {
     controller.insertPage(ProfileScreen(
       {
-        "id": user != null && post.userId == user!.id ? null : post.userId,
+        'id': user != null && post.userId == user!.id ? null : post.userId,
       },
     ));
   }
@@ -378,7 +378,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                               padding:
                                                   EdgeInsets.only(right: 4),
                                               child: Text(
-                                                "+ " +
+                                                '+ ' +
                                                     currencyFormatter.format(
                                                         this
                                                             .post
@@ -547,7 +547,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 ),
                 Visibility(
                   visible:
-                      this.post.userId == (authStore.currentUser?.id ?? ""),
+                      this.post.userId == (authStore.currentUser?.id ?? ''),
                   child: GestureDetector(
                     onHorizontalDragEnd: (_) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -616,7 +616,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             onTap: () {
               controller.insertPage(
                 CommentScreen({
-                  "post": this.post,
+                  'post': this.post,
                 }),
               );
             },
@@ -629,7 +629,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     padding: EdgeInsets.only(bottom: 12, left: 12),
                     child: Text(
                       this.post.commentsCount.toString() +
-                          " ${AppLocalizations.of(context)!.comments}",
+                          ' ${AppLocalizations.of(context)!.comments}',
                       style: TextStyle(color: Colors.black.withOpacity(0.4)),
                     ),
                   ),
@@ -643,7 +643,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
                                   backgroundImage:
-                                      NetworkImage("${widget.user?.photoUrl}"),
+                                      NetworkImage('${widget.user?.photoUrl}'),
                                   radius: 14,
                                 ),
                               )
@@ -652,7 +652,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
                                   backgroundImage:
-                                      AssetImage("assets/icons/user.png"),
+                                      AssetImage('assets/icons/user.png'),
                                   radius: 14,
                                 ),
                               ),
@@ -813,7 +813,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
-            "${(double.parse(this.post.oozTotalCollected) + this.post.oozToTransfer!)}";
+            '${(double.parse(this.post.oozTotalCollected) + this.post.oozToTransfer!)}';
         if (this.post.oozRewarded == null || this.post.oozRewarded == 0) {
           this.post.oozRewarded = this.post.oozToTransfer;
         } else {
@@ -824,13 +824,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       _showOOZIsSent();
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();
-      print("Error: ${e.toString()}");
+      print('Error: ${e.toString()}');
       setState(() {
         _sendOOZIsLoading = false;
         _oozError = true;
         _oozErrorMessage =
             AppLocalizations.of(context)!.anErrorHasOccurredTryAgain;
-        if (errorMessage == "INSUFFICIENT_BALANCE") {
+        if (errorMessage == 'INSUFFICIENT_BALANCE') {
           _oozErrorMessage =
               AppLocalizations.of(context)!.yourHaveInsufficientOOZToGive;
         }
@@ -979,13 +979,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               if (likePostResult.liked) {
                 this.trackingEvents.timelineGaveALike(
                   {
-                    "userId": this.post.userId,
+                    'userId': this.post.userId,
                   },
                 );
               } else if (this.post.likesCount > 0) {
                 this.trackingEvents.timelineGaveADislike(
                   {
-                    "userId": this.post.userId,
+                    'userId': this.post.userId,
                   },
                 );
               }
@@ -1164,7 +1164,7 @@ class HashtagName extends StatelessWidget {
           ),
           borderRadius: BorderRadius.all(Radius.circular(16))),
       label: Text(
-        "#$hashtagName",
+        '#$hashtagName',
         style: TextStyle(
           fontSize: 12,
           color: Color(0xff656F7B),
