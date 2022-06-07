@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/components/hashtag_component.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/components/item_selected.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesting_tags_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -28,6 +31,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
       );
 
   final InterestingTagsStore _interestingTags = GetIt.I.get();
+  final StoreCreatePosts _createPosts = GetIt.I.get();
 
   @override
   void dispose() {
@@ -73,23 +77,27 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      if (_interestingTags.selectedTags.isNotEmpty)
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _interestingTags.selectedTags.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var tagSelected =
-                                _interestingTags.selectedTags[index];
-                            return Chip(
-                              label: Text(tagSelected.name),
-                              deleteIcon: Icon(Icons.close),
-                              onDeleted: () {
-                                _interestingTags.selectedTags
-                                    .remove(tagSelected);
+                      if (_createPosts.tagsSelect.isNotEmpty)
+                        Observer(builder: (context) {
+                          return Container(
+                            height: 50,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: _createPosts.tagsSelect.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                var tagSelected =
+                                    _createPosts.tagsSelect[index];
+                                return hashtagComponent(
+                                  tagSelected: tagSelected,
+                                  deleteHashTag: () {
+                                    _createPosts.removeTag(tagSelected);
+                                  },
+                                );
                               },
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        }),
                       SizedBox(height: 16),
                       TextField(
                         style: TextStyle(
@@ -125,6 +133,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 16),
                       if (_interestingTags.tags.isNotEmpty)
                         NotificationListener(
                           onNotification: (ScrollNotification scrollInfo) {
@@ -140,25 +149,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                             itemCount: _interestingTags.tags.length,
                             itemBuilder: (BuildContext context, int index) {
                               var tag = _interestingTags.tags[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  if (tag.id == '0') {
-                                    _interestingTags.createTag();
-                                    _interestingTags.addTag(tag);
-                                  } else {
-                                    _interestingTags.addTag(tag);
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Text('#${tag.name}'),
-                                    SizedBox(width: 32),
-                                    if (tag.id != 0)
-                                      Text(
-                                          '${tag.numberOfPosts} ${AppLocalizations.of(context)!.publications}'),
-                                  ],
-                                ),
-                              );
+                              return ButtonSelectedTag(tag: tag);
                             },
                           ),
                         ),

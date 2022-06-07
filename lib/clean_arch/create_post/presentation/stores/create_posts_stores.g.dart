@@ -49,6 +49,21 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
     });
   }
 
+  final _$tagsSelectAtom = Atom(name: 'StoreCreatePostsBase.tagsSelect');
+
+  @override
+  List<InterestsTagsEntity> get tagsSelect {
+    _$tagsSelectAtom.reportRead();
+    return super.tagsSelect;
+  }
+
+  @override
+  set tagsSelect(List<InterestsTagsEntity> value) {
+    _$tagsSelectAtom.reportWrite(value, super.tagsSelect, () {
+      super.tagsSelect = value;
+    });
+  }
+
   final _$fullNameAtom = Atom(name: 'StoreCreatePostsBase.fullName');
 
   @override
@@ -215,6 +230,28 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
       ActionController(name: 'StoreCreatePostsBase');
 
   @override
+  void addTag(InterestsTagsEntity entity) {
+    final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
+        name: 'StoreCreatePostsBase.addTag');
+    try {
+      return super.addTag(entity);
+    } finally {
+      _$StoreCreatePostsBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeTag(InterestsTagsEntity entity) {
+    final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
+        name: 'StoreCreatePostsBase.removeTag');
+    try {
+      return super.removeTag(entity);
+    } finally {
+      _$StoreCreatePostsBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addUserInText(UsersEntity e) {
     final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
         name: 'StoreCreatePostsBase.addUserInText');
@@ -252,6 +289,7 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
     return '''
 listTaggedUsers: ${listTaggedUsers},
 users: ${users},
+tagsSelect: ${tagsSelect},
 fullName: ${fullName},
 excludedIds: ${excludedIds},
 geolocationErrorMessage: ${geolocationErrorMessage},

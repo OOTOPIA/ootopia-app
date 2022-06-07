@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/create_post_entity.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_post_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/search_user_by_name_usecase.dart';
@@ -44,7 +45,10 @@ abstract class StoreCreatePostsBase with Store {
 
   List<String>? idsUsersTagged = [];
 
-  List<String>? tagsId = [];
+  @observable
+  List<InterestsTagsEntity> tagsSelect = [];
+
+  List<String> _tagsid = [];
 
   List<String>? mediasIds = [];
 
@@ -80,6 +84,18 @@ abstract class StoreCreatePostsBase with Store {
   @computed
   RichTextController get descriptionInputController =>
       _descriptionInputController;
+
+  @action
+  void addTag(InterestsTagsEntity entity) {
+    tagsSelect.add(entity);
+    _tagsid.add(entity.id);
+  }
+
+  @action
+  void removeTag(InterestsTagsEntity entity) {
+    tagsSelect.remove(entity);
+    _tagsid.remove(entity.id);
+  }
 
   @action
   void addUserInText(UsersEntity e) {
@@ -258,7 +274,7 @@ abstract class StoreCreatePostsBase with Store {
     _startLoading();
     postEntity.description = _descriptionInputController.text;
     postEntity.taggedUsersId = idsUsersTagged;
-    postEntity.tagsIds = tagsId;
+    postEntity.tagsIds = _tagsid;
     postEntity.mediaIds = mediasIds;
     var response = await _createPostUsecase.call(postEntity);
     response.fold(
@@ -273,8 +289,9 @@ abstract class StoreCreatePostsBase with Store {
     _descriptionInputController.clear();
     listTaggedUsers = ObservableList.of([]);
     users = ObservableList.of([]);
+    tagsSelect = ObservableList.of([]);
     idsUsersTagged = [];
-    tagsId = [];
+    _tagsid = [];
     mediasIds = [];
     fullName = '';
     excludedIds = '';

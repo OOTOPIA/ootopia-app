@@ -24,22 +24,6 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
     });
   }
 
-  final _$selectedTagsAtom =
-      Atom(name: 'InterestingTagsStoreBase.selectedTags');
-
-  @override
-  List<InterestsTagsEntity> get selectedTags {
-    _$selectedTagsAtom.reportRead();
-    return super.selectedTags;
-  }
-
-  @override
-  set selectedTags(List<InterestsTagsEntity> value) {
-    _$selectedTagsAtom.reportWrite(value, super.selectedTags, () {
-      super.selectedTags = value;
-    });
-  }
-
   final _$viewStateAtom = Atom(name: 'InterestingTagsStoreBase.viewState');
 
   @override
@@ -143,7 +127,6 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
   String toString() {
     return '''
 tags: ${tags},
-selectedTags: ${selectedTags},
 viewState: ${viewState},
 tag: ${tag},
 error: ${error},

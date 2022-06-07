@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/bottom_open_interesting_tags.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/confirm_post_button_widget.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/error_get_geolocation.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/components/hashtag_component.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/list_of_midias.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/list_of_users.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/show_dialog.dart';
@@ -128,13 +129,29 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                     : this.imageSize!,
                               )
                             : ListOfMidias(args: widget.args),
-                        SizedBox(height: 50),
                         if (storeCreatePosts.geolocationErrorMessage.isNotEmpty)
                           ErrorGetGeolocation(),
-                        SizedBox(
-                          height:
-                              GlobalConstants.of(context).screenHorizontalSpace,
-                        ),
+                        if (storeCreatePosts.tagsSelect.isNotEmpty)
+                          Container(
+                            height: 50,
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: storeCreatePosts.tagsSelect.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                var tagSelected =
+                                    storeCreatePosts.tagsSelect[index];
+                                return hashtagComponent(
+                                  tagSelected: tagSelected,
+                                  deleteHashTag: () {
+                                    storeCreatePosts.tagsSelect
+                                        .remove(tagSelected);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
                         ButtonOpenInterestingTags(),
                         TextFormFieldCreatePost(),
                         SizedBox(

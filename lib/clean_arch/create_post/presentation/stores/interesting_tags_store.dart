@@ -24,9 +24,6 @@ abstract class InterestingTagsStoreBase with Store {
   List<InterestsTagsEntity> tags = ObservableList.of([]);
 
   @observable
-  List<InterestsTagsEntity> selectedTags = ObservableList.of([]);
-
-  @observable
   AsyncStates viewState = AsyncStates.loading;
 
   Timer? _debounce;
@@ -80,10 +77,6 @@ abstract class InterestingTagsStoreBase with Store {
 
   void _stopLoading({bool hasError = false}) {
     viewState = hasError ? AsyncStates.error : AsyncStates.done;
-  }
-
-  void addTag(InterestsTagsEntity value) {
-    selectedTags.add(value);
   }
 
   @action

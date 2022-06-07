@@ -83,7 +83,7 @@ import 'l10n/l10n.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
   ReportDi.injectionDI();
   CreatePostDi.injectionDI();
   await Firebase.initializeApp();
@@ -102,7 +102,7 @@ Future main() async {
     (options) {
       options.dsn = dotenv.env['SENTRY_DSN']!;
       options.debug = false;
-      options.environment = "staging";
+      options.environment = 'staging';
       options.attachStacktrace = true;
       options.diagnosticLevel = SentryLevel.error;
       options.enableAutoSessionTracking = true;
@@ -149,11 +149,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
   NotificationMessageService service = NotificationMessageService();
 
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   trackingEvents
-      .notificationReceived({"notificationType": message.data["type"]});
+      .notificationReceived({'notificationType': message.data['type']});
   service.createMessage(message);
 }
 
@@ -416,12 +416,12 @@ class _MainPageState extends State<MainPage> {
         AppLocalizations.of(context)!.localeName == 'pt') {
       return AppLocalizations.of(context)!
           .shareMyOpinion
-          .replaceFirst(" ", "\n");
+          .replaceFirst(' ', '\n');
     }
     return AppLocalizations.of(context)!.shareMyOpinion;
   }
 
-  showSharedExperience(context) {
+  void showSharedExperience(context) {
     Future.delayed(Duration.zero, () {
       showModalBottomSheet(
         context: context,
@@ -438,7 +438,7 @@ class _MainPageState extends State<MainPage> {
                 text: shareMyOpinion,
                 onTapAbout: () async {
                   await launch(
-                      "https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform");
+                      'https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform');
                 },
               ),
               ButtonSnackBar(
