@@ -9,6 +9,8 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:ootopia_app/clean_arch/core/exception/failure.dart' as _i5;
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart'
     as _i6;
+import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_tag_usecase.dart'
+    as _i7;
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/get_interest_tags_usecase.dart'
     as _i3;
 
@@ -40,6 +42,24 @@ class MockGetInterestTagsUsecase extends _i1.Mock
                   _i2.Either<_i5.Failure, List<_i6.InterestsTagsEntity>>>.value(
               _FakeEither_0<_i5.Failure, List<_i6.InterestsTagsEntity>>())) as _i4
           .Future<_i2.Either<_i5.Failure, List<_i6.InterestsTagsEntity>>>);
+  @override
+  String toString() => super.toString();
+}
+
+/// A class which mocks [CreateTagUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCreateTagUsecase extends _i1.Mock implements _i7.CreateTagUsecase {
+  MockCreateTagUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, bool>> call({String? name}) =>
+      (super.noSuchMethod(Invocation.method(#call, [], {#name: name}),
+              returnValue: Future<_i2.Either<_i5.Failure, bool>>.value(
+                  _FakeEither_0<_i5.Failure, bool>()))
+          as _i4.Future<_i2.Either<_i5.Failure, bool>>);
   @override
   String toString() => super.toString();
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_tag_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/get_interest_tags_usecase.dart';
 
 part 'interesting_tags_store.g.dart';
@@ -12,8 +13,12 @@ class InterestingTagsStore = InterestingTagsStoreBase
 
 abstract class InterestingTagsStoreBase with Store {
   final GetInterestTagsUsecase _getInterestTagsUsecase;
-  InterestingTagsStoreBase({required GetInterestTagsUsecase getTags})
-      : _getInterestTagsUsecase = getTags;
+  final CreateTagUsecase _createTagUsecase;
+  InterestingTagsStoreBase({
+    required GetInterestTagsUsecase getTags,
+    required CreateTagUsecase createTags,
+  })  : _getInterestTagsUsecase = getTags,
+        _createTagUsecase = createTags;
 
   @observable
   List<InterestsTagsEntity> tags = ObservableList.of([]);
@@ -29,7 +34,13 @@ abstract class InterestingTagsStoreBase with Store {
   String tag = '';
 
   @observable
+  String error = '';
+
+  @observable
   bool lastPage = false;
+
+  @observable
+  bool createHasTags = false;
 
   void _incrementPage() => _page += 1;
 
@@ -77,6 +88,15 @@ abstract class InterestingTagsStoreBase with Store {
         },
       );
     });
+  }
+
+  @action
+  Future<void> createTag(String name) async {
+    var response = await _createTagUsecase(name: name);
+    response.fold(
+      (left) => error = left.message,
+      (right) => createHasTags = right,
+    );
   }
 
   void clearVariables() {

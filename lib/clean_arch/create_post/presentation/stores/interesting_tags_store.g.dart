@@ -54,6 +54,21 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
     });
   }
 
+  final _$errorAtom = Atom(name: 'InterestingTagsStoreBase.error');
+
+  @override
+  String get error {
+    _$errorAtom.reportRead();
+    return super.error;
+  }
+
+  @override
+  set error(String value) {
+    _$errorAtom.reportWrite(value, super.error, () {
+      super.error = value;
+    });
+  }
+
   final _$lastPageAtom = Atom(name: 'InterestingTagsStoreBase.lastPage');
 
   @override
@@ -66,6 +81,22 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
   set lastPage(bool value) {
     _$lastPageAtom.reportWrite(value, super.lastPage, () {
       super.lastPage = value;
+    });
+  }
+
+  final _$createHasTagsAtom =
+      Atom(name: 'InterestingTagsStoreBase.createHasTags');
+
+  @override
+  bool get createHasTags {
+    _$createHasTagsAtom.reportRead();
+    return super.createHasTags;
+  }
+
+  @override
+  set createHasTags(bool value) {
+    _$createHasTagsAtom.reportWrite(value, super.createHasTags, () {
+      super.createHasTags = value;
     });
   }
 
@@ -84,13 +115,23 @@ mixin _$InterestingTagsStore on InterestingTagsStoreBase, Store {
     return _$getTagsAsyncAction.run(() => super.getTags(value));
   }
 
+  final _$createTagAsyncAction =
+      AsyncAction('InterestingTagsStoreBase.createTag');
+
+  @override
+  Future<void> createTag(String name) {
+    return _$createTagAsyncAction.run(() => super.createTag(name));
+  }
+
   @override
   String toString() {
     return '''
 tags: ${tags},
 viewState: ${viewState},
 tag: ${tag},
-lastPage: ${lastPage}
+error: ${error},
+lastPage: ${lastPage},
+createHasTags: ${createHasTags}
     ''';
   }
 }
