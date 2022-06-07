@@ -24,11 +24,11 @@ void main() {
     dataSource = CreatePostRemoteDatasourceImpl(httpClient: httpClient);
     createPostModel = CreatePostModel(
       mediasIds: ['1', '2'],
-      description: "My first awesome post!",
+      description: 'My first awesome post!',
     );
   });
 
-  test("When try SEND post then return a bool", () async {
+  test('When try SEND post then return a bool', () async {
     //mocks
     const String url = 'posts/gallery';
     //Mock
@@ -48,7 +48,7 @@ void main() {
     expect(response, isA<bool>());
   });
 
-  test("When try send post then return a left Failure", () async {
+  test('When try send post then return a left Failure', () async {
     const String url = 'posts/gallery';
 
     when(httpClient.post(
@@ -61,7 +61,7 @@ void main() {
         throwsA(isA<Exception>()));
   });
 
-  test("When try get tags then return interesting hashtags", () async {
+  test('When try get tags then return interesting hashtags', () async {
     const String url = 'interests-tags/search';
     const String tags = 'hello';
     const int page = 1;
@@ -87,7 +87,7 @@ void main() {
     expect(response.length, interestingTagsMap.length);
   });
 
-  test("When try get a interesting then return a left Failure", () async {
+  test('When try get a interesting then return a left Failure', () async {
     const String url = 'interests-tags/search';
     const String tags = 'hello';
     const int page = 1;
@@ -107,7 +107,7 @@ void main() {
         throwsA(isA<Exception>()));
   });
 
-  test("When try get users then return a list of users", () async {
+  test('When try get users then return a list of users', () async {
     const String url = 'users/search';
     String fullname = 'andy';
     int page = 1;
@@ -132,7 +132,7 @@ void main() {
     expect(response.length, usersMap.length);
   });
 
-  test("When try get a users then return a left Failure", () async {
+  test('When try get a users then return a left Failure', () async {
     const String url = 'users/search';
     String fullname = 'andy';
     int page = 1;

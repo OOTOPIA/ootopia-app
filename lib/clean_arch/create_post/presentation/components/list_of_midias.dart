@@ -18,27 +18,27 @@ class _ListOfMidiasState extends State<ListOfMidias> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          ...widget.args["fileList"].map(buildMediaRow).toList(),
+          ...widget.args['fileList'].map(buildMediaRow).toList(),
         ],
       ),
     );
   }
 
   void changeMediaFile(File newImage, var oldImage) {
-    int index = widget.args["fileList"]
-        .indexWhere((element) => element["mediaId"] == oldImage["mediaId"]);
+    int index = widget.args['fileList']
+        .indexWhere((element) => element['mediaId'] == oldImage['mediaId']);
 
-    widget.args["fileList"][index]["mediaFile"] = newImage;
+    widget.args['fileList'][index]['mediaFile'] = newImage;
   }
 
-  buildMediaRow(dynamic file) {
+  Widget buildMediaRow(dynamic file) {
     return Container(
       width: MediaQuery.of(context).size.width - 60,
       height: MediaQuery.of(context).size.width - 60,
       child: MediaViewWidget(
-        mediaFilePath: file["mediaFile"].path,
-        mediaType: file["mediaType"],
-        mediaSize: file["mediaSize"],
+        mediaFilePath: file['mediaFile'].path,
+        mediaType: file['mediaType'],
+        mediaSize: file['mediaSize'],
         shouldCustomFlickManager: true,
         showCropWidget: true,
         onChanged: (value) {

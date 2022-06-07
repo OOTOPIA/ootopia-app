@@ -65,11 +65,11 @@ class MockCreatePostRepository extends _i1.Mock
                       _FakeEither_0<_i5.Failure, List<_i8.UsersEntity>>()))
           as _i4.Future<_i2.Either<_i5.Failure, List<_i8.UsersEntity>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> createTag({String? name}) =>
+  _i4.Future<_i2.Either<_i5.Failure, bool>> createTag({String? name}) =>
       (super.noSuchMethod(Invocation.method(#createTag, [], {#name: name}),
-              returnValue: Future<_i2.Either<_i5.Failure, void>>.value(
-                  _FakeEither_0<_i5.Failure, void>()))
-          as _i4.Future<_i2.Either<_i5.Failure, void>>);
+              returnValue: Future<_i2.Either<_i5.Failure, bool>>.value(
+                  _FakeEither_0<_i5.Failure, bool>()))
+          as _i4.Future<_i2.Either<_i5.Failure, bool>>);
   @override
   String toString() => super.toString();
 }

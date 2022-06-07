@@ -20,7 +20,7 @@ abstract class CreatePostRemoteDatasource {
     String? excludedIds,
   });
 
-  Future<void> createTag({required String name});
+  Future<bool> createTag({required String name});
 }
 
 class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
@@ -92,8 +92,13 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
   }
 
   @override
-  Future<void> createTag({required String name}) {
-    // TODO: implement createTag
-    throw UnimplementedError();
+  Future<bool> createTag({required String name}) async {
+    try {
+      var response = await _httpClient
+          .post(Endpoints.createInterestingTags, data: {'name': name});
+      return response.statusCode == 201;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

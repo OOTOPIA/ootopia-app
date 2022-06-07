@@ -5,7 +5,7 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.da
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/get_interest_tags_usecase.dart';
 
-part "interesting_tags_store.g.dart";
+part 'interesting_tags_store.g.dart';
 
 class InterestingTagsStore = InterestingTagsStoreBase
     with _$InterestingTagsStore;

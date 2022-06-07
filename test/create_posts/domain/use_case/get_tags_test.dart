@@ -19,7 +19,7 @@ void main() {
     useCase = GetInterestTagsUsecase(createPostRepository: repository);
   });
 
-  test("When try get tags then return a right List of interestingTags",
+  test('When try get tags then return a right List of interestingTags',
       () async {
     String tags = 'opa';
     const int page = 1;
@@ -31,7 +31,7 @@ void main() {
     expect(result, isA<List<InterestsTagsEntity>>());
   });
 
-  test("When try get tags then return a left Failure", () async {
+  test('When try get tags then return a left Failure', () async {
     String tags = 'opa';
     const int page = 1;
     when(repository.getTags(tags: tags, page: page)).thenAnswer(

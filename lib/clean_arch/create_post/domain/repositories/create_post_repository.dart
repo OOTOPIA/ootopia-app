@@ -16,5 +16,5 @@ abstract class CreatePostRepository {
     String? excludedIds,
   });
 
-  Future<Either<Failure, void>> createTag({required String name});
+  Future<Either<Failure, bool>> createTag({required String name});
 }

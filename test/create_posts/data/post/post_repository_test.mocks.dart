@@ -59,10 +59,9 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
                   Future<List<_i6.UsersEntity>>.value(<_i6.UsersEntity>[]))
           as _i3.Future<List<_i6.UsersEntity>>);
   @override
-  _i3.Future<void> createTag({String? name}) =>
+  _i3.Future<bool> createTag({String? name}) =>
       (super.noSuchMethod(Invocation.method(#createTag, [], {#name: name}),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i3.Future<void>);
+          returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
   @override
   String toString() => super.toString();
 }

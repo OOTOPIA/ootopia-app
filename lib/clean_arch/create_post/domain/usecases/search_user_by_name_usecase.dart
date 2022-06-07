@@ -12,7 +12,7 @@ class SearchUserByNameUsecase {
     required int page,
     String? excludedIds,
   }) async {
-    return _createPostRepository.getUsers(
+    return await _createPostRepository.getUsers(
       fullName: fullName,
       page: page,
       excludedIds: excludedIds,

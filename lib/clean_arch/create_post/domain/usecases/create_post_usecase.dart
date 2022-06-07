@@ -9,6 +9,6 @@ class CreatePostUsecase {
       : _createPostRepository = createPostRepository;
 
   Future<Either<Failure, bool>> call(CreatePostEntity createPostEntity) async {
-    return _createPostRepository.createPost(post: createPostEntity);
+    return await _createPostRepository.createPost(post: createPostEntity);
   }
 }

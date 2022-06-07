@@ -19,7 +19,7 @@ void main() {
     useCase = SearchUserByNameUsecase(createPostRepository: repository);
   });
 
-  test("When try get users then return a right List of users", () async {
+  test('When try get users then return a right List of users', () async {
     String fullname = 'andy';
     int page = 1;
     String excludedIds = '';
@@ -38,7 +38,7 @@ void main() {
     expect(result, isA<List<UsersEntity>>());
   });
 
-  test("When try get users then return a left Failure", () async {
+  test('When try get users then return a left Failure', () async {
     String fullname = 'andy';
     int page = 1;
     String excludedIds = '';

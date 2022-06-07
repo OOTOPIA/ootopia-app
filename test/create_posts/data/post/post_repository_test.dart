@@ -24,7 +24,7 @@ void main() {
     createPostEntity = CreatePostEntity();
   });
 
-  test("When try send post then return a right bool", () async {
+  test('When try send post then return a right bool', () async {
     final bool resultWhen = true;
     when(dataSource.createPost(
             createPostModel: CreatePostModel.fromEntity(createPostEntity)))
@@ -35,7 +35,7 @@ void main() {
     expect(result, isA<bool>());
   });
 
-  test("When try send a new post then return a left Failure", () async {
+  test('When try send a new post then return a left Failure', () async {
     when(dataSource.createPost(
       createPostModel: CreatePostModel.fromEntity(createPostEntity),
     )).thenThrow(Exception('error'));
@@ -45,7 +45,7 @@ void main() {
     expect(result, isA<Failure>());
   });
 
-  test("When try get users then return a right bool", () async {
+  test('When try get users then return a right bool', () async {
     when(dataSource.getUsers(
       fullname: 'andy',
       page: 1,
@@ -61,7 +61,7 @@ void main() {
     expect(result, isA<List<UsersEntity>>());
   });
 
-  test("When try get users then return a left Failure", () async {
+  test('When try get users then return a left Failure', () async {
     when(dataSource.getUsers(
       fullname: 'andy',
       page: 1,

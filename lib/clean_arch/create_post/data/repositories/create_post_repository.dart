@@ -67,8 +67,12 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
   }
 
   @override
-  Future<Either<Failure, void>> createTag({required String name}) {
-    // TODO: implement createTag
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> createTag({required String name}) async {
+    try {
+      var response = await _createPostRemoteDatasource.createTag(name: name);
+      return Right(response);
+    } catch (e) {
+      return Left(Failure(message: ''));
+    }
   }
 }

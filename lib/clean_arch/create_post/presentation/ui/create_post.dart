@@ -46,7 +46,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       storeCreatePosts.getLocation(context);
     });
 
-    if (widget.args["type"] == "image") {
+    if (widget.args['type'] == 'image') {
       _getSizeImage();
     }
   }
@@ -62,7 +62,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   void _getSizeImage() {
     this.image = Image.file(
-      File(widget.args["filePath"]),
+      File(widget.args['filePath']),
       fit: BoxFit.cover,
     );
     this.imageSize = Size(100.toDouble(), 100.toDouble());
@@ -118,12 +118,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         GlobalConstants.of(context).spacingSmall),
                     child: Column(
                       children: [
-                        widget.args["fileList"] == null
+                        widget.args['fileList'] == null
                             ? MediaViewWidget(
-                                mediaFilePath: widget.args["filePath"],
-                                mediaType: widget.args["type"],
+                                mediaFilePath: widget.args['filePath'],
+                                mediaType: widget.args['type'],
                                 shouldCustomFlickManager: true,
-                                mediaSize: widget.args["type"] == "video"
+                                mediaSize: widget.args['type'] == 'video'
                                     ? null
                                     : this.imageSize!,
                               )

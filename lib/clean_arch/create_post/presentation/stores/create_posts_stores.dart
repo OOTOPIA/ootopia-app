@@ -12,7 +12,7 @@ import 'package:ootopia_app/clean_arch/create_post/domain/usecases/search_user_b
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-part "create_posts_stores.g.dart";
+part 'create_posts_stores.g.dart';
 
 class StoreCreatePosts = StoreCreatePostsBase with _$StoreCreatePosts;
 
@@ -23,7 +23,7 @@ abstract class StoreCreatePostsBase with Store {
   RichTextController _descriptionInputController = RichTextController(
     deleteOnBack: false,
     patternMatchMap: {
-      RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?"):
+      RegExp(r'((https?:www\.)|(https?:\/\/)|(www\.))?[\w/\-?=%.][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?'):
           const TextStyle(
         color: LightColors.linkText,
       ),
@@ -55,10 +55,10 @@ abstract class StoreCreatePostsBase with Store {
   String? excludedIds = '';
 
   @observable
-  String geolocationErrorMessage = "";
+  String geolocationErrorMessage = '';
 
   @observable
-  String geolocationMessage = "Please, wait...";
+  String geolocationMessage = 'Please, wait...';
 
   Timer? _debounce;
 
@@ -85,7 +85,7 @@ abstract class StoreCreatePostsBase with Store {
   void addUserInText(UsersEntity e) {
     var text = _descriptionInputController.text;
 
-    var name = "‌@${e.fullname}‌";
+    var name = '‌@${e.fullname}‌';
     var nameStartRange = 0;
     for (var i = text.length - 1; i >= 0; i--) {
       if (text[i].contains('@')) {
@@ -133,11 +133,11 @@ abstract class StoreCreatePostsBase with Store {
       }
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
-        var getLastString = value.split("‌@");
+        var getLastString = value.split('‌@');
         if (getLastString.last.contains('@')) {
           openSelectedUser = true;
           var startName = getLastString.last.split('@').last;
-          var finishName = startName.split("‌");
+          var finishName = startName.split('‌');
           page = 1;
           fullName = finishName.first;
           await searchUser();
@@ -208,7 +208,7 @@ abstract class StoreCreatePostsBase with Store {
       int endNameUser = 0;
       listTaggedUsers?.forEach((user) {
         idsUsersTagged!.add(user.id);
-        String newString = "@[${user.id}]";
+        String newString = '@[${user.id}]';
         var startname =
             newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
 
@@ -225,7 +225,7 @@ abstract class StoreCreatePostsBase with Store {
   }
 
   void getLocation(BuildContext context) async {
-    geolocationErrorMessage = "";
+    geolocationErrorMessage = '';
     geolocationMessage = AppLocalizations.of(context)!.pleaseWait;
     try {
       var position = await Geolocation.determinePosition(context);
@@ -234,12 +234,12 @@ abstract class StoreCreatePostsBase with Store {
       if (placemarks.length > 0) {
         var placemark = placemarks[0];
 
-        postEntity.addressCity = placemark.subAdministrativeArea ?? "";
-        postEntity.addressState = placemark.administrativeArea ?? "";
-        postEntity.addressCountryCode = placemark.isoCountryCode ?? "";
+        postEntity.addressCity = placemark.subAdministrativeArea ?? '';
+        postEntity.addressState = placemark.administrativeArea ?? '';
+        postEntity.addressCountryCode = placemark.isoCountryCode ?? '';
         postEntity.addressLatitude = position.latitude;
         postEntity.addressLongitude = position.longitude;
-        postEntity.addressNumber = placemark.name ?? "";
+        postEntity.addressNumber = placemark.name ?? '';
       } else {
         geolocationMessage =
             AppLocalizations.of(context)!.failedToGetCurrentLocation;
@@ -278,8 +278,8 @@ abstract class StoreCreatePostsBase with Store {
     mediasIds = [];
     fullName = '';
     excludedIds = '';
-    geolocationErrorMessage = "";
-    geolocationMessage = "Please, wait...";
+    geolocationErrorMessage = '';
+    geolocationMessage = 'Please, wait...';
     lastPage = false;
     openSelectedUser = false;
     viewState = AsyncStates.loading;

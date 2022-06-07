@@ -10,7 +10,7 @@ class GetInterestTagsUsecase {
 
   Future<Either<Failure, List<InterestsTagsEntity>>> call(
       {required String tags, required int page}) async {
-    return _createPostRepository.getTags(
+    return await _createPostRepository.getTags(
       tags: tags,
       page: page,
     );

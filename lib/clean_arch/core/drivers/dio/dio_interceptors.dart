@@ -13,9 +13,9 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
     final PackageInfo info = await PackageInfo.fromPlatform();
     var headers = await this.getHeaders();
     headers['User-Agent'] =
-        "${Platform.operatingSystem}+${Platform.operatingSystemVersion}/${info.version}+${info.buildNumber}";
-    if ((options.path == dotenv.env['API_URL']! + "posts") ||
-        (options.path == dotenv.env['API_URL']! + "users")) {
+        '${Platform.operatingSystem}+${Platform.operatingSystemVersion}/${info.version}+${info.buildNumber}';
+    if ((options.path == dotenv.env['API_URL']! + 'posts') ||
+        (options.path == dotenv.env['API_URL']! + 'users')) {
       headers.remove('Content-Type');
     }
     options.headers = headers;
