@@ -296,6 +296,7 @@ abstract class StoreCreatePostsBase with Store {
   }
 
   void clearVariable() {
+    tagsid = ObservableList.of([]);
     _descriptionInputController.clear();
     listTaggedUsers = ObservableList.of([]);
     users = ObservableList.of([]);
@@ -307,7 +308,7 @@ abstract class StoreCreatePostsBase with Store {
     geolocationMessage = 'Please, wait...';
     lastPage = false;
     openSelectedUser = false;
-    viewState = AsyncStates.loading;
-    page = 0;
+    viewState = AsyncStates.done;
+    page = 1;
   }
 }

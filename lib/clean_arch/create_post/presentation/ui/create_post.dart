@@ -174,7 +174,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               onPressed: () async {
                                 FocusScope.of(context)
                                     .requestFocus(new FocusNode());
-                                _interestingTagsStore.selectedTags.clear();
+                                storeCreatePosts.tagsid.clear();
                                 _interestingTagsStore.selectedTags
                                     .forEach((element) {
                                   storeCreatePosts.tagsid.add(element.id);
@@ -196,12 +196,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                     content: Text(storeCreatePosts.error),
                                   ));
                                 } else {
+                                  storeCreatePosts.clearVariable();
                                   Navigator.of(context).pushNamedAndRemoveUntil(
                                     PageRoute.Page.homeScreen.route,
                                     ModalRoute.withName('/'),
                                     arguments: {
                                       'createdPost': true,
-                                      "oozToReward": 0
+                                      'oozToReward': 0.0
                                     },
                                   );
                                 }

@@ -49,6 +49,8 @@ abstract class InterestingTagsStoreBase with Store {
 
   void _startLoading() => viewState = AsyncStates.loading;
 
+  bool get loadingMoreTags => viewState == AsyncStates.loadingNewData;
+
   void _startLoadingNewData() => viewState = AsyncStates.loadingNewData;
 
   void cancelTimer() {

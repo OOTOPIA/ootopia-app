@@ -128,8 +128,10 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         fileName: fileName,
         queryParameters: {'type': type},
       );
+      print(response.data);
       return response.data['mediaId'];
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
