@@ -7,22 +7,26 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.da
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/create_post_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_post_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/search_user_by_name_usecase.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/usecases/send_medias_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
 import 'package:fake_async/fake_async.dart';
 import '../../../fixtures/posts/posts_fixtures.dart';
 import 'create_post_store_test.mocks.dart';
 
-@GenerateMocks([CreatePostUsecase, SearchUserByNameUsecase])
+@GenerateMocks([CreatePostUsecase, SearchUserByNameUsecase, SendMediasUsecase])
 void main() {
   late CreatePostUsecase createPostUsecase;
   late StoreCreatePosts controller;
   late SearchUserByNameUsecase searchUserByNameUsecase;
+  late SendMediasUsecase sendMediasUsecase;
   setUp(() {
     createPostUsecase = MockCreatePostUsecase();
     searchUserByNameUsecase = MockSearchUserByNameUsecase();
+    sendMediasUsecase = MockSendMediasUsecase();
     controller = StoreCreatePosts(
       createPostUsecase: createPostUsecase,
       searchUser: searchUserByNameUsecase,
+      sendMediasUsecase: sendMediasUsecase,
     );
   });
 

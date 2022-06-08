@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i3;
+import 'dart:io' as _i7;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:ootopia_app/clean_arch/create_post/data/datasource/create_post_remote_datasource.dart'
@@ -63,6 +64,10 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
       (super.noSuchMethod(
           Invocation.method(#createTag, [], {#name: name, #language: language}),
           returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
+  @override
+  _i3.Future<String> sendMedia(String? type, _i7.File? file) =>
+      (super.noSuchMethod(Invocation.method(#sendMedia, [type, file]),
+          returnValue: Future<String>.value('')) as _i3.Future<String>);
   @override
   String toString() => super.toString();
 }

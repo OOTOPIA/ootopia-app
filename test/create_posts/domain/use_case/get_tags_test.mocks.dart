@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i4;
+import 'dart:io' as _i9;
 
 import 'package:either_dart/either.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -70,6 +71,13 @@ class MockCreatePostRepository extends _i1.Mock
               returnValue: Future<_i2.Either<_i5.Failure, bool>>.value(
                   _FakeEither_0<_i5.Failure, bool>()))
           as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, String>> sendMedia(
+          String? type, _i9.File? file) =>
+      (super.noSuchMethod(Invocation.method(#sendMedia, [type, file]),
+              returnValue: Future<_i2.Either<_i5.Failure, String>>.value(
+                  _FakeEither_0<_i5.Failure, String>()))
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
   @override
   String toString() => super.toString();
 }

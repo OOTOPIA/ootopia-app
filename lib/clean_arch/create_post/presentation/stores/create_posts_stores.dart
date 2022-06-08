@@ -6,10 +6,10 @@ import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/create_post_entity.dart';
-import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_post_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/search_user_by_name_usecase.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/usecases/send_medias_usecase.dart';
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,6 +20,7 @@ class StoreCreatePosts = StoreCreatePostsBase with _$StoreCreatePosts;
 abstract class StoreCreatePostsBase with Store {
   final SearchUserByNameUsecase _searchUserByNameUsecase;
   final CreatePostUsecase _createPostUsecase;
+  final SendMediasUsecase _mediasUsecase;
 
   RichTextController _descriptionInputController = RichTextController(
     deleteOnBack: false,
@@ -34,8 +35,10 @@ abstract class StoreCreatePostsBase with Store {
   StoreCreatePostsBase({
     required SearchUserByNameUsecase searchUser,
     required CreatePostUsecase createPostUsecase,
+    required SendMediasUsecase sendMediasUsecase,
   })  : _searchUserByNameUsecase = searchUser,
-        _createPostUsecase = createPostUsecase;
+        _createPostUsecase = createPostUsecase,
+        _mediasUsecase = sendMediasUsecase;
 
   @observable
   List<UsersEntity>? listTaggedUsers = ObservableList.of([]);
@@ -43,17 +46,15 @@ abstract class StoreCreatePostsBase with Store {
   @observable
   List<UsersEntity> users = ObservableList.of([]);
 
-  List<String>? idsUsersTagged = [];
+  List<String> idsUsersTagged = [];
 
-  @observable
-  List<InterestsTagsEntity> tagsSelect = [];
-
-  List<String> _tagsid = [];
-
-  List<String>? mediasIds = [];
+  List<String> tagsid = [];
 
   @observable
   String fullName = '';
+
+  @observable
+  String error = '';
 
   @observable
   String? excludedIds = '';
@@ -64,6 +65,7 @@ abstract class StoreCreatePostsBase with Store {
   @observable
   String geolocationMessage = 'Please, wait...';
 
+  @observable
   Timer? _debounce;
 
   @observable
@@ -73,7 +75,7 @@ abstract class StoreCreatePostsBase with Store {
   bool openSelectedUser = false;
 
   @observable
-  AsyncStates viewState = AsyncStates.loading;
+  AsyncStates viewState = AsyncStates.done;
 
   @observable
   int page = 0;
@@ -84,18 +86,6 @@ abstract class StoreCreatePostsBase with Store {
   @computed
   RichTextController get descriptionInputController =>
       _descriptionInputController;
-
-  @action
-  void addTag(InterestsTagsEntity entity) {
-    tagsSelect.add(entity);
-    _tagsid.add(entity.id);
-  }
-
-  @action
-  void removeTag(InterestsTagsEntity entity) {
-    tagsSelect.remove(entity);
-    _tagsid.remove(entity.id);
-  }
 
   @action
   void addUserInText(UsersEntity e) {
@@ -175,6 +165,8 @@ abstract class StoreCreatePostsBase with Store {
 
   void _startLoading() => viewState = AsyncStates.loading;
 
+  bool get loading => viewState == AsyncStates.loading;
+
   void _incrementPage() => page += 1;
 
   void _stopGetPost(List<UsersEntity> list) => lastPage = list.isEmpty;
@@ -223,7 +215,7 @@ abstract class StoreCreatePostsBase with Store {
       int newStartIndex = 0;
       int endNameUser = 0;
       listTaggedUsers?.forEach((user) {
-        idsUsersTagged!.add(user.id);
+        idsUsersTagged.add(user.id);
         String newString = '@[${user.id}]';
         var startname =
             newTextComment.indexOf('‌@${user.fullname}‌', endNameUser);
@@ -269,13 +261,31 @@ abstract class StoreCreatePostsBase with Store {
     }
   }
 
+  Future<void> sendMedia(List<Map> fileList) async {
+    _startLoading();
+
+    List<String> mediaIds = [];
+    for (var file in fileList) {
+      var result = await _mediasUsecase(
+        type: file['mediaType'],
+        file: file['mediaFile'],
+      );
+      result.fold(
+        (left) => error = left.message,
+        (right) => mediaIds.add(right),
+      );
+    }
+    postEntity.mediaIds = mediaIds;
+    await sendPost();
+  }
+
   @action
   Future<void> sendPost() async {
-    _startLoading();
+    taggedUserInText();
     postEntity.description = _descriptionInputController.text;
     postEntity.taggedUsersId = idsUsersTagged;
-    postEntity.tagsIds = _tagsid;
-    postEntity.mediaIds = mediasIds;
+    postEntity.tagsIds = tagsid;
+
     var response = await _createPostUsecase.call(postEntity);
     response.fold(
       (left) => _stopLoading(hasError: true),
@@ -289,10 +299,8 @@ abstract class StoreCreatePostsBase with Store {
     _descriptionInputController.clear();
     listTaggedUsers = ObservableList.of([]);
     users = ObservableList.of([]);
-    tagsSelect = ObservableList.of([]);
     idsUsersTagged = [];
-    _tagsid = [];
-    mediasIds = [];
+    tagsid = [];
     fullName = '';
     excludedIds = '';
     geolocationErrorMessage = '';

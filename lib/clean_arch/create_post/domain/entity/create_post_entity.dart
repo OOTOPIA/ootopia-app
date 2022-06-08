@@ -20,5 +20,6 @@ class CreatePostEntity {
     this.addressLatitude,
     this.addressLongitude,
     this.addressNumber,
+    this.taggedUsersId,
   });
 }

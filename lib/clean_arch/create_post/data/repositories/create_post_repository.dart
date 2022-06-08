@@ -79,4 +79,14 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
       return Left(Failure(message: ''));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> sendMedia(String type, File file) async {
+    try {
+      var response = await _createPostRemoteDatasource.sendMedia(type, file);
+      return Right(response);
+    } catch (e) {
+      return Left(Failure(message: ''));
+    }
+  }
 }

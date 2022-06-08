@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 import 'package:ootopia_app/clean_arch/core/exception/failure.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/create_post_entity.dart';
@@ -17,4 +19,5 @@ abstract class CreatePostRepository {
   });
 
   Future<Either<Failure, bool>> createTag({required String name});
+  Future<Either<Failure, String>> sendMedia(String type, File file);
 }

@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i4;
+import 'dart:io' as _i5;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -51,6 +52,24 @@ class MockHttpClient extends _i1.Mock implements _i3.HttpClient {
       (super.noSuchMethod(
               Invocation.method(#delete, [endpoint],
                   {#data: data, #queryParameters: queryParameters}),
+              returnValue: Future<_i2.Response<dynamic>>.value(
+                  _FakeResponse_0<dynamic>()))
+          as _i4.Future<_i2.Response<dynamic>>);
+  @override
+  _i4.Future<_i2.Response<dynamic>> postFile(String? endpoint,
+          {String? fileName,
+          _i5.File? file,
+          dynamic data,
+          Map<String, dynamic>? queryParameters}) =>
+      (super.noSuchMethod(
+              Invocation.method(#postFile, [
+                endpoint
+              ], {
+                #fileName: fileName,
+                #file: file,
+                #data: data,
+                #queryParameters: queryParameters
+              }),
               returnValue: Future<_i2.Response<dynamic>>.value(
                   _FakeResponse_0<dynamic>()))
           as _i4.Future<_i2.Response<dynamic>>);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ootopia_app/clean_arch/core/constants/endpoints.dart';
 import 'package:ootopia_app/clean_arch/core/constants/globals.dart';
 import 'package:ootopia_app/clean_arch/core/drivers/dio/http_client.dart';
@@ -24,6 +26,7 @@ abstract class CreatePostRemoteDatasource {
     required String name,
     required String language,
   });
+  Future<String> sendMedia(String type, File file);
 }
 
 class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
@@ -39,8 +42,10 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         Endpoints.createPost,
         data: createPostModel.toJson(),
       );
+      print('data ${response.data}');
       return response.statusCode == 201;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -107,6 +112,23 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         'language': language,
       });
       return response.statusCode == 201;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> sendMedia(String type, File file) async {
+    String fileName = file.path.split('/').last;
+
+    try {
+      final response = await _httpClient.postFile(
+        Endpoints.postFile,
+        file: file,
+        fileName: fileName,
+        queryParameters: {'type': type},
+      );
+      return response.data['mediaId'];
     } catch (e) {
       rethrow;
     }

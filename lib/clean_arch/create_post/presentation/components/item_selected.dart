@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
-import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesting_tags_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,7 +9,6 @@ class ButtonSelectedTag extends StatelessWidget {
 
   final InterestsTagsEntity tag;
   final InterestingTagsStore _interestingTags = GetIt.I.get();
-  final StoreCreatePosts _createPosts = GetIt.I.get();
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +16,8 @@ class ButtonSelectedTag extends StatelessWidget {
       onTap: () {
         if (tag.id == '0') {
           _interestingTags.createTag();
-          _createPosts.addTag(tag);
-        } else {
-          _createPosts.addTag(tag);
         }
+        _interestingTags.selectedTags.add(tag);
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),

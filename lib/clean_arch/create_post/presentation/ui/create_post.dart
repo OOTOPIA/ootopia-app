@@ -15,6 +15,7 @@ import 'package:ootopia_app/clean_arch/create_post/presentation/components/list_
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/show_dialog.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/text_field_component.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesting_tags_store.dart';
 import 'package:ootopia_app/screens/camera_screen/custom_gallery/components/media_view_widget.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -23,6 +24,7 @@ import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 
 class CreatePostPage extends StatefulWidget {
   final Map<String, dynamic> args;
@@ -38,7 +40,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   final pageController = SmartPageController.getInstance();
   StoreCreatePosts storeCreatePosts = GetIt.I.get();
-
+  InterestingTagsStore _interestingTagsStore = GetIt.I.get();
   @override
   void initState() {
     super.initState();
@@ -101,6 +103,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Scaffold(
       appBar: appbar,
       body: Observer(builder: (context) {
+        if (storeCreatePosts.loading) {
+          return Center(child: CircularProgressIndicator());
+        }
         return Stack(
           fit: StackFit.expand,
           children: [
@@ -131,21 +136,22 @@ class _CreatePostPageState extends State<CreatePostPage> {
                             : ListOfMidias(args: widget.args),
                         if (storeCreatePosts.geolocationErrorMessage.isNotEmpty)
                           ErrorGetGeolocation(),
-                        if (storeCreatePosts.tagsSelect.isNotEmpty)
+                        if (_interestingTagsStore.selectedTags.isNotEmpty)
                           Container(
                             height: 50,
                             padding: EdgeInsets.only(bottom: 8),
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-                              itemCount: storeCreatePosts.tagsSelect.length,
+                              itemCount:
+                                  _interestingTagsStore.selectedTags.length,
                               itemBuilder: (BuildContext context, int index) {
                                 var tagSelected =
-                                    storeCreatePosts.tagsSelect[index];
+                                    _interestingTagsStore.selectedTags[index];
                                 return hashtagComponent(
                                   tagSelected: tagSelected,
                                   deleteHashTag: () {
-                                    storeCreatePosts.tagsSelect
+                                    _interestingTagsStore.selectedTags
                                         .remove(tagSelected);
                                   },
                                 );
@@ -165,11 +171,40 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                 style: GoogleFonts.roboto(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 FocusScope.of(context)
                                     .requestFocus(new FocusNode());
-
-                                // sendPost();
+                                _interestingTagsStore.selectedTags.clear();
+                                _interestingTagsStore.selectedTags
+                                    .forEach((element) {
+                                  storeCreatePosts.tagsid.add(element.id);
+                                });
+                                List<Map> fileList =
+                                    widget.args['fileList'] != null
+                                        ? widget.args['fileList']
+                                        : [
+                                            {
+                                              'mediaFile':
+                                                  File(widget.args['filePath']),
+                                              'mediaType': widget.args['type']
+                                            }
+                                          ];
+                                await storeCreatePosts.sendMedia(fileList);
+                                if (storeCreatePosts.error.isNotEmpty) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(storeCreatePosts.error),
+                                  ));
+                                } else {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    PageRoute.Page.homeScreen.route,
+                                    ModalRoute.withName('/'),
+                                    arguments: {
+                                      'createdPost': true,
+                                      "oozToReward": 0
+                                    },
+                                  );
+                                }
                               }),
                         )
                       ],

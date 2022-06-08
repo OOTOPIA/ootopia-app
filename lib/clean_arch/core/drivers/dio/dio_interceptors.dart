@@ -18,6 +18,7 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
         (options.path == dotenv.env['API_URL']! + 'users')) {
       headers.remove('Content-Type');
     }
+
     options.headers = headers;
     return super.onRequest(options, handler);
   }
@@ -36,9 +37,7 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
 
     String? token = prefs.getAuthToken();
     if (token == null) return _headers;
-
     Map<String, String> headers = {'Authorization': 'Bearer ' + token};
-
     if (contentType == null) {
       headers['Content-Type'] = 'application/json; charset=UTF-8';
     }

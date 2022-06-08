@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i4;
+import 'dart:io' as _i10;
 
 import 'package:either_dart/either.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -15,6 +16,8 @@ import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_post_u
     as _i3;
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/search_user_by_name_usecase.dart'
     as _i7;
+import 'package:ootopia_app/clean_arch/create_post/domain/usecases/send_medias_usecase.dart'
+    as _i9;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -67,6 +70,26 @@ class MockSearchUserByNameUsecase extends _i1.Mock
                   Future<_i2.Either<_i5.Failure, List<_i8.UsersEntity>>>.value(
                       _FakeEither_0<_i5.Failure, List<_i8.UsersEntity>>()))
           as _i4.Future<_i2.Either<_i5.Failure, List<_i8.UsersEntity>>>);
+  @override
+  String toString() => super.toString();
+}
+
+/// A class which mocks [SendMediasUsecase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSendMediasUsecase extends _i1.Mock implements _i9.SendMediasUsecase {
+  MockSendMediasUsecase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, String>> call(
+          {String? type, _i10.File? file}) =>
+      (super.noSuchMethod(
+              Invocation.method(#call, [], {#type: type, #file: file}),
+              returnValue: Future<_i2.Either<_i5.Failure, String>>.value(
+                  _FakeEither_0<_i5.Failure, String>()))
+          as _i4.Future<_i2.Either<_i5.Failure, String>>);
   @override
   String toString() => super.toString();
 }

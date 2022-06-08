@@ -15,6 +15,7 @@ class CreatePostModel extends CreatePostEntity {
     double? addressLatitude,
     double? addressLongitude,
     String? addressNumber,
+    List<String>? taggedUsersId,
   }) : super(
           mediaIds: mediasIds,
           description: description,
@@ -25,6 +26,7 @@ class CreatePostModel extends CreatePostEntity {
           addressLatitude: addressLatitude,
           addressLongitude: addressLongitude,
           addressNumber: addressNumber,
+          taggedUsersId: taggedUsersId,
         );
   Map<String, dynamic> toJson() => _$CreatePostModelToJson(this);
 
@@ -39,6 +41,7 @@ class CreatePostModel extends CreatePostEntity {
       addressLatitude: createPostEntity.addressLatitude,
       addressLongitude: createPostEntity.addressLongitude,
       addressNumber: createPostEntity.addressNumber,
+      taggedUsersId: createPostEntity.taggedUsersId,
     );
   }
 }

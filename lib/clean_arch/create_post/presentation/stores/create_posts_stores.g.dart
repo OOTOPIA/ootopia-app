@@ -49,21 +49,6 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
     });
   }
 
-  final _$tagsSelectAtom = Atom(name: 'StoreCreatePostsBase.tagsSelect');
-
-  @override
-  List<InterestsTagsEntity> get tagsSelect {
-    _$tagsSelectAtom.reportRead();
-    return super.tagsSelect;
-  }
-
-  @override
-  set tagsSelect(List<InterestsTagsEntity> value) {
-    _$tagsSelectAtom.reportWrite(value, super.tagsSelect, () {
-      super.tagsSelect = value;
-    });
-  }
-
   final _$fullNameAtom = Atom(name: 'StoreCreatePostsBase.fullName');
 
   @override
@@ -76,6 +61,21 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
   set fullName(String value) {
     _$fullNameAtom.reportWrite(value, super.fullName, () {
       super.fullName = value;
+    });
+  }
+
+  final _$errorAtom = Atom(name: 'StoreCreatePostsBase.error');
+
+  @override
+  String get error {
+    _$errorAtom.reportRead();
+    return super.error;
+  }
+
+  @override
+  set error(String value) {
+    _$errorAtom.reportWrite(value, super.error, () {
+      super.error = value;
     });
   }
 
@@ -124,6 +124,21 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
   set geolocationMessage(String value) {
     _$geolocationMessageAtom.reportWrite(value, super.geolocationMessage, () {
       super.geolocationMessage = value;
+    });
+  }
+
+  final _$_debounceAtom = Atom(name: 'StoreCreatePostsBase._debounce');
+
+  @override
+  Timer? get _debounce {
+    _$_debounceAtom.reportRead();
+    return super._debounce;
+  }
+
+  @override
+  set _debounce(Timer? value) {
+    _$_debounceAtom.reportWrite(value, super._debounce, () {
+      super._debounce = value;
     });
   }
 
@@ -230,28 +245,6 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
       ActionController(name: 'StoreCreatePostsBase');
 
   @override
-  void addTag(InterestsTagsEntity entity) {
-    final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
-        name: 'StoreCreatePostsBase.addTag');
-    try {
-      return super.addTag(entity);
-    } finally {
-      _$StoreCreatePostsBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void removeTag(InterestsTagsEntity entity) {
-    final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
-        name: 'StoreCreatePostsBase.removeTag');
-    try {
-      return super.removeTag(entity);
-    } finally {
-      _$StoreCreatePostsBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void addUserInText(UsersEntity e) {
     final _$actionInfo = _$StoreCreatePostsBaseActionController.startAction(
         name: 'StoreCreatePostsBase.addUserInText');
@@ -289,8 +282,8 @@ mixin _$StoreCreatePosts on StoreCreatePostsBase, Store {
     return '''
 listTaggedUsers: ${listTaggedUsers},
 users: ${users},
-tagsSelect: ${tagsSelect},
 fullName: ${fullName},
+error: ${error},
 excludedIds: ${excludedIds},
 geolocationErrorMessage: ${geolocationErrorMessage},
 geolocationMessage: ${geolocationMessage},

@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/hashtag_component.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/item_selected.dart';
-import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesting_tags_store.dart';
 import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
@@ -31,7 +30,6 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
       );
 
   final InterestingTagsStore _interestingTags = GetIt.I.get();
-  final StoreCreatePosts _createPosts = GetIt.I.get();
 
   @override
   void dispose() {
@@ -77,21 +75,22 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      if (_createPosts.tagsSelect.isNotEmpty)
+                      if (_interestingTags.selectedTags.isNotEmpty)
                         Observer(builder: (context) {
                           return Container(
                             height: 50,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-                              itemCount: _createPosts.tagsSelect.length,
+                              itemCount: _interestingTags.selectedTags.length,
                               itemBuilder: (BuildContext context, int index) {
                                 var tagSelected =
-                                    _createPosts.tagsSelect[index];
+                                    _interestingTags.selectedTags[index];
                                 return hashtagComponent(
                                   tagSelected: tagSelected,
                                   deleteHashTag: () {
-                                    _createPosts.removeTag(tagSelected);
+                                    _interestingTags.selectedTags
+                                        .remove(tagSelected);
                                   },
                                 );
                               },
