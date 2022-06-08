@@ -110,8 +110,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimationEnd = true;
   bool canDoubleClick = true;
   SmartPageController controller = SmartPageController.getInstance();
-  int mediaPosition = 0;
-  bool showPosition = false;
 
   @override
   void initState() {
@@ -204,8 +202,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
-    postTimelineComponentController =
-        Provider.of<PostTimelineComponentController>(context);
+    postTimelineComponentController = Provider.of<PostTimelineComponentController>(context);
     return Observer(
       builder: (_) => Column(
         children: [
