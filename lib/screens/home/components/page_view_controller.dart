@@ -57,10 +57,10 @@ class PageViewController {
     pageHistoryTabSelected = [0];
   }
 
-  addListener(Function listener) {
-    listeners.add(listener);
-    listeners.forEach((l) => controller.addListener(() => l()));
-  }
+  // addListener(Function listener) {
+  //   listeners.add(listener);
+  //   listeners.forEach((l) => controller.addListener(() => l()));
+  // }
 
   goToPage(int index, [bool? dontUpdateHistoryTabSelected]) {
     if (dontUpdateHistoryTabSelected == false ||

@@ -210,8 +210,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    Color selectedIconColor = LightColors.blue;
-    Color unselectedIconColor = Color(0XFF3A4046);
     authStore = Provider.of<AuthStore>(context);
     //profileStore = Provider.of<ProfileScreenStore>(context);
     timelineStore = Provider.of<TimelineStore>(context);
