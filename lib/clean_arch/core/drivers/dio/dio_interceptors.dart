@@ -18,7 +18,8 @@ class AuthInterceptors extends InterceptorsWrapper with SecureStoreMixin {
         (options.path == dotenv.env['API_URL']! + 'users')) {
       headers.remove('Content-Type');
     }
-
+    print(headers);
+    print(options.path);
     options.headers = headers;
     return super.onRequest(options, handler);
   }

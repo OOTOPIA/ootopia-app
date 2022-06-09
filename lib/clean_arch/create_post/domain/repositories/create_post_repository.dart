@@ -8,6 +8,7 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.da
 
 abstract class CreatePostRepository {
   Future<Either<Failure, bool>> createPost({required CreatePostEntity post});
+
   Future<Either<Failure, List<InterestsTagsEntity>>> getTags({
     required String tags,
     required int page,
@@ -18,6 +19,8 @@ abstract class CreatePostRepository {
     String? excludedIds,
   });
 
-  Future<Either<Failure, bool>> createTag({required String name});
+  Future<Either<Failure, InterestsTagsEntity>> createTag(
+      {required String name});
+
   Future<Either<Failure, String>> sendMedia(String type, File file);
 }

@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:ootopia_app/clean_arch/core/exception/failure.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_tag_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/get_interest_tags_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/interesting_tags_store.dart';
@@ -74,7 +75,12 @@ void main() {
 
   test('when try create tag, then we have a success', () async {
     String name = 'tags';
-    when(createTagUsecase(name: name)).thenAnswer((_) async => Right(true));
+    when(createTagUsecase(name: name))
+        .thenAnswer((_) async => Right(InterestsTagsEntity(
+              id: 'id',
+              name: 'name',
+              numberOfPosts: 10,
+            )));
 
     await controller.createTag();
     expect(controller.createHasTags, true);

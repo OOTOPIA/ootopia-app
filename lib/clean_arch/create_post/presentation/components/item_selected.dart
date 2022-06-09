@@ -13,13 +13,14 @@ class ButtonSelectedTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (tag.id == '0') {
-          _interestingTags.createTag();
+          await _interestingTags.createTag();
+        } else {
+          _interestingTags.selectedTags.add(tag);
+          _interestingTags.tags.clear();
+          _interestingTags.interestingTagController.clear();
         }
-        _interestingTags.selectedTags.add(tag);
-        _interestingTags.tags.clear();
-        _interestingTags.interestingTag.clear();
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),

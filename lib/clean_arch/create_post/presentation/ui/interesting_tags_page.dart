@@ -109,11 +109,15 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                           fontSize: 16,
                         ),
                         onChanged: _interestingTags.getTags,
-                        controller: _interestingTags.interestingTag,
+                        controller: _interestingTags.interestingTagController,
                         decoration: InputDecoration(
-                          suffixIcon: Icon(Icons.close),
+                          suffixIcon: Icon(
+                            Icons.close,
+                            color: LightColors.black,
+                          ),
                           prefixIcon: InkWell(
-                            onTap: _interestingTags.interestingTag.clear,
+                            onTap:
+                                _interestingTags.interestingTagController.clear,
                             child: Icon(
                               Icons.search,
                               color: LightColors.black,

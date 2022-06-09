@@ -6,9 +6,7 @@ import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ButtonOpenInterestingTags extends StatelessWidget {
-  const ButtonOpenInterestingTags({
-    Key? key,
-  }) : super(key: key);
+  const ButtonOpenInterestingTags({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +55,6 @@ class ButtonOpenInterestingTags extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              crossAxisAlignment: WrapCrossAlignment.start,
-              children: [],
             ),
           ),
         ],

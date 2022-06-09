@@ -21,7 +21,6 @@ import 'package:ootopia_app/screens/components/default_app_bar.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
-import 'package:smart_page_navigation/smart_page_navigation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
@@ -38,15 +37,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Image? image;
   Size? imageSize;
 
-  final pageController = SmartPageController.getInstance();
-  StoreCreatePosts storeCreatePosts = GetIt.I.get();
+  StoreCreatePosts _storeCreatePosts = GetIt.I.get();
   InterestingTagsStore _interestingTagsStore = GetIt.I.get();
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      storeCreatePosts.getLocation(context);
+      _storeCreatePosts.getLocation(context);
     });
 
     if (widget.args['type'] == 'image') {
@@ -56,8 +54,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   @override
   void dispose() {
-    storeCreatePosts.cancelTimer();
-    storeCreatePosts.clearVariable();
+    _storeCreatePosts.cancelTimer();
+    _storeCreatePosts.clearVariable();
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     SystemChrome.restoreSystemUIOverlays();
     super.dispose();
@@ -65,9 +63,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   void sendPost() async {
     FocusScope.of(context).requestFocus(new FocusNode());
-    storeCreatePosts.tagsid.clear();
+    _storeCreatePosts.tagsid.clear();
     _interestingTagsStore.selectedTags.forEach((element) {
-      storeCreatePosts.tagsid.add(element.id);
+      _storeCreatePosts.tagsid.add(element.id);
     });
     List<Map> fileList = widget.args['fileList'] != null
         ? widget.args['fileList']
@@ -77,13 +75,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
               'mediaType': widget.args['type']
             }
           ];
-    await storeCreatePosts.sendMedia(fileList);
-    if (storeCreatePosts.error.isNotEmpty) {
+    await _storeCreatePosts.sendMedia(fileList);
+    if (_storeCreatePosts.error.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(storeCreatePosts.error),
+        content: Text(_storeCreatePosts.error),
       ));
     } else {
-      storeCreatePosts.clearVariable();
+      _storeCreatePosts.clearVariable();
       _interestingTagsStore.clearVariables();
       _interestingTagsStore.selectedTags.clear();
 
@@ -135,7 +133,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     return Scaffold(
       appBar: appbar,
       body: Observer(builder: (context) {
-        if (storeCreatePosts.loading) {
+        if (_storeCreatePosts.loading) {
           return Center(child: CircularProgressIndicator());
         }
         return Stack(
@@ -148,7 +146,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
             GestureDetector(
                 onTap: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
-                  storeCreatePosts.openSelectedUser = false;
+                  _storeCreatePosts.openSelectedUser = false;
                 },
                 child: SingleChildScrollView(
                   child: Container(
@@ -166,7 +164,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                     : this.imageSize!,
                               )
                             : ListOfMidias(args: widget.args),
-                        if (storeCreatePosts.geolocationErrorMessage.isNotEmpty)
+                        if (_storeCreatePosts
+                            .geolocationErrorMessage.isNotEmpty)
                           ErrorGetGeolocation(),
                         if (_interestingTagsStore.selectedTags.isNotEmpty)
                           Container(
@@ -211,7 +210,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     ),
                   ),
                 )),
-            if (storeCreatePosts.openSelectedUser) ListOfUsers()
+            if (_storeCreatePosts.openSelectedUser) ListOfUsers()
           ],
         );
       }),

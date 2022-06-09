@@ -49,7 +49,6 @@ class HttpClient {
     String endpoint, {
     required String fileName,
     required File file,
-    dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
     FormData formData = FormData.fromMap({
@@ -58,6 +57,10 @@ class HttpClient {
         filename: fileName,
       ),
     });
-    return _dio.post(endpoint, data: formData);
+    return _dio.post(
+      endpoint,
+      data: formData,
+      queryParameters: queryParameters,
+    );
   }
 }

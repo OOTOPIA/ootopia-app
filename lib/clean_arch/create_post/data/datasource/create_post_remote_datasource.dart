@@ -22,7 +22,7 @@ abstract class CreatePostRemoteDatasource {
     String? excludedIds,
   });
 
-  Future<bool> createTag({
+  Future<InterestsTagsEntity> createTag({
     required String name,
     required String language,
   });
@@ -98,7 +98,7 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
   }
 
   @override
-  Future<bool> createTag({
+  Future<InterestsTagsEntity> createTag({
     required String name,
     required String language,
   }) async {
@@ -110,7 +110,7 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
           'language': language,
         },
       );
-      return response.statusCode == 201;
+      return InterestTagsModel.fromJson(response.data);
     } catch (e) {
       rethrow;
     }

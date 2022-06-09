@@ -27,7 +27,7 @@ abstract class InterestingTagsStoreBase with Store {
   @observable
   List<InterestsTagsEntity> selectedTags = ObservableList.of([]);
 
-  TextEditingController interestingTag = TextEditingController();
+  TextEditingController interestingTagController = TextEditingController();
 
   @observable
   AsyncStates viewState = AsyncStates.loading;
@@ -93,7 +93,7 @@ abstract class InterestingTagsStoreBase with Store {
       _resetTags();
       _startLoading();
     }
-    _debounce = Timer(Duration(seconds: 1, milliseconds: 700), () async {
+    _debounce = Timer(Duration(seconds: 1), () async {
       tag = value;
       var _response =
           await _getInterestTagsUsecase.call(tags: value, page: _page);
@@ -114,7 +114,7 @@ abstract class InterestingTagsStoreBase with Store {
     var response = await _createTagUsecase(name: tag);
     response.fold(
       (left) => error = left.message,
-      (right) => createHasTags = right,
+      (right) => selectedTags.add(right),
     );
   }
 

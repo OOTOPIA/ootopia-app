@@ -26,9 +26,9 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
       if (response) {
         return Right(response);
       }
-      return Left(Failure(message: ''));
+      return Left(Failure(message: 'It\'s not possible to create your post'));
     } catch (e) {
-      return Left(Failure(message: ''));
+      return Left(Failure(message: 'It\'s not possible to create your post'));
     }
   }
 
@@ -44,7 +44,8 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
       );
       return Right(response);
     } catch (e) {
-      return Left(Failure(message: ''));
+      return Left(
+          Failure(message: 'Something went wrong when try to get tags'));
     }
   }
 
@@ -62,12 +63,14 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
       );
       return Right(response);
     } catch (e) {
-      return Left(Failure(message: ''));
+      return Left(
+          Failure(message: 'Something went wrong when try to get users'));
     }
   }
 
   @override
-  Future<Either<Failure, bool>> createTag({required String name}) async {
+  Future<Either<Failure, InterestsTagsEntity>> createTag(
+      {required String name}) async {
     try {
       String currenLocalization = Platform.localeName.replaceAll('_', '-');
       var response = await _createPostRemoteDatasource.createTag(
@@ -76,7 +79,8 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
       );
       return Right(response);
     } catch (e) {
-      return Left(Failure(message: ''));
+      return Left(
+          Failure(message: 'Something went wrong when try to create a tag'));
     }
   }
 
@@ -86,7 +90,8 @@ class CreatePostRepositoryImpl extends CreatePostRepository {
       var response = await _createPostRemoteDatasource.sendMedia(type, file);
       return Right(response);
     } catch (e) {
-      return Left(Failure(message: ''));
+      return Left(Failure(
+          message: 'Something went wrong when try to send your medias'));
     }
   }
 }
