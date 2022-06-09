@@ -11,12 +11,12 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerLearningTracks extends StatefulWidget {
   final Widget viewQuiz;
-  ChaptersModel chapter;
+  final ChaptersModel chapter;
   final Function updateStatusVideo;
   final Function eventFullScreen;
   final Function? eventNextVideo;
   final Function? eventPreviusVideo;
-  List<ChaptersModel>? listChapters;
+  final List<ChaptersModel>? listChapters;
 
   VideoPlayerLearningTracks({
     required this.chapter,
@@ -51,7 +51,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
   String timeVideo(Duration time) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitHours =
-    time.inHours == 0 ? '' : twoDigits(time.inHours.remainder(60)) + ':';
+        time.inHours == 0 ? '' : twoDigits(time.inHours.remainder(60)) + ':';
     String twoDigitMinutes = twoDigits(time.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(time.inSeconds.remainder(60));
     return "$twoDigitHours$twoDigitMinutes:$twoDigitSeconds";
@@ -92,19 +92,19 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
       isLoading = true;
     });
     videoPlayerController =
-    VideoPlayerController.network(currentChapter.videoUrl)
-      ..addListener(startVideo)
-      ..initialize().then((value) {
-        setState(() {
-          timerOpacity?.cancel();
-          timerOpacity = Timer(
-            Duration(seconds: 1),
+        VideoPlayerController.network(currentChapter.videoUrl)
+          ..addListener(startVideo)
+          ..initialize().then((value) {
+            setState(() {
+              timerOpacity?.cancel();
+              timerOpacity = Timer(
+                Duration(seconds: 1),
                 () => setState(() => timerOpacity = null),
-          );
-          isLoading = false;
-        });
-        videoPlayerController!.play();
-      });
+              );
+              isLoading = false;
+            });
+            videoPlayerController!.play();
+          });
   }
 
   startVideo() {
@@ -171,7 +171,7 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                     timerOpacity?.cancel();
                     timerOpacity = Timer(
                       Duration(seconds: 1),
-                          () => setState(() => timerOpacity = null),
+                      () => setState(() => timerOpacity = null),
                     );
                   });
                 },
@@ -180,148 +180,148 @@ class _VideoPlayerLearningTracksState extends State<VideoPlayerLearningTracks> {
                     height: heightPlayerVideo,
                     child: videoPlayerController != null
                         ? Container(
-                      child: Stack(
-                        children: [
-                          Image.network(
-                            widget.chapter.videoThumbUrl,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ),
-                          ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: 40,
-                                sigmaY: 40,
-                              ),
-                              child: Container(
-                                color: Colors.black.withOpacity(0.4),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: heightPlayerVideo,
-                            child: AspectRatio(
-                              aspectRatio: widthVideo / heightVideo,
-                              child: VideoPlayer(videoPlayerController!),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: VideoPlayAndPause(
-                              disableNextVideo: !(widget.listChapters !=
-                                  null &&
-                                  widget.listChapters!.indexWhere(
-                                          (_chapter) =>
-                                      _chapter.id ==
-                                          currentChapter.id) <
-                                      (widget.listChapters!.length - 1)),
-                              disablePreviusVideo:
-                              !(widget.listChapters != null &&
-                                  widget.listChapters!.indexWhere(
-                                          (_chapter) =>
-                                      _chapter.id ==
-                                          currentChapter.id) >
-                                      0),
-                              eventNextVideo: () {
-                                if (widget.listChapters != null &&
-                                    widget.listChapters!.indexWhere(
-                                            (_chapter) =>
-                                        _chapter.id ==
-                                            currentChapter.id) <
-                                        (widget.listChapters!.length -
-                                            1)) {
-                                  videoPlayerController!.pause();
-                                  int currentIndex = widget.listChapters!
-                                      .indexWhere((_chapter) =>
-                                  _chapter.id ==
-                                      currentChapter.id);
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                  widget.chapter.videoThumbUrl,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                                ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                      sigmaX: 40,
+                                      sigmaY: 40,
+                                    ),
+                                    child: Container(
+                                      color: Colors.black.withOpacity(0.4),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: heightPlayerVideo,
+                                  child: AspectRatio(
+                                    aspectRatio: widthVideo / heightVideo,
+                                    child: VideoPlayer(videoPlayerController!),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: VideoPlayAndPause(
+                                    disableNextVideo: !(widget.listChapters !=
+                                            null &&
+                                        widget.listChapters!.indexWhere(
+                                                (_chapter) =>
+                                                    _chapter.id ==
+                                                    currentChapter.id) <
+                                            (widget.listChapters!.length - 1)),
+                                    disablePreviusVideo:
+                                        !(widget.listChapters != null &&
+                                            widget.listChapters!.indexWhere(
+                                                    (_chapter) =>
+                                                        _chapter.id ==
+                                                        currentChapter.id) >
+                                                0),
+                                    eventNextVideo: () {
+                                      if (widget.listChapters != null &&
+                                          widget.listChapters!.indexWhere(
+                                                  (_chapter) =>
+                                                      _chapter.id ==
+                                                      currentChapter.id) <
+                                              (widget.listChapters!.length -
+                                                  1)) {
+                                        videoPlayerController!.pause();
+                                        int currentIndex = widget.listChapters!
+                                            .indexWhere((_chapter) =>
+                                                _chapter.id ==
+                                                currentChapter.id);
 
-                                  currentChapter = widget
-                                      .listChapters![currentIndex + 1];
-                                  videoPlayerController!
-                                      .removeListener(startVideo);
-                                  videoPlayerController!.dispose();
-                                  startVideFirst();
-                                }
-                              },
-                              eventPreviusVideo: () {
-                                if (widget.listChapters != null &&
-                                    widget.listChapters!.indexWhere(
-                                            (_chapter) =>
-                                        _chapter.id ==
-                                            currentChapter.id) >
-                                        0) {
-                                  videoPlayerController!.pause();
-                                  int currentIndex = widget.listChapters!
-                                      .indexWhere((_chapter) =>
-                                  _chapter.id ==
-                                      currentChapter.id);
+                                        currentChapter = widget
+                                            .listChapters![currentIndex + 1];
+                                        videoPlayerController!
+                                            .removeListener(startVideo);
+                                        videoPlayerController!.dispose();
+                                        startVideFirst();
+                                      }
+                                    },
+                                    eventPreviusVideo: () {
+                                      if (widget.listChapters != null &&
+                                          widget.listChapters!.indexWhere(
+                                                  (_chapter) =>
+                                                      _chapter.id ==
+                                                      currentChapter.id) >
+                                              0) {
+                                        videoPlayerController!.pause();
+                                        int currentIndex = widget.listChapters!
+                                            .indexWhere((_chapter) =>
+                                                _chapter.id ==
+                                                currentChapter.id);
 
-                                  currentChapter = widget
-                                      .listChapters![currentIndex - 1];
+                                        currentChapter = widget
+                                            .listChapters![currentIndex - 1];
 
-                                  videoPlayerController!
-                                      .removeListener(startVideo);
-                                  videoPlayerController!.dispose();
-                                  startVideFirst();
-                                }
-                              },
-                              onClickSlider: onClickSlider,
-                              videoPlayerController:
-                              videoPlayerController,
-                              timerOpacity: timerOpacity,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: VideoBar(
-                              onChangeStart: (value) async {
-                                await videoPlayerController!.pause();
-                                setState(() {
-                                  onClickSlider = true;
-                                  Future.delayed(
-                                      Duration(milliseconds: 300), () {
-                                    onClickSlider = false;
-                                  });
-                                });
-                              },
-                              onChanged: (value) async {
-                                setState(() {
-                                  totalTimeVideoText = timeVideo(
-                                      videoPlayerController!
-                                          .value.duration);
+                                        videoPlayerController!
+                                            .removeListener(startVideo);
+                                        videoPlayerController!.dispose();
+                                        startVideFirst();
+                                      }
+                                    },
+                                    onClickSlider: onClickSlider,
+                                    videoPlayerController:
+                                        videoPlayerController,
+                                    timerOpacity: timerOpacity,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: VideoBar(
+                                    onChangeStart: (value) async {
+                                      await videoPlayerController!.pause();
+                                      setState(() {
+                                        onClickSlider = true;
+                                        Future.delayed(
+                                            Duration(milliseconds: 300), () {
+                                          onClickSlider = false;
+                                        });
+                                      });
+                                    },
+                                    onChanged: (value) async {
+                                      setState(() {
+                                        totalTimeVideoText = timeVideo(
+                                            videoPlayerController!
+                                                .value.duration);
 
-                                  positionVideoText = timeVideo(
-                                      videoPlayerController!
-                                          .value.position);
-                                  currentPosition = value.toInt();
-                                  onClickSlider = false;
-                                });
-                                await videoPlayerController!.seekTo(
-                                    Duration(seconds: value.toInt()));
-                              },
-                              onChangeEnd: (value) async {
-                                setState(() {
-                                  onClickSlider = false;
-                                });
-                                await videoPlayerController!.play();
-                              },
-                              fullScreenVideo: fullScreenVideo,
-                              fullScreenEvent: () {
-                                fullScreenVideo = !fullScreenVideo;
-                                widget.eventFullScreen();
-                              },
-                              timerOpacity: timerOpacity,
-                              currentPosition: currentPosition,
-                              maxDurationVideo: maxDurationVideo,
-                              positionVideoText: positionVideoText,
-                              totalTimeVideoText: totalTimeVideoText,
+                                        positionVideoText = timeVideo(
+                                            videoPlayerController!
+                                                .value.position);
+                                        currentPosition = value.toInt();
+                                        onClickSlider = false;
+                                      });
+                                      await videoPlayerController!.seekTo(
+                                          Duration(seconds: value.toInt()));
+                                    },
+                                    onChangeEnd: (value) async {
+                                      setState(() {
+                                        onClickSlider = false;
+                                      });
+                                      await videoPlayerController!.play();
+                                    },
+                                    fullScreenVideo: fullScreenVideo,
+                                    fullScreenEvent: () {
+                                      fullScreenVideo = !fullScreenVideo;
+                                      widget.eventFullScreen();
+                                    },
+                                    timerOpacity: timerOpacity,
+                                    currentPosition: currentPosition,
+                                    maxDurationVideo: maxDurationVideo,
+                                    positionVideoText: positionVideoText,
+                                    totalTimeVideoText: totalTimeVideoText,
+                                  ),
+                                )
+                              ],
                             ),
                           )
-                        ],
-                      ),
-                    )
                         : Container()),
               ),
               if (!fullScreenVideo) widget.viewQuiz,

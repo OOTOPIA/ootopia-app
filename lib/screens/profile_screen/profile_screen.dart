@@ -166,7 +166,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void showModalProfile() async {
-    Navigator.pop(context);
     await showDialog(
         context: context,
         builder: (context) {
@@ -178,11 +177,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             content: RichText(
               text: TextSpan(children: [
                 TextSpan(
-                    text: AppLocalizations.of(context)!.removeUser,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400)),
+                  text: AppLocalizations.of(context)!.removeUser,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
                 TextSpan(
                     text: ' ${store!.profile!.fullname} ',
                     style: TextStyle(
@@ -202,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    AppLocalizations.of(context)!.cancel,
+                    AppLocalizations.of(context)!.cancel.toUpperCase(),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -215,15 +216,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     if (authStore.deletedUser) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text(
-                          AppLocalizations.of(context)!.userDeleted,
-                          style: TextStyle(color: Colors.white),
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.all(
+                          GlobalConstants.of(context).spacingNormal,
+                        ),
+                        backgroundColor: Color(0xff03DAC5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        content: Row(
+                          children: [
+                            Icon(Icons.done, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.of(context)!.userDeleted,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
                         ),
                       ));
                       controller.back();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          margin: EdgeInsets.all(
+                            GlobalConstants.of(context).spacingNormal,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           backgroundColor: Colors.red,
                           content: Text(
                             AppLocalizations.of(context)!
@@ -233,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }
                   },
                   child: Text(
-                    'Ok',
+                    'OK',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -242,6 +262,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           );
         });
+  }
+
+  void _selectedOption(String optionSelected) {
+    if (optionSelected == 'delete') {
+      showModalProfile();
+    }
   }
 
   @override
@@ -290,45 +316,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 if (authStore.currentUser!.isAdmin != null &&
                                     authStore.currentUser!.isAdmin!)
+                                  //&& authStore.currentUser!.id != profileUserId)
                                   Align(
                                     alignment: Alignment.topRight,
-                                    child: PopupMenuButton(
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                          color: Colors.white,
-                                          width: 2,
-                                          style: BorderStyle.solid,
-                                        ),
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
+                                    child: PopupMenuButton<String>(
+                                      padding: EdgeInsets.zero,
+                                      offset: Offset(-25, 36),
+                                      onSelected: _selectedOption,
+                                      enabled: true,
                                       icon: Icon(Icons.more_vert),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8))),
                                       itemBuilder: (BuildContext context) =>
-                                          <PopupMenuEntry>[
+                                          <PopupMenuEntry<String>>[
                                         PopupMenuItem(
-                                          child: ListTile(
-                                            onTap: showModalProfile,
-                                            title: RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                    ),
-                                                    text: AppLocalizations.of(
-                                                            context)!
-                                                        .remove),
-                                                TextSpan(
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14,
-                                                    ),
-                                                    text:
-                                                        ' ${store!.profile!.fullname}')
-                                              ]),
+                                          value: 'delete',
+                                          child: Row(children: [
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .remove,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
-                                          ),
+                                            Text(
+                                              ' ${store!.profile!.fullname}',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14,
+                                              ),
+                                            )
+                                          ]),
                                         ),
                                       ],
                                     ),
@@ -652,6 +674,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   bool get showButton {
-    return !isLoggedInUserProfile;
+    return !isLoggedInUserProfile && authStore.currentUser != null;
   }
 }

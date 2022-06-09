@@ -3,26 +3,39 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ootopia_app/data/models/learning_tracks/learning_tracks_model.dart';
-import 'package:ootopia_app/screens/components/share_link.dart';
+import 'package:ootopia_app/screens/learning_tracks/components/popup_menu_learning_track.dart';
+import 'package:ootopia_app/screens/learning_tracks/learning_tracks_store.dart';
+import 'package:smart_page_navigation/smart_page_navigation.dart';
 
-class LearningTrackWidget extends StatelessWidget {
+class LearningTrackWidget extends StatefulWidget {
   final LearningTracksModel learningTrack;
   final onTap;
   final NumberFormat currencyFormatter;
-  const LearningTrackWidget({Key? key,
+  final LearningTracksStore learningTracksStore;
+  LearningTrackWidget({
+    Key? key,
     required this.learningTrack,
+    required this.learningTracksStore,
     required this.onTap,
-    required this.currencyFormatter}) : super(key: key);
+    required this.currencyFormatter,
+  }) : super(key: key);
+
+  @override
+  State<LearningTrackWidget> createState() => _LearningTrackWidgetState();
+}
+
+class _LearningTrackWidgetState extends State<LearningTrackWidget> {
+  SmartPageController controller = SmartPageController.getInstance();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: InkWell(
-        key: Key(learningTrack.id.toString()),
+        key: Key(widget.learningTrack.id.toString()),
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
-        onTap: onTap,
+        onTap: widget.onTap,
         child: Column(
           children: [
             Row(
@@ -34,20 +47,20 @@ class LearningTrackWidget extends StatelessWidget {
                     CircleAvatar(
                       radius: 16,
                       backgroundImage: NetworkImage(
-                        learningTrack.userPhotoUrl,
+                        widget.learningTrack.userPhotoUrl,
                       ),
                     ),
                     SizedBox(
                       width: 8,
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width - (48  + 140) ,
+                      width: MediaQuery.of(context).size.width - (48 + 140),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            learningTrack.userName,
+                            widget.learningTrack.userName,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -55,11 +68,10 @@ class LearningTrackWidget extends StatelessWidget {
                             ),
                           ),
                           Visibility(
-                            visible: learningTrack.location !=
-                                'null' &&
-                                learningTrack.location != null,
+                            visible: widget.learningTrack.location != 'null' &&
+                                widget.learningTrack.location != null,
                             child: Text(
-                              learningTrack.location!,
+                              widget.learningTrack.location!,
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 12,
@@ -71,10 +83,10 @@ class LearningTrackWidget extends StatelessWidget {
                     )
                   ],
                 ),
-                ShareLink(
-                  type: Type.learning_track,
-                  id: learningTrack.id,
-                )
+                PopMenuLearningTrack(
+                  learningTrack: widget.learningTrack,
+                  learningTracksStore: widget.learningTracksStore,
+                ),
               ],
             ),
             SizedBox(
@@ -86,27 +98,24 @@ class LearningTrackWidget extends StatelessWidget {
                   width: double.infinity,
                   height: 200,
                   decoration: BoxDecoration(
-                    border: learningTrack.completed == true
+                    border: widget.learningTrack.completed == true
                         ? Border.all(
-                      color: Color(0xff018F9C),
-                      width: 3,
-                    )
+                            color: Color(0xff018F9C),
+                            width: 3,
+                          )
                         : Border.all(
-                        color: Color.fromARGB(1, 0, 0, 0),
-                        width: 0),
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(12)),
+                            color: Color.fromARGB(1, 0, 0, 0), width: 0),
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                     image: DecorationImage(
                       image: NetworkImage(
-                        learningTrack.imageUrl,
+                        widget.learningTrack.imageUrl,
                       ),
                       fit: BoxFit.cover,
                     ),
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(12)),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -121,11 +130,10 @@ class LearningTrackWidget extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   child: Container(
-                    width: MediaQuery.of(context).size.width  - 48,
-                    padding: const EdgeInsets.only(
-                        bottom: 16.0, left: 16),
+                    width: MediaQuery.of(context).size.width - 48,
+                    padding: const EdgeInsets.only(bottom: 16.0, left: 16),
                     child: Text(
-                      learningTrack.title,
+                      widget.learningTrack.title,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -143,7 +151,7 @@ class LearningTrackWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${learningTrack.chapters.length.toString()} ${AppLocalizations.of(context)!.lessons}',
+                  '${widget.learningTrack.chapters.length.toString()} ${AppLocalizations.of(context)!.lessons}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -153,15 +161,15 @@ class LearningTrackWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      learningTrack.completed == true
+                      widget.learningTrack.completed == true
                           ? AppLocalizations.of(context)!
-                          .completed
-                          .toUpperCase()
-                          : learningTrack.time,
+                              .completed
+                              .toUpperCase()
+                          : widget.learningTrack.time,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: learningTrack.completed == true
+                        color: widget.learningTrack.completed == true
                             ? Color(0xff018F9C)
                             : Colors.grey,
                       ),
@@ -176,7 +184,7 @@ class LearningTrackWidget extends StatelessWidget {
                     SizedBox(
                       width: 8,
                     ),
-                    if (!learningTrack.completed)...[
+                    if (!widget.learningTrack.completed) ...[
                       Text(
                         AppLocalizations.of(context)!.receive,
                         style: TextStyle(
@@ -193,7 +201,7 @@ class LearningTrackWidget extends StatelessWidget {
                       'assets/icons/ooz_mini_blue.svg',
                       height: 10,
                       width: 19.33,
-                      color: learningTrack.completed == true
+                      color: widget.learningTrack.completed == true
                           ? Color(0xff018F9C)
                           : Color(0xffA3A3A3),
                     ),
@@ -201,11 +209,11 @@ class LearningTrackWidget extends StatelessWidget {
                       width: 8,
                     ),
                     Text(
-                      '${currencyFormatter.format(learningTrack.ooz)}',
+                      '${widget.currencyFormatter.format(widget.learningTrack.ooz)}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: learningTrack.completed == true
+                        color: widget.learningTrack.completed == true
                             ? Color(0xff018F9C)
                             : Colors.grey,
                       ),
@@ -220,11 +228,10 @@ class LearningTrackWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                learningTrack.description,
+                widget.learningTrack.description,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w400),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
             ),
             SizedBox(

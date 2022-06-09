@@ -221,7 +221,7 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
       AsyncAction('_ProfileScreenStoreBase.getProfileDetails');
 
   @override
-  Future<Profile?> getProfileDetails(String userId) {
+  Future<void> getProfileDetails(String userId) {
     return _$getProfileDetailsAsyncAction
         .run(() => super.getProfileDetails(userId));
   }
@@ -230,8 +230,7 @@ mixin _$ProfileScreenStore on _ProfileScreenStoreBase, Store {
       AsyncAction('_ProfileScreenStoreBase.getUserPosts');
 
   @override
-  Future<List<TimelinePost>?> getUserPosts(String userId,
-      {int? limit, int? offset}) {
+  Future<void> getUserPosts(String userId, {int? limit, int? offset}) {
     return _$getUserPostsAsyncAction
         .run(() => super.getUserPosts(userId, limit: limit, offset: offset));
   }

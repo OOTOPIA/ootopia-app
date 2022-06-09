@@ -166,7 +166,7 @@ abstract class TimelineStoreBase with Store {
 
   @action
   Future removePost(TimelinePost post) async {
-    await this.postRepository.deletePost(post.id);
+    deletePost = await this.postRepository.deletePost(post.id);
     removePostInList(post);
   }
 

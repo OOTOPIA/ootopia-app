@@ -5,13 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayAndPause extends StatefulWidget {
-  VideoPlayerController? videoPlayerController;
-  Timer? timerOpacity;
-  bool onClickSlider;
-  bool disablePreviusVideo;
-  bool disableNextVideo;
-  Function eventNextVideo;
-  Function eventPreviusVideo;
+  final VideoPlayerController? videoPlayerController;
+  final Timer? timerOpacity;
+  final bool onClickSlider;
+  final bool disablePreviusVideo;
+  final bool disableNextVideo;
+  final Function eventNextVideo;
+  final Function eventPreviusVideo;
 
   VideoPlayAndPause({
     Key? key,

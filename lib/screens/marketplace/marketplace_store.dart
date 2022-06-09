@@ -26,13 +26,27 @@ abstract class MarketplaceStoreBase with Store {
 
   final currencyFormatter = NumberFormat('#,##0.00', 'ID');
 
+  @observable
+  bool isDeleteProduct = true;
+
+  @action
+  Future<void> deleteProductMarketingPlace(String id) async {
+    isDeleteProduct = await _marketplaceRepository.deleteProduct(id);
+    productList = productList
+        .where((element) => element.id != id)
+        .toList()
+        .asObservable();
+  }
+
   @action
   Future<void> getProducts({bool clearList = false}) async {
     try {
-      final List<ProductModel> response = await _marketplaceRepository
-          .getProducts(limit: itemsPerPageCount, offset: currentPage*itemsPerPageCount);
+      final List<ProductModel> response =
+          await _marketplaceRepository.getProducts(
+              limit: itemsPerPageCount,
+              offset: currentPage * itemsPerPageCount);
       hasMoreItems = response.length == itemsPerPageCount;
-      if(clearList){
+      if (clearList) {
         productList.clear();
       }
       productList.addAll(response);
@@ -55,17 +69,15 @@ abstract class MarketplaceStoreBase with Store {
     await getProducts(clearList: true);
   }
 
-  bool loadingPage(){
+  bool loadingPage() {
     return viewState == ViewState.loading;
   }
 
-  bool loadingMoreItems(){
+  bool loadingMoreItems() {
     return viewState == ViewState.loadingMoreProducts;
   }
 
-  bool canLoadMoreProducts(){
+  bool canLoadMoreProducts() {
     return viewState == ViewState.done && hasMoreItems;
   }
-
-
 }

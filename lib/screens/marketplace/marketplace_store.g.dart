@@ -54,6 +54,31 @@ mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
     });
   }
 
+  final _$isDeleteProductAtom =
+      Atom(name: 'MarketplaceStoreBase.isDeleteProduct');
+
+  @override
+  bool get isDeleteProduct {
+    _$isDeleteProductAtom.reportRead();
+    return super.isDeleteProduct;
+  }
+
+  @override
+  set isDeleteProduct(bool value) {
+    _$isDeleteProductAtom.reportWrite(value, super.isDeleteProduct, () {
+      super.isDeleteProduct = value;
+    });
+  }
+
+  final _$deleteProductMarketingPlaceAsyncAction =
+      AsyncAction('MarketplaceStoreBase.deleteProductMarketingPlace');
+
+  @override
+  Future<void> deleteProductMarketingPlace(String id) {
+    return _$deleteProductMarketingPlaceAsyncAction
+        .run(() => super.deleteProductMarketingPlace(id));
+  }
+
   final _$getProductsAsyncAction =
       AsyncAction('MarketplaceStoreBase.getProducts');
 
@@ -84,7 +109,8 @@ mixin _$MarketplaceStore on MarketplaceStoreBase, Store {
     return '''
 viewState: ${viewState},
 productList: ${productList},
-hasMoreItems: ${hasMoreItems}
+hasMoreItems: ${hasMoreItems},
+isDeleteProduct: ${isDeleteProduct}
     ''';
   }
 }

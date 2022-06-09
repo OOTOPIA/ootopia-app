@@ -547,7 +547,10 @@
      "sendReport":"The complaint has been sent",
      "dontSeeMorePosts":"Don't see more posts from %USERNAME%",
      "report":"Report",
-      "successDeletePost":"Post deleted successfully!",
-     "somethingWentWrongInDeletePost":"Something went wrong deleting this post, try again."
-
+    "successDeletePost":"Post deleted successfully!",
+    "successDeleteLearningTrack":"Learning Track deleted successfully!",
+    "somethingWentWrongInDeletePost":"Something went wrong deleting this post, try again.",
+    "somethingWentWrongInLearningTrack":"Something went wrong deleting this learning track, try again.",
+    "successDeleteProduct":"Product deleted successfully!",
+    "somethingWentWrongInDeleteProduct":"Something went wrong deleting this product, try again."
 }

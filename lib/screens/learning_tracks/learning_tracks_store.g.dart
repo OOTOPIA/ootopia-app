@@ -104,6 +104,22 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
     });
   }
 
+  final _$deleteLearningAtom =
+      Atom(name: 'LearningTracksStoreBase.deleteLearning');
+
+  @override
+  bool get deleteLearning {
+    _$deleteLearningAtom.reportRead();
+    return super.deleteLearning;
+  }
+
+  @override
+  set deleteLearning(bool value) {
+    _$deleteLearningAtom.reportWrite(value, super.deleteLearning, () {
+      super.deleteLearning = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('LearningTracksStoreBase.init');
 
   @override
@@ -153,6 +169,15 @@ mixin _$LearningTracksStore on LearningTracksStoreBase, Store {
         .run(() => super.loadMoreLearningTracks());
   }
 
+  final _$deleteLearningTrackAsyncAction =
+      AsyncAction('LearningTracksStoreBase.deleteLearningTrack');
+
+  @override
+  Future<void> deleteLearningTrack(String id) {
+    return _$deleteLearningTrackAsyncAction
+        .run(() => super.deleteLearningTrack(id));
+  }
+
   @override
   String toString() {
     return '''
@@ -161,7 +186,8 @@ isLoadingMore: ${isLoadingMore},
 hasMoreItems: ${hasMoreItems},
 welcomeGuideLearningTrack: ${welcomeGuideLearningTrack},
 viewState: ${viewState},
-lastLearningTracks: ${lastLearningTracks}
+lastLearningTracks: ${lastLearningTracks},
+deleteLearning: ${deleteLearning}
     ''';
   }
 }
