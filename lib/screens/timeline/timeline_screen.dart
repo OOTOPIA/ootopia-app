@@ -337,7 +337,93 @@ class _TimelinePageState extends State<TimelinePage>
                   InviteYourFriends(),
                   Expanded(
                     child: Center(
-                      child: body(),
+                      child: Observer(builder: (_) {
+                        if (timelineStore.viewState ==
+                            TimelineViewState.loading) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (timelineStore.viewState ==
+                            TimelineViewState.error) {
+                          return TryAgain(
+                            () => timelineStore.getTimelinePosts(),
+                          );
+                        } else if (timelineStore.viewState ==
+                                TimelineViewState.ok &&
+                            timelineStore.allPosts.length == 0) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  AppLocalizations.of(context)!.noPosts,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace,
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: VisibilityDetector(
+                                  key: ObjectKey(flickMultiManager),
+                                  onVisibilityChanged: (visibility) {
+                                    if (visibility.visibleFraction == 0 &&
+                                        this.mounted) {
+                                      flickMultiManager.pause();
+                                    }
+                                  },
+                                  child:
+                                      NotificationListener<ScrollNotification>(
+                                    onNotification:
+                                        (ScrollNotification scrollInfo) {
+                                      if (!timelineStore.loadingMorePosts &&
+                                          timelineStore.viewState !=
+                                              TimelineViewState.loading &&
+                                          scrollInfo.metrics.pixels ==
+                                              scrollInfo
+                                                  .metrics.maxScrollExtent &&
+                                          timelineStore.hasMorePosts) {
+                                        timelineStore.getTimelinePosts();
+                                      }
+                                      return true;
+                                    },
+                                    child: RefreshIndicator(
+                                      onRefresh: () async {
+                                        timelineStore.reloadPosts();
+                                      },
+                                      child: ListView.separated(
+                                        addAutomaticKeepAlives: false,
+                                        addRepaintBoundaries: false,
+                                        itemCount:
+                                            timelineStore.allPosts.length,
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
+                                        itemBuilder: (context, index) {
+                                          return PostWidget(
+                                            index: index,
+                                            post: timelineStore.allPosts[index],
+                                            action: () => setState(() {}),
+                                            timelineStore: timelineStore,
+                                            flickMultiManager:
+                                                flickMultiManager,
+                                            user: user,
+                                            loggedIn: loggedIn,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 ],
@@ -347,84 +433,6 @@ class _TimelinePageState extends State<TimelinePage>
         ),
       ),
     );
-  }
-
-  body() {
-    return Observer(builder: (_) {
-      if (timelineStore.viewState == TimelineViewState.loading) {
-        return Center(child: CircularProgressIndicator());
-      } else if (timelineStore.viewState == TimelineViewState.error) {
-        return TryAgain(
-          () => timelineStore.getTimelinePosts(),
-        );
-      } else if (timelineStore.viewState == TimelineViewState.ok &&
-          timelineStore.allPosts.length == 0) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                AppLocalizations.of(context)!.noPosts,
-              ),
-            ],
-          ),
-        );
-      }
-      return Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: GlobalConstants.of(context).screenHorizontalSpace,
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: VisibilityDetector(
-                key: ObjectKey(flickMultiManager),
-                onVisibilityChanged: (visibility) {
-                  if (visibility.visibleFraction == 0 && this.mounted) {
-                    flickMultiManager.pause();
-                  }
-                },
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (ScrollNotification scrollInfo) {
-                    if (!timelineStore.loadingMorePosts &&
-                        timelineStore.viewState != TimelineViewState.loading &&
-                        scrollInfo.metrics.pixels ==
-                            scrollInfo.metrics.maxScrollExtent &&
-                        timelineStore.hasMorePosts) {
-                      timelineStore.getTimelinePosts();
-                    }
-                    return true;
-                  },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      timelineStore.reloadPosts();
-                    },
-                    child: ListView.separated(
-                      addAutomaticKeepAlives: false,
-                      addRepaintBoundaries: false,
-                      itemCount: timelineStore.allPosts.length,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
-                      itemBuilder: (context, index) {
-                        return PostWidget(
-                          index: index,
-                          post: timelineStore.allPosts[index],
-                          action: () => setState(() {}),
-                          timelineStore: timelineStore,
-                          flickMultiManager: flickMultiManager,
-                          user: user,
-                          loggedIn: loggedIn,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    });
   }
 
 // Widget get remainingTime => Padding(

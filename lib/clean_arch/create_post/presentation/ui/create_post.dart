@@ -63,6 +63,38 @@ class _CreatePostPageState extends State<CreatePostPage> {
     super.dispose();
   }
 
+  void sendPost() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    storeCreatePosts.tagsid.clear();
+    _interestingTagsStore.selectedTags.forEach((element) {
+      storeCreatePosts.tagsid.add(element.id);
+    });
+    List<Map> fileList = widget.args['fileList'] != null
+        ? widget.args['fileList']
+        : [
+            {
+              'mediaFile': File(widget.args['filePath']),
+              'mediaType': widget.args['type']
+            }
+          ];
+    await storeCreatePosts.sendMedia(fileList);
+    if (storeCreatePosts.error.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(storeCreatePosts.error),
+      ));
+    } else {
+      storeCreatePosts.clearVariable();
+      _interestingTagsStore.clearVariables();
+      _interestingTagsStore.selectedTags.clear();
+
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        PageRoute.Page.homeScreen.route,
+        ModalRoute.withName('/'),
+        arguments: {'createdPost': true, 'oozToReward': 0.0},
+      );
+    }
+  }
+
   void _getSizeImage() {
     this.image = Image.file(
       File(widget.args['filePath']),
@@ -139,7 +171,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         if (_interestingTagsStore.selectedTags.isNotEmpty)
                           Container(
                             height: 50,
-                            padding: EdgeInsets.only(bottom: 8),
+                            margin: EdgeInsets.symmetric(horizontal: 16),
+                            width: MediaQuery.of(context).size.width,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
@@ -166,47 +199,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         Container(
                           margin: EdgeInsets.only(top: 28),
                           child: ConfirmButtonWidget(
-                              content: Text(
-                                AppLocalizations.of(context)!.publish,
-                                style: GoogleFonts.roboto(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () async {
-                                FocusScope.of(context)
-                                    .requestFocus(new FocusNode());
-                                storeCreatePosts.tagsid.clear();
-                                _interestingTagsStore.selectedTags
-                                    .forEach((element) {
-                                  storeCreatePosts.tagsid.add(element.id);
-                                });
-                                List<Map> fileList =
-                                    widget.args['fileList'] != null
-                                        ? widget.args['fileList']
-                                        : [
-                                            {
-                                              'mediaFile':
-                                                  File(widget.args['filePath']),
-                                              'mediaType': widget.args['type']
-                                            }
-                                          ];
-                                await storeCreatePosts.sendMedia(fileList);
-                                if (storeCreatePosts.error.isNotEmpty) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(storeCreatePosts.error),
-                                  ));
-                                } else {
-                                  storeCreatePosts.clearVariable();
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                    PageRoute.Page.homeScreen.route,
-                                    ModalRoute.withName('/'),
-                                    arguments: {
-                                      'createdPost': true,
-                                      'oozToReward': 0.0
-                                    },
-                                  );
-                                }
-                              }),
+                            content: Text(
+                              AppLocalizations.of(context)!.publish,
+                              style: GoogleFonts.roboto(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: sendPost,
+                          ),
                         )
                       ],
                     ),

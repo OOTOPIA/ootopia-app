@@ -42,10 +42,8 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         Endpoints.createPost,
         data: createPostModel.toJson(),
       );
-      print('data ${response.data}');
       return response.statusCode == 201;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -71,7 +69,6 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
           .toList();
       return _list;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -106,11 +103,13 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
     required String language,
   }) async {
     try {
-      var response =
-          await _httpClient.post(Endpoints.createInterestingTags, data: {
-        'name': name,
-        'language': language,
-      });
+      var response = await _httpClient.post(
+        Endpoints.createInterestingTags,
+        data: {
+          'name': name,
+          'language': language,
+        },
+      );
       return response.statusCode == 201;
     } catch (e) {
       rethrow;
@@ -128,10 +127,8 @@ class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
         fileName: fileName,
         queryParameters: {'type': type},
       );
-      print(response.data);
       return response.data['mediaId'];
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

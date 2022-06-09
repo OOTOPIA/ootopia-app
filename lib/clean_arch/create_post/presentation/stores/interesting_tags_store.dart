@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
@@ -25,6 +26,8 @@ abstract class InterestingTagsStoreBase with Store {
 
   @observable
   List<InterestsTagsEntity> selectedTags = ObservableList.of([]);
+
+  TextEditingController interestingTag = TextEditingController();
 
   @observable
   AsyncStates viewState = AsyncStates.loading;

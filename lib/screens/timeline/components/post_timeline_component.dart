@@ -108,8 +108,6 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _bigLikeShowAnimationEnd = true;
   bool canDoubleClick = true;
   SmartPageController controller = SmartPageController.getInstance();
-  int mediaPosition = 0;
-  bool showPosition = false;
 
   @override
   void initState() {
@@ -592,9 +590,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               scrollDirection: Axis.horizontal,
               itemCount: this.post.tags.length,
               itemBuilder: (ctx, index) {
-                return HashtagName(
-                  hashtagName: this.post.tags[index],
-                );
+                return HashtagName(hashtagName: this.post.tags[index]);
               },
             ),
           ),

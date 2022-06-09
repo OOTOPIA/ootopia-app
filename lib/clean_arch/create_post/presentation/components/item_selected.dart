@@ -18,6 +18,8 @@ class ButtonSelectedTag extends StatelessWidget {
           _interestingTags.createTag();
         }
         _interestingTags.selectedTags.add(tag);
+        _interestingTags.tags.clear();
+        _interestingTags.interestingTag.clear();
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),

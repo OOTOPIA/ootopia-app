@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/async_states.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/stores/create_posts_stores.dart';
-import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/shared/background_butterfly_bottom.dart';
 import 'package:ootopia_app/shared/background_butterfly_top.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListOfUsers extends StatefulWidget {
-  ListOfUsers({
-    Key? key,
-  }) : super(key: key);
+  ListOfUsers({Key? key}) : super(key: key);
 
   @override
   State<ListOfUsers> createState() => _ListOfUsersState();
@@ -24,9 +22,13 @@ class _ListOfUsersState extends State<ListOfUsers> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        color: Colors.white,
+        margin: EdgeInsets.symmetric(horizontal: 16),
         height: MediaQuery.of(context).size.height * .4,
         width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
         child: NotificationListener(
           onNotification: (ScrollNotification scrollInfo) {
             if (scrollInfo.metrics.pixels ==
@@ -39,10 +41,8 @@ class _ListOfUsersState extends State<ListOfUsers> {
           child: SingleChildScrollView(
             controller: scrollController,
             child: Observer(builder: (context) {
-              if (createPosts.viewState == ViewState.loading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+              if (createPosts.loadingUsers) {
+                return Center(child: CircularProgressIndicator());
               } else if (createPosts.users.isEmpty &&
                   createPosts.fullName.isNotEmpty) {
                 return GestureDetector(
@@ -88,8 +88,6 @@ class _ListOfUsersState extends State<ListOfUsers> {
               return Observer(builder: (context) {
                 return Stack(
                   children: [
-                    BackgroundButterflyTop(positioned: -59),
-                    BackgroundButterflyBottom(positioned: -50),
                     Padding(
                       padding: EdgeInsets.only(left: 16, top: 16),
                       child: Column(
@@ -127,7 +125,7 @@ class _ListOfUsersState extends State<ListOfUsers> {
                             .toList(),
                       ),
                     ),
-                    if (createPosts.viewState == ViewState.loadingNewData)
+                    if (createPosts.viewState == AsyncStates.loadingNewData)
                       Center(
                         child: CircularProgressIndicator(),
                       ),

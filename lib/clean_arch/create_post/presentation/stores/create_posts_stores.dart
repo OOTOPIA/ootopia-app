@@ -165,7 +165,11 @@ abstract class StoreCreatePostsBase with Store {
 
   void _startLoading() => viewState = AsyncStates.loading;
 
+  void _startLoadingUsers() => viewState = AsyncStates.loadingUsers;
+
   bool get loading => viewState == AsyncStates.loading;
+
+  bool get loadingUsers => viewState == AsyncStates.loadingUsers;
 
   void _incrementPage() => page += 1;
 
@@ -175,15 +179,24 @@ abstract class StoreCreatePostsBase with Store {
     viewState = hasError ? AsyncStates.error : AsyncStates.done;
   }
 
+  void _startLoadingNewData() => viewState = AsyncStates.loadingNewData;
+
   void _setUsers(List<UsersEntity> list) {
     if (list.isNotEmpty) {
       users = ObservableList.of([...users, ...list]);
     }
   }
 
+  void _resetUsers() {
+    users = ObservableList.of([]);
+  }
+
   @action
   Future<void> searchUser() async {
-    _startLoading();
+    if (viewState != AsyncStates.loadingNewData) {
+      _startLoadingUsers();
+      _resetUsers();
+    }
     var _response = await _searchUserByNameUsecase.call(
       fullName: fullName,
       page: page,
@@ -202,6 +215,7 @@ abstract class StoreCreatePostsBase with Store {
   @action
   Future<void> getMoreUsers() async {
     if (!lastPage) {
+      _startLoadingNewData();
       _incrementPage();
       searchUser();
     }
