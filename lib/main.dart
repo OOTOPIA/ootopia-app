@@ -45,7 +45,6 @@ import 'package:ootopia_app/screens/ooz_current/ooz_current_page.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
-import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
@@ -366,8 +365,8 @@ class _MainPageState extends State<MainPage> {
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
     PageRoute.Page.walletPage: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
-    PageRoute.Page.regenerationGameLearningAlert: (args) =>
-        RegenerationGameLearningAlert(args),
+    // PageRoute.Page.regenerationGameLearningAlert: (args) =>
+    //     RegenerationGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
