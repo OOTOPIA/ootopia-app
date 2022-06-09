@@ -2,16 +2,16 @@
 // in ootopia_app/test/create_posts/data/post/post_repository_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 import 'dart:io' as _i7;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:ootopia_app/clean_arch/create_post/data/datasource/create_post_remote_datasource.dart'
-    as _i2;
+    as _i3;
 import 'package:ootopia_app/clean_arch/create_post/data/models/create_post/create_post_model.dart'
-    as _i4;
-import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart'
     as _i5;
+import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart'
+    as _i2;
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart'
     as _i6;
 
@@ -23,32 +23,35 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.da
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 
+class _FakeInterestsTagsEntity_0 extends _i1.Fake
+    implements _i2.InterestsTagsEntity {}
+
 /// A class which mocks [CreatePostRemoteDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCreatePostRemoteDatasource extends _i1.Mock
-    implements _i2.CreatePostRemoteDatasource {
+    implements _i3.CreatePostRemoteDatasource {
   MockCreatePostRemoteDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<bool> createPost({_i4.CreatePostModel? createPostModel}) =>
+  _i4.Future<bool> createPost({_i5.CreatePostModel? createPostModel}) =>
       (super.noSuchMethod(
           Invocation.method(
               #createPost, [], {#createPostModel: createPostModel}),
-          returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i4.Future<bool>);
   @override
-  _i3.Future<List<_i5.InterestsTagsEntity>> getTags(
+  _i4.Future<List<_i2.InterestsTagsEntity>> getTags(
           {String? language, String? tags, int? page}) =>
       (super.noSuchMethod(
           Invocation.method(
               #getTags, [], {#language: language, #tags: tags, #page: page}),
-          returnValue: Future<List<_i5.InterestsTagsEntity>>.value(
-              <_i5.InterestsTagsEntity>[])) as _i3
-          .Future<List<_i5.InterestsTagsEntity>>);
+          returnValue: Future<List<_i2.InterestsTagsEntity>>.value(
+              <_i2.InterestsTagsEntity>[])) as _i4
+          .Future<List<_i2.InterestsTagsEntity>>);
   @override
-  _i3.Future<List<_i6.UsersEntity>> getUsers(
+  _i4.Future<List<_i6.UsersEntity>> getUsers(
           {int? page, String? fullname, String? excludedIds}) =>
       (super.noSuchMethod(
               Invocation.method(#getUsers, [], {
@@ -58,16 +61,19 @@ class MockCreatePostRemoteDatasource extends _i1.Mock
               }),
               returnValue:
                   Future<List<_i6.UsersEntity>>.value(<_i6.UsersEntity>[]))
-          as _i3.Future<List<_i6.UsersEntity>>);
+          as _i4.Future<List<_i6.UsersEntity>>);
   @override
-  _i3.Future<bool> createTag({String? name, String? language}) =>
+  _i4.Future<_i2.InterestsTagsEntity> createTag(
+          {String? name, String? language}) =>
       (super.noSuchMethod(
           Invocation.method(#createTag, [], {#name: name, #language: language}),
-          returnValue: Future<bool>.value(false)) as _i3.Future<bool>);
+          returnValue: Future<_i2.InterestsTagsEntity>.value(
+              _FakeInterestsTagsEntity_0())) as _i4
+          .Future<_i2.InterestsTagsEntity>);
   @override
-  _i3.Future<String> sendMedia(String? type, _i7.File? file) =>
+  _i4.Future<String> sendMedia(String? type, _i7.File? file) =>
       (super.noSuchMethod(Invocation.method(#sendMedia, [type, file]),
-          returnValue: Future<String>.value('')) as _i3.Future<String>);
+          returnValue: Future<String>.value('')) as _i4.Future<String>);
   @override
   String toString() => super.toString();
 }

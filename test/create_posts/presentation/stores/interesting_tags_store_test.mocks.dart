@@ -55,11 +55,13 @@ class MockCreateTagUsecase extends _i1.Mock implements _i7.CreateTagUsecase {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, bool>> call({String? name}) =>
+  _i4.Future<_i2.Either<_i5.Failure, _i6.InterestsTagsEntity>> call(
+          {String? name}) =>
       (super.noSuchMethod(Invocation.method(#call, [], {#name: name}),
-              returnValue: Future<_i2.Either<_i5.Failure, bool>>.value(
-                  _FakeEither_0<_i5.Failure, bool>()))
-          as _i4.Future<_i2.Either<_i5.Failure, bool>>);
+          returnValue:
+              Future<_i2.Either<_i5.Failure, _i6.InterestsTagsEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.InterestsTagsEntity>())) as _i4
+          .Future<_i2.Either<_i5.Failure, _i6.InterestsTagsEntity>>);
   @override
   String toString() => super.toString();
 }

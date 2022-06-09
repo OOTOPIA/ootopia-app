@@ -2,10 +2,10 @@ class InterestsTagsEntity {
   InterestsTagsEntity({
     required this.id,
     required this.name,
-    required this.numberOfPosts,
+    this.numberOfPosts = 0,
   });
 
-  String id;
-  String name;
-  int numberOfPosts;
+  final String id;
+  final String name;
+  final int numberOfPosts;
 }

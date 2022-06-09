@@ -59,7 +59,6 @@ class MockHttpClient extends _i1.Mock implements _i3.HttpClient {
   _i4.Future<_i2.Response<dynamic>> postFile(String? endpoint,
           {String? fileName,
           _i5.File? file,
-          dynamic data,
           Map<String, dynamic>? queryParameters}) =>
       (super.noSuchMethod(
               Invocation.method(#postFile, [
@@ -67,7 +66,6 @@ class MockHttpClient extends _i1.Mock implements _i3.HttpClient {
               ], {
                 #fileName: fileName,
                 #file: file,
-                #data: data,
                 #queryParameters: queryParameters
               }),
               returnValue: Future<_i2.Response<dynamic>>.value(
