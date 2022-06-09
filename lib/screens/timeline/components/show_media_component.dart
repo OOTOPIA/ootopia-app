@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ootopia_app/data/models/timeline/media_model.dart';
 import 'package:ootopia_app/data/models/timeline/timeline_post_model.dart';
 import 'package:ootopia_app/data/models/users/user_model.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_manager.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/multi_manager/flick_multi_player.dart';
 import 'package:ootopia_app/screens/timeline/components/image_post_timeline_component.dart';
+import 'package:ootopia_app/screens/timeline/components/post_item/media_row.dart';
 
 class ShowMediaComponent extends StatefulWidget {
   final TimelinePost post;
@@ -47,7 +47,55 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20)),
               ),
-              child: mediaView(),
+              child: Column(
+                children: [
+                  if (widget.post.type == "image") ...[
+                    ImagePostTimeline(
+                      image: widget.post.imageUrl as String,
+                      onDoubleTapVideo: () => widget.likePost(false, true),
+                    )
+                  ] else if (widget.post.type == "video") ...[
+                    FlickMultiPlayer(
+                      userId:  widget.user?.id,
+                      postId: widget.post.id,
+                      url: widget.post.videoUrl!,
+                      flickMultiManager: widget.flickMultiManager!,
+                      image: widget.post.thumbnailUrl!,
+                      onDoubleTapVideo: () => widget.likePost(false, true),
+                    )
+                  ] else ...[
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.width,
+                      child: PageView.builder(
+                        itemCount: widget.post.medias!.length,
+                        pageSnapping: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, pagePosition) {
+                          return MediaRow(
+                              media: widget.post.medias![pagePosition],
+                              post: widget.post,
+                              likePost: () => widget.likePost(false, true),
+                              flickMultiManager: widget.flickMultiManager!,
+                              userId: widget.user?.id
+                          );
+                        },
+                        onPageChanged: (value) {
+                          setState(() {
+                            mediaPosition = value;
+                            showPosition = true;
+                            Future.delayed(Duration(seconds: 2), () {
+                              setState(() {
+                                showPosition = false;
+                              });
+                            });
+                          });
+                        },
+                      ),
+                    )
+                  ]
+                ],
+              ),
             ),
             Container(
               width: double.infinity,
@@ -56,16 +104,16 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                 alignment: Alignment.center,
                 child: AnimatedContainer(
                   height: widget.bigLikeShowAnimation &&
-                          !widget.bigLikeShowAnimationEnd
+                      !widget.bigLikeShowAnimationEnd
                       ? 100
                       : 0.0,
                   width: widget.bigLikeShowAnimation &&
-                          !widget.bigLikeShowAnimationEnd
+                      !widget.bigLikeShowAnimationEnd
                       ? 100
                       : 0.0,
                   curve: widget.bigLikeShowAnimation &&
-                          !widget.bigLikeShowAnimationEnd &&
-                          widget.canDoubleClick
+                      !widget.bigLikeShowAnimationEnd &&
+                      widget.canDoubleClick
                       ? Curves.easeOutBack
                       : Curves.easeIn,
                   decoration: BoxDecoration(
@@ -74,7 +122,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                   duration: const Duration(milliseconds: 300),
                   child: AnimatedOpacity(
                     opacity: widget.bigLikeShowAnimation &&
-                            !widget.bigLikeShowAnimationEnd
+                        !widget.bigLikeShowAnimationEnd
                         ? 0.8
                         : 0.0,
                     duration: Duration(milliseconds: 300),
@@ -83,11 +131,11 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                       child: Image.asset(
                         'assets/icons_profile/woow_90_deg.png',
                         width: widget.bigLikeShowAnimation &&
-                                !widget.bigLikeShowAnimationEnd
+                            !widget.bigLikeShowAnimationEnd
                             ? 100
                             : 0.0,
                         height: widget.bigLikeShowAnimation &&
-                                !widget.bigLikeShowAnimationEnd
+                            !widget.bigLikeShowAnimationEnd
                             ? 100
                             : 0.0,
                       ),
@@ -96,9 +144,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                 ),
               ),
             ),
-            if (widget.post.type == 'gallery' &&
-                widget.post.medias!.length > 1 &&
-                showPosition)
+            if (isCarrousel() && showPosition)...[
               Positioned(
                 right: 23,
                 top: 22,
@@ -116,10 +162,10 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                   ),
                 ),
               ),
+            ]
           ],
         ),
-        if (widget.post.type == 'gallery' &&
-            widget.post.medias!.length > 1) ...[
+        if (isCarrousel()) ...[
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -130,64 +176,8 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
     );
   }
 
-  Widget mediaView() {
-    if (widget.post.type == "image") {
-      return ImagePostTimeline(
-        image: widget.post.imageUrl as String,
-        onDoubleTapVideo: () => widget.likePost(false, true),
-      );
-    } else if (widget.post.type == "video") {
-      return FlickMultiPlayer(
-        userId: (widget.user != null ? widget.user!.id : null),
-        postId: widget.post.id,
-        url: widget.post.videoUrl!,
-        flickMultiManager: widget.flickMultiManager!,
-        image: widget.post.thumbnailUrl!,
-        onDoubleTapVideo: () => widget.likePost(false, true),
-      );
-    } else {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width,
-        child: PageView.builder(
-          itemCount: widget.post.medias!.length,
-          pageSnapping: true,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, pagePosition) {
-            return buildMediaRow(widget.post.medias![pagePosition]);
-          },
-          onPageChanged: (value) {
-            setState(() {
-              mediaPosition = value;
-              showPosition = true;
-              Future.delayed(Duration(seconds: 2), () {
-                setState(() {
-                  showPosition = false;
-                });
-              });
-            });
-          },
-        ),
-      );
-    }
-  }
-
-  buildMediaRow(Media media) {
-    if (media.type == "image") {
-      return ImagePostTimeline(
-        image: media.mediaUrl as String,
-        onDoubleTapVideo: () => widget.likePost(false, true),
-      );
-    } else if (media.type == "video") {
-      return FlickMultiPlayer(
-        userId: (widget.user != null ? widget.user!.id : null),
-        postId: widget.post.id,
-        url: media.mediaUrl!,
-        flickMultiManager: widget.flickMultiManager!,
-        image: media.thumbUrl!,
-        onDoubleTapVideo: () => widget.likePost(false, true),
-      );
-    }
+  bool isCarrousel(){
+    return widget.post.type == 'gallery' && widget.post.medias!.length > 1;
   }
 
   List<Widget> indexDots(int mediasLength) {
