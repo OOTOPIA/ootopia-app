@@ -29,7 +29,7 @@ abstract class InterestingTagsStoreBase with Store {
   @observable
   List<InterestsTagsEntity> selectedTags = ObservableList.of([]);
 
-  TextEditingController interestingTagController = TextEditingController();
+  TextEditingController tagTextController = TextEditingController();
 
   @observable
   AsyncStates viewState = AsyncStates.loading;
@@ -95,6 +95,7 @@ abstract class InterestingTagsStoreBase with Store {
       _resetTags();
       _startLoading();
     }
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(Duration(seconds: 1), () async {
       tag = value;
       var _response =

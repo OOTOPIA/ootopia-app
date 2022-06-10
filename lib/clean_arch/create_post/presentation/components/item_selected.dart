@@ -8,21 +8,19 @@ class ButtonSelectedTag extends StatelessWidget {
   ButtonSelectedTag({Key? key, required this.tag}) : super(key: key);
 
   final InterestsTagsEntity tag;
-  final InterestingTagsStore _interestingTags = GetIt.I.get();
+  final InterestingTagsStore _controller = GetIt.I.get();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        print(tag.id);
         if (tag.id == '0') {
-          await _interestingTags.createTag();
+          await _controller.createTag();
         } else {
-          _interestingTags.selectedTags.add(tag);
-          _interestingTags.tags.clear();
-          _interestingTags.interestingTagController.clear();
+          _controller.selectedTags.add(tag);
+          _controller.tags.clear();
+          _controller.tagTextController.clear();
         }
-        print(_interestingTags.selectedTags.length);
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),

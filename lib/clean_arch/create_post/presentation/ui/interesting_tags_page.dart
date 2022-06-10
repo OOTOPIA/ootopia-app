@@ -21,7 +21,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
   PreferredSizeWidget get appbar => DefaultAppBar(
         components: [
           AppBarComponents.back,
-          _interestingTags.selectedTags.isNotEmpty
+          _controller.selectedTags.isNotEmpty
               ? AppBarComponents.keep
               : AppBarComponents.close,
         ],
@@ -33,11 +33,11 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
         },
       );
 
-  final InterestingTagsStore _interestingTags = GetIt.I.get();
+  final InterestingTagsStore _controller = GetIt.I.get();
 
   @override
   void dispose() {
-    _interestingTags.clearVariables();
+    _controller.clearVariables();
     super.dispose();
   }
 
@@ -79,7 +79,7 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      if (_interestingTags.selectedTags.isNotEmpty)
+                      if (_controller.selectedTags.isNotEmpty)
                         Observer(builder: (context) {
                           return Container(
                             height: 50,
@@ -87,14 +87,14 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-                              itemCount: _interestingTags.selectedTags.length,
+                              itemCount: _controller.selectedTags.length,
                               itemBuilder: (BuildContext context, int index) {
                                 var tagSelected =
-                                    _interestingTags.selectedTags[index];
+                                    _controller.selectedTags[index];
                                 return hashtagComponent(
                                   tagSelected: tagSelected,
                                   deleteHashTag: () {
-                                    _interestingTags.selectedTags
+                                    _controller.selectedTags
                                         .remove(tagSelected);
                                   },
                                 );
@@ -108,16 +108,15 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                           fontWeight: FontWeight.w400,
                           fontSize: 16,
                         ),
-                        onChanged: _interestingTags.getTags,
-                        controller: _interestingTags.interestingTagController,
+                        onChanged: _controller.getTags,
+                        controller: _controller.tagTextController,
                         decoration: InputDecoration(
                           suffixIcon: Icon(
                             Icons.close,
                             color: LightColors.black,
                           ),
                           prefixIcon: InkWell(
-                            onTap:
-                                _interestingTags.interestingTagController.clear,
+                            onTap: _controller.tagTextController.clear,
                             child: Icon(
                               Icons.search,
                               color: LightColors.black,
@@ -146,28 +145,28 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      if (_interestingTags.tags.isNotEmpty)
+                      if (_controller.tags.isNotEmpty)
                         Expanded(
                           child: NotificationListener(
                             onNotification: (ScrollNotification scrollInfo) {
                               if (scrollInfo.metrics.pixels ==
                                       scrollInfo.metrics.maxScrollExtent &&
-                                  !_interestingTags.lastPage) {
-                                _interestingTags.getMoreTags();
+                                  !_controller.lastPage) {
+                                _controller.getMoreTags();
                               }
                               return true;
                             },
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: _interestingTags.tags.length,
+                              itemCount: _controller.tags.length,
                               itemBuilder: (BuildContext context, int index) {
-                                var tag = _interestingTags.tags[index];
+                                var tag = _controller.tags[index];
                                 return ButtonSelectedTag(tag: tag);
                               },
                             ),
                           ),
                         ),
-                      if (_interestingTags.loadingMoreTags)
+                      if (_controller.loadingMoreTags)
                         Center(child: CircularProgressIndicator())
                     ],
                   );
