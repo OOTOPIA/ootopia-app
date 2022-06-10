@@ -14,6 +14,7 @@ class ButtonSelectedTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+        print(tag.id);
         if (tag.id == '0') {
           await _interestingTags.createTag();
         } else {
@@ -21,6 +22,7 @@ class ButtonSelectedTag extends StatelessWidget {
           _interestingTags.tags.clear();
           _interestingTags.interestingTagController.clear();
         }
+        print(_interestingTags.selectedTags.length);
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),

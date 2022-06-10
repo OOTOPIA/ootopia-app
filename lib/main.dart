@@ -8,8 +8,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/clean_arch/core/di/create_post_di.dart';
-import 'package:ootopia_app/clean_arch/core/di/report_di.dart';
 import 'package:ootopia_app/clean_arch/core/routes/app_routes.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/ui/create_post.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/ui/interesting_tags_page.dart';
@@ -79,12 +77,12 @@ import './shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/l10n.dart';
+import 'package:ootopia_app/clean_arch/core/di/inectable.dart' as di;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  ReportDi.injectionDI();
-  CreatePostDi.injectionDI();
+  await di.init();
   await Firebase.initializeApp();
 
   ///FlutterBackgroundService.initialize(onStartService);

@@ -8,6 +8,7 @@ import 'package:ootopia_app/clean_arch/create_post/data/models/interest_tags/int
 import 'package:ootopia_app/clean_arch/create_post/data/models/users/users_model.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class CreatePostRemoteDatasource {
   Future<bool> createPost({required CreatePostModel createPostModel});
@@ -29,6 +30,7 @@ abstract class CreatePostRemoteDatasource {
   Future<String> sendMedia(String type, File file);
 }
 
+@Injectable(as: CreatePostRemoteDatasource)
 class CreatePostRemoteDatasourceImpl extends CreatePostRemoteDatasource {
   final HttpClient _httpClient;
 

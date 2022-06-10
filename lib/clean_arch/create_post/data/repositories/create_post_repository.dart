@@ -8,7 +8,9 @@ import 'package:ootopia_app/clean_arch/core/exception/failure.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/entity/users_entity.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/repositories/create_post_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@Injectable(as: CreatePostRepository)
 class CreatePostRepositoryImpl extends CreatePostRepository {
   final CreatePostRemoteDatasource _createPostRemoteDatasource;
   CreatePostRepositoryImpl(

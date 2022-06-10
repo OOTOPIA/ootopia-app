@@ -6,17 +6,16 @@ part of 'chapters_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ChaptersModel _$ChaptersModelFromJson(Map<String, dynamic> json) {
-  return ChaptersModel(
-    id: json['id'] as int,
-    title: json['title'] as String,
-    videoUrl: json['videoUrl'] as String,
-    videoThumbUrl: json['videoThumbUrl'] as String,
-    ooz: (json['ooz'] as num).toDouble(),
-    time: json['time'] as String,
-    completed: json['completed'] as bool,
-  );
-}
+ChaptersModel _$ChaptersModelFromJson(Map<String, dynamic> json) =>
+    ChaptersModel(
+      id: json['id'] as int,
+      title: json['title'] as String,
+      videoUrl: json['videoUrl'] as String,
+      videoThumbUrl: json['videoThumbUrl'] as String,
+      ooz: (json['ooz'] as num).toDouble(),
+      time: json['time'] as String,
+      completed: json['completed'] as bool,
+    );
 
 Map<String, dynamic> _$ChaptersModelToJson(ChaptersModel instance) =>
     <String, dynamic>{

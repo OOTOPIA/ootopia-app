@@ -7,8 +7,10 @@ import 'package:ootopia_app/clean_arch/create_post/domain/entity/interest_tags_e
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/create_tag_usecase.dart';
 import 'package:ootopia_app/clean_arch/create_post/domain/usecases/get_interest_tags_usecase.dart';
 
+import 'package:injectable/injectable.dart';
 part 'interesting_tags_store.g.dart';
 
+@singleton
 class InterestingTagsStore = InterestingTagsStoreBase
     with _$InterestingTagsStore;
 

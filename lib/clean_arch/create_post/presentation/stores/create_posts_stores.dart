@@ -13,8 +13,10 @@ import 'package:ootopia_app/clean_arch/create_post/domain/usecases/send_medias_u
 import 'package:ootopia_app/shared/geolocation.dart';
 import 'package:ootopia_app/shared/rich_text_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:injectable/injectable.dart';
 part 'create_posts_stores.g.dart';
 
+@singleton
 class StoreCreatePosts = StoreCreatePostsBase with _$StoreCreatePosts;
 
 abstract class StoreCreatePostsBase with Store {

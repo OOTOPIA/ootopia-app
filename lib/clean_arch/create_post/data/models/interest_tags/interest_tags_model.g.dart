@@ -6,10 +6,9 @@ part of 'interest_tags_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-InterestTagsModel _$InterestTagsModelFromJson(Map<String, dynamic> json) {
-  return InterestTagsModel(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    numberOfPosts: json['numberOfPosts'] as int,
-  );
-}
+InterestTagsModel _$InterestTagsModelFromJson(Map<String, dynamic> json) =>
+    InterestTagsModel(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      numberOfPosts: json['numberOfPosts'] as int,
+    );

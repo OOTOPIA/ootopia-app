@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ootopia_app/clean_arch/core/drivers/dio/dio_interceptors.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class HttpClient {
   late Dio _dio;
   HttpClient({required Dio dio}) {
