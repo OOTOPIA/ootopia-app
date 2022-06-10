@@ -58,7 +58,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                 ] else ...[
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width - 44,
                     child: PageView.builder(
                       itemCount: widget.post.medias!.length,
                       pageSnapping: true,
