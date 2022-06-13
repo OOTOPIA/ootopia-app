@@ -10,7 +10,7 @@ import 'package:ootopia_app/clean_arch/create_post/presentation/components/botto
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/confirm_post_button_widget.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/error_get_geolocation.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/hashtag_component.dart';
-import 'package:ootopia_app/clean_arch/create_post/presentation/components/list_of_midias.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/components/list_of_medias.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/list_of_users.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/show_dialog.dart';
 import 'package:ootopia_app/clean_arch/create_post/presentation/components/text_field_component.dart';
