@@ -4,7 +4,9 @@ import 'package:ootopia_app/clean_arch/report/data/models/report_posts_model.dar
 import 'package:ootopia_app/clean_arch/report/domain/entity/report_posts_entity.dart';
 import 'package:ootopia_app/clean_arch/core/exception/failure.dart';
 import 'package:ootopia_app/clean_arch/report/domain/repositories/reports_posts_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@Injectable(as: ReportPostsRepository)
 class ReportPostRepositoryImpl extends ReportPostsRepository {
   final ReportRemoteDataSource _remoteDataSource;
   ReportPostRepositoryImpl({required ReportRemoteDataSource remoteDataSource})

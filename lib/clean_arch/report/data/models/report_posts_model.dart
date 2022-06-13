@@ -3,7 +3,7 @@ import 'package:ootopia_app/clean_arch/report/domain/entity/report_posts_entity.
 
 part 'report_posts_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createFactory: false)
 class ReportPostsModel extends ReportPostsEntity {
   ReportPostsModel({
     required bool visualizerPostUser,

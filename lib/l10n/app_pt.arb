@@ -53,8 +53,8 @@
 
     "favoriteThemes": "Temas Favoritos",
     "selectTheHashtagsThatCorrespondToTheThemesYouWantToExploreAndLearn":"Selecione as hashtags que correspondem aos temas que você deseja explorar e aprender.",
-    "selectAtLeastOneHashtag": "Selecione pelo menos uma hashtag",
-    "selectHashtags": "Selecione hashtags",
+    "selectAtLeastOneHashtag": "Inclua pelo menos uma hashtag",
+    "addHashtags": "Adicione hashtags",
     "tagsSelected": "selecionadas",
     "tagSelected":"selecionada",
 

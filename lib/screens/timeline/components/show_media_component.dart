@@ -39,63 +39,53 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
       children: [
         Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Color(0xff1A4188),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20)),
-              ),
-              child: Column(
-                children: [
-                  if (widget.post.type == "image") ...[
-                    ImagePostTimeline(
-                      image: widget.post.imageUrl as String,
-                      onDoubleTapVideo: () => widget.likePost(false, true),
-                    )
-                  ] else if (widget.post.type == "video") ...[
-                    FlickMultiPlayer(
-                      userId:  widget.user?.id,
-                      postId: widget.post.id,
-                      url: widget.post.videoUrl!,
-                      flickMultiManager: widget.flickMultiManager!,
-                      image: widget.post.thumbnailUrl!,
-                      onDoubleTapVideo: () => widget.likePost(false, true),
-                    )
-                  ] else ...[
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.width,
-                      child: PageView.builder(
-                        itemCount: widget.post.medias!.length,
-                        pageSnapping: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, pagePosition) {
-                          return MediaRow(
-                              media: widget.post.medias![pagePosition],
-                              post: widget.post,
-                              likePost: () => widget.likePost(false, true),
-                              flickMultiManager: widget.flickMultiManager!,
-                              userId: widget.user?.id
-                          );
-                        },
-                        onPageChanged: (value) {
-                          setState(() {
-                            mediaPosition = value;
-                            showPosition = true;
-                            Future.delayed(Duration(seconds: 2), () {
-                              setState(() {
-                                showPosition = false;
-                              });
+            Column(
+              children: [
+                if (widget.post.type == 'image') ...[
+                  ImagePostTimeline(
+                    image: widget.post.imageUrl as String,
+                    onDoubleTapVideo: () => widget.likePost(false, true),
+                  )
+                ] else if (widget.post.type == 'video') ...[
+                  FlickMultiPlayer(
+                    userId: widget.user?.id,
+                    postId: widget.post.id,
+                    url: widget.post.videoUrl!,
+                    flickMultiManager: widget.flickMultiManager!,
+                    image: widget.post.thumbnailUrl!,
+                    onDoubleTapVideo: () => widget.likePost(false, true),
+                  )
+                ] else ...[
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width - 44,
+                    child: PageView.builder(
+                      itemCount: widget.post.medias!.length,
+                      pageSnapping: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, pagePosition) {
+                        return MediaRow(
+                            media: widget.post.medias![pagePosition],
+                            post: widget.post,
+                            likePost: () => widget.likePost(false, true),
+                            flickMultiManager: widget.flickMultiManager!,
+                            userId: widget.user?.id);
+                      },
+                      onPageChanged: (value) {
+                        setState(() {
+                          mediaPosition = value;
+                          showPosition = true;
+                          Future.delayed(Duration(seconds: 2), () {
+                            setState(() {
+                              showPosition = false;
                             });
                           });
-                        },
-                      ),
-                    )
-                  ]
-                ],
-              ),
+                        });
+                      },
+                    ),
+                  )
+                ]
+              ],
             ),
             Container(
               width: double.infinity,
@@ -104,16 +94,16 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                 alignment: Alignment.center,
                 child: AnimatedContainer(
                   height: widget.bigLikeShowAnimation &&
-                      !widget.bigLikeShowAnimationEnd
+                          !widget.bigLikeShowAnimationEnd
                       ? 100
                       : 0.0,
                   width: widget.bigLikeShowAnimation &&
-                      !widget.bigLikeShowAnimationEnd
+                          !widget.bigLikeShowAnimationEnd
                       ? 100
                       : 0.0,
                   curve: widget.bigLikeShowAnimation &&
-                      !widget.bigLikeShowAnimationEnd &&
-                      widget.canDoubleClick
+                          !widget.bigLikeShowAnimationEnd &&
+                          widget.canDoubleClick
                       ? Curves.easeOutBack
                       : Curves.easeIn,
                   decoration: BoxDecoration(
@@ -122,7 +112,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                   duration: const Duration(milliseconds: 300),
                   child: AnimatedOpacity(
                     opacity: widget.bigLikeShowAnimation &&
-                        !widget.bigLikeShowAnimationEnd
+                            !widget.bigLikeShowAnimationEnd
                         ? 0.8
                         : 0.0,
                     duration: Duration(milliseconds: 300),
@@ -131,11 +121,11 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                       child: Image.asset(
                         'assets/icons_profile/woow_90_deg.png',
                         width: widget.bigLikeShowAnimation &&
-                            !widget.bigLikeShowAnimationEnd
+                                !widget.bigLikeShowAnimationEnd
                             ? 100
                             : 0.0,
                         height: widget.bigLikeShowAnimation &&
-                            !widget.bigLikeShowAnimationEnd
+                                !widget.bigLikeShowAnimationEnd
                             ? 100
                             : 0.0,
                       ),
@@ -144,7 +134,7 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
                 ),
               ),
             ),
-            if (isCarrousel() && showPosition)...[
+            if (isCarrousel() && showPosition) ...[
               Positioned(
                 right: 23,
                 top: 22,
@@ -176,14 +166,13 @@ class _ShowMediaComponent extends State<ShowMediaComponent> {
     );
   }
 
-  bool isCarrousel(){
+  bool isCarrousel() {
     return widget.post.type == 'gallery' && widget.post.medias!.length > 1;
   }
 
   List<Widget> indexDots(int mediasLength) {
     return List<Widget>.generate(mediasLength, (index) {
       return Container(
-        margin: EdgeInsets.all(2),
         width: 8,
         height: 8,
         decoration: BoxDecoration(

@@ -6,22 +6,23 @@ part of 'friends_data_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FriendsDataModel _$FriendsDataModelFromJson(Map<String, dynamic> json) {
-  return FriendsDataModel(
-    total: json['total'] as int?,
-    friends: (json['friends'] as List<dynamic>?)
+FriendsDataModel _$FriendsDataModelFromJson(Map<String, dynamic> json) =>
+    FriendsDataModel(
+      total: json['total'] as int?,
+      friends: (json['friends'] as List<dynamic>?)
+          ?.map((e) => e == null
+              ? null
+              : FriendModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      searchFriends: (json['searchFriends'] as List<dynamic>?)
+          ?.map((e) => e == null
+              ? null
+              : FriendModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    )..alreadyFriends = (json['alreadyFriends'] as List<dynamic>?)
         ?.map((e) =>
             e == null ? null : FriendModel.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    searchFriends: (json['searchFriends'] as List<dynamic>?)
-        ?.map((e) =>
-            e == null ? null : FriendModel.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  )..alreadyFriends = (json['alreadyFriends'] as List<dynamic>?)
-      ?.map((e) =>
-          e == null ? null : FriendModel.fromJson(e as Map<String, dynamic>))
-      .toList();
-}
+        .toList();
 
 Map<String, dynamic> _$FriendsDataModelToJson(FriendsDataModel instance) =>
     <String, dynamic>{

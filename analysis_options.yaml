@@ -1,0 +1,11 @@
+analyzer:
+  errors:
+    undefined_prefixed_name: ignore
+  exclude:
+    - "**.g.dart"
+    - "**.mocks.dart"
+
+linter:
+  rules:
+    - prefer_single_quotes
+    - always_declare_return_types
