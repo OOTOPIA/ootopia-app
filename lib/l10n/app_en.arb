@@ -552,5 +552,6 @@
     "somethingWentWrongInDeletePost":"Something went wrong deleting this post, try again.",
     "somethingWentWrongInLearningTrack":"Something went wrong deleting this learning track, try again.",
     "successDeleteProduct":"Product deleted successfully!",
-    "somethingWentWrongInDeleteProduct":"Something went wrong deleting this product, try again."
+    "somethingWentWrongInDeleteProduct":"Something went wrong deleting this product, try again.",
+    "tagAlreadySelected":"Tag already selected"
 }

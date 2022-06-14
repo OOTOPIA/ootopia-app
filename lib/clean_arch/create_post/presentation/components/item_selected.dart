@@ -17,9 +17,27 @@ class ButtonSelectedTag extends StatelessWidget {
         if (tag.id == '0') {
           await _controller.createTag();
         } else {
-          _controller.selectedTags.add(tag);
-          _controller.tags.clear();
-          _controller.tagTextController.clear();
+          var haveIdInSelectedTag = _controller.selectedTags
+              .firstWhere(
+                (element) => element.id == tag.id,
+                orElse: () => InterestsTagsEntity(id: '0', name: ''),
+              )
+              .id;
+          if (haveIdInSelectedTag == '0') {
+            _controller.selectedTags.add(tag);
+            _controller.tags.clear();
+            _controller.tagTextController.clear();
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  AppLocalizations.of(context)!.tagAlreadySelected,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            );
+          }
         }
       },
       child: Padding(

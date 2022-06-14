@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ootopia_app/clean_arch/core/constants/colors.dart';
@@ -110,6 +111,9 @@ class _InterestingTagsPageState extends State<InterestingTagsPage> {
                         ),
                         onChanged: _controller.getTags,
                         controller: _controller.tagTextController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp(' '))
+                        ],
                         decoration: InputDecoration(
                           suffixIcon: Icon(
                             Icons.close,

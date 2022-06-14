@@ -546,7 +546,8 @@
      "successDeleteProduct":"Produto deletado com sucesso!",
      "somethingWentWrongInDeletePost":"Algo deu errado ao deletar o usuario, tente novamente.",
      "somethingWentWrongInLearningTrack":"Algo deu errado ao deletar a trilha de aprendizagem, tente novamente.",
-      "somethingWentWrongInDeleteProduct":"Algo deu errado ao deletar esse produto, tente novamente."
+      "somethingWentWrongInDeleteProduct":"Algo deu errado ao deletar esse produto, tente novamente.",
+      "tagAlreadySelected":"Tag já selecionada"
 
 }
 

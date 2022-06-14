@@ -584,14 +584,19 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             ),
           ),
           Container(
-            height: 30,
-            child: ListView.builder(
-              physics: ClampingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: this.post.tags.length,
-              itemBuilder: (ctx, index) {
-                return HashtagName(hashtagName: this.post.tags[index]);
-              },
+            height: 150,
+            child: Wrap(
+              runSpacing: 0,
+              spacing: 0,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              runAlignment: WrapAlignment.start,
+              children: [
+                for (var i = 0; i < post.tags.length; i++)
+                  if (i == 3)
+                    HashtagName(hashtagName: 'Mais')
+                  else
+                    HashtagName(hashtagName: post.tags[i])
+              ],
             ),
           ),
           SizedBox(height: 8),

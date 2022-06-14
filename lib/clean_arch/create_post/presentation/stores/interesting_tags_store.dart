@@ -76,6 +76,8 @@ abstract class InterestingTagsStoreBase with Store {
   void _setTags(List<InterestsTagsEntity> list) {
     if (list.isNotEmpty) {
       tags = ObservableList.of([...tags, ...list]);
+    } else {
+      tags.add(InterestsTagsEntity(id: '0', name: 'value', numberOfPosts: 0));
     }
   }
 
@@ -103,7 +105,6 @@ abstract class InterestingTagsStoreBase with Store {
       _response.fold(
         (l) => _stopLoading(hasError: true),
         (result) {
-          tags.add(InterestsTagsEntity(id: '0', name: value, numberOfPosts: 0));
           _setTags(result);
           _stopGetTags(result);
           _stopLoading();
