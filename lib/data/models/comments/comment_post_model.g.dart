@@ -6,29 +6,27 @@ part of 'comment_post_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Comment _$CommentFromJson(Map<String, dynamic> json) {
-  return Comment(
-    id: json['id'] as String,
-    postId: json['postId'] as String,
-    userId: json['userId'] as String,
-    text: json['text'] as String,
-    photoUrl: json['photoUrl'] as String?,
-    username: json['username'] as String?,
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
-    updatedAt: json['updatedAt'] == null
-        ? null
-        : DateTime.parse(json['updatedAt'] as String),
-    userComments: (json['usersComments'] as List<dynamic>?)
-        ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    totalReplies: json['totalReplies'] as int?,
-    commentReplies: (json['commentReplies'] as List<dynamic>?)
-        ?.map((e) => CommentReply.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
+      id: json['id'] as String,
+      postId: json['postId'] as String,
+      userId: json['userId'] as String,
+      text: json['text'] as String,
+      photoUrl: json['photoUrl'] as String?,
+      username: json['username'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
+      userComments: (json['usersComments'] as List<dynamic>?)
+          ?.map((e) => UserSearchModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      totalReplies: json['totalReplies'] as int?,
+      commentReplies: (json['commentReplies'] as List<dynamic>?)
+          ?.map((e) => CommentReply.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'id': instance.id,

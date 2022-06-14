@@ -21,13 +21,10 @@ import 'package:ootopia_app/screens/timeline/components/post_timeline_controller
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/analytics.server.dart';
-import 'package:ootopia_app/shared/custom_scrollbar_widget.dart';
 import 'package:ootopia_app/shared/expanded_text.dart';
 import 'package:ootopia_app/shared/global-constants.dart';
 import 'package:ootopia_app/shared/page-enum.dart' as PageRoute;
 import 'package:ootopia_app/shared/secure-store-mixin.dart';
-import 'package:ootopia_app/shared/snackbar_component.dart';
-import 'package:ootopia_app/theme/light/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_page_navigation/smart_page_navigation.dart';
 
@@ -96,7 +93,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   bool _sendOOZIsLoading = false;
   bool _oozIsSent = false;
   bool _oozError = false;
-  String _oozErrorMessage = "";
+  String _oozErrorMessage = '';
   bool _oozSlidingOut = false;
   late AuthStore authStore;
 
@@ -153,7 +150,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   void _goToProfile() async {
     controller.insertPage(ProfileScreen(
       {
-        "id": user != null && post.userId == user!.id ? null : post.userId,
+        'id': user != null && post.userId == user!.id ? null : post.userId,
       },
     ));
   }
@@ -223,7 +220,8 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
   Widget build(BuildContext context) {
     authStore = Provider.of<AuthStore>(context);
     walletStore = Provider.of<WalletStore>(context);
-    postTimelineComponentController = Provider.of<PostTimelineComponentController>(context);
+    postTimelineComponentController =
+        Provider.of<PostTimelineComponentController>(context);
     return Observer(
       builder: (_) => Column(
         children: [
@@ -240,139 +238,12 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (this.post.badges!.length > 0)
-                    GestureDetector(
-                        child: Container(
-                            width: 25,
-                            height: 25,
-                            child: Image.network(
-                                this.post.badges?[0].icon as String)),
-                        onTap: () {
-                          showModalBottomSheet(
-                              barrierColor: Colors.black.withAlpha(1),
-                              context: context,
-                              backgroundColor: Colors.black.withAlpha(1),
-                              builder: (BuildContext context) {
-                                return SnackBarWidget(
-                                    menu: AppLocalizations.of(context)!
-                                        .badgeChangeMakerPro,
-                                    text: AppLocalizations.of(context)!
-                                        .theChangeMakerProBadgeIsAwardedToIndividualsAndOrganizationsThatAreLeadingConsistentWorkToHelpRegeneratePlanetEarth,
-                                    buttons: [
-                                      ButtonSnackBar(
-                                        text: AppLocalizations.of(context)!
-                                            .learnMore,
-                                        onTapAbout: () {
-                                          Navigator.of(context)
-                                              .pushNamedAndRemoveUntil(
-                                            PageRoute.Page.homeScreen.route,
-                                            (Route<dynamic> route) => false,
-                                            arguments: {
-                                              "returnToPageWithArgs": {
-                                                'currentPageName':
-                                                    "learning_tracks"
-                                              }
-                                            },
-                                          );
-                                        },
-                                      )
-                                    ],
-                                    marginBottom: true,
-                                    contact: {
-                                      "text": AppLocalizations.of(context)!
-                                          .areYouAChangeMakerProToo,
-                                      "textLink": AppLocalizations.of(context)!
-                                          .getInContact,
-                                    });
-                              });
-                        }),
                   PopupMenuPost(
                     isAnabled: isUserOwnsPost,
                     callbackReturnPopupMenu: _popupMenuReturn,
                     post: post,
                   ),
                 ],
-              )
-            ],
-          ),
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 32,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  color: Color(0xff1A4188),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/Textura_azul_escuro.png',
-                    ),
-                    alignment: Alignment.bottomLeft,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ScrollConfiguration(
-                          behavior: const ScrollBehavior()
-                              .copyWith(overscroll: false),
-                          child: MyScrollbar(
-                            thumbColor: Color(0xff03145C),
-                            trackColor: Color(0xff4D7BC9),
-                            thickness: 4,
-                            builder: (context, scrollController) =>
-                                ListView.builder(
-                              controller: scrollController,
-                              shrinkWrap: true,
-                              padding: EdgeInsets.only(left: 15),
-                              physics: ClampingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: this.post.tags.length,
-                              itemBuilder: (ctx, index) {
-                                return HashtagName(
-                                  hashtagName: this.post.tags[index],
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0.2,
-                top: 4,
-                child: Container(
-                  height: 20,
-                  width: 20.5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 0.2,
-                top: 4,
-                child: Container(
-                  height: 20,
-                  width: 20.5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(15),
-                    ),
-                  ),
-                ),
               )
             ],
           ),
@@ -505,7 +376,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                               padding:
                                                   EdgeInsets.only(right: 4),
                                               child: Text(
-                                                "+ " +
+                                                '+ ' +
                                                     currencyFormatter.format(
                                                         this
                                                             .post
@@ -674,7 +545,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                 ),
                 Visibility(
                   visible:
-                      this.post.userId == (authStore.currentUser?.id ?? ""),
+                      this.post.userId == (authStore.currentUser?.id ?? ''),
                   child: GestureDetector(
                     onHorizontalDragEnd: (_) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -712,6 +583,18 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               ],
             ),
           ),
+          Container(
+            height: 30,
+            child: ListView.builder(
+              physics: ClampingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: this.post.tags.length,
+              itemBuilder: (ctx, index) {
+                return HashtagName(hashtagName: this.post.tags[index]);
+              },
+            ),
+          ),
+          SizedBox(height: 8),
           Visibility(
             visible: this.post.description.isNotEmpty,
             child: Container(
@@ -729,7 +612,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
             onTap: () {
               controller.insertPage(
                 CommentScreen({
-                  "post": this.post,
+                  'post': this.post,
                 }),
               );
             },
@@ -742,7 +625,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                     padding: EdgeInsets.only(bottom: 12, left: 12),
                     child: Text(
                       this.post.commentsCount.toString() +
-                          " ${AppLocalizations.of(context)!.comments}",
+                          ' ${AppLocalizations.of(context)!.comments}',
                       style: TextStyle(color: Colors.black.withOpacity(0.4)),
                     ),
                   ),
@@ -756,7 +639,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
                                   backgroundImage:
-                                      NetworkImage("${widget.user?.photoUrl}"),
+                                      NetworkImage('${widget.user?.photoUrl}'),
                                   radius: 14,
                                 ),
                               )
@@ -765,7 +648,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
                                 backgroundColor: Colors.white,
                                 child: CircleAvatar(
                                   backgroundImage:
-                                      AssetImage("assets/icons/user.png"),
+                                      AssetImage('assets/icons/user.png'),
                                   radius: 14,
                                 ),
                               ),
@@ -926,7 +809,7 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       setState(() {
         _sendOOZIsLoading = false;
         this.post.oozTotalCollected =
-            "${(double.parse(this.post.oozTotalCollected) + this.post.oozToTransfer!)}";
+            '${(double.parse(this.post.oozTotalCollected) + this.post.oozToTransfer!)}';
         if (this.post.oozRewarded == null || this.post.oozRewarded == 0) {
           this.post.oozRewarded = this.post.oozToTransfer;
         } else {
@@ -937,13 +820,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
       _showOOZIsSent();
     } on FetchDataException catch (e) {
       String errorMessage = e.toString();
-      print("Error: ${e.toString()}");
+      print('Error: ${e.toString()}');
       setState(() {
         _sendOOZIsLoading = false;
         _oozError = true;
         _oozErrorMessage =
             AppLocalizations.of(context)!.anErrorHasOccurredTryAgain;
-        if (errorMessage == "INSUFFICIENT_BALANCE") {
+        if (errorMessage == 'INSUFFICIENT_BALANCE') {
           _oozErrorMessage =
               AppLocalizations.of(context)!.yourHaveInsufficientOOZToGive;
         }
@@ -1092,13 +975,13 @@ class _PhotoTimelineState extends State<PhotoTimeline> with SecureStoreMixin {
               if (likePostResult.liked) {
                 this.trackingEvents.timelineGaveALike(
                   {
-                    "userId": this.post.userId,
+                    'userId': this.post.userId,
                   },
                 );
               } else if (this.post.likesCount > 0) {
                 this.trackingEvents.timelineGaveADislike(
                   {
-                    "userId": this.post.userId,
+                    'userId': this.post.userId,
                   },
                 );
               }
@@ -1268,95 +1151,22 @@ class HashtagName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(3),
-      padding: EdgeInsets.all(4),
-      child: Center(
-        child: Text(
-          "#$hashtagName",
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.w400,
+    return Chip(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: Color(0xffD4D6D8),
           ),
+          borderRadius: BorderRadius.all(Radius.circular(16))),
+      label: Text(
+        '#$hashtagName',
+        style: TextStyle(
+          fontSize: 12,
+          color: Color(0xff656F7B),
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
   }
 }
-
-// class CustomContainerShapeBorder extends CustomPainter {
-//   final double x;
-//
-//   CustomContainerShapeBorder({this.x = 0});
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final paint = Paint()..color = Colors.blue.shade900;
-//
-//     double calcPosition = x >= 36 ? x - 36 : 0;
-//
-//     canvas.translate(calcPosition, 0);
-//
-//     canvas.drawRRect(
-//       RRect.fromRectAndCorners(
-//         Rect.fromLTRB(
-//           0,
-//           0,
-//           32,
-//           30,
-//         ),
-//         bottomLeft: Radius.circular(100),
-//         topLeft: Radius.circular(100),
-//         topRight: Radius.circular(12),
-//         bottomRight: Radius.circular(12),
-//       ),
-//       paint,
-//     );
-//
-//     canvas.translate(31, 0);
-//
-//     var path = Path();
-//     path.lineTo(0, 15);
-//     path.lineTo(15, 15);
-//     path.close();
-//     canvas.drawPath(path, paint);
-//
-//     var path2 = Path();
-//     path2.lineTo(15, 15);
-//     path2.lineTo(0, 30);
-//     path2.close();
-//     canvas.drawPath(path2, paint);
-//     //var path = createPath(3, 36);
-//     //canvas.drawPath(path, paint..color = Colors.green);
-//     //canvas.restore();
-//   }
-//
-//   @override
-//   bool shouldRepaint(CustomPainter oldDelegate) {
-//     return true;
-//   }
-//
-//   Path createPath(int sides, double radius) {
-//     var path = Path();
-//     var angle = (math.pi * 2) / sides;
-//     path.moveTo(radius * math.cos(0.0), radius * math.sin(0.0));
-//     for (int i = 1; i <= sides; i++) {
-//       double x = radius * math.cos(angle * i);
-//       double y = radius * math.sin(angle * i);
-//       path.lineTo(x, y);
-//     }
-//     path.close();
-//     return path;
-//   }
-// }
-
-// Usar caso seja necessário no futuro, atualmente o player do youtube será desabilitado
-// YoutubePlayer(
-//   controller: _controller,
-//   showVideoProgressIndicator: true,
-//   onReady: () {
-//     print("ready!!");
-//     _isPlayerReady = true;
-//     //_controller.addListener(listener);
-//   },
-// )

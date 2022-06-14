@@ -57,7 +57,7 @@ class _TimelinePageState extends State<TimelinePage>
   User? user;
   bool showUploadedVideoMessage = false;
   GeneralConfigRepositoryImpl generalConfigRepositoryImpl =
-  GeneralConfigRepositoryImpl();
+      GeneralConfigRepositoryImpl();
   UserRepositoryImpl userRepositoryImpl = UserRepositoryImpl();
 
   SecureStoreMixin secureStoreMixin = SecureStoreMixin();
@@ -69,7 +69,8 @@ class _TimelinePageState extends State<TimelinePage>
   //bool showRemainingTime = false;
   //bool showRemainingTimeEnd = false;
   SmartPageController controller = SmartPageController.getInstance();
-  LearningTracksRepositoryImpl learningTracksStore = LearningTracksRepositoryImpl();
+  LearningTracksRepositoryImpl learningTracksStore =
+      LearningTracksRepositoryImpl();
   MarketplaceRepositoryImpl marketplaceRepository = MarketplaceRepositoryImpl();
 
   @override
@@ -84,7 +85,7 @@ class _TimelinePageState extends State<TimelinePage>
         onReceiveVideoFromAnotherApp(value);
       });
     }, onError: (err) {
-      print("getIntentDataStream error: $err");
+      print('getIntentDataStream error: $err');
     });
 
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
@@ -97,13 +98,13 @@ class _TimelinePageState extends State<TimelinePage>
     performAllRequests();
     flickMultiManager = FlickMultiManager();
 
-    if (widget.args != null && widget.args!["createdPost"] == true) {
+    if (widget.args != null && widget.args!['createdPost'] == true) {
       setState(() {
         showUploadedVideoMessage = true;
       });
       Timer(
         Duration(milliseconds: 5000),
-            () {
+        () {
           setState(() {
             showUploadedVideoMessage = false;
           });
@@ -132,19 +133,19 @@ class _TimelinePageState extends State<TimelinePage>
     //_sub =
     linkStream.listen((link) {
       if (link == null) return;
-      if (link.contains("posts/shared")) goToPost(link);
-      if (link.contains("market-place/shared")) goToMarketPlace(link);
-      if (link.contains("learning-tracks/shared")) goToLearningTracks(link);
-      if (link.contains("resetPasswordToken=")) redefinePassword(link);
+      if (link.contains('posts/shared')) goToPost(link);
+      if (link.contains('market-place/shared')) goToMarketPlace(link);
+      if (link.contains('learning-tracks/shared')) goToLearningTracks(link);
+      if (link.contains('resetPasswordToken=')) redefinePassword(link);
     }, onError: (Object err) {
       if (!mounted) return;
     });
   }
 
   void redefinePassword(String link) {
-    bool isResetPassword = link.contains("resetPasswordToken=");
+    bool isResetPassword = link.contains('resetPasswordToken=');
     if (isResetPassword) {
-      var linkSplit = link.split("resetPasswordToken=");
+      var linkSplit = link.split('resetPasswordToken=');
       String token = linkSplit[linkSplit.length - 1];
       setRecoverPasswordToken(token);
       goToResetPassword();
@@ -153,15 +154,15 @@ class _TimelinePageState extends State<TimelinePage>
 
   Future<void> goToPost(String link) async {
     PostRepositoryImpl postsRepository = PostRepositoryImpl();
-    String postId = link.split("/").last;
+    String postId = link.split('/').last;
     var post = await postsRepository.getPostById(postId);
 
     controller.insertPage(
       TimelineScreenProfileScreen(
         {
-          "userId": authStore.currentUser?.id,
-          "posts": [post].toList(),
-          "postSelected": 0,
+          'userId': authStore.currentUser?.id,
+          'posts': [post].toList(),
+          'postSelected': 0,
         },
       ),
     );
@@ -193,16 +194,16 @@ class _TimelinePageState extends State<TimelinePage>
       try {
         final uri = await getInitialUri();
         if (!mounted || uri == null) return;
-        if (uri.toString().contains("resetPasswordToken=")) {
+        if (uri.toString().contains('resetPasswordToken=')) {
           redefinePassword(uri.toString());
         }
-        if (uri.toString().contains("posts/shared")) {
+        if (uri.toString().contains('posts/shared')) {
           goToPost(uri.toString());
         }
-        if (uri.toString().contains("market-place/shared")) {
+        if (uri.toString().contains('market-place/shared')) {
           goToMarketPlace(uri.toString());
         }
-        if (uri.toString().contains("learning-tracks/shared")) {
+        if (uri.toString().contains('learning-tracks/shared')) {
           goToLearningTracks(uri.toString());
         }
       } catch (err) {
@@ -218,21 +219,21 @@ class _TimelinePageState extends State<TimelinePage>
   }
 
   void performAllRequests() async {
-    print("PERFORM ALL BEFORE");
+    print('PERFORM ALL BEFORE');
     await _checkUserIsLoggedIn();
     _getTransferOozToPostLimitConfig();
-    print("PERFORM ALL AFTER");
+    print('PERFORM ALL AFTER');
   }
 
   void _getTransferOozToPostLimitConfig() async {
     try {
       GeneralConfigModel? transferOozToPostLimitConfig = await this
           .secureStoreMixin
-          .getGeneralConfigByName("transfer_ooz_to_post_limit");
+          .getGeneralConfigByName('transfer_ooz_to_post_limit');
       setTransferOOZToPostLimit(transferOozToPostLimitConfig?.value ?? 0);
       timelineStore.getTimelinePosts();
     } catch (e) {
-      print("Erro!!! ${e.toString()}");
+      print('Erro!!! ${e.toString()}');
     }
   }
 
@@ -247,10 +248,10 @@ class _TimelinePageState extends State<TimelinePage>
           await Navigator.of(context).pushNamed(
             PageRoute.Page.loginScreen.route,
             arguments: {
-              "returnToPageWithArgs": {
-                "pageRoute": PageRoute.Page.postPreviewScreen.route,
-                "arguments": {
-                  "filePath": videoFile.path,
+              'returnToPageWithArgs': {
+                'pageRoute': PageRoute.Page.postPreviewScreen.route,
+                'arguments': {
+                  'filePath': videoFile.path,
                 }
               }
             },
@@ -259,7 +260,7 @@ class _TimelinePageState extends State<TimelinePage>
           Navigator.of(context).pushNamed(
             PageRoute.Page.postPreviewScreen.route,
             arguments: {
-              "filePath": videoFile.path,
+              'filePath': videoFile.path,
             },
           );
         }
@@ -274,11 +275,11 @@ class _TimelinePageState extends State<TimelinePage>
         await this.userRepositoryImpl.getMyAccountDetails();
         user = await getCurrentUser();
         authStore.checkUserIsLogged();
-        print("LOGGED USER: " + user!.fullname!);
+        print('LOGGED USER: ' + user!.fullname!);
       }
       return loggedIn;
     } catch (err) {
-      print("Deu erro: $err");
+      print('Deu erro: $err');
       return false;
     }
   }
@@ -301,7 +302,7 @@ class _TimelinePageState extends State<TimelinePage>
     // These are the callbacks
     switch (state) {
       case AppLifecycleState.resumed:
-      //timelineStore.startTimelineViewTimer();
+        //timelineStore.startTimelineViewTimer();
         break;
       case AppLifecycleState.inactive:
         timelineStore.stopTimelineViewTimer();
@@ -337,15 +338,16 @@ class _TimelinePageState extends State<TimelinePage>
                   Expanded(
                     child: Center(
                       child: Observer(builder: (_) {
-                        if (timelineStore.viewState == TimelineViewState.loading) {
+                        if (timelineStore.viewState ==
+                            TimelineViewState.loading) {
                           return Center(child: CircularProgressIndicator());
-                        }
-                        else if (timelineStore.viewState == TimelineViewState.error) {
+                        } else if (timelineStore.viewState ==
+                            TimelineViewState.error) {
                           return TryAgain(
-                                () => timelineStore.getTimelinePosts(),
+                            () => timelineStore.getTimelinePosts(),
                           );
-                        }
-                        else if (timelineStore.viewState == TimelineViewState.ok &&
+                        } else if (timelineStore.viewState ==
+                                TimelineViewState.ok &&
                             timelineStore.allPosts.length == 0) {
                           return Center(
                             child: Column(
@@ -360,7 +362,8 @@ class _TimelinePageState extends State<TimelinePage>
                         }
                         return Padding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: GlobalConstants.of(context).screenHorizontalSpace,
+                            horizontal: GlobalConstants.of(context)
+                                .screenHorizontalSpace,
                           ),
                           child: Column(
                             children: <Widget>[
@@ -368,15 +371,21 @@ class _TimelinePageState extends State<TimelinePage>
                                 child: VisibilityDetector(
                                   key: ObjectKey(flickMultiManager),
                                   onVisibilityChanged: (visibility) {
-                                    if (visibility.visibleFraction == 0 && this.mounted) {
+                                    if (visibility.visibleFraction == 0 &&
+                                        this.mounted) {
                                       flickMultiManager.pause();
                                     }
                                   },
-                                  child: NotificationListener<ScrollNotification>(
-                                    onNotification: (ScrollNotification scrollInfo) {
+                                  child:
+                                      NotificationListener<ScrollNotification>(
+                                    onNotification:
+                                        (ScrollNotification scrollInfo) {
                                       if (!timelineStore.loadingMorePosts &&
-                                          timelineStore.viewState != TimelineViewState.loading &&
-                                          scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent &&
+                                          timelineStore.viewState !=
+                                              TimelineViewState.loading &&
+                                          scrollInfo.metrics.pixels ==
+                                              scrollInfo
+                                                  .metrics.maxScrollExtent &&
                                           timelineStore.hasMorePosts) {
                                         timelineStore.getTimelinePosts();
                                       }
@@ -389,16 +398,19 @@ class _TimelinePageState extends State<TimelinePage>
                                       child: ListView.separated(
                                         addAutomaticKeepAlives: false,
                                         addRepaintBoundaries: false,
-                                        itemCount: timelineStore.allPosts.length,
-                                        separatorBuilder: (BuildContext context, int index) =>
-                                        const Divider(),
+                                        itemCount:
+                                            timelineStore.allPosts.length,
+                                        separatorBuilder:
+                                            (BuildContext context, int index) =>
+                                                const Divider(),
                                         itemBuilder: (context, index) {
                                           return PostWidget(
                                             index: index,
                                             post: timelineStore.allPosts[index],
                                             action: () => setState(() {}),
                                             timelineStore: timelineStore,
-                                            flickMultiManager: flickMultiManager,
+                                            flickMultiManager:
+                                                flickMultiManager,
                                             user: user,
                                             loggedIn: loggedIn,
                                           );

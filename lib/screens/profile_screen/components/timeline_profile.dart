@@ -170,19 +170,16 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
           itemScrollController: this.itemScrollController,
           itemPositionsListener: this.itemPositionsListener,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: PhotoTimeline(
-                isRegister: widget.isRegister,
-                key: ObjectKey(timelineStore.allPosts[index]),
-                post: timelineStore.allPosts[index],
-                timelineStore: this.timelineStore,
-                loggedIn: this.loggedIn,
-                flickMultiManager: flickMultiManager,
-                isProfile: true,
-                user: this.user,
-                onDelete: () => setState(() {}),
-              ),
+            return PhotoTimeline(
+              isRegister: widget.isRegister,
+              key: ObjectKey(timelineStore.allPosts[index]),
+              post: timelineStore.allPosts[index],
+              timelineStore: this.timelineStore,
+              loggedIn: this.loggedIn,
+              flickMultiManager: flickMultiManager,
+              isProfile: true,
+              user: this.user,
+              onDelete: () => setState(() {}),
             );
           },
         );
@@ -241,8 +238,8 @@ class _ListPostProfileComponentState extends State<ListPostProfileComponent>
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 24),
                             child: PhotoTimeline(
                               isRegister: widget.isRegister,
                               key: ObjectKey(timelineStore.allPosts[index]),

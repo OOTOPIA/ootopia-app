@@ -38,17 +38,13 @@ class _ImagePostTimeline extends State<ImagePostTimeline> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            color: Color(0xff000000),
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
+            color: Colors.black,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             image: DecorationImage(
               fit: BoxFit.contain,
               alignment: FractionalOffset.center,
               image: NetworkImage(widget.image),
-            )
-        ),
-
+            )),
       ),
     );
   }

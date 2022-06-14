@@ -8,7 +8,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ootopia_app/clean_arch/core/di/report_di.dart';
+import 'package:ootopia_app/clean_arch/core/routes/app_routes.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/ui/create_post.dart';
+import 'package:ootopia_app/clean_arch/create_post/presentation/ui/interesting_tags_page.dart';
 import 'package:ootopia_app/clean_arch/report/presentation/stores/store_report_post.dart';
 import 'package:ootopia_app/data/repositories/general_config_repository.dart';
 import 'package:ootopia_app/screens/about_ethical_marketingplace/about_ethical_marketplace.dart';
@@ -41,7 +43,6 @@ import 'package:ootopia_app/screens/ooz_current/ooz_current_page.dart';
 import 'package:ootopia_app/screens/post_preview_screen/components/post_preview_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/profile_screen_store.dart';
 import 'package:ootopia_app/screens/profile_screen/components/timeline_profile_store.dart';
-import 'package:ootopia_app/screens/regenerarion_game_learning_alert/regenerarion_game_learning_alert.dart';
 import 'package:ootopia_app/screens/timeline/components/post_timeline_component_controller.dart';
 import 'package:ootopia_app/screens/wallet/wallet_screen.dart';
 import 'package:ootopia_app/screens/home/home_screen.dart';
@@ -54,7 +55,6 @@ import 'package:ootopia_app/screens/splash/splash_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/celebrate_component.dart';
 import 'package:ootopia_app/screens/timeline/components/comments/comment_screen.dart';
 import 'package:ootopia_app/screens/timeline/components/feed_player/player_video_fullscreen.dart';
-import 'package:ootopia_app/screens/post_preview_screen/post_preview_screen.dart';
 import 'package:ootopia_app/screens/timeline/timeline_store.dart';
 import 'package:ootopia_app/screens/wallet/wallet_store.dart';
 import 'package:ootopia_app/shared/FirebaseMessaging/notification_message_service.dart';
@@ -77,11 +77,12 @@ import './shared/analytics.server.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/l10n.dart';
+import 'package:ootopia_app/clean_arch/core/di/inectable.dart' as di;
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  ReportDi.injectionDI();
+  await dotenv.load(fileName: '.env');
+  await di.init();
   await Firebase.initializeApp();
 
   ///FlutterBackgroundService.initialize(onStartService);
@@ -98,7 +99,7 @@ Future main() async {
     (options) {
       options.dsn = dotenv.env['SENTRY_DSN']!;
       options.debug = false;
-      options.environment = "staging";
+      options.environment = 'staging';
       options.attachStacktrace = true;
       options.diagnosticLevel = SentryLevel.error;
       options.enableAutoSessionTracking = true;
@@ -145,11 +146,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
   NotificationMessageService service = NotificationMessageService();
 
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
 
   AnalyticsTracking trackingEvents = AnalyticsTracking.getInstance();
   trackingEvents
-      .notificationReceived({"notificationType": message.data["type"]});
+      .notificationReceived({'notificationType': message.data['type']});
   service.createMessage(message);
 }
 
@@ -319,6 +320,7 @@ class _ExpensesAppState extends State<ExpensesApp> with WidgetsBindingObserver {
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
+        routes: appRoutes,
         theme: AppTheme.instance(context).light,
         home: MainPage(),
       ),
@@ -355,14 +357,14 @@ class _MainPageState extends State<MainPage> {
         RegisterTopInterestsScreen(args),
     PageRoute.Page.playerVideoFullScreen: (args) =>
         PLayerVideoFullscreen(args: args),
-    PageRoute.Page.postPreviewScreen: (args) => PostPreviewPage(args),
+    PageRoute.Page.postPreviewScreen: (args) => CreatePostPage(args),
     PageRoute.Page.recoverPasswordScreen: (args) => RecoverPasswordPage(args),
     PageRoute.Page.resetPasswordScreen: (args) => ResetPasswordPage(args),
     PageRoute.Page.splashScreen: (args) => SplashScreen(args),
     PageRoute.Page.walletPage: (args) => WalletPage(),
     PageRoute.Page.celebration: (args) => Celebration(args),
-    PageRoute.Page.regenerationGameLearningAlert: (args) =>
-        RegenerationGameLearningAlert(args),
+    // PageRoute.Page.regenerationGameLearningAlert: (args) =>
+    //     RegenerationGameLearningAlert(args),
     PageRoute.Page.chatWithUsersScreen: (args) => ChatWithUsersScreen(),
     PageRoute.Page.invitationScreen: (args) => InvitationScreen(),
     PageRoute.Page.insertInvitationCode: (args) => InsertInvitationCode(args),
@@ -399,7 +401,8 @@ class _MainPageState extends State<MainPage> {
           displayContacts: args['displayContacts'],
         ),
     PageRoute.Page.viewLearningTracksScreen: (args) =>
-        ViewLearningTracksScreen(args)
+        ViewLearningTracksScreen(args),
+    PageRoute.Page.interstingTags: (args) => InterestingTagsPage()
   };
 
   SharedExperienceService sharedExperienceService =
@@ -410,12 +413,12 @@ class _MainPageState extends State<MainPage> {
         AppLocalizations.of(context)!.localeName == 'pt') {
       return AppLocalizations.of(context)!
           .shareMyOpinion
-          .replaceFirst(" ", "\n");
+          .replaceFirst(' ', '\n');
     }
     return AppLocalizations.of(context)!.shareMyOpinion;
   }
 
-  showSharedExperience(context) {
+  void showSharedExperience(context) {
     Future.delayed(Duration.zero, () {
       showModalBottomSheet(
         context: context,
@@ -432,7 +435,7 @@ class _MainPageState extends State<MainPage> {
                 text: shareMyOpinion,
                 onTapAbout: () async {
                   await launch(
-                      "https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform");
+                      'https://docs.google.com/forms/d/e/1FAIpQLScGB6JQf4-YQn7aZQ5fmJTYxhM1W3qXuW87ycYrlayiesN92A/viewform');
                 },
               ),
               ButtonSnackBar(

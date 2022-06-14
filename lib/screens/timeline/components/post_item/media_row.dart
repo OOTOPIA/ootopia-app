@@ -11,32 +11,33 @@ class MediaRow extends StatelessWidget {
   final TimelinePost post;
   final String? userId;
   final Media media;
-  const MediaRow({Key? key,
-    required this.media,
-    required this.likePost,
-    required this.flickMultiManager,
-    required this.post,
-    required this.userId}) : super(key: key);
+  const MediaRow(
+      {Key? key,
+      required this.media,
+      required this.likePost,
+      required this.flickMultiManager,
+      required this.post,
+      required this.userId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (media.type == "image") {
+    if (media.type == 'image') {
       return ImagePostTimeline(
         image: media.mediaUrl as String,
         onDoubleTapVideo: likePost,
       );
-    } else if (media.type == "video") {
+    } else if (media.type == 'video') {
       return FlickMultiPlayer(
-        userId: userId ,
+        userId: userId,
         postId: post.id,
         url: media.mediaUrl!,
         flickMultiManager: flickMultiManager,
         image: media.thumbUrl!,
         onDoubleTapVideo: likePost,
       );
-    }else{
+    } else {
       return Container();
     }
   }
-
 }

@@ -6,12 +6,11 @@ part of 'friend_thumb_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FriendThumbModel _$FriendThumbModelFromJson(Map<String, dynamic> json) {
-  return FriendThumbModel(
-    type: json['type'] as String?,
-    thumbnailUrl: json['thumbnailUrl'] as String?,
-  );
-}
+FriendThumbModel _$FriendThumbModelFromJson(Map<String, dynamic> json) =>
+    FriendThumbModel(
+      type: json['type'] as String?,
+      thumbnailUrl: json['thumbnailUrl'] as String?,
+    );
 
 Map<String, dynamic> _$FriendThumbModelToJson(FriendThumbModel instance) =>
     <String, dynamic>{

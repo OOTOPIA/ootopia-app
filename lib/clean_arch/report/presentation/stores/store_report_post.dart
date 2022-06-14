@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ootopia_app/clean_arch/report/domain/entity/report_posts_entity.dart';
 import 'package:ootopia_app/clean_arch/report/domain/usecases/report_post_usecase.dart';
+import 'package:injectable/injectable.dart';
 
-part "store_report_post.g.dart";
+part 'store_report_post.g.dart';
 
+@injectable
 class StoreReportPost = StoreReportPostBase with _$StoreReportPost;
 
 abstract class StoreReportPostBase with Store {

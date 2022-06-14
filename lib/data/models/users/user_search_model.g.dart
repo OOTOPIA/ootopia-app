@@ -6,16 +6,15 @@ part of 'user_search_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserSearchModel _$UserSearchModelFromJson(Map<String, dynamic> json) {
-  return UserSearchModel(
-    email: json['email'] as String?,
-    fullname: json['fullname'] as String,
-    id: json['id'] as String,
-    photoUrl: json['photoUrl'] as String?,
-    start: json['start'] as int?,
-    end: json['end'] as int?,
-  );
-}
+UserSearchModel _$UserSearchModelFromJson(Map<String, dynamic> json) =>
+    UserSearchModel(
+      email: json['email'] as String?,
+      fullname: json['fullname'] as String,
+      id: json['id'] as String,
+      photoUrl: json['photoUrl'] as String?,
+      start: json['start'] as int?,
+      end: json['end'] as int?,
+    );
 
 Map<String, dynamic> _$UserSearchModelToJson(UserSearchModel instance) =>
     <String, dynamic>{
