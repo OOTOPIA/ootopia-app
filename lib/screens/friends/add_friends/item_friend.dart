@@ -53,6 +53,8 @@ class ItemFriend extends StatelessWidget {
                             fit: BoxFit.cover,
                             width: 40,
                             height: 40,
+                            cacheHeight: 400,
+                            cacheWidth: 400,
                             errorBuilder: (context, url, error) => Image.asset(
                                   'assets/icons/user.png',
                                   fit: BoxFit.cover,
@@ -192,6 +194,8 @@ class ItemFriend extends StatelessWidget {
                               fit: BoxFit.cover,
                               width: 74,
                               height: 76,
+                              cacheHeight: 76,
+                              cacheWidth: 76,
                               errorBuilder: (context, url, error) => Container(
                                 width: 74,
                                 height: 76,

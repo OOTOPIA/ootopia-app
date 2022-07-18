@@ -264,6 +264,10 @@ class _CircleOfFriendWidgetState extends State<CircleOfFriendWidget> {
             fit: BoxFit.cover,
             width: size,
             height: size,
+
+            /// TODO
+            cacheHeight: 300,
+            cacheWidth: 300,
             loadingBuilder: (BuildContext context, Widget child,
                 ImageChunkEvent? loadingProgress) {
               if (loadingProgress == null) {

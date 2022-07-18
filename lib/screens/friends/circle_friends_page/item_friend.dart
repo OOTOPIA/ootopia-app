@@ -61,6 +61,8 @@ class ItemFriend extends StatelessWidget {
                               fit: BoxFit.cover,
                               width: 40,
                               height: 40,
+                              cacheHeight: 100,
+                              cacheWidth: 100,
                               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                 if (loadingProgress == null) {
                                   return child;
@@ -260,6 +262,8 @@ class ItemFriend extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 width: 74,
                                 height: 76,
+                                cacheHeight: 200,
+                                cacheWidth: 200,
                                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                   if (loadingProgress == null) {
                                     return child;

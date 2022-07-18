@@ -43,6 +43,9 @@ class GridCustomWidget extends StatelessWidget {
                       child: Image.network(
                         thumbnailUrl,
                         fit: BoxFit.cover,
+                        /// TODO
+                        cacheWidth: (itemWidth).round(),
+                        cacheHeight: (itemWidth).round(),
                       ),
                     ),
                   ),
